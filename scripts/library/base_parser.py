@@ -4,18 +4,18 @@ from __future__ import absolute_import, division, print_function
 
 from abc import ABCMeta, abstractmethod
 
-from scripts.parser_library.extractor import Extractor
-from scripts.parser_library.ingestor import Ingestor
-from scripts.parser_library.requester import Requester
+from scripts.library.extractor import Extractor
+from scripts.library.ingestor import Ingestor
+from scripts.library.requester import Requester
 
 
 class BaseParser:
     """Abstract base parser for data pipeline parsers.
 
     Attributes:
-        extractor (parser_library.extractor): pipeline extractor
-        ingestor (parser_library.ingestor): pipeline ingestor
-        requester (parser_library.requester): pipeline requester
+        extractor (library.extractor): pipeline extractor
+        ingestor (library.ingestor): pipeline ingestor
+        requester (library.requester): pipeline requester
         school (str): School that parser is for.
     """
 

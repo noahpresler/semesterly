@@ -10,15 +10,15 @@ from __future__ import absolute_import, division, print_function
 
 import jsonschema
 
-from scripts.parser_library.internal_exceptions import JsonValidationError, \
+from scripts.library.internal_exceptions import JsonValidationError, \
     JsonValidationWarning, JsonDuplicationWarning, IngestorError, \
     IngestorWarning
-from scripts.parser_library.logger import JsonListLogger
-from scripts.parser_library.tracker import NullTracker
-from scripts.parser_library.validator import Validator
+from scripts.library.logger import JsonListLogger
+from scripts.library.tracker import NullTracker
+from scripts.library.validator import Validator
 
-# from scripts.parser_library.exceptions import PipelineError, PipelineWarning
-from scripts.parser_library.utils import clean, make_list
+# from scripts.library.exceptions import PipelineError, PipelineWarning
+from scripts.library.utils import clean, make_list
 
 
 # class IngestorError(PipelineError):
@@ -38,13 +38,13 @@ class Ingestor(dict):
         ALL_KEYS (set): Set of keys supported by Ingestor.
         break_on_error (bool): Break/cont on errors.
         break_on_warning (bool): Break/cont on warnings.
-        logger (parser_library.logger): Logger object.
+        logger (library.logger): Logger object.
         school (str): School code (e.g. jhu, gw, umich).
         skip_duplicates (bool): Skip ingestion for repeated definitions.
-        tracker (parser_library.tracker): Tracker object.
+        tracker (library.tracker): Tracker object.
         UNICODE_WHITESPACE (TYPE): regex that matches Unicode whitespace.
         validate (bool): Enable/disable validation.
-        validator (parser_library.validator): Validator instance.
+        validator (library.validator): Validator instance.
     """
 
     # INSTRUCTOR = (
@@ -217,7 +217,7 @@ class Ingestor(dict):
             skip_duplicates (bool, optional): Skip ingesting courses
                 that have already been seen.
             validate (bool, optional): Perform validation?
-            tracker (parser_library.tracker, optional): tracker object
+            tracker (library.tracker, optional): tracker object
         """
         self.school = school
         self.validate = validate

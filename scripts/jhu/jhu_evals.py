@@ -9,7 +9,7 @@ import urllib
 
 from bs4 import BeautifulSoup
 
-from scripts.parser_library.base_parser import BaseParser
+from scripts.library.base_parser import BaseParser
 
 
 class HopkinsEvalParser(BaseParser):

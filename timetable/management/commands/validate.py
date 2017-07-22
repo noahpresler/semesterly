@@ -13,9 +13,9 @@ GNU General Public License for more details.
 """
 
 from django.core.management.base import BaseCommand, CommandParser, CommandError
-from scripts.parser_library.validator import Validator
+from scripts.library.validator import Validator
 from timetable.management.commands.args_parse import *
-from scripts.parser_library.internal_exceptions import *
+from scripts.library.internal_exceptions import *
 
 class Command(BaseCommand):
 	def add_arguments(self, parser):

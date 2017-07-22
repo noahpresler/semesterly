@@ -20,10 +20,10 @@ import simplejson as json
 
 from timetable.models import *
 
-from scripts.parser_library.utils import DotDict, make_list
-from scripts.parser_library.logger import Logger, JsonListLogger
-from scripts.parser_library.internal_exceptions import DigestionError
-from scripts.parser_library.tracker import ProgressBar, NullTracker
+from scripts.library.utils import DotDict, make_list
+from scripts.library.logger import Logger, JsonListLogger
+from scripts.library.internal_exceptions import DigestionError
+from scripts.library.tracker import ProgressBar, NullTracker
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()

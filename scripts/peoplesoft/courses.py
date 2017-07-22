@@ -14,9 +14,9 @@ import sys
 from abc import ABCMeta, abstractmethod
 
 from scripts.textbooks.amazon import amazon_textbook_fields
-from scripts.parser_library.base_parser import CourseParser
-from scripts.parser_library.internal_exceptions import CourseParseError
-from scripts.parser_library.extractor import filter_departments, \
+from scripts.library.base_parser import CourseParser
+from scripts.library.internal_exceptions import CourseParseError
+from scripts.library.extractor import filter_departments, \
     filter_years_and_terms, titlize, extract_info
 
 
