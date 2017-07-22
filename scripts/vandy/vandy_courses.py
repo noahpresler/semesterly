@@ -8,10 +8,10 @@ from __future__ import absolute_import, division, print_function
 import re
 import sys
 
-from scripts.parser_library.base_parser import CourseParser
-from scripts.parser_library.internal_exceptions import CourseParseError
-from scripts.parser_library.utils import safe_cast
-from scripts.parser_library.exceptions import ParseError
+from scripts.library.base_parser import CourseParser
+from scripts.library.internal_exceptions import CourseParseError
+from scripts.library.utils import safe_cast
+from scripts.library.exceptions import ParseError
 
 
 class VandyParser(CourseParser):

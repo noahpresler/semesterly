@@ -16,14 +16,14 @@ import dateutil.parser as dparser
 # Contains BASE_DIR and PARSING_DIR.
 from django.conf import settings
 
-from scripts.parser_library.internal_exceptions import \
+from scripts.library.internal_exceptions import \
     JsonDuplicationWarning, JsonValidationError, JsonValidationWarning
-from scripts.parser_library.utils import DotDict, make_list, update, \
+from scripts.library.utils import DotDict, make_list, update, \
     dir_to_dict
-from scripts.parser_library.logger import Logger
-from scripts.parser_library.tracker import Tracker
-from scripts.parser_library.viewer import ProgressBar
-from scripts.parser_library.exceptions import PipelineError, PipelineWarning
+from scripts.library.logger import Logger
+from scripts.library.tracker import Tracker
+from scripts.library.viewer import ProgressBar
+from scripts.library.exceptions import PipelineError, PipelineWarning
 
 
 class ValidationError(PipelineError, jsonschema.exceptions.ValidationError):
@@ -108,7 +108,7 @@ class Validator:
             return
 
         if schema_path is None:
-            schema_path = '{}/{}/parser_library/schemas'.format(
+            schema_path = '{}/{}/library/schemas'.format(
                 settings.BASE_DIR,
                 settings.PARSING_DIR
             )

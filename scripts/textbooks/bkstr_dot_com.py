@@ -12,8 +12,8 @@ import re
 import simplejson as json
 
 from scripts.textbooks.amazon import amazon_textbook_fields
-from scripts.parser_library.base_parser import BaseParser
-from scripts.parser_library.extractor import filter_years_and_terms
+from scripts.library.base_parser import BaseParser
+from scripts.library.extractor import filter_years_and_terms
 
 
 class BkstrDotComParser(BaseParser):
