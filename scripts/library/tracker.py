@@ -6,7 +6,7 @@ import datetime
 
 from timeit import default_timer as timer
 
-from scripts.parser_library.exceptions import PipelineError, PipelineWarning
+from scripts.library.exceptions import PipelineError, PipelineWarning
 
 
 class TrackerError(PipelineError):

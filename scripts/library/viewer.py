@@ -9,7 +9,7 @@ import dateutil.parser as dparser
 
 from abc import ABCMeta, abstractmethod
 
-from scripts.parser_library.utils import pretty_json
+from scripts.library.utils import pretty_json
 
 
 class Viewer:
@@ -22,7 +22,7 @@ class Viewer:
         """Incremental updates of tracking info.
 
         Args:
-            tracker (scripts.parser_library.tracker.Tracker): Tracker instance.
+            tracker (scripts.library.tracker.Tracker): Tracker instance.
             broadcast_type (str): Broadcast type emitted by tracker.
         """
 
@@ -31,7 +31,7 @@ class Viewer:
         """Report all tracked info.
 
         Args:
-            tracker (scripts.parser_library.tracker.Tracker): Tracker instance.
+            tracker (scripts.library.tracker.Tracker): Tracker instance.
         """
 
 

@@ -17,10 +17,10 @@ from timetable.school_mappers import course_parsers, textbook_parsers, \
     new_course_parsers, new_textbook_parsers, new_eval_parsers, eval_parsers
 from timetable.management.commands.args_parse import schoollist_argparser, \
     ingestor_argparser, validator_argparser
-from scripts.parser_library.internal_exceptions import CourseParseError, \
+from scripts.library.internal_exceptions import CourseParseError, \
     JsonValidationError, JsonValidationWarning, IngestorWarning
-from scripts.parser_library.tracker import Tracker
-from scripts.parser_library.viewer import LogFormatted, ProgressBar
+from scripts.library.tracker import Tracker
+from scripts.library.viewer import LogFormatted, ProgressBar
 
 
 class Command(BaseCommand):

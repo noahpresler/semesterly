@@ -22,10 +22,10 @@ from random import randint
 from fake_useragent import UserAgent
 from time import sleep
 
-from scripts.parser_library.base_parser import BaseParser
+from scripts.library.base_parser import BaseParser
 from amazon import amazon_textbook_fields
 
-from scripts.parser_library.internal_exceptions import ParseError
+from scripts.library.internal_exceptions import ParseError
 
 from timetable.models import Course, Section, Textbook, TextbookLink
 
@@ -151,7 +151,7 @@ class BNParser(BaseParser):
 
         payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\n0\r\n-----011000010111000001101001--"
         self.requester.headers['content-type'] = "multipart/form-data; boundary=---011000010111000001101001"
-        semester_list = self.requester.post(url, 
+        semester_list = self.requester.post(url,
             params=params,
             data=payload,
             throttle=lambda:sleep(randint(300, 500))
@@ -226,7 +226,7 @@ class BNParser(BaseParser):
         return objs
 
     def extract_id_and_name(self, obj):
-        try:   
+        try:
             id_ = obj["categoryId"]
             name = obj["categoryName"]
             return id_, name

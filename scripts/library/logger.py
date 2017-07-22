@@ -10,10 +10,10 @@ import logging
 # from pygments import highlight, lexers, formatters, filters
 from pygments import highlight, lexers, formatters
 
-from scripts.parser_library.internal_exceptions import JsonValidationError, \
+from scripts.library.internal_exceptions import JsonValidationError, \
     JsonValidationWarning, DigestionError
 
-from scripts.parser_library.utils import pretty_json
+from scripts.library.utils import pretty_json
 
 
 class JSONWriter(object):

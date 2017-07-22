@@ -6,7 +6,7 @@ Parsing library extractio utilities.
 @date     11/22/16
 """
 
-# TODO - consider moving much functionality to scripts.parser_library.utils
+# TODO - consider moving much functionality to scripts.library.utils
 
 from __future__ import absolute_import, division, print_function
 
@@ -15,8 +15,8 @@ import re
 import unicodedata
 import dateutil.parser as dparser
 
-from scripts.parser_library.words import conjunctions_and_prepositions
-from scripts.parser_library.internal_exceptions import CourseParseError, CourseParseWarning
+from scripts.library.words import conjunctions_and_prepositions
+from scripts.library.internal_exceptions import CourseParseError, CourseParseWarning
 
 
 def filter_years_and_terms(base_years_and_terms,
