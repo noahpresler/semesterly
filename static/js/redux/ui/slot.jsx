@@ -1,3 +1,17 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import Radium, { StyleRoot } from 'radium';
@@ -179,7 +193,7 @@ class Slot extends React.Component {
 
   updateColours(colour) {
     // update sibling slot colours (i.e. the slots for the same course)
-    $(`.slot-${this.props.course}`)
+    $(`.slot-${this.props.courseId}`)
       .css('background-color', colour);
   }
 
@@ -223,7 +237,7 @@ class Slot extends React.Component {
         <StyleRoot>
           <div className="fc-event-container">
             <div
-              className={`fc-time-grid-event fc-event slot slot-${this.props.course}`}
+              className={`fc-time-grid-event fc-event slot slot-${this.props.courseId}`}
               style={this.getSlotStyles()}
               onClick={this.props.fetchCourseInfo}
               onMouseEnter={this.onSlotHover}
@@ -267,9 +281,9 @@ class Slot extends React.Component {
 Slot = Radium(Slot);
 
 Slot.propTypes = {
-  classmates: PropTypes.arrayOf(SemesterlyPropTypes.classmates).isRequired,
+  classmates: SemesterlyPropTypes.classmatesArray.isRequired,
   colourId: PropTypes.number.isRequired,
-  course: PropTypes.number.isRequired,
+  courseId: PropTypes.number.isRequired,
   depth_level: PropTypes.number.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,

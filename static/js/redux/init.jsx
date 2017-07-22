@@ -1,3 +1,17 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
@@ -13,6 +27,7 @@ import {
 } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
+import { receiveCourses } from './actions/search_actions';
 import {
     browserSupportsLocalStorage,
     setFirstVisit,
@@ -31,14 +46,14 @@ const store = createStore(rootReducer,
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
   if (userTimetables.length > 0) {
-    dispatch(loadTimetable(userTimetables[0]));
-    dispatch({ type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true });
+    const activeTimetable = userTimetables[0];
+    dispatch(loadTimetable(activeTimetable));
     setTimeout(() => {
-      dispatch(fetchMostClassmatesCount(userTimetables[0].courses.map(c => c.id)));
+      dispatch(fetchMostClassmatesCount(activeTimetable));
     }, 500);
-    dispatch({ type: ActionTypes.CACHED_TT_LOADED });
   } else if (browserSupportsLocalStorage()) {
     dispatch(loadCachedTimetable(allSemesters, oldSemesters));
+    dispatch({ type: ActionTypes.CACHED_TT_LOADED });
   }
 };
 
@@ -95,11 +110,12 @@ const handleFlows = featureFlow => (dispatch) => {
       break;
     case 'SHARE_TIMETABLE':
       dispatch({ type: ActionTypes.CACHED_TT_LOADED });
+      // TODO: replace course objects in userInfo with course ids after storing in entities
+      dispatch(receiveCourses(featureFlow.courses));
       if (initData.currentUser.isLoggedIn) {
         dispatch(handleCreateNewTimetable());
       }
-      dispatch(lockTimetable(featureFlow.sharedTimetable,
-        true, initData.currentUser.isLoggedIn));
+      dispatch(lockTimetable(featureFlow.sharedTimetable));
       break;
     case 'SHARE_EXAM':
       dispatch({ type: ActionTypes.SET_FINAL_EXAMS_SHARED });
@@ -144,6 +160,7 @@ const setup = () => (dispatch) => {
 
   dispatch({ type: ActionTypes.INIT_STATE, data: initData });
 
+  dispatch(receiveCourses(initData.currentUser.courses));
   dispatch(setupTimetables(initData.currentUser.timetables, initData.allSemesters,
     initData.oldSemesters));
 

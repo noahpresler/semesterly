@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Flows &#8212; Semesterly 0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Contribution Pipeline" href="contributing.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="contributing.html" title="Contribution Pipeline"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Semesterly 0.6 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="flows">
+<span id="id1"></span><h1>Flows<a class="headerlink" href="#flows" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="initalization">
+<h2>Initalization<a class="headerlink" href="#initalization" title="Permalink to this headline">¶</a></h2>
+<p>When a user loads the home timetable page, <code class="docutils literal"><span class="pre">FeatureFlowView</span></code> inside of
+<code class="docutils literal"><span class="pre">timetable.utils</span></code> is used to handle the request. On initial page load,
+the frontend requires some data to initialize the redux state, like
+information about the current user, the list of possible semesters for the
+school, and the list of student integrations. This initial data is created
+inside of the view, and passed in as a single json string in the response
+context:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FeatureFlowView</span><span class="p">(</span><span class="n">ValidateSubdomainMixin</span><span class="p">,</span> <span class="n">APIView</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># ...gather values for init_data</span>
+
+        <span class="n">init_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;school&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">school</span><span class="p">,</span>
+            <span class="s1">&#39;currentUser&#39;</span><span class="p">:</span> <span class="n">get_user_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">school</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">student</span><span class="p">,</span> <span class="n">sem</span><span class="p">),</span>
+            <span class="s1">&#39;currentSemester&#39;</span><span class="p">:</span> <span class="n">curr_sem_index</span><span class="p">,</span>
+            <span class="s1">&#39;allSemesters&#39;</span><span class="p">:</span> <span class="n">all_semesters</span><span class="p">,</span>
+            <span class="s1">&#39;uses12HrTime&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">school</span> <span class="ow">in</span> <span class="n">AM_PM_SCHOOLS</span><span class="p">,</span>
+            <span class="s1">&#39;studentIntegrations&#39;</span><span class="p">:</span> <span class="n">integrations</span><span class="p">,</span>
+            <span class="s1">&#39;examSupportedSemesters&#39;</span><span class="p">:</span> <span class="nb">map</span><span class="p">(</span><span class="n">all_semesters</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+                                          <span class="n">final_exams_available</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">school</span><span class="p">,</span> <span class="p">[])),</span>
+
+            <span class="s1">&#39;featureFlow&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">feature_flow</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_name</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;timetable.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;init_data&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">init_data</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>which makes the <code class="docutils literal"><span class="pre">init_data</span></code> variable accessible in <cite>timetable.html</cite>. This dumped json string is
+then passed to the frontend as a global variable:</p>
+<blockquote>
+<div><div class="highlight-html"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+  <span class="kd">var</span> <span class="nx">initData</span> <span class="o">=</span> <span class="s2">&quot;{{init_data|escapejs}}&quot;</span><span class="p">;</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>And then parsed inside of the <code class="docutils literal"><span class="pre">setup()</span></code> function in <code class="docutils literal"><span class="pre">init.jsx</span></code></p>
+<blockquote>
+<div><div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">setup</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">initData</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">initData</span><span class="p">);</span>
+
+    <span class="c1">// pass init data into the redux state</span>
+    <span class="nx">dispatch</span><span class="p">({</span> <span class="nx">type</span><span class="o">:</span> <span class="nx">ActionTypes</span><span class="p">.</span><span class="nx">INIT_STATE</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">initData</span> <span class="p">});</span>
+
+    <span class="c1">// do other logic with initData...</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In other words, the data that the frontend requires is retrieved/calculated inside
+of <code class="docutils literal"><span class="pre">FeatureFlowView</span></code>, and then passed to the frontend as global variable <code class="docutils literal"><span class="pre">initData</span></code>. The frontend
+then does any logic it needs based on that data inside of <code class="docutils literal"><span class="pre">setup()</span></code> in <code class="docutils literal"><span class="pre">init.jsx</span></code>. Any
+data that needs to be reused later on from <code class="docutils literal"><span class="pre">initData</span></code> should be passed in to the redux state so
+that the only global variable uses appear in <code class="docutils literal"><span class="pre">setup()</span></code>.</p>
+</div>
+<div class="section" id="feature-flows">
+<h2>Feature Flows<a class="headerlink" href="#feature-flows" title="Permalink to this headline">¶</a></h2>
+<p>One such piece of data that is passed to the frontend is a <code class="docutils literal"><span class="pre">featureFlow</span></code> object. This object is
+obtained as the return value of <code class="docutils literal"><span class="pre">.get_feature_flow()</span></code>, in addition to a <code class="docutils literal"><span class="pre">name:</span> <span class="pre">self.feature_name</span></code>
+key value pair. In the default implementation, this is just the dictionary <code class="docutils literal"><span class="pre">{name:</span> <span class="pre">None}</span></code>:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FeatureFlowView</span><span class="p">(</span><span class="n">ValidateSubdomainMixin</span><span class="p">,</span> <span class="n">APIView</span><span class="p">):</span>
+    <span class="n">feature_name</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">get_feature_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="o">...</span>
+        <span class="n">feature_flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_feature_flow</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">init_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="o">...</span>
+            <span class="s1">&#39;featureFlow&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">feature_flow</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_name</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;timetable.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;init_data&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">init_data</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This feature flow value can be used to store any extra information that the frontend needs for any
+endpoints that would require initial data to be loaded. For example, when loading a timetable share
+link, the frontend also needs to get data about the timetable that is being shared - instead of making
+a request to the backend after page load, this information can be provided by the backend directly
+by passing this information in the feature flow. It is easy to write new views that pass different
+data and have custom logic by subclassing <code class="docutils literal"><span class="pre">FeatureFlowView</span></code> and overwriting the
+<code class="docutils literal"><span class="pre">get_feature_flow()</span></code> method and the <code class="docutils literal"><span class="pre">.feature_name</span></code> class attribute.</p>
+<p>Having this data all stored under the key
+<code class="docutils literal"><span class="pre">featureFlow</span></code> in <code class="docutils literal"><span class="pre">init_data</span></code> ensures two things. Firstly, it makes explicit that there can only
+be one feature flow in play at a time (we can&#8217;t load a timetable share link and a course share link
+at the same time), and secondly, it allows the frontend to know where to look for any feature data
+and act accordingly. In practice, this is done by switching on the name of the feature flow:</p>
+<blockquote>
+<div><div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">setup</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">initData</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">initData</span><span class="p">);</span>
+
+    <span class="nx">dispatch</span><span class="p">({</span> <span class="nx">type</span><span class="o">:</span> <span class="nx">ActionTypes</span><span class="p">.</span><span class="nx">INIT_STATE</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">initData</span> <span class="p">});</span>
+
+    <span class="c1">// do other logic with initData...</span>
+
+    <span class="nx">dispatch</span><span class="p">(</span><span class="nx">handleFlows</span><span class="p">(</span><span class="nx">initData</span><span class="p">.</span><span class="nx">featureFlow</span><span class="p">));</span>
+<span class="p">};</span>
+
+<span class="kr">const</span> <span class="nx">handleFlows</span> <span class="o">=</span> <span class="nx">featureFlow</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="nx">featureFlow</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="s1">&#39;SIGNUP&#39;</span><span class="o">:</span>
+            <span class="nx">dispatch</span><span class="p">({</span> <span class="nx">type</span><span class="o">:</span> <span class="nx">ActionTypes</span><span class="p">.</span><span class="nx">TRIGGER_SIGNUP_MODAL</span> <span class="p">});</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="s1">&#39;USER_ACQ&#39;</span><span class="o">:</span>
+            <span class="nx">dispatch</span><span class="p">({</span> <span class="nx">type</span><span class="o">:</span> <span class="nx">ActionTypes</span><span class="p">.</span><span class="nx">TRIGGER_ACQUISITION_MODAL</span> <span class="p">});</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="s1">&#39;SHARE_TIMETABLE&#39;</span><span class="o">:</span>
+            <span class="nx">dispatch</span><span class="p">({</span> <span class="nx">type</span><span class="o">:</span> <span class="nx">ActionTypes</span><span class="p">.</span><span class="nx">CACHED_TT_LOADED</span> <span class="p">});</span>
+            <span class="nx">dispatch</span><span class="p">(</span><span class="nx">lockTimetable</span><span class="p">(</span><span class="nx">featureFlow</span><span class="p">.</span><span class="nx">sharedTimetable</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">initData</span><span class="p">.</span><span class="nx">currentUser</span><span class="p">.</span><span class="nx">isLoggedIn</span><span class="p">));</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="c1">// ... etc.</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="c1">// unexpected feature name</span>
+            <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>To help understand how feature flows work, let&#8217;s go through the code for an example feature flow:
+course sharing. In order to implement course sharing, we want to create a new view/endpoint that
+retrieves course data based on the url and passes it to the frontend, which would then update the
+redux state and dispatch an action to open the course modal.</p>
+<p>We start be defining a new endpoint for this feature flow:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;course/(?P&lt;code&gt;.+?)/(?P&lt;sem_name&gt;.+?)/(?P&lt;year&gt;.+?)/*$&#39;</span><span class="p">,</span>
+                   <span class="n">courses</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">CourseModal</span><span class="o">.</span><span class="n">as_view</span><span class="p">())</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Then we create a new <code class="docutils literal"><span class="pre">FeatureFlowView</span></code> for this endpoint which needs to do two things: define
+a name for the feature flow, which the frontend look at to determine what action to do, and return
+the course data that the frontend needs inside of <code class="docutils literal"><span class="pre">get_feature_flow()</span></code>:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CourseModal</span><span class="p">(</span><span class="n">FeatureFlowView</span><span class="p">):</span>
+    <span class="n">feature_name</span> <span class="o">=</span> <span class="s2">&quot;SHARE_COURSE&quot;</span>
+
+    <span class="k">def</span> <span class="nf">get_feature_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">sem_name</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+        <span class="n">semester</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Semester</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">sem_name</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">)</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">course</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Course</span><span class="p">,</span> <span class="n">school</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">school</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span>
+        <span class="n">course_json</span> <span class="o">=</span> <span class="n">get_detailed_course_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">school</span><span class="p">,</span> <span class="n">course</span><span class="p">,</span> <span class="n">semester</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">student</span><span class="p">)</span>
+
+        <span class="c1"># analytics</span>
+        <span class="n">SharedCourseView</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">student</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">student</span><span class="p">,</span>
+            <span class="n">shared_course</span><span class="o">=</span><span class="n">course</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;sharedCourse&#39;</span><span class="p">:</span> <span class="n">course_json</span><span class="p">,</span> <span class="s1">&#39;semester&#39;</span><span class="p">:</span> <span class="n">semester</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The frontend can now add a new case in <code class="docutils literal"><span class="pre">handleFlows</span></code> to perform logic for this feature flow:</p>
+<blockquote>
+<div><div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">handleFlows</span> <span class="o">=</span> <span class="nx">featureFlow</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="nx">featureFlow</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">...</span>
+        <span class="k">case</span> <span class="s1">&#39;SHARE_COURSE&#39;</span><span class="o">:</span>
+            <span class="nx">dispatch</span><span class="p">(</span><span class="nx">setCourseInfo</span><span class="p">(</span><span class="nx">featureFlow</span><span class="p">.</span><span class="nx">sharedCourse</span><span class="p">));</span>
+            <span class="nx">dispatch</span><span class="p">(</span><span class="nx">fetchCourseClassmates</span><span class="p">(</span><span class="nx">featureFlow</span><span class="p">.</span><span class="nx">sharedCourse</span><span class="p">.</span><span class="nx">id</span><span class="p">));</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="c1">// ... etc.</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="c1">// unexpected feature name</span>
+            <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="shortcuts">
+<h2>Shortcuts<a class="headerlink" href="#shortcuts" title="Permalink to this headline">¶</a></h2>
+<p>Some feature flows don&#8217;t require any extra data - they simply require the frontend to know that
+a feature flow is being run. For example, for the signup feature flow, loading the page at
+<code class="docutils literal"><span class="pre">/signup</span></code> should simply open the signup modal, which requires no extra logic or data other than
+knowing that it should occur. We could do this by writing a new view:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SignupModal</span><span class="p">(</span><span class="n">FeatureFlowView</span><span class="p">):</span>
+    <span class="n">feature_name</span> <span class="o">=</span> <span class="s2">&quot;SIGNUP&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>We do not need to implement <code class="docutils literal"><span class="pre">.get_feature_flow()</span></code> since the frontend doesn&#8217;t require any extra
+data and the default implementation already returns an empty dictionary. We can simplify this
+by simply declaring this view directly inside of the urls file:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^signup/*$/&#39;</span><span class="p">,</span> <span class="n">FeatureFlowView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span><span class="n">feature_name</span><span class="o">=</span><span class="s1">&#39;SIGNUP&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>see <a class="reference external" href="https://github.com/noahpresler/semesterly/pull/838">https://github.com/noahpresler/semesterly/pull/838</a> for the
+original pull request implementing feature flows</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Flows</a><ul>
+<li><a class="reference internal" href="#initalization">Initalization</a></li>
+<li><a class="reference internal" href="#feature-flows">Feature Flows</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="contributing.html"
+                        title="previous chapter">Contribution Pipeline</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/flows.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="contributing.html" title="Contribution Pipeline"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Semesterly 0.6 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, norofe.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

@@ -1,3 +1,17 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import * as ActionTypes from '../constants/actionTypes';
 
 const explorationModal = (state = {
@@ -16,19 +30,19 @@ const explorationModal = (state = {
     case ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS:
       return Object.assign({}, state, { isFetching: true });
     case ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS: {
-      let { advancedSearchResults } = action;
+      let results = action.response.result;
       if (state.page > 1) {
-        if (advancedSearchResults) {
-          advancedSearchResults = [...state.advancedSearchResults].concat(advancedSearchResults);
+        if (results) {
+          results = [...state.advancedSearchResults].concat(results);
           return Object.assign({}, state, {
-            advancedSearchResults,
+            advancedSearchResults: results,
             isFetching: false,
           });
         }
         return Object.assign({}, state, { isFetching: false });
       }
       return Object.assign({}, state, {
-        advancedSearchResults,
+        advancedSearchResults: results,
         isFetching: false,
         active: 0,
       });
@@ -54,5 +68,7 @@ const explorationModal = (state = {
       return state;
   }
 };
+
+export const getAdvancedSearchResultIds = state => state.advancedSearchResults;
 
 export default explorationModal;

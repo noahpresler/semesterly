@@ -1,8 +1,32 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 """ Models pertaining to Students. """
 
+import json
+
+from django.conf import settings
+from django.core.signing import TimestampSigner
 from django.db import models
 from django.contrib.auth.models import User
+from hashids import Hashids
+from oauth2client.client import GoogleCredentials
+
 from timetable import models as timetable_models
+
+# TODO: put hashids salt into config/settings file
+hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
 
 class Student(models.Model):
@@ -34,6 +58,37 @@ class Student(models.Model):
     school = models.CharField(max_length=100, null=True)
     time_accepted_tos = models.DateTimeField(null=True)
 
+    def get_token(self):
+        return TimestampSigner().sign(self.id).split(':', 1)[1]
+
+    def get_hash(self):
+        return hashids.encrypt(self.id)
+
+    def is_signed_up_through_fb(self):
+        return self.provider_exists('facebook')
+
+    def is_signed_up_through_google(self):
+        return self.provider_exists('google-oauth2')
+
+    def provider_exists(self, provider):
+        return self.user.social_auth.filter(provider=provider).exists()
+
+    def is_logged_in_google(self):
+        credentials = self.get_google_credentials()
+        return credentials is not None and (not credentials.invalid)
+
+    def get_google_credentials(self):
+        social_user = self.user.social_auth.filter(provider='google-oauth2').first()
+        if social_user is None:
+            return None
+        access_token = social_user.extra_data["access_token"]
+        refresh_token = social_user.extra_data.get("refresh_token")
+        expires_at = social_user.extra_data["expires"]
+        return GoogleCredentials(access_token, settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
+                                 settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET, refresh_token,
+                                 expires_at,
+                                 "https://accounts.google.com/o/oauth2/token", 'my-user-agent/1.0')
+
 
 class Reaction(models.Model):
     """ Database object representing a reaction to a course.
@@ -58,33 +113,36 @@ class Reaction(models.Model):
 
 
 class PersonalEvent(models.Model):
+    """
+    A custom event that has been saved to a user's PersonalTimetable
+    so that it persists across refresh, device, and session. Marks 
+    when a user is not free. Courses are scheduled around it.abs
+
+    """
     name = models.CharField(max_length=50)
     day = models.CharField(max_length=1)
     time_start = models.CharField(max_length=15)
     time_end = models.CharField(max_length=15)
 
 
-class PersonalTimetable(models.Model):
+class PersonalTimetable(timetable_models.Timetable):
     """ Database object representing a timetable created (and saved) by a user.
 
         A PersonalTimetable belongs to a Student, and contains a list of
         Courses and Sections that it represents.
     """
-    courses = models.ManyToManyField(timetable_models.Course)
-    school = models.CharField(max_length=50)
     name = models.CharField(max_length=100)
-    _semester = models.CharField(max_length=2) # deprecated
-    semester = models.ForeignKey('timetable.Semester')
-    time_updated = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student)
     last_updated = models.DateTimeField(auto_now=True)
-    sections = models.ManyToManyField(timetable_models.Section)
     events = models.ManyToManyField(PersonalEvent)
     has_conflict = models.BooleanField(blank=True, default=False)
 
 
 class RegistrationToken(models.Model):
-    """ Database object used during signup. """
+    """
+    A push notification token for Chrome noitification via 
+    Google Cloud Messaging
+    """
     auth = models.TextField(default='')
     p256dh = models.TextField(default='')
     endpoint = models.TextField(default='')

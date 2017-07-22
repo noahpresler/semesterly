@@ -1,10 +1,21 @@
-import { getLogFinalExamViewEndpoint } from './constants/endpoints';
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
 
-export const randomString = (length = 30, chars = '!?()*&^%$#@![]0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') => {
-  let result = '';
-  for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-  return result;
-};
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
+import range from 'lodash/range';
+import { getLogFinalExamViewEndpoint } from './constants/endpoints';
+import COLOUR_DATA from './constants/colours';
+
 export const browserSupportsLocalStorage = () => {
   try {
     localStorage.setItem('test', 'test');
@@ -122,25 +133,51 @@ export const getMaxHourBasedOnWindowHeight = () => {
   }
   return Math.min(24, parseInt(maxHour, 10));
 };
+
 /*
- gets the end hour of the current timetable, based on the class that ends latest
+ * Raise error if the response has an error status code, otherwise return response.
+ * Used to handle errors inside of the fetch() promise chain
  */
-export const getMaxEndHour = (timetable, hasCourses) => {
-  let maxEndHour = 17;
-  if (!hasCourses) {
-    return maxEndHour;
+export const checkStatus = (response) => {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
   }
-  getMaxHourBasedOnWindowHeight();
-  const courses = timetable.courses;
-  for (let courseIndex = 0; courseIndex < courses.length; courseIndex++) {
-    const course = courses[courseIndex];
-    for (let slotIndex = 0; slotIndex < course.slots.length; slotIndex++) {
-      const slot = course.slots[slotIndex];
-      const endHour = parseInt(slot.time_end.split(':')[0], 10);
-      maxEndHour = Math.max(maxEndHour, endHour);
-    }
-  }
-  return Math.max(maxEndHour, getMaxHourBasedOnWindowHeight());
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
 };
 
+// TODO: define map somewhere or use CHOICES in Section model
+export const getSectionTypeDisplayName = function getSectionTypeDisplayName(sectionTypeCode) {
+  switch (sectionTypeCode) {
+    case 'L':
+      return 'Lecture';
+    case 'T':
+      return 'Tutorial';
+    case 'P':
+      return 'Lab/Practical';
+    default:
+      return sectionTypeCode;
+  }
+};
+
+// A comparison function for sorting objects by string property
+export const strPropertyCmp = prop => (first, second) => (first[prop] > second[prop] ? 1 : -1);
+
 export const isIncomplete = prop => prop === undefined || prop === '' || prop === null;
+
+export const getNextAvailableColour = courseToColourIndex =>
+  range(COLOUR_DATA.length).find(i => !Object.values(courseToColourIndex).some(x => x === i));
+
+export const generateCustomEventId = () => new Date().getTime();
+
+export const slotToDisplayOffering = (course, section, offering, colourId) => ({
+  ...offering,
+  colourId,
+  courseId: course.id,
+  code: course.code,
+  name: course.name,
+  custom: false,
+  meeting_section: section.meeting_section,
+});
+

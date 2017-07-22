@@ -1,11 +1,25 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 
-const CourseModalSection = ({ secName, instr, enrolled, waitlist, size, hoverSection,
+const CourseModalSection = ({ secName, instr, enrolment, waitlist, size, hoverSection,
                                unHoverSection, locked, lockOrUnlock,
                                isOnActiveTimetable }) => {
-  const seats = size - enrolled;
+  const seats = size - enrolment;
   let seatStatus = waitlist > 0 ? (`${waitlist} waitlist`) : (`${seats} open`);
   if (seats === -1 || size === -1) {
     seatStatus = 'Unknown';
@@ -52,7 +66,7 @@ CourseModalSection.defaultProps = {
 CourseModalSection.propTypes = {
   secName: PropTypes.string.isRequired,
   instr: PropTypes.string.isRequired,
-  enrolled: PropTypes.number.isRequired,
+  enrolment: PropTypes.number.isRequired,
   waitlist: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
   hoverSection: PropTypes.func.isRequired,

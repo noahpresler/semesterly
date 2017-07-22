@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Backend Endpoints &#8212; Semesterly 0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contribution Pipeline" href="contributing.html" />
+    <link rel="prev" title="Locking Implementation" href="locking.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="contributing.html" title="Contribution Pipeline"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="locking.html" title="Locking Implementation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Semesterly 0.6 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="backend-endpoints">
+<span id="backend"></span><h1>Backend Endpoints<a class="headerlink" href="#backend-endpoints" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="create-timetables">
+<h2>Create timetables<a class="headerlink" href="#create-timetables" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>description</dt>
+<dd>This endpoint generates timetables</dd>
+<dt>endpoint</dt>
+<dd><code class="docutils literal"><span class="pre">/get_timetables/</span></code></dd>
+<dt>view</dt>
+<dd><code class="docutils literal"><span class="pre">get_timetables</span></code></dd>
+<dt>request format example</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;courseSections&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;6076&quot;</span><span class="p">:</span> <span class="p">{</span>                                           <span class="c1"># course id</span>
+            <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="s2">&quot;P0201&quot;</span>                                    <span class="c1"># maps section type code to locked section</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;6090&quot;</span><span class="p">:</span> <span class="p">{}</span>                                          <span class="c1"># empty object if no locked sections</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;customSlots&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;numOptionCourses&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;optionCourses&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;preferences&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;sort_metrics&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;metric&quot;</span><span class="p">:</span> <span class="s2">&quot;days with class&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;order&quot;</span><span class="p">:</span> <span class="s2">&quot;least&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;selected&quot;</span><span class="p">:</span> <span class="n">false</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;metric&quot;</span><span class="p">:</span> <span class="s2">&quot;number of conflicts&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;order&quot;</span><span class="p">:</span> <span class="s2">&quot;least&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;selected&quot;</span><span class="p">:</span> <span class="n">false</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;metric&quot;</span><span class="p">:</span> <span class="s2">&quot;time on campus&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;order&quot;</span><span class="p">:</span> <span class="s2">&quot;least&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;selected&quot;</span><span class="p">:</span> <span class="n">false</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;metric&quot;</span><span class="p">:</span> <span class="s2">&quot;course rating stars&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;order&quot;</span><span class="p">:</span> <span class="s2">&quot;most&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;selected&quot;</span><span class="p">:</span> <span class="n">false</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;try_with_conflicts&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;school&quot;</span><span class="p">:</span> <span class="s2">&quot;uoft&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;semester&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Fall&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="s2">&quot;2016&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;sid&quot;</span><span class="p">:</span> <span class="s2">&quot;k#abILevGEL7vbhIYJwL&amp;7!wl4tBVD&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;updated_courses&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;course_id&quot;</span><span class="p">:</span> <span class="mi">6090</span><span class="p">,</span>
+            <span class="s2">&quot;section_codes&quot;</span><span class="p">:</span> <span class="p">[</span>                              <span class="c1"># list of locked section codes</span>
+                <span class="s2">&quot;P0201&quot;</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+<dt>response format</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;new_c_to_s&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;6076&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="s2">&quot;P0201&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;6090&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="s2">&quot;P0201&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;timetables&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;avg_rating&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;courses&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;EMU150H1&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;department&quot;</span><span class="p">:</span> <span class="s2">&quot;MUS&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;enrolled_sections&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;P0201&quot;</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">6076</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Instrumental-Violin &amp; Viola&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;num_credits&quot;</span><span class="p">:</span> <span class="mf">0.17</span><span class="p">,</span>
+                    <span class="s2">&quot;slots&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;_semester&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;course&quot;</span><span class="p">:</span> <span class="mi">6076</span><span class="p">,</span>
+                            <span class="s2">&quot;day&quot;</span><span class="p">:</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;enrolment&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">26674</span><span class="p">,</span>
+                            <span class="s2">&quot;instructors&quot;</span><span class="p">:</span> <span class="s2">&quot;Rapoport&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="s2">&quot;120&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;meeting_section&quot;</span><span class="p">:</span> <span class="s2">&quot;P0201&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;section&quot;</span><span class="p">:</span> <span class="mi">15726</span><span class="p">,</span>
+                            <span class="s2">&quot;section_type&quot;</span><span class="p">:</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;semester&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;textbooks&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                            <span class="s2">&quot;time_end&quot;</span><span class="p">:</span> <span class="s2">&quot;11:00&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;time_start&quot;</span><span class="p">:</span> <span class="s2">&quot;10:00&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;waitlist&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;waitlist_size&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;textbooks&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;P0201&quot;</span><span class="p">:</span> <span class="p">[]</span>
+                    <span class="p">}</span>
+                <span class="p">},</span>
+                <span class="o">...</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;days_with_class&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;has_conflict&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;num_conflicts&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;num_friends&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;time_on_campus&quot;</span><span class="p">:</span> <span class="mf">24.8</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="create-timetable-share-link">
+<h2>Create Timetable Share Link<a class="headerlink" href="#create-timetable-share-link" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>description</dt>
+<dd>This endpoint creates a new share link and stores it in the db</dd>
+<dt>endpoint</dt>
+<dd><code class="docutils literal"><span class="pre">/share/link</span></code></dd>
+<dt>view</dt>
+<dd><code class="docutils literal"><span class="pre">create_share_link</span></code></dd>
+</dl>
+<p>request format example</p>
+<p>response format</p>
+</div>
+<div class="section" id="load-share-timetable-link">
+<h2>Load Share Timetable Link<a class="headerlink" href="#load-share-timetable-link" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>description</dt>
+<dd>This endpoint looks up share link in the db</dd>
+<dt>endpoint</dt>
+<dd><code class="docutils literal"><span class="pre">/share/[code]</span></code></dd>
+<dt>view</dt>
+<dd><code class="docutils literal"><span class="pre">share_timetable</span></code></dd>
+</dl>
+<p>request format example</p>
+<p>response format</p>
+</div>
+<div class="section" id="basic-course-search">
+<h2>Basic Course Search<a class="headerlink" href="#basic-course-search" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>description</dt>
+<dd>This endpoint is used to search based on string query (main in search bar)</dd>
+<dt>endpoint</dt>
+<dd><code class="docutils literal"><span class="pre">/search/[school]/[semester</span> <span class="pre">name]/[year]/[query]/</span></code></dd>
+<dt>view</dt>
+<dd><code class="docutils literal"><span class="pre">course_search</span></code></dd>
+</dl>
+<p>request format example</p>
+<p>response format</p>
+</div>
+<div class="section" id="advanced-course-search">
+<h2>Advanced Course Search<a class="headerlink" href="#advanced-course-search" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>description</dt>
+<dd>This endpoint is used to do search from advanced search modal</dd>
+<dt>endpoint</dt>
+<dd><code class="docutils literal"><span class="pre">/advanced_search/</span></code></dd>
+<dt>view</dt>
+<dd><code class="docutils literal"><span class="pre">advanced_course_search</span></code></dd>
+</dl>
+<p>request format example</p>
+<p>response format</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Backend Endpoints</a><ul>
+<li><a class="reference internal" href="#create-timetables">Create timetables</a></li>
+<li><a class="reference internal" href="#create-timetable-share-link">Create Timetable Share Link</a></li>
+<li><a class="reference internal" href="#load-share-timetable-link">Load Share Timetable Link</a></li>
+<li><a class="reference internal" href="#basic-course-search">Basic Course Search</a></li>
+<li><a class="reference internal" href="#advanced-course-search">Advanced Course Search</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="locking.html"
+                        title="previous chapter">Locking Implementation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="contributing.html"
+                        title="next chapter">Contribution Pipeline</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/backend.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="contributing.html" title="Contribution Pipeline"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="locking.html" title="Locking Implementation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Semesterly 0.6 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, norofe.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>

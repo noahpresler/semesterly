@@ -1,14 +1,30 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import * as ActionTypes from '../constants/actionTypes';
 import { isIncomplete } from '../util';
 
-const userInfo = (state = {
+export const initialState = {
   data: { isLoggedIn: false },
   overrideHide: false, // hide the user settings modal if true. Overrides overrideShow
   overrideShow: false, // show the user settings modal if true
   isVisible: false,
   saving: false,
   isFetching: false,
-}, action) => {
+};
+
+const userInfo = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.INIT_STATE:
       return Object.assign({}, state, { data: action.data.currentUser, isFetching: false });
@@ -41,17 +57,6 @@ const userInfo = (state = {
 };
 
 export const isUserInfoIncomplete = (state) => {
-  // if (!state.data.FacebookSignedUp) {
-  //   return state.data.isLoggedIn &&
-  //     (isIncomplete(state.data.major) ||
-  //     isIncomplete(state.data.class_year));
-  // }
-  // return state.data.isLoggedIn &&
-  //   (isIncomplete(state.data.social_offerings) ||
-  //     isIncomplete(state.data.social_courses) ||
-  //     isIncomplete(state.data.major) ||
-  //     isIncomplete(state.data.class_year)
-  //   );
   const fields = state.data.FacebookSignedUp ?
   ['social_offerings', 'social_courses',
     'major', 'class_year'] :
