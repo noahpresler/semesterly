@@ -27,7 +27,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_DIRECTORY = os.getcwd()
 
-PARSING_DIR = 'scripts'
+PARSING_DIR = 'parsing'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -159,7 +159,8 @@ INSTALLED_APPS = (
     'rest_framework_swagger',
     'webpack_loader',
     'djcelery',
-    'agreement'
+    'agreement',
+    'parsing',
 )
 
 REST_FRAMEWORK ={
