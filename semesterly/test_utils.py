@@ -24,6 +24,7 @@ from django.contrib.auth import BACKEND_SESSION_KEY
 from django.contrib.auth import HASH_SESSION_KEY
 from django.contrib.auth import SESSION_KEY
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import StaleElementReferenceException
@@ -60,6 +61,11 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     """
 
     serialized_rollback = True
+
+    def __init__(self, *args, **kwargs):
+        super(SeleniumTestCase, self).__init__(*args, **kwargs)
+        if settings.DEBUG == False:
+            settings.DEBUG = True
 
     @classmethod
     def setUpClass(cls):
