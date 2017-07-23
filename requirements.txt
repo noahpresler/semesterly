@@ -69,3 +69,8 @@ pep8==1.7.0
 recommonmark==0.4.0
 sphinx-autobuild==0.6.0
 sphinx-rtd-theme==0.1.9
+django-picklefield==0.3.2
+scikit-learn==0.18.1
+scipy==0.19.1
+numpy==1.13.1
+nltk==3.2.1
