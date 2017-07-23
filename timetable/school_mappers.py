@@ -17,6 +17,8 @@ from collections import OrderedDict
 
 import django
 
+from parsing.schools.active import VALID_SCHOOLS
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
@@ -34,18 +36,6 @@ school_to_granularity = {
     'umich': 5,
     'chapman': 5,
     'salisbury': 5,
-}
-
-VALID_SCHOOLS = {
-    "uoft",
-    "jhu",
-    "umd",
-    "queens",
-    "vandy",
-    "gw",
-    "umich",
-    "chapman",
-    "salisbury",
 }
 
 AM_PM_SCHOOLS = {
@@ -199,7 +189,7 @@ old_school_to_semesters = {
 types = ['courses', 'evals', 'textbooks']
 for school in VALID_SCHOOLS:
     for p_type in types:
-        exec "from scripts.{0}.{0}_{1} import *".format(school, p_type)
+        exec "from parsing.schools.{0}.{0}_{1} import *".format(school, p_type)
 
 # use lambdas to call constructor in a lazy fashion
 course_parsers = {
@@ -240,7 +230,7 @@ eval_parsers = {
 }
 
 textbook_parsers = {
-    'uoft': parse_uoft_textbooks,
+    # 'uoft': parse_uoft_textbooks,
     'rutgers': lambda: None,
     'uo': lambda: None,
     'queens': parse_queens_textbooks,
