@@ -1,16 +1,18 @@
-# Copyright (C) 2017 Semester.ly Technologies, LLC
-#
-# Semester.ly is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Semester.ly is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
 
-"""This file contains all dicts which map a school to its associated object."""
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+from __future__ import absolute_import, division, print_function
+
 import os
 
 from collections import OrderedDict
@@ -21,6 +23,9 @@ from parsing.schools.active import VALID_SCHOOLS
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
+
+"""This file contains all dicts which map a school to its associated object."""
+
 
 # the smallest block size (in minutes) needed to describe start/end times
 # > uoft classes only start on the hour or half hour, so granularity is 30min
@@ -184,40 +189,26 @@ old_school_to_semesters = {
 }
 # END TEMP
 
-# do the imports: assumes all parser follow the same naming conventions:
-# schoolname_parsertype where parsertype can be courses, evals, or textbooks
+new_parsers = {}
+
+# Do the imports.
 types = ['courses', 'evals', 'textbooks']
-for school in VALID_SCHOOLS:
-    for p_type in types:
-        exec "from parsing.schools.{0}.{0}_{1} import *".format(school, p_type)
+for type_ in types:
+    new_parsers[type_] = {}
+    for school in VALID_SCHOOLS:
+        try:
+            Parser = None  # Binding below in exec.
+            exec 'from parsing.schools.{}.{} import Parser'.format(
+                school,
+                type_
+            )
+            new_parsers[type_][school] = Parser
+        except ImportError:
+            pass
 
 # use lambdas to call constructor in a lazy fashion
 course_parsers = {
     'uoft': lambda: UofTParser().start(),
-}
-
-new_course_parsers = {
-    'chapman': lambda *args, **kwargs: ChapmanParser(**kwargs),
-    'jhu': lambda *args, **kwargs: HopkinsParser(**kwargs),
-    'umich': lambda *args, **kwargs: UmichParser(**kwargs),
-    'queens': lambda *args, **kwargs: QueensParser(**kwargs),
-    'salisbury': lambda *args, **kwargs: SalisburyParser(**kwargs),
-    'vandy': lambda *args, **kwargs: VandyParser(**kwargs),
-    'umd': lambda *args, **kwargs: UMDParser(**kwargs),
-}
-
-new_textbook_parsers = {
-    'chapman': lambda *args, **kwargs: ChapmanParser(**kwargs),
-    'gw': lambda *args, **kwargs: GWTextbookParser(**kwargs),
-    'jhu': lambda *args, **kwargs: JHUTextbookParser(**kwargs),
-    'umd': lambda *args, **kwargs: UMDTextbookParser(**kwargs),
-    'umich': lambda *args, **kwargs: UmichTextbookParser(**kwargs),
-    'vandy': lambda *args, **kwargs: VandyTextbookParser(**kwargs),
-}
-
-new_eval_parsers = {
-    'jhu': lambda *args, **kwargs: HopkinsEvalParser(**kwargs),
-    'vandy': lambda *args, **kwargs: VandyEvalParser(**kwargs),
 }
 
 eval_parsers = {
@@ -233,7 +224,7 @@ textbook_parsers = {
     # 'uoft': parse_uoft_textbooks,
     'rutgers': lambda: None,
     'uo': lambda: None,
-    'queens': parse_queens_textbooks,
+    # 'queens': parse_queens_textbooks,
 }
 
 final_exams_available = {

@@ -1,22 +1,15 @@
-"""
-Queens Course Parser.
-
-@org    Semeseter.ly
-@author Noah Presler & Michael N. Miller
-@date   2/15/17
-"""
-
+"""Filler."""
 from __future__ import absolute_import, division, print_function
 
 import signal
 import socket
 
-from parsing.common.peoplesoft.courses import QPeoplesoftParser
-
 from selenium import webdriver
 
+from parsing.common.peoplesoft.courses import QPeoplesoftParser
 
-class QueensParser(QPeoplesoftParser):
+
+class Parser(QPeoplesoftParser):
     """Course parser for Queens University."""
 
     BASE_URL = 'https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/'\
@@ -38,16 +31,16 @@ class QueensParser(QPeoplesoftParser):
         self.cap["phantomjs.page.settings.resourceTimeout"] = 50000000
         self.cap["phantomjs.page.settings.loadImages"] = False
         self.cap["phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:16.0) Gecko/20121026 Firefox/16.0'
-        # self.driver = webdriver.PhantomJS(desired_capabilities=self.cap)
+        self.driver = webdriver.PhantomJS(desired_capabilities=self.cap)
         # NOTE: comment being saved in case this is important for local dev.
-        self.driver = webdriver.PhantomJS(
-            './node_modules/phantomjs-prebuilt/bin/phantomjs',
-            desired_capabilities=self.cap
-        )
+        # self.driver = webdriver.PhantomJS(
+        #     './node_modules/phantomjs-prebuilt/bin/phantomjs',
+        #     desired_capabilities=self.cap
+        # )
         # self.driver = webdriver.Chrome()  # FOR DEBUG PURPOSES ONLY
 
-        super(QueensParser, self).__init__('queens', QueensParser.BASE_URL,
-                                           url_params=params, **kwargs)
+        super(Parser, self).__init__('queens', Parser.BASE_URL,
+                                     url_params=params, **kwargs)
 
     def seleni_run(self, execute):
         """Run selenium routine."""
@@ -65,12 +58,12 @@ class QueensParser(QPeoplesoftParser):
         self.driver.get('https://my.queensu.ca/')
         self.seleni_run(
             lambda: self.driver.find_element_by_id('username').send_keys(
-                QueensParser.CREDENTIALS['USERNAME']
+                Parser.CREDENTIALS['USERNAME']
             )
         )
         self.seleni_run(
             lambda: self.driver.find_element_by_id('password').send_keys(
-                QueensParser.CREDENTIALS['PASSWORD']
+                Parser.CREDENTIALS['PASSWORD']
             )
         )
         self.seleni_run(
@@ -120,33 +113,14 @@ class QueensParser(QPeoplesoftParser):
         self.requester.headers = headers
 
         # NOTE: get request will update CookieJar
-        self.requester.get(QueensParser.BASE_URL, params={
+        self.requester.get(Parser.BASE_URL, params={
             'Page': 'SSR_CLSRCH_ENTRY',
             'Action': 'U',
             'ExactKeys': 'Y',
             'TargetFrameName': 'None'
         })
 
-    def start(self,
-              years=None,
-              terms=None,
-              departments=None,
-              textbooks=True,
-              verbosity=3,
-              **kwargs):
+    def start(self, verbosity=3, **kwargs):
         """Start parse."""
-        if verbosity >= 1:
-            print('Logging in')
-
         self.login()
-
-        if verbosity >= 1:
-            print('Completed login')
-
-        self.parse(
-            cmd_years=years,
-            cmd_terms=terms,
-            cmd_departments=departments,
-            cmd_textbooks=textbooks,
-            verbosity=verbosity
-        )
+        super(Parser, self).start(verbosity=verbosity, **kwargs)

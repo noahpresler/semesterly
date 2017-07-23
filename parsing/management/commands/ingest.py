@@ -14,8 +14,8 @@ import traceback
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from timetable.school_mappers import course_parsers, textbook_parsers, \
-    new_course_parsers, new_textbook_parsers, new_eval_parsers, eval_parsers
+from timetable.school_mappers import new_parsers, course_parsers, textbook_parsers, \
+    eval_parsers
 from parsing.management.commands.args_parse import schoollist_argparser, \
     ingestor_argparser, validator_argparser
 from parsing.library.internal_exceptions import CourseParseError, \
@@ -72,20 +72,14 @@ class Command(BaseCommand):
         logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
 
         # NOTE: TODO - hacky until school_mappers is deprecated
-        new_map = {
-            'textbook': new_textbook_parsers,
-            'course': new_course_parsers,
-            'eval': new_eval_parsers,
-        }
         old_map = {
-            'textbook': textbook_parsers,
-            'course': course_parsers,
-            'eval': eval_parsers,
+            'textbooks': textbook_parsers,
+            'courses': course_parsers,
+            'evals': eval_parsers,
         }
 
+        parsers = new_parsers[options['type']]
         for school in options['schools']:
-
-            parsers = new_map[options['type']]
             if school not in parsers:
                 do_parse = old_map[options['type']][school]
                 self.old_parser(do_parse, school)
@@ -128,8 +122,7 @@ class Command(BaseCommand):
                     return '{}/{}'.format(stats['valid'], stats['total'])
                 tracker.add_viewer(ProgressBar(school, formatter))
 
-            p = parser(school,
-                       config_path=options['config_file'],
+            p = parser(config_path=options['config_file'],
                        output_path=options['output'],
                        output_error_path=options['output_error'],
                        break_on_error=options['break_on_error'],
