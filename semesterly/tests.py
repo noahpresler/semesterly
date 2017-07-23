@@ -1,16 +1,14 @@
-"""
-Copyright (C) 2017 Semester.ly Technologies, LLC
-
-Semester.ly is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Semester.ly is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 from semesterly.test_utils import SeleniumTestCase
 from timetable.models import Semester, Course
@@ -95,14 +93,14 @@ class EndToEndTest(SeleniumTestCase):
                 class_year=2017
             )
         with self.description("search, add, change personal timetable name and save"):
-            self.search_course('calc', 3)
+            self.search_course('AS.110.105', 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.change_ptt_name("Testing Timetable")
             self.save_ptt()
             self.assert_ptt_const_across_refresh()
         with self.description("add to personal timetable, share, save"):
-            self.search_course('calc', 3)
-            self.open_course_modal_from_search(1)
+            self.search_course('AS.110.106', 1)
+            self.open_course_modal_from_search(0)
             self.share_timetable([
                 self.add_course_from_course_modal(
                     n_slots=8, n_master_slots=2
@@ -123,7 +121,7 @@ class EndToEndTest(SeleniumTestCase):
             self.change_term("Spring 2017")
             self.create_ptt("Hope ders no bugs!")
             self.click_off()
-            self.search_course('calc', 2)
+            self.search_course('AS.110.106', 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.save_ptt()
             self.change_term("Fall 2017")
