@@ -1,24 +1,26 @@
-"""
-JHU Course Parser.
-
-@org      Semesterly
-@author   Noah Presler & Michael Miller
-@date     7/2/2017
-"""
+"""Filler."""
 
 from __future__ import absolute_import, division, print_function
 
 import re
-import sys
 
-from parsing.library.base_parser import CourseParser
+from parsing.library.base_parser import BaseParser
 from parsing.library.extractor import time_12to24, titlize
 
 
-class HopkinsParser(CourseParser):
-    """Hopkins course parser."""
+class Parser(BaseParser):
+    """Hopkins course parser.
 
-    SCHOOL = 'jhu'
+    Attributes:
+        API_URL (str): Description
+        DAY_TO_LETTER_MAP (TYPE): Description
+        KEY (str): Description
+        last_course (dict): Description
+        schools (list): Description
+        semester (TYPE): Description
+        verbosity (TYPE): Description
+    """
+
     API_URL = 'https://isis.jhu.edu/api/classes/'
     KEY = 'evZgLDW987P3GofN2FLIhmvQpHASoIxO'
     DAY_TO_LETTER_MAP = {
@@ -35,21 +37,21 @@ class HopkinsParser(CourseParser):
         """Construct hopkins parser object."""
         self.schools = []
         self.last_course = {}
-        super(HopkinsParser, self).__init__(HopkinsParser.SCHOOL, **kwargs)
+        super(Parser, self).__init__('jhu', **kwargs)
 
     def _get_schools(self):
-        url = '{}/codes/schools'.format(HopkinsParser.API_URL)
+        url = '{}/codes/schools'.format(Parser.API_URL)
         params = {
-            'key': HopkinsParser.KEY
+            'key': Parser.KEY
         }
         self.schools = self.requester.get(url, params=params)
 
     def _get_courses(self, school):
-        url = '{}/{}/{}'.format(HopkinsParser.API_URL,
+        url = '{}/{}/{}'.format(Parser.API_URL,
                                 school['Name'],
                                 self.semester)
         params = {
-            'key': HopkinsParser.KEY
+            'key': Parser.KEY
         }
         return self.requester.get(url, params=params)
 
@@ -57,9 +59,9 @@ class HopkinsParser(CourseParser):
         return self.requester.get(self._get_section_url(course))
 
     def _get_section_url(self, course):
-        return HopkinsParser.API_URL + '/' \
+        return Parser.API_URL + '/' \
             + course['OfferingName'].replace(".", "") + course['SectionName'] \
-            + '/' + self.semester + '?key=' + HopkinsParser.KEY
+            + '/' + self.semester + '?key=' + Parser.KEY
 
     def _parse_schools(self):
         for school in self.schools:
@@ -159,7 +161,7 @@ class HopkinsParser(CourseParser):
                         meeting['DOW'] != "TBA" and
                         meeting['DOW'] != "None"):
                     self.ingestor['days'] = map(
-                        lambda d: HopkinsParser.DAY_TO_LETTER_MAP[d.lower()],
+                        lambda d: Parser.DAY_TO_LETTER_MAP[d.lower()],
                         re.findall(r'([A-Z][a-z]*)+?', meeting['DOW'])
                     )
                     self.ingestor['location'] = {
@@ -171,6 +173,7 @@ class HopkinsParser(CourseParser):
     def start(self,
               years=None,
               terms=None,
+              years_and_terms=None,
               departments=None,
               textbooks=True,
               verbosity=3,

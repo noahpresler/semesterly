@@ -1,11 +1,12 @@
-from parsing.common.textbooks.bn_textbook_parser import BNParser
+"""Filler."""
+from parsing.common.bn_textbook_parser import BarnesAndNoblesParser
 
 
-class UmichTextbookParser(BNParser):
+class Parser(BarnesAndNoblesParser):
     """Textbook parser for University of Michigan."""
 
     def __init__(self, term="Fall", year=2017, **kwargs):
-        super(UmichTextbookParser, self).__init__(
+        super(Parser, self).__init__(
             "28052",  # storeid
             "umichigan.bncollege.com",
             "umich",

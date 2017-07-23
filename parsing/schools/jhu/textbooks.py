@@ -1,7 +1,10 @@
-from parsing.common.textbooks.bn_textbook_parser import BNParser
+"""Filler."""
+from parsing.common.bn_textbook_parser import BarnesAndNoblesParser
 
 
-class JHUTextbookParser(BNParser):
+class Parser(BarnesAndNoblesParser):
+    """JHU Textbook Parser."""
+
     def __init__(self, term="Fall", year=2017, **kwargs):
         super(JHUTextbookParser, self).__init__(
             "18053",

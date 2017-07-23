@@ -7,7 +7,7 @@ import re
 from parsing.library.base_parser import BaseParser
 
 
-class VandyEvalParser(BaseParser):
+class Parser(BaseParser):
     """Vanderbilt Evaluation Parser.
 
     Attributes:
@@ -23,10 +23,10 @@ class VandyEvalParser(BaseParser):
         Args:
             **kwargs: pass-through
         """
-        super(VandyEvalParser, self).__init__('vandy', **kwargs)
+        super(Parser, self).__init__('vandy', **kwargs)
 
     def _login(self):
-        soup = self.requester.get(VandyEvalParser.BASE_URL)
+        soup = self.requester.get(Parser.BASE_URL)
 
         # Security checkpoint
         sec_block = soup.find('input',
@@ -40,7 +40,7 @@ class VandyEvalParser(BaseParser):
         }
 
         # Accept Terms and Conditions page
-        soup = self.requester.post(VandyEvalParser.BASE_URL, data=form)
+        soup = self.requester.post(Parser.BASE_URL, data=form)
 
         # Security checkpoint
         vsasm_block = soup.find('input',
@@ -53,7 +53,7 @@ class VandyEvalParser(BaseParser):
         }
 
         # Search page
-        soup = self.requester.post(VandyEvalParser.BASE_URL, data=form)
+        soup = self.requester.post(Parser.BASE_URL, data=form)
 
     def start(self, **kwargs):
         """Start parsing.
@@ -69,7 +69,7 @@ class VandyEvalParser(BaseParser):
 
     def _parse_eval_results(self, school, area, course):
         # Soupify post response
-        soup = self.requester.post(VandyEvalParser.BASE_URL, data={
+        soup = self.requester.post(Parser.BASE_URL, data={
             'ViewSchool': school,
             'ViewArea': area,
             'ViewCourse': course
@@ -177,7 +177,7 @@ class VandyEvalParser(BaseParser):
         return match.group(1), match.group(2), match.group(3)
 
     def _parse_list_of_courses(self, school, area):
-        soup = self.requester.post(VandyEvalParser.BASE_URL, data={
+        soup = self.requester.post(Parser.BASE_URL, data={
             'ViewSchool': school,
             'ViewArea': area
         })
@@ -186,14 +186,14 @@ class VandyEvalParser(BaseParser):
         return [c['value'].strip() for c in courses if c['value'].strip()]
 
     def _parse_list_of_areas(self, school):
-        soup = self.requester.post(VandyEvalParser.BASE_URL,
+        soup = self.requester.post(Parser.BASE_URL,
                                    data={'ViewSchool': school})
         areas = soup.find('select',
                           attrs={'name': 'ViewArea'}).find_all('option')
         return [a['value'] for a in areas if a['value']]
 
     def _parse_list_of_schools(self):
-        soup = self.requester.get(VandyEvalParser.BASE_URL)
+        soup = self.requester.get(Parser.BASE_URL)
         schools = soup.find('select',
                             attrs={'name': 'ViewSchool'}).find_all('option')
         return [s['value'] for s in schools if s['value']]
@@ -212,6 +212,6 @@ class VandyEvalParser(BaseParser):
         }
 
         # TODO - review why non-matching cc codes are present in evals
-        if VandyEvalParser.CC_REGEX.match(code) is None:
+        if Parser.CC_REGEX.match(code) is None:
             return
         self.ingestor.ingest_eval()

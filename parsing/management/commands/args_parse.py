@@ -5,28 +5,22 @@
 
 import os
 import argparse
-from timetable.school_mappers import course_parsers, new_course_parsers, \
-    new_textbook_parsers
-from django.conf import settings
+from parsing.schools.active import VALID_SCHOOLS
+
+# from django.conf import settings
 # TODO - change 'parsing' to settings.PARSING_DIR
 
 def schoollist_argparser(parser):
     # Handles nargs='*' with strict choices and set to all schools if empty
     class SchoolVerifierAction(argparse.Action):
-        VALID_SCHOOLS = (
-            set(new_course_parsers.keys()) |
-            set(new_textbook_parsers.keys()) |
-            set(course_parsers.keys())
-        )
-
         def __call__(self, parser, namespace, values, option_string=None):
             for value in values:
-                if value in SchoolVerifierAction.VALID_SCHOOLS:
+                if value in VALID_SCHOOLS:
                     continue
                 raise parser.error(
                     'invalid school: {0!r} (choose from [{1}])'.format(
                         value,
-                        ', '.join(SchoolVerifierAction.VALID_SCHOOLS)
+                        ', '.join(VALID_SCHOOLS)
                     )
                 )
             if values:
@@ -36,7 +30,7 @@ def schoollist_argparser(parser):
                 # set list of schools to all schools that are parseable
                 setattr(namespace,
                         self.dest,
-                        list(SchoolVerifierAction.VALID_SCHOOLS))
+                        list(VALID_SCHOOLS))
 
     # optional argument to specify parser for specific school
     parser.add_argument('schools', type=str, nargs='*',
@@ -85,10 +79,10 @@ def ingestor_argparser(parser):
 
 def parser_type_argparser(parser):
     parser.add_argument('--type',
-                        default='course',
-                        const='course',
+                        default='courses',
+                        const='courses',
                         nargs='?',
-                        choices=['course', 'textbook', 'eval'],
+                        choices=['courses', 'textbooks', 'evals'],
                         help='type of parser to run (default: %(default)s)')
 
 

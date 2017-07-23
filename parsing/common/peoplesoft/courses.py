@@ -14,13 +14,13 @@ import sys
 from abc import ABCMeta, abstractmethod
 
 from parsing.common.textbooks.amazon import amazon_textbook_fields
-from parsing.library.base_parser import CourseParser
+from parsing.library.base_parser import BaseParser
 from parsing.library.internal_exceptions import CourseParseError
 from parsing.library.extractor import filter_departments, \
     filter_years_and_terms, titlize, extract_info
 
 
-class PeoplesoftParser(CourseParser):
+class PeoplesoftParser(BaseParser):
     """Generalized Peoplesoft course parser."""
 
     __metaclass__ = ABCMeta
@@ -63,17 +63,16 @@ class PeoplesoftParser(CourseParser):
 
     def parse(self,
               years_and_terms=None,
-              cmd_years=None,
-              cmd_terms=None,
-              cmd_departments=None,
-              cmd_course=None,  # NOTE: not implemented
-              cmd_textbooks=True,
+              years=None,
+              terms=None,
+              departments=None,
+              textbooks=True,
               verbosity=3,
               department_name_regex=None,
               **kwargs):
         """Do parse."""
         self.verbosity = verbosity
-        self.textbooks = cmd_textbooks
+        self.textbooks = textbooks
         self._empty_ingestor_lists()
 
         # NOTE: umich will do nothing and return an empty dict
@@ -81,8 +80,8 @@ class PeoplesoftParser(CourseParser):
         if years_and_terms is None:
             years_and_terms = PeoplesoftParser._get_years_and_terms(soup)
         self.years_and_terms = filter_years_and_terms(years_and_terms,
-                                                      cmd_years,
-                                                      cmd_terms)
+                                                      years,
+                                                      terms)
         for year, terms in self.years_and_terms.items():
             self.ingestor['year'] = year
             for term_name in terms:
@@ -110,7 +109,7 @@ class PeoplesoftParser(CourseParser):
                     dept_param_key = self._get_dept_param_key(soup)
                     departments, department_ids = self._get_departments(
                         soup,
-                        cmd_departments
+                        departments
                     )
 
                     for dept_code, dept_name in departments.iteritems():

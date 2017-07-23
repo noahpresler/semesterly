@@ -10,6 +10,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+# TODO - all of this!
+# FIXME -- conform to datapipeline.
+
 import sys
 import requests, cookielib
 from bs4 import BeautifulSoup
