@@ -29,11 +29,11 @@ const config = {
   // the entry point we created earlier. Note that './' means
   // your current directory. You don't have to specify the extension  now,
   // because you will specify extensions later in the `resolve` section
-  entry: ['../../static/js/redux/init', '../../static/css/timetable/main'],
+  entry: ['./static/js/redux/init', './static/css/timetable/main'],
 
   output: {
     // where you want your compiled bundle to be stored
-    path: path.resolve('../../static/bundles/'),
+    path: path.resolve('./static/bundles/'),
     // naming convention webpack should use for your files
     filename: '[name]-[hash].js',
   },
