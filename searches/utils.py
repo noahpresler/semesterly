@@ -68,7 +68,7 @@ class Vectorizer:
             bar.update(current_count)
 
         print("Transforming all courses into vectors...")
-        with open('dictionary.pickle', 'r') as handle:
+        with open('searches/dictionary.pickle', 'r') as handle:
             count_vectorizer = pickle.load(handle)
         processed_word_counts = count_vectorizer.transform(raw_word_counts)
         tfidf_tf = TfidfTransformer(use_idf=True).fit(processed_word_counts)
@@ -113,7 +113,7 @@ class Searcher:
 
     def load_count_vectorizer(self):
         """Loads english dictionary count vectorizer pickle object."""
-        with open('dictionary.pickle', 'r') as handle:
+        with open('searches/dictionary.pickle', 'r') as handle:
             return pickle.load(handle)
 
     def vectorize_query(self, query):
