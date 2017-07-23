@@ -1,10 +1,4 @@
-"""
-GW Course Parser.
-
-@org    Semeseter.ly
-@author Michael N. Miller
-@date   11/26/16
-"""
+"""Filler."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -19,13 +13,12 @@ from parsing.library.utils import safe_cast
 from parsing.library.extractor import filter_years_and_terms
 
 
-class GWParser(CourseParser):
-    """George Washington University course parser object.
+class Parser(CourseParser):
+    """George Washington University course parser.
 
     NOTE: GW cannot support multiple login!
     """
 
-    SCHOOL = 'gw'
     URL = 'https://banweb.gwu.edu/PRODCartridge'
     CREDENTIALS = {
         ***REMOVED***,
@@ -43,12 +36,12 @@ class GWParser(CourseParser):
     }
 
     def __init__(self, **kwargs):
-        """Construct GW parser.
+        """Construct GW parser object.
 
         Args:
             **kwargs: pass-through
         """
-        super(GWParser, self).__init__(GWParser.SCHOOL, **kwargs)
+        super(Parser, self).__init__('gw', **kwargs)
 
     def start(self,
               years=None,
@@ -62,7 +55,7 @@ class GWParser(CourseParser):
         self._direct_to_search_page()
 
         years_and_terms = filter_years_and_terms(
-            GWParser.YEARS_AND_TERMS,
+            Parser.YEARS_AND_TERMS,
             years_filter=years,
             terms_filter=terms,
             years_and_terms_filter=years_and_terms
@@ -71,12 +64,12 @@ class GWParser(CourseParser):
         for year, terms in years_and_terms.items():
             self.ingestor['year'] = year
             for term_name in terms:
-                term_code = GWParser.YEARS_AND_TERMS[year][term_name]
+                term_code = Parser.YEARS_AND_TERMS[year][term_name]
                 self.ingestor['term'] = term_name
 
                 # Retrieve term search page.
                 soup = self.requester.get(
-                    GWParser.URL + '/bwckgens.p_proc_term_date',
+                    Parser.URL + '/bwckgens.p_proc_term_date',
                     params={
                         'p_calling_proc': 'P_CrseSearch',
                         'p_term': term_code
@@ -116,10 +109,10 @@ class GWParser(CourseParser):
                     query['sel_subj'] = ['dummy', dept_code]
 
                     rows = self.requester.post(
-                        GWParser.URL + '/bwskfcls.P_GetCrse',
+                        Parser.URL + '/bwskfcls.P_GetCrse',
                         params=query)
 
-                    GWParser._check_errorpage(rows)
+                    Parser._check_errorpage(rows)
 
                     try:
                         rows = rows.find(
@@ -157,7 +150,7 @@ class GWParser(CourseParser):
 
                             # Query course catalog to obtain description.
                             catalog = self.requester.get(
-                                GWParser.URL + '/bwckctlg.p_display_courses',
+                                Parser.URL + '/bwckctlg.p_display_courses',
                                 params={
                                     'term_in': term_code,
                                     'one_subj': dept_code,
@@ -175,13 +168,13 @@ class GWParser(CourseParser):
 
                             if catalog:
                                 self.ingestor.update(
-                                    GWParser._parse_catalogentrypage(catalog)
+                                    Parser._parse_catalogentrypage(catalog)
                                 )
 
                             course = self.ingestor.ingest_course()
 
                             section_soup = self.requester.get(
-                                GWParser.URL + '/bwckschd.p_disp_listcrse',
+                                Parser.URL + '/bwckschd.p_disp_listcrse',
                                 params={
                                     'term_in': term_code,
                                     'subj_in': dept_code,
@@ -189,7 +182,7 @@ class GWParser(CourseParser):
                                     'crn_in': self.ingestor['ident']
                                 })
 
-                            meetings_soup = GWParser._extract_meetings(section_soup)
+                            meetings_soup = Parser._extract_meetings(section_soup)
                             """Example of a meeting entry
                             <tr>
                                 <td class="dddefault">Class</td>
@@ -212,19 +205,19 @@ class GWParser(CourseParser):
 
     def _login(self):
         # Collect necessary cookies
-        self.requester.get(GWParser.URL + '/twbkwbis.P_WWWLogin',
+        self.requester.get(Parser.URL + '/twbkwbis.P_WWWLogin',
                            parse=False)
 
         self.requester.headers['Referer'] = '{}/twbkwbis.P_WWWLogin'.format(
-            GWParser.URL
+            Parser.URL
         )
 
         logged_in = self.requester.post(
-            GWParser.URL + '/twbkwbis.P_ValLogin',
+            Parser.URL + '/twbkwbis.P_ValLogin',
             parse=False,
             data={
-                'sid': GWParser.CREDENTIALS['USERNAME'],
-                'PIN': GWParser.CREDENTIALS['PASSWORD']
+                'sid': Parser.CREDENTIALS['USERNAME'],
+                'PIN': Parser.CREDENTIALS['PASSWORD']
             }
         )
 
@@ -236,21 +229,21 @@ class GWParser(CourseParser):
 
         # Deal with security question page.
         self.requester.post(
-            '{}/twbkwbis.P_ProcSecurityAnswer'.format(GWParser.URL),
+            '{}/twbkwbis.P_ProcSecurityAnswer'.format(Parser.URL),
             parse=False,
             data={
                 'RET_CODE': '',
-                'SID': GWParser.CREDENTIALS['USERNAME'],
+                'SID': Parser.CREDENTIALS['USERNAME'],
                 'QSTN_NUM': 1,
-                'answer': GWParser.CREDENTIALS['SECURITY_QUESTION_ANSWER']
+                'answer': Parser.CREDENTIALS['SECURITY_QUESTION_ANSWER']
             }
         )
 
     def _direct_to_search_page(self):
-        genurl = GWParser.URL + '/twbkwbis.P_GenMenu'
+        genurl = Parser.URL + '/twbkwbis.P_GenMenu'
         actions = ['bmenu.P_MainMnu', 'bmenu.P_StuMainMnu', 'bmenu.P_RegMnu']
         map(lambda n: self.requester.get(genurl, params={'name': n}), actions)
-        self.requester.get(GWParser.URL + '/bwskfcls.P_CrseSearch',
+        self.requester.get(Parser.URL + '/bwskfcls.P_CrseSearch',
                            parse=False,
                            params={'term_in': ''})
 
@@ -294,9 +287,9 @@ class GWParser(CourseParser):
         meat = soup.find('body').find('table', class_='datadisplaytable')
         if meat is None:
             return {}
-        fields.update({'descr': GWParser._extract_description(meat)})
-        fields.update(GWParser._extract_info(meat.find('td',
-                                                       class_='ntdefault')))
+        fields.update({'descr': Parser._extract_description(meat)})
+        fields.update(Parser._extract_info(meat.find('td',
+                                                     class_='ntdefault')))
         return fields
 
     @staticmethod

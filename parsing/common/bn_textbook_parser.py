@@ -10,14 +10,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-# @what     B&N generalized scraper.
-# @org      Semeseter.ly
-# @author   Michael N. Miller & Eric Calder
-# @date     3/6/17
+from __future__ import absolute_import, division, print_function
 
-from __future__ import print_function # NOTE: slowly move toward Python3
-
-import os, re, requests
+import re
+import requests
 from random import randint
 from fake_useragent import UserAgent
 from time import sleep
@@ -67,7 +63,8 @@ class TextbookSemester:
     def __str__(self):
         return 'Semester -- term: {}, year: {}, id: {}'.format(self.term, self.year, self.id)
 
-class BNParser(BaseParser):
+
+class BarnesAndNoblesParser(BaseParser):
 
     # TODO - make this constructor more readable
     def __init__(self, store_id, store_link, school, delimeter, term=None, year=None, **kwargs):
@@ -91,15 +88,15 @@ class BNParser(BaseParser):
         self.textbook_payload = TextbookPayload(self.store_id)
 
         self.ua = UserAgent()
-        super(BNParser, self).__init__(school, **kwargs)
+        super(BarnesAndNoblesParser, self).__init__(school, **kwargs)
 
     def start(self,
-        years=None,
-        terms=None,
-        departments=None,
-        textbooks=True,
-        verbosity=3,
-        **kwargs):
+              years=None,
+              terms=None,
+              departments=None,
+              textbooks=True,
+              verbosity=3,
+              **kwargs):
 
         # TODO - remove hardcoding of year and term and use filtering
         if years is None:
@@ -117,15 +114,15 @@ class BNParser(BaseParser):
 
         self.url = 'http://{}/webapp/wcs/stores/servlet/'.format(self.store_link)
         self.params = {
-            "campusId":"14704480",
-            "termId":"",
-            "deptId":"",
-            "courseId":"",
-            "sectionId":"",
-            "storeId":self.store_id,
-            "catalogId":"10001",
-            "langId":"-1",
-            "dropdown":"course"
+            "campusId": "14704480",
+            "termId": "",
+            "deptId": "",
+            "courseId": "",
+            "sectionId": "",
+            "storeId": self.store_id,
+            "catalogId": "10001",
+            "langId": "-1",
+            "dropdown": "course"
         }
 
         self.semesters = self.parse_semesters(False)
@@ -332,6 +329,7 @@ class BNParser(BaseParser):
         textbooks = self.parse_textbooks(soup)
 
         return textbooks
+
 
 class TextbookPayload:
     '''Builds up 100 textbook request to request from bn.'''

@@ -1,9 +1,9 @@
-"""Gw textbook parser."""
+"""Filler."""
 
 from parsing.common.textbooks.bkstr_dot_com import BkstrDotComParser
 
 
-class GWTextbookParser(BkstrDotComParser):
+class Parser(BkstrDotComParser):
     """GW textbook parser.
 
     Inherits for bkstr.com parser.
@@ -16,4 +16,4 @@ class GWTextbookParser(BkstrDotComParser):
             **kwargs: pass-through
         """
         store_id = '10370'
-        super(GWTextbookParser, self).__init__('gw', store_id, **kwargs)
+        super(Parser, self).__init__('gw', store_id, **kwargs)

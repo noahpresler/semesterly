@@ -1,35 +1,46 @@
-# @what     Vanderbilt Course Parser
-# @org      Semeseter.ly
-# @author   Michael N. Miller and Maxwell Yeo
-# @date     2/5/17
+"""Filler."""
 
 from __future__ import absolute_import, division, print_function
 
 import re
 import sys
 
-from parsing.library.base_parser import CourseParser
+from parsing.library.base_parser import BaseParsr
 from parsing.library.internal_exceptions import CourseParseError
 from parsing.library.utils import safe_cast
 from parsing.library.exceptions import ParseError
 
 
-class VandyParser(CourseParser):
+class Parser(BaseParsr):
+    """Vanderbilt course parser.
+
+    Attributes:
+        API_URL (str): Description
+        course (TYPE): Description
+        CREDENTIALS (TYPE): Description
+        departments (dict): Description
+        SCHOOL (str): Description
+        verbosity (TYPE): Description
+    """
 
     API_URL = 'https://webapp.mis.vanderbilt.edu/more'
-    SCHOOL = 'vandy'
     CREDENTIALS = {
         'USERNAME': '***REMOVED***',
         'PASSWORD': '***REMOVED***'
     }
 
     def __init__(self, **kwargs):
+        """Construct parser instance.
+
+        Args:
+            **kwargs: pass-through
+        """
         self.departments = {}
         self.course = {
             'description': '',
             'cancelled': False
         }
-        super(VandyParser, self).__init__(VandyParser.SCHOOL, **kwargs)
+        super(Parser, self).__init__('vandy', **kwargs)
 
     def login(self):
         if self.verbosity > 2:
@@ -37,14 +48,14 @@ class VandyParser(CourseParser):
         login_url = 'https://login.mis.vanderbilt.edu'
         get_login_url = login_url + '/login'
         params = {
-            'service': VandyParser.API_URL + '/j_spring_cas_security_check'
+            'service': Parser.API_URL + '/j_spring_cas_security_check'
         }
         soup = self.requester.get(get_login_url, params)
         post_suffix_url = soup.find('form', {'name': 'loginForm'})['action']
         sec_block = soup.find('input', {'name': 'lt'})['value']
         login_info = {
-            'username': VandyParser.CREDENTIALS['USERNAME'],
-            'password': VandyParser.CREDENTIALS['PASSWORD'],
+            'username': Parser.CREDENTIALS['USERNAME'],
+            'password': Parser.CREDENTIALS['PASSWORD'],
             'lt': sec_block,
             '_eventId': 'submit',
             'submit': 'LOGIN'
@@ -52,7 +63,7 @@ class VandyParser(CourseParser):
         self.requester.post(login_url + post_suffix_url,
                             login_info, params,
                             parse=False)
-        self.requester.get(VandyParser.API_URL + '/Entry.action',
+        self.requester.get(Parser.API_URL + '/Entry.action',
                            parse=False)
 
     def start(self,
@@ -98,14 +109,14 @@ class VandyParser(CourseParser):
                 # Load environment for targeted semester
                 self.requester.get(
                     '{}{}'.format(
-                        VandyParser.API_URL,
+                        Parser.API_URL,
                         '/SelectTerm!selectTerm.action'),
                     {'selectedTermCode': semester_code},
                     parse=False)
 
                 self.requester.get(
                     '{}{}'.format(
-                        VandyParser.API_URL,
+                        Parser.API_URL,
                         '/SelectTerm!updateSessions.action'),
                     parse=False)
 
@@ -140,7 +151,7 @@ class VandyParser(CourseParser):
                     # GET html for department course listings
                     html = self.requester.get(
                         '{}{}'.format(
-                            VandyParser.API_URL,
+                            Parser.API_URL,
                             '/SearchClassesExecute!search.action'
                         ),
                         payload
@@ -150,7 +161,7 @@ class VandyParser(CourseParser):
                     self.parse_courses_in_department(html)
 
                 # return to search page for next iteration
-                self.requester.get(VandyParser.API_URL + '/Entry.action',
+                self.requester.get(Parser.API_URL + '/Entry.action',
                                    parse=False)
 
     def create_course(self):
@@ -226,7 +237,7 @@ class VandyParser(CourseParser):
 
         # Query Vandy class search website
         soup = self.requester.get(
-            VandyParser.API_URL + '/SearchClasses!input.action',
+            Parser.API_URL + '/SearchClasses!input.action',
             parse=True)
 
         # Retrieve all deparments from dropdown in advanced search
@@ -271,7 +282,7 @@ class VandyParser(CourseParser):
 
             page_count = page_count + 1
             next_page_url = '{}{}{}'.format(
-                VandyParser.API_URL,
+                Parser.API_URL,
                 '/SearchClassesExecute!switchPage.action?pageNum=',
                 page_count)
             html = self.requester.get(next_page_url)
@@ -304,7 +315,7 @@ class VandyParser(CourseParser):
         course_number, term_code = search.group(1), search.group(2)
 
         # Base URL to retrieve detailed course info
-        course_details_url = VandyParser.API_URL \
+        course_details_url = Parser.API_URL \
             + '/GetClassSectionDetail.action'
 
         # Create payload to request course from server
