@@ -23,6 +23,7 @@ from parsing.library.digestor import Digestor
 from parsing.library.internal_exceptions import JsonException, DigestionError
 from parsing.library.tracker import Tracker
 from parsing.library.viewer import LogFormatted
+from searches.utils import Vectorizer
 
 
 class Command(BaseCommand):
@@ -89,3 +90,5 @@ class Command(BaseCommand):
             self.stderr.write(self.style.ERROR('FAILED: digestion'))
             self.stderr.write(traceback.format_exc())
             tracker.see_error(traceback.format_exc())
+
+        Vectorizer().vectorize()
