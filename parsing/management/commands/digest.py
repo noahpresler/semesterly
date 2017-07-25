@@ -11,108 +11,81 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
+from __future__ import absolute_import, division, print_function
 
-import datetime, os, traceback
-from timeit import default_timer as timer
-from simplejson.scanner import JSONDecodeError
+import traceback
 
-from django.core.management.base import BaseCommand, CommandParser, CommandError
-from parsing.management.commands.args_parse import *
+from django.core.management.base import BaseCommand
+
+from parsing.management.commands.arguments import digest_args
 from parsing.library.validator import Validator
 from parsing.library.digestor import Digestor
 from parsing.library.internal_exceptions import JsonException, DigestionError
-from parsing.library.tracker import Tracker, LogFormatted
-from django.conf import settings
+from parsing.library.tracker import Tracker
+from parsing.library.viewer import LogFormatted
+
 
 class Command(BaseCommand):
+    help = 'Digestion driver'
+
     def add_arguments(self, parser):
-        schoollist_argparser(parser)
-        digestor_argparser(parser)
-        validate_switch_argparser(parser)
-        validator_argparser(parser)
-        progressbar_argparser(parser)
-        masterlog_argparser(parser)
-        # textbooks_argparser(parser)
-        # TODO - replace with --type option
+        digest_args(parser)
 
     def handle(self, *args, **options):
-        # TODO - design better file path scheme.
-        type_ = 'courses' if not options['textbooks'] else 'textbooks'
+        tracker = Tracker()
+        tracker.add_viewer(LogFormatted(options['master_log']))
+        tracker.set_cmd_options(options)
+        tracker.mode = 'digesting'
+        tracker.start()
 
-        for school in options['schools']:
-            message = "Starting digestion for {}.\n".format(school)
-            self.stdout.write(self.style.SUCCESS(message))
-            directory = '{}/schools/{}'.format(settings.PARSING_DIR, school)
+        for data_type in options['types']:
+            for school in options['schools']:
+                self.run(tracker, school, data_type, options)
 
-            # Default data directories.
-            if not options.get('data'):
-                options['data'] = '{}/data/{}.json'.format(directory, type_)
-            if not options.get('log_stats'):
-                options['log_stats'] = '{}/schools/logs/master.log'.format(settings.PARSING_DIR)
+        tracker.end()
 
-            if not os.path.isfile(options['data']):
-                Command.reset_for_next_school(options)
-                continue
+    def run(self, tracker, school, data_type, options):
+        tracker.school = school
 
-            tracker = Tracker(school)
-            tracker.add_viewer(LogFormatted(options['log_stats']))
-            tracker.set_cmd_options(options)
+        tracker.mode = 'validating'
 
-            # Perform pre-digestion validation
-            if options['validate']:
-                if not options.get('config_file'):
-                    options['config_file'] = '{}/config.json'.format(directory)
-                if not options.get('output_error'):
-                    options['output_error'] = '{}/logs/validate_{}_error.log'.format(directory, type_)
+        try:
+            Validator(
+                options['config_file'].format(school=school,
+                                              type=data_type),
+                tracker=tracker
+            ).validate_self_contained(
+                options['data'].format(school=school, type=data_type),
+                break_on_error=True,
+                break_on_warning=options.get('break_on_warning'),
+                output_error=options.get('output_error').format(
+                    school=school,
+                    type=data_type
+                ),
+                display_progress_bar=options['display_progress_bar']
+            )
+        except JsonException:
+            return  # Skip digestion for this school.
 
-                try:
-                    print options['data']
-                    start_time = timer()
-                    vstat = Validator(options['config_file']).validate_self_contained(options['data'],
-                        break_on_error=True, # Do not allow digestion if error present
-                        break_on_warning=options['break_on_warning'],
-                        output_error=options.get('output_error'),
-                        display_progress_bar=options['display_progress_bar'])
-                    end_time = timer()
-                    self.stdout.write('\n')
-                except (JsonException, JSONDecodeError) as e:
-                    self.stderr.write(self.style.ERROR('FAILED: validation.'))
-                    self.stderr.write(str(e) + '\n' + school + '\n')
-                    tracker.see_error(traceback.format_exc())
-                    Command.reset_for_next_school(options)
-                    continue # Skip digestion for this school.
+        tracker.mode = 'digesting'
 
-            if not options.get('output_diff'):
-                options['output_diff'] = '{}/logs/digest_{}_diff.log.json'.format(directory, type_)
+        try:
+            Digestor(
+                school,
+                data=options['data'].format(school=school, type=data_type),
+                output=options['output_diff'].format(school=school,
+                                                     type=data_type),
+                diff=options['diff'],
+                load=options['load'],
+                display_progress_bar=options['display_progress_bar'],
+                tracker=tracker
+            ).digest()
 
-            tracker.start()
-
-            try:
-                Digestor(school,
-                    data=options['data'],
-                    output=options['output_diff'],
-                    diff=options['diff'],
-                    load=options['load'],
-                    display_progress_bar=options['display_progress_bar'],
-                    tracker=tracker,
-                ).digest()
-
-            except DigestionError as e:
-                self.stderr.write(self.style.ERROR('FAILED: digestion'))
-                self.stderr.write(str(e))
-                tracker.see_error(str(e) + '\n' + traceback.format_exc())
-            except Exception as e:
-                self.stderr.write(self.style.ERROR('FAILED: digestion'))
-                self.stderr.write(traceback.format_exc())
-                tracker.see_error(traceback.format_exc())
-
-            tracker.end()
-            Command.reset_for_next_school(options)
-
-        self.stdout.write(self.style.SUCCESS("Digestion Finished!"))
-
-    @staticmethod
-    def reset_for_next_school(options):
-        options['data'] = None
-        options['config_file'] = None
-        options['output_error'] = None
+        except DigestionError as e:
+            self.stderr.write(self.style.ERROR('FAILED: digestion'))
+            self.stderr.write(str(e))
+            tracker.see_error(str(e) + '\n' + traceback.format_exc())
+        except Exception as e:
+            self.stderr.write(self.style.ERROR('FAILED: digestion'))
+            self.stderr.write(traceback.format_exc())
+            tracker.see_error(traceback.format_exc())

@@ -21,6 +21,7 @@ class Tracker(object):
     """Tracks specified attributes and broadcasts to viewers."""
 
     BROADCAST_TYPES = {
+        'SCHOOL',
         'YEAR',
         'TERM',
         'DEPARTMENT',
@@ -28,12 +29,10 @@ class Tracker(object):
         'INSTRUCTOR',
         'TIME',
         'MODE',
-        'INVALID',
     }
 
-    def __init__(self, school):
+    def __init__(self):
         """Initialize tracker object."""
-        self.school = school
         self.saw_error = False
         self.error = ''
 
@@ -141,7 +140,7 @@ class NullTracker(Tracker):
 
     def __init__(self, *args, **kwargs):
         """Construct null tracker."""
-        super(NullTracker, self).__init__('null', *args, **kwargs)
+        super(NullTracker, self).__init__(*args, **kwargs)
 
     def broadcast(self, broadcast_type):
         """Do nothing."""
