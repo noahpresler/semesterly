@@ -1,7 +1,7 @@
 """Filler."""
 
 VALID_SCHOOLS = {
-    # "uoft",
+    "uoft",
     "jhu",
     "umd",
     "queens",
