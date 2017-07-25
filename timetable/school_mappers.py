@@ -26,6 +26,7 @@ django.setup()
 
 """This file contains all dicts which map a school to its associated object."""
 
+VALID_SCHOOLS = VALID_SCHOOLS
 
 # the smallest block size (in minutes) needed to describe start/end times
 # Ex: uoft classes only start on the hour or half hour, so granularity is 30min
