@@ -13,6 +13,7 @@ GNU General Public License for more details.
 """
 from __future__ import absolute_import, division, print_function
 
+import sys
 import traceback
 
 from django.core.management.base import BaseCommand
@@ -23,7 +24,7 @@ from parsing.library.digestor import Digestor
 from parsing.library.internal_exceptions import JsonException, DigestionError
 from parsing.library.tracker import Tracker
 from parsing.library.viewer import LogFormatted
-from searches.utils import Vectorizer
+# from searches.utils import Vectorizer
 
 
 class Command(BaseCommand):
@@ -66,6 +67,7 @@ class Command(BaseCommand):
                 display_progress_bar=options['display_progress_bar']
             )
         except JsonException:
+            print('FAILED VALIDATION', file=sys.stderr)
             return  # Skip digestion for this school.
 
         tracker.mode = 'digesting'
@@ -91,4 +93,4 @@ class Command(BaseCommand):
             self.stderr.write(traceback.format_exc())
             tracker.see_error(traceback.format_exc())
 
-        Vectorizer().vectorize()
+        # Vectorizer().vectorize()

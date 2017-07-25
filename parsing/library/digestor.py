@@ -23,6 +23,17 @@ django.setup()
 
 
 class Digestor(object):
+
+    MODELS = {
+        'course': Course,
+        'section': Section,
+        'offering': Offering,
+        'textbook': Textbook,
+        'textbook_link': TextbookLink,
+        'evaluation': Evaluation,
+        'semester': Semester
+    }
+
     def __init__(self, school,
                  data=None,
                  output=None,
@@ -67,10 +78,8 @@ class Digestor(object):
             'course': lambda x: self.digest_course(x),
             'section': lambda x: self.digest_section(x),
             'meeting': lambda x: self.digest_meeting(x),
-            'instructor': lambda x: self.digest_instructor(x),
-            'final_exam': lambda x: self.digest_final_exam(x),
             'textbook': lambda x: self.digest_textbook(x),
-            'textbook_link': lambda x: self.digest_textbook_link(x)
+            'textbook_link': lambda x: self.digest_textbook_link(x),
         }
 
         for obj in make_list(self.data):
@@ -89,7 +98,6 @@ class Digestor(object):
         Returns:
             django course model object
         '''
-
         course_model = self.strategy.digest_course(self.adapter.adapt_course(course))
 
         if course_model:
@@ -391,61 +399,47 @@ class DigestionAdapter:
         # NOTE: no current usage of course linked textbooks (listified yield will always be length 1)
 
 
-class DigestionStrategy:
+class DigestionStrategy(object):
     __metaclass__ = ABCMeta
 
-    MODELS = {
-        'course': Course,
-        'section': Section,
-        'offering': Offering,
-        'textbook': Textbook,
-        'textbook_link': TextbookLink
-    }
+    # def digest_course(self, model_params):
+    #     """Digest course.
 
-    @abstractmethod
-    def digest_course(self, model_args):
-        ''' Digest course.
-        Args:
-            course: json dictionary
+    #     Args:
+    #         model_params (TYPE): Description
+    #     """
 
-        Returns: (django) formatted course model
-        '''
+    # def digest_section(self, model_params):
+    #     """Digest course.
 
-    @abstractmethod
-    def digest_section(self, model_args):
-        ''' Digest course.
-        Args:
-            section: json dictionary
+    #     Args:
+    #         model_params (TYPE): Description
+    #     """
 
-        Returns: (django) formatted section model
-        '''
+    # def digest_offering(self, model_params):
+    #     """Digest course.
 
-    @abstractmethod
-    def digest_offering(self, model_args):
-        ''' Digest course.
-        Args:
-            course: json dictionary
+    #     Args:
+    #         model_params (TYPE): Description
+    #     """
 
-        Returns: (django) formatted meeting model
-        '''
+    # def digest_textbook(self, model_params):
+    #     """Digest textbook.
 
-    @abstractmethod
-    def digest_textbook(self, textbook):
-        '''Digest textbook.'''
+    #     Args:
+    #         model_params (TYPE): Description
+    #     """
 
-    @abstractmethod
-    def digest_textbook_link(self, textbook_link):
-        '''Digest Textbook Link.'''
+    # def digest_textbook_link(self, model_params):
+    #     """Digest Textbook Link.
 
-    def digest_instructor(self, instructor):
-        raise NotImplementedError  # TODO
-
-    def digest_final_exam(self, final_exam):
-        raise NotImplementedError  # TODO
+    #     Args:
+    #         model_params (TYPE): Description
+    #     """
 
     @abstractmethod
     def wrap_up(self):
-        '''Do whatever needs to be done to end digestion session.'''
+        '''Do whatever needs to be done to wrap_up digestion session.'''
 
 
 class Vommit(DigestionStrategy):
@@ -457,44 +451,23 @@ class Vommit(DigestionStrategy):
         self.defaults = Vommit.get_model_defaults()
         super(Vommit, self).__init__()
 
-        # for name, model in Vommit.MODELS.items():
-        #     def closure(name, model):
-        #         def digest(self, model_params):
-        #             obj = model.objects.filter(
-        #                 **Vommit.exclude(model_params)
-        #             ).first()
-        #             self.diff(name, model_args, obj)
-        #             return obj
-        #     setattr(self, 'digest_' + name, closure(name, model))
+        for name, model in Digestor.MODELS.items():
+            # if hasattr(self, 'digest_' + name):
+            #     continue
+
+            def closure(name, model):
+                def digest(self, model_params):
+                    obj = model.objects.filter(
+                        **Vommit.exclude(model_params)
+                    ).first()
+                    self.diff(name, model_params, obj)
+                    return obj
+                return digest
+            setattr(self.__class__, 'digest_' + name, closure(name, model))
 
     @staticmethod
     def exclude(dct):
         return {k: v for k, v in dct.items() if k != 'defaults'}
-
-    def digest_course(self, model_args):
-        model = Course.objects.filter(**Vommit.exclude(model_args)).first()
-        self.diff('course', model_args, model)
-        return model
-
-    def digest_section(self, model_args):
-        model = Section.objects.filter(**Vommit.exclude(model_args)).first()
-        self.diff('section', model_args, model)
-        return model
-
-    def digest_offering(self, model_args):
-        model = Offering.objects.filter(**Vommit.exclude(model_args)).first()
-        self.diff('offering', model_args, model)
-        return model
-
-    def digest_textbook(self, model_args):
-        model = Textbook.objects.filter(**Vommit.exclude(model_args)).first()
-        self.diff('textbook', model_args, model)
-        return model
-
-    def digest_textbook_link(self, model_args):
-        model = TextbookLink.objects.filter(**Vommit.exclude(model_args)).first()
-        self.diff('textbook_link', model_args, model)
-        return model
 
     def wrap_up(self):
         self.json_logger.close()
@@ -516,19 +489,20 @@ class Vommit(DigestionStrategy):
             if k in context:
                 try:
                     whats[k] = str(v)
-                except django.utils.encoding.DjangoUnicodeDecodeError as e:
+                except django.utils.encoding.DjangoUnicodeDecodeError:
                     whats[k] = '<{}: [Bad Unicode data]'.format(k)
 
         # Remove db specific content from model.
-        blacklist = {
+        blacklist = context | {
             '_state',
             'id',
             'section_id',
             'course_id',
             '_course_cache',
             'semester_id',
-            '_semester'
-        } | context
+            '_semester',
+            'vector',
+        }
 
         def prune(d):
             return {k: v for k, v in d.iteritems() if k not in blacklist}
@@ -603,33 +577,27 @@ class Absorb(DigestionStrategy):
 
     def __init__(self, school):
         self.school = school
+        Absorb._create_digest_methods()
         super(Absorb, self).__init__()
 
-    @staticmethod
-    def digest_course(model_args):
-        model, created = Absorb._update_or_create(Course, model_args)
-        return model
+    @classmethod
+    def _create_digest_methods(cls):
+        for name, model in Digestor.MODELS.items():
+            if hasattr(cls, 'digest_' + name):
+                continue
 
-    @staticmethod
-    def digest_section(model_args, clean=True):
-        model, created = Absorb._update_or_create(Section, model_args)
+            def closure(name, model):
+                def digest(cls, params):
+                    obj, created = cls._update_or_create(model, params)
+                    return obj
+                return classmethod(digest)
+            setattr(cls, 'digest_' + name, closure(name, model))
+
+    @classmethod
+    def digest_section(cls, parmams, clean=True):
+        model, created = cls._update_or_create(Section, parmams)
         if model and clean:
-            Absorb.remove_offerings(model)
-        return model
-
-    @staticmethod
-    def digest_offering(model_args):
-        model, created = Absorb._update_or_create(Offering, model_args)
-        return model
-
-    @staticmethod
-    def digest_textbook(model_args):
-        model, created = Absorb._update_or_create(Textbook, model_args)
-        return model
-
-    @staticmethod
-    def digest_textbook_link(model_args):
-        model, created = Absorb._update_or_create(TextbookLink, model_args)
+            cls.remove_offerings(model)
         return model
 
     @staticmethod
@@ -649,12 +617,12 @@ class Absorb(DigestionStrategy):
             s.delete()
 
     @staticmethod
-    def remove_offerings(section_model):
+    def remove_offerings(section_obj):
         ''' Remove all offerings associated with a section. '''
-        Offering.objects.filter(section=section_model).delete()
+        Offering.objects.filter(section=section_obj).delete()
 
     def wrap_up(self):
-        ''' Update time updated for school at end of parse. '''
+        ''' Update time updated for school at wrap_up of parse. '''
         update_object, created = Updates.objects.update_or_create(
             school=self.school,
             update_field="Course",
@@ -667,30 +635,25 @@ class Burp(DigestionStrategy):
     '''Load valid data into Django db and output diff between input
         and db data.
     '''
+
     def __init__(self, school, output=None):
         self.vommit = Vommit(output)
         self.absorb = Absorb(school)
+        Burp.create_digest_methods()
         super(Burp, self).__init__()
 
-    def digest_course(self, model_args):
-        self.vommit.digest_course(model_args)
-        return self.absorb.digest_course(model_args)
+    @classmethod
+    def create_digest_methods(cls):
+        for name in Digestor.MODELS:
+            if hasattr(cls, 'digest_' + name):
+                continue
 
-    def digest_section(self, model_args):
-        self.vommit.digest_section(model_args)
-        return self.absorb.digest_section(model_args)
-
-    def digest_offering(self, model_args):
-        self.vommit.digest_offering(model_args)
-        return self.absorb.digest_offering(model_args)
-
-    def digest_textbook(self, model_args):
-        self.vommit.digest_textbook(model_args)
-        return self.absorb.digest_textbook(model_args)
-
-    def digest_textbook_link(self, model_args):
-        self.vommit.digest_textbook_link(model_args)
-        return self.absorb.digest_textbook_link(model_args)
+            def closure(name):
+                def digest(self, params):
+                    getattr(self.vommit, 'digest_' + name)(params)
+                    return getattr(self.absorb, 'digest_' + name)(params)
+                return digest
+            setattr(cls, 'digest_' + name, closure(name))
 
     def wrap_up(self):
         self.vommit.wrap_up()

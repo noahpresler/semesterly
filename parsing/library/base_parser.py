@@ -70,23 +70,3 @@ class BaseParser:
     def end(self):
         """Finish the parse."""
         self.ingestor.wrap_up()
-
-
-# class CourseParser(BaseParser):
-#     """Abstract course parser."""
-
-#     __metaclass__ = ABCMeta
-
-#     @abstractmethod
-#     def __init__(self, school, **kwargs):
-#         """Create course parser instance.
-
-#         Args:
-#             school (str)
-#             **kwargs: pass-through
-#         """
-#         super(CourseParser, self).__init__(school, **kwargs)
-
-#     @abstractmethod
-#     def start(self, **kwargs):
-#         """Start the parse."""
