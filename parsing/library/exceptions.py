@@ -5,7 +5,7 @@ class PipelineError(Exception):
     """Data-pipeline error class."""
 
 
-class PipelineWarning(Exception):
+class PipelineWarning(UserWarning):
     """Data-pipeline warning class."""
 
 

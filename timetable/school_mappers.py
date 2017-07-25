@@ -84,6 +84,7 @@ school_to_semesters = {
             'Fall',
             'Summer',
             'Spring',
+            'Intersession',
         ],
     }),
     'uoft': OrderedDict({
@@ -189,24 +190,22 @@ old_school_to_semesters = {
 }
 # END TEMP
 
-new_parsers = {}
+parsers = {}
 
 # Do the imports.
-types = ['courses', 'evals', 'textbooks']
-for type_ in types:
-    new_parsers[type_] = {}
+for parser_type in ['courses', 'evals', 'textbooks']:
+    parsers[parser_type] = {}
     for school in VALID_SCHOOLS:
         try:
             Parser = None  # Binding below in exec.
             exec 'from parsing.schools.{}.{} import Parser'.format(
                 school,
-                type_
+                parser_type
             )
-            new_parsers[type_][school] = Parser
+            parsers[parser_type][school] = Parser
         except ImportError:
             pass
 
-# use lambdas to call constructor in a lazy fashion
 course_parsers = {
     'uoft': lambda: UofTParser().start(),
 }

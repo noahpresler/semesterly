@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-import sys
 import datetime
 import progressbar
 import dateutil.parser as dparser
@@ -36,57 +35,74 @@ class Viewer:
 
 
 class ProgressBar(Viewer):
-    """Command line progress bar viewer for parsers."""
+    """Command line progress bar viewer for data pipeline."""
 
-    TERMINAL_WIDTH_SWITCH_SIZE = 100
+    SWITCH_SIZE = 100
 
-    def __init__(self, school, formatter=(lambda x: x)):
+    class Timer(progressbar.widgets.FormatLabel,
+                progressbar.widgets.TimeSensitiveWidgetBase):
+        """Custom timer created to take away 'Elapsed Time' string."""
+
+        def __init__(self, format='%(elapsed)s', **kwargs):
+            """Contruct Timer."""
+            progressbar.widgets.FormatLabel.__init__(self,
+                                                     format=format,
+                                                     **kwargs)
+            progressbar.widgets.TimeSensitiveWidgetBase.__init__(self,
+                                                                 **kwargs)
+
+    def __init__(self, stat_format=''):
+        """Construct instance of data pipeline progress bar."""
         self.statuses = StatView()
+        self.stat_format = stat_format
 
-        # Set progress bar to long or short dependent on terminal width
-        terminal_width = ProgressBar._get_terminal_size()
-        if terminal_width < ProgressBar.TERMINAL_WIDTH_SWITCH_SIZE:
-            self.bar = progressbar.ProgressBar(
-                redirect_stdout=True,
-                max_value=progressbar.UnknownLength,
-                widgets=[
-                    ' (', school, ') ',
-                    progressbar.FormatLabel('%(value)s')
-                ])
-        else:
-            self.bar = progressbar.ProgressBar(
-                redirect_stdout=True,
-                max_value=progressbar.UnknownLength,
-                widgets=[
-                    ' (', school, ')',
-                    ' [', progressbar.Timer(), '] ',
-                    progressbar.FormatLabel('%(value)s')
-                ])
-        self.formatter = formatter
+        self.format_custom_text = progressbar.FormatCustomText(
+            '(%(school)s) ==%(mode)s== %(stats)s',
+        )
 
-    @staticmethod
-    def _get_terminal_size():
-        return progressbar.utils.get_terminal_size()[0]
+        self.bar = progressbar.ProgressBar(
+            redirect_stdout=True,
+            max_value=progressbar.UnknownLength,
+            widgets=[
+                ' [', ProgressBar.Timer(), '] ',
+                self.format_custom_text,
+            ])
 
     def receive(self, tracker, broadcast_type):
+        """Incremental update to progress bar."""
         self.statuses.receive(tracker, broadcast_type)
         counters = self.statuses.stats
-        mode = '=={}=='.format(tracker.mode.upper())
-        count_string = ' | '.join(('{}: {}'.format(k[:3].title(), self.formatter(counters[k])) for k in counters if counters[k]['total'] > 0))
-        formatted_string = mode
-        if ProgressBar._get_terminal_size() > ProgressBar.TERMINAL_WIDTH_SWITCH_SIZE:
+        formatted_string = ''
+        if progressbar.utils.get_terminal_size()[0] > ProgressBar.SWITCH_SIZE:
             attrs = ['year', 'term', 'department']
             for attr in attrs:
                 if not hasattr(tracker, attr):
                     continue
                 if attr == 'department':
                     if 'code' in tracker.department:
-                        formatted_string += ' | {}'.format(tracker.department['code'])
-                    formatted_string += ' | {}'.format(tracker.department['name'])
+                        formatted_string += ' | {}'.format(
+                            tracker.department['code']
+                        )
+                    else:
+                        formatted_string += ' | {}'.format(
+                            tracker.department['name']
+                        )
                     continue
                 formatted_string += ' | {}'.format(getattr(tracker, attr))
-        formatted_string += ' | {}'.format(count_string)
-        self.bar.update(formatted_string)
+        for data_type, counter in counters.items():
+            if counter['total'] == 0:
+                continue
+            formatted_string += ' | {label}: {stat}'.format(
+                label=data_type[:3].title(),
+                stat=self.stat_format.format(
+                    valid=counter['valid'],
+                    total=counter['total']
+                )
+            )
+        self.format_custom_text.update_mapping(school=tracker.school,
+                                               mode=tracker.mode.upper(),
+                                               stats=formatted_string)
+        self.bar.update()
 
     def report(self, tracker):
         """Do nothing."""
@@ -128,8 +144,9 @@ class StatView(Viewer):
     Attributes:
         KINDS (tuple): The kinds of objects that can be tracked.
             TODO - move this to a shared space w/Validator
+        LABELS (tuple): The status labels of objects that can be tracked.
+        report (TYPE): Description
         stats (dict): The view itself of the stats.
-        STATUSES (tuple): The statuses of objects that can be tracked.
     """
 
     # TODO - move to central location w/Validator/schema kinds
@@ -144,7 +161,7 @@ class StatView(Viewer):
         'eval',
     )
 
-    STATUSES = ('valid', 'created', 'new', 'updated', 'total')
+    LABELS = ('valid', 'created', 'new', 'updated', 'total')
 
     report = None
 
@@ -152,7 +169,7 @@ class StatView(Viewer):
         """Construct StatView instance."""
         self.stats = {
             subject: {
-                stat: 0 for stat in StatView.STATUSES
+                stat: 0 for stat in StatView.LABELS
             } for subject in StatView.KINDS
         }
 

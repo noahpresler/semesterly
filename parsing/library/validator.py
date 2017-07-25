@@ -89,8 +89,10 @@ class Validator:
         self.seen = {}
 
         if tracker is None:  # Used during self-contained validation.
-            self.tracker = Tracker(self.config.school.code)
+            self.tracker = Tracker()
+            self.tracker.school = self.config.school.code
             self.tracker.mode = 'validating'
+            self.tracker.start()
         else:
             self.tracker = tracker
 
@@ -181,34 +183,39 @@ class Validator:
             Validator.schema_validate(obj, *Validator.SCHEMAS[obj.kind])
             self.kind_to_validation_function[obj.kind](obj)
 
-    def validate_self_contained(self, datafile,
-                                break_on_error=False,
+    def validate_self_contained(self, data_path,
+                                break_on_error=True,
                                 break_on_warning=False,
                                 output_error=None,
-                                display_progress_bar=True):
+                                display_progress_bar=True,
+                                master_log_path=None):
+        """Validate JSON file as without ingestor.
 
-        # Add functionality to tracker.
-        # TODO -- fix hardcoded master log file
-        self.tracker.add_viewer(settings.PARSING_DIR + '/logs/master.log')
+        Args:
+            data_path (str): Path to data file.
+            break_on_error (bool, optional)
+            break_on_warning (bool, optional)
+            output_error (None, optional): Error output file path.
+            display_progress_bar (bool, optional)
+
+        Raises:
+            e: TODO
+        """
+        # TODO - iter errors and catch exceptions within method
+
         if display_progress_bar:
-            def formatter(stats):
-                return '{}/{}'.format(stats['valid'], stats['total'])
-            self.tracker.add_viewer(
-                ProgressBar(self.config.school.code, formatter)
-            )
-        self.tracker.start()
+            self.tracker.add_viewer(ProgressBar('{total}'))
 
         logger = Logger(errorfile=output_error)
 
         try:
             # self.validate_directory(directory)
-            data = Validator.file_to_json(datafile)
+            data = Validator.file_to_json(data_path)
             Validator.schema_validate(data, *Validator.SCHEMAS.datalist)
         except (JsonValidationError, json.scanner.JSONDecodeError) as e:
             logger.log(e)
             raise e  # fatal error, cannot continue
 
-        # TODO - iter errors and catch exceptions within method
         for obj in data:
             obj = DotDict(obj)
             try:
@@ -223,7 +230,6 @@ class Validator:
                 if break_on_warning:
                     raise e
             self.tracker.status = dict(kind=obj.kind, status='total')
-            # TODO - delay tracker update to progress bar
 
         self.tracker.end()
 

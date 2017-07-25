@@ -20,8 +20,7 @@ nltk==3.2.1
 oauth==1.0.1
 oauthlib==1.1.1
 prettytable==0.7.2
-progressbar==2.3
-progressbar2==3.6.2
+progressbar2==3.32.1
 psycopg2==2.6.2
 PyJWT==1.4.0
 pyserial==2.6
