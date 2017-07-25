@@ -505,7 +505,7 @@ class Ingestor(dict):
         self.tracker.term = evaluation['term']
         return evaluation
 
-    def wrap_up(self):
+    def end(self):
         """Finish ingesting by closing i/o and clearing internal state."""
         self.logger.close()
         self.clear()

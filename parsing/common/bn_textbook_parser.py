@@ -108,7 +108,6 @@ class BarnesAndNoblesParser(BaseParser):
             for term in terms:
                 self.term = term
                 self.parse()
-        self.ingestor.wrap_up()
 
     def parse(self):
 
