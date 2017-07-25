@@ -1,35 +1,28 @@
-# @what     Parsing Digestor (db adapter)
-# @org      Semeseter.ly
-# @author   Michael N. Miller
-# @date     1/22/17
-
+"""Filler."""
 from __future__ import absolute_import, division, print_function
-
-import datetime
 
 import os
 import sys
+import datetime
+import django
+import jsondiff
+import simplejson as json
 
 from abc import ABCMeta, abstractmethod
 
-import django
-
-import jsondiff
-
-import simplejson as json
-
-from timetable.models import *
-
+from timetable.models import Course, Section, Offering, Textbook, \
+    TextbookLink, Evaluation, Semester, Updates
 from parsing.library.utils import DotDict, make_list
-from parsing.library.logger import Logger, JsonListLogger
+from parsing.library.logger import JsonListLogger
 from parsing.library.internal_exceptions import DigestionError
-from parsing.library.tracker import ProgressBar, NullTracker
+from parsing.library.tracker import NullTracker
+from parsing.library.viewer import ProgressBar
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
 
-class Digestor:
+class Digestor(object):
     def __init__(self, school,
                  data=None,
                  output=None,
@@ -37,43 +30,33 @@ class Digestor:
                  load=True,
                  display_progress_bar=True,
                  tracker=NullTracker()):
-
-        # TODO - extrapolate datafile/dict/string resolution to another manager
-        if data:
-            if isinstance(data, dict):
-                data = data
-            else:
-                with open(data, 'r') as f:
-                    data = json.load(f)
-        else:
-            data = json.load(sys.stdin)
+        with open(data, 'r') as f:
+            data = json.load(f)
 
         self.data = [DotDict(obj) for obj in data]
 
-        self.cached = DotDict({
-            'course': {'code': '_'},
-            'section': {'code': '_'}
-        })
+        self.cached = DotDict(dict(
+            course={'code': '_'},
+            section={'code': '_'}
+        ))
 
         self.school = school
         self.adapter = DigestionAdapter(school, self.cached)
-        self.strategy = self.set_strategy(diff, load, output)
+        self.strategy = self._resolve_strategy(diff, load, output)
 
         # Setup tracker for digestion and progress bar.
         self.tracker = tracker
-        self.tracker = 'digesting'
+        self.tracker.mode = 'digesting'
         if display_progress_bar:
-            def formatter(stats):
-                return '{}'.format(stats['total'])
-            self.tracker.add_viewer(ProgressBar(school, formatter))
+            self.tracker.add_viewer(ProgressBar('{total}'))
 
-    def set_strategy(self, diff, load, output=None):
-        if diff and load:
-            return Burp(self.school, output)  # Diff only
-        elif not diff and load:
-            return Absorb(self.school)  # Load db only
-        elif diff and not load:
-            return Vommit(output)  # Load db and log diff
+    def _resolve_strategy(self, diff, load, output=None):
+        if diff and load:  # Diff only
+            return Burp(self.school, output)
+        elif not diff and load:  # Load db only
+            return Absorb(self.school)
+        elif diff and not load:  # Load db and log diff
+            return Vommit(output)
         else:  # Nothing to do...
             raise ValueError('Nothing to run with --no-diff and --no-load.')
 
@@ -411,6 +394,14 @@ class DigestionAdapter:
 class DigestionStrategy:
     __metaclass__ = ABCMeta
 
+    MODELS = {
+        'course': Course,
+        'section': Section,
+        'offering': Offering,
+        'textbook': Textbook,
+        'textbook_link': TextbookLink
+    }
+
     @abstractmethod
     def digest_course(self, model_args):
         ''' Digest course.
@@ -465,6 +456,16 @@ class Vommit(DigestionStrategy):
         self.json_logger.open()
         self.defaults = Vommit.get_model_defaults()
         super(Vommit, self).__init__()
+
+        # for name, model in Vommit.MODELS.items():
+        #     def closure(name, model):
+        #         def digest(self, model_params):
+        #             obj = model.objects.filter(
+        #                 **Vommit.exclude(model_params)
+        #             ).first()
+        #             self.diff(name, model_args, obj)
+        #             return obj
+        #     setattr(self, 'digest_' + name, closure(name, model))
 
     @staticmethod
     def exclude(dct):
