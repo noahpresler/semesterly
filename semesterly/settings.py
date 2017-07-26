@@ -27,6 +27,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_DIRECTORY = os.getcwd()
 
+PARSING_DIR = 'parsing'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -157,7 +159,8 @@ INSTALLED_APPS = (
     'rest_framework_swagger',
     'webpack_loader',
     'djcelery',
-    'agreement'
+    'agreement',
+    'parsing',
 )
 
 REST_FRAMEWORK ={
@@ -263,7 +266,7 @@ LOGGING = {
 }
 
 ADMINS = [
-    ('Rohan Das', 'rohan@semester.ly'), 
+    ('Rohan Das', 'rohan@semester.ly'),
     ('Felix Zhu', 'felix@semester.ly'),
     # ('Noah Presler', 'noah@semester.ly'),
     ('Eric Calder', 'eric@semester.ly'),

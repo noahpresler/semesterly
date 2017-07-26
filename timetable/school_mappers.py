@@ -1,27 +1,35 @@
-# Copyright (C) 2017 Semester.ly Technologies, LLC
-#
-# Semester.ly is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Semester.ly is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
 
-"""This file contains all dicts which map a school to its associated object."""
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+from __future__ import absolute_import, division, print_function
+
 import os
 
 from collections import OrderedDict
 
 import django
 
+from parsing.schools.active import VALID_SCHOOLS
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
+"""This file contains all dicts which map a school to its associated object."""
+
+VALID_SCHOOLS = VALID_SCHOOLS
+
 # the smallest block size (in minutes) needed to describe start/end times
-# > uoft classes only start on the hour or half hour, so granularity is 30min
+# Ex: uoft classes only start on the hour or half hour, so granularity is 30min
 school_to_granularity = {
     'jhu': 5,
     'uoft': 30,
@@ -34,18 +42,6 @@ school_to_granularity = {
     'umich': 5,
     'chapman': 5,
     'salisbury': 5,
-}
-
-VALID_SCHOOLS = {
-    "uoft",
-    "jhu",
-    "umd",
-    "queens",
-    "vandy",
-    "gw",
-    "umich",
-    "chapman",
-    "salisbury",
 }
 
 AM_PM_SCHOOLS = {
@@ -64,7 +60,7 @@ FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS = {
 }
 
 # Identifies schools that have user access restrictions so that
-#  parsing can only happen one semester/term at a time.
+#  parsing can only happen one request at a time.
 SINGLE_ACCESS_SCHOOLS = {
     "gw",
 }
@@ -89,6 +85,7 @@ school_to_semesters = {
             'Fall',
             'Summer',
             'Spring',
+            'Intersession',
         ],
     }),
     'uoft': OrderedDict({
@@ -194,38 +191,24 @@ old_school_to_semesters = {
 }
 # END TEMP
 
-# do the imports: assumes all parser follow the same naming conventions:
-# schoolname_parsertype where parsertype can be courses, evals, or textbooks
-types = ['courses', 'evals', 'textbooks']
-for school in VALID_SCHOOLS:
-    for p_type in types:
-        exec "from scripts.{0}.{0}_{1} import *".format(school, p_type)
+parsers = {}
 
-# use lambdas to call constructor in a lazy fashion
+# Do the imports.
+for parser_type in ['courses', 'evals', 'textbooks']:
+    parsers[parser_type] = {}
+    for school in VALID_SCHOOLS:
+        try:
+            Parser = None  # Binding below in exec.
+            exec 'from parsing.schools.{}.{} import Parser'.format(
+                school,
+                parser_type
+            )
+            parsers[parser_type][school] = Parser
+        except ImportError:
+            pass
+
 course_parsers = {
     'uoft': lambda: UofTParser().start(),
-    # 'rutgers': parse_rutgers,
-    # 'uo': parse_ottawa,
-    'gw': lambda: GWParser().parse(),
-}
-
-new_course_parsers = {
-    'chapman': lambda *args, **kwargs: ChapmanParser(**kwargs),
-    'jhu': lambda *args, **kwargs: HopkinsParser(**kwargs),
-    'umich': lambda *args, **kwargs: UmichParser(**kwargs),
-    'queens': lambda *args, **kwargs: QueensParser(**kwargs),
-    'salisbury': lambda *args, **kwargs: SalisburyParser(**kwargs),
-    'vandy': lambda *args, **kwargs: VandyParser(**kwargs),
-    'umd': lambda *args, **kwargs: UMDParser(**kwargs),
-}
-
-new_textbook_parsers = {
-    'chapman': lambda *args, **kwargs: ChapmanParser(**kwargs),
-    'gw': lambda *args, **kwargs: GWTextbookParser(**kwargs),
-    'jhu': lambda *args, **kwargs: JHUTextbookParser(**kwargs),
-    'umd': lambda *args, **kwargs: UMDTextbookParser(**kwargs),
-    'umich': lambda *args, **kwargs: UmichTextbookParser(**kwargs),
-    'vandy': lambda *args, **kwargs: VandyTextbookParser(**kwargs),
 }
 
 eval_parsers = {
@@ -238,10 +221,10 @@ eval_parsers = {
 }
 
 textbook_parsers = {
-    'uoft': parse_uoft_textbooks,
+    # 'uoft': parse_uoft_textbooks,
     'rutgers': lambda: None,
     'uo': lambda: None,
-    'queens': parse_queens_textbooks,
+    # 'queens': parse_queens_textbooks,
 }
 
 final_exams_available = {
