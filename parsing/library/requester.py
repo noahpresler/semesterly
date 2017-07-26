@@ -10,11 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-# what     Parsing library HTTP Requester
-# @org      Semeseter.ly
-# @author   Michael N. Miller
-# @date     3/5/17
-
 from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
 import os, datetime, requests, cookielib, re, sys, interruptingcow
@@ -111,7 +106,7 @@ class Requester:
         Args:
             url (str): url to query
             form (dict): HTTP form key-value dictionary (defualt None)
-            params (dict): payload dictionary of HTTP params 
+            params (dict): payload dictionary of HTTP params
 
         Returns:
             request object: if parse is False
