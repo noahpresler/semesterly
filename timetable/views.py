@@ -27,8 +27,9 @@ from timetable.serializers import DisplayTimetableSerializer
 from timetable.models import Semester, Course, Section
 from timetable.utils import update_locked_sections, courses_to_timetables, DisplayTimetable
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMixin
+from semesterly.settings import HASHING_SALT
 
-hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
+hashids = Hashids(salt=HASHING_SALT)
 logger = logging.getLogger(__name__)
 
 

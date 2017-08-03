@@ -22,9 +22,9 @@ from hashids import Hashids
 from oauth2client.client import GoogleCredentials
 
 from timetable import models as timetable_models
+from semesterly.settings import HASHING_SALT
 
-# TODO: put hashids salt into config/settings file
-hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
+hashids = Hashids(salt=HASHING_SALT)
 
 
 class Student(models.Model):
