@@ -18,6 +18,7 @@
     "browser-filesaver": "^1.1.1",
     "browserify": "^14.3.0",
     "classnames": "^2.2.4",
+    "clipboard": "^1.7.1",
     "css-loader": "^0.28.0",
     "es6-promise": "^4.0.5",
     "eslint": "^3.19.0",

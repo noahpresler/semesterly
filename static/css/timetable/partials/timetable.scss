@@ -126,28 +126,11 @@ button {
 
 .fc-right {
   .share-course-link-wrapper {
-    background-color: $geee;
-    border-radius: 2px;
-    height: 38px;
-    margin-left: -140px !important;
+    top: auto;
+    right: auto;
+    display: block;
+    margin-left: -213px !important;
     margin-top: 36px;
-    padding: 0 5px;
-    position: absolute;
-    z-index: 1000;
-
-    .share-course-link {
-      color: $g222;
-      font-size: 14px;
-      font-weight: 400;
-      height: 25px;
-      margin-top: 7px;
-      width: auto;
-    }
-
-    .tip,
-    .tip-border {
-      display: none;
-    }
   }
 }
 
