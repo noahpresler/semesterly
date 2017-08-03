@@ -10,8 +10,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-USER = "1dc4"
-PASS = "CREOmule1"
+from semesterly.settings import get_secret
+
+USER = get_secret('QUEENS_USER')
+PASS = get_secret('QUEENS_PASS')
 OUTPUT_DIR = "./data-dump"
 PROFILE = None
 MAX_RETRIES = 10

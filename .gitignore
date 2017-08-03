@@ -50,3 +50,5 @@ venv/
 .vscode/
 webpack-stats.json
 workfile.html
+semesterly/secrets.py
+semesterly/secret_key.py

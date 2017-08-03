@@ -36,7 +36,7 @@ from timetable.models import Semester, Course, Section
 from timetable.serializers import DisplayTimetableSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
-from semesterly.settings import HASHING_SALT
+from semesterly.settings import get_secret
 
 DAY_MAP = {
     'M': 'mo',
@@ -48,7 +48,7 @@ DAY_MAP = {
     'U': 'su'
 }
 
-hashids = Hashids(salt=HASHING_SALT)
+hashids = Hashids(salt=get_secret('HASHING_SALT'))
 
 
 def get_friend_count_from_course_id(school, student, course_id, semester):

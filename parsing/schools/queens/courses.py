@@ -18,6 +18,7 @@ import socket
 from selenium import webdriver
 
 from parsing.common.peoplesoft.courses import QPeoplesoftParser
+from semesterly.settings import get_secret
 
 
 class Parser(QPeoplesoftParser):
@@ -26,8 +27,8 @@ class Parser(QPeoplesoftParser):
     BASE_URL = 'https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/'\
                'SA_LEARNER_SERVICES.CLASS_SEARCH.GBL'
     CREDENTIALS = {
-        'USERNAME': '1dc4',
-        'PASSWORD': 'CREOmule1'
+        'USERNAME': get_secret('QUEENS_USER'),
+        'PASSWORD': get_secret('QUEENS_PASS')
     }
 
     def __init__(self, **kwargs):

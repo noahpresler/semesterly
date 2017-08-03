@@ -16,13 +16,14 @@ from __future__ import absolute_import, division, print_function
 import re
 import sys
 
-from parsing.library.base_parser import BaseParsr
+from parsing.library.base_parser import BaseParser
 from parsing.library.internal_exceptions import CourseParseError
 from parsing.library.utils import safe_cast
 from parsing.library.exceptions import ParseError
+from semesterly.settings import get_secret
 
 
-class Parser(BaseParsr):
+class Parser(BaseParser):
     """Vanderbilt course parser.
 
     Attributes:
@@ -36,8 +37,8 @@ class Parser(BaseParsr):
 
     API_URL = 'https://webapp.mis.vanderbilt.edu/more'
     CREDENTIALS = {
-        'USERNAME': 'khanaf',
-        'PASSWORD': 'Gainz%2123'
+        'USERNAME': get_secret('VANDY_USER'),
+        'PASSWORD': get_secret('VANDY_PASS')
     }
 
     def __init__(self, **kwargs):

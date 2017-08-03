@@ -29,11 +29,24 @@ PROJECT_DIRECTORY = os.getcwd()
 
 PARSING_DIR = 'parsing'
 
+def get_secret(key):
+    """
+    Returns the value for a secret by the given key. 
+    Will first look for a corresponding environment variable.
+    If this fails, checks semesterly/sensitive.py.
+    """
+    try:
+        return os.environ[key]
+    except KeyError:
+        try:
+            from sensitive import SECRETS
+            return SECRETS[key]
+        except:
+            raise ValueError("""'%s' not correctly configured.
+             Try adding it to semesterly/sensitive.py"""  % key)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-_^5#l6kf0pnf7!s%-1w1*()85zyger%2&pyfe47*8uw!x&8n$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -42,8 +55,6 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['*']
 
-SOCIAL_AUTH_FACEBOOK_KEY = '580022102164877'
-SOCIAL_AUTH_FACEBOOK_SECRET = '0eac3d0db71f27b07f03d7fd6a760a33'
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
     'user_friends',
@@ -52,15 +63,12 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email,gender'
 }
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1033039203403-ffu02ldu6ifcoeuv6vudaq31dmsjpafe.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'CousME2J0Ke7Ht0sMp9Bdm3I'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/plus.login',
     'https://www.googleapis.com/auth/plus.me',
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/calendar'
 ]
-GOOGLE_API_KEY = 'AIzaSyD-zqYiewSVAstidBlBtMWnmgWhDvBNTJo'
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
     'access_type': 'offline',  # Enables the refreshing grant
     'approval_promt': 'force'  # Enables refresh_token
@@ -69,6 +77,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_FACEBOOK_KEY = get_secret('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = get_secret('SOCIAL_AUTH_FACEBOOK_SECRET')
 
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
@@ -273,7 +286,6 @@ ADMINS = [
 
 ]
 
-# STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 
 EMAIL_USE_TLS = True
@@ -334,11 +346,8 @@ CACHES = {
 }
 CACHALOT_ENABLED = True
 
-
-
 try:
     from local_settings import *
-    from sensitive import *
 except:
     pass
 
@@ -375,3 +384,12 @@ CELERYD_CHDIR = BASE_DIR
 # CELERYBEAT_SCHEDULE = {}
 
 # End Celery stuff.
+
+try:
+    #SECRET_KEY should be provided in sensitive.py for security
+    SECRET_KEY = get_secret('SECRET_KEY')
+except ImportError:
+    #fall back on creating a random SECRET_KEY
+    from django.utils.crypto import get_random_string
+    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+    SECRET_KEY = get_random_string(50, chars)

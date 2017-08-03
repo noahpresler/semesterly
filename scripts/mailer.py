@@ -17,12 +17,13 @@ from email.mime.text import MIMEText
 from django.template.loader import render_to_string
 from student.models import *
 from student.views import create_unsubscribe_link
+from semesterly.settings import get_secret
 
 class Mailer():
     def __init__(self):
         # Create server object with SSL option
-        self.server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
-        self.server.login('AKIAJWXCNDO3CMYAIC6A', 'AonOaLbp9FjBkyhP9ihHBge92CEqgMPMbgrUweYxT9Ar')
+        self.server = smtplib.SMTP_SSL(get_secret('MAILER_SERVER'))
+        self.server.login(get_secret('MAILER_USER'), get_secret('MAILER_PASSWORD'))
 
         # Define to
         self.sender = 'textbooks@semester.ly'
@@ -71,5 +72,5 @@ class Mailer():
             print("skipped " + str(student.user.email))
             traceback.print_exc()
 
-            self.server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
-            self.server.login('AKIAJWXCNDO3CMYAIC6A', 'AonOaLbp9FjBkyhP9ihHBge92CEqgMPMbgrUweYxT9Ar')
+        self.server = smtplib.SMTP_SSL(MAILER_SERVER)
+        self.server.login(MAILER_USER, MAILER_PASSWORD)
