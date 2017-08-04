@@ -36,7 +36,7 @@ class Viewer(object):
         """Incremental updates of tracking info.
 
         Args:
-            tracker (parsing.library.tracker.Tracker): Tracker instance.
+            tracker (Tracker): Tracker instance.
             broadcast_type (str): Broadcast type emitted by tracker.
         """
 
@@ -45,7 +45,7 @@ class Viewer(object):
         """Report all tracked info.
 
         Args:
-            tracker (parsing.library.tracker.Tracker): Tracker instance.
+            tracker (Tracker): Tracker instance.
         """
 
 

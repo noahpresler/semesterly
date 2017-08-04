@@ -9,6 +9,7 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
+"""Make me a module."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -101,7 +102,7 @@ def task_parse_textbooks(schools=None, all=False):
 def task_parse_school(school, years_and_terms, textbooks=False):
     """Call the django management commands to start parse."""
     filename = '{}/{}/data/courses_{}.json'.format(
-        settings.PARSING_DIR
+        settings.PARSING_DIR,
         school,
         '-'.join(
             '{}{}'.format(
@@ -119,7 +120,7 @@ def task_parse_school(school, years_and_terms, textbooks=False):
                             output=filename)
     management.call_command('digest', school,
                             textbooks=textbooks,
-                            display_progress_bar=True,
+                            display_progress_bar=False,
                             verbosity=0,
                             data=filename)
     print('Parsed {} {}'.format(school, years_and_terms))

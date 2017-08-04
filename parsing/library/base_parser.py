@@ -10,7 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
 from __future__ import absolute_import, division, print_function
 
 from abc import ABCMeta, abstractmethod
@@ -24,10 +23,10 @@ class BaseParser:
     """Abstract base parser for data pipeline parsers.
 
     Attributes:
-        extractor (library.extractor): pipeline extractor
-        ingestor (library.ingestor): pipeline ingestor
-        requester (library.requester): pipeline requester
-        school (str): School that parser is for.
+        extractor (:obj:`parsing.library.extractor.Extractor`)
+        ingestor (:obj:`parsing.library.ingestor.Ingestor`)
+        requester (:obj:`parsing.library.requester.Requester`)
+        school (:obj:`str`): School that parser is for.
     """
 
     __metaclass__ = ABCMeta
@@ -75,7 +74,7 @@ class BaseParser:
         """Start the parse.
 
         Args:
-            **kwargs: pass-through
+            **kwargs: pass-through to child parser.
         """
 
     def end(self):

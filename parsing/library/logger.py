@@ -33,22 +33,22 @@ class JSONStreamWriter(object):
         file (dict): Current object being JSONified and streamed.
         inner (TYPE): Description
 
-    Example:
+    Examples:
         >>> with JSONStreamWriter(sys.stdout, type_='dict') as streamer:
-                streamer.write('a', 1)
-                streamer.write('b', 2)
-                streamer.write('c', 3)
+        ...     streamer.write('a', 1)
+        ...     streamer.write('b', 2)
+        ...     streamer.write('c', 3)
         {
             "a": 1,
             "b": 2,
             "c": 3
         }
         >>> with JSONStreamWriter(sys.stdout, type_='dict') as streamer:
-                streamer.write('a', 1)
-                with streamer.write('data', type_=list) as streamer2:
-                    streamer2.write({0:0, 1:1, 2:2})
-                    streamer2.write({3:3, 4:'4'})
-                streamer.write('b', 2)
+        ...     streamer.write('a', 1)
+        ...     with streamer.write('data', type_=list) as streamer2:
+        ...         streamer2.write({0:0, 1:1, 2:2})
+        ...         streamer2.write({3:3, 4:'4'})
+        ...     streamer.write('b', 2)
         {
             "a": 1,
             "data":
