@@ -30,6 +30,7 @@ Students know best
    setup
    environment
    parsing
+   advancedconfig
    howitworks   
    learning
    contributing
