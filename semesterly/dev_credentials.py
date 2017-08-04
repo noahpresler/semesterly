@@ -25,10 +25,10 @@ SECRETS = {
     'GOOGLE_API_KEY': 'AIzaSyBdJi-FTASHxCyH_-3caR-K_IkRUW8dGSQ',
     'SOCIAL_AUTH_GOOGLE_OAUTH2_KEY': '993759614355-6sti4ks7kaikb9806ob49p9qvshhpgj7.apps.googleusercontent.com',
     'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET': 'YMy_-3GD7bF8FlASDlLg0dDm',
-    'SOCIAL_AUTH_FACEBOOK_KEY': '2286711541553926',
-    'SOCIAL_AUTH_FACEBOOK_SECRET': 'da8a5d20de803f05b4af1c5532bf3987',
-    'FB_TEST_EMAIL': 'tiysufezko_1501822839@tfbnw.net',
-    'FB_TEST_PASS': 'asdfjkkjdgasljasfdj',
+    'SOCIAL_AUTH_FACEBOOK_KEY': '2008148216081463',
+    'SOCIAL_AUTH_FACEBOOK_SECRET': '75f855457ff18db012e57ccaaf3470eb',
+    'FB_TEST_EMAIL': 'open_ejvbpxf_user@tfbnw.net',
+    'FB_TEST_PASS': 'asdfasdfdsfdsfadfdsflsdflglfg',
 
     #Not essential for testing, but can be filled in for advanced usage
     'QUEENS_USER': None,
