@@ -34,7 +34,8 @@
         "required": [
           "kind",
           "code",
-          "name"
+          "name",
+          "school"
         ]
       },
       {

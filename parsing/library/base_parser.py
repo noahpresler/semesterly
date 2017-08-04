@@ -80,4 +80,4 @@ class BaseParser:
 
     def end(self):
         """Finish the parse."""
-        self.ingestor.wrap_up()
+        self.ingestor.end()
