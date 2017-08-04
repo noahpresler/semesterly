@@ -22,6 +22,7 @@ from parsing.library.base_parser import CourseParser
 from parsing.library.internal_exceptions import CourseParseError
 from parsing.library.utils import safe_cast
 from parsing.library.extractor import filter_years_and_terms
+from semesterly.settings import get_secret
 
 
 class Parser(CourseParser):
@@ -32,9 +33,9 @@ class Parser(CourseParser):
 
     URL = 'https://banweb.gwu.edu/PRODCartridge'
     CREDENTIALS = {
-        ***REMOVED***,
-        '***REMOVED***,
-        ***REMOVED***
+        'USERNAME': get_secret('GW_USER'),
+        'PASSWORD': get_secret('GW_PASS'),
+        'SECURITY_QUESTION_ANSWER': get_secret('GW_SECURITY_ANSWER')
     }
     YEARS_AND_TERMS = {
         2017: {

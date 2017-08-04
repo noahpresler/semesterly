@@ -17,6 +17,7 @@ import re
 
 from parsing.library.base_parser import BaseParser
 from parsing.library.extractor import time_12to24, titlize
+from semesterly.settings import get_secret
 
 
 class Parser(BaseParser):
@@ -33,7 +34,7 @@ class Parser(BaseParser):
     """
 
     API_URL = 'https://isis.jhu.edu/api/classes/'
-    KEY = '***REMOVED***'
+    KEY = get_secret('JHU_API_KEY')
     DAY_TO_LETTER_MAP = {
         'm': 'M',
         't': 'T',
