@@ -47,10 +47,15 @@ def get_secret(key):
              If this fails only on travis, have an administrator
              add your secret as a travis environment variable."""  % key)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+try:
+    #SECRET_KEY should be provided in sensitive.py for security
+    SECRET_KEY = get_secret('SECRET_KEY')
+except ImportError:
+    #fall back on creating a random SECRET_KEY
+    from django.utils.crypto import get_random_string
+    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+    SECRET_KEY = get_random_string(50, chars)
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
@@ -386,12 +391,3 @@ CELERYD_CHDIR = BASE_DIR
 # CELERYBEAT_SCHEDULE = {}
 
 # End Celery stuff.
-
-try:
-    #SECRET_KEY should be provided in sensitive.py for security
-    SECRET_KEY = get_secret('SECRET_KEY')
-except ImportError:
-    #fall back on creating a random SECRET_KEY
-    from django.utils.crypto import get_random_string
-    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
-    SECRET_KEY = get_random_string(50, chars)
