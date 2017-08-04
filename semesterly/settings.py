@@ -29,21 +29,36 @@ PROJECT_DIRECTORY = os.getcwd()
 
 PARSING_DIR = 'parsing'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+def get_secret(key):
+    """
+    Returns the value for a secret by the given key. 
+    Will first look for a corresponding environment variable.
+    If this fails, checks semesterly/sensitive.py.
+    """
+    try:
+        return os.environ[key]
+    except KeyError:
+        try:
+            from sensitive import SECRETS
+            return SECRETS[key]
+        except:
+            try:
+                from dev_credentials import SECRETS
+                return SECRETS[key]
+            except: 
+                raise ValueError("""'%s' not correctly configured.
+                Try adding it to the file semesterly/sensitive.py.
+                If this fails only on travis, have an administrator
+                add your secret as a travis environment variable."""  % key)
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '***REMOVED***'
+SECRET_KEY = get_secret('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['*']
 
-SOCIAL_AUTH_FACEBOOK_KEY = '580022102164877'
-SOCIAL_AUTH_FACEBOOK_SECRET = '***REMOVED***'
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
     'user_friends',
@@ -52,15 +67,12 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email,gender'
 }
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '***REMOVED***'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '***REMOVED***'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/plus.login',
     'https://www.googleapis.com/auth/plus.me',
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/calendar'
 ]
-GOOGLE_API_KEY = '***REMOVED***'
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
     'access_type': 'offline',  # Enables the refreshing grant
     'approval_promt': 'force'  # Enables refresh_token
@@ -69,6 +81,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_FACEBOOK_KEY = get_secret('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = get_secret('SOCIAL_AUTH_FACEBOOK_SECRET')
 
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
@@ -268,12 +285,10 @@ LOGGING = {
 ADMINS = [
     ('Rohan Das', 'rohan@semester.ly'),
     ('Felix Zhu', 'felix@semester.ly'),
-    # ('Noah Presler', 'noah@semester.ly'),
+    ('Noah Presler', 'noah@semester.ly'),
     ('Eric Calder', 'eric@semester.ly'),
-
 ]
 
-# STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 
 EMAIL_USE_TLS = True
@@ -334,11 +349,8 @@ CACHES = {
 }
 CACHALOT_ENABLED = True
 
-
-
 try:
     from local_settings import *
-    from sensitive import *
 except:
     pass
 

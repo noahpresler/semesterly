@@ -7,34 +7,34 @@ Running Tests
 Frontend
 ~~~~~~~~
 
-Run all tests: 
+Run all tests::
 
     npm test
 
-Run single test:
+Run single test::
 
     npm test -- static/js/redux/__tests__/schema.test.js
 
 Backend
 ~~~~~~~
 
-Run all tests:
+Run all tests::
 
     python manage.py test
 
-Run all tests for a single app:
+Run all tests for a single app::
   
     python manage.py test timetable
 
-Run single test suite
+Run single test suite::
 
     python manage.py test timetable.tests.UrlsTest
 
-Run single test case
+Run single test case::
 
     python manage.py test timetable.tests.UrlTest.test_urls_call_correct_views
 
-Run tests without resetting db:
+Run tests without resetting db::
 
     python manage.py test -k
 
