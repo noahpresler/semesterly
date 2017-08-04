@@ -43,7 +43,9 @@ def get_secret(key):
             return SECRETS[key]
         except:
             raise ValueError("""'%s' not correctly configured.
-             Try adding it to semesterly/sensitive.py"""  % key)
+             Try adding it to semesterly/sensitive.py.
+             If this fails only on travis, have an administrator
+             add your secret as a travis environment variable."""  % key)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
