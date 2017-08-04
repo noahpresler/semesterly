@@ -52,3 +52,5 @@ webpack-stats.json
 workfile.html
 semesterly/secrets.py
 semesterly/secret_key.py
+backup.sh
+client_secret.json

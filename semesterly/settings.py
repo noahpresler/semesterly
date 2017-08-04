@@ -42,19 +42,16 @@ def get_secret(key):
             from sensitive import SECRETS
             return SECRETS[key]
         except:
-            raise ValueError("""'%s' not correctly configured.
-             Try adding it to semesterly/sensitive.py.
-             If this fails only on travis, have an administrator
-             add your secret as a travis environment variable."""  % key)
+            # try:
+            from dev_credentials import SECRETS
+            return SECRETS[key]
+            # except: 
+            #     raise ValueError("""'%s' not correctly configured.
+            #     Try adding it to semesterly/sensitive.py.
+            #     If this fails only on travis, have an administrator
+            #     add your secret as a travis environment variable."""  % key)
 
-try:
-    #SECRET_KEY should be provided in sensitive.py for security
-    SECRET_KEY = get_secret('SECRET_KEY')
-except ImportError:
-    #fall back on creating a random SECRET_KEY
-    from django.utils.crypto import get_random_string
-    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
-    SECRET_KEY = get_random_string(50, chars)
+SECRET_KEY = get_secret('SECRET_KEY')
 
 DEBUG = False
 
