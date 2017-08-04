@@ -26,10 +26,11 @@ from analytics.models import SharedCourseView
 from courses.serializers import CourseSerializer
 from student.models import Student
 from student.utils import get_classmates_from_course_id
-from timetable.models import Semester, Course, Updates
+from timetable.models import Semester, Course
 from timetable.school_mappers import school_code_to_name
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView
 from helpers.decorators import validate_subdomain
+from parsing.models import DataUpdate
 
 
 # TODO: use CBV
@@ -130,7 +131,7 @@ def course_page(request, code):
 
 
 class CourseDetail(ValidateSubdomainMixin, APIView):
-    """ View that handles individual course entities. """
+    """View that handles individual course entities."""
 
     def get(self, request, sem_name, year, course_id):
         """ Return detailed data about a single course. Currently used for course modals. """
@@ -153,13 +154,27 @@ class SchoolList(APIView):
         Provides the basic school information including the schools
         areas, departments, levels, and the time the data was last updated
         """
-        last_updated = None
-        if Updates.objects.filter(
-                school=school, update_field="Course").exists():
-            update_time_obj = Updates.objects.get(school=school, update_field="Course") \
-                .last_updated.astimezone(timezone('US/Eastern'))
-            last_updated = update_time_obj.strftime(
-                '%Y-%m-%d %H:%M') + " " + update_time_obj.tzname()
+        # TODO - last_updated should encode per-semester last updated statuses
+        last_updated = datetime.min
+        updates = DataUpdate.objects.filter(school=school,
+                                            update_type=DataUpdate.COURSES)
+
+        updated = False
+        for update in updates:
+            # terms = last_updated.setdefault(update.semester.year, [])
+            if update.timestamp.replace(tzinfo=None) > last_updated:
+                last_updated = update.timestamp.astimezone(timezone('US/Eastern'))
+                updated = True
+            # terms.append({update.semester.name: last_updated})
+
+        if updated:
+            last_updated = '{} {}'.format(
+                last_updated.strftime('%Y-%m-%d %H:%M'),
+                last_updated.tzname()
+            )
+        else:
+            last_updated = None
+
         json_data = {
             'areas': sorted(list(Course.objects.filter(school=school)
                                  .exclude(areas__exact='')
@@ -175,6 +190,7 @@ class SchoolList(APIView):
                                   .distinct())),
             'last_updated': last_updated
         }
+
         return Response(json_data, status=status.HTTP_200_OK)
 
 

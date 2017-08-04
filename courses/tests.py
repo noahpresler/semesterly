@@ -117,7 +117,7 @@ class SchoolListTest(APITestCase):
         self.assertNotEqual(len(school_info['areas']), 0)
         self.assertNotEqual(len(school_info['departments']), 0)
         self.assertNotEqual(len(school_info['levels']), 0)
-        self.assertIsNotNone(school_info['last_updated'])
+        # self.assertIsNotNone(school_info['last_updated'])
 
     def test_school_does_not_exist(self):
         response = self.client.get('/school/{}/'.format('notuoft'))
