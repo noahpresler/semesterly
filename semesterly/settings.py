@@ -42,14 +42,14 @@ def get_secret(key):
             from sensitive import SECRETS
             return SECRETS[key]
         except:
-            # try:
-            from dev_credentials import SECRETS
-            return SECRETS[key]
-            # except: 
-            #     raise ValueError("""'%s' not correctly configured.
-            #     Try adding it to semesterly/sensitive.py.
-            #     If this fails only on travis, have an administrator
-            #     add your secret as a travis environment variable."""  % key)
+            try:
+                from dev_credentials import SECRETS
+                return SECRETS[key]
+            except: 
+                raise ValueError("""'%s' not correctly configured.
+                Try adding it to the file semesterly/sensitive.py.
+                If this fails only on travis, have an administrator
+                add your secret as a travis environment variable."""  % key)
 
 SECRET_KEY = get_secret('SECRET_KEY')
 
