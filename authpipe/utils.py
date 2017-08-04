@@ -20,8 +20,9 @@ from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from hashids import Hashids
 
 from student.models import Student
+from semesterly.settings import get_secret
 
-hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
+hashids = Hashids(salt=get_secret('HASHING_SALT'))
 
 
 def check_student_token(student, token):
@@ -86,7 +87,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         response = requests.get(
             'https://www.googleapis.com/plus/v1/people/me'.format(
                 social_user.uid,
-                settings.GOOGLE_API_KEY),
+                get_secret('GOOGLE_API_KEY')),
             params={'access_token': access_token}
         )
         new_student.img_url = response.json()['image'].get('url', '')

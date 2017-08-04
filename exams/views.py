@@ -20,9 +20,9 @@ from jhu_final_exam_scheduler import JHUFinalExamScheduler
 from helpers.mixins import FeatureFlowView, CsrfExemptMixin
 from exams.models import FinalExamShare
 from student.utils import get_student
+from semesterly.settings import get_secret
 
-
-hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
+hashids = Hashids(salt=get_secret('HASHING_SALT'))
 
 
 # TODO: use new request shape

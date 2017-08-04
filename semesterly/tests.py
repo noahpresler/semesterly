@@ -12,6 +12,7 @@
 
 from semesterly.test_utils import SeleniumTestCase
 from timetable.models import Semester, Course
+from settings import get_secret
 
 class EndToEndTest(SeleniumTestCase):
 
@@ -85,8 +86,8 @@ class EndToEndTest(SeleniumTestCase):
         self.clear_tutorial()
         with self.description("succesfully signup with facebook"):
             self.login_via_fb(
-                email='endtoend_edmsgmk_tester@tfbnw.net',
-                password='tester.ly'
+                email=get_secret("FB_TEST_EMAIL"),
+                password=get_secret("FB_TEST_PASS")
             )
             self.complete_user_settings_basics(
                 major='Computer Science',
