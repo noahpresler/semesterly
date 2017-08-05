@@ -60,26 +60,6 @@
   }
 }
 
-.share-course-link-wrapper {
-  input {
-    border: 1px solid $gfff;
-    transition: border .3s;
-
-    &:focus {
-      border: 1px solid $blue-alt;
-    }
-
-    &:hover {
-      border: 1px solid $gddd;
-    }
-  }
-
-  .share-course-link {
-    cursor: text;
-  }
-}
-
-
 .timetable-drop-it-down {
   cursor: pointer;
   height: 37px;
@@ -241,7 +221,6 @@
   color: $gfff;
   cursor: pointer;
   margin-bottom: 5px;
-  overflow: hidden;
   padding: 5px 5px 5px 10px;
   position: relative;
   transition: color .3s, background-color .3s;
@@ -256,37 +235,6 @@
     top: 0;
   }
 
-  .share-course-link-wrapper {
-    background-color: $gf9f9f9;
-    border-radius: 2px;
-    height: 38px;
-    max-width: 250px;
-    padding: 0 5px;
-    position: absolute;
-    right: 5px;
-    top: 20px;
-    z-index: 1;
-
-    .tip {
-      right: 12px;
-      top: -7px;
-    }
-
-    .tip-border {
-      right: 12px;
-      top: -7px;
-    }
-
-    .share-course-link {
-      color: $g222;
-      font-size: 14px;
-      font-weight: 400;
-      height: 25px;
-      margin-top: 7px;
-      max-width: 240px;
-      width: auto;
-    }
-  }
 }
 
 .modal-module {

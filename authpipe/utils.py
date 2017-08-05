@@ -1,16 +1,14 @@
-"""
-Copyright (C) 2017 Semester.ly Technologies, LLC
-
-Semester.ly is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Semester.ly is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 import json
 import urllib2
@@ -22,8 +20,9 @@ from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from hashids import Hashids
 
 from student.models import Student
+from semesterly.settings import get_secret
 
-hashids = Hashids(salt="***REMOVED***")
+hashids = Hashids(salt=get_secret('HASHING_SALT'))
 
 
 def check_student_token(student, token):
@@ -88,7 +87,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         response = requests.get(
             'https://www.googleapis.com/plus/v1/people/me'.format(
                 social_user.uid,
-                settings.GOOGLE_API_KEY),
+                get_secret('GOOGLE_API_KEY')),
             params={'access_token': access_token}
         )
         new_student.img_url = response.json()['image'].get('url', '')

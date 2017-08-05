@@ -1,16 +1,14 @@
-"""
-Copyright (C) 2017 Semester.ly Technologies, LLC
-
-Semester.ly is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Semester.ly is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 import datetime
 import inspect
@@ -26,6 +24,7 @@ from django.contrib.auth import BACKEND_SESSION_KEY
 from django.contrib.auth import HASH_SESSION_KEY
 from django.contrib.auth import SESSION_KEY
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import StaleElementReferenceException
@@ -42,6 +41,7 @@ from timetable.models import Course
 from timetable.models import Offering
 from timetable.models import Section
 from timetable.models import Semester
+
 
 class SeleniumTestCase(StaticLiveServerTestCase):
     """
@@ -61,6 +61,11 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     """
 
     serialized_rollback = True
+
+    def __init__(self, *args, **kwargs):
+        super(SeleniumTestCase, self).__init__(*args, **kwargs)
+        if settings.DEBUG == False:
+            settings.DEBUG = True
 
     @classmethod
     def setUpClass(cls):
