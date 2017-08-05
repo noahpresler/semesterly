@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
     """
-    This view is responsible for responding to any requests dealing with the 
+    This view is responsible for responding to any requests dealing with the
     generation of timetables and the satisfaction of constraits provided by
     the frontend/user.
     """
@@ -44,7 +44,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         school = request.subdomain
         params = request.data
         student = get_student(request)
-        
+
         try:
             params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
         except TypeError: # handle deprecated cached semesters from frontend
@@ -104,14 +104,14 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
 
 class TimetableLinkView(FeatureFlowView):
     """
-    A subclass of :obj:`FeatureFlowView` (see :ref:`flows`) for the 
-    viewing of shared timetable links. Provides the logic for preloading 
+    A subclass of :obj:`FeatureFlowView` (see :ref:`flows`) for the
+    viewing of shared timetable links. Provides the logic for preloading
     the shared timetable into initData when a user hits the corresponding
     url. The frontend can then act on this data to load the shared timetable
     for viewing.
 
     Additionally, on POST provides the functionality for the creation of
-    shared timetables. 
+    shared timetables.
     """
 
     feature_name = 'SHARE_TIMETABLE'
@@ -119,8 +119,8 @@ class TimetableLinkView(FeatureFlowView):
     def get_feature_flow(self, request, slug):
         """
         Overrides :obj:`FeatureFlowView` *get_feature_flow* method. Takes the slug,
-        decrypts the hashed database id, and either retrieves the corresponding 
-        timetable or hits a 404. 
+        decrypts the hashed database id, and either retrieves the corresponding
+        timetable or hits a 404.
         """
         timetable_id = hashids.decrypt(slug)[0]
         shared_timetable = get_object_or_404(SharedTimetable,
@@ -136,7 +136,7 @@ class TimetableLinkView(FeatureFlowView):
 
     def post(self, request):
         """
-        Creates a :obj:`SharedTimetable` and returns the hashed database id 
+        Creates a :obj:`SharedTimetable` and returns the hashed database id
         as the slug for the url which students then share and access.
         """
         school = request.subdomain
