@@ -109,7 +109,7 @@ class TextbookModal extends React.Component {
         id="aws-cart-form" method="GET"
         action="https://www.amazon.com/gp/aws/cart/add.html" target="_blank"
       >
-        <input type="hidden" name="AWSAccessKeyId" value="***REMOVED***" />
+        <input type="hidden" name="AWSAccessKeyId" value="AKIAJGUOXN3COOYBPTHQ" />
         <input type="hidden" name="AssociateTag" value="semesterly-20" />
         <div className="tb-list-container">
           {textbookList}

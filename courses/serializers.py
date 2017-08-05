@@ -83,9 +83,9 @@ class CourseSerializer(serializers.ModelSerializer):
         unique_textbooks = []
         seen_textbooks = set()
         for tb in all_textbooks:
-            if tb['id'] not in seen_textbooks:
+            if tb['isbn'] not in seen_textbooks:
                 unique_textbooks.append(tb)
-            seen_textbooks.add(tb['id'])
+            seen_textbooks.add(tb['isbn'])
         return unique_textbooks
 
     def get_regexed_courses(self, course):
