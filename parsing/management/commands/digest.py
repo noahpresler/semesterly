@@ -35,7 +35,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         tracker = Tracker()
         tracker.add_viewer(LogFormatted(options['master_log']))
-        tracker.set_cmd_options(options)
+        tracker.cmd_options = options
         tracker.mode = 'digesting'
         tracker.start()
 

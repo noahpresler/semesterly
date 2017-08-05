@@ -221,7 +221,7 @@ class Validator:
 
         try:
             # self.validate_directory(directory)
-            data = Validator.file_to_json(data_path)
+            data = Validator.file_to_json(data_path)['$data']
             Validator.schema_validate(data, *Validator.SCHEMAS.datalist)
         except (JsonValidationError, json.scanner.JSONDecodeError) as e:
             logger.log(e)
