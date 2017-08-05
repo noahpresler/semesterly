@@ -15,20 +15,111 @@ General System Workflow
 
 .. note:: This process happens automatically via `Django/Celery Beat Periodict Tasks <https://github.com/celery/django-celery-beat>`_. You can learn more about these schedule tasks below (`Scheduled Tasks`_).
 
-Steps 1 and 2 are what we call **parsing** – an operation that is non-generalizable across all Universities. Of course, several Universities may share the same infrastructure (e.g. the same student information system), and therefore we have some `Generalized Parsers`_. These take minimal configuration to extend to a new school.
-
-For all other In all other conditions, a new parser must be written. For more information on this, read :ref:`addaschool`.
+Steps 1 and 2 are what we call **parsing** – an operation that is non-generalizable across all Universities. Often a new parser must be written. For more information on this, read :ref:`addaschool`.
 
 Parsing Library Documentation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-TODO
+Base Parser
+-----------
+.. automodule:: parsing.library.base_parser
+	:members:
+	:undoc-members:
+	:inherited-members:
+	:show-inheritance:
 
-.. _genparsers:
+Requester
+---------
+.. automodule:: parsing.library.requester
+	:members:
+	:undoc-members:
+	:inherited-members:
+	:show-inheritance:
 
-Generalized Parsers
-~~~~~~~~~~~~~~~~~~~
-TODO
+Ingestor
+--------
+.. automodule:: parsing.library.ingestor
+	:members:
+	:undoc-members:
+	:inherited-members:
+	:show-inheritance:
+
+Validator
+---------
+.. automodule:: parsing.library.validator
+	:members:
+	:undoc-members:
+	:inherited-members:
+	:show-inheritance:
+
+Logger
+------
+.. automodule:: parsing.library.logger
+	:members:
+	:undoc-members:
+	:inherited-members:
+	:show-inheritance:
+
+
+Tracker
+-------
+.. automodule:: parsing.library.tracker
+	:members:
+	:undoc-members:
+	:inherited-members:
+	:show-inheritance:
+
+Viewer
+------
+.. automodule:: parsing.library.viewer
+	:members:
+	:undoc-members:
+	:inherited-members:
+	:show-inheritance:
+
+
+Digestor
+--------
+.. automodule:: parsing.library.digestor
+	:members:
+	:undoc-members:
+	:inherited-members:
+	:show-inheritance:
+
+Exceptions
+----------
+.. automodule:: parsing.library.exceptions
+	:members:
+	:undoc-members:
+	:inherited-members:
+	:show-inheritance:
+
+Extractor
+---------
+.. automodule:: parsing.library.extractor
+	:members:
+	:undoc-members:
+	:inherited-members:
+	:show-inheritance:
+
+Utils
+-----
+.. automodule:: parsing.library.utils
+	:members:
+	:undoc-members:
+	:inherited-members:
+	:show-inheritance:
+
+
+
+Parsing Models Documentation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. automodule:: parsing.models
+	:members:
 
 Scheduled Tasks
 ~~~~~~~~~~~~~~~
-TODO
+.. automodule:: parsing.tasks
+    :members:
+    :undoc-members:
+    :inherited-members:
+    :show-inheritance:

@@ -10,7 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
 from __future__ import absolute_import, division, print_function
 
 import datetime
@@ -20,10 +19,15 @@ import dateutil.parser as dparser
 from abc import ABCMeta, abstractmethod
 
 from parsing.library.utils import pretty_json
+from parsing.library.exceptions import PipelineError
 
 
-class Viewer:
-    """The frontend to a tracker object."""
+class ViewerError(PipelineError):
+    """Viewer error class."""
+
+
+class Viewer(object):
+    """A view that is updated via a tracker object broadcast or report."""
 
     __metaclass__ = ABCMeta
 
@@ -32,7 +36,7 @@ class Viewer:
         """Incremental updates of tracking info.
 
         Args:
-            tracker (parsing.library.tracker.Tracker): Tracker instance.
+            tracker (Tracker): Tracker instance.
             broadcast_type (str): Broadcast type emitted by tracker.
         """
 
@@ -41,7 +45,7 @@ class Viewer:
         """Report all tracked info.
 
         Args:
-            tracker (parsing.library.tracker.Tracker): Tracker instance.
+            tracker (Tracker): Tracker instance.
         """
 
 
@@ -106,8 +110,11 @@ class ProgressBar(Viewer):
             formatted_string += ' | {label}: {stat}'.format(
                 label=data_type[:3].title(),
                 stat=self.stat_format.format(
+                    new=counter['new'],
                     valid=counter['valid'],
-                    total=counter['total']
+                    total=counter['total'],
+                    created=counter['created'],
+                    updated=counter['updated']
                 )
             )
         self.format_custom_text.update_mapping(school=tracker.school,
@@ -150,13 +157,12 @@ class LogFormatted(Viewer):
 
 
 class StatView(Viewer):
-    """Keeps dictionary view of statistics of objects in pipeline.
+    """Keeps view of statistics of objects processed pipeline.
 
     Attributes:
         KINDS (tuple): The kinds of objects that can be tracked.
             TODO - move this to a shared space w/Validator
         LABELS (tuple): The status labels of objects that can be tracked.
-        report (TYPE): Description
         stats (dict): The view itself of the stats.
     """
 
@@ -173,8 +179,6 @@ class StatView(Viewer):
     )
 
     LABELS = ('valid', 'created', 'new', 'updated', 'total')
-
-    report = None
 
     def __init__(self):
         """Construct StatView instance."""
@@ -209,7 +213,7 @@ class StatView(Viewer):
         Ignore all broadcasts that are not STATUS.
 
         Args:
-            tracker (parsing.parsing_library.tracker.Tracker):
+            tracker (parsing.library.tracker.Tracker):
                 Tracker receiving update from.
             broadcast_type (str): Broadcast message from tracker.
         """
@@ -249,12 +253,9 @@ class TimeDistributionView(Viewer):
         Ignore all broadcasts that are not TIME.
 
         Args:
-            tracker (parsing.parsing_library.tracker.Tracker):
+            tracker (parsing.library.tracker.Tracker):
                 Tracker receiving update from.
             broadcast_type (str): Broadcast message from tracker.
-
-        Returns:
-            TYPE: Description
         """
         if broadcast_type != 'TIME':
             return
@@ -275,6 +276,63 @@ class TimeDistributionView(Viewer):
         #         if grain < self.granularity:
         #             self.granularity = grain
         #         break
+
+    def report(self, tracker):
+        """Do nothing."""
+
+
+class Hoarder(Viewer):
+    """Accumulate a log of some properties of the tracker."""
+
+    def __init__(self):
+        """Create Hoarder instance."""
+        self._schools = {}
+
+    @property
+    def schools(self):
+        """Get schools attribute (i.e. self.schools).
+
+        Returns:
+            dict: Value of schools storage value.
+        """
+        return self._schools
+
+    @schools.setter
+    def schools(self, value):
+        self._schools = value
+
+    def receive(self, tracker, broadcast_type):
+        """Receive an update from a tracker.
+
+        Ignore all broadcasts that are not TIME.
+
+        Args:
+            tracker (parsing.library.tracker.Tracker):
+                Tracker receiving update from.
+            broadcast_type (str): Broadcast message from tracker.
+        """
+        if broadcast_type == 'TERM':
+            try:
+                semesters = self.schools.setdefault(tracker.school, {})
+                terms = semesters.setdefault(tracker.year, [])
+                if tracker.term not in set(terms):
+                    terms.append(tracker.term)
+            except AttributeError:
+                pass
+
+        # elif broadcast_type == 'INSTRUCTOR':
+        #     try:
+        #         instructors = self.schools.setdefault(tracker.school, [])
+        #         instructors.add(tracker.instructor)
+        #     except AttributeError:
+        #         pass
+
+        # elif broadcast_type == 'DEPARTMENT':
+        #     try:
+        #         departments = self.schools.setdefault(tracker.school, [])
+        #         departments.add(tracker.department)
+        #     except AttributeError:
+        #         pass
 
     def report(self, tracker):
         """Do nothing."""
