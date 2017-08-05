@@ -7,5 +7,7 @@
 	"terms": [
 		"Fall",
 		"Spring"
-	]
+	],
+	"granularity": 5,
+	"ampm": true
 }

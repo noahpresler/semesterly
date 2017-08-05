@@ -1,59 +1,26 @@
-"""
-Copyright (C) 2017 Semester.ly Technologies, LLC
+# Copyright (C) 2017 Semester.ly Technologies, LLC
 
-Semester.ly is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 
-Semester.ly is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
 from __future__ import absolute_import, division, print_function
 
-import os
-
-from collections import OrderedDict
-
-import django
+from collections import OrderedDict, namedtuple
 
 from parsing.schools.active import VALID_SCHOOLS
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
-
-"""This file contains all dicts which map a school to its associated object."""
-
 VALID_SCHOOLS = VALID_SCHOOLS
 
-# the smallest block size (in minutes) needed to describe start/end times
-# Ex: uoft classes only start on the hour or half hour, so granularity is 30min
-school_to_granularity = {
-    'jhu': 5,
-    'uoft': 30,
-    'umd': 5,
-    'rutgers': 5,
-    'uo': 5,
-    'queens': 5,
-    'vandy': 5,
-    'gw': 5,
-    'umich': 5,
-    'chapman': 5,
-    'salisbury': 5,
-}
-
-AM_PM_SCHOOLS = {
-    "jhu",
-    "umd",
-    "rutgers",
-    "vandy",
-    "gw",
-    "umich",
-    "chapman",
-    "salisbury",
-}
+# TODO - uoft does not have a config file b/c it is not in the pipeline
+# "granularity": 30,
+#  "ampm": false
 
 FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS = {
     "queens",
@@ -212,18 +179,11 @@ course_parsers = {
 }
 
 eval_parsers = {
-    'jhu': lambda: HopkinsEvalParser().parse_evals(),
-    'uoft': lambda: None,
     'umd': lambda: umdReview().parse_reviews,
-    'rutgers': lambda: None,
-    'uo': lambda: None,
-    'queens': lambda: None,
 }
 
 textbook_parsers = {
     # 'uoft': parse_uoft_textbooks,
-    'rutgers': lambda: None,
-    'uo': lambda: None,
     # 'queens': parse_queens_textbooks,
 }
 

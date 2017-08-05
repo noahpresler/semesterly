@@ -9,5 +9,7 @@
 		"Intersession",
 		"Spring",
 		"Summer"
-	]
+	],
+	"granularity": 5,
+	"ampm": true
 }
