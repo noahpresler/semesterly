@@ -155,25 +155,16 @@ class SchoolList(APIView):
         areas, departments, levels, and the time the data was last updated
         """
         # TODO - last_updated should encode per-semester last updated statuses
-        last_updated = datetime.min
-        updates = DataUpdate.objects.filter(school=school,
-                                            update_type=DataUpdate.COURSES)
+        last_updated = DataUpdate.objects.filter(
+            school=school,
+            update_type=DataUpdate.COURSES
+        ).order_by('timestamp').first()
 
-        updated = False
-        for update in updates:
-            # terms = last_updated.setdefault(update.semester.year, [])
-            if update.timestamp.replace(tzinfo=None) > last_updated:
-                last_updated = update.timestamp.astimezone(timezone('US/Eastern'))
-                updated = True
-            # terms.append({update.semester.name: last_updated})
-
-        if updated:
+        if last_updated is not None:
             last_updated = '{} {}'.format(
-                last_updated.strftime('%Y-%m-%d %H:%M'),
-                last_updated.tzname()
+                last_updated.timestamp.strftime('%Y-%m-%d %H:%M'),
+                last_updated.timestamp.tzname()
             )
-        else:
-            last_updated = None
 
         json_data = {
             'areas': sorted(list(Course.objects.filter(school=school)
