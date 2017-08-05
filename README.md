@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-Read the docs and learn more: http://semesterly.readthedocs.io/en/latest/
+<h4>Read the docs and learn more: http://semesterly.readthedocs.io/en/latest/</h4>
 </p>
 
 <p align="center"><img src="http://i.imgur.com/G543QPJ.jpg"></p>
