@@ -78,9 +78,15 @@ class CourseSerializer(serializers.ModelSerializer):
         return course.get_reactions(self.context.get('student'))
 
     def get_textbooks(self, course):
-        return list(
-            set(tb for section in course.section_set.filter(semester=self.context['semester'])
-                for tb in section.get_textbooks()))
+        sections = course.section_set.filter(semester=self.context['semester'])
+        all_textbooks = (tb for section in sections for tb in section.get_textbooks())
+        unique_textbooks = []
+        seen_textbooks = set()
+        for tb in all_textbooks:
+            if tb['id'] not in seen_textbooks:
+                unique_textbooks.append(tb)
+            seen_textbooks.add(tb['id'])
+        return unique_textbooks
 
     def get_regexed_courses(self, course):
         """
