@@ -17,12 +17,14 @@ import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
 import uniqBy from 'lodash/uniqBy';
+import flatMap from 'lodash/flatMap';
 import MasterSlot from './master_slot';
 import TimetableNameInputContainer from './containers/timetable_name_input_container';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import Textbook from './textbook';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import { getNextAvailableColour } from '../util';
+import { getTextbooksFromCourse } from '../reducers/entities_reducer';
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -246,14 +248,8 @@ SideBar.propTypes = {
 export default SideBar;
 
 export const TextbookList = ({ courses }) => {
-  let tbs = [];
-  for (let i = 0; i < courses.length; i++) {
-    if (courses[i].textbooks !== undefined && Object.keys(courses[i].textbooks).length > 0) {
-      for (let j = 0; j < courses[i].enrolled_sections.length; j++) {
-        tbs = tbs.concat(courses[i].textbooks[courses[i].enrolled_sections[j]]);
-      }
-    }
-  }
+  let tbs = flatMap(courses, getTextbooksFromCourse);
+
   const img = (!isNaN(parseInt(courses, 0)) && (courses.length >= 5)) ? null :
   <img src="/static/img/emptystates/textbooks.png" alt="No textbooks found." />;
   if (tbs.length === 0) {
@@ -272,15 +268,7 @@ export const TextbookList = ({ courses }) => {
   );
 };
 
-TextbookList.defaultProps = {
-  courses: null,
-};
-
 TextbookList.propTypes = {
-  courses: PropTypes.arrayOf(PropTypes.shape({
-    textbooks: PropTypes.arrayOf(PropTypes.shape({
-      isbn: PropTypes.string,
-    })),
-  })),
+  courses:PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
 };
 
