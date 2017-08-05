@@ -79,14 +79,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_textbooks(self, course):
         sections = course.section_set.filter(semester=self.context['semester'])
-        all_textbooks = (tb for section in sections for tb in section.get_textbooks())
-        unique_textbooks = []
-        seen_textbooks = set()
-        for tb in all_textbooks:
-            if tb['isbn'] not in seen_textbooks:
-                unique_textbooks.append(tb)
-            seen_textbooks.add(tb['isbn'])
-        return unique_textbooks
+        return {section.meeting_section: section.get_textbooks() for section in sections}
 
     def get_regexed_courses(self, course):
         """

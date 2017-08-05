@@ -1,5 +1,6 @@
 import merge from 'lodash/merge';
 import uniq from 'lodash/uniq';
+import flatMap from 'lodash/flatMap';
 
 // TODO: garbage collect (e.g. clear when changing semesters)
 const entities = (state = {}, action) => {
@@ -54,6 +55,9 @@ export const getSectionTypeToSections = (denormCourse) => {
   });
   return sectionTypeToSections;
 };
+
+export const getTextbooksFromCourse = (course) =>
+  flatMap(Object.keys(course.textbooks), sectionCode => course.textbooks[sectionCode]);
 
 // TIMETABLE SELECTORS
 //    SLOT SELECTORS

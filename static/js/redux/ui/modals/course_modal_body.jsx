@@ -15,6 +15,7 @@ GNU General Public License for more details.
 import PropTypes from 'prop-types';
 import React from 'react';
 import isEmpty from 'lodash/isEmpty';
+import flatMap from 'lodash/flatMap';
 import Reaction from '../reaction';
 import REACTION_MAP from '../../constants/reactions';
 import MasterSlot from '../master_slot';
@@ -303,12 +304,14 @@ class CourseModalBody extends React.Component {
         </div>
       </div>);
     }
-    const textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
+
+    const textbooksArray = flatMap(Object.keys(textbooks), sectionCode => textbooks[sectionCode]);
+    const textbooksDisplay = !textbooksArray || textbooksArray.length === 0 ? null :
             (<div className="modal-module">
               <h3 className="modal-module-header">Textbooks</h3>
               <div className="modal-textbook-list">
                 {
-                    textbooks.map(t => <Textbook key={t.isbn} tb={t} />)
+                    textbooksArray.map(t => <Textbook key={t.isbn} tb={t} />)
                 }
               </div>
             </div>);
