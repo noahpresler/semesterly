@@ -1,28 +1,29 @@
-"""
-Copyright (C) 2017 Semester.ly Technologies, LLC
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-Semester.ly is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Semester.ly is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
 
 import operator
 
 from django.core.paginator import Paginator, EmptyPage
+from django.apps import apps
 from django.db.models import Q
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from analytics.views import save_analytics_course_search
 from courses.serializers import CourseSerializer
-from searches.utils import get_course_matches
+from searches.utils import baseline_search
 from student.models import Student
 from student.utils import get_student
 from timetable.models import Semester
@@ -30,11 +31,16 @@ from helpers.mixins import ValidateSubdomainMixin, CsrfExemptMixin
 
 
 class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
+    """Course Search List."""
     def get(self, request, query, sem_name, year):
-        """ Return basic search results. """
+        """ Return vectorized search results. """
         school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
-        course_match_objs = get_course_matches(request.subdomain, query, sem)[:4]
+        # Use vectorized_search if and only if a valid Searcher object is created, otherwise use baseline_search
+        if apps.get_app_config('searches').searcher:
+            course_match_objs = apps.get_app_config('searches').searcher.vectorized_search(request.subdomain, query, sem)[:4]
+        else:
+            course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
         save_analytics_course_search(query[:200], course_match_objs[:2], sem, request.subdomain,
                                      get_student(request))
         course_matches = [CourseSerializer(course, context={'semester': sem, 'school': school}).data
@@ -47,7 +53,8 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         page = int(request.query_params.get('page', 1))
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         # Filter first by the user's search query.
-        course_match_objs = get_course_matches(school, query, sem)
+        # TODO : use vectorized search (change returned obj to be filterable)
+        course_match_objs = baseline_search(school, query, sem)
 
         # Filter now by departments, areas, levels, or times if provided.
         filters = request.data.get('filters', {})

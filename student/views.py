@@ -1,16 +1,14 @@
-"""
-Copyright (C) 2017 Semester.ly Technologies, LLC
-
-Semester.ly is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Semester.ly is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 from datetime import datetime
 import json
@@ -38,6 +36,7 @@ from timetable.models import Semester, Course, Section
 from timetable.serializers import DisplayTimetableSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
+from semesterly.settings import get_secret
 
 DAY_MAP = {
     'M': 'mo',
@@ -49,7 +48,7 @@ DAY_MAP = {
     'U': 'su'
 }
 
-hashids = Hashids(salt="***REMOVED***")
+hashids = Hashids(salt=get_secret('HASHING_SALT'))
 
 
 def get_friend_count_from_course_id(school, student, course_id, semester):

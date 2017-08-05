@@ -1,16 +1,14 @@
-"""
-Copyright (C) 2017 Semester.ly Technologies, LLC
-
-Semester.ly is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Semester.ly is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -22,9 +20,9 @@ from jhu_final_exam_scheduler import JHUFinalExamScheduler
 from helpers.mixins import FeatureFlowView, CsrfExemptMixin
 from exams.models import FinalExamShare
 from student.utils import get_student
+from semesterly.settings import get_secret
 
-
-hashids = Hashids(salt="***REMOVED***")
+hashids = Hashids(salt=get_secret('HASHING_SALT'))
 
 
 # TODO: use new request shape

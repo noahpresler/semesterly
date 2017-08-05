@@ -1,24 +1,21 @@
-"""
-Copyright (C) 2017 Semester.ly Technologies, LLC
-
-Semester.ly is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Semester.ly is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
-
-from datetime import datetime
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from timetable.models import Semester, Course, Section, Offering, Updates
+from timetable.models import Semester, Course, Section, Offering
+from parsing.models import DataUpdate
 from helpers.test.test_cases import UrlTestCase
 from serializers import CourseSerializer
 
@@ -103,13 +100,17 @@ class SchoolListTest(APITestCase):
         self.areas = 'area'
         self.departments = 'math'
         self.level = 'hard'
-        self.time = datetime.now()
-        Course.objects.create(school=self.school, code='SEA101', name='Intro',
-                              areas=self.areas, department=self.departments, level=self.level)
-        Updates.objects.create(
-            school=self.school,
-            update_field='Course',
-            last_updated=self.time)
+        Course.objects.create(school=self.school,
+                              code='SEA101',
+                              name='Intro',
+                              areas=self.areas,
+                              department=self.departments,
+                              level=self.level)
+        semester, _ = Semester.objects.update_or_create(name='Fall',
+                                                        year='2017')
+        DataUpdate.objects.create(school=self.school,
+                                  update_type=DataUpdate.COURSES,
+                                  semester=semester)
 
     def test_school_exists(self):
         response = self.client.get('/school/{}/'.format(self.school))

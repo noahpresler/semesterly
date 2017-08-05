@@ -1,16 +1,14 @@
-"""
-Copyright (C) 2017 Semester.ly Technologies, LLC
-
-Semester.ly is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Semester.ly is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 """ Models pertaining to Students. """
 
@@ -24,9 +22,9 @@ from hashids import Hashids
 from oauth2client.client import GoogleCredentials
 
 from timetable import models as timetable_models
+from semesterly.settings import get_secret
 
-# TODO: put hashids salt into config/settings file
-hashids = Hashids(salt="***REMOVED***")
+hashids = Hashids(salt=get_secret('HASHING_SALT'))
 
 
 class Student(models.Model):
@@ -84,8 +82,8 @@ class Student(models.Model):
         access_token = social_user.extra_data["access_token"]
         refresh_token = social_user.extra_data.get("refresh_token")
         expires_at = social_user.extra_data["expires"]
-        return GoogleCredentials(access_token, settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
-                                 settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET, refresh_token,
+        return GoogleCredentials(access_token, get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY'),
+                                 get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'), refresh_token,
                                  expires_at,
                                  "https://accounts.google.com/o/oauth2/token", 'my-user-agent/1.0')
 

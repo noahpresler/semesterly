@@ -1,24 +1,22 @@
-"""
-Copyright (C) 2017 Semester.ly Technologies, LLC
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-Semester.ly is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Semester.ly is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
-
-import re
 import os
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 
 from django.forms.models import model_to_dict
 from django.db import models
+from picklefield.fields import PickledObjectField
 
 
 class Semester(models.Model):
@@ -60,23 +58,6 @@ class Textbook(models.Model):
         return model_to_dict(self)
 
 
-class Updates(models.Model):
-    """
-    Stores the date/time that the school's data was last updated.
-    This is updated when digestion into the database completes.
-
-    Attributes:
-        school (CharField): the school code that was updated (e.g. jhu)
-        update_field (CharField): which field was updated
-        last_updated (DateTimeField): the datetime last updated
-        reason (Charfield): the reason it was updated (default Scheduled Update)
-    """
-    school = models.CharField(max_length=100)
-    update_field = models.CharField(max_length=100)  # e.g. 'textbook', 'course'
-    last_updated = models.DateTimeField(auto_now=True)
-    reason = models.CharField(max_length=200, default='Scheduled Update')
-
-
 class Course(models.Model):
     """
     Represents a course at a school, made unique by its course code.
@@ -109,6 +90,7 @@ class Course(models.Model):
         geneds (:obj:`CharField`): geneds satisfied by this course
         related_courses (:obj:`ManyToManyField` of :obj:`Course`, optional): courses computed similar to this course
         same_as (:obj:`ForeignKey`): If this course is the same as another course, provide Foreign key
+        vector (:obj:`PickleObjectField`): the vector representation of a course transformed from course vectorizer
     """
     school = models.CharField(db_index=True, max_length=100)
     code = models.CharField(max_length=20)
@@ -130,6 +112,7 @@ class Course(models.Model):
     geneds = models.CharField(max_length=300, null=True, blank=True)
     related_courses = models.ManyToManyField("self", blank=True)
     same_as = models.ForeignKey('self', null=True)
+    vector = PickledObjectField(default=None, null=True)
 
     def __str__(self):
         return self.code + ": " + self.name
