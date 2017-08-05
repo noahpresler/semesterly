@@ -9,6 +9,7 @@
 		"Spring",
 		"Summer"
 	],
+	"granularity": 5,
 	"campuses": [
 		"Allied Health",
 		"Blair School of Music",
