@@ -8,6 +8,10 @@
    <a href="http://semesterly.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/docs/badge/?version=latest"/></a>
 </p>
 
+<p align="center">
+Read the docs and learn more: http://semesterly.readthedocs.io/en/latest/
+</p>
+
 <p align="center"><img src="http://i.imgur.com/G543QPJ.jpg"></p>
 
 ## License
