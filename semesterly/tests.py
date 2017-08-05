@@ -154,7 +154,7 @@ class EndToEndTest(SeleniumTestCase):
                 first_name="Tester",
                 last_name="McTesterFace",
                 email='e2etesterly@gmail.com',
-                password='***REMOVED***'
+                password='tester.ly'
             )
             self.complete_user_settings_basics(
                 major='Computer Science',

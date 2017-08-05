@@ -55,7 +55,7 @@ class Command(BaseCommand):
             **options: Command options.
         """
         tracker = Tracker()
-        tracker.set_cmd_options(options)
+        tracker.cmd_options = options
         tracker.add_viewer(LogFormatted(options['master_log']))
         tracker.mode = 'ingesting'
         if options['display_progress_bar']:

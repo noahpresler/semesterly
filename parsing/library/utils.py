@@ -161,13 +161,13 @@ def iterrify(x):
 
     Examples:
         >>> for i in iterrify(1):
-        >>>     print(i)
+        ...     print(i)
         1
         >>> for i in iterrify([1]):
-        >>>     print(i)
+        ...     print(i)
         1
         >>> for i in iterrify('hello'):
-        >>>     print(i)
+        ...     print(i)
         'hello'
     """
     if isinstance(x, collections.Iterable) and not isinstance(x, basestring):
@@ -185,27 +185,28 @@ def dir_to_dict(path):
     Returns:
         dict: Dictionary representation of the directory.
 
-        Example::
-            {
-                "name": ""
-                "kind": "directory",
-                "children": [
-                    {
-                        "name": "child_dir_a",
-                        "kind": "directory",
-                        "children": [
-                            {
-                                "name": "file0",
-                                "kind": "file"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "file1.txt",
-                        "kind": "file"
-                    }
-                ]
-            }
+    Example(s)::
+        >>> print('hi')
+        {
+            "name": ""
+            "kind": "directory",
+            "children": [
+                {
+                    "name": "child_dir_a",
+                    "kind": "directory",
+                    "children": [
+                        {
+                            "name": "file0",
+                            "kind": "file"
+                        }
+                    ]
+                },
+                {
+                    "name": "file1.txt",
+                    "kind": "file"
+                }
+            ]
+        }
     """
     d = {'name': os.path.basename(path)}
     if os.path.isdir(path):

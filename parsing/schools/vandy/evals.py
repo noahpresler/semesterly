@@ -45,7 +45,7 @@ class Parser(BaseParser):
 
         form = {
             'VSASM_ASVBlock': sec_block,
-            'VSASM_user': '***REMOVED***',
+            'VSASM_user': 'khanaf',
             'VSASM_pw': 'Gainz!23',
             'VSASM_Login': 'Login'
         }

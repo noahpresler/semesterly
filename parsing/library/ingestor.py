@@ -17,12 +17,12 @@ import jsonschema
 from parsing.library.internal_exceptions import JsonValidationError, \
     JsonValidationWarning, JsonDuplicationWarning, IngestorError, \
     IngestorWarning
-from parsing.library.logger import JsonListLogger
+from parsing.library.logger import Logger, JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
-
-# from parsing.library.exceptions import PipelineError, PipelineWarning
+from parsing.library.viewer import Hoarder
 from parsing.library.utils import clean, make_list
+# from parsing.library.exceptions import PipelineError, PipelineWarning
 
 
 # class IngestorError(PipelineError):
@@ -50,100 +50,6 @@ class Ingestor(dict):
         validate (bool): Enable/disable validation.
         validator (library.validator): Validator instance.
     """
-
-    # INSTRUCTOR = (
-    #     'instr',
-    #     'instrs',
-    # )
-
-    # DEPARTMENT = (
-    #     'dept',
-    #     ('dept_code', 'dept_name')
-    # )
-
-    # LOCATION = (
-    #     'loc',
-    # )
-
-    # TIME = (
-    #     'time',
-    #     ('time_start', 'time_end')
-    # )
-
-    # def _resolve(self, *args, **kwargs):
-    #     unique = kwargs.get('unique', True)
-    #     keys = set()
-    #     groups = filter(lambda x: isinstance(x, tuple), args)
-    #     for group in groups:
-    #         keys |= set(self._resolve(group, unique=False))
-    #     more_keys |= set(filter(lambda x: isinstance(x, basestring), args)) & set(self)
-    #     if more_keys is None:
-    #         unique = False
-    #     keys |= more_keys
-    #     if len(keys) == 0:
-    #         return
-    #     elif unique and len(keys) > 1:
-    #         raise IngestorError('Cannot resolve {}'.format(keys))
-    #     if unique:
-    #         return list(keys)[0]
-    #     return keys
-
-    # def _resolve_instructors(self):
-    #     key = self._resolve(*Ingestor.INSTRUCTOR)
-    #     if key is None:
-    #         return
-
-    #     instructors = make_list(self._get(key))
-    #     for idx, instructor in enumerate(instructors):
-    #         if not isinstance(instructors[i], basestring):
-    #             continue
-    #         instructors[idx] = {'name': instructors[idx]}
-    #     return instructors
-
-    # def _resolve_department(self):
-    #     # key = self._resolve('dept_code', 'dept_name', unique=False)
-    #     # if key is not None:
-    #     #     return {
-    #     #         'code': self._get('dept_code'),
-    #     #         'dept': self._get('dept_name')
-    #     #     }
-    #     # key = self._resolve('time')
-    #     # if key is None:
-    #     #     return
-    #     # return self._get(key)
-
-    #     key = self._resolve(*Ingestor.DEPARTMENT)
-    #     if key is None:
-    #         return
-
-    #     department = self_get(key)
-    #     if isinstance(department, basestring):
-    #         department = {'name': department}
-    #     return department
-
-    # def _location(self):
-    #     location = self._resolve(*Ingestor.LOCATION)
-    #     if location is None:
-    #         return
-
-    #     if isinstance(location, basestring):
-    #         location = {'where': location}
-    #     return location
-
-    # def _time(self):
-    #     key = self._resolve('time')
-    #     keys = self._resolve('time_start', 'time_end', unique=False)
-    #     if keys is not None:
-    #         if key is not None:
-    #             raise IngestorError('Cannot resolve {}'.format(set(keys) | set([key])))
-    #         return {
-    #             'start': self._get('time_start'),
-    #             'end': self._get('time_end')
-    #         }
-    #     key = self._resolve('time')
-    #     if key is None:
-    #         return
-    #     return self._get(key)
 
     ALL_KEYS = {
         'school',
@@ -194,7 +100,7 @@ class Ingestor(dict):
         'days', 'day', 'dates', 'date',
         'time',
         'credits', 'num_credits',
-        'campus',  # NOTE: not really
+        'campus',  # TODO - not really
         'textbooks', 'isbn', 'required',
         'detail_url', 'image_url', 'author', 'title',
         'score',
@@ -220,7 +126,7 @@ class Ingestor(dict):
             display_progress_bar (bool, optional): display progress bar
             skip_duplicates (bool, optional): Skip ingesting courses
                 that have already been seen.
-            validate (bool, optional): Perform validation?
+            validate (bool, optional): Perform validation.
             tracker (library.tracker, optional): tracker object
         """
         self.school = school
@@ -229,10 +135,14 @@ class Ingestor(dict):
         self.break_on_warning = break_on_warning
         self.skip_duplicates = skip_duplicates
         self.tracker = tracker
+        self.hoarder = Hoarder()
+        self.tracker.add_viewer(self.hoarder)
+        self.tracker.school = school
 
         # Initialize loggers for json and errors.
-        self.logger = JsonListLogger(logfile=output_path,
-                                     errorfile=output_error_path)
+        self.json = JSONStreamWriter(output_path, type_=dict).enter()
+        self.data_list = self.json.write('$data', type_=list).enter()
+        self.logger = Logger(errorfile=output_error_path)
         if self.validate:
             self.validator = Validator(config_path, tracker=self.tracker)
 
@@ -396,10 +306,8 @@ class Ingestor(dict):
 
         section = clean(section)
         self._validate_and_log(section)
-        if 'year' in section:
-            self.tracker.year = section['year']
-        if 'term' in section:
-            self.tracker.term = section['term']
+        self.tracker.year = section['year']
+        self.tracker.term = section['term']
         return section
 
     def ingest_meeting(self, section):
@@ -510,13 +418,22 @@ class Ingestor(dict):
         return evaluation
 
     def end(self):
-        """Finish ingesting by closing i/o and clearing internal state."""
+        """Finish ingesting.
+
+        Close i/o, clear internal state, write meta info
+        """
+        self.data_list.exit()
+        self.json.write('$meta', {
+            '$schools': self.hoarder.schools,
+            '$timestamp': self.tracker.start_time
+        })
+        self.json.exit()
         self.logger.close()
         self.clear()
 
     def _validate_and_log(self, obj):
         if self.validate is False:
-            self.logger.log(obj)
+            self.data_list.write(obj)
             self.tracker.status = dict(kind=obj['kind'], status='total')
             return
 
@@ -524,7 +441,7 @@ class Ingestor(dict):
         if skip:
             return
         if is_valid:
-            self.logger.log(obj)
+            self.data_list.write(obj)
         try:
             for key in self:
                 if key in Ingestor.ALL_KEYS:
@@ -535,7 +452,7 @@ class Ingestor(dict):
                 )
         except IngestorWarning as e:
             is_valid = True
-            self.logger.log(e)
+            self.logger.log_exception(e)
             if self.break_on_warning:
                 raise e
         self.tracker.status = dict(kind=obj['kind'], status='total')
@@ -551,11 +468,11 @@ class Ingestor(dict):
         except jsonschema.exceptions.ValidationError as e:
             # Wrap error along with json object in another error
             e = JsonValidationError(str(e), data)
-            self.logger.log(e)
+            self.logger.log_exception(e)
             if self.break_on_error:
                 raise e
         except JsonValidationError as e:
-            self.logger.log(e)
+            self.logger.log_exception(e)
             if self.break_on_error:
                 raise e
         except (JsonValidationWarning, JsonDuplicationWarning) as e:
@@ -564,7 +481,7 @@ class Ingestor(dict):
                 full_skip = True
             else:
                 is_valid = True
-                self.logger.log(e)
+                self.logger.log_exception(e)
                 if self.break_on_warning:
                     raise e
 

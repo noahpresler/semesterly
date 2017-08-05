@@ -18,36 +18,109 @@ import pipes
 import simplejson as json
 import logging
 
-# from pygments import highlight, lexers, formatters, filters
 from pygments import highlight, lexers, formatters
 
 from parsing.library.internal_exceptions import JsonValidationError, \
     JsonValidationWarning, DigestionError
-
 from parsing.library.utils import pretty_json
 
 
-class JSONWriter(object):
+class JSONStreamWriter(object):
     """Context to stream JSON list to file.
 
     Attributes:
-        obj (dict): Current object being JSONified and streamed.
+        BRACES (TYPE): Description
+        file (dict): Current object being JSONified and streamed.
+        inner (TYPE): Description
+
+    Examples:
+        >>> with JSONStreamWriter(sys.stdout, type_='dict') as streamer:
+        ...     streamer.write('a', 1)
+        ...     streamer.write('b', 2)
+        ...     streamer.write('c', 3)
+        {
+            "a": 1,
+            "b": 2,
+            "c": 3
+        }
+        >>> with JSONStreamWriter(sys.stdout, type_='dict') as streamer:
+        ...     streamer.write('a', 1)
+        ...     with streamer.write('data', type_=list) as streamer2:
+        ...         streamer2.write({0:0, 1:1, 2:2})
+        ...         streamer2.write({3:3, 4:'4'})
+        ...     streamer.write('b', 2)
+        {
+            "a": 1,
+            "data":
+            [
+                {
+                    0: 0,
+                    1: 1,
+                    2: 2
+                },
+                {
+                    3: 3,
+                    4: "4"
+                }
+            ],
+            "b": 2
+        }
     """
 
-    def __init__(self, obj):
+    BRACES = {
+        list: ('[', ']'),
+        dict: ('{', '}'),
+    }
+
+    def __init__(self, obj, type_=list, inner=False, level=0):
         """Contruct JSONWriter instance.
 
         Args:
             obj (file, str): file or filepath to write to.
         """
+        self.first = True
+        self.level = level
         if isinstance(obj, file):
-            self.obj = obj
+            self.file = obj
         else:
-            self.obj = open(obj, 'wb')
+            self.file = open(obj, 'wb')
+        self.open, self.close = JSONStreamWriter.BRACES[type_]
+        self.inner = inner
+        self.type_ = type_
+
+    def write(self, *args, **kwargs):
+        """Write to JSON in streaming fasion.
+
+        Picks either write_obj or write_key_value
+
+        Args:
+            *args: pass-through
+            **kwargs: pass-through
+
+        Returns:
+            return value of appropriate write function.
+
+        Raises:
+            ValueError: type_ is not of type list or dict.
+        """
+        if self.type_ == list:
+            return self.write_obj(*args, **kwargs)
+        elif self.type_ == dict:
+            return self.write_key_value(*args, **kwargs)
+        else:
+            raise ValueError('type_ must be `list` or `dict`')
+
+    def enter(self):
+        """Wrapper for self.__enter__."""
+        return self.__enter__()
+
+    def exit(self):
+        """Wrapper for self.__exit__."""
+        self.__exit__(None, None, None)
 
     def __enter__(self):
         """Open JSON list."""
-        print('[', file=self.obj)
+        print('  ' * self.level, self.open, file=self.file, sep='')
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -55,24 +128,70 @@ class JSONWriter(object):
 
         Will not close stdout or stderr.
         """
-        print('\n]', file=self.obj)
-        if self.obj == sys.stdout or self.obj == sys.stderr:
+        print('\n', '  ' * self.level, self.close,
+              file=self.file,
+              sep='',
+              end='')
+        if self.file == sys.stdout or self.file == sys.stderr or self.inner:
             return
-        self.obj.close()
+        self.file.close()
 
-    def write(self, obj):
+    def write_key_value(self, key, value=None, type_=list):
+        """Write key, value pair as string to file.
+
+        If value is not given, returns new list streamer.
+
+        Args:
+            key (str): Description
+            value (str, dict, None, optional): Description
+            type_ (str, optional): Description
+
+        Returns:
+            None if value is given, else new JSONStreamWriter
+        """
+        if self.first:
+            self.first = False
+        else:
+            print(',', file=self.file)
+
+        if value is None:
+            print('  ' * (self.level + 1), '"{}":'.format(key),
+                  file=self.file,
+                  sep='',
+                  end='\n')
+            return JSONStreamWriter(self.file,
+                                    type_=type_,
+                                    inner=True,
+                                    level=self.level + 1)
+
+        if isinstance(value, dict) or isinstance(value, list):
+            tabbing = '\n' + '  ' * (self.level + 1)
+            value = tabbing.join(pretty_json(value).splitlines())
+        elif isinstance(value, str):
+            value = '"{}"'.format(value)
+
+        tabbing = '  ' * (self.level + 1)
+        print(tabbing, '"{}": {}'.format(key, value),
+              file=self.file,
+              sep='',
+              end='')
+
+    def write_obj(self, obj):
         """Write obj as JSON to file.
 
         Args:
             obj (dict): Serializable obj to write to file.
         """
-        print(pretty_json(obj), file=self.obj, sep='\n', end='')
+        if self.first:
+            self.first = False
+        else:
+            print(',', file=self.file)
 
-        # After first pass, all write will be delimited with comma.
-        setattr(self, 'write', self._delimited_write)
-
-    def _delimited_write(self, obj):
-        print(',', pretty_json(obj), file=self.obj, sep='\n', end='')
+        tabbing = '  ' * (self.level + 1)
+        print(tabbing + ('\n' + tabbing).join(pretty_json(obj).splitlines()),
+              file=self.file,
+              sep='\n',
+              end='')
 
 
 # class JSONFormatter(logging.Formatter):
@@ -182,26 +301,6 @@ class Logger(object):
         colorful_json = highlight(unicode(j, 'UTF-8'), l, formatters.TerminalFormatter())
         return colorful_json
 
-class JsonListLogger(Logger):
-    def __init__(self, logfile=None, errorfile=None):
-        self.first = True # unset after open entry added
-        super(JsonListLogger, self).__init__(logfile, errorfile)
-        self.open()
-
-    def open(self):
-        self.logfile.write('[\n')
-
     def close(self):
         self.logfile.write(']\n')
         self.logfile.close()
-
-    def log(self, entry):
-        if isinstance(entry, Exception):
-            self.log_exception(entry)
-        else:
-            output = ',' if not self.first else ''
-            self.first = False # always set to zero
-            if isinstance(entry, basestring):
-                entry = json.loads(entry)
-            output += '  ' + '  '.join(Logger.pretty_json(entry).splitlines(True)) # preserve and tab each newline
-            self.logfile.write(output)

@@ -10,26 +10,27 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
 from __future__ import absolute_import, division, print_function
 
 import datetime
 
 from timeit import default_timer as timer
 
-from parsing.library.exceptions import PipelineError, PipelineWarning
+from parsing.library.exceptions import PipelineError
 
 
 class TrackerError(PipelineError):
     """Tracker error class."""
 
 
-class TrackerWarning(PipelineWarning):
-    """Tracker warning class."""
-
-
 class Tracker(object):
-    """Tracks specified attributes and broadcasts to viewers."""
+    """Tracks specified attributes and broadcasts to viewers.
+
+    Attributes are defined for all BROADCAST_TYPES
+    Examples:
+        tracker.year = 2017
+        tracker.term = 'Fall'
+    """
 
     BROADCAST_TYPES = {
         'SCHOOL',
@@ -40,6 +41,7 @@ class Tracker(object):
         'INSTRUCTOR',
         'TIME',
         'MODE',
+        'CMD_OPTIONS',
     }
 
     def __init__(self):
@@ -77,8 +79,8 @@ class Tracker(object):
                     hasattr(self, name)):
                 continue
 
-            # NOTE: closure methods are used to capture the variables in their
-            #       current context of the loop.
+            # NOTE: closure methods are used to capture the variables
+            #       in their current context of the loop.
 
             def closure_getter(name, storage_name):
                 def getter(self):
@@ -104,7 +106,7 @@ class Tracker(object):
         self.start_time = timer()
 
     def end(self):
-        """End tracker and report to viwers."""
+        """End tracker and report to viewers."""
         self.end_time = timer()
         self.report()
 
@@ -121,9 +123,6 @@ class Tracker(object):
         self.saw_error = True
         self.error += msg + '\n'
 
-    def set_cmd_options(self, cmd_options):
-        self.cmd_options = cmd_options
-
     def broadcast(self, broadcast_type):
         """Broadcast tracker update to viewers.
 
@@ -135,7 +134,7 @@ class Tracker(object):
         """
         if broadcast_type not in Tracker.BROADCAST_TYPES:
             raise TrackerError(
-                'Unsupported broadcast type {}'.format(broadcast_type)
+                'unsupported broadcast type {}'.format(broadcast_type)
             )
         for viewer in self.viewers:
             viewer.receive(self, broadcast_type)
