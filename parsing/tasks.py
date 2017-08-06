@@ -22,7 +22,7 @@ from django.core import management
 from django.conf import settings
 
 from timetable.school_mappers import SCHOOLS_MAP
-from parsing.schools.active import SCHOOLS as VALID_SCHOOLS
+from parsing.schools.active import ACTIVE_SCHOOLS
 
 logger = get_task_logger(__name__)
 
@@ -34,7 +34,7 @@ logger = get_task_logger(__name__)
 )
 def task_parse_current_registration_period(schools=None, textbooks=False):
     """Parse semesters in current registration period."""
-    schools = set(schools or VALID_SCHOOLS)
+    schools = set(schools or ACTIVE_SCHOOLS)
     for school in set(SCHOOLS_MAP) & schools:
         # Grab the most recent year.
         years = [SCHOOLS_MAP[school].semesters.items()[-1]]
@@ -66,7 +66,7 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
 @task()
 def task_parse_active(schools=None, textbooks=False):
     """Parse all semesters displayed to users (i.e. active semesters)."""
-    schools = set(schools or VALID_SCHOOLS)
+    schools = set(schools or ACTIVE_SCHOOLS)
     for school in set(SCHOOLS_MAP) & schools:
         if school in SINGLE_ACCESS_SCHOOLS:
             task_parse_school.delay(

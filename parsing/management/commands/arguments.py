@@ -18,7 +18,7 @@ import simplejson as json
 
 from django.conf import settings
 
-from parsing.schools.active import VALID_SCHOOLS
+from parsing.schools.active import ACTIVE_SCHOOLS
 
 # TODO - https://github.com/kislyuk/argcomplete
 
@@ -147,12 +147,12 @@ def _school_list_arg(parser):
         def __call__(self, parser, namespace, values, option_string=None):
             """Verify school list, set to all valid schools if none listed."""
             for value in values:
-                if value in VALID_SCHOOLS:
+                if value in ACTIVE_SCHOOLS:
                     continue
                 raise parser.error(
                     'invalid school: {0!r} (choose from [{1}])'.format(
                         value,
-                        ', '.join(VALID_SCHOOLS)
+                        ', '.join(ACTIVE_SCHOOLS)
                     )
                 )
             if values:
@@ -160,13 +160,13 @@ def _school_list_arg(parser):
             else:
                 setattr(namespace,
                         self.dest,
-                        list(VALID_SCHOOLS))
+                        list(ACTIVE_SCHOOLS))
 
     parser.add_argument('schools',
                         type=str,
                         nargs='*',
                         action=SchoolVerifierAction,
-                        help='default: parsing.schools.active.VALID_SCHOOLS')
+                        help='default: parsing.schools.active.ACTIVE_SCHOOLS')
 
 
 def _validate_switch_arg(parser):

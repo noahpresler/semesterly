@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from parsing.schools.active import SCHOOLS as VALID_SCHOOLS
+from parsing.schools.active import ACTIVE_SCHOOLS
 
 class SubdomainMiddleware(object):
 	def process_request(self, request):
@@ -18,7 +18,7 @@ class SubdomainMiddleware(object):
 					.split('.')[0]\
 					.strip()\
 					.lower()
-		if subdomain in VALID_SCHOOLS:
+		if subdomain in ACTIVE_SCHOOLS:
 			request.subdomain = subdomain
 		else:
 			request.subdomain = None

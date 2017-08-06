@@ -22,18 +22,18 @@ from student.utils import get_student
 from student.serializers import get_student_dict
 from timetable.models import Semester
 from timetable.school_mappers import SCHOOLS_MAP
-from parsing.schools.active import SCHOOLS as VALID_SCHOOLS
+from parsing.schools.active import ACTIVE_SCHOOLS
 from timetable.utils import get_current_semesters
 
 
 class ValidateSubdomainMixin(object):
     """
     Mixin which validates subdomain, redirecting user to index if the school
-    is not in :obj:`VALID_SCHOOLS`.
+    is not in :obj:`ACTIVE_SCHOOLS`.
     """
 
     def dispatch(self, request, *args, **kwargs):
-        if request.subdomain not in VALID_SCHOOLS:
+        if request.subdomain not in ACTIVE_SCHOOLS:
             return render(request, 'index.html')
         return super(ValidateSubdomainMixin, self).dispatch(request, *args, **kwargs)
 

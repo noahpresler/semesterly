@@ -17,7 +17,7 @@ from collections import OrderedDict, namedtuple
 from django.conf import settings
 
 from parsing.library.utils import DotDict
-from parsing.schools.active import SCHOOLS as VALID_SCHOOLS
+from parsing.schools.active import ACTIVE_SCHOOLS
 
 # TODO - uoft does not have a config file b/c it is not in the pipeline
 # "granularity": 30,
@@ -75,7 +75,7 @@ def load_parsers(school):
     return parsers
 
 
-SCHOOLS_MAP = {school: load_school(school) for school in VALID_SCHOOLS}
+SCHOOLS_MAP = {school: load_school(school) for school in ACTIVE_SCHOOLS}
 
 
 course_parsers = {

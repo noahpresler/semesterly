@@ -28,7 +28,7 @@ from student.utils import get_student
 from student.models import *
 from analytics.models import *
 from timetable.models import Semester
-from parsing.schools.active import SCHOOLS as VALID_SCHOOLS
+from parsing.schools.active import ACTIVE_SCHOOLS
 
 
 to_zone = tz.gettz('America/New_York')
@@ -40,13 +40,13 @@ def view_analytics_dashboard(request):
         total_timetables_by_school = {}
         # timetables_per_hour = {}
         # shared_timetables_per_hour = {}
-        for school in VALID_SCHOOLS:
+        for school in ACTIVE_SCHOOLS:
             total_timetables_by_school[school] = number_timetables(school=school)
             # timetables_per_hour[school] = number_timetables_per_hour(school=school)
             # shared_timetables_per_hour[school] = number_timetables_per_hour(Timetable=SharedTimetable, school=school)
 
         # Number of users by permission
-        # TODO: Moves this array to somewhere else (like VALID_SCHOOLS)
+        # TODO: Moves this array to somewhere else (like ACTIVE_SCHOOLS)
         total_signups = number_timetables(Timetable=Student)
 
         permissions = ["social_courses", "social_offerings", "social_all"]
@@ -223,7 +223,7 @@ def number_students_by_year():
 
 def number_students_by_school():
     result = {}
-    for school in VALID_SCHOOLS:
+    for school in ACTIVE_SCHOOLS:
         ids = PersonalTimetable.objects.filter(school=school)\
                                         .values_list("student", flat=True)\
                                         .distinct()
