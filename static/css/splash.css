@@ -199,7 +199,12 @@ header nav a:hover {
 	display: inline-block;
 	width: 30px;
 	height: 30px;
+  text-align: center;
 	vertical-align: middle;
+}
+#hero ul a .square-logo .fa {
+  font-size: 20px;
+  line-height: 30px;
 }
 #hero ul a span {
 	display: inline-block;
