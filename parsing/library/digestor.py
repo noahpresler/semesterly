@@ -28,7 +28,7 @@ from parsing.library.logger import JSONStreamWriter
 from parsing.library.internal_exceptions import DigestionError
 from parsing.library.tracker import NullTracker
 from parsing.library.viewer import ProgressBar
-from parsing.library.exception import PipelineError
+from parsing.library.exceptions import PipelineError
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'semesterly.settings')
 django.setup()
