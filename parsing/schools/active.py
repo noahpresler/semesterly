@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 
-SCHOOLS = {
+ACTIVE_SCHOOLS = {
     # "uoft",  # TODO - not in data pipeline
     "jhu",
     "umd",
@@ -22,5 +22,3 @@ SCHOOLS = {
     "chapman",
     "salisbury",
 }
-
-ACTIVE_SCHOOLS = SCHOOLS

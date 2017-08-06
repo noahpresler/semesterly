@@ -55,7 +55,7 @@ def load_school(school):
                   config.ampm,
                   config.full_academic_year_registration,
                   config.single_access,
-                  config.get('final_exams', []),
+                  config.get('final_exams'),
                   load_parsers(school))
 
 

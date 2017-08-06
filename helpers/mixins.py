@@ -80,8 +80,10 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
                 integrations.append(i.name)
 
         final_exams = []
-        for years_and_terms in SCHOOLS_MAP[self.school].final_exams:
-            for year, terms in years_and_terms.items():
+        if SCHOOLS_MAP[self.school].final_exams is None:
+            final_exams = []
+        else:
+            for year, terms in SCHOOLS_MAP[self.school].final_exams.items():
                 for term in terms:
                     final_exams.append({
                         'name': term,

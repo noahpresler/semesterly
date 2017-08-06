@@ -243,7 +243,7 @@ def get_current_semesters(school):
     (semester name, year) pairs.
     """
     semesters = []
-    for year, terms in reversed(SCHOOLS_MAP[school].semesters.items()):
+    for year, terms in reversed(SCHOOLS_MAP[school].active_semesters.items()):
         for term in terms:
             # Ensure DB has all semesters.
             Semester.objects.update_or_create(name=term, year=year)

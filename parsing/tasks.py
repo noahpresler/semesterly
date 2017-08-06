@@ -37,18 +37,18 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
     schools = set(schools or ACTIVE_SCHOOLS)
     for school in set(SCHOOLS_MAP) & schools:
         # Grab the most recent year.
-        years = [SCHOOLS_MAP[school].semesters.items()[-1]]
+        years = [SCHOOLS_MAP[school].active_semesters.items()[-1]]
 
         # Handle case where registration is for full academic year
         if SCHOOLS_MAP[school].full_academic_year_registration:
-            if len(SCHOOLS_MAP[school].semesters) > 2:
-                years.append(SCHOOLS_MAP[school].semesters.items()[-2])
+            if len(SCHOOLS_MAP[school].active_semesters) > 2:
+                years.append(SCHOOLS_MAP[school].active_semesters.items()[-2])
 
             # Group all semesters into single parsing call for schools that
             #  cannot support parallel parsing.
             if SCHOOLS_MAP[school].single_access_schools:
                 years_and_terms = {
-                    year: SCHOOLS_MAP[school].semesters[year][0]
+                    year: SCHOOLS_MAP[school].active_semesters[year][0]
                     for year in years
                 }
                 task_parse_school.delay(
@@ -71,11 +71,11 @@ def task_parse_active(schools=None, textbooks=False):
         if school in SINGLE_ACCESS_SCHOOLS:
             task_parse_school.delay(
                 school,
-                SCHOOLS_MAP[school].semesters
+                SCHOOLS_MAP[school].active_semesters
             )
             continue
 
-        for year, terms in SCHOOLS_MAP[school].semesters.items():
+        for year, terms in SCHOOLS_MAP[school].active_semesters.items():
             for term in terms:
                 task_parse_school.delay(school, {year: [term]},
                                         textbooks=textbooks)
