@@ -1,13 +1,21 @@
 {
-	"school": {
-		"code": "umd",
-		"name": "University of Maryland"
-	},
-	"course_code_regex": "([A-Z]{4}\\d{3}[A-Z]?)$",
-	"terms": [
-		"Fall",
-		"Spring"
-	],
-	"granularity": 5,
-	"ampm": true
+  "school": {
+    "code": "umd",
+    "name": "University of Maryland"
+  },
+  "course_code_regex": "([A-Z]{4}\\d{3}[A-Z]?)$",
+  "terms": [
+    "Fall",
+    "Spring"
+  ],
+  "granularity": 5,
+  "ampm": true,
+  "full_academic_year_registration": false,
+  "single_access": false,
+  "active_semesters": {
+    "2017": [
+      "Fall",
+      "Spring"
+    ]
+  }
 }

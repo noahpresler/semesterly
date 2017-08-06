@@ -10,7 +10,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from timetable.school_mappers import VALID_SCHOOLS
+from parsing.schools.active import SCHOOLS as VALID_SCHOOLS
+
 class SubdomainMiddleware(object):
 	def process_request(self, request):
 		subdomain = request.META.get('HTTP_HOST', '')\

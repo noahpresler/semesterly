@@ -12,167 +12,71 @@
 
 from __future__ import absolute_import, division, print_function
 
+import simplejson as json
 from collections import OrderedDict, namedtuple
+from django.conf import settings
 
-from parsing.schools.active import VALID_SCHOOLS
-
-VALID_SCHOOLS = VALID_SCHOOLS
+from parsing.library.utils import DotDict
+from parsing.schools.active import SCHOOLS as VALID_SCHOOLS
 
 # TODO - uoft does not have a config file b/c it is not in the pipeline
 # "granularity": 30,
-#  "ampm": false
+# "ampm": false
+#     'uoft': OrderedDict({
+#         2018: [
+#             'Winter',
+#         ],
+#         2017: [
+#             'Fall',
+#             'Winter',
+#         ],
+#     }),
 
-FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS = {
-    "queens",
-}
-
-# Identifies schools that have user access restrictions so that
-#  parsing can only happen one request at a time.
-SINGLE_ACCESS_SCHOOLS = {
-    "gw",
-}
-
-school_code_to_name = {
-    'jhu': 'Johns Hopkins University',
-    'uoft': 'University of Toronto',
-    'umd': 'University of Maryland',
-    'rutgers': 'Rutgers University',
-    'uo': 'University of Ottawa',
-    'queens': 'Queens University',
-    'vandy': 'Vanderbilt University',
-    'gw': 'George Washington University',
-    'umich': 'University of Michigan',
-    'chapman': 'Chapman University',
-    'salisbury': 'Salisbury University',
-}
-
-school_to_semesters = {
-    'jhu': OrderedDict({
-        2017: [
-            'Fall',
-            'Summer',
-            'Spring',
-            'Intersession',
-        ],
-    }),
-    'uoft': OrderedDict({
-        2018: [
-            'Winter',
-        ],
-        2017: [
-            'Fall',
-            'Winter',
-        ],
-    }),
-    'umd': OrderedDict({
-        2017: [
-            'Fall',
-            'Spring',
-        ],
-    }),
-    'rutgers': OrderedDict({
-        2017: [
-            'Spring',
-        ],
-        2016: [
-            'Fall',
-        ],
-    }),
-    'queens': OrderedDict({
-        2018: [
-            'Winter',
-        ],
-        2017: [
-            'Fall',
-            'Winter',
-        ],
-        2016: [
-            'Fall',
-        ],
-    }),
-    'vandy': OrderedDict({
-        2017: [
-            'Fall',
-            'Spring',
-        ],
-        2016: [
-            'Fall',
-        ],
-    }),
-    'gw': OrderedDict({
-        2017: [
-            'Fall',
-            'Spring',
-        ],
-    }),
-    'umich': OrderedDict({
-        2017: [
-            'Fall',
-            'Winter',
-        ],
-        2016: [
-            'Fall',
-        ],
-    }),
-    'chapman': OrderedDict({
-        2017: [
-            'Fall',
-            'Spring',
-        ],
-        2016: [
-            'Fall',
-        ],
-    }),
-    'salisbury': OrderedDict({
-        2017: [
-            'Fall',
-            'Summer',
-            'Spring',
-            'Winter',
-            'Interterm',
-        ],
-        2016: [
-            'Fall',
-        ],
-    }),
-}
+School = namedtuple(
+    'School',
+    'code name active_semesters granularity ampm full_academic_year_registration single_access final_exams parsers'
+)
 
 
-# TEMP: backwards compatibility hack - see #916
-def _sem(term, year):
-    return {'name': term, 'year': year}
-old_school_to_semesters = {
-    'jhu': [_sem('Fall', '2017'), _sem('Summer', '2017'), _sem('Spring', '2017'),
-            _sem('Fall', '2016')],
-    'uoft': [_sem('Winter', '2017'), _sem('Fall', '2016')],
-    'umd': [_sem('Spring', '2017'), _sem('Fall', '2016')],
-    'rutgers': [_sem('Spring', '2017'), _sem('Fall', '2016')],
-    # 'uo': [_sem('Spring', '2017'), _sem('Fall', '2016')],
-    'queens': [_sem('Winter', '2017'), _sem('Fall', '2016')],
-    'vandy': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
-    'gw': [_sem('Fall', '2017'), _sem('Spring', '2017')],
-    'umich': [_sem('Fall', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016')],
-    'chapman': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
-    'salisbury': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Winter', '2017'),
-                  _sem('Fall', '2016'), _sem('Summer', '2017'), _sem('Interterm', '2017')],
-}
-# END TEMP
+def load_school(school):
+    config_file = '{}/schools/{}/config.json'.format(settings.PARSING_DIR,
+                                                     school)
+    with open(config_file) as f:
+        config = DotDict(json.load(f))
 
-parsers = {}
+    active_semesters = OrderedDict(
+        sorted(config.active_semesters.items(), key=lambda x: x[0])
+    )
 
-# Do the imports.
-for parser_type in ['courses', 'evals', 'textbooks']:
-    parsers[parser_type] = {}
-    for school in VALID_SCHOOLS:
+    return School(config.school.code,
+                  config.school.name,
+                  active_semesters,
+                  config.granularity,
+                  config.ampm,
+                  config.full_academic_year_registration,
+                  config.single_access,
+                  config.get('final_exams', []),
+                  load_parsers(school))
+
+
+def load_parsers(school):
+    parsers = {}
+    for parser_type in ['courses', 'evals', 'textbooks']:
         try:
-            Parser = None  # Binding below in exec.
-            exec 'from parsing.schools.{}.{} import Parser'.format(
+            parser = None  # Binding below in exec.
+            exec 'from {}.schools.{}.{} import Parser as parser'.format(
+                settings.PARSING_DIR,
                 school,
                 parser_type
             )
-            parsers[parser_type][school] = Parser
+            parsers[parser_type] = parser
         except ImportError:
             pass
+    return parsers
+
+
+SCHOOLS_MAP = {school: load_school(school) for school in VALID_SCHOOLS}
+
 
 course_parsers = {
     'uoft': lambda: UofTParser().start(),
@@ -185,8 +89,4 @@ eval_parsers = {
 textbook_parsers = {
     # 'uoft': parse_uoft_textbooks,
     # 'queens': parse_queens_textbooks,
-}
-
-final_exams_available = {
-    'jhu': [_sem('Spring', '2017')]
 }

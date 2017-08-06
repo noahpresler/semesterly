@@ -11,8 +11,8 @@
 # GNU General Public License for more details.
 
 
-VALID_SCHOOLS = {
-    "uoft",
+SCHOOLS = {
+    # "uoft",  # TODO - not in data pipeline
     "jhu",
     "umd",
     "queens",
@@ -22,3 +22,5 @@ VALID_SCHOOLS = {
     "chapman",
     "salisbury",
 }
+
+ACTIVE_SCHOOLS = SCHOOLS

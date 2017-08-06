@@ -14,9 +14,8 @@ import itertools
 from collections import namedtuple
 
 from courses.utils import get_sections_by_section_type
-from timetable.models import Section, Course, Semester
-from timetable.school_mappers import school_to_granularity, school_to_semesters, \
-    old_school_to_semesters
+from timetable.models import Section, Semester
+from timetable.school_mappers import SCHOOLS_MAP
 from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, \
     get_avg_rating
 from student.models import PersonalTimetable
@@ -187,7 +186,7 @@ def get_time_index(hours, minutes, school):
     """Take number of hours and minutes, and return the corresponding time slot index"""
     # earliest possible hour is 8, so we get the number of hours past 8am
     return (hours - 8) * (60 /
-                          school_to_granularity[school]) + minutes / school_to_granularity[school]
+                          SCHOOLS_MAP[school].granularity) + minutes / SCHOOLS_MAP[school].granularity
 
 
 def get_hours_minutes(time_string):
@@ -222,11 +221,11 @@ def get_tt_stats(timetable, day_to_usage):
 def get_day_to_usage(custom_events, school):
     """Initialize day_to_usage dictionary, which has custom events blocked out."""
     day_to_usage = {
-        'M': [set() for _ in range(14 * 60 / school_to_granularity[school])],
-        'T': [set() for _ in range(14 * 60 / school_to_granularity[school])],
-        'W': [set() for _ in range(14 * 60 / school_to_granularity[school])],
-        'R': [set() for _ in range(14 * 60 / school_to_granularity[school])],
-        'F': [set() for _ in range(14 * 60 / school_to_granularity[school])]
+        'M': [set() for _ in range(14 * 60 / SCHOOLS_MAP[school].granularity)],
+        'T': [set() for _ in range(14 * 60 / SCHOOLS_MAP[school].granularity)],
+        'W': [set() for _ in range(14 * 60 / SCHOOLS_MAP[school].granularity)],
+        'R': [set() for _ in range(14 * 60 / SCHOOLS_MAP[school].granularity)],
+        'F': [set() for _ in range(14 * 60 / SCHOOLS_MAP[school].granularity)]
     }
 
     for event in custom_events:
@@ -244,7 +243,7 @@ def get_current_semesters(school):
     (semester name, year) pairs.
     """
     semesters = []
-    for year, terms in reversed(school_to_semesters[school].items()):
+    for year, terms in reversed(SCHOOLS_MAP[school].semesters.items()):
         for term in terms:
             # Ensure DB has all semesters.
             Semester.objects.update_or_create(name=term, year=year)
@@ -257,9 +256,9 @@ def get_current_semesters(school):
     return semesters
 
 
-def get_old_semesters(school):
-    semesters = old_school_to_semesters[school]
-    # Ensure DB has all semesters.
-    for semester in semesters:
-        Semester.objects.update_or_create(**semester)
-    return semesters
+# def get_old_semesters(school):
+#     semesters = old_school_to_semesters[school]
+#     # Ensure DB has all semesters.
+#     for semester in semesters:
+#         Semester.objects.update_or_create(**semester)
+#     return semesters

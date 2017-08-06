@@ -14,12 +14,12 @@ from functools import wraps
 
 from django.shortcuts import render
 
-from timetable.school_mappers import VALID_SCHOOLS
+from parsing.schools.active import SCHOOLS as VALID_SCHOOLS
 
 
 def validate_subdomain(view_func):
     """
-    Validates subdomain, redirecting user to 
+    Validates subdomain, redirecting user to
     index iof the school is invalid.
     """
     @wraps(view_func)

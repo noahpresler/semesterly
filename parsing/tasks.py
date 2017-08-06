@@ -21,9 +21,8 @@ from celery.utils.log import get_task_logger
 from django.core import management
 from django.conf import settings
 
-from timetable.school_mappers import \
-    FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS, SINGLE_ACCESS_SCHOOLS, \
-    VALID_SCHOOLS, school_to_semesters
+from timetable.school_mappers import SCHOOLS_MAP
+from parsing.schools.active import SCHOOLS as VALID_SCHOOLS
 
 logger = get_task_logger(__name__)
 
@@ -36,20 +35,20 @@ logger = get_task_logger(__name__)
 def task_parse_current_registration_period(schools=None, textbooks=False):
     """Parse semesters in current registration period."""
     schools = set(schools or VALID_SCHOOLS)
-    for school in set(school_to_semesters) & schools:
+    for school in set(SCHOOLS_MAP) & schools:
         # Grab the most recent year.
-        years = [school_to_semesters[school].items()[-1]]
+        years = [SCHOOLS_MAP[school].semesters.items()[-1]]
 
         # Handle case where registration is for full academic year
-        if school in FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS:
-            if len(school_to_semesters[school]) > 2:
-                years.append(school_to_semesters[school].items()[-2])
+        if SCHOOLS_MAP[school].full_academic_year_registration:
+            if len(SCHOOLS_MAP[school].semesters) > 2:
+                years.append(SCHOOLS_MAP[school].semesters.items()[-2])
 
             # Group all semesters into single parsing call for schools that
             #  cannot support parallel parsing.
-            if school in SINGLE_ACCESS_SCHOOLS:
+            if SCHOOLS_MAP[school].single_access_schools:
                 years_and_terms = {
-                    year: school_to_semesters[school][year][0]
+                    year: SCHOOLS_MAP[school].semesters[year][0]
                     for year in years
                 }
                 task_parse_school.delay(
@@ -68,15 +67,15 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
 def task_parse_active(schools=None, textbooks=False):
     """Parse all semesters displayed to users (i.e. active semesters)."""
     schools = set(schools or VALID_SCHOOLS)
-    for school in set(school_to_semesters) & schools:
+    for school in set(SCHOOLS_MAP) & schools:
         if school in SINGLE_ACCESS_SCHOOLS:
             task_parse_school.delay(
                 school,
-                school_to_semesters[school]
+                SCHOOLS_MAP[school].semesters
             )
             continue
 
-        for year, terms in school_to_semesters[school].items():
+        for year, terms in SCHOOLS_MAP[school].semesters.items():
             for term in terms:
                 task_parse_school.delay(school, {year: [term]},
                                         textbooks=textbooks)

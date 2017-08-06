@@ -16,7 +16,8 @@ from nltk.corpus import stopwords
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
-from timetable.school_mappers import VALID_SCHOOLS
+from parsing.schools.active import SCHOOLS as VALID_SCHOOLS
+
 
 class SimilarityFinder:
 

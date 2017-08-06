@@ -1,15 +1,29 @@
 {
-	"school": {
-		"code": "salisbury",
-		"name": "Salisbury University"
-	},
-	"course_code_regex": "([A-Z]{3,4} \\d{2,3})$",
-	"terms": [
-		"Fall",
-		"Winter",
-		"Spring",
-		"Summer"
-	],
-	"granularity": 5,
-	"ampm": true
+  "school": {
+    "code": "salisbury",
+    "name": "Salisbury University"
+  },
+  "course_code_regex": "([A-Z]{3,4} \\d{2,3})$",
+  "terms": [
+    "Fall",
+    "Winter",
+    "Spring",
+    "Summer"
+  ],
+  "granularity": 5,
+  "ampm": true,
+  "full_academic_year_registration": false,
+  "single_access": false,
+  "active_semesters": {
+    "2017": [
+      "Fall",
+      "Summer",
+      "Spring",
+      "Winter",
+      "Interterm"
+    ],
+    "2016": [
+      "Fall"
+    ]
+  }
 }

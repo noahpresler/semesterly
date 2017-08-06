@@ -14,7 +14,8 @@ GNU General Public License for more details.
 
 from django.core.management.base import BaseCommand, CommandError
 from timetable.models import *
-from timetable.school_mappers import VALID_SCHOOLS
+from parsing.schools.active import SCHOOLS as VALID_SCHOOLS
+
 from django.db.models import Q
 from django.utils.encoding import smart_str
 import datetime, logging, os, sys, cookielib, requests, time, re
