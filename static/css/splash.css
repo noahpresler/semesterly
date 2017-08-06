@@ -47,7 +47,6 @@ header nav {
 	line-height: 30px;
 	height: 30px;
 }
-
 header nav a,
 header nav a:link,
 header nav a:active,
@@ -57,9 +56,11 @@ header nav a:visited {
 	text-decoration: none;
 	transition: color .2s;
 }
-
 header nav a:hover {
 	color: #3498DB;
+}
+header nav a .fa {
+  margin-right: 3px;
 }
 .desktop-nav {
 	display: block;
@@ -76,6 +77,7 @@ header nav a:hover {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+  float: right;
 }
 .mobile-nav .mobile-nav-label span {
 	display: inline-block;
@@ -574,7 +576,7 @@ footer h6 {
 		display: none;
 	}
 }
-@media(max-width: 820px) {
+@media(max-width: 892px) {
 	header h1 {
 		display: none;
 	}
