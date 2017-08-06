@@ -1,0 +1,14 @@
+{
+	"school": {
+		"code": <CODE>,
+		"name": <NAME>
+	},
+	"course_code_regex": <REGEX>,
+	"terms": [],
+	"granularity": <GRANULARITY>,
+	"ampm": <AMPM>,
+	"full_academic_year_registration": <FULL_ACADEMIC_YEAR_REGISTRATION>,
+	"single_access": <SINGLE_ACCESS>,
+	"active_semesters": {},
+	"buildings": []
+}

@@ -10,60 +10,139 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from __future__ import absolute_import, division, print_function
+
+import os
+import simplejson as json
 
 from django.core.management.base import BaseCommand, CommandError
-import sys, os
+from django.conf import settings
+
 
 class Command(BaseCommand):
+    """Make a school within the Semesterly system.
 
-    help = "Scaffolds a directory for a new school"
+    Attributes:
+        CONFIG_TEMPLATE_PATH (str)
+        PARSER_TEMPLATE_PATH (str)
+        help (str)
+    """
+
+    help = "Scaffolds a directory for a new school, adds to active schools"
+
+    PARSER_TEMPLATE_PATH = '{}/{}/management/parser_template.txt'.format(
+        os.getcwd(),
+        settings.PARSING_DIR
+    )
+    CONFIG_TEMPLATE_PATH = '{}/{}/management/config_template.txt'.format(
+        os.getcwd(),
+        settings.PARSING_DIR
+    )
 
     def add_arguments(self, parser):
-        parser.add_argument('--name', type=str, help='the school name', required=True)
-        parser.add_argument('--code', type=str, required=True,
-            help='the schools shortened name, will be the subdomain (e.g. jhu)')
-        parser.add_argument('--regex', type=str, required=True,
-            help='regex for detecting course codes')
+        parser.add_argument(
+            '--name',
+            type=str,
+            help='the school name',
+            required=True
+        )
+        parser.add_argument(
+            '--code',
+            type=str,
+            required=True,
+            help='the schools shortened name, will be the subdomain (e.g. jhu)'
+        )
+        parser.add_argument(
+            '--regex',
+            type=str,
+            default=r'(.)*',
+            help='for detecting/validating course code; default: %(default)s'
+        )
+        parser.add_argument(
+            '--ampm',
+            type=bool,
+            default=True,
+            help='school use 12 instead of 24hr time; default: %(default)s'
+        )
+        parser.add_argument(
+            '--full-academic-year-registration',
+            type=bool,
+            default=False,
+            help='registration time period; default: %(default)s'
+        )
+        parser.add_argument(
+            '--single-access',
+            type=bool,
+            default=False,
+            help='access cannot be parallelized; default: %(default)s'
+        )
+        parser.add_argument(
+            '--granularity',
+            type=int,
+            default=5,
+            help='minimum time between section offerings; default: %(default)s'
+        )
 
     def success_print(self, message):
         self.stdout.write(self.style.SUCCESS(message))
 
     def handle(self, *args, **options):
         name = options['name']
-        code = options['code']
-        regex = options['regex']
+        code = options['code'].lower()
+        replacements = (
+            ('CODE', code),
+            ('NAME', name),
+            ('REGEX', options['regex']),
+            ('AMPM', options['ampm']),
+            ('GRANULARITY', options['granularity']),
+            ('SINGLE_ACCESS', options['single_access']),
+            ('FULL_ACADEMIC_YEAR_REGISTRATION', options['full_academic_year_registration']),
+        )
 
-        parser_template_path = os.getcwd() +  '/timetable/management/parser_template.txt'
-        config_template_path = os.getcwd() +  '/timetable/management/config_template.txt'
-        
-        school_dir_path = '{}/scripts/{}'.format(os.getcwd(), code)
-        parser_path = '{}/{}_courses.py'.format(school_dir_path, code)
+        school_dir_path = '{}/{}/schools/{}'.format(os.getcwd(),
+                                                    settings.PARSING_DIR,
+                                                    code)
+
+        if os.path.exists(school_dir_path):
+            raise CommandError("This school already exists.")
+
+        parser_path = '{}/courses.py'.format(school_dir_path, code)
         config_path = '{}/config.json'.format(school_dir_path)
         logs_path = '{}/logs'.format(school_dir_path)
         data_path = '{}/data'.format(school_dir_path)
         init_path = '{}/__init__.py'.format(school_dir_path)
-        
+        active_schools_path = '{}/active'.format(school_dir_path)
 
-        with open(parser_template_path, 'rb') as file:
-            parser = file.read().format(code.upper(), code.upper(), code)
-        with open(config_template_path, 'rb') as file:
+        with open(active_schools_path, 'r') as file:
+            active_schools = set(file.read().splitlines())
+        active_schools.add(code)
+
+        with open('LICENSE_HEADER', 'r') as file:
+            license = file.read()
+
+        with open(Command.PARSER_TEMPLATE_PATH, 'rb') as file:
+            parser = file.read().format(name=name,
+                                        code=code,
+                                        parser_type='course'.title())
+
+        with open(Command.CONFIG_TEMPLATE_PATH, 'rb') as file:
             config = file.read()
-            config = config.replace('<CODE>', code)
-            config = config.replace('<NAME>', name)
-            config = config.replace('<REGEX>', regex)
-
-        if os.path.exists(school_dir_path):
-            self.stdout.write(self.style.ERROR("This school already exists."))
-            exit()
+            for tag, replacement in replacements:
+                config = config.replace('<{}>'.format(tag),
+                                        json.dumps(replacement))
 
         os.makedirs(school_dir_path)
         os.makedirs(logs_path)
         os.makedirs(data_path)
 
         with open(parser_path, "w") as file:
+            file.write('# '.join(license.splitlines()))
+            file.write('\n')
             file.write(parser)
         with open(config_path, "w") as file:
             file.write(config)
+        with open(active_schools_path, 'w') as file:
+            file.write('\n'.join(sorted(active_schools)))
         open(init_path, 'a').close()
 
         self.success_print(

@@ -10,15 +10,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from django.conf import settings
 
-ACTIVE_SCHOOLS = {
-    # "uoft",  # TODO - not in data pipeline
-    "jhu",
-    "umd",
-    "queens",
-    "vandy",
-    "gw",
-    "umich",
-    "chapman",
-    "salisbury",
-}
+active_file = settings.PARSING_DIR + '/schools/active'
+
+with open(active_file, 'r') as file:
+    ACTIVE_SCHOOLS = set(file.read().splitlines())

@@ -48,15 +48,15 @@ def load_school(school):
         sorted(config.active_semesters.items(), key=lambda x: x[0])
     )
 
-    return School(config.school.code,
-                  config.school.name,
-                  active_semesters,
-                  config.granularity,
-                  config.ampm,
-                  config.full_academic_year_registration,
-                  config.single_access,
-                  config.get('final_exams'),
-                  load_parsers(school))
+    return School(code=config.school.code,
+                  name=config.school.name,
+                  active_semesters=active_semesters,
+                  granularity=config.granularity,
+                  ampm=config.ampm,
+                  full_academic_year_registration=config.full_academic_year_registration,
+                  single_access=config.single_access,
+                  final_exams=config.get('final_exams'),
+                  parsers=load_parsers(school))
 
 
 def load_parsers(school):
@@ -77,16 +77,15 @@ def load_parsers(school):
 
 SCHOOLS_MAP = {school: load_school(school) for school in ACTIVE_SCHOOLS}
 
+# course_parsers = {
+#     'uoft': lambda: UofTParser().start(),
+# }
 
-course_parsers = {
-    'uoft': lambda: UofTParser().start(),
-}
+# eval_parsers = {
+#     'umd': lambda: umdReview().parse_reviews,
+# }
 
-eval_parsers = {
-    'umd': lambda: umdReview().parse_reviews,
-}
-
-textbook_parsers = {
-    # 'uoft': parse_uoft_textbooks,
-    # 'queens': parse_queens_textbooks,
-}
+# textbook_parsers = {
+#     # 'uoft': parse_uoft_textbooks,
+#     # 'queens': parse_queens_textbooks,
+# }
