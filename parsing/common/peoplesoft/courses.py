@@ -61,9 +61,9 @@ class PeoplesoftParser(BaseParser):
         self.department_name_regex = department_name_regex
         super(PeoplesoftParser, self).__init__(school, **kwargs)
 
-    @abstractmethod
     def start(self, **kwargs):
         """Start parsing courses."""
+        self.parse(**kwargs)
 
     def parse(self,
               years_and_terms=None,

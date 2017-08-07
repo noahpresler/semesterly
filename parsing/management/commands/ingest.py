@@ -18,8 +18,7 @@ import simplejson as json
 import traceback
 
 from django.core.management.base import BaseCommand
-from timetable.school_mappers import parsers, course_parsers, \
-    textbook_parsers, eval_parsers
+from timetable.school_mappers import SCHOOLS_MAP
 from parsing.management.commands.arguments import ingest_args
 from parsing.library.internal_exceptions import CourseParseError, \
     JsonValidationError, JsonValidationWarning, IngestorWarning
@@ -66,18 +65,7 @@ class Command(BaseCommand):
             for school in options['schools']:
                 tracker.school = school
 
-                # TODO - remove after deprecation
-                if school not in parsers[data_type]:
-                    old_map = {
-                        'textbooks': textbook_parsers,
-                        'courses': course_parsers,
-                        'evals': eval_parsers,
-                    }
-                    self.old_parser(old_map[data_type][school], school)
-                    continue
-                # END - remove after deprecation
-
-                self.run(parsers[data_type][school],
+                self.run(SCHOOLS_MAP[school].parsers[data_type],
                          tracker,
                          options,
                          data_type,
@@ -153,16 +141,16 @@ class Command(BaseCommand):
             tracker.see_error(traceback.format_exc())
             tracker.see_error('INGESTOR DUMP\n' + dict_pp(parser.ingestor))
 
-    def old_parser(self, do_parse, school):
-        """Run older parser that sidesteps datapipeline.
+    # def old_parser(self, do_parse, school):
+    #     """Run older parser that sidesteps datapipeline.
 
-        Args:
-            do_parse (lambda): Parsing function to run.
-            school (str): The school name.
-        """
-        message = 'Starting {} parser for {}.\n'.format('courses', school)
-        self.stdout.write(self.style.SUCCESS(message))
-        try:
-            do_parse()
-        except Exception:
-            self.stderr.write(traceback.format_exc())
+    #     Args:
+    #         do_parse (lambda): Parsing function to run.
+    #         school (str): The school name.
+    #     """
+    #     message = 'Starting {} parser for {}.\n'.format('courses', school)
+    #     self.stdout.write(self.style.SUCCESS(message))
+    #     try:
+    #         do_parse()
+    #     except Exception:
+    #         self.stderr.write(traceback.format_exc())

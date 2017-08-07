@@ -1,0 +1,14 @@
+{
+	"school": {
+		"code": "uoft",
+		"name": "University of Toronto"
+	},
+	"course_code_regex": "(.)*",
+	"terms": [],
+	"granularity": 5,
+	"ampm": true,
+	"full_academic_year_registration": false,
+	"single_access": false,
+	"active_semesters": {},
+	"buildings": []
+}

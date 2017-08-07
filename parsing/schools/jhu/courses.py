@@ -10,7 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
 from __future__ import absolute_import, division, print_function
 
 import re
@@ -59,6 +58,7 @@ class Parser(BaseParser):
         self.schools = self.requester.get(url, params=params)
 
     def _get_courses(self, school):
+        # print(school, file=sys.stderr)
         url = '{}/{}/{}'.format(Parser.API_URL,
                                 school['Name'],
                                 self.semester)

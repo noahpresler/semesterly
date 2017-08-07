@@ -73,12 +73,35 @@
         "additionalProperties": false,
         "required": [ "code" ]
       }
+    },
+    "single_access": {
+      "type": "boolean"
+    },
+    "granularity": {
+      "type": "integer"
+    },
+    "full_academic_year_registration": {
+      "type": "boolean"
+    },
+    "active_semesters": {
+      "type": "object"
+    },
+    "ampm": {
+      "type": "boolean"
+    },
+    "final_exams": {
+      "type": "object"
     }
   },
   "additionalProperties": false,
   "required": [
     "school",
     "course_code_regex",
-    "terms"
+    "terms",
+    "single_access",
+    "granularity",
+    "full_academic_year_registration",
+    "active_semesters",
+    "ampm"
   ]
 }
