@@ -11,7 +11,6 @@
 # GNU General Public License for more details.
 
 
-
 class PipelineError(Exception):
     """Data-pipeline error class."""
 
@@ -24,5 +23,5 @@ class ParseError(PipelineError):
     """Parser error class."""
 
 
-class ParseException(PipelineWarning):
+class ParseWarning(PipelineWarning):
     """Parser warning class."""

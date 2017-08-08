@@ -21,7 +21,7 @@ from parsing.library.logger import Logger, JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
 from parsing.library.viewer import Hoarder
-from parsing.library.utils import clean, make_list
+from parsing.library.utils import clean, make_list, time24
 # from parsing.library.exceptions import PipelineError, PipelineWarning
 
 
@@ -225,8 +225,8 @@ class Ingestor(dict):
         time = self._get('time')
         if 'time' not in self:
             time = {
-                'start': self._get('time_start', 'start_time'),
-                'end': self._get('time_end', 'end_time')
+                'start': time24(self._get('time_start', 'start_time')),
+                'end': time24(self._get('time_end', 'end_time'))
             }
         return time
 

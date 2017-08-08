@@ -10,11 +10,18 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from __future__ import absolute_import, division, print_function
 
 import collections
-import re
+import dateutil.parser as dparser
 import os
+import re
 import simplejson as json
+
+from datetime import datetime
+
+from parsing.library.exceptions import ParseError
+from parsing.library.words import conjunctions_and_prepositions
 
 UNICODE_WHITESPACE = re.compile(r'(?:\u00a0)|(?:\xc2)|(?:\xa0)', re.IGNORECASE)
 
@@ -82,7 +89,19 @@ def make_list(x):
 class DotDict(dict):
     """Dot notation access for dictionary.
 
-    TODO - add example(s)
+    Supports set, get, and delete.
+
+    Examples:
+        >>> d = DotDict({'a': 1, 'b': 2, 'c': {'ca': 31}})
+        >>> d.a, d.b
+        (1, 2)
+        >>> d['a']
+        1
+        >>> d['a'] = 3
+        >>> d.a, d['b']
+        (3, 2)
+        >>> d.a.ca, d.a['ca']
+        (31, 31)
     """
 
     __getattr__ = dict.get
@@ -217,3 +236,44 @@ def dir_to_dict(path):
     else:
         d['kind'] = "file"
     return d
+
+
+def time24(time):
+    """Convert time to 24hr format.
+
+    Args:
+        time (str): time in reasonable format
+
+    Returns:
+        str: 24hr time in format hh:mm
+
+    Raises:
+        ParseError: Unparseable time input.
+    """
+    if isinstance(time, str):
+        time = dparser.parse(time)
+    if not isinstance(time, datetime):
+        raise ParseError('invalid time input')
+    return time.strftime('%H:%M')
+
+_roman_numeral = re.compile(r'^[ivx]+$')
+
+
+def titlize(name):
+    """Format name into pretty title.
+
+    Will uppercase roman numerals.
+    Will lowercase conjuctions and prepositions.
+
+    Examples:
+        >>> titlize('BIOLOGY OF ANIMALS II)
+        Biology of Animals II
+    """
+    titled = []
+    for word in name.lower().split():
+        if _roman_numeral.match(word) is not None:
+            word = word.upper()
+        elif word in conjunctions_and_prepositions:
+            word = word.title()
+        titled.append(word)
+    return ' '.join(titled)

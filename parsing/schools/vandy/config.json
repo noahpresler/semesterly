@@ -12,6 +12,7 @@
   "granularity": 5,
   "full_academic_year_registration": false,
   "single_access": false,
+  "ampm": true,
   "active_semesters": {
     "2017": [
       "Fall",

@@ -10,16 +10,14 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
 from __future__ import absolute_import, division, print_function
 
 import re
 import sys
 
 from parsing.library.base_parser import BaseParser
-from parsing.library.internal_exceptions import CourseParseError
-from parsing.library.utils import safe_cast
 from parsing.library.exceptions import ParseError
+from parsing.library.utils import safe_cast
 from semesterly.settings import get_secret
 
 
@@ -27,7 +25,7 @@ class Parser(BaseParser):
     """Vanderbilt course parser.
 
     Attributes:
-        API_URL (str): Description
+        URL (str): Description
         course (TYPE): Description
         CREDENTIALS (TYPE): Description
         departments (dict): Description
@@ -35,7 +33,7 @@ class Parser(BaseParser):
         verbosity (TYPE): Description
     """
 
-    API_URL = 'https://webapp.mis.vanderbilt.edu/more'
+    URL = 'https://webapp.mis.vanderbilt.edu/more'
     CREDENTIALS = {
         'USERNAME': get_secret('VANDY_USER'),
         'PASSWORD': get_secret('VANDY_PASS')
@@ -54,13 +52,13 @@ class Parser(BaseParser):
         }
         super(Parser, self).__init__('vandy', **kwargs)
 
-    def login(self):
+    def _login(self):
         if self.verbosity > 2:
             print("Logging in...")
         login_url = 'https://login.mis.vanderbilt.edu'
         get_login_url = login_url + '/login'
         params = {
-            'service': Parser.API_URL + '/j_spring_cas_security_check'
+            'service': Parser.URL + '/j_spring_cas_security_check'
         }
         soup = self.requester.get(get_login_url, params)
         post_suffix_url = soup.find('form', {'name': 'loginForm'})['action']
@@ -73,9 +71,10 @@ class Parser(BaseParser):
             'submit': 'LOGIN'
         }
         self.requester.post(login_url + post_suffix_url,
-                            login_info, params,
+                            login_info,
+                            params,
                             parse=False)
-        self.requester.get(Parser.API_URL + '/Entry.action',
+        self.requester.get(Parser.URL + '/Entry.action',
                            parse=False)
 
     def start(self,
@@ -84,10 +83,10 @@ class Parser(BaseParser):
               departments=None,
               textbooks=True,
               verbosity=3):
-
+        """Start the parse."""
         self.verbosity = verbosity
 
-        self.login()
+        self._login()
 
         # TODO - read from site and filter based on kwargs
         years_and_terms = {
@@ -121,14 +120,14 @@ class Parser(BaseParser):
                 # Load environment for targeted semester
                 self.requester.get(
                     '{}{}'.format(
-                        Parser.API_URL,
+                        Parser.URL,
                         '/SelectTerm!selectTerm.action'),
                     {'selectedTermCode': semester_code},
                     parse=False)
 
                 self.requester.get(
                     '{}{}'.format(
-                        Parser.API_URL,
+                        Parser.URL,
                         '/SelectTerm!updateSessions.action'),
                     parse=False)
 
@@ -163,7 +162,7 @@ class Parser(BaseParser):
                     # GET html for department course listings
                     html = self.requester.get(
                         '{}{}'.format(
-                            Parser.API_URL,
+                            Parser.URL,
                             '/SearchClassesExecute!search.action'
                         ),
                         payload
@@ -173,7 +172,7 @@ class Parser(BaseParser):
                     self.parse_courses_in_department(html)
 
                 # return to search page for next iteration
-                self.requester.get(Parser.API_URL + '/Entry.action',
+                self.requester.get(Parser.URL + '/Entry.action',
                                    parse=False)
 
     def create_course(self):
@@ -249,7 +248,7 @@ class Parser(BaseParser):
 
         # Query Vandy class search website
         soup = self.requester.get(
-            Parser.API_URL + '/SearchClasses!input.action',
+            Parser.URL + '/SearchClasses!input.action',
             parse=True)
 
         # Retrieve all deparments from dropdown in advanced search
@@ -275,7 +274,7 @@ class Parser(BaseParser):
 
         # perform more targeted searches if needed
         if num_hits == 300:
-            raise CourseParseError('vandy num_hits greater than 300')
+            raise ParseError('vandy num_hits greater than 300')
         else:
             self.parse_set_of_courses(html)
 
@@ -294,7 +293,7 @@ class Parser(BaseParser):
 
             page_count = page_count + 1
             next_page_url = '{}{}{}'.format(
-                Parser.API_URL,
+                Parser.URL,
                 '/SearchClassesExecute!switchPage.action?pageNum=',
                 page_count)
             html = self.requester.get(next_page_url)
@@ -327,7 +326,7 @@ class Parser(BaseParser):
         course_number, term_code = search.group(1), search.group(2)
 
         # Base URL to retrieve detailed course info
-        course_details_url = Parser.API_URL \
+        course_details_url = Parser.URL \
             + '/GetClassSectionDetail.action'
 
         # Create payload to request course from server
@@ -505,11 +504,10 @@ class Parser(BaseParser):
         else:
 
             search = re.match("(.*) \- (.*)", unformatted_time_range)
-            if search is not None:
-                self.update_current_course('time_start', self.extractor.time_12to24(search.group(1)))
-                self.update_current_course('time_end', self.extractor.time_12to24(search.group(2)))
-            else:
-                print('ERROR: invalid time format', file=sys.stderr)
+            if search is None:
+                raise ParseError('time not found on page')
+            self.update_current_course('time_start', search.group(1))
+            self.update_current_course('time_end', search.group(2))
 
     def extract_instructors(self, string):
 
