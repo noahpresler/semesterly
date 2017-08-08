@@ -19,22 +19,20 @@ from django.conf import settings
 from parsing.library.utils import DotDict
 from parsing.schools.active import ACTIVE_SCHOOLS
 
-# TODO - uoft does not have a config file b/c it is not in the pipeline
-# "granularity": 30,
-# "ampm": false
-#     'uoft': OrderedDict({
-#         2018: [
-#             'Winter',
-#         ],
-#         2017: [
-#             'Fall',
-#             'Winter',
-#         ],
-#     }),
+_school_attrs = [
+    'code',
+    'name',
+    'active_semesters',
+    'granularity',
+    'ampm',
+    'full_academic_year_registration',
+    'single_access',
+    'final_exams parsers'
+]
 
 School = namedtuple(
     'School',
-    'code name active_semesters granularity ampm full_academic_year_registration single_access final_exams parsers'
+    ' '.join(_school_attrs)
 )
 
 
