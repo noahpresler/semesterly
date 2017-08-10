@@ -13,10 +13,12 @@
 from __future__ import absolute_import, division, print_function
 
 import collections
-import dateutil.parser as dparser
+import dateparser
 import os
 import re
+import sys
 import simplejson as json
+
 
 from datetime import datetime
 
@@ -204,8 +206,7 @@ def dir_to_dict(path):
     Returns:
         dict: Dictionary representation of the directory.
 
-    Example(s)::
-        >>> print('hi')
+    Example output:
         {
             "name": ""
             "kind": "directory",
@@ -250,10 +251,10 @@ def time24(time):
     Raises:
         ParseError: Unparseable time input.
     """
-    if isinstance(time, str):
-        time = dparser.parse(time)
+    if isinstance(time, basestring):
+        time = dateparser.parse(time)
     if not isinstance(time, datetime):
-        raise ParseError('invalid time input')
+        raise ParseError('invalid time input {}'.format(time))
     return time.strftime('%H:%M')
 
 _roman_numeral = re.compile(r'^[ivx]+$')
@@ -277,3 +278,31 @@ def titlize(name):
             word = word.title()
         titled.append(word)
     return ' '.join(titled)
+
+
+def dict_filter_by_dict(a, b):
+    """Filter dictionary a by b.
+
+    Filters at two level depth with regex matching.
+
+    Args:
+        a (dict): Dictionary to filter.
+        b (dict): Dictionary to filter by.
+
+    Returns:
+        dict: Filtered dictionary
+    """
+    filtered = {}
+    for x, ys in a.items():
+        for p, qs in b.items():
+            m = re.match(str(p), str(x))
+            if m is None:
+                continue
+            filtered.setdefault(x, {})
+            for y in ys:
+                for q in qs:
+                    n = re.match(str(q), str(y))
+                    if n is None:
+                        continue
+                    filtered[x][y] = a[x][y]
+    return filtered

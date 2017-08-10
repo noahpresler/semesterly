@@ -87,9 +87,10 @@ class Requester(object):
 
     def get(self, url,
             params='',
+            session=None,
             cookies=None,
             headers=None,
-            verify=False,
+            verify=True,
             **kwargs):
         """HTTP GET.
 
@@ -107,8 +108,8 @@ class Requester(object):
         def request():
             return self.session.get(
                 url,
-                params='',
-                cookies=cookies if cookies is not None else self.cookies,
+                params=params,
+                cookies=self.cookies,
                 headers=headers if headers is not None else self.headers,
                 verify=verify,
             )
@@ -138,7 +139,7 @@ class Requester(object):
                 url,
                 data=data,
                 params=params,
-                cookies=cookies if cookies is not None else self.cookies,
+                cookies=self.cookies,
                 headers=headers if headers is not None else self.headers,
                 verify=verify,
             )

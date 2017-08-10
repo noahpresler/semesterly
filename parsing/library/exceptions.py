@@ -25,3 +25,7 @@ class ParseError(PipelineError):
 
 class ParseWarning(PipelineWarning):
     """Parser warning class."""
+
+
+class ParseJump(PipelineWarning):
+    """Parser exception used in control flow."""

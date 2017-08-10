@@ -15,7 +15,8 @@
       ],
       "properties": {
         "code": {},
-        "name": {}
+        "name": {},
+        "subdivisions": {}
       },
       "additionalProperties": false
     },

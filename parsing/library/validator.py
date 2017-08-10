@@ -73,11 +73,11 @@ class Validator:
         'textbook_link',
     }
 
-    def __init__(self, config_path, tracker=None, relative=True):
+    def __init__(self, config, tracker=None, relative=True):
         """Construct validator instance.
 
         Args:
-            config_path (str): School config file path.
+            config (dict): School config dictionary.
             tracker (None, optional): Description
             relative (bool, optional): Enforce relative ordering in validation.
         """
@@ -89,7 +89,7 @@ class Validator:
             for kind in Validator.KINDS
         }
 
-        self.config = DotDict(Validator.file_to_json(config_path))
+        self.config = DotDict(config)
         self.config['kind'] = 'config'
         self.validate(self.config)
 
@@ -395,9 +395,9 @@ class Validator:
                 )
 
             # NOTE: mutating obj
-            meeting.course = section.course
-            meeting.section = {'code': section.code}
-            self.validate_meeting(meeting)
+            # meeting['course'] = section.course
+            # meeting['section'] = {'code': section.code}
+            self.validate_meeting(DotDict(meeting))
 
         if 'textbooks' in section:
             for textbook in section.textbooks:
@@ -468,12 +468,13 @@ class Validator:
                 raise e
         if not self.relative:
             return
-        if meeting.course.code not in self.seen:
+        if 'course' in meeting and meeting.course.code not in self.seen:
             raise JsonValidationError(
                 'course code {} isnt defined'.format(meeting.course.code),
                 meeting
             )
-        if meeting.section.code not in self.seen[meeting.course.code]:
+        if ('section' in meeting and
+                meeting.section.code not in self.seen[meeting.course.code]):
             raise JsonValidationError(
                 'section {} isnt defined'.format(meeting.section.code),
                 meeting

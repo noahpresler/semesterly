@@ -20,12 +20,10 @@ class Parser(BaseParser):
         super(Parser, self).__init__('{code}', **kwargs)
 
     def start(self,
-              years_and_terms=None,
-              years=None,
-              terms=None,
-              departments=None,
+              verbosity=3,
               textbooks=False,
-              verbosity=3):
+              departments=None,
+              years_and_terms_filter=None):
         """Start the parse."""
         self.verbosity = verbosity
 

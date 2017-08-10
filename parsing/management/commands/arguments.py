@@ -35,13 +35,6 @@ def ingest_args(parser):
     Args:
         parser (argparser.Parser): Django argument parser.
     """
-    class LoadToJsonAction(argparse.Action):
-        def __call__(self, parser, namespace, values, option_string=None):
-            try:
-                setattr(parser, self.dest, json.loads(values))
-            except json.JSONDecodeError:
-                parser.error('invalid JSON')
-
     _progress_bar_arg(parser)
     _school_list_arg(parser)
     _parser_type_arg(parser)
@@ -50,11 +43,11 @@ def ingest_args(parser):
                         action=WritableFileAction,
                         help='default: %(default)s',
                         default=SCHOOLS_DIR + '/{school}/data/courses.json')
-    parser.add_argument('--terms', nargs='+', type=str)
-    parser.add_argument('--years', nargs='+', type=int)
+    parser.add_argument('--terms', nargs='+', type=str, default=[r'\w*'])
+    parser.add_argument('--years', nargs='+', type=int, default=[r'\d{4}'])
     parser.add_argument('--years-and-terms', type=str, dest='years_and_terms',
                         action=LoadToJsonAction,
-                        help='json formatted (year, term) dictionary')
+                        help='json formatted (year, term) dictionary. If provided, will override `terms` and `years` values.')
     parser.add_argument('--departments', nargs='+', type=str)
     _validate_switch_arg(parser)
     _validator_args(parser)
@@ -116,7 +109,7 @@ def digest_args(parser):
     parser.add_argument(
         '--output-diff',
         type=str,
-        action=SingleSchoolWritableFileAction,
+        action=compose_actions(SingleSchoolAction, WritableFileAction),
         default=SCHOOLS_DIR + '/{school}/logs/diff_{type}.json',
         help='default: %(default)s)'
     )
@@ -200,15 +193,17 @@ def _progress_bar_arg(parser):
 
 def _validator_args(parser):
     parser.add_argument(
-        '--config-file',
-        action=SingleSchoolWritableFileAction,
+        '--config',
+        action=compose_actions(SingleSchoolAction,
+                               ReadableFileAction,
+                               LoadFileToJsonAction),
         help='default: %(default)s',
         default=SCHOOLS_DIR + '/{school}/config.json'
     )
 
     parser.add_argument(
         '--output-error',
-        action=SingleSchoolWritableFileAction,
+        action=compose_actions(SingleSchoolAction, WritableFileAction),
         help='default: %(default)s',
         default=SCHOOLS_DIR + '/{school}/logs/error_{type}.log'
     )
@@ -230,7 +225,7 @@ def _validator_args(parser):
 def _data_arg(parser):
     parser.add_argument(
         '--data',
-        action=SingleSchoolReadableFileAction,
+        action=compose_actions(SingleSchoolAction, ReadableFileAction),
         default=SCHOOLS_DIR + '/{school}/data/{type}.json',
         help='default: %(default)s'
     )
@@ -278,7 +273,7 @@ class ReadableFileAction(argparse.Action):
             raise parser.error(
                 '{} is not a valid file path'.format(prospective_file)
             )
-        if os.access(prospective_dir, os.R_OK):
+        if os.access(prospective_dir + '/' + prospective_file, os.R_OK):
             setattr(namespace, self.dest, prospective_file)
             return
         raise parser.error('{} isnt a readable file'.format(prospective_file))
@@ -297,31 +292,52 @@ class SingleSchoolAction(argparse.Action):
             raise parser.error('non-default config invalid for many schools')
 
 
-class SingleSchoolWritableFileAction(argparse.Action):
-    """Enforce that non-default config can only be applied to single school."""
+class LoadToJsonAction(argparse.Action):
+    """Argparse hook to load json input into Python dictionary."""
 
     def __call__(self, parser, namespace, values, option_string=None):
-        """Single school and writable file action callable."""
-        SingleSchoolAction('', '').__call__(parser,
-                                            namespace,
-                                            values,
-                                            option_string)
-        WritableFileAction(option_string, self.dest).__call__(parser,
-                                                              namespace,
-                                                              values,
-                                                              option_string)
+        """Load to JSON action callable.
+
+        Raises:
+            parser.error: invalid JSON.
+        """
+        try:
+            setattr(parser, self.dest, json.loads(values))
+        except json.scanner.JSONDecodeError:
+            parser.error('invalid JSON')
 
 
-class SingleSchoolReadableFileAction(argparse.Action):
-    """Enforce single school action and readable file action."""
+class LoadFileToJsonAction(argparse.Action):
+    """Argparse hook to read JSON file and load into Python dictionary."""
 
     def __call__(self, parser, namespace, values, option_string=None):
-        """Single schools and readable file action callable."""
-        SingleSchoolAction('', '').__call__(parser,
-                                            namespace,
-                                            values,
-                                            option_string)
-        ReadableFileAction(option_string, self.dest).__call__(parser,
-                                                              namespace,
-                                                              values,
-                                                              option_string)
+        """Load file to JSON Action.
+
+        Raises:
+            parser.error: invalid JSON.
+        """
+        with open(values, 'r') as file:
+            data = file.read()
+        try:
+            setattr(parser, self.dest, json.loads(data))
+        except json.scanner.JSONDecodeError:
+            parser.error('invalid JSON in {}'.format(values))
+
+
+def compose_actions(*actions):
+    """Compose many argparse actions into one callable action.
+
+    Args:
+        *actions: The actions to compose.
+
+    Returns:
+        argparse.Action: Composed action.
+    """
+    class ComposableAction(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            for action in actions:
+                action(option_string, self.dest).__call__(parser,
+                                                          namespace,
+                                                          values,
+                                                          option_string)
+    return ComposableAction

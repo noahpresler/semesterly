@@ -21,7 +21,7 @@ from parsing.library.logger import Logger, JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
 from parsing.library.viewer import Hoarder
-from parsing.library.utils import clean, make_list, time24
+from parsing.library.utils import clean, make_list, time24, safe_cast
 # from parsing.library.exceptions import PipelineError, PipelineWarning
 
 
@@ -53,6 +53,7 @@ class Ingestor(dict):
 
     ALL_KEYS = {
         'school',
+        'school_subdivision_code', 'school_subdivision_name',
         'kind',
         'department',
         'dept',
@@ -92,7 +93,7 @@ class Ingestor(dict):
         'remaining_seats',
         'fees', 'fee', 'cost',
         'final_exam',
-        'offerings',
+        'offerings', 'meetings',
         'time_start', 'start_time',
         'time_end', 'end_time',
         'location',
@@ -105,9 +106,10 @@ class Ingestor(dict):
         'detail_url', 'image_url', 'author', 'title',
         'score',
         'summary',
+        'same_as',
     }
 
-    def __init__(self, school, config_path, output_path, output_error_path,
+    def __init__(self, school, config, output_path, output_error_path,
                  break_on_error=True,
                  break_on_warning=False,
                  display_progress_bar=True,
@@ -118,7 +120,7 @@ class Ingestor(dict):
 
         Args:
             school (string): The school code (e.g. jhu, gw, umich).
-            config_path (str): Configuration file path.
+            config (dict): Configuration dictionary.
             output_path (str): Output path.
             output_error_path (str): Error output path.
             break_on_error (bool, optional): Stop ingesting on error.
@@ -144,7 +146,7 @@ class Ingestor(dict):
         self.data_list = self.json.write('$data', type_=list).enter()
         self.logger = Logger(errorfile=output_error_path)
         if self.validate:
-            self.validator = Validator(config_path, tracker=self.tracker)
+            self.validator = Validator(config, tracker=self.tracker)
 
         # Inherit dictionary functionality.
         super(Ingestor, self).__init__()
@@ -245,12 +247,18 @@ class Ingestor(dict):
         course = {
             'kind': 'course',
             'school': {
-                'code': self.school
+                'code': self.school,
+                'subdivisions': [
+                    {
+                        'code': self._get('school_subdivision_code'),
+                        'name': self._get('school_subdivision_name')
+                    }
+                ]
             },
             'code': self._get('course_code', 'code', 'course'),
             'name': self._get('name', 'course_name'),
             'department': self._resolve_department(),
-            'credits': self._get('credits', 'num_credits'),
+            'credits': safe_cast(self._get('credits', 'num_credits'), float, default=0.),
             'prerequisites': make_list(self._get('prerequisites', 'prereqs')),
             'corequisites': make_list(self._get('corequisites', 'coreqs')),
             'exclusions': make_list(self._get('exclusions')),
@@ -261,6 +269,7 @@ class Ingestor(dict):
             'geneds': make_list(self._get('geneds')),
             'sections': self._get('sections'),
             'homepage': self._get('homepage', 'website'),
+            'same_as': self._get('same_as')
         }
 
         course = clean(course)
@@ -284,7 +293,7 @@ class Ingestor(dict):
         section = {
             'kind': 'section',
             'course': {
-                'code': course['code']
+                'code': course.get('code')
             },
             'code': self._get('section_code', 'section',
                               'meeting_section'),
@@ -292,16 +301,16 @@ class Ingestor(dict):
             'term': self._get('term', 'semester'),
             'year': str(self._get('year')),
             'instructors': self._resolve_instructors(),
-            'capacity': self._get('capacity', 'size'),
-            'enrollment': self._get('enrollment', 'enrolment'),
-            'waitlist': self._get('waitlist'),
-            'waitlist_size': self._get('waitlist_size'),
-            'remaining_seats': self._get('remaining_seats'),
+            'capacity': int(self._get('capacity', 'size')),
+            'enrollment': int(self._get('enrollment', 'enrolment')),
+            'waitlist': int(self._get('waitlist')),
+            'waitlist_size': int(self._get('waitlist_size')),
+            'remaining_seats': int(self._get('remaining_seats')),
             'type': self._get('type', 'section_type'),
             'fees': self._get('fees', 'fee', 'cost'),
             'final_exam': self._get('final_exam'),
             'textbooks': self._get('textbooks'),
-            'meetings': self._get('offerings')
+            'meetings': self._get('offerings', 'meetings')
         }
 
         section = clean(section)
@@ -310,7 +319,7 @@ class Ingestor(dict):
         self.tracker.term = section['term']
         return section
 
-    def ingest_meeting(self, section):
+    def ingest_meeting(self, section, clean_only=False):
         """Create meeting ingested json map.
 
         Args:
@@ -319,13 +328,19 @@ class Ingestor(dict):
         Returns:
             dict: meeting
         """
+        year = str(self._get('year')),
+        term = self._get('term', 'semester')
+        if section.get('code') is None:
+            year = None
+            term = None
+
         meeting = {
             'kind': 'meeting',
-            'course': section['course'],
+            'course': section.get('course'),
             'section': {
-                'code': section['code'],
-                'year': str(self._get('year')),
-                'term': self._get('term', 'semester')
+                'code': section.get('code'),
+                'year': year,
+                'term': term,
             },
             'days': make_list(self._get('days', 'day')),
             'dates': make_list(self._get('dates', 'date')),
@@ -334,6 +349,10 @@ class Ingestor(dict):
         }
 
         meeting = clean(meeting)
+
+        if clean_only:
+            return meeting
+
         self._validate_and_log(meeting)
         if 'time' in meeting:
             self.tracker.time = meeting['time']['start']

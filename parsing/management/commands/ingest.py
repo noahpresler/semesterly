@@ -81,12 +81,15 @@ class Command(BaseCommand):
             data_type (str): {'courses', 'evals', 'textbooks'}
             school (str): School to parse.
         """
+        # Load config file to dictionary.
+        if isinstance(options['config'], str):
+            with open(options['config'].format(school=school,
+                                               type=data_type), 'r') as file:
+                options['config'] = json.load(file)
+
         try:
             p = parser(
-                config_path=options['config_file'].format(
-                    school=school,
-                    type=data_type
-                ),
+                config=options['config'],
                 output_path=options['output'].format(school=school),
                 output_error_path=options['output_error'].format(
                     school=school,
@@ -101,19 +104,17 @@ class Command(BaseCommand):
 
             p.start(
                 verbosity=options['verbosity'],
-                years=options.get('years'),
-                terms=options.get('terms'),
-                years_and_terms=options.get('years_and_terms'),
-                departments=options.get('departments'),
-                textbooks=data_type == 'textbook'
+                textbooks=data_type == 'textbook',
+                departments_filter=options.get('departments'),
+                years_and_terms_filter=Command._resolve_years_and_terms(options),
             )
 
             p.end()
 
         except PipelineError as e:
-            pass  # TODO
+            print(e, file=self.stderr)
         except PipelineWarning as e:
-            pass  # TODO
+            print(e, file=self.stderr)
         except CourseParseError as e:
             logging.exception(e)
             error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
@@ -140,16 +141,15 @@ class Command(BaseCommand):
             tracker.see_error(traceback.format_exc())
             tracker.see_error('INGESTOR DUMP\n' + dict_pp(parser.ingestor))
 
-    # def old_parser(self, do_parse, school):
-    #     """Run older parser that sidesteps datapipeline.
+    @staticmethod
+    def _resolve_years_and_terms(options):
+        if options.get('years_and_terms') is not None:
+            return options['years_and_terms']
 
-    #     Args:
-    #         do_parse (lambda): Parsing function to run.
-    #         school (str): The school name.
-    #     """
-    #     message = 'Starting {} parser for {}.\n'.format('courses', school)
-    #     self.stdout.write(self.style.SUCCESS(message))
-    #     try:
-    #         do_parse()
-    #     except Exception:
-    #         self.stderr.write(traceback.format_exc())
+        # Construct years and terms dictionary
+        years_and_terms = {}
+        for year in options['years']:
+            year = years_and_terms.setdefault(year, [])
+            for term in options['terms']:
+                year.append(term)
+        return years_and_terms

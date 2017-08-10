@@ -152,8 +152,7 @@
         "required": [
           "kind",
           "time",
-          "course",
-          "section"
+          "days"
         ]
       }
     }

@@ -19,6 +19,7 @@ from django.conf import settings
 from parsing.library.utils import DotDict
 from parsing.schools.active import ACTIVE_SCHOOLS
 
+
 _school_attrs = [
     'code',
     'name',

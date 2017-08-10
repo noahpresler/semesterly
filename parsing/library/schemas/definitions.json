@@ -134,6 +134,22 @@
             "type": "integer"
           }
         }
+      },
+      "subdivisions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "maxLength": 20
+            },
+            "name": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        }
       }
     },
     "required": [ "code" ]

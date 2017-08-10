@@ -15,7 +15,7 @@ from __future__ import absolute_import, division, print_function
 import re
 
 from parsing.library.base_parser import BaseParser
-from parsing.library.extractor import time_12to24, titlize
+from parsing.library.utils import dict_filter_by_dict, titlize
 from semesterly.settings import get_secret
 
 
@@ -24,7 +24,7 @@ class Parser(BaseParser):
 
     Attributes:
         API_URL (str): Description
-        DAY_TO_LETTER_MAP (TYPE): Description
+        DAY_MAP (TYPE): Description
         KEY (str): Description
         last_course (dict): Description
         schools (list): Description
@@ -34,7 +34,7 @@ class Parser(BaseParser):
 
     API_URL = 'https://isis.jhu.edu/api/classes/'
     KEY = get_secret('JHU_API_KEY')
-    DAY_TO_LETTER_MAP = {
+    DAY_MAP = {
         'm': 'M',
         't': 'T',
         'w': 'W',
@@ -134,9 +134,13 @@ class Parser(BaseParser):
         self.ingestor['description'] = section_details[0]['Description']
         self.ingestor['code'] = course['OfferingName'].strip()
         self.ingestor['num_credits'] = num_credits
-        self.ingestor['department_name'] = ' '.join(course['Department'].split()[1:])
+        self.ingestor['department_name'] = ' '.join(
+            course['Department'].split()[1:]
+        )
         self.ingestor['campus'] = 1
-        self.ingestor['exclusions'] = section_details[0].get('EnrollmentRestrictedTo')
+        self.ingestor['exclusions'] = section_details[0].get(
+            'EnrollmentRestrictedTo'
+        )
 
         # Add specialty areas for computer science department
         if course['Department'] == 'EN Computer Science':
@@ -154,26 +158,30 @@ class Parser(BaseParser):
         for meeting in section_details[0]['Meetings']:
             # Load core section fields
             self.ingestor['section'] = "(" + section[0]['SectionName'] + ")"
-            self.ingestor['semester'] = self.semester.split()[0]
             self.ingestor['instrs'] = map(lambda i: i.strip(),
                                           course['Instructors'].split(','))
-            self.ingestor['size'], self.ingestor['enrollment'], self.ingestor['waitlist'] = self._compute_size_enrollment(course)
-            self.ingestor['year'] = self.semester.split()[1]
+
+            size, enrollment, waitlist = self._compute_size_enrollment(course)
+            self.ingestor['size'] = size
+            self.ingestor['enrollment'] = enrollment
+            self.ingestor['waitlist'] = waitlist
 
             created_section = self.ingestor.ingest_section(created_course)
 
             # Load offering fields.
             times = meeting['Times']
             for time in filter(lambda t: len(t) > 0, times.split(',')):
-                time_pieces = re.search(r'(\d\d:\d\d [AP]M) - (\d\d:\d\d [AP]M)',
-                                        time)
-                self.ingestor['time_start'] = time_12to24(time_pieces.group(1))
-                self.ingestor['time_end'] = time_12to24(time_pieces.group(2))
+                time_pieces = re.search(
+                    r'(\d{2}:\d{2} [AP]M) - (\d{2}:\d{2} [AP]M)',
+                    time
+                )
+                self.ingestor['time_start'] = time_pieces.group(1)
+                self.ingestor['time_end'] = time_pieces.group(2)
                 if (len(meeting['DOW'].strip()) > 0 and
                         meeting['DOW'] != "TBA" and
                         meeting['DOW'] != "None"):
                     self.ingestor['days'] = map(
-                        lambda d: Parser.DAY_TO_LETTER_MAP[d.lower()],
+                        lambda d: Parser.DAY_MAP[d.lower()],
                         re.findall(r'([A-Z][a-z]*)+?', meeting['DOW'])
                     )
                     self.ingestor['location'] = {
@@ -183,25 +191,26 @@ class Parser(BaseParser):
                     self.ingestor.ingest_meeting(created_section)
 
     def start(self,
-              years=None,
-              terms=None,
-              years_and_terms=None,
-              departments=None,
-              textbooks=True,
               verbosity=3,
-              **kwargs):
+              textbooks=False,
+              departments_filter=None,
+              years_and_terms_filter=None):
         """Start parse."""
         self.verbosity = verbosity
 
-        # Defualt to hardcoded current year.
-        if not years:
-            years = ['2017', '2016']
-        if not terms:
-            terms = ['Spring', 'Fall', 'Summer']
+        # Default to hardcoded current year.
+        years = ['2017', '2016', '2015']
+        terms = ['Spring', 'Fall', 'Summer', 'Intersession']
 
-        # Run parser for all semesters specified.
-        for year in years:
+        years_and_terms = dict_filter_by_dict(
+            {year: {term for term in terms} for year in years},
+            years_and_terms_filter
+        )
+
+        for year in years_and_terms.items():
+            self.ingestor['year'] = year
             for term in terms:
+                self.ingestor['term'] = term
                 self.semester = '{} {}'.format(term, year)
                 self._get_schools()
                 self._parse_schools()
