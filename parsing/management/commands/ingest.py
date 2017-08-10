@@ -19,11 +19,10 @@ import traceback
 from django.core.management.base import BaseCommand
 from timetable.school_mappers import SCHOOLS_MAP
 from parsing.management.commands.arguments import ingest_args
-from parsing.library.internal_exceptions import CourseParseError, \
-    JsonValidationError, JsonValidationWarning, IngestorWarning
-from parsing.library.exceptions import PipelineError, PipelineWarning
+from parsing.library.exceptions import PipelineException
 from parsing.library.tracker import Tracker
-from parsing.library.viewer import LogFormatted, ProgressBar
+from parsing.library.viewer import LogFormatted, StatProgressBar
+from parsing.library.utils import pretty_json
 
 
 class Command(BaseCommand):
@@ -57,7 +56,7 @@ class Command(BaseCommand):
         tracker.add_viewer(LogFormatted(options['master_log']))
         tracker.mode = 'ingesting'
         if options['display_progress_bar']:
-            tracker.add_viewer(ProgressBar('{valid}/{total}'))
+            tracker.add_viewer(StatProgressBar('{valid}/{total}'))
         tracker.start()
 
         for data_type in options['types']:
@@ -111,35 +110,18 @@ class Command(BaseCommand):
 
             p.end()
 
-        except PipelineError as e:
+        except PipelineException as e:
             print(e, file=self.stderr)
-        except PipelineWarning as e:
-            print(e, file=self.stderr)
-        except CourseParseError as e:
-            logging.exception(e)
-            error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
-            print(self.style.ERROR(error), file=self.stderr)
-            tracker.see_error(error)
-        except (JsonValidationError,
-                JsonValidationWarning, IngestorWarning) as e:
-            logging.exception(e)
-            error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
-            print(self.style.ERROR(error), file=self.stderr)
-            tracker.see_error(error)
+            # TODO - log
         except Exception as e:
             logging.exception(e)
 
-            def dict_pp(j):
-                return json.dumps(j,
-                                  sort_keys=True,
-                                  indent=2,
-                                  separators=(',', ': '))
             print(self.style.ERROR(traceback.format_exc()),
                   file=self.stderr)
-            print(self.style.ERROR(dict_pp(parser.ingestor)),
+            print(self.style.ERROR(pretty_json(parser.ingestor)),
                   file=self.stderr)
             tracker.see_error(traceback.format_exc())
-            tracker.see_error('INGESTOR DUMP\n' + dict_pp(parser.ingestor))
+            tracker.see_error('INGESTOR DUMP\n' + pretty_json(parser.ingestor))
 
     @staticmethod
     def _resolve_years_and_terms(options):

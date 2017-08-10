@@ -16,9 +16,10 @@ import traceback
 import simplejson as json
 
 from django.core.management.base import BaseCommand
-from parsing.library.validator import Validator
+from parsing.library.validator import Validator, ValidationError, \
+    ValidationWarning
 from parsing.management.commands.arguments import validate_args
-from parsing.library.internal_exceptions import JsonException
+from parsing.library.exceptions import PipelineError, PipelineWarning
 
 
 class Command(BaseCommand):
@@ -78,9 +79,15 @@ class Command(BaseCommand):
                 ),
                 display_progress_bar=options['display_progress_bar']
             )
-        except JsonException as e:
+        except ValidationWarning as e:
+            pass  # TODO
+        except ValidationError as e:
             self.stdout.write(self.style.ERROR('FAILED VALIDATION ' + school))
             self.stderr.write(str(e))
+        except PipelineError as e:
+            pass  # TODO
+        except PipelineWarning as e:
+            pass  # TODO
         except Exception as e:
             self.stdout.write(self.style.ERROR('FAILED VALIDATION ' + school))
             self.stderr.write(traceback.format_exc())

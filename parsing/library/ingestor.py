@@ -12,25 +12,44 @@
 
 from __future__ import absolute_import, division, print_function
 
-import jsonschema
+import warnings
 
-from parsing.library.internal_exceptions import JsonValidationError, \
-    JsonValidationWarning, JsonDuplicationWarning, IngestorError, \
-    IngestorWarning
+from parsing.library.internal_exceptions import IngestorWarning
 from parsing.library.logger import Logger, JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
 from parsing.library.viewer import Hoarder
 from parsing.library.utils import clean, make_list, time24, safe_cast
-# from parsing.library.exceptions import PipelineError, PipelineWarning
+from parsing.library.exceptions import PipelineError, PipelineWarning
+from parsing.library.Validator import ValidationError, ValidationWarning, \
+    MultipleDefinitionsWarning
 
 
-# class IngestorError(PipelineError):
-#     """Ingestor error class."""
+class IngestionError(PipelineError):
+    """Ingestor error class."""
 
 
-# class IngestorWarning(PipelineWarning):
-#     """Ingestor warning class."""
+def time24(time):
+    """Convert time to 24hr format.
+
+    Args:
+        time (str): time in reasonable format
+
+    Returns:
+        str: 24hr time in format hh:mm
+
+    Raises:
+        ParseError: Unparseable time input.
+    """
+    if isinstance(time, basestring):
+        time = dateparser.parse(time)
+    if not isinstance(time, datetime):
+        raise IngestionError('invalid time input {}'.format(time))
+    return time.strftime('%H:%M')
+
+
+class IngestionWarning(PipelineWarning):
+    """Ingestor warning class."""
 
 
 class Ingestor(dict):
@@ -453,7 +472,7 @@ class Ingestor(dict):
     def _validate_and_log(self, obj):
         if self.validate is False:
             self.data_list.write(obj)
-            self.tracker.status = dict(kind=obj['kind'], status='total')
+            self.tracker.stats = dict(kind=obj['kind'], status='total')
             return
 
         is_valid, skip = self._run_validator(obj)
@@ -474,7 +493,7 @@ class Ingestor(dict):
             self.logger.log_exception(e)
             if self.break_on_warning:
                 raise e
-        self.tracker.status = dict(kind=obj['kind'], status='total')
+        self.tracker.stats = dict(kind=obj['kind'], status='total')
 
     def _run_validator(self, data):
         is_valid = False
@@ -482,26 +501,21 @@ class Ingestor(dict):
 
         try:
             self.validator.validate(data)
-            self.tracker.status = dict(kind=data['kind'], status='valid')
+            self.tracker.stats = dict(kind=data['kind'], status='valid')
             is_valid = True
-        except jsonschema.exceptions.ValidationError as e:
-            # Wrap error along with json object in another error
-            e = JsonValidationError(str(e), data)
+        except ValidationError as e:
             self.logger.log_exception(e)
             if self.break_on_error:
                 raise e
-        except JsonValidationError as e:
-            self.logger.log_exception(e)
-            if self.break_on_error:
-                raise e
-        except (JsonValidationWarning, JsonDuplicationWarning) as e:
-            if (isinstance(e, JsonDuplicationWarning) and
+        except ValidationWarning as e:
+            if (isinstance(e, MultipleDefinitionsWarning) and
                     self.skip_duplicates):
                 full_skip = True
             else:
                 is_valid = True
                 self.logger.log_exception(e)
-                if self.break_on_warning:
-                    raise e
+                warnings.warn('', e, stacklevel=2)
+                # if self.break_on_warning:
+                #     raise e
 
         return is_valid, full_skip

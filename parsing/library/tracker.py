@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 from __future__ import absolute_import, division, print_function
-
+import sys
 import datetime
 
 from timeit import default_timer as timer
@@ -37,7 +37,7 @@ class Tracker(object):
         'YEAR',
         'TERM',
         'DEPARTMENT',
-        'STATUS',
+        'STATS',
         'INSTRUCTOR',
         'TIME',
         'MODE',
@@ -110,9 +110,48 @@ class Tracker(object):
         self.end_time = timer()
         self.report()
 
-    def add_viewer(self, viewer):
-        """Add viewer to broadcast queue."""
-        self.viewers.append(viewer)
+    def add_viewer(self, viewer, name=None):
+        """Add viewer to broadcast queue.
+
+        Args:
+            viewer (Viewer): Viewer to add.
+            name (None, str, optional): Name the viewer.
+        """
+        if name is None:
+            name = 'viewer{}'.format(len(self.viewers))
+        self.viewers.append((name, viewer))
+
+    def remove_viewer(self, name):
+        """Remove all viewers that match name.
+
+        Args:
+            name (str): Viewer name to remove.
+        """
+        self.viewers = filter(lambda v: v[0] != name, self.viewers)
+
+    def has_viewer(self, name):
+        """Determine if name exists in viewers.
+
+        Args:
+            name (str): The name to check against.
+
+        Returns:
+            bool: True if name in viewers else False
+        """
+        return name in dict(self.viewers)
+
+    def get_viewer(self, name):
+        """Get viewer by name.
+
+        Will return arbitrary match if multiple viewers with same name exist.
+
+        Args:
+            name (str): Viewer name to get.
+
+        Returns:
+            Viewer: Viewer instance if found, else None
+        """
+        return dict(self.viewers).get(name)
 
     def see_error(self, msg):
         """Set error sighting to true when called.
@@ -136,12 +175,13 @@ class Tracker(object):
             raise TrackerError(
                 'unsupported broadcast type {}'.format(broadcast_type)
             )
-        for viewer in self.viewers:
+        # TODO - broadcast based on optional name argument
+        for name, viewer in self.viewers:
             viewer.receive(self, broadcast_type)
 
     def report(self):
         """Notify viewers that tracker has ended."""
-        for viewer in self.viewers:
+        for name, viewer in self.viewers:
             viewer.report(self)
 
 

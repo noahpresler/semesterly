@@ -16,13 +16,11 @@ import collections
 import dateparser
 import os
 import re
-import sys
 import simplejson as json
-
 
 from datetime import datetime
 
-from parsing.library.exceptions import ParseError
+# from parsing.library.exceptions import ParseError  # TODO - does not belong
 from parsing.library.words import conjunctions_and_prepositions
 
 UNICODE_WHITESPACE = re.compile(r'(?:\u00a0)|(?:\xc2)|(?:\xa0)', re.IGNORECASE)
@@ -206,7 +204,7 @@ def dir_to_dict(path):
     Returns:
         dict: Dictionary representation of the directory.
 
-    Example output:
+    Example output format:
         {
             "name": ""
             "kind": "directory",
@@ -238,24 +236,6 @@ def dir_to_dict(path):
         d['kind'] = "file"
     return d
 
-
-def time24(time):
-    """Convert time to 24hr format.
-
-    Args:
-        time (str): time in reasonable format
-
-    Returns:
-        str: 24hr time in format hh:mm
-
-    Raises:
-        ParseError: Unparseable time input.
-    """
-    if isinstance(time, basestring):
-        time = dateparser.parse(time)
-    if not isinstance(time, datetime):
-        raise ParseError('invalid time input {}'.format(time))
-    return time.strftime('%H:%M')
 
 _roman_numeral = re.compile(r'^[ivx]+$')
 

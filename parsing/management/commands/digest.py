@@ -12,7 +12,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-import sys
+import simplejson as json
 import traceback
 
 from django.core.management.base import BaseCommand
@@ -22,7 +22,8 @@ from parsing.library.validator import Validator
 from parsing.library.digestor import Digestor
 from parsing.library.internal_exceptions import JsonException, DigestionError
 from parsing.library.tracker import Tracker
-from parsing.library.viewer import LogFormatted
+from parsing.library.viewer import LogFormatted, StatProgressBar, \
+    ETAProgressBar
 # from searches.utils import Vectorizer
 
 
@@ -35,6 +36,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         tracker = Tracker()
         tracker.add_viewer(LogFormatted(options['master_log']))
+        if options['display_progress_bar']:
+            tracker.add_viewer(StatProgressBar('{valid}/{total}'),
+                               name='progressbar')
+
         tracker.cmd_options = options
         tracker.mode = 'digesting'
         tracker.start()
@@ -50,10 +55,15 @@ class Command(BaseCommand):
 
         tracker.mode = 'validating'
 
+        # Load config file to dictionary.
+        if isinstance(options['config'], str):
+            with open(options['config'].format(school=school,
+                                               type=data_type), 'r') as file:
+                options['config'] = json.load(file)
+
         try:
             Validator(
-                options['config_file'].format(school=school,
-                                              type=data_type),
+                options['config'],
                 tracker=tracker
             ).validate_self_contained(
                 options['data'].format(school=school, type=data_type),
@@ -69,6 +79,8 @@ class Command(BaseCommand):
             print('FAILED VALIDATION', file=sys.stderr)
             return  # Skip digestion for this school.
 
+        tracker.remove_viewer('progressbar')
+        tracker.add_viewer(ETAProgressBar(), name='progressbar')
         tracker.mode = 'digesting'
 
         try:

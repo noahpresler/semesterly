@@ -78,13 +78,20 @@
       "type": "boolean"
     },
     "granularity": {
-      "type": "integer"
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 60
     },
     "full_academic_year_registration": {
       "type": "boolean"
     },
     "active_semesters": {
-      "type": "object"
+      "type": "object",
+      "patterProperties": {
+        "20[012]\\d": {
+          "type": "string"
+        }
+      }
     },
     "ampm": {
       "type": "boolean"

@@ -49,22 +49,23 @@ class Viewer(object):
         """
 
 
-class ProgressBar(Viewer):
+class Timer(progressbar.widgets.FormatLabel,
+            progressbar.widgets.TimeSensitiveWidgetBase):
+    """Custom timer created to take away 'Elapsed Time' string."""
+
+    def __init__(self, format='%(elapsed)s', **kwargs):
+        """Contruct Timer instance."""
+        progressbar.widgets.FormatLabel.__init__(self,
+                                                 format=format,
+                                                 **kwargs)
+        progressbar.widgets.TimeSensitiveWidgetBase.__init__(self,
+                                                             **kwargs)
+
+
+class StatProgressBar(Viewer):
     """Command line progress bar viewer for data pipeline."""
 
     SWITCH_SIZE = 100
-
-    class Timer(progressbar.widgets.FormatLabel,
-                progressbar.widgets.TimeSensitiveWidgetBase):
-        """Custom timer created to take away 'Elapsed Time' string."""
-
-        def __init__(self, format='%(elapsed)s', **kwargs):
-            """Contruct Timer."""
-            progressbar.widgets.FormatLabel.__init__(self,
-                                                     format=format,
-                                                     **kwargs)
-            progressbar.widgets.TimeSensitiveWidgetBase.__init__(self,
-                                                                 **kwargs)
 
     def __init__(self, stat_format=''):
         """Construct instance of data pipeline progress bar."""
@@ -77,18 +78,25 @@ class ProgressBar(Viewer):
 
         self.bar = progressbar.ProgressBar(
             redirect_stdout=True,
-            max_value=progressbar.UnknownLength,
+            # max_value=progressbar.UnknownLength,
             widgets=[
-                ' [', ProgressBar.Timer(), '] ',
+                ' [', Timer(), '] ',
                 self.format_custom_text,
             ])
 
     def receive(self, tracker, broadcast_type):
         """Incremental update to progress bar."""
         self.statuses.receive(tracker, broadcast_type)
+
+        if (broadcast_type != 'SCHOOL' and
+                broadcast_type != 'TERM' and
+                broadcast_type != 'DEPARTMENT' and
+                broadcast_type != 'STATS'):
+            return
+
         counters = self.statuses.stats
         formatted_string = ''
-        if progressbar.utils.get_terminal_size()[0] > ProgressBar.SWITCH_SIZE:
+        if progressbar.utils.get_terminal_size()[0] > StatProgressBar.SWITCH_SIZE:
             attrs = ['year', 'term', 'department']
             for attr in attrs:
                 if not hasattr(tracker, attr):
@@ -121,6 +129,33 @@ class ProgressBar(Viewer):
                                                mode=tracker.mode.upper(),
                                                stats=formatted_string)
         self.bar.update()
+
+    def report(self, tracker):
+        """Do nothing."""
+
+
+class ETAProgressBar(Viewer):
+    def __init__(self):
+
+        self.format_custom_text = progressbar.FormatCustomText(
+            '(%(school)s) ==%(mode)s== ',
+        )
+
+        self.bar = progressbar.ProgressBar(
+            redirect_stdout=True,
+            max_value=progressbar.UnknownLength,
+            widgets=[
+                ' [', Timer(), '] ',
+                self.format_custom_text,
+                progressbar.Bar(),
+                '(', progressbar.ETA(), ')',
+            ])
+
+    def receive(self, tracker, broadcast_type):
+        if broadcast_type != 'SCHOOL' and broadcast_type != 'MODE':
+            return
+        self.format_custom_text.update_mapping(school=tracker.school,
+                                               mode=tracker.mode.upper())
 
     def report(self, tracker):
         """Do nothing."""
@@ -217,9 +252,9 @@ class StatView(Viewer):
                 Tracker receiving update from.
             broadcast_type (str): Broadcast message from tracker.
         """
-        if broadcast_type != 'STATUS':
+        if broadcast_type != 'STATS':
             return
-        self._increment(tracker.status['kind'], tracker.status['status'])
+        self._increment(tracker.stats['kind'], tracker.stats['status'])
 
     def report(self, tracker):
         """Do nothing."""

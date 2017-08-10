@@ -12,7 +12,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-import os
 import sys
 import django
 import jsondiff
@@ -27,11 +26,7 @@ from parsing.library.utils import DotDict, make_list
 from parsing.library.logger import JSONStreamWriter
 from parsing.library.internal_exceptions import DigestionError
 from parsing.library.tracker import NullTracker
-from parsing.library.viewer import ProgressBar
 from parsing.library.exceptions import PipelineError
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'semesterly.settings')
-django.setup()
 
 
 class DigestorError(PipelineError):
@@ -88,8 +83,6 @@ class Digestor(object):
         # Setup tracker for digestion and progress bar.
         self.tracker = tracker
         self.tracker.mode = 'digesting'
-        if display_progress_bar:
-            self.tracker.add_viewer(ProgressBar('{total}'))
 
     def _resolve_strategy(self, diff, load, output=None):
         if diff and load:  # Diff only
@@ -112,14 +105,19 @@ class Digestor(object):
             'textbook_link': lambda x: self.digest_textbook_link(x),
         }
 
-        for obj in make_list(self.data):
-            do_digestion[obj.kind](obj)
+        if self.tracker.has_viewer('progressbar'):
+            bar = self.tracker.get_viewer('progressbar').bar
+            for obj in bar(make_list(self.data)):
+                do_digestion[obj.kind](obj)
+        else:
+            for obj in make_list(self.data):
+                do_digestion[obj.kind](obj)
 
         self.wrap_up()
 
     def update_progress(self, key, exists):
         if exists:
-            self.tracker.status = dict(kind=key, status='total')
+            self.tracker.stats = dict(kind=key, status='total')
         # TODO - add more stats including newly created and the like
 
     def digest_course(self, course):
@@ -295,8 +293,9 @@ class DigestionAdapter(object):
         if 'waitlist_size' in section:
             adapted['waitlist_size'] = section.waitlist_size
         if 'remaining_seats' in section:
+            pass
             # FIXME -- possible logic conflict with other data
-            adapted['remaining_seats'] = section.remaining_seats
+            # adapted['remaining_seats'] = section.remaining_seats
         section_type_map = {
             'Lecture': 'L',
             'Laboratory': 'P',
@@ -483,7 +482,7 @@ class Vommit(DigestionStrategy):
         for k, v in inmodel.iteritems():
             if k in context:
                 try:
-                    whats[k] = str(v)
+                    whats[k] = unicode(v)
                 except django.utils.encoding.DjangoUnicodeDecodeError:
                     whats[k] = '<{}: [Bad Unicode data]'.format(k)
 

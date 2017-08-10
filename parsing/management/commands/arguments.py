@@ -273,7 +273,7 @@ class ReadableFileAction(argparse.Action):
             raise parser.error(
                 '{} is not a valid file path'.format(prospective_file)
             )
-        if os.access(prospective_dir + '/' + prospective_file, os.R_OK):
+        if os.access(prospective_file, os.R_OK):
             setattr(namespace, self.dest, prospective_file)
             return
         raise parser.error('{} isnt a readable file'.format(prospective_file))
