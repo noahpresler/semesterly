@@ -273,7 +273,7 @@ textarea {
 // End Navicon
 
 
-.nav > li {
+li {
   &.footer-button {
     line-height: 22px;
 
@@ -283,6 +283,20 @@ textarea {
       &:hover {
         background-color: transparent;
         text-decoration: underline;
+      }
+    }
+
+    .footer-button--github {
+      font-size: 13px;
+      color: $g333;
+      background-color: $geee;
+      border-radius: 3px;
+      &:hover {
+        text-decoration: none;
+        background-color: $gddd;
+      }
+      i {
+        margin: 0 3px;
       }
     }
 

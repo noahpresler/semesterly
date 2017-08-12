@@ -188,15 +188,16 @@ class Semesterly extends React.Component {
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="https://github.com/noahpresler/semesterly/"
-                  >Github</a>
+                    href="https://www.facebook.com/semesterly/"
+                  >Facebook</a>
                 </li>
                 <li className="footer-button" role="presentation">
                   <a
+                    className="footer-button--github"
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="https://www.facebook.com/semesterly/"
-                  >Facebook</a>
+                    href="https://github.com/noahpresler/semesterly/"
+                  ><i className="fa fa-github"></i>Follow</a>
                 </li>
                 <li className="footer-button">
                   <div
