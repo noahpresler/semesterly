@@ -502,6 +502,68 @@ footer h6 {
 #hub {
 	width: 7.8%;
 }
+/* End Authors*/
+
+/* Open Source */
+#open-source {
+  padding: 70px 10px 50px;
+  background-color: #eee;
+  border-top: 1px solid #ddd;
+  background-image: url(/static/img/splash/grey.png)
+}
+#open-source h2 {
+  margin-bottom: 20px;
+}
+.open-source__cta {
+  clear: both;
+  padding: 20px 0 40px;
+}
+.open-source__cta a,
+.open-source__cta a:link,
+.open-source__cta a:active,
+.open-source__cta a:visited {
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 5px 15px;
+  margin: 20px 5px;
+}
+.open-source__cta a i {
+  margin: 0 4px 0 -5px;
+  font-size: 18px;
+}
+.cta--primary {
+  background-color: #00a1ff;
+  color: #fff;
+}
+.cta--primary:hover {
+  background-color: #2eb1fd;
+}
+.cta--alt {
+  color: #333;
+  background-color: #eee;
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#fcfcfc),color-stop(100%,#eee));
+  background-image: -webkit-linear-gradient(top,#fcfcfc 0,#eee 100%);
+  background-image: -moz-linear-gradient(top,#fcfcfc 0,#eee 100%);
+  background-image: -ms-linear-gradient(top,#fcfcfc 0,#eee 100%);
+  background-image: -o-linear-gradient(top,#fcfcfc 0,#eee 100%);
+  background-image: linear-gradient(to bottom,#fcfcfc 0,#eee 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#eeeeee', GradientType=0);
+  background-repeat: no-repeat;
+  border: 1px solid #d5d5d5;
+}
+.cta--alt:hover {
+  background-color: #ddd;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #eee), color-stop(100%, #ddd));
+  background-image: -webkit-linear-gradient(top, #eee 0, #ddd 100%);
+  background-image: -moz-linear-gradient(top, #eee 0, #ddd 100%);
+  background-image: -ms-linear-gradient(top, #eee 0, #ddd 100%);
+  background-image: -o-linear-gradient(top, #eee 0, #ddd 100%);
+  background-image: linear-gradient(to bottom, #eee 0, #ddd 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#dddddd', GradientType=0);
+  border-color: #ccc;
+}
+/* End Open Source */
 
 @media(max-width: 1110px) {
 	#hero ul {
