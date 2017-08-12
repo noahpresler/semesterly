@@ -169,33 +169,29 @@ class Semesterly extends React.Component {
               <p className="data-last-updated no-print">Data last
                 updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
               <ul className="nav nav-pills no-print">
-                <li className="footer-button" role="presentation"><a
-                  href="/termsofservice"
-                >Terms</a></li>
-                <li className="footer-button" role="presentation"><a
-                  href="/privacypolicy"
-                >Privacy</a></li>
-                <li className="footer-button" role="presentation"><a
-                  href="mailto:contact@semester.ly?Subject=Semesterly"
-                >Contact us</a></li>
-                <li className="footer-button" role="presentation"><a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="http://goo.gl/forms/YSltU2YI54PC9sXw1"
-                >Feedback</a>
+                <li className="footer-button" role="presentation">
+                  <a href="/termsofservice">Terms</a>
                 </li>
-                <li className="footer-button" role="presentation"><a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://www.facebook.com/semesterly/"
-                  >Facebook</a>
+                <li className="footer-button" role="presentation">
+                  <a href="/privacypolicy">Privacy</a>
                 </li>
-                <li className="footer-button" role="presentation"><a
-                    className="footer-button--github"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://github.com/noahpresler/semesterly/"
-                  ><i className="fa fa-github"></i>Follow</a>
+                <li className="footer-button" role="presentation">
+                  <a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a>
+                </li>
+                <li className="footer-button" role="presentation">
+                  <a target="_blank" rel="noopener noreferrer" href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a>
+                </li>
+                <li className="footer-button" role="presentation">
+                  <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/semesterly/">Facebook</a>
+                </li>
+                <li className="footer-button" role="presentation">
+                  <a className="footer-button--github"
+                     target="_blank" rel="noopener noreferrer"
+                     href="https://github.com/noahpresler/semesterly/"
+                  >
+                    <i className="fa fa-github"></i>
+                    Follow
+                  </a>
                 </li>
                 <li className="footer-button">
                   <div
