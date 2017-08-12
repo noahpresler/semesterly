@@ -338,6 +338,7 @@ TEMPLATE_LOADERS = (
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIRECTORY,'templates/'),
+    os.path.join(PROJECT_DIRECTORY,'semesterly/templates/'),
 )
 
 # Caching
