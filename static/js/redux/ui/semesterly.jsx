@@ -184,15 +184,13 @@ class Semesterly extends React.Component {
                   href="http://goo.gl/forms/YSltU2YI54PC9sXw1"
                 >Feedback</a>
                 </li>
-                <li className="footer-button" role="presentation">
-                  <a
+                <li className="footer-button" role="presentation"><a
                     target="_blank"
                     rel="noopener noreferrer"
                     href="https://www.facebook.com/semesterly/"
                   >Facebook</a>
                 </li>
-                <li className="footer-button" role="presentation">
-                  <a
+                <li className="footer-button" role="presentation"><a
                     className="footer-button--github"
                     target="_blank"
                     rel="noopener noreferrer"
