@@ -175,7 +175,7 @@ class Semesterly extends React.Component {
                   href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
                 <li className="footer-button" role="presentation"><a target="_blank" rel="noopener noreferrer"
                   href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a></li>
-                <li className="footer-button" role="presentation"><a target="_blank" rel="noopener noreferrer"
+                <li className="footer-button" role="presentation"><a rel="noopener noreferrer" target="_blank"
                   href="https://www.facebook.com/semesterly/">Facebook</a></li>
                 <li className="footer-button" role="presentation"><a
                     className="footer-button--github"
