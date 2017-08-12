@@ -26,7 +26,7 @@ from parsing.schools.active import ACTIVE_SCHOOLS
 #       --no-color
 #       --verbosity
 
-SCHOOLS_DIR = settings.PARSING_DIR + '/schools'
+SCHOOLS_DIR = settings.PARSING_MODULE + '/schools'
 
 
 def ingest_args(parser):
@@ -172,7 +172,7 @@ def _master_log_arg(parser):
     parser.add_argument('--master-log',
                         type=str,
                         action=WritableFileAction,
-                        default=settings.PARSING_DIR + '/logs/master.log',
+                        default=settings.PARSING_MODULE + '/logs/master.log',
                         help='default: %(default)s')
 
 

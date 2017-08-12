@@ -16,7 +16,6 @@ from __future__ import absolute_import, division, print_function
 import sys
 import pipes
 import simplejson as json
-import logging
 
 from pygments import highlight, lexers, formatters
 
@@ -29,9 +28,11 @@ class JSONStreamWriter(object):
     """Context to stream JSON list to file.
 
     Attributes:
-        BRACES (TYPE): Description
+        BRACES (TYPE): Open close brace definitions.
         file (dict): Current object being JSONified and streamed.
-        inner (TYPE): Description
+        first (bool): Indicator if first write has been done by streamer.
+        level (int): Nesting level of streamer.
+        type_ (dict, list): Actual type class of streamer (dict or list).
 
     Examples:
         >>> with JSONStreamWriter(sys.stdout, type_='dict') as streamer:
@@ -72,7 +73,7 @@ class JSONStreamWriter(object):
         dict: ('{', '}'),
     }
 
-    def __init__(self, obj, type_=list, inner=False, level=0):
+    def __init__(self, obj, type_=list, level=0):
         """Contruct JSONWriter instance.
 
         Args:
@@ -85,7 +86,6 @@ class JSONStreamWriter(object):
         else:
             self.file = open(obj, 'wb')
         self.open, self.close = JSONStreamWriter.BRACES[type_]
-        self.inner = inner
         self.type_ = type_
 
     def write(self, *args, **kwargs):
@@ -132,7 +132,8 @@ class JSONStreamWriter(object):
               file=self.file,
               sep='',
               end='')
-        if self.file == sys.stdout or self.file == sys.stderr or self.inner:
+        if (self.file == sys.stdout or self.file == sys.stderr or
+                self.level == 0):
             return
         self.file.close()
 
@@ -161,7 +162,6 @@ class JSONStreamWriter(object):
                   end='\n')
             return JSONStreamWriter(self.file,
                                     type_=type_,
-                                    inner=True,
                                     level=self.level + 1)
 
         if isinstance(value, dict) or isinstance(value, list):

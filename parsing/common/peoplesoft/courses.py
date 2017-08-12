@@ -15,13 +15,13 @@ from __future__ import absolute_import, division, print_function
 import re
 import sys
 
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 
 from parsing.common.textbooks.amazon import amazon_textbook_fields
 from parsing.library.base_parser import BaseParser
-from parsing.library.internal_exceptions import CourseParseError
-from parsing.library.extractor import filter_departments, \
-    filter_years_and_terms, titlize, extract_info
+from parsing.library.exception import ParseError
+from parsing.library.extractor import extract_info, filter_departments
+from parsing.library.utils import dict_filter_by_dict
 
 
 class PeoplesoftParser(BaseParser):
@@ -66,14 +66,11 @@ class PeoplesoftParser(BaseParser):
         self.parse(**kwargs)
 
     def parse(self,
-              years_and_terms=None,
-              years=None,
-              terms=None,
-              departments=None,
-              textbooks=True,
               verbosity=3,
-              department_name_regex=None,
-              **kwargs):
+              textbooks=True,
+              years_and_terms_filter=None,
+              departments_filter=None,
+              department_name_regex=None):
         """Do parse."""
         self.verbosity = verbosity
         self.textbooks = textbooks
@@ -81,15 +78,13 @@ class PeoplesoftParser(BaseParser):
 
         # NOTE: umich will do nothing and return an empty dict
         soup, params = self._goto_search_page(self.url_params)
-        if years_and_terms is None:
-            years_and_terms = PeoplesoftParser._get_years_and_terms(soup)
-        self.years_and_terms = filter_years_and_terms(years_and_terms,
-                                                      years,
-                                                      terms)
+        self.years_and_terms = dict_filter_by_dict(
+            PeoplesoftParser._get_years_and_terms(soup),
+            years_and_terms_filter
+        )
         for year, terms in self.years_and_terms.items():
             self.ingestor['year'] = year
-            for term_name in terms:
-                term_code = years_and_terms[year][term_name]
+            for term_name, term_code in terms.items():
                 soup = self._term_update(term_code, params)
                 self.ingestor['term'] = term_name
 
@@ -113,7 +108,7 @@ class PeoplesoftParser(BaseParser):
                     dept_param_key = self._get_dept_param_key(soup)
                     departments, department_ids = self._get_departments(
                         soup,
-                        departments
+                        departments_filter
                     )
 
                     for dept_code, dept_name in departments.iteritems():
@@ -290,7 +285,7 @@ class PeoplesoftParser(BaseParser):
 
         # Place course info into course model
         self.ingestor['course_code'] = rtitle.group(1)
-        self.ingestor['course_name'] = titlize(rtitle.group(3))
+        self.ingestor['course_name'] = rtitle.group(3)
         self.ingestor['section_code'] = rtitle.group(2)
         self.ingestor['credits'] = float(re.match(r'(\d*).*', units).group(1))
         if req is not None:
@@ -346,8 +341,8 @@ class PeoplesoftParser(BaseParser):
                     re.findall(r'[A-Z][^A-Z]*', rsched.group(1))
                 )
                 time = (
-                    self.extractor.time_12to24(rsched.group(2)),
-                    self.extractor.time_12to24(rsched.group(3))
+                    rsched.group(2),
+                    rsched.group(3)
                 )
             else:  # handle TBA classes
                 continue
@@ -455,7 +450,7 @@ class PeoplesoftParser(BaseParser):
         # check for valid search/page
         if soup is None:
             # TODO - write to error.log with set handle
-            raise CourseParseError('is valid search page, soup is None')
+            raise ParseError('is valid search page, soup is None')
         errmsg = soup.find('div', id='win1divDERIVED_CLSMSG_ERROR_TEXT')
         if soup.find('td', id='PTBADPAGE_') or errmsg:
             if errmsg:
@@ -568,11 +563,6 @@ class UPeoplesoftParser(PeoplesoftParser):
         return 'ICAction'
 
     def _term_update(self, term_code, params):
-        """Redirect to term page.
-
-        Args:
-            params: not used
-        """
         if self.term_base_url is None:
             self.term_base_url = self.base_url
         return self.requester.get(self.term_base_url, {'strm': term_code})

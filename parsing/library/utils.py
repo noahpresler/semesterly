@@ -13,14 +13,10 @@
 from __future__ import absolute_import, division, print_function
 
 import collections
-import dateparser
 import os
 import re
 import simplejson as json
 
-from datetime import datetime
-
-# from parsing.library.exceptions import ParseError  # TODO - does not belong
 from parsing.library.words import conjunctions_and_prepositions
 
 UNICODE_WHITESPACE = re.compile(r'(?:\u00a0)|(?:\xc2)|(?:\xa0)', re.IGNORECASE)
@@ -204,7 +200,7 @@ def dir_to_dict(path):
     Returns:
         dict: Dictionary representation of the directory.
 
-    Example output format:
+    Example output format::
         {
             "name": ""
             "kind": "directory",
@@ -225,6 +221,7 @@ def dir_to_dict(path):
                 }
             ]
         }
+
     """
     d = {'name': os.path.basename(path)}
     if os.path.isdir(path):
@@ -263,7 +260,9 @@ def titlize(name):
 def dict_filter_by_dict(a, b):
     """Filter dictionary a by b.
 
-    Filters at two level depth with regex matching.
+    dict or set
+    Items or keys must be string or regex.
+    Filters at arbitrary depth with regex matching.
 
     Args:
         a (dict): Dictionary to filter.
@@ -272,6 +271,9 @@ def dict_filter_by_dict(a, b):
     Returns:
         dict: Filtered dictionary
     """
+    if b is None:
+        return a
+
     filtered = {}
     for x, ys in a.items():
         for p, qs in b.items():
@@ -285,4 +287,23 @@ def dict_filter_by_dict(a, b):
                     if n is None:
                         continue
                     filtered[x][y] = a[x][y]
+    return filtered
+
+
+def dict_filter_by_list(a, b):
+    if b is None:
+        return a
+
+    filtered = type(a)
+    for x in a:
+        for y in b:
+            m = re.match(str(y), str(x))
+            if m is None:
+                continue
+            if isinstance(a, list):
+                filtered.append(x)
+            elif isinstance(a, set):
+                filtered.add(x)
+            elif isinstance(a, dict):
+                filtered[x] = a[x]
     return filtered

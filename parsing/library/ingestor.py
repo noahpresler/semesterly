@@ -12,21 +12,28 @@
 
 from __future__ import absolute_import, division, print_function
 
+import dateparser
 import warnings
+
+from datetime import datetime
 
 from parsing.library.internal_exceptions import IngestorWarning
 from parsing.library.logger import Logger, JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
 from parsing.library.viewer import Hoarder
-from parsing.library.utils import clean, make_list, time24, safe_cast
+from parsing.library.utils import clean, make_list, safe_cast, titlize
 from parsing.library.exceptions import PipelineError, PipelineWarning
-from parsing.library.Validator import ValidationError, ValidationWarning, \
+from parsing.library.validator import ValidationError, ValidationWarning, \
     MultipleDefinitionsWarning
 
 
 class IngestionError(PipelineError):
     """Ingestor error class."""
+
+
+class IngestionWarning(PipelineWarning):
+    """Ingestor warning class."""
 
 
 def time24(time):
@@ -46,10 +53,6 @@ def time24(time):
     if not isinstance(time, datetime):
         raise IngestionError('invalid time input {}'.format(time))
     return time.strftime('%H:%M')
-
-
-class IngestionWarning(PipelineWarning):
-    """Ingestor warning class."""
 
 
 class Ingestor(dict):
@@ -275,7 +278,7 @@ class Ingestor(dict):
                 ]
             },
             'code': self._get('course_code', 'code', 'course'),
-            'name': self._get('name', 'course_name'),
+            'name': titlize(self._get('name', 'course_name')),
             'department': self._resolve_department(),
             'credits': safe_cast(self._get('credits', 'num_credits'), float, default=0.),
             'prerequisites': make_list(self._get('prerequisites', 'prereqs')),

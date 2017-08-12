@@ -15,7 +15,7 @@ from __future__ import absolute_import, division, print_function
 import re
 
 from parsing.library.base_parser import BaseParser
-from parsing.library.utils import dict_filter_by_dict, titlize
+from parsing.library.utils import dict_filter_by_dict
 from semesterly.settings import get_secret
 
 
@@ -51,21 +51,17 @@ class Parser(BaseParser):
         super(Parser, self).__init__('jhu', **kwargs)
 
     def _get_schools(self):
-        url = '{}/codes/schools'.format(Parser.API_URL)
-        params = {
-            'key': Parser.KEY
-        }
-        self.schools = self.requester.get(url, params=params)
+        self.schools = self.requester.get(
+            '{}/codes/schools'.format(Parser.API_URL),
+            params={'key': Parser.KEY}
+        )
 
     def _get_courses(self, school):
         # print(school, file=sys.stderr)
         url = '{}/{}/{}'.format(Parser.API_URL,
                                 school['Name'],
                                 self.semester)
-        params = {
-            'key': Parser.KEY
-        }
-        return self.requester.get(url, params=params)
+        return self.requester.get(url, params={'key': Parser.KEY})
 
     def _get_section(self, course):
         return self.requester.get(self._get_section_url(course))
@@ -130,7 +126,7 @@ class Parser(BaseParser):
 
         self.ingestor['level'] = re.findall(re.compile(r".+?\..+?\.(.{1}).+"),
                                             course['OfferingName'])[0] + "00"
-        self.ingestor['name'] = titlize(course['Title'])
+        self.ingestor['name'] = course['Title']
         self.ingestor['description'] = section_details[0]['Description']
         self.ingestor['code'] = course['OfferingName'].strip()
         self.ingestor['num_credits'] = num_credits

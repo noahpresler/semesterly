@@ -38,8 +38,9 @@ School = namedtuple(
 
 
 def load_school(school):
-    config_file = '{}/schools/{}/config.json'.format(settings.PARSING_DIR,
-                                                     school)
+    config_file = '{}/{}/schools/{}/config.json'.format(settings.BASE_DIR,
+                                                        settings.PARSING_MODULE,
+                                                        school)
     with open(config_file) as f:
         config = DotDict(json.load(f))
 
@@ -64,7 +65,7 @@ def load_parsers(school):
         try:
             parser = None  # Binding below in exec.
             exec 'from {}.schools.{}.{} import Parser as parser'.format(
-                settings.PARSING_DIR,
+                settings.PARSING_MODULE,
                 school,
                 parser_type
             )

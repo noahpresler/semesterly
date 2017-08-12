@@ -26,7 +26,6 @@ from parsing.schools.active import ACTIVE_SCHOOLS
 
 logger = get_task_logger(__name__)
 
-
 @periodic_task(
     run_every=(crontab(hour=00, minute=00)),
     name="task_parse_current_registration_period",
@@ -101,7 +100,7 @@ def task_parse_textbooks(schools=None, all=False):
 def task_parse_school(school, years_and_terms, textbooks=False):
     """Call the django management commands to start parse."""
     filename = '{}/{}/data/courses_{}.json'.format(
-        settings.PARSING_DIR,
+        settings.PARSING_MODULE,
         school,
         '-'.join(
             '{}{}'.format(

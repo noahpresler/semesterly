@@ -1,0 +1,39 @@
+---
+version: 1
+disable_existing_loggers: false
+
+
+formatters:
+    simple:
+        format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        datefmt: '%Y-%m-%d %H:%M:%S'
+
+
+handlers:
+  master_file:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: simple
+    filename: parsing/logs/master.log
+    maxBytes: 10485760 # 10MB
+    backupCount: 5
+    encoding: utf8
+
+  error_file:
+    class: logging.handlers.RotatingFileHandler
+    level: ERROR
+    formatter: simple
+    filename: parsing/logs/errors.log
+    maxBytes: 10485760 # 10MB
+    backupCount: 5
+    encoding: utf8
+
+
+loggers:
+    parsing:
+        level: INFO
+        handlers:
+        - master_file
+        - error_file
+        propagate: yes
+...

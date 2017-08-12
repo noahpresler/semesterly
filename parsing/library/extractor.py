@@ -14,79 +14,10 @@
 
 from __future__ import absolute_import, division, print_function
 
-import sys
 import re
 import unicodedata
-import dateutil.parser as dparser
 
-from parsing.library.words import conjunctions_and_prepositions
-from parsing.library.internal_exceptions import CourseParseError, CourseParseWarning
-
-
-def filter_years_and_terms(base_years_and_terms,
-                           years_filter=None,
-                           terms_filter=None,
-                           years_and_terms_filter=None):
-    """Filter term and year mappings.
-
-    Args:
-        base_years_and_terms (dict): Mapping of valid years and terms.
-        years_filter (None, list, optional): Use as filter if not None.
-        terms_filter (None, list, optional): Use as filter if not None.
-        years_and_terms_filter (None, dict, optional): Use as filter
-            if not None.
-
-    Returns:
-        dict: Filtered subset of base_years_and_terms.
-
-    Raises:
-        CourseParseWarning: Invalid year/term specified in cmd args
-    """
-    def intersect(a, b):
-        intersected = {}
-        for y in a:
-            if y not in b:
-                continue
-            for t in a[y]:
-                if t not in b[y]:
-                    continue
-                intersected.setdefault(y, [])
-                intersected[y].append(t)
-        return intersected
-
-    def pick_not_none(a, b):
-        if a is None:
-            return b
-        return a
-
-    filtered_years_and_terms = None
-    if terms_filter is not None:
-        terms_filter = set(terms_filter)
-        filtered_years_and_terms = {
-            year: [
-                term for term in terms if term in terms_filter
-            ] for year, terms in base_years_and_terms.items()
-        }
-    if years_filter is not None:
-        years_filter = set(years_filter)
-        filtered_years = {
-            year: terms for year, terms in base_years_and_terms.items()
-            if year in years_filter
-        }
-        filtered_years_and_terms = intersect(
-            filtered_years,
-            pick_not_none(filtered_years_and_terms, base_years_and_terms)
-        )
-    if years_and_terms_filter is not None:
-        filtered_years_and_terms = intersect(
-            years_and_terms_filter,
-            pick_not_none(filtered_years_and_terms, base_years_and_terms)
-        )
-
-    filtered = pick_not_none(filtered_years_and_terms, base_years_and_terms)
-    if not filtered:
-        raise CourseParseWarning('no years and terms to parse')
-    return filtered
+from parsing.library.internal_exceptions import CourseParseError
 
 
 def filter_departments(departments, cmd_departments=None, grouped=False):
@@ -121,22 +52,6 @@ def filter_departments(departments, cmd_departments=None, grouped=False):
         }
 
     return departments
-
-
-def titlize(name):
-    """Title and keep roman numerals uppercase."""
-    name = name.lower()
-    titled = ''
-    for word in name.split():
-        if Extractor._ROMAN_NUMERAL.match(word) is not None:
-            titled += word.upper()
-        else:
-            if word in conjunctions_and_prepositions:
-                titled += word.lower()
-            else:
-                titled += word.title()
-        titled += ' '
-    return titled.strip()
 
 
 def extract_info(course, text):
@@ -224,43 +139,7 @@ def extract_info(course, text):
     return text
 
 
-def time_12to24(time12):
-    """Convert 12hr time to 24hr time.
-
-    Args:
-        time12 (str): 12 hour time format
-
-    Returns:
-        str: 24 hr time in format hrhr:minmin
-    """
-    time = dparser.parse(time12)
-    return time.strftime('%H:%M')
-
-
 class Extractor():
-
-    def time_12to24(self,time12):
-        ''' Attempts to convert 12hr time to 24hr time
-
-        Args:
-            time12 (str): 12 hour time format
-
-        Returns:
-            str: 24 hr time in format hrhr:minmin
-        '''
-
-        time24 = dparser.parse(time12)
-        return time24.strftime('%H:%M')
-
-        # match = re.match("(\d*):(\d*).*?(\S)", time12.strip())
-
-        # # Transform to 24 hours
-        # hours = int(match.group(1))
-        # if re.search(r'[pP]', match.group(3)):
-        #     hours = (hours%12)+12
-
-        # # Return as 24hr-time string
-        # return str(hours) + ":" + match.group(2)
 
     def extract_info(self, course, text):
         ''' Attempts to extract info from text and put it into course object.
@@ -365,20 +244,6 @@ class Extractor():
     '''
 
     @staticmethod
-    def filter_term_and_year(years_and_terms, cmd_years=None, cmd_terms=None):
-        if cmd_years is None and cmd_terms is None:
-            return years_and_terms
-        years = cmd_years if cmd_years is not None else years_and_terms
-        for year in years:
-            if year not in years_and_terms:
-                raise CourseParseError('year {} not defined'.format(year))
-            terms = cmd_terms if cmd_terms is not None else years_and_terms[year]
-            for term in terms:
-                if term not in years_and_terms[year]:
-                    raise CourseParseError('term not defined for {} {}'.format(term, year))
-        return {year: {term: years_and_terms[year][term] for term in terms} for year in years}
-
-    @staticmethod
     def filter_departments(departments, cmd_departments=None, grouped=False):
         '''Filter department dictionary to only include those departments listed in cmd_departments, if given
         Args:
@@ -407,16 +272,3 @@ class Extractor():
         return departments
 
     _ROMAN_NUMERAL = re.compile(r'^[iv]+$')
-
-    @staticmethod
-    def titlize(name):
-        '''Title and keep roman numerals uppercase.'''
-        name = name.lower()
-        titled = ''
-        for word in name.split():
-            if Extractor._ROMAN_NUMERAL.match(word) is not None:
-                titled += word.upper()
-            else:
-                titled += word.lower() if word in conjunctions_and_prepositions else word.title()
-            titled += ' '
-        return titled.strip()

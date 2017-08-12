@@ -10,7 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
 from __future__ import absolute_import, division, print_function
 
 import os
@@ -54,7 +53,7 @@ class Parser(BaseParser):
         Args:
             **kwargs: Nothing.
         """
-        directory = '{}/{}/schools/jhu/HopkinsEvaluations'.format(os.getcwd(), settings.PARSING_DIR)
+        directory = '{}/{}/schools/jhu/HopkinsEvaluations'.format(os.getcwd(), settings.PARSING_MODULE)
         for fn in os.listdir(directory):
             term, year = os.path.splitext(fn)[0].split(':')
             eval_file_path = '{}/{}'.format(directory, fn)

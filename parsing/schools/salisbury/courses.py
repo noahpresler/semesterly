@@ -21,9 +21,3 @@ class Parser(PeoplesoftParser):
     def __init__(self, **kwargs):
         """Construct Salisbury parsing object."""
         super(Parser, self).__init__('salisbury', Parser.URL, **kwargs)
-
-    def start(self, years=None, **kwargs):
-        """Start parsing."""
-        if years is None:
-            years = ['2016', '2017']
-        super(Parser, self).start(years=years, **kwargs)

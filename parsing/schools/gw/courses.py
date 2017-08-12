@@ -18,14 +18,13 @@ import sys
 
 from bs4 import NavigableString, Tag
 
-from parsing.library.base_parser import CourseParser
-from parsing.library.internal_exceptions import CourseParseError
-from parsing.library.utils import safe_cast
-from parsing.library.extractor import filter_years_and_terms
+from parsing.library.base_parser import BaseParser
+from parsing.library.exceptions import ParseError
+from parsing.library.utils import safe_cast, dict_filter_by_dict
 from semesterly.settings import get_secret
 
 
-class Parser(CourseParser):
+class Parser(BaseParser):
     """George Washington University course parser.
 
     NOTE: GW cannot support multiple login!
@@ -56,21 +55,17 @@ class Parser(CourseParser):
         super(Parser, self).__init__('gw', **kwargs)
 
     def start(self,
-              years=None,
-              terms=None,
-              years_and_terms=None,
-              departments=None,
+              years_and_terms_filter=None,
+              departments_filter=None,
               verbosity=3,
-              **kwargs):
+              textbooks=None):
         """Start parse."""
         self._login()
         self._direct_to_search_page()
 
-        years_and_terms = filter_years_and_terms(
+        years_and_terms = dict_filter_by_dict(
             Parser.YEARS_AND_TERMS,
-            years_filter=years,
-            terms_filter=terms,
-            years_and_terms_filter=years_and_terms
+            years_and_terms_filter
         )
 
         for year, terms in years_and_terms.items():
@@ -122,7 +117,8 @@ class Parser(CourseParser):
 
                     rows = self.requester.post(
                         Parser.URL + '/bwskfcls.P_GetCrse',
-                        params=query)
+                        params=query
+                    )
 
                     Parser._check_errorpage(rows)
 
@@ -265,8 +261,8 @@ class Parser(CourseParser):
             time = re.match(r'(.*) - (.*)', col[1].text)
             if not time:
                 continue
-            self.ingestor['time_start'] = self.extractor.time_12to24(time.group(1))
-            self.ingestor['time_end'] = self.extractor.time_12to24(time.group(2))
+            self.ingestor['time_start'] = time.group(1)
+            self.ingestor['time_end'] = time.group(2)
             self.ingestor['days'] = [col[2].text]
             filtered_days = filter(lambda x: x.replace(u'\xa0', u''),
                                    self.ingestor['days'])
@@ -359,4 +355,4 @@ class Parser(CourseParser):
         error = soup.find('span', class_='errortext')
         if not error:
             return
-        raise CourseParseError('Error on page request, message: ' + error.text)
+        raise ParseError('Error on page request, message: ' + error.text)

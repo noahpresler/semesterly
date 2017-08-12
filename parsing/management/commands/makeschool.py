@@ -22,24 +22,22 @@ from django.conf import settings
 class Command(BaseCommand):
     """Make a school within the Semesterly system.
 
+    Scaffolds a directory for a new school, adds to active schools
+
     Attributes:
-        CONFIG_TEMPLATE_PATH (str)
-        PARSER_TEMPLATE_PATH (str)
-        help (str)
+        template (str): Formatted filename of templates.
+        help (str): Command help message.
     """
 
     help = "Scaffolds a directory for a new school, adds to active schools"
 
-    PARSER_TEMPLATE_PATH = '{}/{}/management/parser_template.txt'.format(
+    template = '{}/{}/management/{{}}_template.txt'.format(
         os.getcwd(),
-        settings.PARSING_DIR
-    )
-    CONFIG_TEMPLATE_PATH = '{}/{}/management/config_template.txt'.format(
-        os.getcwd(),
-        settings.PARSING_DIR
+        settings.PARSING_MODULE
     )
 
     def add_arguments(self, parser):
+        """Add arguments to command."""
         parser.add_argument(
             '--name',
             type=str,
@@ -83,10 +81,8 @@ class Command(BaseCommand):
             help='minimum time between section offerings; default: %(default)s'
         )
 
-    def success_print(self, message):
-        self.stdout.write(self.style.SUCCESS(message))
-
     def handle(self, *args, **options):
+        """Handle the command."""
         name = options['name']
         code = options['code'].lower()
         replacements = (
@@ -96,11 +92,12 @@ class Command(BaseCommand):
             ('AMPM', options['ampm']),
             ('GRANULARITY', options['granularity']),
             ('SINGLE_ACCESS', options['single_access']),
-            ('FULL_ACADEMIC_YEAR_REGISTRATION', options['full_academic_year_registration']),
+            ('FULL_ACADEMIC_YEAR_REGISTRATION',
+                options['full_academic_year_registration']),
         )
 
         school_dir_path = '{}/{}/schools/{}'.format(os.getcwd(),
-                                                    settings.PARSING_DIR,
+                                                    settings.PARSING_MODULE,
                                                     code)
 
         if os.path.exists(school_dir_path):
@@ -120,16 +117,19 @@ class Command(BaseCommand):
         with open('LICENSE_HEADER', 'r') as file:
             license = file.read()
 
-        with open(Command.PARSER_TEMPLATE_PATH, 'rb') as file:
+        with open(Command.template.format('parser'), 'rb') as file:
             parser = file.read().format(name=name,
                                         code=code,
                                         parser_type='course'.title())
 
-        with open(Command.CONFIG_TEMPLATE_PATH, 'rb') as file:
+        with open(Command.template.format('config'), 'rb') as file:
             config = file.read()
             for tag, replacement in replacements:
                 config = config.replace('<{}>'.format(tag),
                                         json.dumps(replacement))
+
+        with open(Command.template.format('init'), 'r') as file:
+            init = file.read()
 
         os.makedirs(school_dir_path)
         os.makedirs(logs_path)
@@ -143,8 +143,11 @@ class Command(BaseCommand):
             file.write(config)
         with open(active_schools_path, 'w') as file:
             file.write('\n'.join(sorted(active_schools)))
-        open(init_path, 'a').close()
+        with open(init_path, 'w') as file:
+            file.write('# '.join(license.splitlines()))
+            file.write('\n')
+            file.write(init)
 
-        self.success_print(
+        self.stdout.write(self.style.SUCCESS(
             "Finished! Directory instantiated {}".format(school_dir_path)
-        )
+        ))

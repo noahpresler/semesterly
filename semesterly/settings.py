@@ -21,17 +21,18 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 import djcelery
+import os
+import yaml
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_DIRECTORY = os.getcwd()
+PARSING_MODULE = 'parsing'
 
-PARSING_DIR = 'parsing'
 
 def get_secret(key):
     """
-    Returns the value for a secret by the given key. 
+    Returns the value for a secret by the given key.
     Will first look for a corresponding environment variable.
     If this fails, checks semesterly/sensitive.py.
     """
@@ -45,7 +46,7 @@ def get_secret(key):
             try:
                 from dev_credentials import SECRETS
                 return SECRETS[key]
-            except: 
+            except:
                 raise ValueError("""'%s' not correctly configured.
                 Try adding it to the file semesterly/sensitive.py.
                 If this fails only on travis, have an administrator
@@ -237,50 +238,8 @@ DATABASES = {
 }
 
 # Logging
-LOGFILE = PROJECT_DIRECTORY + '/logfile.txt'
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-        },
-        'simple': {
-            'format': '%(levelname)s %(asctime)s %(message)s'
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': LOGFILE,
-            'formatter': 'verbose'
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-            'include_html': True,
-        }
-    },
-    'loggers': {
-        '': {
-            'handlers': ['file'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        'timetable.views': {
-            'handlers': ['mail_admins', 'file'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        'student.views': {
-            'handlers': ['mail_admins', 'file'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    },
-}
+with open('semesterly/logging.yaml', 'r') as file:
+    LOGGING = yaml.safe_load(file.read())
 
 ADMINS = [
     ('Rohan Das', 'rohan@semester.ly'),

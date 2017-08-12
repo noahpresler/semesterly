@@ -24,7 +24,7 @@ import simplejson as json
 import sys
 import warnings
 
-# Contains BASE_DIR and PARSING_DIR.
+# Contains BASE_DIR and PARSING_MODULE.
 from django.conf import settings
 
 from parsing.library.logger import Logger
@@ -50,14 +50,14 @@ class Validator:
     """Validation engine in parsing data pipeline.
 
     Attributes:
-        config (DotDict): Loaded config.json.
-        course_code_regex (re): Regex to match course code.
-        kind_to_validation_function (dict):
+        config (:obj:`DotDict`): Loaded config.json.
+        course_code_regex (:obj:`re`): Regex to match course code.
+        kind_to_validation_function (:obj:`dict`):
             Map kind to validation function defined within this class.
-        KINDS (set): Kinds of objects that validator validates.
-        relative (bool): Enforce relative ordering in validation.
-        seen (dict): Running monitor of seen courses and sections
-        tracker (parsing.parsing_library.tracker.Tracker): Tracker.
+        KINDS (:obj:`set`): Kinds of objects that validator validates.
+        relative (:obj:`bool`): Enforce relative ordering in validation.
+        seen (:obj:`dict`): Running monitor of seen courses and sections
+        tracker (:obj:`parsing.library.tracker.Tracker`)
     """
 
     KINDS = {
@@ -124,7 +124,7 @@ class Validator:
         if schema_path is None:
             schema_path = '{}/{}/library/schemas'.format(
                 settings.BASE_DIR,
-                settings.PARSING_DIR
+                settings.PARSING_MODULE
             )
 
         def load(kind):
