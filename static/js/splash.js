@@ -16,18 +16,15 @@ GNU General Public License for more details.
 $(document).ready(function() {  
     sizeitup();
 
-    $('#schools-dropdown').click(function(){
-        console.log('toggling');
+    $('#schools-dropdown .mobile-nav-label').click(function(){
         $('#schools-dropdown').toggleClass('open');
     });
 
     $('#schools-dropdown').click(function(e){
-        console.log('preventing');
         e.stopPropagation();
     });
 
     $(document).click(function(){
-        console.log('removing');
         $('#schools-dropdown').removeClass('open');
     });
 
