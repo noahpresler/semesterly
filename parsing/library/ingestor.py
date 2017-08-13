@@ -12,47 +12,23 @@
 
 from __future__ import absolute_import, division, print_function
 
-import dateparser
+import logging
+import sys
 import warnings
-
-from datetime import datetime
 
 from parsing.library.internal_exceptions import IngestorWarning
 from parsing.library.logger import Logger, JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
 from parsing.library.viewer import Hoarder
-from parsing.library.utils import clean, make_list, safe_cast, titlize
-from parsing.library.exceptions import PipelineError, PipelineWarning
+from parsing.library.utils import clean, make_list, safe_cast, titlize, time24
+from parsing.library.exceptions import PipelineError
 from parsing.library.validator import ValidationError, ValidationWarning, \
     MultipleDefinitionsWarning
 
 
 class IngestionError(PipelineError):
     """Ingestor error class."""
-
-
-class IngestionWarning(PipelineWarning):
-    """Ingestor warning class."""
-
-
-def time24(time):
-    """Convert time to 24hr format.
-
-    Args:
-        time (str): time in reasonable format
-
-    Returns:
-        str: 24hr time in format hh:mm
-
-    Raises:
-        ParseError: Unparseable time input.
-    """
-    if isinstance(time, basestring):
-        time = dateparser.parse(time)
-    if not isinstance(time, datetime):
-        raise IngestionError('invalid time input {}'.format(time))
-    return time.strftime('%H:%M')
 
 
 class Ingestor(dict):
@@ -323,11 +299,11 @@ class Ingestor(dict):
             'term': self._get('term', 'semester'),
             'year': str(self._get('year')),
             'instructors': self._resolve_instructors(),
-            'capacity': int(self._get('capacity', 'size')),
-            'enrollment': int(self._get('enrollment', 'enrolment')),
-            'waitlist': int(self._get('waitlist')),
-            'waitlist_size': int(self._get('waitlist_size')),
-            'remaining_seats': int(self._get('remaining_seats')),
+            'capacity': safe_cast(self._get('capacity', 'size'), int),
+            'enrollment': safe_cast(self._get('enrollment', 'enrolment'), int),
+            'waitlist': safe_cast(self._get('waitlist'), int),
+            'waitlist_size': safe_cast(self._get('waitlist_size'), int),
+            'remaining_seats': safe_cast(self._get('remaining_seats'), int),
             'type': self._get('type', 'section_type'),
             'fees': self._get('fees', 'fee', 'cost'),
             'final_exam': self._get('final_exam'),
@@ -350,7 +326,7 @@ class Ingestor(dict):
         Returns:
             dict: meeting
         """
-        year = str(self._get('year')),
+        year = str(self._get('year'))
         term = self._get('term', 'semester')
         if section.get('code') is None:
             year = None
@@ -507,9 +483,9 @@ class Ingestor(dict):
             self.tracker.stats = dict(kind=data['kind'], status='valid')
             is_valid = True
         except ValidationError as e:
-            self.logger.log_exception(e)
+            logging.exception('Ingestion failed')
             if self.break_on_error:
-                raise e
+                raise ValidationError(*e.args)
         except ValidationWarning as e:
             if (isinstance(e, MultipleDefinitionsWarning) and
                     self.skip_duplicates):

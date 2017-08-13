@@ -12,6 +12,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import sys
 import re
 
 from parsing.library.base_parser import BaseParser
@@ -52,12 +53,11 @@ class Parser(BaseParser):
 
     def _get_schools(self):
         self.schools = self.requester.get(
-            '{}/codes/schools'.format(Parser.API_URL),
+            Parser.API_URL + '/codes/schools',
             params={'key': Parser.KEY}
         )
 
     def _get_courses(self, school):
-        # print(school, file=sys.stderr)
         url = '{}/{}/{}'.format(Parser.API_URL,
                                 school['Name'],
                                 self.semester)
@@ -81,6 +81,7 @@ class Parser(BaseParser):
             section = self._get_section(course)
             if len(section) == 0:
                 # FIXME - make this less hacky
+                # warning.warn
                 hacky_log_file = 'parsing/schools/jhu/logs/section_url_tracking.log'
                 with open(hacky_log_file, 'w') as f:
                     print(self._get_section_url(course), file=f)
@@ -195,15 +196,15 @@ class Parser(BaseParser):
         self.verbosity = verbosity
 
         # Default to hardcoded current year.
-        years = ['2017', '2016', '2015']
-        terms = ['Spring', 'Fall', 'Summer', 'Intersession']
+        years = {'2017', '2016', '2015'}
+        terms = {'Spring', 'Fall', 'Summer', 'Intersession'}
 
         years_and_terms = dict_filter_by_dict(
-            {year: {term for term in terms} for year in years},
+            {year: [term for term in terms] for year in years},
             years_and_terms_filter
         )
 
-        for year in years_and_terms.items():
+        for year, terms in years_and_terms.items():
             self.ingestor['year'] = year
             for term in terms:
                 self.ingestor['term'] = term

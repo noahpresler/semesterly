@@ -175,8 +175,8 @@ class LogFormatted(Viewer):
             print('=' * 40, file=log)
             print('{}'.format(tracker.school.upper()), file=log)
             print('=={}=='.format(tracker.mode.upper()), file=log)
-            if tracker.saw_error:
-                print('FAILED:\n\n{}'.format(tracker.error), file=log)
+            # if tracker.saw_error:
+            #     print('FAILED:\n\n{}'.format(tracker.error), file=log)
             print('TIMESTAMP (UTC): {}'.format(tracker.timestamp), file=log)
             print('ELAPSED: {}'.format(str(datetime.timedelta(seconds=int(tracker.end_time - tracker.start_time)))), file=log)
             if hasattr(tracker, 'cmd_options'):

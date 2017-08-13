@@ -14,7 +14,6 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import simplejson as json
-import traceback
 
 from django.core.management.base import BaseCommand
 from timetable.school_mappers import SCHOOLS_MAP
@@ -22,7 +21,7 @@ from parsing.management.commands.arguments import ingest_args
 from parsing.library.exceptions import PipelineException
 from parsing.library.tracker import Tracker
 from parsing.library.viewer import LogFormatted, StatProgressBar
-from parsing.library.utils import pretty_json
+from parsing.library.ingestor import IngestionError
 
 
 class Command(BaseCommand):
@@ -86,6 +85,8 @@ class Command(BaseCommand):
                                                type=data_type), 'r') as file:
                 options['config'] = json.load(file)
 
+        logger_name = parser.__module__ + '.' + parser.__name__
+
         try:
             p = parser(
                 config=options['config'],
@@ -105,23 +106,19 @@ class Command(BaseCommand):
                 verbosity=options['verbosity'],
                 textbooks=data_type == 'textbook',
                 departments_filter=options.get('departments'),
-                years_and_terms_filter=Command._resolve_years_and_terms(options),
+                years_and_terms_filter=Command._resolve_years_and_terms(
+                    options
+                )
             )
 
             p.end()
 
-        except PipelineException as e:
-            print(e, file=self.stderr)
-            # TODO - log
-        except Exception as e:
-            logging.exception(e)
-
-            print(self.style.ERROR(traceback.format_exc()),
-                  file=self.stderr)
-            print(self.style.ERROR(pretty_json(parser.ingestor)),
-                  file=self.stderr)
-            tracker.see_error(traceback.format_exc())
-            tracker.see_error('INGESTOR DUMP\n' + pretty_json(parser.ingestor))
+        except PipelineException:
+            logger = logging.getLogger(logger_name)
+            logger.exception('Ingestion failed')
+        except Exception:
+            logger = logging.getLogger(logger_name)
+            logger.exception(IngestionError(p.ingestor, 'Ingestion failed'))
 
     @staticmethod
     def _resolve_years_and_terms(options):

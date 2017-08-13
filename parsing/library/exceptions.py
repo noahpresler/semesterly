@@ -45,7 +45,7 @@ class PipelineException(Exception):
         Returns:
             str
         """
-        return '\n' + '\n'.join(self.args)
+        return '\n' + '\n'.join(map(str, self.args))
 
 
 class PipelineError(PipelineException):

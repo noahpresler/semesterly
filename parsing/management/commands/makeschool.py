@@ -134,6 +134,8 @@ class Command(BaseCommand):
         os.makedirs(school_dir_path)
         os.makedirs(logs_path)
         os.makedirs(data_path)
+        open(logs_path + '/.gitkeep', 'a').close()
+        open(data_path + '/.gitkeep', 'a').close()
 
         with open(parser_path, "w") as file:
             file.write('# '.join(license.splitlines()))

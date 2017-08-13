@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 from __future__ import absolute_import, division, print_function
-import sys
+
 import datetime
 
 from timeit import default_timer as timer
@@ -26,10 +26,7 @@ class TrackerError(PipelineError):
 class Tracker(object):
     """Tracks specified attributes and broadcasts to viewers.
 
-    Attributes are defined for all BROADCAST_TYPES
-    Examples:
-        tracker.year = 2017
-        tracker.term = 'Fall'
+    @property attributes are defined for all BROADCAST_TYPES
     """
 
     BROADCAST_TYPES = {
@@ -46,12 +43,7 @@ class Tracker(object):
 
     def __init__(self):
         """Initialize tracker object."""
-        self.saw_error = False
-        self.error = ''
-
-        # Consumers.
         self.viewers = []
-
         self._create_tracking_properties()
 
     def _create_tracking_properties(self):
@@ -152,15 +144,6 @@ class Tracker(object):
             Viewer: Viewer instance if found, else None
         """
         return dict(self.viewers).get(name)
-
-    def see_error(self, msg):
-        """Set error sighting to true when called.
-
-        Args:
-            msg{str}: message associated with error
-        """
-        self.saw_error = True
-        self.error += msg + '\n'
 
     def broadcast(self, broadcast_type):
         """Broadcast tracker update to viewers.

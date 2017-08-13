@@ -13,9 +13,12 @@
 from __future__ import absolute_import, division, print_function
 
 import collections
+import dateparser
 import os
 import re
 import simplejson as json
+
+from datetime import datetime
 
 from parsing.library.words import conjunctions_and_prepositions
 
@@ -280,21 +283,32 @@ def dict_filter_by_dict(a, b):
             m = re.match(str(p), str(x))
             if m is None:
                 continue
-            filtered.setdefault(x, {})
+            if isinstance(ys, list):
+                filtered.setdefault(x, [])
+            elif isinstance(ys, dict):
+                filtered.setdefault(x, {})
             for y in ys:
                 for q in qs:
                     n = re.match(str(q), str(y))
                     if n is None:
                         continue
-                    filtered[x][y] = a[x][y]
+                    if isinstance(ys, list):
+                        filtered[x].append(y)
+                    elif isinstance(ys, dict):
+                        filtered[x][y] = a[x][y]
     return filtered
 
 
 def dict_filter_by_list(a, b):
     if b is None:
         return a
-
-    filtered = type(a)
+    filtered = None
+    if isinstance(a, list):
+        filtered = []
+    elif isinstance(a, set):
+        filtered = set()
+    elif isinstance(a, dict):
+        filtered = {}
     for x in a:
         for y in b:
             m = re.match(str(y), str(x))
@@ -307,3 +321,24 @@ def dict_filter_by_list(a, b):
             elif isinstance(a, dict):
                 filtered[x] = a[x]
     return filtered
+
+
+def time24(time):
+    """Convert time to 24hr format.
+
+    Args:
+        time (str): time in reasonable format
+
+    Returns:
+        str: 24hr time in format hh:mm
+
+    Raises:
+        ParseError: Unparseable time input.
+    """
+    from parsing.library.validator import ValidationError
+
+    if isinstance(time, basestring):
+        time = dateparser.parse(time)
+    if not isinstance(time, datetime):
+        raise ValidationError('invalid time input {}'.format(time))
+    return time.strftime('%H:%M')

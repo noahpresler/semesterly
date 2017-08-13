@@ -17,7 +17,7 @@ import simplejson as json
 
 from parsing.common.textbooks.amazon import amazon_textbook_fields
 from parsing.library.base_parser import BaseParser
-from parsing.library.utils import dict_filter_by_dict
+from parsing.library.utils import dict_filter_by_dict, dict_filter_by_list
 
 
 class BkstrDotComParser(BaseParser):
@@ -36,7 +36,7 @@ class BkstrDotComParser(BaseParser):
               departments_filter=None,
               years_and_terms_filter=None):
         """Start parsing."""
-        self.cmd_departments = departments_filter
+        self.departments_filter = departments_filter
 
         # Grab cookies from home website.
         self.requester.get('http://www.bkstr.com')
@@ -74,8 +74,8 @@ class BkstrDotComParser(BaseParser):
         self.ingestor['term'] = term
         query['termId'] = term_code
         query['requestType'] = 'DEPARTMENTS'
-        depts = self.extractor.filter_departments(self._extract_json(query),
-                                                  self.cmd_departments)
+        depts = dict_filter_by_list(self._extract_json(query),
+                                    self.departments_filter)
         for dept, dept_code in depts.items():
             self._parse_dept(dept, dept_code, query)
 

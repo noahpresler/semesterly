@@ -29,11 +29,18 @@ handlers:
     include_html: true
     level: ERROR
 
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simple
+    stream: ext://sys.stderr
+
 loggers:
 
   ? ''
   : handlers:
     - file
+    - console
     level: ERROR
     propagate: true
 

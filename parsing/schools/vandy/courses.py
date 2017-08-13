@@ -17,7 +17,7 @@ import sys
 
 from parsing.library.base_parser import BaseParser
 from parsing.library.exceptions import ParseError, ParseJump
-from parsing.library.utils import safe_cast, dict_filter_by_dict
+from parsing.library.utils import dict_filter_by_dict, dict_filter_by_list
 from semesterly.settings import get_secret
 
 
@@ -109,13 +109,6 @@ class Parser(BaseParser):
                     parse=False
                 )
 
-                # Get a list of all the department codes
-                departments = self.extract_department_codes()
-                # department_codes = self.extractor.filter_departments(
-                #     department_codes,
-                #     departments_filter
-                # )
-
                 # Create payload to request course list from server
                 params = {
                     'searchCriteria.classStatusCodes': [
@@ -126,7 +119,8 @@ class Parser(BaseParser):
                     ]
                 }
 
-                for dept_code, dept_name in departments:
+                departments = self.extract_department_codes()
+                for dept_code, dept_name in dict_filter_by_list(departments, departments_filter):
                     self.ingestor['department_code'] = dept_code
                     self.ingestor['department_name'] = dept_name
 

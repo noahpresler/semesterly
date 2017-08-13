@@ -20,8 +20,8 @@ from abc import ABCMeta
 from parsing.common.textbooks.amazon import amazon_textbook_fields
 from parsing.library.base_parser import BaseParser
 from parsing.library.exception import ParseError
-from parsing.library.extractor import extract_info, filter_departments
-from parsing.library.utils import dict_filter_by_dict
+from parsing.library.extractor import extract_info
+from parsing.library.utils import dict_filter_by_dict, dict_filter_by_list
 
 
 class PeoplesoftParser(BaseParser):
@@ -225,7 +225,7 @@ class PeoplesoftParser(BaseParser):
             id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d')
         )['id']
 
-    def _get_departments(self, soup, cmd_departments=None):
+    def _get_departments(self, soup, departments_filter=None):
         dept_soups = soup.find(
             'select',
             id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d')
@@ -236,7 +236,7 @@ class PeoplesoftParser(BaseParser):
         departments = {
             d['value']: extract_dept_name(d.text) for d in dept_soups
         }
-        return filter_departments(departments, cmd_departments), None
+        return dict_filter_by_list(departments, departments_filter), None
 
     def _get_course_list_as_soup(self, courses, soup):
         """Fill payload for course description page request."""
@@ -513,15 +513,17 @@ class QPeoplesoftParser(PeoplesoftParser):
             if term.get('selected') is not None:
                 return term.text
 
-    def _get_departments(self, soup, cmd_departments=None):
+    def _get_departments(self, soup, departments_filter=None):
         if self._get_selected_term(soup) == self.intially_selected_term:
             sys.stderr.write('GET DEPARTMENTS')
-            return self.extractor.filter_departments(
+            return dict_filter_by_list(
                 self.saved_departments,
-                cmd_departments
+                departments_filter
             ), None
-        return super(QPeoplesoftParser, self)._get_departments(soup,
-                                                               cmd_departments)
+        return super(QPeoplesoftParser, self)._get_departments(
+            soup,
+            departments_filter
+        )
 
     def _get_dept_param_key(self, soup):
         if self._get_selected_term(soup) == self.intially_selected_term:
@@ -538,7 +540,7 @@ class UPeoplesoftParser(PeoplesoftParser):
         self.term_base_url = term_base_url
         super(UPeoplesoftParser, self).__init__(school, url, **kwargs)
 
-    def _get_departments(self, soup, cmd_departments=None):
+    def _get_departments(self, soup, departments_filter=None):
         # extract department query list
         departments = soup.find_all(
             'a',
@@ -553,10 +555,9 @@ class UPeoplesoftParser(PeoplesoftParser):
             for dept, dept_name in zip(departments, department_names)
         }
         dept_ids = {dept.text: dept['id'] for dept in departments}
-        return self.extractor.filter_departments(
+        return dict_filter_by_list(
             depts,
-            cmd_departments,
-            grouped=True
+            departments_filter,
         ), dept_ids
 
     def _get_dept_param_key(self, soup):

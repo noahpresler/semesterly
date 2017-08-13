@@ -20,40 +20,6 @@ import unicodedata
 from parsing.library.internal_exceptions import CourseParseError
 
 
-def filter_departments(departments, cmd_departments=None, grouped=False):
-    """Intersect department mappings.
-
-    Args:
-        department: dictionary of item <dept_code, dept_name>
-    KwArgs:
-        cmd_departments: department code list
-        grouped: if grouped is set will not throw CoureParseError
-    Return: filtered list of departments.
-    """
-    # FIXME -- if groups exists, will only search current group
-    if cmd_departments is None:
-        return departments
-
-    # department list specified as cmd line arg
-    for cmd_dept_code in cmd_departments:
-        if cmd_dept_code not in departments and not grouped:
-            raise CourseParseError('invalid dept {}'.format(cmd_dept_code))
-
-    # Return dictionary of {code: name} or set {code}
-    if isinstance(departments, dict):
-        departments = {
-            cmd_dept_code: departments[cmd_dept_code]
-            for cmd_dept_code in cmd_departments
-            if cmd_dept_code in departments
-        }
-    else:
-        departments = {
-            dept for dept in departments if dept in cmd_departments
-        }
-
-    return departments
-
-
 def extract_info(course, text):
     """Attempt to extract info from text and put it into course object.
 
