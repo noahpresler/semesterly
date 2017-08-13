@@ -12,7 +12,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-import sys
+import logging
 import re
 
 from parsing.library.base_parser import BaseParser
@@ -80,11 +80,7 @@ class Parser(BaseParser):
         for course in courses:
             section = self._get_section(course)
             if len(section) == 0:
-                # FIXME - make this less hacky
-                # warning.warn
-                hacky_log_file = 'parsing/schools/jhu/logs/section_url_tracking.log'
-                with open(hacky_log_file, 'w') as f:
-                    print(self._get_section_url(course), file=f)
+                logging.warn(self._get_section_url(course))
                 continue
             self._load_ingestor(course, section)
 

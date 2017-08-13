@@ -43,7 +43,8 @@ class Parser(BaseParser):
         'Total Enrolled': 'enrollment',
         'Available Seats': 'remaining_seats',
         'Wait List Capacity': 'waitlist_size',
-        'Total on Wait List': 'waitlist'
+        'Total on Wait List': 'waitlist',
+        'Location': 'location'
     }
 
     def __init__(self, **kwargs):
@@ -153,34 +154,12 @@ class Parser(BaseParser):
             year[term] = sem['value']
         return years_and_terms
 
-    def create_course(self):
-        self.ingestor['areas'] = filter(
-            lambda a: bool(a),
-            self.course.get('Attributes', '').split(',')
-        )
-
-        created_course = self.ingestor.ingest_course()
-        return created_course
-
-    def create_section(self, created_course):
-        if self.cancelled_course:
-            self.cancelled_course = False
-
-            created_section = self.ingestor.ingest_section(created_course)
-            return created_section
 
     def create_offerings(self, created_section):
         if self.course.get('days'):
             for day in list(self.course.get('days')):
                 self.ingestor['location'] = self.course.get('Location')
                 self.ingestor.ingest_meeting(created_section)
-
-    def update_current_course(self, label, value):
-        try:
-            self.course[label] = value.strip()
-        except:
-            print('label:', label, sys.exc_info()[0])
-            sys.stderr.write("UNICODE ERROR\n")
 
     def extract_department_codes(self):
         # Query Vandy class search website
@@ -235,8 +214,8 @@ class Parser(BaseParser):
 
             try:
                 last_class_number = self.parse_course(course)
-            except ParseJump as e:
-                print(e, file=sys.stderr)
+            except ParseJump:
+                pass
 
         return last_class_number
 
@@ -276,8 +255,7 @@ class Parser(BaseParser):
             raise ParseJump('no title in course')
 
         self.ingestor['course_name'] = search.group(2)
-        self.ingestor['course_code'] = title.group(1) + ' ' + title.group(2)
-        # self.update_current_course("Catalog ID", catalog_id)
+        self.ingestor['course_code'] = title.group(1) + '-' + title.group(2)
         self.ingestor['section_code'] = '(' + title.group(3).strip() + ')'
 
         # Deal with course details as subgroups seen on details page
@@ -322,7 +300,7 @@ class Parser(BaseParser):
 
     def parse_attributes(self, soup):
         labels = [l.text.strip() for l in soup.find_all('div', class_='listItem')]
-        self.update_current_course("Attributes", ', '.join(labels))
+        self.ingestor['areas'] = labels
 
     def parse_labeled_table(self, soup):
 
@@ -380,19 +358,16 @@ class Parser(BaseParser):
 
                 elif label == 'Days':
                     self.extract_days(value)
-        except ParseJump as e:
-            print(e, file=sys.stderr)
-            # print(labels, values, file=sys.stderr)
+        except ParseJump:
+            pass
 
         meetings = self.ingestor.setdefault('meetings', [])
         meetings.append(self.ingestor.ingest_meeting({}, clean_only=True))
-        print(self.ingestor['meetings'], file=sys.stderr)
 
     def extract_days(self, unformatted_days):
         if unformatted_days == 'TBA' or unformatted_days == '':
             raise ParseJump(self.ingestor['course_code'] + ' days TBA')
         self.ingestor['days'] = list(unformatted_days)
-        print(self.ingestor['days'], file=sys.stderr)
 
     def extract_time_range(self, unformatted_time_range):
         if unformatted_time_range == 'TBA' or unformatted_time_range == '':
@@ -423,7 +398,10 @@ class Parser(BaseParser):
     def extract_notes(self, soup):
         notes = ' '.join([l for l in (p.strip() for p in soup.text.splitlines()) if l]).strip()
         description = self.ingestor.setdefault('description', [])
-        description.append(notes)
+        if isinstance(description, list):
+            description.append(notes)
+        elif isinstance(description, basestring):
+            description += '\n' + notes
 
     def extract_description(self, soup):
         description = soup.text.strip()

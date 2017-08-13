@@ -14,7 +14,6 @@ from __future__ import absolute_import, division, print_function
 
 from abc import ABCMeta, abstractmethod
 
-from parsing.library.extractor import Extractor
 from parsing.library.ingestor import Ingestor
 from parsing.library.requester import Requester
 
@@ -57,7 +56,6 @@ class BaseParser:
         """
         self.school = school
         self.requester = Requester()
-        self.extractor = Extractor()
         self.tracker = tracker
         self.ingestor = Ingestor(school,
                                  config,
