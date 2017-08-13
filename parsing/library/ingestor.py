@@ -16,7 +16,7 @@ import logging
 import sys
 import warnings
 
-from parsing.library.logger import Logger, JSONStreamWriter
+from parsing.library.logger import JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
 from parsing.library.viewer import Hoarder
@@ -43,7 +43,6 @@ class Ingestor(dict):
         ALL_KEYS (set): Set of keys supported by Ingestor.
         break_on_error (bool): Break/cont on errors.
         break_on_warning (bool): Break/cont on warnings.
-        logger (library.logger): Logger object.
         school (str): School code (e.g. jhu, gw, umich).
         skip_duplicates (bool): Skip ingestion for repeated definitions.
         tracker (library.tracker): Tracker object.
@@ -145,7 +144,6 @@ class Ingestor(dict):
         # Initialize loggers for json and errors.
         self.json = JSONStreamWriter(output_path, type_=dict).enter()
         self.data_list = self.json.write('$data', type_=list).enter()
-        self.logger = Logger(errorfile=output_error_path)
         if self.validate:
             self.validator = Validator(config, tracker=self.tracker)
 
@@ -448,7 +446,6 @@ class Ingestor(dict):
             '$timestamp': self.tracker.start_time
         })
         self.json.exit()
-        self.logger.close()
         self.clear()
 
     def _validate_and_log(self, obj):

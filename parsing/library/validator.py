@@ -19,6 +19,7 @@ from __future__ import absolute_import, division, print_function
 import dateutil.parser as dparser
 import httplib
 import jsonschema
+import logging
 import re
 import simplejson as json
 import sys
@@ -27,7 +28,6 @@ import warnings
 # Contains BASE_DIR and PARSING_MODULE.
 from django.conf import settings
 
-from parsing.library.logger import Logger
 from parsing.library.tracker import Tracker
 from parsing.library.exceptions import PipelineError, PipelineWarning
 from parsing.library.utils import DotDict, make_list, update, \
@@ -225,8 +225,6 @@ class Validator:
         # if display_progress_bar:
         #     self.tracker.add_viewer(StatProgressBar('{valid}/{total}'))
 
-        logger = Logger(errorfile=output_error)
-
         # self.validate_directory(directory)
         data = Validator.file_to_json(data_path)['$data']
         Validator.schema_validate(data, *Validator.SCHEMAS.datalist)
@@ -237,12 +235,12 @@ class Validator:
                 self.kind_to_validation_function[obj.kind](obj)
                 self.tracker.stats = dict(kind=obj.kind, status='valid')
             except ValidationError as e:
-                logger.log(e)
-                print(e.args, file=sys.stderr)
+                logging.exception('Validation error')
                 if break_on_error:
                     raise ValidationError(*e.args)
             except ValidationWarning as e:
-                warnings.warn('', e, stacklevel=2)
+                logging.warn(e)
+                # warnings.warn('', e, stacklevel=2)
             self.tracker.stats = dict(kind=obj.kind, status='total')
 
         self.tracker.end()
