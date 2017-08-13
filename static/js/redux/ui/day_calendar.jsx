@@ -91,13 +91,18 @@ class DayCalendar extends React.Component {
   }
 
   getTimelineStyle() {
-    if ((new Date()).getHours() > this.props.endHour || (new Date()).getHours() < 8) {
+    const now = new Date();
+    if (now.getHours() > this.props.endHour ||  // if the current time is before
+      now.getHours() < 8 //||// 8am or after the schedule end
+    // now.getDay() === 0 || // time or if the current day is
+    // now.getDay() === 6    // Saturday or Sunday, then
+    ) { // display no line
       return { display: 'none' };
     }
     const diff = Math.abs(new Date() - new Date().setHours(8, 0, 0));
     const mins = Math.ceil((diff / 1000) / 60);
-    const top = ((mins / 15.0) * 13) + 65;
-    return { top };
+    const top = (mins / 15.0) * 13;
+    return { top, zIndex: 1 };
   }
 
   getCalendarRows() {
@@ -240,7 +245,6 @@ class DayCalendar extends React.Component {
           onSwipedLeft={this.swipedLeft}
         >
           <div className="fc-view-container" style={{}}>
-            <div className="fc-timeline" style={this.getTimelineStyle()} />
             <div className="fc-view fc-settimana-view fc-agenda-view">
               <table>
                 <tbody className="fc-body">
@@ -269,6 +273,7 @@ class DayCalendar extends React.Component {
                               </tbody>
                             </table>
                           </div>
+                          <div className="fc-timeline" style={this.getTimelineStyle()} />
                           <div className="fc-content-skeleton">
                             <SlotManagerContainer
                               days={[DAYS[this.state.day]]}
