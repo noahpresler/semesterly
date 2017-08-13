@@ -50,8 +50,9 @@ def parse_results(source):
             continue
         matches = re.search("- (.+)[YFS], section (.+?) ", section_header.text)
         all_textbooks_info = sibling.find_all('td', class_="book-desc")
-        print "\t\t\tFor %s section %s, found %d textbook(s). These are:" % (
-            matches.group(1), matches.group(2), len(all_textbooks_info))
+        print "\t\t\tFor {} section {}, found {} textbook(s). These are:".format(
+            matches.group(1), matches.group(2), len(all_textbooks_info)
+        )
         course = Course.objects.get(school="uoft", code=matches.group(1))
         course_sections = Section.objects.filter(course=course, meeting_section=matches.group(2))
         for textbook_info in all_textbooks_info:
