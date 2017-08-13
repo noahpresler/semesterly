@@ -16,19 +16,22 @@ import logging
 import sys
 import warnings
 
-from parsing.library.internal_exceptions import IngestorWarning
 from parsing.library.logger import Logger, JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
 from parsing.library.viewer import Hoarder
 from parsing.library.utils import clean, make_list, safe_cast, titlize, time24
-from parsing.library.exceptions import PipelineError
+from parsing.library.exceptions import PipelineError, PipelineWarning
 from parsing.library.validator import ValidationError, ValidationWarning, \
     MultipleDefinitionsWarning
 
 
 class IngestionError(PipelineError):
     """Ingestor error class."""
+
+
+class IngestionWarning(PipelineWarning):
+    """Ingestor warning class."""
 
 
 class Ingestor(dict):
@@ -213,7 +216,7 @@ class Ingestor(dict):
                     if isinstance(instructors[i], basestring):
                         instructors[i] = {'name': instructors[i]}
         elif len(instr_keys) > 1:
-            raise IngestorWarning(
+            raise IngestionWarning(
                 'cannot resolve instructors from keys: {}'.format(
                     ','.join(instr_keys)
                 ),
@@ -463,13 +466,13 @@ class Ingestor(dict):
             for key in self:
                 if key in Ingestor.ALL_KEYS:
                     continue
-                raise IngestorWarning(
-                    'ingestor does not support key {}'.format(key),
-                    self
+                raise IngestionWarning(
+                    self,
+                    'ingestor does not support key {}'.format(key)
                 )
-        except IngestorWarning as e:
+        except IngestionWarning as e:
             is_valid = True
-            self.logger.log_exception(e)
+            logging.exception('Ingestor warning')
             if self.break_on_warning:
                 raise e
         self.tracker.stats = dict(kind=obj['kind'], status='total')
@@ -492,9 +495,8 @@ class Ingestor(dict):
                 full_skip = True
             else:
                 is_valid = True
-                self.logger.log_exception(e)
-                warnings.warn('', e, stacklevel=2)
-                # if self.break_on_warning:
-                #     raise e
+                logging.exception('Validation waring')
+                if self.break_on_warning:
+                    raise ValidationWarning(*e.args)
 
         return is_valid, full_skip

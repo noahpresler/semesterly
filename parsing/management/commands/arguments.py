@@ -76,10 +76,9 @@ def digest_args(parser):
     """
     class SetFalseErrorOnNoDiffNoLoadAction(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
-            attr = self.dest
-            setattr(namespace, attr, False)
-            other_attr = 'diff' if attr == 'load' else 'load'
-            if (not getattr(namespace, attr) and
+            setattr(namespace, self.dest, False)
+            other_attr = 'diff' if self.dest == 'load' else 'load'
+            if (not getattr(namespace, self.dest) and
                     not getattr(namespace, other_attr)):
                 raise parser.error('--no-diff and --no-load does no action')
 
@@ -302,9 +301,9 @@ class LoadToJsonAction(argparse.Action):
             parser.error: invalid JSON.
         """
         try:
-            setattr(parser, self.dest, json.loads(values))
+            setattr(namespace, self.dest, json.loads(values))
         except json.scanner.JSONDecodeError:
-            parser.error('invalid JSON')
+            parser.error(option_string + ' invalid JSON')
 
 
 class LoadFileToJsonAction(argparse.Action):
@@ -319,7 +318,7 @@ class LoadFileToJsonAction(argparse.Action):
         with open(values, 'r') as file:
             data = file.read()
         try:
-            setattr(parser, self.dest, json.loads(data))
+            setattr(namespace, self.dest, json.loads(data))
         except json.scanner.JSONDecodeError:
             parser.error('invalid JSON in {}'.format(values))
 

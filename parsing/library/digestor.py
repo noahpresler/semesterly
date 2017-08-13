@@ -439,101 +439,100 @@ class DigestionStrategy(object):
 class Vommit(DigestionStrategy):
     '''Output diff between input and db data.'''
 
-    def __init__(self, output=None):
-        self.json_logger = JSONStreamWriter(output)
-        self.json_logger.enter()
+    def __init__(self, output):
         self.defaults = Vommit.get_model_defaults()
+        self.output = output
         super(Vommit, self).__init__()
+
+        def exclude(dct):
+                return {k: v for k, v in dct.items() if k != 'defaults'}
 
         for name, model in Digestor.MODELS.items():
             # if hasattr(self, 'digest_' + name):
             #     continue
-
             def closure(name, model):
                 def digest(self, model_params):
                     obj = model.objects.filter(
-                        **Vommit.exclude(model_params)
+                        **exclude(model_params)
                     ).first()
                     self.diff(name, model_params, obj)
                     return obj
                 return digest
             setattr(self.__class__, 'digest_' + name, closure(name, model))
 
-    @staticmethod
-    def exclude(dct):
-        return {k: v for k, v in dct.items() if k != 'defaults'}
-
     def wrap_up(self):
         self.json_logger.exit()
 
     def diff(self, kind, inmodel, dbmodel, hide_defaults=True):
-        # Check for empty inputs
-        if inmodel is None:
-            return None
-        if dbmodel is None:
-            dbmodel = {}
-        else:
-            # Transform django object to dictionary.
-            dbmodel = dbmodel.__dict__
+        with JSONStreamWriter(self.output) as streamer:
+            # Check for empty inputs
+            if inmodel is None:
+                return None
+            if dbmodel is None:
+                dbmodel = {}
+            else:
+                # Transform django object to dictionary.
+                dbmodel = dbmodel.__dict__
 
-        context = {'section', 'course', 'semester', 'textbook'}
+            context = {'section', 'course', 'semester', 'textbook'}
 
-        whats = {}
-        for k, v in inmodel.iteritems():
-            if k in context:
+            whats = {}
+            for k, v in inmodel.iteritems():
+                if k not in context:
+                    continue
                 try:
                     whats[k] = unicode(v)
                 except django.utils.encoding.DjangoUnicodeDecodeError:
                     whats[k] = '<{}: [Bad Unicode data]'.format(k)
 
-        # Remove db specific content from model.
-        blacklist = context | {
-            '_state',
-            'id',
-            'section_id',
-            'course_id',
-            '_course_cache',
-            'semester_id',
-            '_semester',
-            'vector',
-        }
+            # Remove db specific content from model.
+            blacklist = context | {
+                '_state',
+                'id',
+                'section_id',
+                'course_id',
+                '_course_cache',
+                'semester_id',
+                '_semester',
+                'vector',
+            }
 
-        def prune(d):
-            return {k: v for k, v in d.iteritems() if k not in blacklist}
-        dbmodel = prune(dbmodel)
-        inmodel = prune(inmodel)
+            def prune(d):
+                return {k: v for k, v in d.iteritems() if k not in blacklist}
+            dbmodel = prune(dbmodel)
+            inmodel = prune(inmodel)
 
-        if 'course' in dbmodel:
-            dbmodel['course'] = str(dbmodel['course'])
+            if 'course' in dbmodel:
+                dbmodel['course'] = str(dbmodel['course'])
 
-        # Remove null values from dictionaries.
-        dbmodel = {k: v for k, v in dbmodel.iteritems() if v is not None}
+            # Remove null values from dictionaries.
+            dbmodel = {k: v for k, v in dbmodel.iteritems() if v is not None}
 
-        # Move contents of default dictionary to first-level of dictionary.
-        if 'defaults' in inmodel:
-            defaults = inmodel['defaults']
-            del inmodel['defaults']
-            inmodel.update(defaults)
+            # Move contents of default dictionary to first-level of dictionary.
+            if 'defaults' in inmodel:
+                defaults = inmodel['defaults']
+                del inmodel['defaults']
+                inmodel.update(defaults)
 
-        # Diff the in-model and db-model
-        diffed = json.loads(jsondiff.diff(dbmodel, inmodel,
-                                          syntax='symmetric',
-                                          dump=True))
+            # Diff the in-model and db-model
+            diffed = json.loads(jsondiff.diff(dbmodel, inmodel,
+                                              syntax='symmetric',
+                                              dump=True))
 
-        # Remove db defaulted values from diff output.
-        if hide_defaults and '$delete' in diffed:
-            self.remove_defaulted_keys(kind, diffed['$delete'])
-            if len(diffed['$delete']) == 0:
-                del diffed['$delete']
+            # Remove db defaulted values from diff output.
+            if hide_defaults and '$delete' in diffed:
+                self.remove_defaulted_keys(kind, diffed['$delete'])
+                if len(diffed['$delete']) == 0:
+                    del diffed['$delete']
 
-        # Add `what` and `context` tag to diff output.
-        if len(diffed) > 0:
-            if isinstance(diffed, list) and len(diffed[0]) == 0:
-                diffed = {'$new': diffed[1]}
-            elif isinstance(diffed, dict):
-                diffed.update({'$what': inmodel})
-            diffed.update({'$context': whats})
-            self.json_logger.write(diffed)
+            # Add `what` and `context` tag to diff output.
+            if len(diffed) > 0:
+                if isinstance(diffed, list) and len(diffed[0]) == 0:
+                    diffed = {'$new': diffed[1]}
+                elif isinstance(diffed, dict):
+                    diffed.update({'$what': inmodel})
+                diffed.update({'$context': whats})
+                self.json_logger.write(diffed)
 
     def remove_defaulted_keys(self, kind, dct):
         for default in self.defaults[kind]:
