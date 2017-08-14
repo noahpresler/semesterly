@@ -12,15 +12,18 @@
 
 from __future__ import absolute_import, division, print_function
 
+import logging
 import simplejson as json
 import traceback
 
 from django.core.management.base import BaseCommand
 
 from parsing.management.commands.arguments import digest_args
-from parsing.library.validator import Validator
+from parsing.library.validator import Validator, ValidationError, \
+    ValidationWarning
 from parsing.library.digestor import Digestor
-from parsing.library.internal_exceptions import JsonException, DigestionError
+from parsing.library.exceptions import PipelineException
+from parsing.library.digestor import DigestionError
 from parsing.library.tracker import Tracker
 from parsing.library.viewer import LogFormatted, StatProgressBar, \
     ETAProgressBar
@@ -51,6 +54,7 @@ class Command(BaseCommand):
         tracker.end()
 
     def run(self, tracker, school, data_type, options):
+        """Run the Command."""
         tracker.school = school
 
         tracker.mode = 'validating'
@@ -75,8 +79,8 @@ class Command(BaseCommand):
                 ),
                 display_progress_bar=options['display_progress_bar']
             )
-        except JsonException:
-            print('FAILED VALIDATION', file=sys.stderr)
+        except (ValidationError, ValidationWarning):
+            logging.exception('Failed validation before digestion')
             return  # Skip digestion for this school.
 
         tracker.remove_viewer('progressbar')
@@ -95,13 +99,12 @@ class Command(BaseCommand):
                 tracker=tracker
             ).digest()
 
-        except DigestionError as e:
-            self.stderr.write(self.style.ERROR('FAILED: digestion'))
-            self.stderr.write(str(e))
-            tracker.see_error(str(e) + '\n' + traceback.format_exc())
-        except Exception as e:
-            self.stderr.write(self.style.ERROR('FAILED: digestion'))
-            self.stderr.write(traceback.format_exc())
-            tracker.see_error(traceback.format_exc())
+        except DigestionError:
+            logging.exception('Failed digestion')
+        except PipelineException:
+            logging.expection('Failed digestion w/in pipeline')
+        except Exception:
+            logging.exception('Failed digestion with uncaught exception')
 
+        # TODO - move to periodic tasks
         # Vectorizer().vectorize()

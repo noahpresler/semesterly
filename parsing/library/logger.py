@@ -10,7 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
 from __future__ import absolute_import, division, print_function
 
 import sys
@@ -19,8 +18,6 @@ import simplejson as json
 
 from pygments import highlight, lexers, formatters
 
-from parsing.library.internal_exceptions import JsonValidationError, \
-    JsonValidationWarning, DigestionError
 from parsing.library.utils import pretty_json
 
 

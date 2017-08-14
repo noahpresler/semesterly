@@ -118,7 +118,7 @@ class Command(BaseCommand):
             logger.exception('Ingestion failed')
         except Exception:
             logger = logging.getLogger(logger_name)
-            logger.exception(IngestionError(p.ingestor, 'Ingestion failed'))
+            # logger.exception(IngestionError(p.ingestor, 'Ingestion failed'))
 
     @staticmethod
     def _resolve_years_and_terms(options):

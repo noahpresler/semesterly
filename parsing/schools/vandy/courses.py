@@ -13,7 +13,6 @@
 from __future__ import absolute_import, division, print_function
 
 import re
-import sys
 
 from parsing.library.base_parser import BaseParser
 from parsing.library.exceptions import ParseError, ParseJump
@@ -153,7 +152,6 @@ class Parser(BaseParser):
             year = years_and_terms.setdefault(int(year), {})
             year[term] = sem['value']
         return years_and_terms
-
 
     def create_offerings(self, created_section):
         if self.course.get('days'):

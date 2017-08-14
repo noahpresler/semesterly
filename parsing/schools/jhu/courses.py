@@ -35,7 +35,6 @@ class Parser(BaseParser):
     """
 
     API_URL = 'https://isis.jhu.edu/api/classes/'
-    KEY = get_secret('JHU_API_KEY')
     DAY_MAP = {
         'm': 'M',
         't': 'T',
@@ -45,6 +44,16 @@ class Parser(BaseParser):
         'sa': 'S',
         's': 'U'
     }
+
+    def __new__(cls, *args, **kwargs):
+        """Set static variables within closure.
+
+        Returns:
+            Parser
+        """
+        new_instance = object.__new__(cls, *args, **kwargs)
+        cls.KEY = get_secret('JHU_API_KEY')
+        return new_instance
 
     def __init__(self, **kwargs):
         """Construct hopkins parser object."""

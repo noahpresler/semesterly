@@ -285,9 +285,6 @@ class Ingestor(dict):
 
         Returns:
             dict: section
-
-        Raises:
-            IngestorWarning: cannot resolve key
         """
         section = {
             'kind': 'section',
@@ -465,7 +462,8 @@ class Ingestor(dict):
                     continue
                 raise IngestionWarning(
                     self,
-                    'ingestor does not support key {}'.format(key)
+                    'ingestor does not support key {}: {}'.format(key,
+                                                                  self[key])
                 )
         except IngestionWarning as e:
             is_valid = True

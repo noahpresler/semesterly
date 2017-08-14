@@ -49,8 +49,9 @@ def get_secret(key):
             except:
                 raise ValueError("""'%s' not correctly configured.
                 Try adding it to the file semesterly/sensitive.py.
-                If this fails only on travis, have an administrator
-                add your secret as a travis environment variable."""  % key)
+                If this fails only on travis, make sure get_secret
+                is not called globally. Wrap the call within a closure
+                such as @classmethod def new(cls).""" % key)
 
 SECRET_KEY = get_secret('SECRET_KEY')
 
@@ -238,7 +239,7 @@ DATABASES = {
 }
 
 # Logging
-with open('semesterly/logging.yaml', 'r') as file:
+with open(PROJECT_DIRECTORY + '/semesterly/logging.yaml', 'r') as file:
     LOGGING = yaml.safe_load(file.read())
 
 ADMINS = [

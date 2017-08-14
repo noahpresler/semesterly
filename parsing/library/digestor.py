@@ -24,12 +24,11 @@ from timetable.models import Course, Section, Offering, Textbook, \
 from parsing.models import DataUpdate
 from parsing.library.utils import DotDict, make_list
 from parsing.library.logger import JSONStreamWriter
-from parsing.library.internal_exceptions import DigestionError
 from parsing.library.tracker import NullTracker
 from parsing.library.exceptions import PipelineError
 
 
-class DigestorError(PipelineError):
+class DigestionError(PipelineError):
     """Digestor error class."""
 
 
@@ -65,6 +64,17 @@ class Digestor(object):
                  load=True,
                  display_progress_bar=True,
                  tracker=NullTracker()):
+        """Construct Digestor instance.
+
+        Args:
+            school (str): Description
+            data (None, optional): Description
+            output (None, optional): Description
+            diff (bool, optional): Description
+            load (bool, optional): Description
+            display_progress_bar (bool, optional): Description
+            tracker (TYPE, optional): Description
+        """
         with open(data, 'r') as f:
             data = json.load(f)
 
@@ -442,6 +452,7 @@ class Vommit(DigestionStrategy):
     def __init__(self, output):
         self.defaults = Vommit.get_model_defaults()
         self.output = output
+        self.json_streamer = JSONStreamWriter(self.output, type_=list).enter()
         super(Vommit, self).__init__()
 
         def exclude(dct):
@@ -461,78 +472,77 @@ class Vommit(DigestionStrategy):
             setattr(self.__class__, 'digest_' + name, closure(name, model))
 
     def wrap_up(self):
-        self.json_logger.exit()
+        self.json_streamer.exit()
 
     def diff(self, kind, inmodel, dbmodel, hide_defaults=True):
-        with JSONStreamWriter(self.output) as streamer:
-            # Check for empty inputs
-            if inmodel is None:
-                return None
-            if dbmodel is None:
-                dbmodel = {}
-            else:
-                # Transform django object to dictionary.
-                dbmodel = dbmodel.__dict__
+        # Check for empty inputs
+        if inmodel is None:
+            return None
+        if dbmodel is None:
+            dbmodel = {}
+        else:
+            # Transform django object to dictionary.
+            dbmodel = dbmodel.__dict__
 
-            context = {'section', 'course', 'semester', 'textbook'}
+        context = {'section', 'course', 'semester', 'textbook'}
 
-            whats = {}
-            for k, v in inmodel.iteritems():
-                if k not in context:
-                    continue
-                try:
-                    whats[k] = unicode(v)
-                except django.utils.encoding.DjangoUnicodeDecodeError:
-                    whats[k] = '<{}: [Bad Unicode data]'.format(k)
+        whats = {}
+        for k, v in inmodel.iteritems():
+            if k not in context:
+                continue
+            try:
+                whats[k] = unicode(v)
+            except django.utils.encoding.DjangoUnicodeDecodeError:
+                whats[k] = '<{}: [Bad Unicode data]'.format(k)
 
-            # Remove db specific content from model.
-            blacklist = context | {
-                '_state',
-                'id',
-                'section_id',
-                'course_id',
-                '_course_cache',
-                'semester_id',
-                '_semester',
-                'vector',
-            }
+        # Remove db specific content from model.
+        blacklist = context | {
+            '_state',
+            'id',
+            'section_id',
+            'course_id',
+            '_course_cache',
+            'semester_id',
+            '_semester',
+            'vector',
+        }
 
-            def prune(d):
-                return {k: v for k, v in d.iteritems() if k not in blacklist}
-            dbmodel = prune(dbmodel)
-            inmodel = prune(inmodel)
+        def prune(d):
+            return {k: v for k, v in d.iteritems() if k not in blacklist}
+        dbmodel = prune(dbmodel)
+        inmodel = prune(inmodel)
 
-            if 'course' in dbmodel:
-                dbmodel['course'] = str(dbmodel['course'])
+        if 'course' in dbmodel:
+            dbmodel['course'] = str(dbmodel['course'])
 
-            # Remove null values from dictionaries.
-            dbmodel = {k: v for k, v in dbmodel.iteritems() if v is not None}
+        # Remove null values from dictionaries.
+        dbmodel = {k: v for k, v in dbmodel.iteritems() if v is not None}
 
-            # Move contents of default dictionary to first-level of dictionary.
-            if 'defaults' in inmodel:
-                defaults = inmodel['defaults']
-                del inmodel['defaults']
-                inmodel.update(defaults)
+        # Move contents of default dictionary to first-level of dictionary.
+        if 'defaults' in inmodel:
+            defaults = inmodel['defaults']
+            del inmodel['defaults']
+            inmodel.update(defaults)
 
-            # Diff the in-model and db-model
-            diffed = json.loads(jsondiff.diff(dbmodel, inmodel,
-                                              syntax='symmetric',
-                                              dump=True))
+        # Diff the in-model and db-model
+        diffed = json.loads(jsondiff.diff(dbmodel, inmodel,
+                                          syntax='symmetric',
+                                          dump=True))
 
-            # Remove db defaulted values from diff output.
-            if hide_defaults and '$delete' in diffed:
-                self.remove_defaulted_keys(kind, diffed['$delete'])
-                if len(diffed['$delete']) == 0:
-                    del diffed['$delete']
+        # Remove db defaulted values from diff output.
+        if hide_defaults and '$delete' in diffed:
+            self.remove_defaulted_keys(kind, diffed['$delete'])
+            if len(diffed['$delete']) == 0:
+                del diffed['$delete']
 
-            # Add `what` and `context` tag to diff output.
-            if len(diffed) > 0:
-                if isinstance(diffed, list) and len(diffed[0]) == 0:
-                    diffed = {'$new': diffed[1]}
-                elif isinstance(diffed, dict):
-                    diffed.update({'$what': inmodel})
-                diffed.update({'$context': whats})
-                self.json_logger.write(diffed)
+        # Add `what` and `context` tag to diff output.
+        if len(diffed) > 0:
+            if isinstance(diffed, list) and len(diffed[0]) == 0:
+                diffed = {'$new': diffed[1]}
+            elif isinstance(diffed, dict):
+                diffed.update({'$what': inmodel})
+            diffed.update({'$context': whats})
+            self.json_streamer.write(diffed)
 
     def remove_defaulted_keys(self, kind, dct):
         for default in self.defaults[kind]:
@@ -600,7 +610,7 @@ class Absorb(DigestionStrategy):
             return model_type.objects.update_or_create(**model_args)
         except django.db.utils.DataError as e:
             json_model_args = {k: str(v) for k, v in model_args.items()}
-            raise DigestionError(str(e), json=json_model_args)
+            raise DigestionError(json_model_args, str(e))
 
     @staticmethod
     def remove_section(section, course_model):

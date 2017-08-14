@@ -31,11 +31,6 @@ class Parser(BaseParser):
     """
 
     URL = 'https://banweb.gwu.edu/PRODCartridge'
-    CREDENTIALS = {
-        'USERNAME': get_secret('GW_USER'),
-        'PASSWORD': get_secret('GW_PASS'),
-        'SECURITY_QUESTION_ANSWER': get_secret('GW_SECURITY_ANSWER')
-    }
     YEARS_AND_TERMS = {
         2017: {
             'Fall': '201703',
@@ -45,6 +40,20 @@ class Parser(BaseParser):
             'Fall': '201603',
         }
     }
+
+    def __new__(cls, *args, **kwargs):
+        """Set static variables within closure.
+
+        Returns:
+            Parser
+        """
+        new_instance = object.__new__(cls, *args, **kwargs)
+        cls.CREDENTIALS = {
+            'USERNAME': get_secret('GW_USER'),
+            'PASSWORD': get_secret('GW_PASS'),
+            'SECURITY_QUESTION_ANSWER': get_secret('GW_SECURITY_ANSWER')
+        }
+        return new_instance
 
     def __init__(self, **kwargs):
         """Construct GW parser object.
@@ -140,11 +149,10 @@ class Parser(BaseParser):
 
                             # general info
                             self.ingestor.update({
-                                'ident': info[1].text,
+                                # 'ident': info[1].text,
                                 'code': info[2].text + ' ' + info[3].text,
-                                'href': info[1].find('a')['href'],
+                                # 'href': info[1].find('a')['href'],
                                 'dept': dept_name,
-                                'selec': info[3].text,
                                 'section': info[4].text,
                                 'credits': safe_cast(info[6].text, float,
                                                      default=0.),
@@ -153,7 +161,7 @@ class Parser(BaseParser):
                                 'enrollment': int(info[11].text),
                                 'waitlist': safe_cast(info[14].text, int,
                                                       default=-1),
-                                'attr': '; '.join(info[22].text.split(' and ')) if len(info) == 23 else ''  # FIXME - hacky fix
+                                'areas': '; '.join(info[22].text.split(' and ')) if len(info) == 23 else ''  # FIXME - hacky fix
                             })
 
                             # Query course catalog to obtain description.
@@ -162,8 +170,8 @@ class Parser(BaseParser):
                                 params={
                                     'term_in': term_code,
                                     'one_subj': dept_code,
-                                    'sel_crse_strt': self.ingestor['selec'],
-                                    'sel_crse_end': self.ingestor['selec'],
+                                    'sel_crse_strt': info[3].text,
+                                    'sel_crse_end': info[3].text,
                                     'sel_subj': '',
                                     'sel_levl': '',
                                     'sel_schd': '',
@@ -186,8 +194,8 @@ class Parser(BaseParser):
                                 params={
                                     'term_in': term_code,
                                     'subj_in': dept_code,
-                                    'crse_in': self.ingestor['selec'],
-                                    'crn_in': self.ingestor['ident']
+                                    'crse_in': info[3].text,
+                                    'crn_in': info[3].text,
                                 })
 
                             meetings_soup = Parser._extract_meetings(section_soup)
@@ -208,8 +216,7 @@ class Parser(BaseParser):
                             if len(meetings_soup) > 0:
                                 self.ingestor['section_type'] = meetings_soup[0].find_all('td')[5].text
                                 section_model = self.ingestor.ingest_section(course)
-
-                            self._parse_meetings(meetings_soup, section_model)
+                                self._parse_meetings(meetings_soup, section_model)
 
     def _login(self):
         # Collect necessary cookies
@@ -326,7 +333,7 @@ class Parser(BaseParser):
 
         extraction = {
             'Schedule Types': ('section_type', lambda s: s[0].upper()),
-            'Levels': ('info', lambda s: 'Levels: ' + s.strip()),
+            'Levels': ('level', lambda s: 'Levels: ' + s.strip()),
             'Course Attributes': ('areas', lambda x: x.strip().split(','))
         }
 
