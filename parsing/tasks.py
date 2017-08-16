@@ -9,7 +9,6 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-"""Make me a module."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -25,6 +24,7 @@ from timetable.school_mappers import SCHOOLS_MAP
 from parsing.schools.active import ACTIVE_SCHOOLS
 
 logger = get_task_logger(__name__)
+
 
 @periodic_task(
     run_every=(crontab(hour=00, minute=00)),
@@ -67,7 +67,7 @@ def task_parse_active(schools=None, textbooks=False):
     """Parse all semesters displayed to users (i.e. active semesters)."""
     schools = set(schools or ACTIVE_SCHOOLS)
     for school in set(SCHOOLS_MAP) & schools:
-        if school in SINGLE_ACCESS_SCHOOLS:
+        if SCHOOLS_MAP[school].singe_access:
             task_parse_school.delay(
                 school,
                 SCHOOLS_MAP[school].active_semesters

@@ -13,10 +13,6 @@
 from __future__ import absolute_import, division, print_function
 
 import sys
-import pipes
-import simplejson as json
-
-from pygments import highlight, lexers, formatters
 
 from parsing.library.utils import pretty_json
 
@@ -193,18 +189,19 @@ class JSONStreamWriter(object):
 
 # class JSONFormatter(logging.Formatter):
 #     """Simple JSON extension of Python logging.Formatter."""
-
+#
 #     def format(self, record):
 #         """Format record message.
-
+#
 #         Args:
 #             record (logging.LogRecord): Description
-
+#
 #         Returns:
 #             str: Prettified JSON string.
 #         """
-#         return pretty_json(record.msg)
-
+#         if isinstance(record.msg, dict):
+#             return pretty_json(record.msg)
+#         return record.msg
 # logging.basicConfig(level=logging.INFO)
 # handler = logging.StreamHandler(sys.stdout)
 # handler.setFormatter(JSONFormatter())

@@ -71,8 +71,10 @@ def clean(dirt):
     return cleaned
 
 
-def make_list(x):
+def make_list(x=None):
     """Wrap in list if not list already.
+
+    If input is None, will return empty list.
 
     Args:
         x: Input.
@@ -80,6 +82,8 @@ def make_list(x):
     Returns:
         list: Input wrapped in list.
     """
+    if x is None:
+        x = []
     if not isinstance(x, list):
         x = [x]
     return x
@@ -251,10 +255,10 @@ def titlize(name):
         Biology of Animals II
     """
     titled = []
-    for word in name.lower().split():
-        if _roman_numeral.match(word) is not None:
+    for word in name.split():
+        if _roman_numeral.match(word.lower()) is not None:
             word = word.upper()
-        elif word in conjunctions_and_prepositions:
+        elif word.lower() in conjunctions_and_prepositions:
             word = word.title()
         titled.append(word)
     return ' '.join(titled)

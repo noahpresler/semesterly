@@ -20,8 +20,8 @@ from timetable.school_mappers import SCHOOLS_MAP
 from parsing.management.commands.arguments import ingest_args
 from parsing.library.exceptions import PipelineException
 from parsing.library.tracker import Tracker
-from parsing.library.viewer import LogFormatted, StatProgressBar
-from parsing.library.ingestor import IngestionError
+from parsing.library.viewer import StatProgressBar, StatView
+from parsing.library.utils import pretty_json
 
 
 class Command(BaseCommand):
@@ -51,11 +51,12 @@ class Command(BaseCommand):
             **options: Command options.
         """
         tracker = Tracker()
-        tracker.cmd_options = options
-        tracker.add_viewer(LogFormatted(options['master_log']))
         tracker.mode = 'ingesting'
+        self.stat_view = StatView()
+        tracker.add_viewer(self.stat_view)
         if options['display_progress_bar']:
-            tracker.add_viewer(StatProgressBar('{valid}/{total}'))
+            tracker.add_viewer(StatProgressBar('{valid}/{total}',
+                                               statistics=self.stat_view))
         tracker.start()
 
         for data_type in options['types']:
@@ -70,7 +71,7 @@ class Command(BaseCommand):
         tracker.end()
 
     def run(self, parser, tracker, options, data_type, school):
-        """Run the parser.
+        """Run the command.
 
         Args:
             parser (parsing.library.base_parser.BaseParser)
@@ -85,7 +86,8 @@ class Command(BaseCommand):
                                                type=data_type), 'r') as file:
                 options['config'] = json.load(file)
 
-        logger_name = parser.__module__ + '.' + parser.__name__
+        logger = logging.getLogger(parser.__module__ + '.' + parser.__name__)
+        logger.debug('Command options:\n' + str(pretty_json(options)))
 
         try:
             p = parser(
@@ -114,11 +116,14 @@ class Command(BaseCommand):
             p.end()
 
         except PipelineException:
-            logger = logging.getLogger(logger_name)
-            logger.exception('Ingestion failed')
+            logger.exception('Ingestion failed for ' + school)
+            logger.debug('Ingestor dump:\n' + pretty_json(p.ingestor))
         except Exception:
-            logger = logging.getLogger(logger_name)
-            # logger.exception(IngestionError(p.ingestor, 'Ingestion failed'))
+            logger.exception('Ingestion failed for ' + school)
+
+        logger.info('Ingestion overview:\n' + pretty_json(
+            self.stat_view.report()
+        ))
 
     @staticmethod
     def _resolve_years_and_terms(options):

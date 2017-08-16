@@ -38,7 +38,6 @@ class Tracker(object):
         'INSTRUCTOR',
         'TIME',
         'MODE',
-        'CMD_OPTIONS',
     }
 
     def __init__(self):

@@ -45,10 +45,7 @@
       "additionalProperties": false
     },
     "description": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "type": "string"
     },
     "prerequisites": {
       "type": "array",

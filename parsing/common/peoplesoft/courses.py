@@ -20,7 +20,6 @@ from abc import ABCMeta
 from parsing.common.textbooks.amazon import amazon_textbook_fields
 from parsing.library.base_parser import BaseParser
 from parsing.library.exceptions import ParseError
-from parsing.library.extractor import extract_info
 from parsing.library.utils import dict_filter_by_dict, dict_filter_by_list
 
 
@@ -288,12 +287,10 @@ class PeoplesoftParser(BaseParser):
         self.ingestor['course_name'] = rtitle.group(3)
         self.ingestor['section_code'] = rtitle.group(2)
         self.ingestor['credits'] = float(re.match(r'(\d*).*', units).group(1))
-        if req is not None:
-            self.ingestor['prereqs'] += [extract_info(self.ingestor, req.text)]
-        self.ingestor['description'] = [
-            extract_info(self.ingestor, descr.text) if descr else '',
-            extract_info(self.ingestor, notes.text) if notes else ''
-        ]
+        self.ingestor['prereqs'] = map(lambda x: x.text, filter(None, [req]))
+        self.ingestor['descr'] = '\n'.join(
+            map(lambda x: x.text, filter(None, [descr, notes, areas]))
+        )
         self.ingestor['size'] = int(capacity)
         self.ingestor['enrollment'] = int(enrollment)
         instructors = []
@@ -304,9 +301,6 @@ class PeoplesoftParser(BaseParser):
             instructors = instructors[:5]
             instructors.append('..., ...')
         self.ingestor['instrs'] = list(set(instructors))
-
-        if areas is not None:
-            self.ingestor['areas'] = [extract_info(self.ingestor, areas.text)]
 
         # TODO - integrate this nicer
         # Handle condition such that a laboratory (or another type) of section
@@ -416,7 +410,7 @@ class PeoplesoftParser(BaseParser):
         self.ingestor['prereqs'] = []
         self.ingestor['coreqs'] = []
         self.ingestor['geneds'] = []
-        self.ingestor['fees'] = []  # NOTE: caused issue with extractor
+        self.ingestor['fees'] = []
         self.ingestor['textbooks'] = []
 
     @staticmethod

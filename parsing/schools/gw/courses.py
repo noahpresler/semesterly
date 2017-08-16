@@ -49,9 +49,9 @@ class Parser(BaseParser):
         """
         new_instance = object.__new__(cls, *args, **kwargs)
         cls.CREDENTIALS = {
-            'USERNAME': get_secret('GW_USER'),
-            'PASSWORD': get_secret('GW_PASS'),
-            'SECURITY_QUESTION_ANSWER': get_secret('GW_SECURITY_ANSWER')
+            'username': get_secret('GW_USER'),
+            'password': get_secret('GW_PASS'),
+            'security_question_answer': get_secret('GW_SECURITY_ANSWER')
         }
         return new_instance
 
@@ -195,8 +195,9 @@ class Parser(BaseParser):
                                     'term_in': term_code,
                                     'subj_in': dept_code,
                                     'crse_in': info[3].text,
-                                    'crn_in': info[3].text,
-                                })
+                                    'crn_in': info[1].text,
+                                }
+                            )
 
                             meetings_soup = Parser._extract_meetings(section_soup)
                             """Example of a meeting entry
@@ -213,10 +214,11 @@ class Parser(BaseParser):
 
                             self._parse_instructors(meetings_soup)
 
-                            if len(meetings_soup) > 0:
-                                self.ingestor['section_type'] = meetings_soup[0].find_all('td')[5].text
-                                section_model = self.ingestor.ingest_section(course)
-                                self._parse_meetings(meetings_soup, section_model)
+                            if len(meetings_soup) == 0:
+                                continue
+                            self.ingestor['section_type'] = meetings_soup[0].find_all('td')[5].text
+                            section_model = self.ingestor.ingest_section(course)
+                            self._parse_meetings(meetings_soup, section_model)
 
     def _login(self):
         # Collect necessary cookies
@@ -231,8 +233,8 @@ class Parser(BaseParser):
             Parser.URL + '/twbkwbis.P_ValLogin',
             parse=False,
             data={
-                'sid': Parser.CREDENTIALS['USERNAME'],
-                'PIN': Parser.CREDENTIALS['PASSWORD']
+                'sid': Parser.CREDENTIALS['username'],
+                'PIN': Parser.CREDENTIALS['password']
             }
         )
 
@@ -248,9 +250,9 @@ class Parser(BaseParser):
             parse=False,
             data={
                 'RET_CODE': '',
-                'SID': Parser.CREDENTIALS['USERNAME'],
+                'SID': Parser.CREDENTIALS['username'],
                 'QSTN_NUM': 1,
-                'answer': Parser.CREDENTIALS['SECURITY_QUESTION_ANSWER']
+                'answer': Parser.CREDENTIALS['security_question_answer']
             }
         )
 

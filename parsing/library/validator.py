@@ -222,10 +222,6 @@ class Validator:
         Raises:
             ValidationError: Description
         """
-        # if display_progress_bar:
-        #     self.tracker.add_viewer(StatProgressBar('{valid}/{total}'))
-
-        # self.validate_directory(directory)
         data = Validator.file_to_json(data_path)['$data']
         Validator.schema_validate(data, *Validator.SCHEMAS.datalist)
 
@@ -462,8 +458,8 @@ class Validator:
                     meeting.section.code
                 )
                 if isinstance(e, ValidationError):
-                    raise ValidationError(message, e.args)
-                raise ValidationWarning(message, e.args)
+                    raise ValidationError(message, *e.args)
+                raise ValidationWarning(message, *e.args)
         if 'location' in meeting:
             try:
                 self.validate_location(meeting.location)
@@ -472,7 +468,7 @@ class Validator:
                     meeting.course.code,
                     meeting.section.code
                 )
-                raise ValidationError(message, e.args)
+                raise ValidationError(message, *e.args)
 
         if not self.relative:
             return
@@ -548,7 +544,7 @@ class Validator:
                 self.validate_homepage(instructor.homepage)
             except ValidationError as e:
                 message = 'instructor {} office, {}'.format(instructor.name)
-                raise ValidationError(message, e.args)
+                raise ValidationError(message, *e.args)
 
         if 'office' in instructor:
             try:
@@ -558,7 +554,7 @@ class Validator:
                     self.validate_meeting(office_hour)
             except ValidationError as e:
                 message = 'instructor {} office, {}'.format(instructor.name)
-                raise ValidationError(message, e.args)
+                raise ValidationError(message, *e.args)
 
     def validate_final_exam(self, final_exam):
         """Validate final exam.
@@ -579,7 +575,7 @@ class Validator:
         try:
             self.validate_meeting(final_exam.meeting)
         except ValidationError as e:
-            raise ValidationError(final_exam, e.args)
+            raise ValidationError(final_exam, *e.args)
 
     def validate_textbook_link(self, textbook_link):
         """Validate textbook link.
@@ -656,8 +652,11 @@ class Validator:
         except ValueError:
             raise ValidationError('invalid time format {}-{}'.format(start, end))
 
-        if start >= end:
-            raise ValidationError('start {} >= end {}'.format(start, end))
+
+        if start > end:
+            raise ValidationError('start {} > end {}'.format(start, end))
+        elif start == end:
+            raise ValidationWarning('start {} = end {}'.format(start, end))
         # NOTE: there exists an unhandled case if the end time is midnight.
 
     def validate_directory(self, directory):

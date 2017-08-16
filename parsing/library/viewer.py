@@ -12,9 +12,9 @@
 
 from __future__ import absolute_import, division, print_function
 
+import dateparser
 import datetime
 import progressbar
-import dateutil.parser as dparser
 
 from abc import ABCMeta, abstractmethod
 
@@ -67,9 +67,9 @@ class StatProgressBar(Viewer):
 
     SWITCH_SIZE = 100
 
-    def __init__(self, stat_format=''):
+    def __init__(self, stat_format='', statistics=None):
         """Construct instance of data pipeline progress bar."""
-        self.statuses = StatView()
+        self.statistics = statistics or StatView()
         self.stat_format = stat_format
 
         self.format_custom_text = progressbar.FormatCustomText(
@@ -86,7 +86,7 @@ class StatProgressBar(Viewer):
 
     def receive(self, tracker, broadcast_type):
         """Incremental update to progress bar."""
-        self.statuses.receive(tracker, broadcast_type)
+        self.statistics.receive(tracker, broadcast_type)
 
         if (broadcast_type != 'SCHOOL' and
                 broadcast_type != 'TERM' and
@@ -94,7 +94,7 @@ class StatProgressBar(Viewer):
                 broadcast_type != 'STATS'):
             return
 
-        counters = self.statuses.stats
+        counters = self.statistics.stats
         formatted_string = ''
         if progressbar.utils.get_terminal_size()[0] > StatProgressBar.SWITCH_SIZE:
             attrs = ['year', 'term', 'department']
@@ -256,8 +256,9 @@ class StatView(Viewer):
             return
         self._increment(tracker.stats['kind'], tracker.stats['status'])
 
-    def report(self, tracker):
-        """Do nothing."""
+    def report(self, tracker=None):
+        """Dump stats."""
+        return self.stats
 
     def _increment(self, kind, status):
         self.stats[kind][status] += 1
@@ -295,22 +296,21 @@ class TimeDistributionView(Viewer):
         if broadcast_type != 'TIME':
             return
 
-        time = getattr(tracker, broadcast_type.lower())
-        dparser.parse(time)
+        time = dateparser.parse(getattr(tracker, broadcast_type.lower()))
 
-        # TODO - analyze distribution and track granularity
+        if time > dateparser.parse('12:00pm'):
+            self.time_distribution[24] += 1
+        else:
+            self.time_distribution[12] += 1
 
-        # if hour > 12:
-        #     self.time_distribution['_24'] += 1
-        # else:
-        #     self.time_distribution['_12'] += 1
-
-        # grains = [60, 30, 20, 15, 10, 5, 3, 2, 1]
-        # for grain in grains:
-        #     if minute % grain == 0:
-        #         if grain < self.granularity:
-        #             self.granularity = grain
-        #         break
+        minute = time.minute if time.minute != 0 else 60
+        grains = [60, 30, 20, 15, 10, 5, 3, 2, 1]
+        for grain in grains:
+            if minute % grain != 0:
+                continue
+            if grain < self.granularity:
+                self.granularity = grain
+            break
 
     def report(self, tracker):
         """Do nothing."""

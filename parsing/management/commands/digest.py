@@ -14,7 +14,6 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import simplejson as json
-import traceback
 
 from django.core.management.base import BaseCommand
 
@@ -25,25 +24,45 @@ from parsing.library.digestor import Digestor
 from parsing.library.exceptions import PipelineException
 from parsing.library.digestor import DigestionError
 from parsing.library.tracker import Tracker
-from parsing.library.viewer import LogFormatted, StatProgressBar, \
-    ETAProgressBar
+from parsing.library.viewer import StatProgressBar, ETAProgressBar, StatView
+from parsing.library.utils import pretty_json
 # from searches.utils import Vectorizer
 
 
 class Command(BaseCommand):
+    """Django command to drive digestion in data pipeline.
+
+    If no school is provided, starts digestion for all schools.
+
+    Attributes:
+        help (str): command help message.
+    """
+
     help = 'Digestion driver'
 
     def add_arguments(self, parser):
+        """Add arguments to command parser.
+
+        Args:
+            parser: Django argument parser.
+        """
         digest_args(parser)
 
     def handle(self, *args, **options):
+        """Logic of the command.
+
+        Args:
+            *args: Args of command.
+            **options: Command options.
+        """
         tracker = Tracker()
-        tracker.add_viewer(LogFormatted(options['master_log']))
+        self.stat_view = StatView()
+        tracker.add_viewer(self.stat_view)
         if options['display_progress_bar']:
-            tracker.add_viewer(StatProgressBar('{valid}/{total}'),
+            tracker.add_viewer(StatProgressBar('{valid}/{total}',
+                                               statistics=self.stat_view),
                                name='progressbar')
 
-        tracker.cmd_options = options
         tracker.mode = 'digesting'
         tracker.start()
 
@@ -54,10 +73,11 @@ class Command(BaseCommand):
         tracker.end()
 
     def run(self, tracker, school, data_type, options):
-        """Run the Command."""
+        """Run the command."""
         tracker.school = school
-
         tracker.mode = 'validating'
+        logger = logging.getLogger('parsing.schools.' + school)
+        logger.debug(pretty_json(options))
 
         # Load config file to dictionary.
         if isinstance(options['config'], str):
@@ -79,7 +99,7 @@ class Command(BaseCommand):
                 ),
                 display_progress_bar=options['display_progress_bar']
             )
-        except (ValidationError, ValidationWarning):
+        except (ValidationError, ValidationWarning, Exception):
             logging.exception('Failed validation before digestion')
             return  # Skip digestion for this school.
 
@@ -105,6 +125,10 @@ class Command(BaseCommand):
             logging.expection('Failed digestion w/in pipeline')
         except Exception:
             logging.exception('Failed digestion with uncaught exception')
+
+        logging.info('Digestion overview:\n' + pretty_json(
+            self.stat_view.report()
+        ))
 
         # TODO - move to periodic tasks
         # Vectorizer().vectorize()

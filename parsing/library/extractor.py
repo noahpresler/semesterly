@@ -12,85 +12,85 @@
 
 from __future__ import absolute_import, division, print_function
 
-import sys
+# NOTE: module currently unused as it introduces too many bugs.
+#       Might reconsider for later use.
+
 import re
-import unicodedata
+# import unicodedata
+
+from collections import namedtuple
+
+from parsing.library.utils import make_list
+
+Extraction = namedtuple('Extraction', 'key container patterns')
 
 
-def extract_info(course, text):
+def extract_info_from_text(text,
+                           inject=None,
+                           extractions=None,
+                           use_lowercase=True,
+                           splice_text=True):
     """Attempt to extract info from text and put it into course object.
 
+    NOTE: Currently unstable and unused as it introduces too many bugs.
+          Might reconsider for later use.
+
     Args:
-        course (dict): course object to place extracted information into
         text (str): text to attempt to extract information from
+        extractions (None, optional): Description
+        inject (None, optional): Description
+        use_lowercase (bool, optional): Description
+
     Returns:
-        * modifies course object
         str: the text trimmed of extracted information
     """
-    # TODO - this method needs to be structured in a more extensible way
-    text = text.encode('utf-8', 'ignore')
-    extractions = {
-        'prereqs': [
-            r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-            r'T[Aa][Kk][Ee] (.*)\.?$'
-        ],
-        'coreqs': [
-            r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*'
-        ],
-        'geneds': [
-            r'GE (.*)'
-        ],
-        'fees': [
-            r'(?:Lab )?Fees?:?\s{1,2}?\$?\s?(\d+(?:\.\d{1,2})?)'
-        ]
-    }
+    # text = text.encode('utf-8', 'ignore')
+    if extractions is None:
+        extractions = (
+            Extraction(
+                key='prereqs',
+                container=make_list,
+                patterns=(r'pr-?ereq(?:uisite)?s?[:,\s]\s*(.*?)(?:\.|$)\s*',
+                          r'take (.*)\.?$')
+            ),
+            Extraction(
+                key='coreqs',
+                container=make_list,
+                patterns=(r'co-?req(?:uisite)?s?[:,\s]\s*(.*?)(?:\.|$)\s*',)
+            ),
+            Extraction(
+                key='geneds',
+                container=make_list,
+                patterns=(r'ge (.*)',)
+            ),
+            Extraction(
+                key='fee',
+                container=float,
+                patterns=(
+                    r'(?:lab )?fees?:?\s{1,2}?\$?\s?(\d+(?:\.\d{1,2})?)',)
+            )
+        )
 
-    for key, extraction_list in extractions.items():
-        for extraction in extraction_list:
-            rex = re.compile(extraction)
-            extracted = rex.search(text)
-            if extracted:
-                course.setdefault(key, [])
-                if 'fees' == key and isinstance(course.get(key), float):
-                    continue  # NOTE: edge case if multiple fees present
-                course[key] += [extracted.group(1)]
-            if isinstance(text, str):
-                text = text.decode('utf-8')
-                text = unicodedata.normalize('NFKD', text)
-            text = rex.sub('', text).strip()
+    # Search for matches.
+    extracted = inject or {}
+    for key, container, patterns in extractions:
+        for pattern in patterns:
+            match = re.search(pattern, text.lower() if use_lowercase else text)
+            if not match:
+                continue
+            try:
+                contained = container(text[match.start() + match.group().index(match.group(1)): match.start() + match.group().index(match.group(1)) + len(match.group(1))])  # magic...
+                default = extracted.setdefault(key, container())
+                default += contained
+                if splice_text:
+                    text = text[:match.start()] + text[match.end():]
+            except:
+                continue
+        # if isinstance(text, basestring):
+        #     text = text.decode('utf-8')
+        #     text = unicodedata.normalize('NFKD', text)
 
-    # NOTE: edge case, if mutliple fees have been extracted will take the first
-    if course.get('fees') and isinstance(course.get('fees'), list):
-        course['fees'] = course['fees'][0]
-
-    # NOTE: for now, combine pre and co reqs
-    requisites = []
-    corequisites = []
-    if hasattr(course.get('prereqs'), '__iter__'):
-        try:
-            for req in course['prereqs']:
-                req = req.strip()
-                if len(req) == 0:
-                    continue
-                requisites += [req]
-        except UnicodeDecodeError:
-            pass
-    if hasattr(course.get('coreqs'), '__iter__'):
-        try:
-            for req in course['coreqs']:
-                req = req.strip()
-                if len(req) == 0:
-                    continue
-                corequisites += [req]
-        except UnicodeDecodeError:
-            pass
-
-    if len(requisites) > 0:
-        if 'prereqs' in course:
-            course['prereqs'] += requisites
-            course['prereqs'] = list(set(course['prereqs']))
-        if 'coreqs' in course:
-            course['coreqs'] += corequisites
-            course['coreqs'] = list(set(course['coreqs']))
-
+    if not inject:
+        return text, extracted
+    print(text)
     return text

@@ -31,7 +31,7 @@ handlers:
 
   console:
     class: logging.StreamHandler
-    level: INFO
+    level: ERROR
     formatter: simple
     stream: ext://sys.stderr
 

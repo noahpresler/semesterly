@@ -14,13 +14,13 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import sys
-import warnings
 
 from parsing.library.logger import JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
 from parsing.library.viewer import Hoarder
-from parsing.library.utils import clean, make_list, safe_cast, titlize, time24
+from parsing.library.utils import clean, make_list, safe_cast, titlize, \
+    time24, pretty_json
 from parsing.library.exceptions import PipelineError, PipelineWarning
 from parsing.library.validator import ValidationError, ValidationWarning, \
     MultipleDefinitionsWarning
@@ -171,7 +171,7 @@ class Ingestor(dict):
         default = kwargs.get('default')
         for key in keys:
             if key not in Ingestor.ALL_KEYS:
-                raise IngestorError('{} not in Ingestor.ALL_KEYS'.format(key))
+                raise IngestionWarning(key + ' not in Ingestor.ALL_KEYS')
             if key not in self:
                 continue
             return self[key]
@@ -186,7 +186,7 @@ class Ingestor(dict):
                     'dept_code' in self)):
             # if not isinstance(self._get('department', 'dept'), dict):
             department = {
-                'name': self._get('department_name', 'dept_name'),
+                'name': titlize(self._get('department_name', 'dept_name')),
                 'code': self._get('department_code', 'dept_code')
             }
         return department
@@ -261,14 +261,18 @@ class Ingestor(dict):
             'prerequisites': make_list(self._get('prerequisites', 'prereqs')),
             'corequisites': make_list(self._get('corequisites', 'coreqs')),
             'exclusions': make_list(self._get('exclusions')),
-            'description': make_list(self._get('description', 'descr')),
-            'areas': self._get('areas'),
+            'areas': make_list(self._get('areas')),
             'level': self._get('level'),
             'cores': make_list(self._get('cores')),
             'geneds': make_list(self._get('geneds')),
             'sections': self._get('sections'),
             'homepage': self._get('homepage', 'website'),
-            'same_as': self._get('same_as')
+            'same_as': self._get('same_as'),
+            'description': self._get('description', 'descr'),
+            # 'description': extract_info_from_text(
+            #     self._get('description', 'descr'),
+            #     inject=self
+            # ),
         }
 
         course = clean(course)
@@ -476,22 +480,28 @@ class Ingestor(dict):
         is_valid = False
         full_skip = False
 
+        logger = logging.getLogger('parsing.schools.' + self.school)
+
         try:
             self.validator.validate(data)
             self.tracker.stats = dict(kind=data['kind'], status='valid')
             is_valid = True
         except ValidationError as e:
-            logging.exception('Ingestion failed')
             if self.break_on_error:
                 raise ValidationError(*e.args)
+            else:
+                logger.warning('Ingestion failed', exc_info=True)
+                logger.debug('Ingestor dump \n' + pretty_json(self))
         except ValidationWarning as e:
             if (isinstance(e, MultipleDefinitionsWarning) and
                     self.skip_duplicates):
                 full_skip = True
             else:
                 is_valid = True
-                logging.exception('Validation waring')
                 if self.break_on_warning:
                     raise ValidationWarning(*e.args)
+                else:
+                    logger.warning('Validation warning', exc_info=True)
+                    logger.debug('Ingestor dump \n' + pretty_json(self))
 
         return is_valid, full_skip
