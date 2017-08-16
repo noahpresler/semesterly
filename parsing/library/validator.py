@@ -279,6 +279,17 @@ class Validator:
         if 'homepage' in course:
             self.validate_website(course.homepage)
 
+        for sa in course.get('same_as', []):
+            if self.course_code_regex(sa) is not None:
+                continue
+            raise ValidationError(
+                course,
+                "same as course code {} does not match r'{}'".format(
+                    course.code,
+                    self.config.course_code_regex
+                )
+            )
+
         for section in course.get('sections', []):
             if 'course' in section and section.course.code != course.code:
                 raise ValidationError(

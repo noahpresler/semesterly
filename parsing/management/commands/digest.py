@@ -26,7 +26,6 @@ from parsing.library.digestor import DigestionError
 from parsing.library.tracker import Tracker
 from parsing.library.viewer import StatProgressBar, ETAProgressBar, StatView
 from parsing.library.utils import pretty_json
-# from searches.utils import Vectorizer
 
 
 class Command(BaseCommand):
@@ -131,4 +130,3 @@ class Command(BaseCommand):
         ))
 
         # TODO - move to periodic tasks
-        # Vectorizer().vectorize()

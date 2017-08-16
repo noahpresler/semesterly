@@ -57,10 +57,8 @@ class BaseParser:
         self.school = school
         self.requester = Requester()
         self.tracker = tracker
-        self.ingestor = Ingestor(school,
-                                 config,
+        self.ingestor = Ingestor(config,
                                  output_path,
-                                 output_error_path,
                                  break_on_error=break_on_error,
                                  break_on_warning=break_on_warning,
                                  skip_duplicates=skip_duplicates,

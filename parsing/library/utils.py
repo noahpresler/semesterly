@@ -103,7 +103,7 @@ class DotDict(dict):
         >>> d['a'] = 3
         >>> d.a, d['b']
         (3, 2)
-        >>> d.a.ca, d.a['ca']
+        >>> d.c.ca, d.c['ca']
         (31, 31)
     """
 
@@ -166,7 +166,12 @@ def safe_cast(val, to_type, default=None):
 
 
 def update(d, u):
-    """Recursive update to dictionary w/o overwriting upper levels."""
+    """Recursive update to dictionary w/o overwriting upper levels.
+
+    Examples:
+        >>> update({0: {1: 2, 3: 4}}, {1: 2, 0: {5: 6, 3: 7}})
+        {0: {1: 2}}
+    """
     for k, v in u.iteritems():
         if isinstance(v, collections.Mapping):
             r = update(d.get(k, {}), v)
@@ -241,9 +246,6 @@ def dir_to_dict(path):
     return d
 
 
-_roman_numeral = re.compile(r'^[ivx]+$')
-
-
 def titlize(name):
     """Format name into pretty title.
 
@@ -251,14 +253,18 @@ def titlize(name):
     Will lowercase conjuctions and prepositions.
 
     Examples:
-        >>> titlize('BIOLOGY OF ANIMALS II)
-        Biology of Animals II
+        >>> titlize('BIOLOGY OF CANINES II')
+        Biology of Canines II
     """
     titled = []
-    for word in name.split():
-        if _roman_numeral.match(word.lower()) is not None:
+    for idx, word in enumerate(name.split()):
+        if re.match(r'^[ivx]+$', word.lower()) is not None:
             word = word.upper()
+        elif idx == 0:
+            word = word.title()
         elif word.lower() in conjunctions_and_prepositions:
+            word = word.lower()
+        else:
             word = word.title()
         titled.append(word)
     return ' '.join(titled)

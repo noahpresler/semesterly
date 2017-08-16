@@ -13,7 +13,6 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
-import sys
 
 from parsing.library.logger import JSONStreamWriter
 from parsing.library.tracker import NullTracker
@@ -109,7 +108,7 @@ class Ingestor(dict):
         'same_as',
     }
 
-    def __init__(self, school, config, output_path, output_error_path,
+    def __init__(self, config, output,
                  break_on_error=True,
                  break_on_warning=False,
                  display_progress_bar=True,
@@ -121,8 +120,7 @@ class Ingestor(dict):
         Args:
             school (string): The school code (e.g. jhu, gw, umich).
             config (dict): Configuration dictionary.
-            output_path (str): Output path.
-            output_error_path (str): Error output path.
+            output (str, file): Output path or file object.
             break_on_error (bool, optional): Stop ingesting on error.
             break_on_warning (bool, optional): Stop ingesting on warning.
             display_progress_bar (bool, optional): display progress bar
@@ -131,7 +129,7 @@ class Ingestor(dict):
             validate (bool, optional): Perform validation.
             tracker (library.tracker, optional): tracker object
         """
-        self.school = school
+        self.school = config['school']['code']
         self.validate = validate
         self.break_on_error = break_on_error
         self.break_on_warning = break_on_warning
@@ -139,10 +137,10 @@ class Ingestor(dict):
         self.tracker = tracker
         self.hoarder = Hoarder()
         self.tracker.add_viewer(self.hoarder)
-        self.tracker.school = school
+        self.tracker.school = self.school
 
         # Initialize loggers for json and errors.
-        self.json = JSONStreamWriter(output_path, type_=dict).enter()
+        self.json = JSONStreamWriter(output, type_=dict).enter()
         self.data_list = self.json.write('$data', type_=list).enter()
         if self.validate:
             self.validator = Validator(config, tracker=self.tracker)
@@ -267,7 +265,7 @@ class Ingestor(dict):
             'geneds': make_list(self._get('geneds')),
             'sections': self._get('sections'),
             'homepage': self._get('homepage', 'website'),
-            'same_as': self._get('same_as'),
+            'same_as': make_list(self._get('same_as')),
             'description': self._get('description', 'descr'),
             # 'description': extract_info_from_text(
             #     self._get('description', 'descr'),

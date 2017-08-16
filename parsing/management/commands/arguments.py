@@ -200,12 +200,12 @@ def _validator_args(parser):
         default=SCHOOLS_DIR + '/{school}/config.json'
     )
 
-    parser.add_argument(
-        '--output-error',
-        action=compose_actions(SingleSchoolAction, WritableFileAction),
-        help='default: %(default)s',
-        default=SCHOOLS_DIR + '/{school}/logs/error_{type}.log'
-    )
+    # parser.add_argument(
+    #     '--output-error',
+    #     action=compose_actions(SingleSchoolAction, WritableFileAction),
+    #     help='default: %(default)s',
+    #     default=SCHOOLS_DIR + '/{school}/logs/error_{type}.log'
+    # )
 
     parser.add_argument('--no-break-on-error',
                         dest='break_on_error',

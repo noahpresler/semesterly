@@ -102,6 +102,7 @@
   },
   "additionalProperties": false,
   "required": [
+    "config",
     "school",
     "course_code_regex",
     "terms",

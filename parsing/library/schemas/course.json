@@ -100,8 +100,11 @@
       }
     },
     "same_as": {
-      "type": "string",
-      "maxLength": 20
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 20
+      }
     },
     "sections": {
       "type": "array",

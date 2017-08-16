@@ -28,7 +28,7 @@ class JSONStreamWriter(object):
         type_ (dict, list): Actual type class of streamer (dict or list).
 
     Examples:
-        >>> with JSONStreamWriter(sys.stdout, type_='dict') as streamer:
+        >>> with JSONStreamWriter(sys.stdout, type_=dict) as streamer:
         ...     streamer.write('a', 1)
         ...     streamer.write('b', 2)
         ...     streamer.write('c', 3)
@@ -37,7 +37,7 @@ class JSONStreamWriter(object):
             "b": 2,
             "c": 3
         }
-        >>> with JSONStreamWriter(sys.stdout, type_='dict') as streamer:
+        >>> with JSONStreamWriter(sys.stdout, type_=dict) as streamer:
         ...     streamer.write('a', 1)
         ...     with streamer.write('data', type_=list) as streamer2:
         ...         streamer2.write({0:0, 1:1, 2:2})
@@ -74,10 +74,12 @@ class JSONStreamWriter(object):
         """
         self.first = True
         self.level = level
-        if isinstance(obj, file):
+        if (hasattr(obj, 'read') and hasattr(obj, 'write')):
             self.file = obj
+            self.close_file = False
         else:
             self.file = open(obj, 'wb')
+            self.close_file = True
         self.open, self.close = JSONStreamWriter.BRACES[type_]
         self.type_ = type_
 
@@ -126,7 +128,7 @@ class JSONStreamWriter(object):
               sep='',
               end='')
         if (self.file == sys.stdout or self.file == sys.stderr or
-                self.level > 0):
+                self.level > 0 or not self.close_file):
             return
         self.file.close()
 

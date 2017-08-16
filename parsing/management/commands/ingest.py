@@ -93,10 +93,10 @@ class Command(BaseCommand):
             p = parser(
                 config=options['config'],
                 output_path=options['output'].format(school=school),
-                output_error_path=options['output_error'].format(
-                    school=school,
-                    type=data_type
-                ),
+                # output_error_path=options['output_error'].format(
+                #     school=school,
+                #     type=data_type
+                # ),
                 break_on_error=options['break_on_error'],
                 break_on_warning=options['break_on_warning'],
                 display_progress_bar=options['display_progress_bar'],
