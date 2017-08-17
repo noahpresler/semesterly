@@ -294,7 +294,7 @@ class Ingestor(dict):
             },
             'code': self._get('section_code', 'section',
                               'meeting_section'),
-            'name': self._get('section_name'),
+            'name': titlize(self._get('section_name')),
             'term': self._get('term', 'semester'),
             'year': str(self._get('year')),
             'instructors': self._resolve_instructors(),
@@ -304,7 +304,7 @@ class Ingestor(dict):
             'waitlist_size': safe_cast(self._get('waitlist_size'), int),
             'remaining_seats': safe_cast(self._get('remaining_seats'), int),
             'type': self._get('type', 'section_type'),
-            'fees': self._get('fees', 'fee', 'cost'),
+            'fees': safe_cast(self._get('fees', 'fee', 'cost'), float),
             'final_exam': self._get('final_exam'),
             'textbooks': self._get('textbooks'),
             'meetings': self._get('offerings', 'meetings')

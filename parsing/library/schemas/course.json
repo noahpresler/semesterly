@@ -134,11 +134,9 @@
         },
         "additionalProperties": false,
         "required": [
-          "kind",
           "code",
           "term",
-          "year",
-          "course"
+          "year"
         ]
       }
     }

@@ -315,12 +315,15 @@ class DigestionAdapter(object):
             adapted['section_type'] = section_type_map.get(section.type, 'L')
         if 'fees' in section:
             pass  # TODO - add fees to database
-        if 'instructors' in section:
-            # FIXME -- might break with instructor as object
-            if isinstance(section.instructors, basestring):
-                adapted['instructors'] = section.instructors
+        for instructor in section.get('instructors', []):
+            adapted.setdefault('instructors', '')
+            if isinstance(instructor.name, basestring):
+                adapted['instructors'] += instructor.name
+            elif isinstance(instructor.name, dict):
+                adapted['instructors'] += '{} {}'.format(instructor.name.first,
+                                                         instructor.name.last)
             else:
-                adapted['instructors'] = ', '.join(i['name'] for i in section.instructors)
+                raise DigestionError('get your instructors straight')
         if 'final_exam' in section:
             pass  # TODO - add to database
 

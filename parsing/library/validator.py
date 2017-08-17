@@ -22,16 +22,13 @@ import jsonschema
 import logging
 import re
 import simplejson as json
-import sys
-import warnings
 
 # Contains BASE_DIR and PARSING_MODULE.
 from django.conf import settings
 
 from parsing.library.tracker import Tracker
 from parsing.library.exceptions import PipelineError, PipelineWarning
-from parsing.library.utils import DotDict, make_list, update, \
-    dir_to_dict
+from parsing.library.utils import DotDict, dir_to_dict, SimpleNamespace
 
 
 class ValidationError(PipelineError):
@@ -90,15 +87,15 @@ class Validator:
             for kind in Validator.KINDS
         }
 
+        # Running monitor of validated course and section codes.
+        self.seen = {}
+
         self.config = DotDict(config)
         self.config['kind'] = 'config'
         self.validate(self.config)
 
         self.course_code_regex = re.compile(self.config.course_code_regex)
         self.relative = relative
-
-        # Running monitor of validated course and section codes.
-        self.seen = {}
 
         if tracker is None:  # Used during self-contained validation.
             self.tracker = Tracker()
@@ -189,16 +186,21 @@ class Validator:
                 return json.load(f)
             return json.load(f, object_pairs_hook=raise_on_duplicates)
 
-    def validate(self, data):
+    def validate(self, data, transact=True):
         """Validation entry/dispatcher.
 
         Args:
             data (list, dict): Data to validate.
         """
-        for obj in make_list(data):
-            obj = DotDict(obj)
-            Validator.schema_validate(obj, *Validator.SCHEMAS[obj.kind])
-            self.kind_to_validation_function[obj.kind](obj)
+        if transact:
+            self.transaction = SimpleNamespace(key=None, values=set())
+
+        data = DotDict(data)
+        Validator.schema_validate(data, *Validator.SCHEMAS[data.kind])
+        self.kind_to_validation_function[data.kind](data)
+
+        if transact and self.transaction.key:
+            self.seen.setdefault(self.transaction.key, set()).update(self.transaction.values)
 
     def validate_self_contained(self, data_path,
                                 break_on_error=True,
@@ -256,6 +258,11 @@ class Validator:
             raise ValidationError(course,
                                   'course object must be of kind course')
 
+        if ('school' in course and
+                course.school.code != self.config.school.code):
+            raise ValidationError(course,
+                                  'course schools does not match config')
+
         if self.course_code_regex.match(course.code) is None:
             raise ValidationError(
                 course,
@@ -280,7 +287,7 @@ class Validator:
             self.validate_website(course.homepage)
 
         for sa in course.get('same_as', []):
-            if self.course_code_regex(sa) is not None:
+            if self.course_code_regex.match(sa) is not None:
                 continue
             raise ValidationError(
                 course,
@@ -290,29 +297,29 @@ class Validator:
                 )
             )
 
+        if self.relative:
+            if course.code in self.seen:
+                raise MultipleDefinitionsWarning(
+                    course,
+                    'multiple definitions of course {}'.format(course.code)
+                )
+            self.transaction.key = course.code
+
         for section in course.get('sections', []):
-            if 'course' in section and section.course.code != course.code:
+            if ('course' in section and
+                    section['course']['code'] != course.code):
                 raise ValidationError(
                     course,
                     'nested {} does not match parent {}'.format(
-                        section.course.code,
+                        section['course']['code'],
                         course.code
                     )
                 )
 
             # NOTE: mutating dictionary
-            section.course = {'code': course.code}
-            self.validate_section(section)
-
-        if not self.relative:
-            return
-
-        if course.code in self.seen:
-            raise MultipleDefinitionsWarning(
-                course,
-                'multiple definitions of course {}'.format(course.code)
-            )
-        self.seen.setdefault(course.code, {})
+            section['course'] = {'code': course.code}
+            section['kind'] = 'section'
+            self.validate(DotDict(section), transact=False)
 
     def validate_section(self, section):
         """Validate section object.
@@ -350,9 +357,15 @@ class Validator:
 
         if 'instructors' in section:
             db_instructor_textfield_max_size = 500
-            db_instructor_textfield_size = len(
-                ', '.join(instructor['name'] for instructor in section.instructors)
-            )
+            instructor_textfield = ''
+            for instructor in section.get('instructors', []):
+                instructor = DotDict(instructor)
+                if isinstance(instructor.name, basestring):
+                    instructor_textfield += instructor.name
+                elif isinstance(instructor.name, dict):
+                    instructor_textfield += '{} {}'.format(instructor.name.first,
+                                                           instructor.name.last)
+            db_instructor_textfield_size = len(instructor_textfield)
             if db_instructor_textfield_size > db_instructor_textfield_max_size:
                 raise ValidationError(
                     section,
@@ -385,7 +398,27 @@ class Validator:
             # final_exam['section'] = {'code': section.code}
             # self.validate_final_exam(section.final_exam)
 
+        if self.relative:
+            if section.course.code not in self.seen and self.transaction.key != section.course.code:
+                raise ValidationError(
+                    'course code {} isnt defined'.format(section.course.code),
+                    section
+                )
+            elif ((section.code, section.year, section.term)
+                    in self.seen.get(section.course.code, set()) | self.transaction.values):
+                raise MultipleDefinitionsWarning(
+                    section,
+                    'multiple defs for {} {} - {} already defined'.format(
+                        section.course.code,
+                        section.code,
+                        section.year
+                    )
+                )
+            self.transaction.key = section.course.code
+            self.transaction.values.add((section.code, section.year, section.term))
+
         for meeting in section.get('meetings', []):
+            meeting = DotDict(meeting)
             if ('course' in meeting and
                     meeting.course.code != section.course.code):
                 raise ValidationError(
@@ -407,36 +440,18 @@ class Validator:
                 )
 
             # NOTE: mutating obj
-            # meeting['course'] = section.course
-            # meeting['section'] = {'code': section.code}
-            self.validate_meeting(DotDict(meeting))
+            meeting['course'] = section.course
+            meeting['section'] = {
+                'code': section.code,
+                'year': section.year,
+                'term': section.term
+            }
+            meeting['kind'] = 'meeting'
+            self.validate(DotDict(meeting), transact=False)
 
         if 'textbooks' in section:
             for textbook in section.textbooks:
                 self.validate_textbook_link(textbook)
-
-        if not self.relative:
-            return
-
-        if section.course.code not in self.seen:
-            raise ValidationError(
-                'course code {} isnt defined'.format(section.course.code),
-                section
-            )
-        elif (section.code in self.seen[section.course.code] and
-                section.year in self.seen[section.course.code][section.code] and
-                section.term in self.seen[section.course.code][section.code][section.year]):
-            raise MultipleDefinitionsWarning(
-                section,
-                'multiple defs for {} {} - {} already defined'.format(
-                    section.course.code,
-                    section.code,
-                    section.year
-                )
-            )
-
-        update(self.seen[section.course.code],
-               {section.code: {section.year: section.term}})
 
     def validate_meeting(self, meeting):
         """Validate meeting object.
@@ -484,13 +499,14 @@ class Validator:
         if not self.relative:
             return
 
-        if 'course' in meeting and meeting.course.code not in self.seen:
+        if 'course' in meeting and meeting.course.code not in self.seen and self.transaction is None:
             raise ValidationError(
                 meeting,
                 'course code {} isnt defined'.format(meeting.course.code)
             )
-        if ('section' in meeting and
-                meeting.section.code not in self.seen[meeting.course.code]):
+        if 'section' not in meeting:
+            return
+        if (meeting.section.code, meeting.section.year, meeting.section.term) not in self.seen.get(meeting.course.code, set()) | self.transaction.values:
             raise ValidationError(
                 meeting,
                 'section {} isnt defined'.format(meeting.section.code)
@@ -661,8 +677,8 @@ class Validator:
         try:
             start, end = map(dparser.parse, [start, end])
         except ValueError:
-            raise ValidationError('invalid time format {}-{}'.format(start, end))
-
+            raise ValidationError('invalid time format {}-{}'.format(start,
+                                                                     end))
 
         if start > end:
             raise ValidationError('start {} > end {}'.format(start, end))

@@ -13,6 +13,7 @@
 import simplejson as json
 import StringIO
 
+from copy import deepcopy
 from django.test import TestCase, SimpleTestCase
 
 from parsing.library.utils import clean, make_list, DotDict, \
@@ -20,7 +21,8 @@ from parsing.library.utils import clean, make_list, DotDict, \
     dict_filter_by_list, time24
 from parsing.library.logger import JSONStreamWriter
 from parsing.library.ingestor import Ingestor
-from parsing.library.validator import Validator, ValidationError
+from parsing.library.validator import Validator, ValidationError, \
+    MultipleDefinitionsWarning, ValidationWarning
 
 
 class UtilsTest(SimpleTestCase):
@@ -52,6 +54,8 @@ class UtilsTest(SimpleTestCase):
         d['a'] = 3
         self.assertEqual((3, 2), (d.a, d['b']))
         self.assertEqual((31, 31), (d.c.ca, d.c['ca']))
+        e = DotDict({'a': [{'b': 1}, {'c': 2}]})
+        self.assertEqual(e.a[1]['c'], 2)
 
     def test_safe_cast(self):
         self.assertEqual(3.14159265, safe_cast('3.14159265', float))
@@ -214,39 +218,42 @@ class JSONStreamWriterTest(SimpleTestCase):
                        separators=(',', ': ')).replace(' [', '\n  [')
         )
 
-config = {
-    'kind': 'config',
-    'school': {
-        'code': 'test',
-        'name': 'University of Test'
-    },
-    'course_code_regex': '([A-Z]+)$',
-    'terms': [
-        'Foo',
-        'Bar',
-        'Baz'
-    ],
-    'granularity': 15,
-    'ampm': True,
-    'full_academic_year_registration': False,
-    'single_access': False,
-    'active_semesters': {
-        '2017': [
+
+class ValidationTest(SimpleTestCase):
+
+    config = {
+        'kind': 'config',
+        'school': {
+            'code': 'test',
+            'name': 'University of Test'
+        },
+        'course_code_regex': '([A-Z]+)$',
+        'terms': [
             'Foo',
-            'Bar'
-        ],
-        '2016': [
-            'Foo',
+            'Bar',
             'Baz'
+        ],
+        'granularity': 15,
+        'ampm': True,
+        'full_academic_year_registration': False,
+        'single_access': False,
+        'active_semesters': {
+            '2017': [
+                'Foo',
+                'Bar'
+            ],
+            '2016': [
+                'Foo',
+                'Baz'
+            ]
+        },
+        'campuses': [
+            'Homewood'
         ]
     }
-}
 
-
-class ValidateConfigTest(SimpleTestCase):
-
-    def test_config_required(self):
-        required = {
+    def test_validator_flat(self):
+        config_required = {
             'school',
             'course_code_regex',
             'terms',
@@ -256,10 +263,280 @@ class ValidateConfigTest(SimpleTestCase):
             'active_semesters',
             'ampm'
         }
-        for req in required:
-            invalid_config = {k: v for k, v in config.items() if k != req}
+
+        for req in config_required:
+            invalid_config = {
+                k: v for k, v in ValidationTest.config.items() if k != req
+            }
             with self.assertRaises(ValidationError):
                 Validator(invalid_config)
+        validator = Validator(ValidationTest.config)
+        course = {
+            'kind': 'course',
+            'school': {
+                'code': 'test'
+            },
+            'code': 'ABC',
+            'name': 'Alphabet',
+            'department': {
+                'code': 'GHI',
+                'name': 'English'
+            },
+            'credits': 3.,
+            'prerequisites': ['ABC', 'DEF'],
+            'corequisites': ['A', 'AB', 'BC', 'B', 'C'],
+            'homepage': 'www.google.com',
+            'same_as': ['ABD'],
+            'description': 'Um, hi hello',
+        }
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(course)
+            invalid['school']['code'] = 'nottest'
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(course)
+            invalid['same_as'].append('abc')
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(course)
+            invalid['code'] = 'abc'
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(course)
+            invalid['code'] = 'abc'
+            validator.validate(invalid)
+        validator.validate(course)
+        with self.assertRaises(MultipleDefinitionsWarning):
+            validator.validate(course)
+
+        section = {
+            'kind': 'section',
+            'course': {
+                'code': 'ABC',
+            },
+            'code': '001',
+            'term': 'Bar',
+            'year': '2017',
+            'instructors': [
+                {
+                    'name': {
+                        'first': 'Sem',
+                        'last': 'Ly'
+                    }
+                },
+                {
+                    'name': 'Semesterly'
+                }
+            ],
+            'capacity': 42,
+            'enrollment': 41,
+            'waitlist': 0,
+            'waitlist_size': 100,
+            'type': 'Lecture',
+            'fees': 50.,
+        }
+
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(section)
+            invalid['course']['code'] = 'ABD'
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(section)
+            invalid['term'] = 'NotInConfig'
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(section)
+            invalid['capacity'] = -1
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(section)
+            invalid['enrollment'] = -1
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(section)
+            invalid['fees'] = 'NotAFloat'
+            validator.validate(invalid)
+        validator.validate(section)
+        with self.assertRaises(MultipleDefinitionsWarning):
+            validator.validate(section)
+
+        meeting = {
+            'kind': 'meeting',
+            'course': {
+                'code': 'ABC'
+            },
+            'section': {
+                'code': '001',
+                'year': '2017',
+                'term': 'Bar'
+            },
+            'days': ['M', 'W', 'F'],
+            'time': {
+                'start': '14:00',
+                'end': '14:50'
+            },
+            'location': {
+                'campus': 'Homewood',
+                'building': 'Malone',
+                'room': 'Ugrad'
+            }
+        }
+
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(meeting)
+            invalid['course']['code'] = 'ABD'
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(meeting)
+            invalid['section']['code'] = '002'
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(meeting)
+            invalid['section']['term'] = 'InvalidTerm'
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(meeting)
+            invalid['section']['year'] = '2018'
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(meeting)
+            invalid['time']['start'] = '15:00'
+            validator.validate(invalid)
+        with self.assertRaises(ValidationWarning):
+            invalid = deepcopy(meeting)
+            invalid['time']['start'] = '14:50'
+            validator.validate(invalid)
+        with self.assertRaises(ValidationWarning):
+            invalid = deepcopy(meeting)
+            invalid['location']['campus'] = 'NotInConfigList'
+            validator.validate(invalid)
+        validator.validate(meeting)
+
+        textbook_link = {
+            'kind': 'textbook_link',
+            'school': {
+                'code': 'test'
+            },
+            'course': {
+                'code': 'ABC'
+            },
+            'section': {
+                'code': '001',
+                'year': '2017',
+                'term': 'Bar'
+            },
+            'isbn': '9780262033848',
+            'required': True
+        }
+
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(textbook_link)
+            invalid['course']['code'] = 'abc'
+            validator.validate(invalid)
+        validator.validate(textbook_link)
+
+    def test_validator_nested(self):
+        validator = Validator(ValidationTest.config)
+        nested_course = {
+            'kind': 'course',
+            'school': {
+                'code': 'test'
+            },
+            'code': 'ABC',
+            'name': 'Alphabet',
+            'department': {
+                'code': 'GHI',
+                'name': 'English'
+            },
+            'credits': 3.,
+            'prerequisites': ['ABC', 'DEF'],
+            'corequisites': ['A', 'AB', 'BC', 'B', 'C'],
+            'homepage': 'www.google.com',
+            'same_as': ['ABD'],
+            'description': 'Um, hi hello',
+            'sections': [
+                {
+                    'code': '001',
+                    'term': 'Bar',
+                    'year': '2017',
+                    'instructors': [
+                        {
+                            'name': {
+                                'first': 'Sem',
+                                'last': 'Ly'
+                            }
+                        },
+                        {
+                            'name': 'Semesterly'
+                        }
+                    ],
+                    'capacity': 42,
+                    'enrollment': 41,
+                    'waitlist': 0,
+                    'waitlist_size': 100,
+                    'type': 'Lecture',
+                    'fees': 50.,
+                },
+                {
+                    'code': '002',
+                    'term': 'Bar',
+                    'year': '2017',
+                    'instructors': [
+                        {
+                            'name': 'Semesterly'
+                        }
+                    ],
+                    'capacity': 40,
+                    'enrollment': 36,
+                    'waitlist': 0,
+                    'waitlist_size': 100,
+                    'type': 'Lecture',
+                    'fees': 50.,
+                    'meetings': [
+                        {
+                            'days': ['M', 'F'],
+                            'time': {
+                                'start': '14:00',
+                                'end': '14:50'
+                            },
+                            'location': {
+                                'campus': 'Homewood',
+                                'building': 'Malone',
+                                'room': 'Ugrad'
+                            }
+                        },
+                        {
+                            'days': ['W'],
+                            'time': {
+                                'start': '10:00',
+                                'end': '12:15'
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(nested_course)
+            invalid['sections'][0]['course'] = {'code': 'ABD'}
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(nested_course)
+            invalid['sections'][1]['meetings'][1]['course'] = {'code': 'ABD'}
+            validator.validate(invalid)
+        with self.assertRaises(MultipleDefinitionsWarning):
+            invalid = deepcopy(nested_course)
+            invalid['sections'][1]['code'] = '001'
+            validator.validate(invalid)
+        with self.assertRaises(ValidationError):
+            invalid = deepcopy(nested_course)
+            invalid['sections'][1]['meetings'][1]['days'] = None
+            validator.validate(invalid)
+
+        validator.validate(nested_course)
+        with self.assertRaises(MultipleDefinitionsWarning):
+            validator.validate(nested_course)
 
 
 class IngestorTest(SimpleTestCase):
