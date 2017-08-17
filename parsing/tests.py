@@ -262,7 +262,6 @@ class ValidateConfigTest(SimpleTestCase):
                 Validator(invalid_config)
 
 
-
 class IngestorTest(SimpleTestCase):
 
     def setUp(self):

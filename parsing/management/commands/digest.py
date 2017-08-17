@@ -25,7 +25,6 @@ from parsing.library.exceptions import PipelineException
 from parsing.library.digestor import DigestionError
 from parsing.library.tracker import Tracker
 from parsing.library.viewer import StatProgressBar, ETAProgressBar, StatView
-from parsing.library.utils import pretty_json
 
 
 class Command(BaseCommand):
@@ -76,7 +75,7 @@ class Command(BaseCommand):
         tracker.school = school
         tracker.mode = 'validating'
         logger = logging.getLogger('parsing.schools.' + school)
-        logger.debug(pretty_json(options))
+        logger.debug('Command options:', options)
 
         # Load config file to dictionary.
         if isinstance(options['config'], str):
@@ -125,8 +124,6 @@ class Command(BaseCommand):
         except Exception:
             logging.exception('Failed digestion with uncaught exception')
 
-        logging.info('Digestion overview:\n' + pretty_json(
-            self.stat_view.report()
-        ))
+        logging.info('Digestion overview:', self.stat_view.report())
 
         # TODO - move to periodic tasks

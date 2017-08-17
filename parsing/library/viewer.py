@@ -13,12 +13,10 @@
 from __future__ import absolute_import, division, print_function
 
 import dateparser
-import datetime
 import progressbar
 
 from abc import ABCMeta, abstractmethod
 
-from parsing.library.utils import pretty_json
 from parsing.library.exceptions import PipelineError
 
 
@@ -159,36 +157,6 @@ class ETAProgressBar(Viewer):
 
     def report(self, tracker):
         """Do nothing."""
-
-
-class LogFormatted(Viewer):
-    def __init__(self, logpath):
-        self.logpath = logpath
-        self.statuses = StatView()
-
-    def receive(self, tracker, broadcast_type):
-        self.statuses.receive(tracker, broadcast_type)
-
-    # TODO - report in valid json format
-    def report(self, tracker):
-        with open(self.logpath, 'a') as log:
-            print('=' * 40, file=log)
-            print('{}'.format(tracker.school.upper()), file=log)
-            print('=={}=='.format(tracker.mode.upper()), file=log)
-            # if tracker.saw_error:
-            #     print('FAILED:\n\n{}'.format(tracker.error), file=log)
-            print('TIMESTAMP (UTC): {}'.format(tracker.timestamp), file=log)
-            print('ELAPSED: {}'.format(str(datetime.timedelta(seconds=int(tracker.end_time - tracker.start_time)))), file=log)
-            if hasattr(tracker, 'cmd_options'):
-                print('COMMAND OPTIONS:\n{}'.format(pretty_json(tracker.cmd_options)), file=log)
-            statistics = {
-                subject: {
-                    stat: value for stat, value in stats.items() if value != 0
-                } for subject, stats in self.statuses.stats.items() if len(stats) > 0
-            }
-            print('STATS:\n{}'.format(pretty_json(statistics)), file=log)
-            if hasattr(tracker, 'granularity'):
-                print('calculated granularity: {}'.format(tracker.granularity), file=log)
 
 
 class StatView(Viewer):

@@ -7,11 +7,16 @@ formatters:
   simple:
     format: '%(levelname)s %(asctime)s %(message)s'
     datefmt: '%Y-%m-%d %H:%M:%S'
+    (): parsing.library.logger.JSONFormatter
 
   verbose:
     format: '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
     datefmt: '%Y-%m-%d %H:%M:%S'
 
+  coloredjson:
+    format: '%(levelname)s %(asctime)s %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+    (): parsing.library.logger.JSONColoredFormatter
 
 handlers:
 
@@ -32,7 +37,7 @@ handlers:
   console:
     class: logging.StreamHandler
     level: ERROR
-    formatter: simple
+    formatter: coloredjson
     stream: ext://sys.stderr
 
 loggers:

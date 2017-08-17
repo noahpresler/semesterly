@@ -18,8 +18,7 @@ from parsing.library.logger import JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
 from parsing.library.viewer import Hoarder
-from parsing.library.utils import clean, make_list, safe_cast, titlize, \
-    time24, pretty_json
+from parsing.library.utils import clean, make_list, safe_cast, titlize, time24
 from parsing.library.exceptions import PipelineError, PipelineWarning
 from parsing.library.validator import ValidationError, ValidationWarning, \
     MultipleDefinitionsWarning
@@ -489,7 +488,7 @@ class Ingestor(dict):
                 raise ValidationError(*e.args)
             else:
                 logger.warning('Ingestion failed', exc_info=True)
-                logger.debug('Ingestor dump \n' + pretty_json(self))
+                logger.debug('Ingestor dump', self)
         except ValidationWarning as e:
             if (isinstance(e, MultipleDefinitionsWarning) and
                     self.skip_duplicates):
@@ -500,6 +499,6 @@ class Ingestor(dict):
                     raise ValidationWarning(*e.args)
                 else:
                     logger.warning('Validation warning', exc_info=True)
-                    logger.debug('Ingestor dump \n' + pretty_json(self))
+                    logger.debug('Ingestor dump', self)
 
         return is_valid, full_skip

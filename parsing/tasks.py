@@ -25,7 +25,6 @@ from parsing.schools.active import ACTIVE_SCHOOLS
 
 logger = get_task_logger(__name__)
 
-
 @periodic_task(
     run_every=(crontab(hour=00, minute=00)),
     name="task_parse_current_registration_period",
@@ -45,7 +44,7 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
 
             # Group all semesters into single parsing call for schools that
             #  cannot support parallel parsing.
-            if SCHOOLS_MAP[school].single_access_schools:
+            if SCHOOLS_MAP[school].single_access:
                 years_and_terms = {
                     year: SCHOOLS_MAP[school].active_semesters[year][0]
                     for year in years

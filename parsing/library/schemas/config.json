@@ -102,7 +102,7 @@
   },
   "additionalProperties": false,
   "required": [
-    "config",
+    "kind",
     "school",
     "course_code_regex",
     "terms",

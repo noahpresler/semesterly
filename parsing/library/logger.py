@@ -12,7 +12,10 @@
 
 from __future__ import absolute_import, division, print_function
 
+import logging
 import sys
+
+from pygments import highlight, lexers, formatters
 
 from parsing.library.utils import pretty_json
 
@@ -189,24 +192,41 @@ class JSONStreamWriter(object):
               end='')
 
 
-# class JSONFormatter(logging.Formatter):
-#     """Simple JSON extension of Python logging.Formatter."""
-#
-#     def format(self, record):
-#         """Format record message.
-#
-#         Args:
-#             record (logging.LogRecord): Description
-#
-#         Returns:
-#             str: Prettified JSON string.
-#         """
-#         if isinstance(record.msg, dict):
-#             return pretty_json(record.msg)
-#         return record.msg
-# logging.basicConfig(level=logging.INFO)
-# handler = logging.StreamHandler(sys.stdout)
-# handler.setFormatter(JSONFormatter())
-# log = logging.getLogger()
-# log.addHandler(handler)
-# log.info({'foo': 'bar', 'bar': 'baz', 'num': 123, 'fnum': 123.456})
+class JSONFormatter(logging.Formatter):
+    """Simple JSON extension of Python logging.Formatter."""
+    def format(self, record):
+        """Format record message.
+
+        Args:
+            record (logging.LogRecord): Description
+
+        Returns:
+            str: Prettified JSON string.
+        """
+        if isinstance(record.args, dict):
+            try:
+                prettified = pretty_json(record.args)
+                record.msg += '\n' + prettified
+            except TypeError:
+                pass
+        return super(JSONFormatter, self).format(record)
+
+
+def colored_json(j):
+    lexer = lexers.JsonLexer()
+    lexer.add_filter('whitespace')
+    colorful_json = highlight(unicode(pretty_json(j), 'UTF-8'),
+                              lexer,
+                              formatters.TerminalFormatter())
+    return colorful_json
+
+
+class JSONColoredFormatter(logging.Formatter):
+    def format(self, record):
+        if isinstance(record.args, dict):
+            try:
+                prettified = colored_json(record.args)
+                record.msg += '\n' + prettified
+            except TypeError:
+                pass
+        return super(JSONColoredFormatter, self).format(record)
