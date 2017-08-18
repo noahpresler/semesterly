@@ -17,7 +17,7 @@ from rest_framework.test import APITestCase
 from timetable.models import Semester, Course, Section, Offering
 from parsing.models import DataUpdate
 from helpers.test.test_cases import UrlTestCase
-from serializers import CourseSerializer
+from .serializers import CourseSerializer
 
 
 class Serializers(TestCase):

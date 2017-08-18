@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
+
 
 import json
 
@@ -85,7 +85,7 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
         if SCHOOLS_MAP[self.school].final_exams is None:
             final_exams = []
         else:
-            for year, terms in SCHOOLS_MAP[self.school].final_exams.items():
+            for year, terms in list(SCHOOLS_MAP[self.school].final_exams.items()):
                 for term in terms:
                     final_exams.append({
                         'name': term,
@@ -100,8 +100,8 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             # 'oldSemesters': get_old_semesters(self.school),
             'uses12HrTime': SCHOOLS_MAP[self.school].ampm,
             'studentIntegrations': integrations,
-            'examSupportedSemesters': map(all_semesters.index,
-                                          final_exams),
+            'examSupportedSemesters': list(map(all_semesters.index,
+                                          final_exams)),
             'timeUpdatedTos': Agreement.objects.latest().last_updated.isoformat(),
 
             'featureFlow': dict(feature_flow, name=self.feature_name)

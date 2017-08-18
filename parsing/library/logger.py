@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
+
 
 import logging
 import sys
@@ -215,7 +215,7 @@ class JSONFormatter(logging.Formatter):
 def colored_json(j):
     lexer = lexers.JsonLexer()
     lexer.add_filter('whitespace')
-    colorful_json = highlight(unicode(pretty_json(j), 'UTF-8'),
+    colorful_json = highlight(str(pretty_json(j), 'UTF-8'),
                               lexer,
                               formatters.TerminalFormatter())
     return colorful_json

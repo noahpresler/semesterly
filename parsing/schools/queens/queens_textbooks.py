@@ -16,7 +16,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
-from qcumber_scraper.textbooks import main
+from .qcumber_scraper.textbooks import main
 from parsing.common.textbooks.amazon import amazon_textbook_fields
 from timetable.models import Textbook
 
@@ -39,7 +39,7 @@ def parse_queens_textbooks():
       tb_obj, created = Textbook.objects.update_or_create(isbn=isbn,
                                                           defaults=tb_data)
       if created:
-        print "New textbook: {0} by {1}".format(tb_data['title'], tb_data['author'])
+        print("New textbook: {0} by {1}".format(tb_data['title'], tb_data['author']))
       courses = [QueensCourse.objects.get(code=c) for c in tb.get('courses', [])]
       for course in courses:
         offerings = QueensCourseOffering.objects.filter(course=course)
@@ -50,7 +50,7 @@ def parse_queens_textbooks():
           new_link = QueensLink(courseoffering=offering, textbook=tb_obj,
                                 is_required=bool(required))
           new_link.save()
-          print "--Saved to section {0}".format(offering.section_code)
+          print("--Saved to section {0}".format(offering.section_code))
 
 if __name__ == '__main__':
   parse_queens_textbooks()

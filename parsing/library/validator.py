@@ -14,10 +14,10 @@
 # TODO - consider something to load db field sizes into validator
 #        However, that would ruin the purity of the adapter.
 
-from __future__ import absolute_import, division, print_function
+
 
 import dateutil.parser as dparser
-import httplib
+import http.client
 import jsonschema
 import logging
 import re
@@ -360,7 +360,7 @@ class Validator:
             instructor_textfield = ''
             for instructor in section.get('instructors', []):
                 instructor = DotDict(instructor)
-                if isinstance(instructor.name, basestring):
+                if isinstance(instructor.name, str):
                     instructor_textfield += instructor.name
                 elif isinstance(instructor.name, dict):
                     instructor_textfield += '{} {}'.format(instructor.name.first,
@@ -654,7 +654,7 @@ class Validator:
         Raises:
             ValidationError: URL is invalid.
         """
-        c = httplib.HTTPConnection(url)
+        c = http.client.HTTPConnection(url)
         c.request('HEAD', '')
         # NOTE: 200 - good status
         #       301 - redirected
@@ -675,7 +675,7 @@ class Validator:
             ValidationError: Time range is invalid.
         """
         try:
-            start, end = map(dparser.parse, [start, end])
+            start, end = list(map(dparser.parse, [start, end]))
         except ValueError:
             raise ValidationError('invalid time format {}-{}'.format(start,
                                                                      end))

@@ -44,7 +44,7 @@ def get_secret(key):
             return SECRETS[key]
         except:
             try:
-                from dev_credentials import SECRETS
+                from .dev_credentials import SECRETS
                 return SECRETS[key]
             except:
                 raise ValueError("""'%s' not correctly configured.
@@ -314,7 +314,7 @@ CACHES = {
 CACHALOT_ENABLED = True
 
 try:
-    from local_settings import *
+    from .local_settings import *
 except:
     pass
 

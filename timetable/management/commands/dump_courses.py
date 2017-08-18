@@ -29,7 +29,7 @@ This module is adapted from the django-fixture-magic module to support Django 1.
 """
 
 
-from __future__ import print_function
+
 
 import json
 

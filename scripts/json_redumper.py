@@ -19,11 +19,11 @@ COURSE_BASE_ID = Course.objects.latest('id').id
 SECTION_BASE_ID = Section.objects.latest('id').id
 OFFERING_BASE_ID = Offering.objects.latest('id').id
 
-print "BASED IDs: C {0}, S {1}, O {2}".format(COURSE_BASE_ID,SECTION_BASE_ID,OFFERING_BASE_ID)
+print("BASED IDs: C {0}, S {1}, O {2}".format(COURSE_BASE_ID,SECTION_BASE_ID,OFFERING_BASE_ID))
 
 with open('everything.json') as data_file:
 	data = json.load(data_file)
-print "{0} Fixtures Detected".format(len(data))
+print("{0} Fixtures Detected".format(len(data)))
 
 new_json = []
 

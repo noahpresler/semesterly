@@ -25,7 +25,7 @@ class SimilarityFinder:
 		self.cachedStopWords = stopwords.words("english")
 		self.mode_type = ""
 		if len(sys.argv) != 2 or sys.argv[1] not in ACTIVE_SCHOOLS:
-			print "Please provide a valid university."
+			print("Please provide a valid university.")
 			exit()
 		self.school = sys.argv[1]
 		self.courses = Course.objects.filter(school=self.school)
@@ -45,18 +45,18 @@ class SimilarityFinder:
 					course_match = Course.objects.filter(school=self.school, description=match[0]).exclude(code=course.code)[0]
 					try:
 						course.related_courses.get(code=course_match.code)
-						print "PREVIOUSLY related", course_match, " to ", course
+						print("PREVIOUSLY related", course_match, " to ", course)
 					except Course.DoesNotExist:
-						print "ADDING", course_match, "as related to", course
+						print("ADDING", course_match, "as related to", course)
 						course.related_courses.add(course_match)
 
 	def unstop_descriptions(self):
 		courses = self.courses.filter(unstopped_description="")
 		for course in courses:
-			print "Unstopping: " + course.name
+			print("Unstopping: " + course.name)
 			course.unstopped_description = ' '.join([word for word in course.description.split() if word not in (self.cachedStopWords)])
 			course.save()
-			print course.unstopped_description
+			print(course.unstopped_description)
 
 if __name__ == '__main__':
 	cf = SimilarityFinder()

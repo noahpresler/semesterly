@@ -30,7 +30,7 @@ def get_amazon_fields(isbn, api):
             "Title" : get_title(result)
         }
     except InvalidParameterValue:
-        print "\t\t\tInvalidParameterException. ISBN: " + isbn
+        print("\t\t\tInvalidParameterException. ISBN: " + isbn)
         info = None
 
     except:

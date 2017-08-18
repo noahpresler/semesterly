@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import subprocess
 import re
 
@@ -32,7 +32,7 @@ class CourseAPI:
 
     @staticmethod
     def _retrieve_from_url(url):
-        page = urllib2.urlopen(url)
+        page = urllib.request.urlopen(url)
         soup = BeautifulSoup(page.read())
         courses = soup.findAll("tr", {"class": "odd"})
         courses_even = soup.findAll("tr", {"class": "even"})
@@ -117,7 +117,7 @@ class CourseAPI:
         req = req.upper()
 
         url = 'http://www.courses.as.pitt.edu/results-genedreqa.asp?REQ={}&TERM={}'.format(req, term)
-        page = urllib2.urlopen(url)
+        page = urllib.request.urlopen(url)
         soup = BeautifulSoup(page.read())
         courses = soup.findAll("tr", {"class": "odd"})
         courses_even = soup.findAll("tr", {"class": "even"})
@@ -175,7 +175,7 @@ class CourseAPI:
         """
 
         url = 'http://www.courses.as.pitt.edu/detail.asp?CLASSNUM={}&TERM={}'.format(class_number, term)
-        page = urllib2.urlopen(url)
+        page = urllib.request.urlopen(url)
         soup = BeautifulSoup(page.read())
         table = soup.findChildren('table')[0]
         rows = table.findChildren('tr')

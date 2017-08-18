@@ -16,7 +16,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from hashids import Hashids
 
-from jhu_final_exam_scheduler import JHUFinalExamScheduler
+from .jhu_final_exam_scheduler import JHUFinalExamScheduler
 from helpers.mixins import FeatureFlowView, CsrfExemptMixin
 from exams.models import FinalExamShare
 from student.utils import get_student
