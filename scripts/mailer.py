@@ -61,7 +61,7 @@ class Mailer():
         msg['subject'] = subject
         msg['From'] = self.sender
         msg['To'] = recipient
-        print ("Sending to: " + str(recipient))
+        print(("Sending to: " + str(recipient)))
 
         try:
             # Perform operations via server
@@ -69,7 +69,7 @@ class Mailer():
             self.server.sendmail(self.sender, [recipient], msg.as_string())
         except:
             e = sys.exc_info()[0]
-            print("skipped " + str(student.user.email))
+            print(("skipped " + str(student.user.email)))
             traceback.print_exc()
 
         self.server = smtplib.SMTP_SSL(MAILER_SERVER)

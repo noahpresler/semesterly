@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import logging
 import simplejson as json
 
@@ -58,15 +56,32 @@ class Command(BaseCommand):
                                                statistics=self.stat_view))
         tracker.start()
 
-        for data_type in options['types']:
+        for parser_type in options['types']:
             for school in options['schools']:
                 tracker.school = school
 
-                self.run(SCHOOLS_MAP[school].parsers[data_type],
-                         tracker,
-                         options,
-                         data_type,
-                         school)
+                try:
+                    parsing = __import__(
+                        'parsing.schools.{school}.{parser_type}'.format(
+                            school=school,
+                            parser_type=parser_type
+                        )
+                    )
+                    parser = eval(
+                        'parsing.schools.{school}.{parser_type}.Parser'.format(
+                            school=school,
+                            parser_type=parser_type
+                        )
+                    )
+                    self.run(parser,
+                             tracker,
+                             options,
+                             parser_type,
+                             school)
+                except ImportError:
+                    logging.exception('Invalid parser')
+                    continue
+
         tracker.end()
 
     def run(self, parser, tracker, options, data_type, school):

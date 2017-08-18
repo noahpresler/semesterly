@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
+
 
 import sys
 import django
@@ -357,7 +357,7 @@ class DigestionAdapter(object):
         for instructor in section.get('instructors', []):
             instructor = DotDict(instructor)
             adapted.setdefault('instructors', '')
-            if isinstance(instructor.name, basestring):
+            if isinstance(instructor.name, str):
                 adapted['instructors'] += instructor.name
             elif isinstance(instructor.name, dict):
                 adapted['instructors'] += '{} {}'.format(instructor.name.first,
@@ -499,9 +499,7 @@ class DigestionAdapter(object):
         # NOTE: no current usage of course linked textbooks (listified yield will always be length 1)
 
 
-class DigestionStrategy(object):
-    __metaclass__ = ABCMeta
-
+class DigestionStrategy(object, metaclass=ABCMeta):
     @abstractmethod
     def wrap_up(self):
         '''Do whatever needs to be done to wrap_up digestion session.'''
@@ -517,9 +515,9 @@ class Vommit(DigestionStrategy):
         super(Vommit, self).__init__()
 
         def exclude(dct):
-                return {k: v for k, v in dct.items() if k != 'defaults'}
+                return {k: v for k, v in list(dct.items()) if k != 'defaults'}
 
-        for name, model in Digestor.MODELS.items():
+        for name, model in list(Digestor.MODELS.items()):
             # if hasattr(self, 'digest_' + name):
             #     continue
             def closure(name, model):
@@ -560,11 +558,11 @@ class Vommit(DigestionStrategy):
         context = {'section', 'course', 'semester', 'textbook'}
 
         whats = {}
-        for k, v in inmodel.iteritems():
+        for k, v in inmodel.items():
             if k not in context:
                 continue
             try:
-                whats[k] = unicode(v)
+                whats[k] = str(v)
             except django.utils.encoding.DjangoUnicodeDecodeError:
                 whats[k] = '<{}: [Bad Unicode data]'.format(k)
 
@@ -581,7 +579,7 @@ class Vommit(DigestionStrategy):
         }
 
         def prune(d):
-            return {k: v for k, v in d.iteritems() if k not in blacklist}
+            return {k: v for k, v in d.items() if k not in blacklist}
         dbmodel = prune(dbmodel)
         inmodel = prune(inmodel)
 
@@ -589,7 +587,7 @@ class Vommit(DigestionStrategy):
             dbmodel['course'] = str(dbmodel['course'])
 
         # Remove null values from dictionaries.
-        dbmodel = {k: v for k, v in dbmodel.iteritems() if v is not None}
+        dbmodel = {k: v for k, v in dbmodel.items() if v is not None}
 
         # Move contents of default dictionary to first-level of dictionary.
         if 'defaults' in inmodel:
@@ -636,7 +634,7 @@ class Vommit(DigestionStrategy):
         }
 
         defaults = {}
-        for model_name, model in models.items():
+        for model_name, model in list(models.items()):
             defaults[model_name] = {}
             for field in model._meta.get_all_field_names():
                 try:
@@ -665,7 +663,7 @@ class Absorb(DigestionStrategy):
 
     @classmethod
     def _create_digest_methods(cls):
-        for name, model in Digestor.MODELS.items():
+        for name, model in list(Digestor.MODELS.items()):
             if hasattr(cls, 'digest_' + name):
                 continue
 
@@ -688,7 +686,7 @@ class Absorb(DigestionStrategy):
         try:
             return model_type.objects.update_or_create(**model_args)
         except django.db.utils.DataError as e:
-            json_model_args = {k: str(v) for k, v in model_args.items()}
+            json_model_args = {k: str(v) for k, v in list(model_args.items())}
             raise DigestionError(json_model_args, str(e))
 
     @staticmethod
@@ -716,8 +714,8 @@ class Absorb(DigestionStrategy):
 
     def wrap_up(self):
         """Update time updated for school at wrap_up of parse."""
-        for school, years in self.meta['$schools'].items():
-            for year, terms in years.items():
+        for school, years in list(self.meta['$schools'].items()):
+            for year, terms in list(years.items()):
                 for term in terms:
                     semester, created = Semester.objects.update_or_create(
                         year=year,

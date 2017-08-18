@@ -12,7 +12,7 @@
 
 import sys
 import requests
-import cookielib
+import http.cookiejar
 import re
 import os
 import time
@@ -50,14 +50,14 @@ class OttawaParser:
 
   def safe_print(self,to_print):
     try:
-      print to_print
+      print(to_print)
     except UnicodeEncodeError:
-      print "Print statement omitted for UnicodeEncodeError."
+      print("Print statement omitted for UnicodeEncodeError.")
 
   def __init__(self, semester):
     self.num_parsed = 0
     self.s = requests.Session()
-    self.cookies = cookielib.CookieJar()
+    self.cookies = http.cookiejar.CookieJar()
     self.headers = {
       'User-Agent': 'My User Agent 1.0'
     }
@@ -95,8 +95,8 @@ class OttawaParser:
           selector = Select(self.driver.find_element_by_id("ctl00_MainContentPlaceHolder_Basic_SessionDropDown"))
           selector.select_by_value(self.sem_value)
           break
-        except Exception,e:
-          print str(e)
+        except Exception as e:
+          print(str(e))
           self.safe_print("Waiting for page load")
     self.safe_print("Term Has Been Selected")
     self.driver.find_element_by_id("ctl00_MainContentPlaceHolder_Basic_Button").click()
@@ -122,7 +122,7 @@ class OttawaParser:
       return False
 
   def to_cookielib_cookie(self,selenium_cookie):
-    return cookielib.Cookie(
+    return http.cookiejar.Cookie(
       version=0,
       name=selenium_cookie['name'],
       value=selenium_cookie['value'],
@@ -235,7 +235,7 @@ class OttawaParser:
           html = r.text
       except (requests.exceptions.Timeout,
           requests.exceptions.ConnectionError):
-        print "Unexpected error:", sys.exc_info()[0]
+        print("Unexpected error:", sys.exc_info()[0])
         
         continue
     return html.encode('utf-8')
@@ -288,7 +288,7 @@ if __name__ == '__main__':
     parse_ottawa()
   else:
     if sys.argv[1] not in ['F', 'S']:
-      print "Please specify either F or S for semester"
+      print("Please specify either F or S for semester")
     else:
       ott = OttawaParser(sys.argv[1])
       ott.parse_courses()

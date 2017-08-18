@@ -15,7 +15,7 @@
 # @author   Michael N. Miller
 # @date     2/22/17
 
-from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
+ # NOTE: slowly move toward Python3
 from django.utils.encoding import smart_str
 
 from amazonproduct import API

@@ -10,10 +10,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
+
 
 import requests
-import cookielib
+import http.cookiejar
 import sys
 import interruptingcow
 
@@ -26,7 +26,7 @@ class Requester(object):
     def __init__(self):
         self.session = requests.Session()
         self.headers = {'User-Agent': UserAgent().random}
-        self.cookies = cookielib.CookieJar()  # TODO - maybe this is not needed
+        self.cookies = http.cookiejar.CookieJar()  # TODO - maybe this is not needed
 
     def new_user_agent(self):
         self.headers['User-Agent'] = UserAgent().random

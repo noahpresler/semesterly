@@ -1,5 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
 from parsing.library.base_parser import BaseParser
 from parsing.library.exceptions import ParserError, ParserWarning, ParserJump
 
@@ -17,7 +15,7 @@ class Parser(BaseParser):
         Returns:
             Parser
         """
-        new_instance = object.__new__(cls, *args, **kwargs)
+        new_instance = object.__new__(cls)
         # CREDENTIALS BELONG HERE.
         # cls.CREDENTIALS = { ... }
         return new_instance

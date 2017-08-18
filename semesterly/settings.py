@@ -44,7 +44,7 @@ def get_secret(key):
             return SECRETS[key]
         except:
             try:
-                from dev_credentials import SECRETS
+                from .dev_credentials import SECRETS
                 return SECRETS[key]
             except:
                 raise ValueError("""'%s' not correctly configured.
@@ -163,6 +163,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
+    # 'social-auth-app-django'
     'django_extensions',
     'authpipe',
     'timetable',
@@ -314,7 +315,7 @@ CACHES = {
 CACHALOT_ENABLED = True
 
 try:
-    from local_settings import *
+    from .local_settings import *
 except:
     pass
 

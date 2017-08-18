@@ -10,15 +10,13 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 from abc import ABCMeta, abstractmethod
 
 from parsing.library.ingestor import Ingestor
 from parsing.library.requester import Requester
 
 
-class BaseParser:
+class BaseParser(metaclass=ABCMeta):
     """Abstract base parser for data pipeline parsers.
 
     Attributes:
@@ -27,8 +25,6 @@ class BaseParser:
         requester (:obj:`parsing.library.requester.Requester`)
         school (:obj:`str`): School that parser is for.
     """
-
-    __metaclass__ = ABCMeta
 
     def __init__(self, school,
                  config=None,

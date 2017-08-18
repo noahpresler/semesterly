@@ -10,15 +10,12 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import simplejson as json
 from collections import OrderedDict, namedtuple
-from django.conf import settings
 
+# import parsing.schools.jhu.courses  # NOTE: used in eval statement
 from parsing.library.utils import DotDict
 from parsing.schools.active import ACTIVE_SCHOOLS
-
 
 _school_attrs = [
     'code',
@@ -28,7 +25,8 @@ _school_attrs = [
     'ampm',
     'full_academic_year_registration',
     'single_access',
-    'final_exams parsers'
+    'final_exams',
+    'parsers'
 ]
 
 School = namedtuple(
@@ -38,6 +36,8 @@ School = namedtuple(
 
 
 def load_school(school):
+    from django.conf import settings
+
     config_file = '{}/{}/schools/{}/config.json'.format(settings.BASE_DIR,
                                                         settings.PARSING_MODULE,
                                                         school)
@@ -45,7 +45,7 @@ def load_school(school):
         config = DotDict(json.load(f))
 
     active_semesters = OrderedDict(
-        sorted(config.active_semesters.items(), key=lambda x: x[0])
+        sorted(list(config.active_semesters.items()), key=lambda x: x[0])
     )
 
     return School(code=config.school.code,
@@ -56,26 +56,40 @@ def load_school(school):
                   full_academic_year_registration=config.full_academic_year_registration,
                   single_access=config.single_access,
                   final_exams=config.get('final_exams'),
-                  parsers=load_parsers(school))
+                  parsers={})
 
 
 def load_parsers(school):
     parsers = {}
     for parser_type in ['courses', 'evals', 'textbooks']:
-        try:
-            parser = None  # Binding below in exec.
-            exec 'from {}.schools.{}.{} import Parser as parser'.format(
-                settings.PARSING_MODULE,
-                school,
-                parser_type
-            )
-            parsers[parser_type] = parser
-        except ImportError:
-            pass
+        pass
+        # try:
+        #     # parser = None  # Binding below in exec.
+        #     # exec('from {}.schools.{}.{} import Parser as parser'.format(
+        #     #     settings.PARSING_MODULE,
+        #     #     school,
+        #     #     parser_type
+        #     # ))
+        #     # print(parser)
+        #     # exec('import parsing.schools.{school}.{parser_type}.Parser'.format(
+        #     #     school=school,
+        #     #     parser_type=parser_type
+        #     # ))
+        #     parsers[parser_type] = __import__(
+        #         'parsing.schools.{school}.{parser_type}.Parser'.format(
+        #             school=school,
+        #             parser_type=parser_type
+        #         )
+        #     )
+        # except (ImportError) as e:
+        #     print(e)
+        #     print(school, parser_type)
     return parsers
 
 
 SCHOOLS_MAP = {school: load_school(school) for school in ACTIVE_SCHOOLS}
+
+# print(SCHOOLS_MAP)
 
 # course_parsers = {
 #     'uoft': lambda: UofTParser().start(),

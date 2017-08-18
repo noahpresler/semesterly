@@ -21,9 +21,7 @@ django.setup()
 from timetable.models import Course, Section, Offering
 
 
-class BaseParser:
-  __metaclass__ = abc.ABCMeta
-
+class BaseParser(metaclass=abc.ABCMeta):
   def __init__(self, semester=None, num_courses=None):
     self.semester = semester
     self.num_courses = num_courses
