@@ -18,25 +18,19 @@ import sys
 
 from bs4 import NavigableString, Tag
 
-from parsing.library.base_parser import CourseParser
-from parsing.library.internal_exceptions import CourseParseError
-from parsing.library.utils import safe_cast
-from parsing.library.extractor import filter_years_and_terms
+from parsing.library.base_parser import BaseParser
+from parsing.library.exceptions import ParseError
+from parsing.library.utils import safe_cast, dict_filter_by_dict
 from semesterly.settings import get_secret
 
 
-class Parser(CourseParser):
+class Parser(BaseParser):
     """George Washington University course parser.
 
     NOTE: GW cannot support multiple login!
     """
 
     URL = 'https://banweb.gwu.edu/PRODCartridge'
-    CREDENTIALS = {
-        'USERNAME': get_secret('GW_USER'),
-        'PASSWORD': get_secret('GW_PASS'),
-        'SECURITY_QUESTION_ANSWER': get_secret('GW_SECURITY_ANSWER')
-    }
     YEARS_AND_TERMS = {
         2017: {
             'Fall': '201703',
@@ -47,6 +41,20 @@ class Parser(CourseParser):
         }
     }
 
+    def __new__(cls, *args, **kwargs):
+        """Set static variables within closure.
+
+        Returns:
+            Parser
+        """
+        new_instance = object.__new__(cls, *args, **kwargs)
+        cls.CREDENTIALS = {
+            'username': get_secret('GW_USER'),
+            'password': get_secret('GW_PASS'),
+            'security_question_answer': get_secret('GW_SECURITY_ANSWER')
+        }
+        return new_instance
+
     def __init__(self, **kwargs):
         """Construct GW parser object.
 
@@ -56,21 +64,17 @@ class Parser(CourseParser):
         super(Parser, self).__init__('gw', **kwargs)
 
     def start(self,
-              years=None,
-              terms=None,
-              years_and_terms=None,
-              departments=None,
+              years_and_terms_filter=None,
+              departments_filter=None,
               verbosity=3,
-              **kwargs):
+              textbooks=None):
         """Start parse."""
         self._login()
         self._direct_to_search_page()
 
-        years_and_terms = filter_years_and_terms(
+        years_and_terms = dict_filter_by_dict(
             Parser.YEARS_AND_TERMS,
-            years_filter=years,
-            terms_filter=terms,
-            years_and_terms_filter=years_and_terms
+            years_and_terms_filter
         )
 
         for year, terms in years_and_terms.items():
@@ -122,7 +126,8 @@ class Parser(CourseParser):
 
                     rows = self.requester.post(
                         Parser.URL + '/bwskfcls.P_GetCrse',
-                        params=query)
+                        params=query
+                    )
 
                     Parser._check_errorpage(rows)
 
@@ -144,11 +149,10 @@ class Parser(CourseParser):
 
                             # general info
                             self.ingestor.update({
-                                'ident': info[1].text,
+                                # 'ident': info[1].text,
                                 'code': info[2].text + ' ' + info[3].text,
-                                'href': info[1].find('a')['href'],
+                                # 'href': info[1].find('a')['href'],
                                 'dept': dept_name,
-                                'selec': info[3].text,
                                 'section': info[4].text,
                                 'credits': safe_cast(info[6].text, float,
                                                      default=0.),
@@ -157,7 +161,7 @@ class Parser(CourseParser):
                                 'enrollment': int(info[11].text),
                                 'waitlist': safe_cast(info[14].text, int,
                                                       default=-1),
-                                'attr': '; '.join(info[22].text.split(' and ')) if len(info) == 23 else ''  # FIXME - hacky fix
+                                'areas': '; '.join(info[22].text.split(' and ')) if len(info) == 23 else ''  # FIXME - hacky fix
                             })
 
                             # Query course catalog to obtain description.
@@ -166,8 +170,8 @@ class Parser(CourseParser):
                                 params={
                                     'term_in': term_code,
                                     'one_subj': dept_code,
-                                    'sel_crse_strt': self.ingestor['selec'],
-                                    'sel_crse_end': self.ingestor['selec'],
+                                    'sel_crse_strt': info[3].text,
+                                    'sel_crse_end': info[3].text,
                                     'sel_subj': '',
                                     'sel_levl': '',
                                     'sel_schd': '',
@@ -190,9 +194,10 @@ class Parser(CourseParser):
                                 params={
                                     'term_in': term_code,
                                     'subj_in': dept_code,
-                                    'crse_in': self.ingestor['selec'],
-                                    'crn_in': self.ingestor['ident']
-                                })
+                                    'crse_in': info[3].text,
+                                    'crn_in': info[1].text,
+                                }
+                            )
 
                             meetings_soup = Parser._extract_meetings(section_soup)
                             """Example of a meeting entry
@@ -209,10 +214,10 @@ class Parser(CourseParser):
 
                             self._parse_instructors(meetings_soup)
 
-                            if len(meetings_soup) > 0:
-                                self.ingestor['section_type'] = meetings_soup[0].find_all('td')[5].text
-                                section_model = self.ingestor.ingest_section(course)
-
+                            if len(meetings_soup) == 0:
+                                continue
+                            self.ingestor['section_type'] = meetings_soup[0].find_all('td')[5].text
+                            section_model = self.ingestor.ingest_section(course)
                             self._parse_meetings(meetings_soup, section_model)
 
     def _login(self):
@@ -228,8 +233,8 @@ class Parser(CourseParser):
             Parser.URL + '/twbkwbis.P_ValLogin',
             parse=False,
             data={
-                'sid': Parser.CREDENTIALS['USERNAME'],
-                'PIN': Parser.CREDENTIALS['PASSWORD']
+                'sid': Parser.CREDENTIALS['username'],
+                'PIN': Parser.CREDENTIALS['password']
             }
         )
 
@@ -245,9 +250,9 @@ class Parser(CourseParser):
             parse=False,
             data={
                 'RET_CODE': '',
-                'SID': Parser.CREDENTIALS['USERNAME'],
+                'SID': Parser.CREDENTIALS['username'],
                 'QSTN_NUM': 1,
-                'answer': Parser.CREDENTIALS['SECURITY_QUESTION_ANSWER']
+                'answer': Parser.CREDENTIALS['security_question_answer']
             }
         )
 
@@ -265,8 +270,8 @@ class Parser(CourseParser):
             time = re.match(r'(.*) - (.*)', col[1].text)
             if not time:
                 continue
-            self.ingestor['time_start'] = self.extractor.time_12to24(time.group(1))
-            self.ingestor['time_end'] = self.extractor.time_12to24(time.group(2))
+            self.ingestor['time_start'] = time.group(1)
+            self.ingestor['time_end'] = time.group(2)
             self.ingestor['days'] = [col[2].text]
             filtered_days = filter(lambda x: x.replace(u'\xa0', u''),
                                    self.ingestor['days'])
@@ -330,7 +335,7 @@ class Parser(CourseParser):
 
         extraction = {
             'Schedule Types': ('section_type', lambda s: s[0].upper()),
-            'Levels': ('info', lambda s: 'Levels: ' + s.strip()),
+            'Levels': ('level', lambda s: 'Levels: ' + s.strip()),
             'Course Attributes': ('areas', lambda x: x.strip().split(','))
         }
 
@@ -359,4 +364,4 @@ class Parser(CourseParser):
         error = soup.find('span', class_='errortext')
         if not error:
             return
-        raise CourseParseError('Error on page request, message: ' + error.text)
+        raise ParseError('Error on page request, message: ' + error.text)

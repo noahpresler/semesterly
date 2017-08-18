@@ -15,7 +15,8 @@
       ],
       "properties": {
         "code": {},
-        "name": {}
+        "name": {},
+        "subdivisions": {}
       },
       "additionalProperties": false
     },
@@ -44,10 +45,7 @@
       "additionalProperties": false
     },
     "description": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "type": "string"
     },
     "prerequisites": {
       "type": "array",
@@ -102,8 +100,11 @@
       }
     },
     "same_as": {
-      "type": "string",
-      "maxLength": 20
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 20
+      }
     },
     "sections": {
       "type": "array",
@@ -133,11 +134,9 @@
         },
         "additionalProperties": false,
         "required": [
-          "kind",
           "code",
           "term",
-          "year",
-          "course"
+          "year"
         ]
       }
     }

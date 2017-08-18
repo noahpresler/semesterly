@@ -9,3 +9,26 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
+
+import logging.config
+import yaml
+import os
+
+
+def qualify(filename):
+    """Wrap filename in absolute path.
+
+    Args:
+        filename (str)
+
+    Returns:
+        str: fully-qualified filename
+    """
+    return os.path.join(os.path.dirname(__file__), filename)
+
+with open(qualify('logging.yaml'), 'r') as f:
+    config = f.read().format(
+        error_filename=qualify('logs/errors.log'),
+        master_filename=qualify('logs/master.log')
+    )
+logging.config.dictConfig(yaml.safe_load(config))

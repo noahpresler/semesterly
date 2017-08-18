@@ -1,32 +1,45 @@
 {
-	"school": {
-		"code": "vandy",
-		"name": "Vanderbilt University"
-	},
-	"course_code_regex": "([A-Z&]{2,8}(?:-[A-Z]{2})?-\\d{4}[A-Z]?)$",
-	"terms": [
-		"Fall",
-		"Spring",
-		"Summer"
-	],
-	"campuses": [
-		"Allied Health",
-		"Blair School of Music",
-		"College of Arts and Science",
-		"Divinity School",
-		"Division Unclassified Studies",
-		"Fisk University",
-		"Graduate School",
-		"Law School",
-		"Lipscomb",
-		"Meharry Medical College",
-		"Owen Grad School of Management",
-		"Peabody College",
-		"School of Engineering",
-		"School of Medicine",
-		"School of Nursing",
-		"Sewanee: The Univ of the South",
-		"Tennessee State University",
-		"Vanderbilt"
-	]
+  "school": {
+    "code": "vandy",
+    "name": "Vanderbilt University"
+  },
+  "course_code_regex": "([A-Z&]{2,8}(?:-[A-Z]{2})?-\\d{4}[A-Z]?)$",
+  "terms": [
+    "Fall",
+    "Spring",
+    "Summer"
+  ],
+  "granularity": 5,
+  "full_academic_year_registration": false,
+  "single_access": false,
+  "ampm": true,
+  "active_semesters": {
+    "2017": [
+      "Fall",
+      "Spring"
+    ],
+    "2016": [
+      "Fall"
+    ]
+  },
+  "campuses": [
+    "Allied Health",
+    "Blair School of Music",
+    "College of Arts and Science",
+    "Divinity School",
+    "Division Unclassified Studies",
+    "Fisk University",
+    "Graduate School",
+    "Law School",
+    "Lipscomb",
+    "Meharry Medical College",
+    "Owen Grad School of Management",
+    "Peabody College",
+    "School of Engineering",
+    "School of Medicine",
+    "School of Nursing",
+    "Sewanee: The Univ of the South",
+    "Tennessee State University",
+    "Vanderbilt"
+  ]
 }

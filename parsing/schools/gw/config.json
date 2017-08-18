@@ -1,11 +1,21 @@
 {
-	"school": {
-		"code": "gw",
-		"name": "George Washington University"
-	},
-	"course_code_regex": "(.*)",
-	"terms": [
-		"Fall",
-		"Spring"
-	]
+  "school": {
+    "code": "gw",
+    "name": "George Washington University"
+  },
+  "course_code_regex": "(.*)",
+  "terms": [
+    "Fall",
+    "Spring"
+  ],
+  "granularity": 5,
+  "ampm": true,
+  "full_academic_year_registration": false,
+  "single_access": true,
+  "active_semesters": {
+    "2017": [
+      "Fall",
+      "Spring"
+    ]
+  }
 }

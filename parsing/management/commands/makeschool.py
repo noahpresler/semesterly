@@ -10,62 +10,146 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from __future__ import absolute_import, division, print_function
+
+import os
+import simplejson as json
 
 from django.core.management.base import BaseCommand, CommandError
-import sys, os
+from django.conf import settings
+
 
 class Command(BaseCommand):
+    """Make a school within the Semesterly system.
 
-    help = "Scaffolds a directory for a new school"
+    Scaffolds a directory for a new school, adds to active schools
+
+    Attributes:
+        template (str): Formatted filename of templates.
+        help (str): Command help message.
+    """
+
+    help = "Scaffolds a directory for a new school, adds to active schools"
+
+    template = '{}/{}/management/{{}}_template.txt'.format(
+        os.getcwd(),
+        settings.PARSING_MODULE
+    )
 
     def add_arguments(self, parser):
-        parser.add_argument('--name', type=str, help='the school name', required=True)
-        parser.add_argument('--code', type=str, required=True,
-            help='the schools shortened name, will be the subdomain (e.g. jhu)')
-        parser.add_argument('--regex', type=str, required=True,
-            help='regex for detecting course codes')
-
-    def success_print(self, message):
-        self.stdout.write(self.style.SUCCESS(message))
+        """Add arguments to command."""
+        parser.add_argument(
+            '--name',
+            type=str,
+            help='the school name',
+            required=True
+        )
+        parser.add_argument(
+            '--code',
+            type=str,
+            required=True,
+            help='the schools shortened name, will be the subdomain (e.g. jhu)'
+        )
+        parser.add_argument(
+            '--regex',
+            type=str,
+            default=r'(.)*',
+            help='for detecting/validating course code; default: %(default)s'
+        )
+        parser.add_argument(
+            '--ampm',
+            type=bool,
+            default=True,
+            help='school use 12 instead of 24hr time; default: %(default)s'
+        )
+        parser.add_argument(
+            '--full-academic-year-registration',
+            type=bool,
+            default=False,
+            help='registration time period; default: %(default)s'
+        )
+        parser.add_argument(
+            '--single-access',
+            type=bool,
+            default=False,
+            help='access cannot be parallelized; default: %(default)s'
+        )
+        parser.add_argument(
+            '--granularity',
+            type=int,
+            default=5,
+            help='minimum time between section offerings; default: %(default)s'
+        )
 
     def handle(self, *args, **options):
+        """Handle the command."""
         name = options['name']
-        code = options['code']
-        regex = options['regex']
+        code = options['code'].lower()
+        replacements = (
+            ('CODE', code),
+            ('NAME', name),
+            ('REGEX', options['regex']),
+            ('AMPM', options['ampm']),
+            ('GRANULARITY', options['granularity']),
+            ('SINGLE_ACCESS', options['single_access']),
+            ('FULL_ACADEMIC_YEAR_REGISTRATION',
+                options['full_academic_year_registration']),
+        )
 
-        parser_template_path = os.getcwd() +  '/timetable/management/parser_template.txt'
-        config_template_path = os.getcwd() +  '/timetable/management/config_template.txt'
-        
-        school_dir_path = '{}/scripts/{}'.format(os.getcwd(), code)
-        parser_path = '{}/{}_courses.py'.format(school_dir_path, code)
+        school_dir_path = '{}/{}/schools/{}'.format(os.getcwd(),
+                                                    settings.PARSING_MODULE,
+                                                    code)
+
+        if os.path.exists(school_dir_path):
+            raise CommandError("This school already exists.")
+
+        parser_path = '{}/courses.py'.format(school_dir_path, code)
         config_path = '{}/config.json'.format(school_dir_path)
         logs_path = '{}/logs'.format(school_dir_path)
         data_path = '{}/data'.format(school_dir_path)
         init_path = '{}/__init__.py'.format(school_dir_path)
-        
+        active_schools_path = '{}/active'.format(school_dir_path)
 
-        with open(parser_template_path, 'rb') as file:
-            parser = file.read().format(code.upper(), code.upper(), code)
-        with open(config_template_path, 'rb') as file:
+        with open(active_schools_path, 'r') as file:
+            active_schools = set(file.read().splitlines())
+        active_schools.add(code)
+
+        with open('LICENSE_HEADER', 'r') as file:
+            license = file.read()
+
+        with open(Command.template.format('parser'), 'rb') as file:
+            parser = file.read().format(name=name,
+                                        code=code,
+                                        parser_type='course'.title())
+
+        with open(Command.template.format('config'), 'rb') as file:
             config = file.read()
-            config = config.replace('<CODE>', code)
-            config = config.replace('<NAME>', name)
-            config = config.replace('<REGEX>', regex)
+            for tag, replacement in replacements:
+                config = config.replace('<{}>'.format(tag),
+                                        json.dumps(replacement))
 
-        if os.path.exists(school_dir_path):
-            self.stdout.write(self.style.ERROR("This school already exists."))
-            exit()
+        with open(Command.template.format('init'), 'r') as file:
+            init = file.read()
 
         os.makedirs(school_dir_path)
         os.makedirs(logs_path)
         os.makedirs(data_path)
+        open(logs_path + '/.gitkeep', 'a').close()
+        open(data_path + '/.gitkeep', 'a').close()
 
         with open(parser_path, "w") as file:
+            file.write('# '.join(license.splitlines()))
+            file.write('\n')
             file.write(parser)
         with open(config_path, "w") as file:
             file.write(config)
-        open(init_path, 'a').close()
+        with open(active_schools_path, 'w') as file:
+            file.write('\n'.join(sorted(active_schools)))
+        with open(init_path, 'w') as file:
+            file.write('# '.join(license.splitlines()))
+            file.write('\n')
+            file.write(init)
 
-        self.success_print(
+        self.stdout.write(self.style.SUCCESS(
             "Finished! Directory instantiated {}".format(school_dir_path)
-        )
+        ))
