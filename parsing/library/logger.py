@@ -10,18 +10,13 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
 from __future__ import absolute_import, division, print_function
 
-import sys
-import pipes
-import simplejson as json
 import logging
+import sys
 
 from pygments import highlight, lexers, formatters
 
-from parsing.library.internal_exceptions import JsonValidationError, \
-    JsonValidationWarning, DigestionError
 from parsing.library.utils import pretty_json
 
 
@@ -29,12 +24,14 @@ class JSONStreamWriter(object):
     """Context to stream JSON list to file.
 
     Attributes:
-        BRACES (TYPE): Description
+        BRACES (TYPE): Open close brace definitions.
         file (dict): Current object being JSONified and streamed.
-        inner (TYPE): Description
+        first (bool): Indicator if first write has been done by streamer.
+        level (int): Nesting level of streamer.
+        type_ (dict, list): Actual type class of streamer (dict or list).
 
     Examples:
-        >>> with JSONStreamWriter(sys.stdout, type_='dict') as streamer:
+        >>> with JSONStreamWriter(sys.stdout, type_=dict) as streamer:
         ...     streamer.write('a', 1)
         ...     streamer.write('b', 2)
         ...     streamer.write('c', 3)
@@ -43,7 +40,7 @@ class JSONStreamWriter(object):
             "b": 2,
             "c": 3
         }
-        >>> with JSONStreamWriter(sys.stdout, type_='dict') as streamer:
+        >>> with JSONStreamWriter(sys.stdout, type_=dict) as streamer:
         ...     streamer.write('a', 1)
         ...     with streamer.write('data', type_=list) as streamer2:
         ...         streamer2.write({0:0, 1:1, 2:2})
@@ -72,7 +69,7 @@ class JSONStreamWriter(object):
         dict: ('{', '}'),
     }
 
-    def __init__(self, obj, type_=list, inner=False, level=0):
+    def __init__(self, obj, type_=list, level=0):
         """Contruct JSONWriter instance.
 
         Args:
@@ -80,12 +77,13 @@ class JSONStreamWriter(object):
         """
         self.first = True
         self.level = level
-        if isinstance(obj, file):
+        if (hasattr(obj, 'read') and hasattr(obj, 'write')):
             self.file = obj
+            self.close_file = False
         else:
             self.file = open(obj, 'wb')
+            self.close_file = True
         self.open, self.close = JSONStreamWriter.BRACES[type_]
-        self.inner = inner
         self.type_ = type_
 
     def write(self, *args, **kwargs):
@@ -132,7 +130,8 @@ class JSONStreamWriter(object):
               file=self.file,
               sep='',
               end='')
-        if self.file == sys.stdout or self.file == sys.stderr or self.inner:
+        if (self.file == sys.stdout or self.file == sys.stderr or
+                self.level > 0 or not self.close_file):
             return
         self.file.close()
 
@@ -161,7 +160,6 @@ class JSONStreamWriter(object):
                   end='\n')
             return JSONStreamWriter(self.file,
                                     type_=type_,
-                                    inner=True,
                                     level=self.level + 1)
 
         if isinstance(value, dict) or isinstance(value, list):
@@ -194,113 +192,41 @@ class JSONStreamWriter(object):
               end='')
 
 
-# class JSONFormatter(logging.Formatter):
-#     """Simple JSON extension of Python logging.Formatter."""
+class JSONFormatter(logging.Formatter):
+    """Simple JSON extension of Python logging.Formatter."""
+    def format(self, record):
+        """Format record message.
 
-#     def format(self, record):
-#         """Format record message.
+        Args:
+            record (logging.LogRecord): Description
 
-#         Args:
-#             record (logging.LogRecord): Description
-
-#         Returns:
-#             str: Prettified JSON string.
-#         """
-#         return pretty_json(record.msg)
-
-# logging.basicConfig(level=logging.INFO)
-# handler = logging.StreamHandler(sys.stdout)
-# handler.setFormatter(JSONFormatter())
-# log = logging.getLogger()
-# log.addHandler(handler)
-# log.info({'foo': 'bar', 'bar': 'baz', 'num': 123, 'fnum': 123.456})
-
-
-# TODO - look at logging library and integrate into Logger
-#        might be able to remove all of this!!! :'(
-
-class Logger(object):
-
-    # NOTE: interface is rather confusing, consider revising
-    def __init__(self, logfile=None, errorfile=None):
-        if logfile:
-            # FIXME -- does not work
-            # Remove special character formatting (ex: Logger.pretty_json)
-            # t = pipes.Template()
-            # t.append('sed "s,\x1B\[[0-9;]*[a-zA-Z],,g"', '--')
-            self.logfile = open(logfile, 'w')
-        else:
-            self.logfile = sys.stdout
-
-        if errorfile:
-            # Remove special character formatting
-            t = pipes.Template()
-            t.append('sed "s,\x1B\[[0-9;]*[a-zA-Z],,g"', '--')
-            self.errorfile = t.open(errorfile, 'w')
-        else:
-            self.errorfile = sys.stderr
-
-    # TODO - name created files with dates and labels
-    # datetime.now().strftime("%Y%m%d-%H%M%S")
-
-    def log_exception(self, error):
-        output = '='*25 + '\n'
-        if isinstance(error, ValueError):
-            output += 'error: '
-            if isinstance(error, JsonValidationError):
-                output += error.message
-                if error.json:
-                    output += '\n' + Logger.pretty_json(error.json)
-            elif isinstance(error, DigestionError):
-                output += error.message
-            else:
-                output += str(error)
-        elif isinstance(error, UserWarning):
-            output += 'warning: '
-            if isinstance(error, JsonValidationWarning):
-                output += error.message
-                if error.json:
-                    output += '\n' + Logger.pretty_json(error.json)
-            else:
-                output += str(error)
-        else:
-            output += str(error)
-        self.errorfile.write(output + '\n')
-
-    def log_json(self, entry):
-        if isinstance(entry, basestring):
-            entry = json.loads(entry)
-        self.logfile.write(Logger.pretty_json(entry))
-
-    def log_normal(self, entry):
-        self.logfile.write(str(entry) + '\n')
-
-    def log(self, entry):
-        if isinstance(entry, Exception):
-            self.log_exception(entry)
-        else:
+        Returns:
+            str: Prettified JSON string.
+        """
+        if isinstance(record.args, dict):
             try:
-                self.log_json(entry)
-            except json.scanner.JSONDecodeError:
-                self.log_normal(entry)
+                prettified = pretty_json(record.args)
+                record.msg += '\n' + prettified
+            except TypeError:
+                pass
+        return super(JSONFormatter, self).format(record)
 
-    @staticmethod
-    def pretty_json(j):
-        '''Format and colorize json for prettified output.'''
-        if isinstance(j, basestring):
-            j = json.loads(j)
-        if isinstance(j, dict):
-            j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
-        return j
 
-    @staticmethod
-    def colored_json(j):
-        j = Logger.pretty_json(j)
-        l = lexers.JsonLexer()
-        l.add_filter('whitespace')
-        colorful_json = highlight(unicode(j, 'UTF-8'), l, formatters.TerminalFormatter())
-        return colorful_json
+def colored_json(j):
+    lexer = lexers.JsonLexer()
+    lexer.add_filter('whitespace')
+    colorful_json = highlight(unicode(pretty_json(j), 'UTF-8'),
+                              lexer,
+                              formatters.TerminalFormatter())
+    return colorful_json
 
-    def close(self):
-        self.logfile.write(']\n')
-        self.logfile.close()
+
+class JSONColoredFormatter(logging.Formatter):
+    def format(self, record):
+        if isinstance(record.args, dict):
+            try:
+                prettified = colored_json(record.args)
+                record.msg += '\n' + prettified
+            except TypeError:
+                pass
+        return super(JSONColoredFormatter, self).format(record)

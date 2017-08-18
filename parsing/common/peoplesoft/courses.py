@@ -15,13 +15,12 @@ from __future__ import absolute_import, division, print_function
 import re
 import sys
 
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 
-from parsing.common.textbooks.amazon import amazon_textbook_fields
+from parsing.common.textbooks.amazon_textbooks import amazon_textbook_fields
 from parsing.library.base_parser import BaseParser
-from parsing.library.internal_exceptions import CourseParseError
-from parsing.library.extractor import filter_departments, \
-    filter_years_and_terms, titlize, extract_info
+from parsing.library.exceptions import ParseError
+from parsing.library.utils import dict_filter_by_dict, dict_filter_by_list
 
 
 class PeoplesoftParser(BaseParser):
@@ -61,19 +60,16 @@ class PeoplesoftParser(BaseParser):
         self.department_name_regex = department_name_regex
         super(PeoplesoftParser, self).__init__(school, **kwargs)
 
-    @abstractmethod
     def start(self, **kwargs):
         """Start parsing courses."""
+        self.parse(**kwargs)
 
     def parse(self,
-              years_and_terms=None,
-              years=None,
-              terms=None,
-              departments=None,
-              textbooks=True,
               verbosity=3,
-              department_name_regex=None,
-              **kwargs):
+              textbooks=True,
+              years_and_terms_filter=None,
+              departments_filter=None,
+              department_name_regex=None):
         """Do parse."""
         self.verbosity = verbosity
         self.textbooks = textbooks
@@ -81,15 +77,13 @@ class PeoplesoftParser(BaseParser):
 
         # NOTE: umich will do nothing and return an empty dict
         soup, params = self._goto_search_page(self.url_params)
-        if years_and_terms is None:
-            years_and_terms = PeoplesoftParser._get_years_and_terms(soup)
-        self.years_and_terms = filter_years_and_terms(years_and_terms,
-                                                      years,
-                                                      terms)
-        for year, terms in self.years_and_terms.items():
+        years_and_terms = dict_filter_by_dict(
+            self._get_years_and_terms(soup),
+            years_and_terms_filter
+        )
+        for year, terms in years_and_terms.items():
             self.ingestor['year'] = year
-            for term_name in terms:
-                term_code = years_and_terms[year][term_name]
+            for term_name, term_code in terms.items():
                 soup = self._term_update(term_code, params)
                 self.ingestor['term'] = term_name
 
@@ -113,7 +107,7 @@ class PeoplesoftParser(BaseParser):
                     dept_param_key = self._get_dept_param_key(soup)
                     departments, department_ids = self._get_departments(
                         soup,
-                        departments
+                        departments_filter
                     )
 
                     for dept_code, dept_name in departments.iteritems():
@@ -152,8 +146,7 @@ class PeoplesoftParser(BaseParser):
             )
         )
 
-    @staticmethod
-    def _get_years_and_terms(soup):
+    def _get_years_and_terms(self, soup):
         term_datas = soup.find(
             'select',
             id='CLASS_SRCH_WRK2_STRM$35$'
@@ -230,7 +223,7 @@ class PeoplesoftParser(BaseParser):
             id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d')
         )['id']
 
-    def _get_departments(self, soup, cmd_departments=None):
+    def _get_departments(self, soup, departments_filter=None):
         dept_soups = soup.find(
             'select',
             id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d')
@@ -241,7 +234,7 @@ class PeoplesoftParser(BaseParser):
         departments = {
             d['value']: extract_dept_name(d.text) for d in dept_soups
         }
-        return filter_departments(departments, cmd_departments), None
+        return dict_filter_by_list(departments, departments_filter), None
 
     def _get_course_list_as_soup(self, courses, soup):
         """Fill payload for course description page request."""
@@ -290,15 +283,13 @@ class PeoplesoftParser(BaseParser):
 
         # Place course info into course model
         self.ingestor['course_code'] = rtitle.group(1)
-        self.ingestor['course_name'] = titlize(rtitle.group(3))
+        self.ingestor['course_name'] = rtitle.group(3)
         self.ingestor['section_code'] = rtitle.group(2)
         self.ingestor['credits'] = float(re.match(r'(\d*).*', units).group(1))
-        if req is not None:
-            self.ingestor['prereqs'] += [extract_info(self.ingestor, req.text)]
-        self.ingestor['description'] = [
-            extract_info(self.ingestor, descr.text) if descr else '',
-            extract_info(self.ingestor, notes.text) if notes else ''
-        ]
+        self.ingestor['prereqs'] = map(lambda x: x.text, filter(None, [req]))
+        self.ingestor['descr'] = '\n'.join(
+            map(lambda x: x.text, filter(None, [descr, notes, areas]))
+        )
         self.ingestor['size'] = int(capacity)
         self.ingestor['enrollment'] = int(enrollment)
         instructors = []
@@ -309,9 +300,6 @@ class PeoplesoftParser(BaseParser):
             instructors = instructors[:5]
             instructors.append('..., ...')
         self.ingestor['instrs'] = list(set(instructors))
-
-        if areas is not None:
-            self.ingestor['areas'] = [extract_info(self.ingestor, areas.text)]
 
         # TODO - integrate this nicer
         # Handle condition such that a laboratory (or another type) of section
@@ -346,8 +334,8 @@ class PeoplesoftParser(BaseParser):
                     re.findall(r'[A-Z][^A-Z]*', rsched.group(1))
                 )
                 time = (
-                    self.extractor.time_12to24(rsched.group(2)),
-                    self.extractor.time_12to24(rsched.group(3))
+                    rsched.group(2),
+                    rsched.group(3)
                 )
             else:  # handle TBA classes
                 continue
@@ -421,7 +409,7 @@ class PeoplesoftParser(BaseParser):
         self.ingestor['prereqs'] = []
         self.ingestor['coreqs'] = []
         self.ingestor['geneds'] = []
-        self.ingestor['fees'] = []  # NOTE: caused issue with extractor
+        self.ingestor['fees'] = []
         self.ingestor['textbooks'] = []
 
     @staticmethod
@@ -455,7 +443,7 @@ class PeoplesoftParser(BaseParser):
         # check for valid search/page
         if soup is None:
             # TODO - write to error.log with set handle
-            raise CourseParseError('is valid search page, soup is None')
+            raise ParseError('is valid search page, soup is None')
         errmsg = soup.find('div', id='win1divDERIVED_CLSMSG_ERROR_TEXT')
         if soup.find('td', id='PTBADPAGE_') or errmsg:
             if errmsg:
@@ -518,15 +506,17 @@ class QPeoplesoftParser(PeoplesoftParser):
             if term.get('selected') is not None:
                 return term.text
 
-    def _get_departments(self, soup, cmd_departments=None):
+    def _get_departments(self, soup, departments_filter=None):
         if self._get_selected_term(soup) == self.intially_selected_term:
             sys.stderr.write('GET DEPARTMENTS')
-            return self.extractor.filter_departments(
+            return dict_filter_by_list(
                 self.saved_departments,
-                cmd_departments
+                departments_filter
             ), None
-        return super(QPeoplesoftParser, self)._get_departments(soup,
-                                                               cmd_departments)
+        return super(QPeoplesoftParser, self)._get_departments(
+            soup,
+            departments_filter
+        )
 
     def _get_dept_param_key(self, soup):
         if self._get_selected_term(soup) == self.intially_selected_term:
@@ -537,13 +527,17 @@ class QPeoplesoftParser(PeoplesoftParser):
 class UPeoplesoftParser(PeoplesoftParser):
     """Modifies Peoplesoft parser to accomodate different structure (umich)."""
 
-    def __init__(self, school, url, term_base_url=None, **kwargs):
+    def __init__(self, school, url, term_base_url=None, years_and_terms=None, **kwargs):
         """Construct Umich parsing object."""
         # Each term has its own page that must be requested from base url.
         self.term_base_url = term_base_url
+        self.years_and_terms_static = years_and_terms
         super(UPeoplesoftParser, self).__init__(school, url, **kwargs)
 
-    def _get_departments(self, soup, cmd_departments=None):
+    def _get_years_and_terms(self, soup):
+        return self.years_and_terms_static
+
+    def _get_departments(self, soup, departments_filter=None):
         # extract department query list
         departments = soup.find_all(
             'a',
@@ -558,21 +552,15 @@ class UPeoplesoftParser(PeoplesoftParser):
             for dept, dept_name in zip(departments, department_names)
         }
         dept_ids = {dept.text: dept['id'] for dept in departments}
-        return self.extractor.filter_departments(
+        return dict_filter_by_list(
             depts,
-            cmd_departments,
-            grouped=True
+            departments_filter,
         ), dept_ids
 
     def _get_dept_param_key(self, soup):
         return 'ICAction'
 
     def _term_update(self, term_code, params):
-        """Redirect to term page.
-
-        Args:
-            params: not used
-        """
         if self.term_base_url is None:
             self.term_base_url = self.base_url
         return self.requester.get(self.term_base_url, {'strm': term_code})

@@ -28,7 +28,7 @@ from student.utils import get_student
 from student.models import *
 from analytics.models import *
 from timetable.models import Semester
-from timetable.school_mappers import VALID_SCHOOLS
+from parsing.schools.active import ACTIVE_SCHOOLS
 
 
 to_zone = tz.gettz('America/New_York')
@@ -40,19 +40,19 @@ def view_analytics_dashboard(request):
         total_timetables_by_school = {}
         # timetables_per_hour = {}
         # shared_timetables_per_hour = {}
-        for school in VALID_SCHOOLS:
+        for school in ACTIVE_SCHOOLS:
             total_timetables_by_school[school] = number_timetables(school=school)
             # timetables_per_hour[school] = number_timetables_per_hour(school=school)
             # shared_timetables_per_hour[school] = number_timetables_per_hour(Timetable=SharedTimetable, school=school)
 
         # Number of users by permission
-        # TODO: Moves this array to somewhere else (like VALID_SCHOOLS)
+        # TODO: Moves this array to somewhere else (like ACTIVE_SCHOOLS)
         total_signups = number_timetables(Timetable=Student)
 
         permissions = ["social_courses", "social_offerings", "social_all"]
         num_users_by_permission = {}
         for permission in permissions:
-            # TODO: hacky way of passing in permission as an identifier for parameter. 
+            # TODO: hacky way of passing in permission as an identifier for parameter.
             # Also have to use tuple for template to easily access %.
             args = {"Timetable": Student, permission: True}
             num_users = number_timetables(**args)
@@ -132,7 +132,7 @@ def save_analytics_course_search(query, courses, semester, school, student=None,
 
 def number_timetables(**parameters):
     """
-    Get the number of timetables filtered by any parameters. 
+    Get the number of timetables filtered by any parameters.
     Use Timetable to specify the table to filter.
     """
     Timetable = parameters.pop("Timetable") if "Timetable" in parameters else AnalyticsTimetable
@@ -150,10 +150,10 @@ def number_timetables(**parameters):
         **{param: val for (param, val) in parameters.iteritems() if val is not None})
     return timetables.count()
 
-def number_timetables_per_hour(Timetable=AnalyticsTimetable, school=None, 
+def number_timetables_per_hour(Timetable=AnalyticsTimetable, school=None,
                                 start_delta_days=1, interval_delta_hours=1):
     """
-    Get the number of time tables created each hour. 
+    Get the number of time tables created each hour.
     Can be used for analytics or shared time tables.
     """
     # TODO: Change start and end time. Currently set for past 24 hours.
@@ -181,7 +181,7 @@ def number_timetables_per_semester():
 
 def number_of_reactions(max_only=False):
     """
-    Get the the number of uses for each reaction. 
+    Get the the number of uses for each reaction.
     If max_only is true, return only the reaction with the most uses.
     """
     # TODO: Could be modified for max AND number of each reaction.
@@ -198,7 +198,7 @@ def number_of_reactions(max_only=False):
 
 def most_popular_courses(n, school, semester, Table=AnalyticsTimetable):
     """
-    Get the top n most popular courses searched (AnalyticsCourseSearch) or in 
+    Get the top n most popular courses searched (AnalyticsCourseSearch) or in
     timetable (AnalyticsTimetable).
     """
     num_courses = {}
@@ -223,10 +223,10 @@ def number_students_by_year():
 
 def number_students_by_school():
     result = {}
-    for school in VALID_SCHOOLS:
+    for school in ACTIVE_SCHOOLS:
         ids = PersonalTimetable.objects.filter(school=school)\
                                         .values_list("student", flat=True)\
-                                        .distinct() 
+                                        .distinct()
         students = Student.objects.filter(id__in=ids) | Student.objects.filter(school=school)
         result[school] = students.count()
     return result

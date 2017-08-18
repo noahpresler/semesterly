@@ -13,27 +13,12 @@
 from __future__ import absolute_import, division, print_function
 
 import re
-import sys
 
 from parsing.library.base_parser import BaseParser
 
 
-def get_valid_time(time):
-        """Take convert time to 24hr format and remove trailing am/pm."""
-        if not time:
-                return time
-        if time[-2:] == 'am' or time[:2] == '12':
-                return time[:-2]
-        else:
-                time = time[:-2]
-                hour, minute = time.split(':')
-                hour = int(hour) + 12
-                return str(hour) + ':' + minute
-
-
 class Parser(BaseParser):
     def __init__(self, sem="Fall", year="2017", **kwargs):
-        # CourseParser.__init__(self, school)
         self.semester = sem
         self.year = year
         self.last_course = {}
@@ -85,7 +70,7 @@ class Parser(BaseParser):
     def get_departments(self):
         """Get department in the specified semester in specified year."""
         # HARD CODED
-        semester_map = {"Fall":"08", "Spring":"01"}
+        semester_map = {'Fall': '08', 'Spring': '01'}
 
         soup = self.requester.get(url=self.base_url)
         prefix_rows = soup.findAll(class_='course-prefix row')
@@ -107,12 +92,12 @@ class Parser(BaseParser):
 
     def get_prerequisites(self, course):
         prereq_match = course.find('strong', text=self.prereq_pattern)
-        prereq=''
+        prereq = ''
         if prereq_match:
             prereq = prereq_match.parent.get_text().strip().replace('Prerequisite:', '')
         restr_match = course.find('strong', text=self.restr_pattern)
         if restr_match:
-            prereq +=  " " + restr_match.parent.get_text().strip().replace('Restriction: ', '')
+            prereq += ' ' + restr_match.parent.get_text().strip().replace('Restriction: ', '')
         return prereq
 
     def get_courses(self, departments):
@@ -152,7 +137,7 @@ class Parser(BaseParser):
                 course_model = self.ingestor.ingest_course()
 
                 section_url = "http://ntst.umd.edu" + partial_url
-                sections = self.get_sections(section_url, course_model)
+                self.get_sections(section_url, course_model)
 
     def get_sections(self, section_url, course_model):
         soup = self.requester.get(url=section_url)
@@ -165,7 +150,7 @@ class Parser(BaseParser):
             instructors_div = div.findAll(class_="section-instructor")
             for instructor_div in instructors_div:
                 instructor_link = instructor_div.find("a")
-                if instructor_link != None:
+                if instructor_link is not None:
                     instructors.append(instructor_link.contents[0].strip())
                 else:
                     instructors.append(instructor_div.contents[0].strip())
@@ -195,25 +180,18 @@ class Parser(BaseParser):
                 if day not in valid_days or not start_time or not end_time:
                     continue
                 self.ingestor['day'] = day
-                self.ingestor['time_start'] = get_valid_time(start_time)
-                self.ingestor['time_end'] = get_valid_time(end_time)
+                self.ingestor['time_start'] = start_time
+                self.ingestor['time_end'] = end_time
                 self.ingestor['location'] = building + room
-                meeting_model = self.ingestor.ingest_meeting(section_model)
+                self.ingestor.ingest_meeting(section_model)
 
     def start(self,
-              years=None,
-              terms=None,
-              departments=None,
+              years_and_terms_filter=None,
+              departments_filter=None,
               textbooks=True,
-              verbosity=3,
-              **kwargs):
-        if departments:
-            print("Error: Departments inputs is not supported.", file=sys.stderr)
-        if years is None:
-            years = [self.year]
-        if terms is None:
-            terms = [self.semester]
-        for year in years:
+              verbosity=3):
+        """Start the parse."""
+        for year, terms in years_and_terms_filter.items():
             self.year = year
             for term in terms:
                 self.semester = term

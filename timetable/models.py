@@ -32,7 +32,10 @@ class Semester(models.Model):
     year = models.CharField(max_length=4)
 
     def __unicode__(self):
-        return "%s %s" % (self.name, self.year)
+        return '{} {}'.format(self.name, self.year)
+
+    def __str__(self):
+        return '{} {}'.format(self.name, self.year)
 
 
 class Textbook(models.Model):
@@ -49,10 +52,10 @@ class Textbook(models.Model):
         title (CharField): the title of the book
     """
     isbn = models.BigIntegerField(primary_key=True)
-    detail_url = models.URLField(max_length=1000)
-    image_url = models.URLField(max_length=1000)
-    author = models.CharField(max_length=500)
-    title = models.CharField(max_length=1500)
+    detail_url = models.URLField(max_length=1000, null=True)
+    image_url = models.URLField(max_length=1000, null=True)
+    author = models.CharField(max_length=500, null=True)
+    title = models.CharField(max_length=1500, null=True)
 
     def get_info(self):
         return model_to_dict(self)
@@ -106,11 +109,11 @@ class Course(models.Model):
     num_credits = models.FloatField(default=-1)
     areas = models.CharField(max_length=600, default='', null=True)
     department = models.CharField(max_length=250, default='', null=True)
-    level = models.CharField(max_length=30, default='', null=True)
+    level = models.CharField(max_length=500, default='', null=True)
     # TODO generalize core/gened/breadth field
     cores = models.CharField(max_length=50, null=True, blank=True)
     geneds = models.CharField(max_length=300, null=True, blank=True)
-    related_courses = models.ManyToManyField("self", blank=True)
+    related_courses = models.ManyToManyField('self', blank=True)
     same_as = models.ForeignKey('self', null=True)
     vector = PickledObjectField(default=None, null=True)
 

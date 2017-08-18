@@ -10,22 +10,17 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
 from __future__ import absolute_import, division, print_function
 
 import logging
 import simplejson as json
-import traceback
 
 from django.core.management.base import BaseCommand
-from timetable.school_mappers import parsers, course_parsers, \
-    textbook_parsers, eval_parsers
+from timetable.school_mappers import SCHOOLS_MAP
 from parsing.management.commands.arguments import ingest_args
-from parsing.library.internal_exceptions import CourseParseError, \
-    JsonValidationError, JsonValidationWarning, IngestorWarning
-from parsing.library.exceptions import PipelineError, PipelineWarning
+from parsing.library.exceptions import PipelineException
 from parsing.library.tracker import Tracker
-from parsing.library.viewer import LogFormatted, ProgressBar
+from parsing.library.viewer import StatProgressBar, StatView
 
 
 class Command(BaseCommand):
@@ -55,56 +50,51 @@ class Command(BaseCommand):
             **options: Command options.
         """
         tracker = Tracker()
-        tracker.cmd_options = options
-        tracker.add_viewer(LogFormatted(options['master_log']))
         tracker.mode = 'ingesting'
+        self.stat_view = StatView()
+        tracker.add_viewer(self.stat_view)
         if options['display_progress_bar']:
-            tracker.add_viewer(ProgressBar('{valid}/{total}'))
+            tracker.add_viewer(StatProgressBar('{valid}/{total}',
+                                               statistics=self.stat_view))
         tracker.start()
 
-        for data_type in options['types']:
+        for parser_type in options['types']:
             for school in options['schools']:
                 tracker.school = school
-
-                # TODO - remove after deprecation
-                if school not in parsers[data_type]:
-                    old_map = {
-                        'textbooks': textbook_parsers,
-                        'courses': course_parsers,
-                        'evals': eval_parsers,
-                    }
-                    self.old_parser(old_map[data_type][school], school)
-                    continue
-                # END - remove after deprecation
-
-                self.run(parsers[data_type][school],
+                self.run(SCHOOLS_MAP[school].parsers[parser_type],
                          tracker,
                          options,
-                         data_type,
+                         parser_type,
                          school)
         tracker.end()
 
-    def run(self, parser, tracker, options, data_type, school):
-        """Run the parser.
+    def run(self, parser, tracker, options, parser_type, school):
+        """Run the command.
 
         Args:
             parser (parsing.library.base_parser.BaseParser)
             tracker (parsing.library.tracker.Tracker)
             options (dict): Command line options for arg parser.
-            data_type (str): {'courses', 'evals', 'textbooks'}
+            parser_type (str): {'courses', 'evals', 'textbooks'}
             school (str): School to parse.
         """
+        # Load config file to dictionary.
+        if isinstance(options['config'], str):
+            with open(options['config'].format(school=school,
+                                               type=parser_type), 'r') as file:
+                options['config'] = json.load(file)
+
+        logger = logging.getLogger(parser.__module__ + '.' + parser.__name__)
+        logger.debug('Ingest command options:' + str(options))
+
         try:
             p = parser(
-                config_path=options['config_file'].format(
-                    school=school,
-                    type=data_type
-                ),
+                config=options['config'],
                 output_path=options['output'].format(school=school),
-                output_error_path=options['output_error'].format(
-                    school=school,
-                    type=data_type
-                ),
+                # output_error_path=options['output_error'].format(
+                #     school=school,
+                #     type=parser_type
+                # ),
                 break_on_error=options['break_on_error'],
                 break_on_warning=options['break_on_warning'],
                 display_progress_bar=options['display_progress_bar'],
@@ -114,55 +104,35 @@ class Command(BaseCommand):
 
             p.start(
                 verbosity=options['verbosity'],
-                years=options.get('years'),
-                terms=options.get('terms'),
-                years_and_terms=options.get('years_and_terms'),
-                departments=options.get('departments'),
-                textbooks=data_type == 'textbook'
+                textbooks=parser_type == 'textbook',
+                departments_filter=options.get('departments'),
+                years_and_terms_filter=Command._resolve_years_and_terms(
+                    options
+                )
             )
 
             p.end()
 
-        except PipelineError as e:
-            pass  # TODO
-        except PipelineWarning as e:
-            pass  # TODO
-        except CourseParseError as e:
-            logging.exception(e)
-            error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
-            print(self.style.ERROR(error), file=self.stderr)
-            tracker.see_error(error)
-        except (JsonValidationError,
-                JsonValidationWarning, IngestorWarning) as e:
-            logging.exception(e)
-            error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
-            print(self.style.ERROR(error), file=self.stderr)
-            tracker.see_error(error)
-        except Exception as e:
-            logging.exception(e)
-
-            def dict_pp(j):
-                return json.dumps(j,
-                                  sort_keys=True,
-                                  indent=2,
-                                  separators=(',', ': '))
-            print(self.style.ERROR(traceback.format_exc()),
-                  file=self.stderr)
-            print(self.style.ERROR(dict_pp(parser.ingestor)),
-                  file=self.stderr)
-            tracker.see_error(traceback.format_exc())
-            tracker.see_error('INGESTOR DUMP\n' + dict_pp(parser.ingestor))
-
-    def old_parser(self, do_parse, school):
-        """Run older parser that sidesteps datapipeline.
-
-        Args:
-            do_parse (lambda): Parsing function to run.
-            school (str): The school name.
-        """
-        message = 'Starting {} parser for {}.\n'.format('courses', school)
-        self.stdout.write(self.style.SUCCESS(message))
-        try:
-            do_parse()
+        except PipelineException:
+            logger.exception('Ingestion failed for ' + school + ' ' + parser_type)
+            try:
+                logger.debug('Ingestor dump for ' + school, p.ingestor)
+            except UnboundLocalError:
+                pass
         except Exception:
-            self.stderr.write(traceback.format_exc())
+            logger.exception('Ingestion failed for ' + school + ' ' + parser_type)
+
+        logger.info('Ingestion overview for ' + school + ': ' + str(self.stat_view.report()))
+
+    @staticmethod
+    def _resolve_years_and_terms(options):
+        if options.get('years_and_terms') is not None:
+            return options['years_and_terms']
+
+        # Construct years and terms dictionary
+        years_and_terms = {}
+        for year in options['years']:
+            year = years_and_terms.setdefault(year, [])
+            for term in options['terms']:
+                year.append(term)
+        return years_and_terms

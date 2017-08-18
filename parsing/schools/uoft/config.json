@@ -1,0 +1,24 @@
+{
+  "school": {
+    "code": "uoft",
+    "name": "University of Toronto"
+  },
+  "course_code_regex": "(.)*",
+  "terms": [
+    "Winter",
+    "Fall"
+  ],
+  "granularity": 30,
+  "ampm": false,
+  "full_academic_year_registration": false,
+  "single_access": false,
+  "active_semesters": {
+    "2018": [
+      "Winter"
+    ],
+    "2017": [
+      "Fall",
+      "Winter"
+    ]
+  }
+}

@@ -1,14 +1,27 @@
 {
-	"school": {
-		"code": "umich",
-		"name": "University of Michigan in Ann Arbor"
-	},
-	"course_code_regex": "([A-Z]* \\d{3}[A-Z]?\\d?)$",
-	"terms": [
-		"Fall",
-		"Winter",
-		"Spring",
-		"Spring/Summer",
-		"Summer"
-	]
+  "school": {
+    "code": "umich",
+    "name": "University of Michigan"
+  },
+  "course_code_regex": "([A-Z]* \\d{3}[A-Z]?\\d?)$",
+  "terms": [
+    "Fall",
+    "Winter",
+    "Spring",
+    "Spring/Summer",
+    "Summer"
+  ],
+  "granularity": 5,
+  "ampm": true,
+  "full_academic_year_registration": false,
+  "single_access": false,
+  "active_semesters": {
+    "2017": [
+      "Fall",
+      "Winter"
+    ],
+    "2016": [
+      "Fall"
+    ]
+  }
 }
