@@ -10,10 +10,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
-
 import collections
-import dateparser
+import dateutil
 import os
 import re
 import simplejson as json
@@ -325,7 +323,7 @@ def time24(time):
     from parsing.library.validator import ValidationError
 
     if isinstance(time, str):
-        time = dateparser.parse(time)
+        time = dateutil.parser.parse(time)
     if not isinstance(time, datetime):
         raise ValidationError('invalid time input {}'.format(time))
     return time.strftime('%H:%M')

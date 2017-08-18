@@ -114,8 +114,8 @@ class Searcher:
 
     def load_count_vectorizer(self):
         """Loads english dictionary count vectorizer pickle object."""
-        with open('searches/dictionary.pickle', 'r') as handle:
-            return pickle.load(handle)
+        with open('searches/dictionary.pickle', 'rb') as handle:
+            return pickle.load(handle, encoding='latin1')
 
     def vectorize_query(self, query):
         """Vectorizes a user's query using count vectorizer."""
