@@ -57,13 +57,7 @@ class Digestor(object):
         'semester': Semester
     }
 
-    def __init__(self, school,
-                 data=None,
-                 output=None,
-                 diff=True,
-                 load=True,
-                 display_progress_bar=True,
-                 tracker=NullTracker()):
+    def __init__(self, school, meta, tracker=NullTracker()):
         """Construct Digestor instance.
 
         Args:
@@ -72,29 +66,27 @@ class Digestor(object):
             output (None, optional): Description
             diff (bool, optional): Description
             load (bool, optional): Description
-            display_progress_bar (bool, optional): Description
-            tracker (TYPE, optional): Description
+        tracker (TYPE, optional): Description
         """
-        with open(data, 'r') as f:
-            data = json.load(f)
-
-        self.meta = data.pop('$meta')
-        self.data = [DotDict(obj) for obj in data.pop('$data')]
+        # with open(data, 'r') as f:
+        #     data = json.load(f)
 
         self.cache = DotDict(dict(
-            course={'code': '_'},
-            section={'code': '_'}
+            course={'code': None},
+            section={'code': None}
         ))
 
         self.school = school
         self.adapter = DigestionAdapter(school, self.cache)
-        self.strategy = self._resolve_strategy(diff, load, output)
+        self.meta = meta
 
         # Setup tracker for digestion and progress bar.
         self.tracker = tracker
         self.tracker.mode = 'digesting'
 
     def _resolve_strategy(self, diff, load, output=None):
+        if diff and output is None:
+            raise ValueError('Cannot generate diff without output')
         if diff and load:  # Diff only
             return Burp(self.school, self.meta, output)
         elif not diff and load:  # Load db only
@@ -104,8 +96,10 @@ class Digestor(object):
         else:  # Nothing to do...
             raise ValueError('Nothing to run with --no-diff and --no-load.')
 
-    def digest(self):
-        '''Digest data.'''
+    def digest(self, data, diff=True, load=True, output=None):
+        """Digest data."""
+        self.data = [DotDict(obj) for obj in make_list(data)]
+        self.strategy = self._resolve_strategy(diff, load, output)
 
         do_digestion = {
             'course': lambda x: self.digest_course(x),
@@ -125,30 +119,30 @@ class Digestor(object):
 
         self.wrap_up()
 
-    def update_progress(self, key, exists):
+    def _update_progress(self, key, exists):
         if exists:
             self.tracker.stats = dict(kind=key, status='total')
         # TODO - add more stats including newly created and the like
 
     def digest_course(self, course):
-        ''' Create course in database from info in json model.
+        """Create course in database from info in json model.
 
         Returns:
             django course model object
-        '''
+        """
         course_model = self.strategy.digest_course(self.adapter.adapt_course(course))
 
         if course_model:
             self.cache.course = course_model
             for section in course.get('sections', []):
-                self.digest_section(section, course_model)
+                self.digest_section(DotDict(section), course_model)
 
-        self.update_progress('course', bool(course_model))
+        self._update_progress('course', bool(course_model))
 
         return course_model
 
     def digest_section(self, section, course_model=None):
-        ''' Create section in database from info in model map.
+        """Create section in database from info in model map.
 
         Args:
             course_model: django course model object
@@ -159,70 +153,107 @@ class Digestor(object):
 
         Returns:
             django section model object
-        '''
-
-        section_model = self.strategy.digest_section(self.adapter.adapt_section(section))
+        """
+        section_model = self.strategy.digest_section(
+            self.adapter.adapt_section(section, course_model=course_model)
+        )
 
         if section_model:
             self.cache.course = course_model
             self.cache.section = section_model
             for meeting in section.get('meetings', []):
-                self.digest_meeting(meeting, section_model)
+                self.digest_meeting(DotDict(meeting), section_model)
             for textbook_link in section.get('textbooks', []):
                 self.digest_textbook_link(DotDict(textbook_link),
                                           section_model=section_model)
-        self.update_progress('section', bool(section_model))
+        self._update_progress('section', bool(section_model))
 
         return section_model
 
     def digest_meeting(self, meeting, section_model=None):
-        ''' Create offering in database from info in model map.
+        """Create offering in database from info in model map.
 
         Args:
             section_model: JSON course model object
 
         Return: Offerings as generator
-        '''
-
+        """
         # NOTE: ignoring dates for now
         offering_models = []
         for offering in self.adapter.adapt_meeting(meeting,
                                                    section_model=section_model):
             offering_model = self.strategy.digest_offering(offering)
             offering_models.append(offering_model)
-            self.update_progress('offering', bool(offering_model))
+            self._update_progress('offering', bool(offering_model))
         return offering_models
 
     def digest_textbook(self, textbook):
-        textbook_model = self.strategy.digest_textbook(self.adapter.adapt_textbook(textbook))
-        self.update_progress('textbook', bool(textbook_model))
+        """Digest textbook.
+
+        Args:
+            textbook (dict)
+        """
+        textbook_model = self.strategy.digest_textbook(
+            self.adapter.adapt_textbook(textbook)
+        )
+        self._update_progress('textbook', bool(textbook_model))
 
     def digest_textbook_link(self, textbook_link,
-                             textbook_model=None,
-                             section_model=None):
+                             textbook_obj=None,
+                             section_obj=None):
+        """Digest textbook link.
+
+        Args:
+            textbook_link (dict): Description
+            textbook_obj (Textbook, None, optional)
+            section_obj (Section, None, optional)
+        """
         # NOTE: currently only support per section digestion.
-        textbook_link_model = self.strategy.digest_textbook_link(list(self.adapter.adapt_textbook_link(textbook_link, textbook_model=textbook_model, section_model=section_model))[0])
-        self.update_progress('textbook_link', bool(textbook_link_model))
+        textbook_link_model = self.strategy.digest_textbook_link(
+            list(self.adapter.adapt_textbook_link(
+                textbook_link,
+                textbook_obj=textbook_obj,
+                section_obj=section_obj))[0]
+        )
+        self._update_progress('textbook_link', bool(textbook_link_model))
 
     def wrap_up(self):
         self.strategy.wrap_up()
 
 
 class DigestionAdapter(object):
+    """Converts JSON defititions to model compliant dictionay.
+
+    Attributes:
+        cache (dict): Caches Django objects to avoid redundant queries.
+        school (str): School code.
+    """
+
     def __init__(self, school, cached):
+        """Construct DigestionAdapter instance.
+
+        Args:
+            school (str): School code.
+            cached (dict): Cache last created course and section to avoid
+                redundant Django calls
+        """
         self.school = school
 
         # Cache last created course and section to avoid redundant Django calls
         self.cache = cached
 
     def adapt_course(self, course):
-        ''' Digest course.
+        """Adapt course for digestion.
+
         Args:
-            course: json object
+            course (dict): course info
 
-        Returns: (django) formatted course dictionary
-        '''
+        Returns:
+            dict: Adapted course for django object.
 
+        Raises:
+            DigestionError: course is None
+        """
         if course is None:
             raise DigestionError('none course')
 
@@ -231,7 +262,7 @@ class DigestionAdapter(object):
         if 'credits' in course:
             adapted['num_credits'] = course.credits
         if 'description' in course:
-            adapted['description'] = '\n'.join(course.description)
+            adapted['description'] = course.description
         if 'department' in course:
             if 'code' in course.department:
                 adapted['department'] = course.department.code
@@ -260,6 +291,13 @@ class DigestionAdapter(object):
                 adapted['prerequisites'], adapted['corequisites']
             )
 
+        for same_as in course.get('same_as', []):
+            same_as = Course.objects.filter(school=self.school,
+                                            code=same_as).first()
+            if same_as is not None:
+                adapted['same_as'] = same_as
+                # TODO - create double-sided relation
+
         return {
             'code': course.code,
             'school': self.school,
@@ -267,16 +305,18 @@ class DigestionAdapter(object):
         }
 
     def adapt_section(self, section, course_model=None):
-        ''' Digest course.
+        """Adapt section to Django model.
+
         Args:
-            section: json object
+            section (TYPE): Description
+            course_model (None, optional): Description
 
-        Returns: (django) formatted section dictionary
-        '''
+        Returns:
+            dict: formatted section dictionary
 
-        if section is None:
-            raise DigestionError('none section')
-
+        Raises:
+            DigestionError: Description
+        """
         if course_model is None:
             if (self.cache.course and
                     section.course.code == self.cache.course.code):
@@ -303,8 +343,7 @@ class DigestionAdapter(object):
         if 'waitlist_size' in section:
             adapted['waitlist_size'] = section.waitlist_size
         if 'remaining_seats' in section:
-            pass
-            # FIXME -- possible logic conflict with other data
+            pass  # NOTE: possible logic conflict with other data
             # adapted['remaining_seats'] = section.remaining_seats
         section_type_map = {
             'Lecture': 'L',
@@ -316,6 +355,7 @@ class DigestionAdapter(object):
         if 'fees' in section:
             pass  # TODO - add fees to database
         for instructor in section.get('instructors', []):
+            instructor = DotDict(instructor)
             adapted.setdefault('instructors', '')
             if isinstance(instructor.name, basestring):
                 adapted['instructors'] += instructor.name
@@ -344,16 +384,18 @@ class DigestionAdapter(object):
         }
 
     def adapt_meeting(self, meeting, section_model=None):
-        ''' Digest course.
+        """Adapt meeting to Django model.
+
         Args:
-            section: json object
+            meeting (TYPE): Description
+            section_model (None, optional): Description
 
-        Returns: (django) formatted offering dictionaries (generator).
-        '''
+        Yields:
+            dict
 
-        if meeting is None:
-            raise DigestionError('none meeting in adapt_meeting')
-
+        Raises:
+            DigestionError: meeting is None.
+        """
         if section_model is None:
             course_model = None
             if (self.cache.code and
@@ -382,8 +424,6 @@ class DigestionAdapter(object):
                         meeting.section.code
                     ), file=sys.stderr)
                     # raise DigestionError('no section object for meeting', meeting)
-                self.cache_course = course_model
-                self.cache_section = section_model
 
         # NOTE: ignoring dates for now
         for day in meeting.get('days', []):
@@ -399,6 +439,14 @@ class DigestionAdapter(object):
             yield offering
 
     def adapt_textbook(self, textbook):
+        """Adapt textbook to model dictionary.
+
+        Args:
+            textbook (dict): validated textbook.
+
+        Returns:
+            dict: Description
+        """
         textbook = {
             'isbn': textbook.isbn,
             'defaults': {
@@ -416,6 +464,16 @@ class DigestionAdapter(object):
     def adapt_textbook_link(self, textbook_link,
                             textbook_model=None,
                             section_model=None):
+        """Adapt textbook link to model dictionary.
+
+        Args:
+            textbook_link (dict): validated
+            textbook_model (model, None, optional)
+            section_model (model, None, optional)
+
+        Yields:
+            dict: model compliant
+        """
         sections = [section_model]
         if section_model is None:
             if 'section' not in textbook_link:
@@ -478,6 +536,18 @@ class Vommit(DigestionStrategy):
         self.json_streamer.exit()
 
     def diff(self, kind, inmodel, dbmodel, hide_defaults=True):
+        """Create a diff between input and existing model.
+
+        Args:
+            kind (str): kind of object to diff.
+            inmodel (model): Description
+            dbmodel (model): Description
+            hide_defaults (bool, optional):
+                hide values that are defaulted into db
+
+        Returns:
+            dict: Diff
+        """
         # Check for empty inputs
         if inmodel is None:
             return None
@@ -546,6 +616,7 @@ class Vommit(DigestionStrategy):
                 diffed.update({'$what': inmodel})
             diffed.update({'$context': whats})
             self.json_streamer.write(diffed)
+        return diffed
 
     def remove_defaulted_keys(self, kind, dct):
         for default in self.defaults[kind]:
@@ -579,7 +650,12 @@ class Vommit(DigestionStrategy):
 
 
 class Absorb(DigestionStrategy):
-    '''Load valid data into Django db.'''
+    """Load valid data into Django db.
+
+    Attributes:
+        meta (dict): Meta-information to use for DataUpdate object
+        school (str)
+    """
 
     def __init__(self, school, meta):
         self.school = school
@@ -616,16 +692,26 @@ class Absorb(DigestionStrategy):
             raise DigestionError(json_model_args, str(e))
 
     @staticmethod
-    def remove_section(section, course_model):
-        ''' Remove section specified from django database. '''
-        if Section.objects.filter(course=course_model, meeting_section=section).exists():
-            s = Section.objects.get(course=course_model,
-                                    meeting_section=section)
+    def remove_section(section_code, course_obj):
+        """Remove section specified from database.
+
+        Args:
+            section (dict): Description
+            course_obj (Course): Section part of this course.
+        """
+        if Section.objects.filter(course=course_obj,
+                                  meeting_section=section_code).exists():
+            s = Section.objects.get(course=course_obj,
+                                    meeting_section=section_code)
             s.delete()
 
     @staticmethod
     def remove_offerings(section_obj):
-        ''' Remove all offerings associated with a section. '''
+        """Remove all offerings associated with a section.
+
+        Args:
+            section_obj (Section): Description
+        """
         Offering.objects.filter(section=section_obj).delete()
 
     def wrap_up(self):
@@ -648,18 +734,21 @@ class Absorb(DigestionStrategy):
 
 
 class Burp(DigestionStrategy):
-    '''Load valid data into Django db and output diff between input
-        and db data.
-    '''
+    """Load valid data into Django db and output diff between input and db data.
+
+    Attributes:
+        absorb (Vommit): Digestion strategy.
+        vommit (Absorb): Digestion strategy.
+    """
 
     def __init__(self, school, meta, output=None):
         self.vommit = Vommit(output)
         self.absorb = Absorb(school, meta)
-        Burp.create_digest_methods()
+        Burp._create_digest_methods()
         super(Burp, self).__init__()
 
     @classmethod
-    def create_digest_methods(cls):
+    def _create_digest_methods(cls):
         for name in Digestor.MODELS:
             if hasattr(cls, 'digest_' + name):
                 continue

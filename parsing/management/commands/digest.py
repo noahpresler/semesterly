@@ -91,10 +91,6 @@ class Command(BaseCommand):
                 options['data'].format(school=school, type=data_type),
                 break_on_error=True,
                 break_on_warning=options.get('break_on_warning'),
-                output_error=options.get('output_error').format(
-                    school=school,
-                    type=data_type
-                ),
                 display_progress_bar=options['display_progress_bar']
             )
         except (ValidationError, ValidationWarning, Exception):
@@ -105,17 +101,20 @@ class Command(BaseCommand):
         tracker.add_viewer(ETAProgressBar(), name='progressbar')
         tracker.mode = 'digesting'
 
+        with open(options['data'].format(school=school, type=data_type), 'r') as file:
+            data = json.load(file)
+
         try:
             Digestor(
                 school,
-                data=options['data'].format(school=school, type=data_type),
-                output=options['output_diff'].format(school=school,
-                                                     type=data_type),
-                diff=options['diff'],
-                load=options['load'],
-                display_progress_bar=options['display_progress_bar'],
+                meta=data['$meta'],
                 tracker=tracker
-            ).digest()
+            ).digest(data['$data'],
+                     diff=options['diff'],
+                     load=options['load'],
+                     output=options['output_diff'].format(school=school,
+                                                         type=data_type),
+            )
 
         except DigestionError:
             logging.exception('Failed digestion')

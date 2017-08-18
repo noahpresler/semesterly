@@ -16,11 +16,12 @@ import StringIO
 from copy import deepcopy
 from django.test import TestCase, SimpleTestCase
 
+from timetable.models import Semester, Course, Section, Offering
 from parsing.library.utils import clean, make_list, DotDict, \
     safe_cast, update, iterrify, titlize, dict_filter_by_dict, \
     dict_filter_by_list, time24
 from parsing.library.logger import JSONStreamWriter
-from parsing.library.ingestor import Ingestor
+from parsing.library.digestor import Digestor
 from parsing.library.validator import Validator, ValidationError, \
     MultipleDefinitionsWarning, ValidationWarning
 
@@ -539,12 +540,430 @@ class ValidationTest(SimpleTestCase):
             validator.validate(nested_course)
 
 
-class IngestorTest(SimpleTestCase):
+class DigestionTest(TestCase):
 
-    def setUp(self):
-        pass
-        # self.output = StringIO.StringIO()
-        # self.ingestor = Ingestor(config, self.output)
+    config = {
+        'kind': 'config',
+        'school': {
+            'code': 'test',
+            'name': 'University of Test'
+        },
+        'course_code_regex': '([A-Z]+)$',
+        'terms': [
+            'Foo',
+            'Bar',
+            'Baz'
+        ],
+        'granularity': 15,
+        'ampm': True,
+        'full_academic_year_registration': False,
+        'single_access': False,
+        'active_semesters': {
+            '2017': [
+                'Foo',
+                'Bar'
+            ],
+            '2016': [
+                'Foo',
+                'Baz'
+            ]
+        },
+    }
 
-    def test_ingest_course(self):
-        pass
+    def test_digest_flat(self):
+        meta = {
+            "$schools": {
+                "salisbury": {
+                    "2017": [
+                        "Summer"
+                    ]
+                }
+            },
+            "$timestamp": 1502836183.235978
+        }
+        digestor = Digestor('test', meta)
+
+        course = {
+            'kind': 'course',
+            'school': {
+                'code': 'test'
+            },
+            'code': 'ABC',
+            'name': 'Alphabet',
+            'department': {
+                'code': 'GHI',
+                'name': 'English'
+            },
+            'credits': 3.,
+            'prerequisites': ['ABC', 'DEF'],
+            'corequisites': ['A', 'AB', 'BC', 'B', 'C'],
+            'homepage': 'www.google.com',
+            'description': 'Um, hi hello',
+        }
+
+        output = StringIO.StringIO()
+        digestor.digest(course, diff=True, load=False, output=output)
+        diff = [
+            {
+                "$context": {},
+                "$new": {
+                    "code": "ABC",
+                    "corequisites": "A, AB, BC, B, C",
+                    "department": "English",
+                    "description": "Um, hi hello",
+                    "name": "Alphabet",
+                    "num_credits": 3.0,
+                    "prerequisites": "Pre: ABC, DEF Co: A, AB, BC, B, C",
+                    "school": "test"
+                }
+            }
+        ]
+        self.assertEqual(
+            json.dumps(diff, sort_keys=True, indent=2, separators=(',', ': ')),
+            output.getvalue()
+        )
+
+        digestor.digest(course, diff=False, load=True)
+        course_model = Course.objects.get(school='test',
+                                          code='ABC',
+                                          name='Alphabet')
+        self.assertEqual(course_model.num_credits, 3.)
+        self.assertEqual(course_model.department, 'English')
+        self.assertEqual(course_model.corequisites, 'A, AB, BC, B, C')
+        self.assertEqual(course_model.description, 'Um, hi hello')
+        self.assertEqual(course_model.prerequisites,
+                         'Pre: ABC, DEF Co: A, AB, BC, B, C')
+
+        output = StringIO.StringIO()
+        digestor.digest(course, diff=True, load=True, output=output)
+        self.assertEqual(len(eval(output.getvalue())), 0)
+
+        course2 = {
+            'kind': 'course',
+            'school': {
+                'code': 'test'
+            },
+            'code': 'ABD',
+            'name': 'The second course',
+            'department': {
+                'name': 'Where'
+            },
+            'credits': 3.5,
+            'same_as': ['ABC'],
+        }
+        digestor.digest(course2, diff=False, load=True)
+        course2_model = Course.objects.get(school='test',
+                                           code='ABD')
+        self.assertEqual(course2_model.same_as, course_model)
+
+        section = {
+            'kind': 'section',
+            'course': {
+                'code': 'ABC',
+            },
+            'code': '001',
+            'term': 'Bar',
+            'year': '2017',
+            'instructors': [
+                {
+                    'name': {
+                        'first': 'Sem',
+                        'last': 'Ly'
+                    }
+                },
+                {
+                    'name': 'Semesterly'
+                }
+            ],
+            'capacity': 42,
+            'enrollment': 41,
+            'waitlist': 0,
+            'waitlist_size': 100,
+            'type': 'Lecture',
+            'fees': 50.,
+        }
+
+        output = StringIO.StringIO()
+        digestor.digest(section, diff=True, load=True, output=output)
+        diff = [
+            {
+                "$context": {
+                    "course": "ABC: Alphabet",
+                    "semester": "Bar 2017"
+                },
+                "$new": {
+                    "enrolment": 41,
+                    "instructors": "Sem LySemesterly",
+                    "meeting_section": "001",
+                    "section_type": "L",
+                    "size": 42,
+                    "waitlist": 0,
+                    "waitlist_size": 100
+                }
+            }
+        ]
+        self.assertEqual(
+            json.dumps(diff, sort_keys=True, indent=2, separators=(',', ': ')),
+            output.getvalue()
+        )
+        section_model = Section.objects.get(
+            course__school='test',
+            course__code=section['course']['code'],
+            meeting_section=section['code'],
+            semester__year=section['year'],
+            semester__name=section['term']
+        )
+        Semester.objects.get(year='2017', name='Bar')
+        self.assertEqual(section_model.course, course_model)
+        self.assertEqual(section_model.size, section['capacity'])
+        self.assertEqual(section_model.waitlist, section['waitlist'])
+        self.assertEqual(section_model.waitlist_size, section['waitlist_size'])
+        self.assertEqual(section_model.section_type, 'L')
+        self.assertEqual(section_model.enrolment, section['enrollment'])
+
+        meeting = {
+            'kind': 'meeting',
+            'course': {
+                'code': 'ABC'
+            },
+            'section': {
+                'code': '001',
+                'year': '2017',
+                'term': 'Bar'
+            },
+            'days': ['M', 'W', 'F'],
+            'time': {
+                'start': '14:00',
+                'end': '14:50'
+            },
+            'location': {
+                'campus': 'Homewood',
+                'building': 'Malone',
+                'room': 'Ugrad'
+            }
+        }
+
+        output = StringIO.StringIO()
+        digestor.digest(meeting, diff=True, load=True, output=output)
+        diff = [
+            {
+                "$context": {
+                    "section": "Course: ABC: Alphabet; Section: ABC: Alphabet; Semester: ABC: Alphabet"
+                },
+                "$new": {
+                    "day": "M",
+                    "location": "",
+                    "time_end": "14:50",
+                    "time_start": "14:00"
+                }
+            },
+            {
+                "$context": {
+                    "section": "Course: ABC: Alphabet; Section: ABC: Alphabet; Semester: ABC: Alphabet"
+                },
+                "$new": {
+                    "day": "W",
+                    "location": "",
+                    "time_end": "14:50",
+                    "time_start": "14:00"
+                }
+            },
+            {
+                "$context": {
+                    "section": "Course: ABC: Alphabet; Section: ABC: Alphabet; Semester: ABC: Alphabet"
+                },
+                "$new": {
+                    "day": "F",
+                    "location": "",
+                    "time_end": "14:50",
+                    "time_start": "14:00"
+                }
+            }
+        ]
+        self.assertEqual(
+            json.dumps(diff, sort_keys=True, indent=2, separators=(',', ': ')),
+            output.getvalue()
+        )
+        self.assertEqual(
+            len(Offering.objects.filter(section=section_model)),
+            3
+        )
+
+    def test_digest_nested(self):
+        meta = {
+            "$schools": {
+                "salisbury": {
+                    "2017": [
+                        "Summer"
+                    ]
+                }
+            },
+            "$timestamp": 1502836183.235978
+        }
+        digestor = Digestor('test', meta)
+
+        nested_course = {
+            'kind': 'course',
+            'school': {
+                'code': 'test'
+            },
+            'code': 'ABC',
+            'name': 'Alphabet',
+            'department': {
+                'code': 'GHI',
+                'name': 'English'
+            },
+            'credits': 3.,
+            'prerequisites': ['ABC', 'DEF'],
+            'corequisites': ['A', 'AB', 'BC', 'B', 'C'],
+            'homepage': 'www.google.com',
+            'same_as': ['ABD'],
+            'description': 'Um, hi hello',
+            'sections': [
+                {
+                    'code': '001',
+                    'term': 'Bar',
+                    'year': '2017',
+                    'instructors': [
+                        {
+                            'name': {
+                                'first': 'Sem',
+                                'last': 'Ly'
+                            }
+                        },
+                        {
+                            'name': 'Semesterly'
+                        }
+                    ],
+                    'capacity': 42,
+                    'enrollment': 41,
+                    'waitlist': 0,
+                    'waitlist_size': 100,
+                    'type': 'Lecture',
+                    'fees': 50.,
+                },
+                {
+                    'code': '002',
+                    'term': 'Bar',
+                    'year': '2017',
+                    'instructors': [
+                        {
+                            'name': 'Semesterly'
+                        }
+                    ],
+                    'capacity': 40,
+                    'enrollment': 36,
+                    'waitlist': 0,
+                    'waitlist_size': 100,
+                    'type': 'Lecture',
+                    'fees': 50.,
+                    'meetings': [
+                        {
+                            'days': ['M', 'F'],
+                            'time': {
+                                'start': '14:00',
+                                'end': '14:50'
+                            },
+                            'location': {
+                                'campus': 'Homewood',
+                                'building': 'Malone',
+                                'room': 'Ugrad'
+                            }
+                        },
+                        {
+                            'days': ['W'],
+                            'time': {
+                                'start': '10:00',
+                                'end': '12:15'
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+
+        output = StringIO.StringIO()
+        digestor.digest(nested_course, diff=True, load=True, output=output)
+
+        diff = [
+            {
+                "$context": {},
+                "$new": {
+                    "code": "ABC",
+                    "corequisites": "A, AB, BC, B, C",
+                    "department": "English",
+                    "description": "Um, hi hello",
+                    "name": "Alphabet",
+                    "num_credits": 3.0,
+                    "prerequisites": "Pre: ABC, DEF Co: A, AB, BC, B, C",
+                    "school": "test"
+                }
+            },
+            {
+                "$context": {
+                    "course": "ABC: Alphabet",
+                    "semester": "Bar 2017"
+                },
+                "$new": {
+                    "enrolment": 41,
+                    "instructors": "Sem LySemesterly",
+                    "meeting_section": "001",
+                    "section_type": "L",
+                    "size": 42,
+                    "waitlist": 0,
+                    "waitlist_size": 100
+                }
+            },
+            {
+                "$context": {
+                    "course": "ABC: Alphabet",
+                    "semester": "Bar 2017"
+                },
+                "$new": {
+                    "enrolment": 36,
+                    "instructors": "Semesterly",
+                    "meeting_section": "002",
+                    "section_type": "L",
+                    "size": 40,
+                    "waitlist": 0,
+                    "waitlist_size": 100
+                }
+            },
+            {
+                "$context": {
+                    "section": "Course: ABC: Alphabet; Section: ABC: Alphabet; Semester: ABC: Alphabet"
+                },
+                "$new": {
+                    "day": "M",
+                    "location": "",
+                    "time_end": "14:50",
+                    "time_start": "14:00"
+                }
+            },
+            {
+                "$context": {
+                    "section": "Course: ABC: Alphabet; Section: ABC: Alphabet; Semester: ABC: Alphabet"
+                },
+                "$new": {
+                    "day": "F",
+                    "location": "",
+                    "time_end": "14:50",
+                    "time_start": "14:00"
+                }
+            },
+            {
+                "$context": {
+                    "section": "Course: ABC: Alphabet; Section: ABC: Alphabet; Semester: ABC: Alphabet"
+                },
+                "$new": {
+                    "day": "W",
+                    "location": "",
+                    "time_end": "12:15",
+                    "time_start": "10:00"
+                }
+            }
+        ]
+        self.assertEqual(
+            json.dumps(diff, sort_keys=True, indent=2, separators=(',', ': ')),
+            output.getvalue()
+        )
