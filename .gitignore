@@ -1,4 +1,6 @@
 assets/*
+backup.sh
+client_secret.json
 .coverage
 deploy.sh
 dev_env/
@@ -29,6 +31,8 @@ sections
 semes/
 semesterly_backup/
 semesterly/local_settings.py
+semesterly/secret_key.py
+semesterly/secrets.py
 semesterly/sensitive.py
 semesterly-venv/
 sensitive.py
@@ -51,7 +55,3 @@ venv/
 .vscode/
 webpack-stats.json
 workfile.html
-semesterly/secrets.py
-semesterly/secret_key.py
-backup.sh
-client_secret.json

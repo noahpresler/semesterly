@@ -1,9 +1,0 @@
-{
-	"school": {
-		"code": "<CODE>",
-		"name": "<NAME>"
-	},
-	"course_code_regex": "<REGEX>",
-	"terms": [],
-	"buildings": []
-}

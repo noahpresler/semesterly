@@ -1,0 +1,65 @@
+---
+version: 1
+disable_existing_loggers: false
+
+formatters:
+
+  simple:
+    format: '%(levelname)s %(asctime)s %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+    (): parsing.library.logger.JSONFormatter
+
+  verbose:
+    format: '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+
+  coloredjson:
+    format: '%(levelname)s %(asctime)s %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+    (): parsing.library.logger.JSONColoredFormatter
+
+handlers:
+
+  file:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    filename: {handlers_file_filename}
+    formatter: verbose
+    maxBytes: 10485760 # 10MB
+    backupCount: 5
+    encoding: utf8
+
+  mail_admins:
+    class: django.utils.log.AdminEmailHandler
+    include_html: true
+    level: ERROR
+
+  console:
+    class: logging.StreamHandler
+    level: ERROR
+    formatter: coloredjson
+    stream: ext://sys.stderr
+
+loggers:
+
+  ? ''
+  : handlers:
+    - file
+    - console
+    level: ERROR
+    propagate: true
+
+  student.views:
+    handlers:
+    - mail_admins
+    - file
+    level: ERROR
+    propagate: true
+
+  timetable.views:
+    handlers:
+    - mail_admins
+    - file
+    level: ERROR
+    propagate: true
+...

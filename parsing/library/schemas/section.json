@@ -50,13 +50,16 @@
       ]
     },
     "capacity": {
-      "type": "integer"
+      "type": "integer",
+      "minimum": 0
     },
     "enrollment": {
-      "type": "integer"
+      "type": "integer",
+      "minimum": 0
     },
     "waitlist": {
-      "type": "integer"
+      "type": "integer",
+      "minimum": 0
     },
     "waitlist_size": {
       "type": "integer"
@@ -150,14 +153,13 @@
         },
         "additionalProperties": false,
         "required": [
-          "kind",
           "time",
-          "course",
-          "section"
+          "days"
         ]
       }
     }
   },
+  "additionalProperties": false,
   "required": [
     "code"
   ]

@@ -1,13 +1,30 @@
 {
-	"school": {
-		"code": "jhu",
-		"name": "Johns Hopkins University"
-	},
-	"course_code_regex": "([A-Z]{2}\\.\\d{3}\\.\\d{3})$",
-	"terms": [
-		"Fall",
-		"Intersession",
-		"Spring",
-		"Summer"
-	]
+  "school": {
+    "code": "jhu",
+    "name": "Johns Hopkins University"
+  },
+  "course_code_regex": "([A-Z]{2}\\.\\d{3}\\.\\d{3})$",
+  "terms": [
+    "Fall",
+    "Intersession",
+    "Spring",
+    "Summer"
+  ],
+  "granularity": 5,
+  "ampm": true,
+  "full_academic_year_registration": false,
+  "single_access": false,
+  "active_semesters": {
+    "2017": [
+      "Fall",
+      "Summer",
+      "Spring",
+      "Intersession"
+    ]
+  },
+  "final_exams": {
+    "2017": [
+      "Spring"
+    ]
+  }
 }

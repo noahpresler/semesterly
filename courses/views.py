@@ -27,7 +27,7 @@ from courses.serializers import CourseSerializer
 from student.models import Student
 from student.utils import get_classmates_from_course_id
 from timetable.models import Semester, Course
-from timetable.school_mappers import school_code_to_name
+from timetable.school_mappers import SCHOOLS_MAP
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView
 from helpers.decorators import validate_subdomain
 from parsing.models import DataUpdate
@@ -41,7 +41,7 @@ def all_courses(request):
     and is sorted by department.
     """
     school = request.subdomain
-    school_name = school_code_to_name[school]  # TODO: use single groupby query
+    school_name = SCHOOLS_MAP[school].name  # TODO: use single groupby query
     dep_to_courses = collections.OrderedDict()
     departments = Course.objects.filter(school=school) \
         .order_by('department').values_list('department', flat=True).distinct()
@@ -88,7 +88,7 @@ def course_page(request, code):
     """
     school = request.subdomain
     try:
-        school_name = school_code_to_name[school]
+        school_name = SCHOOLS_MAP[school].name
         course_obj = Course.objects.filter(code__iexact=code)[0]
         # TODO: hard coding (section type, semester)
         current_year = datetime.now().year

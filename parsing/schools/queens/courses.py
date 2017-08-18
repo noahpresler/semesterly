@@ -24,12 +24,20 @@ from semesterly.settings import get_secret
 class Parser(QPeoplesoftParser):
     """Course parser for Queens University."""
 
-    BASE_URL = 'https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/'\
-               'SA_LEARNER_SERVICES.CLASS_SEARCH.GBL'
-    CREDENTIALS = {
-        'USERNAME': get_secret('QUEENS_USER'),
-        'PASSWORD': get_secret('QUEENS_PASS')
-    }
+    URL = 'https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL'
+
+    def __new__(cls, *args, **kwargs):
+        """Set static variables within closure.
+
+        Returns:
+            Parser
+        """
+        new_instance = object.__new__(cls, *args, **kwargs)
+        cls.CREDENTIALS = {
+            'USERNAME': get_secret('QUEENS_USER'),
+            'PASSWORD': get_secret('QUEENS_PASS')
+        }
+        return new_instance
 
     def __init__(self, **kwargs):
         """Construct parsing object."""
@@ -43,15 +51,17 @@ class Parser(QPeoplesoftParser):
         self.cap["phantomjs.page.settings.resourceTimeout"] = 50000000
         self.cap["phantomjs.page.settings.loadImages"] = False
         self.cap["phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:16.0) Gecko/20121026 Firefox/16.0'
-        self.driver = webdriver.PhantomJS(desired_capabilities=self.cap)
-        # NOTE: comment being saved in case this is important for local dev.
-        # self.driver = webdriver.PhantomJS(
-        #     './node_modules/phantomjs-prebuilt/bin/phantomjs',
-        #     desired_capabilities=self.cap
-        # )
+        try:
+            self.driver = webdriver.PhantomJS(desired_capabilities=self.cap)
+        except AttributeError:
+            # NOTE: comment being saved in case this is important for local dev.
+            self.driver = webdriver.PhantomJS(
+                './node_modules/phantomjs/bin/phantomjs',
+                desired_capabilities=self.cap
+            )
         # self.driver = webdriver.Chrome()  # FOR DEBUG PURPOSES ONLY
 
-        super(Parser, self).__init__('queens', Parser.BASE_URL,
+        super(Parser, self).__init__('queens', Parser.URL,
                                      url_params=params, **kwargs)
 
     def seleni_run(self, execute):
@@ -125,7 +135,7 @@ class Parser(QPeoplesoftParser):
         self.requester.headers = headers
 
         # NOTE: get request will update CookieJar
-        self.requester.get(Parser.BASE_URL, params={
+        self.requester.get(Parser.URL, params={
             'Page': 'SSR_CLSRCH_ENTRY',
             'Action': 'U',
             'ExactKeys': 'Y',

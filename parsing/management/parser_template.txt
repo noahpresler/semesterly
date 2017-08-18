@@ -1,0 +1,41 @@
+from __future__ import print_function, division, absolute_import
+
+from parsing.library.base_parser import BaseParser
+from parsing.library.exceptions import ParserError, ParserWarning, ParserJump
+
+
+class Parser(BaseParser):
+    """{parser_type} parser for {name}.
+
+    Attributes:
+        verbosity (int): Verbosity of the parsing run.
+    """
+
+    def __new__(cls, *args, **kwargs):
+        """Set static variables within closure.
+
+        Returns:
+            Parser
+        """
+        new_instance = object.__new__(cls, *args, **kwargs)
+        # CREDENTIALS BELONG HERE.
+        # cls.CREDENTIALS = { ... }
+        return new_instance
+
+    def __init__(self, **kwargs):
+        """Construct parser instance.
+
+        Args:
+            **kwargs: pass-through to base parser.
+        """
+        super(Parser, self).__init__('{code}', **kwargs)
+
+    def start(self,
+              verbosity=3,
+              textbooks=False,
+              departments_filter=None,
+              years_and_terms_filter=None):
+        """Start the parse."""
+        self.verbosity = verbosity
+
+        # TODO - your magic!

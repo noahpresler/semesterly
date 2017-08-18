@@ -32,7 +32,10 @@ class Semester(models.Model):
     year = models.CharField(max_length=4)
 
     def __unicode__(self):
-        return "%s %s" % (self.name, self.year)
+        return '{} {}'.format(self.name, self.year)
+
+    def __str__(self):
+        return '{} {}'.format(self.name, self.year)
 
 
 class Textbook(models.Model):
@@ -110,7 +113,7 @@ class Course(models.Model):
     # TODO generalize core/gened/breadth field
     cores = models.CharField(max_length=50, null=True, blank=True)
     geneds = models.CharField(max_length=300, null=True, blank=True)
-    related_courses = models.ManyToManyField("self", blank=True)
+    related_courses = models.ManyToManyField('self', blank=True)
     same_as = models.ForeignKey('self', null=True)
     vector = PickledObjectField(default=None, null=True)
 

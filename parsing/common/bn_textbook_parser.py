@@ -21,9 +21,8 @@ from time import sleep
 from parsing.library.base_parser import BaseParser
 from amazon import amazon_textbook_fields
 
-from parsing.library.internal_exceptions import ParseError
-
 from timetable.models import Course, Section, Textbook, TextbookLink
+
 
 class TextbookSection:
     def __init__(self, section_id, name):
@@ -34,6 +33,7 @@ class TextbookSection:
     def __str__(self):
         return 'Section -- id: {}, name: {}'.format(self.id, self.name)
 
+
 class TextbookCourse:
     def __init__(self, course_id, name):
         self.id = course_id
@@ -42,6 +42,7 @@ class TextbookCourse:
 
     def __str__(self):
         return 'Course -- id: {}, name: {}'.format(self.id, self.name)
+
 
 class TextbookDepartment:
     def __init__(self, department_id, name):
@@ -52,6 +53,7 @@ class TextbookDepartment:
     def __str__(self):
         return 'Department -- id: {}, name: {}'.format(self.id, self.name)
 
+
 class TextbookSemester:
     def __init__(self, semester_id, name, term, year):
         self.id = semester_id
@@ -61,7 +63,9 @@ class TextbookSemester:
         self.departments = []
 
     def __str__(self):
-        return 'Semester -- term: {}, year: {}, id: {}'.format(self.term, self.year, self.id)
+        return 'Semester -- term: {}, year: {}, id: {}'.format(self.term,
+                                                               self.year,
+                                                               self.id)
 
 
 class BarnesAndNoblesParser(BaseParser):
@@ -87,23 +91,16 @@ class BarnesAndNoblesParser(BaseParser):
         self.begining_textbook_payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"storeId\"\r\n\r\n" + self.store_id + "\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"catalogId\"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"langId\"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"clearAll\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"viewName\"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"secCatList\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"removeSectionId\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"mcEnabled\"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"showCampus\"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectTerm\"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectDepartment\"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectSection\"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectCourse\"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"campus1\"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermName_14704480\"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermId_14704480\"\r\n\r\n73256452\r\n-----011000010111000001101001"
         self.textbook_payload = TextbookPayload(self.store_id)
 
-        self.ua = UserAgent()
         super(BarnesAndNoblesParser, self).__init__(school, **kwargs)
 
     def start(self,
-              years=None,
-              terms=None,
-              departments=None,
-              textbooks=True,
               verbosity=3,
-              **kwargs):
+              textbooks=True,
+              departments_filter=None,
+              years_and_terms_filter=None):
 
         # TODO - remove hardcoding of year and term and use filtering
-        if years is None:
-            years = [self.year]
-        if terms is None:
-            terms = [self.term]
-        for year in years:
+        for year, terms in years_and_terms_filter.items():
             self.year = year
             for term in terms:
                 self.term = term

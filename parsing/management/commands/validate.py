@@ -13,13 +13,14 @@
 from __future__ import absolute_import, division, print_function
 
 import traceback
+import simplejson as json
 
 from django.core.management.base import BaseCommand
-from parsing.library.validator import Validator
+from parsing.library.validator import Validator, ValidationError, \
+    ValidationWarning
 from parsing.management.commands.arguments import validate_args
-from parsing.library.internal_exceptions import JsonException
+from parsing.library.exceptions import PipelineError, PipelineWarning
 
-# TODO - write to master log
 
 class Command(BaseCommand):
     """Django command to drive self-contained validation in data pipeline.
@@ -59,9 +60,15 @@ class Command(BaseCommand):
             school (str): School to parse.
             data_type (str): {'courses', 'evals', 'textbooks'}
         """
+        # Load config file to dictionary.
+        if isinstance(options['config'], str):
+            with open(options['config'].format(school=school,
+                                               type=data_type), 'r') as file:
+                options['config'] = json.load(file)
+
         try:
             Validator(
-                options['config_file'].format(school=school, type=data_type),
+                options['config']
             ).validate_self_contained(
                 options['data'].format(school=school, type=data_type),
                 break_on_error=options.get('break_on_error'),
@@ -72,9 +79,15 @@ class Command(BaseCommand):
                 ),
                 display_progress_bar=options['display_progress_bar']
             )
-        except JsonException as e:
+        except ValidationWarning as e:
+            pass  # TODO
+        except ValidationError as e:
             self.stdout.write(self.style.ERROR('FAILED VALIDATION ' + school))
             self.stderr.write(str(e))
+        except PipelineError as e:
+            pass  # TODO
+        except PipelineWarning as e:
+            pass  # TODO
         except Exception as e:
             self.stdout.write(self.style.ERROR('FAILED VALIDATION ' + school))
             self.stderr.write(traceback.format_exc())
