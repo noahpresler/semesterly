@@ -17,7 +17,7 @@ import simplejson as json
 
 from parsing.common.textbooks.amazon import amazon_textbook_fields
 from parsing.library.base_parser import BaseParser
-from parsing.library.extractor import filter_years_and_terms
+from parsing.library.utils import dict_filter_by_dict, dict_filter_by_list
 
 
 class BkstrDotComParser(BaseParser):
@@ -33,14 +33,10 @@ class BkstrDotComParser(BaseParser):
 
     def start(self,
               verbosity=3,
-              years=None,
-              terms=None,
-              departments=None,
-              **kwargs):
+              departments_filter=None,
+              years_and_terms_filter=None):
         """Start parsing."""
-        self.cmd_years = years
-        self.cmd_terms = terms
-        self.cmd_departments = departments
+        self.departments_filter = departments_filter
 
         # Grab cookies from home website.
         self.requester.get('http://www.bkstr.com')
@@ -56,16 +52,19 @@ class BkstrDotComParser(BaseParser):
 
         programs = self._extract_json(query)
         for program, program_code in programs.items():
-            self._parse_program(program, program_code, query)
+            self._parse_program(program,
+                                program_code,
+                                query,
+                                years_and_terms_filter)
 
-    def _parse_program(self, program, program_code, query):
+    def _parse_program(self, program, program_code, query,
+                       years_and_terms_filter):
         query['programId'] = program_code
         query['requestType'] = 'TERMS'
         terms_and_years = self._extract_json(query)
         years_and_terms = self._parse_terms_and_years(terms_and_years)
-        years_and_terms = filter_years_and_terms(years_and_terms,
-                                                 self.cmd_years,
-                                                 self.cmd_terms)
+        years_and_terms = dict_filter_by_dict(years_and_terms,
+                                              years_and_terms_filter)
         for year, terms in years_and_terms.items():
             self.ingestor['year'] = year
             for term, term_code in terms.items():
@@ -75,8 +74,8 @@ class BkstrDotComParser(BaseParser):
         self.ingestor['term'] = term
         query['termId'] = term_code
         query['requestType'] = 'DEPARTMENTS'
-        depts = self.extractor.filter_departments(self._extract_json(query),
-                                                  self.cmd_departments)
+        depts = dict_filter_by_list(self._extract_json(query),
+                                    self.departments_filter)
         for dept, dept_code in depts.items():
             self._parse_dept(dept, dept_code, query)
 

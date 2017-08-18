@@ -10,11 +10,17 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from __future__ import absolute_import, division, print_function
 
 import collections
-import re
+import dateparser
 import os
+import re
 import simplejson as json
+
+from datetime import datetime
+
+from parsing.library.words import conjunctions_and_prepositions
 
 UNICODE_WHITESPACE = re.compile(r'(?:\u00a0)|(?:\xc2)|(?:\xa0)', re.IGNORECASE)
 
@@ -65,8 +71,10 @@ def clean(dirt):
     return cleaned
 
 
-def make_list(x):
+def make_list(x=None):
     """Wrap in list if not list already.
+
+    If input is None, will return empty list.
 
     Args:
         x: Input.
@@ -74,6 +82,8 @@ def make_list(x):
     Returns:
         list: Input wrapped in list.
     """
+    if x is None:
+        x = []
     if not isinstance(x, list):
         x = [x]
     return x
@@ -82,7 +92,19 @@ def make_list(x):
 class DotDict(dict):
     """Dot notation access for dictionary.
 
-    TODO - add example(s)
+    Supports set, get, and delete.
+
+    Examples:
+        >>> d = DotDict({'a': 1, 'b': 2, 'c': {'ca': 31}})
+        >>> d.a, d.b
+        (1, 2)
+        >>> d['a']
+        1
+        >>> d['a'] = 3
+        >>> d.a, d['b']
+        (3, 2)
+        >>> d.c.ca, d.c['ca']
+        (31, 31)
     """
 
     __getattr__ = dict.get
@@ -144,7 +166,12 @@ def safe_cast(val, to_type, default=None):
 
 
 def update(d, u):
-    """Recursive update to dictionary w/o overwriting upper levels."""
+    """Recursive update to dictionary w/o overwriting upper levels.
+
+    Examples:
+        >>> update({0: {1: 2, 3: 4}}, {1: 2, 0: {5: 6, 3: 7}})
+        {0: {1: 2}}
+    """
     for k, v in u.iteritems():
         if isinstance(v, collections.Mapping):
             r = update(d.get(k, {}), v)
@@ -185,8 +212,7 @@ def dir_to_dict(path):
     Returns:
         dict: Dictionary representation of the directory.
 
-    Example(s)::
-        >>> print('hi')
+    Example output format::
         {
             "name": ""
             "kind": "directory",
@@ -207,6 +233,7 @@ def dir_to_dict(path):
                 }
             ]
         }
+
     """
     d = {'name': os.path.basename(path)}
     if os.path.isdir(path):
@@ -217,3 +244,122 @@ def dir_to_dict(path):
     else:
         d['kind'] = "file"
     return d
+
+
+def titlize(name):
+    """Format name into pretty title.
+
+    Will uppercase roman numerals.
+    Will lowercase conjuctions and prepositions.
+
+    Examples:
+        >>> titlize('BIOLOGY OF CANINES II')
+        Biology of Canines II
+    """
+    titled = []
+    for idx, word in enumerate(name.split()):
+        if re.match(r'^[ivx]+$', word.lower()) is not None:
+            word = word.upper()
+        elif idx == 0:
+            word = word.title()
+        elif word.lower() in conjunctions_and_prepositions:
+            word = word.lower()
+        else:
+            word = word.title()
+        titled.append(word)
+    return ' '.join(titled)
+
+
+def dict_filter_by_dict(a, b):
+    """Filter dictionary a by b.
+
+    dict or set
+    Items or keys must be string or regex.
+    Filters at arbitrary depth with regex matching.
+
+    Args:
+        a (dict): Dictionary to filter.
+        b (dict): Dictionary to filter by.
+
+    Returns:
+        dict: Filtered dictionary
+    """
+    if b is None:
+        return a
+
+    filtered = {}
+    for x, ys in a.items():
+        for p, qs in b.items():
+            m = re.match(str(p), str(x))
+            if m is None:
+                continue
+            if isinstance(ys, list):
+                filtered.setdefault(x, [])
+            elif isinstance(ys, dict):
+                filtered.setdefault(x, {})
+            for y in ys:
+                for q in qs:
+                    n = re.match(str(q), str(y))
+                    if n is None:
+                        continue
+                    if isinstance(ys, list):
+                        filtered[x].append(y)
+                    elif isinstance(ys, dict):
+                        filtered[x][y] = a[x][y]
+    return filtered
+
+
+def dict_filter_by_list(a, b):
+    if b is None:
+        return a
+    filtered = None
+    if isinstance(a, list):
+        filtered = []
+    elif isinstance(a, set):
+        filtered = set()
+    elif isinstance(a, dict):
+        filtered = {}
+    for x in a:
+        for y in b:
+            m = re.match(str(y), str(x))
+            if m is None:
+                continue
+            if isinstance(a, list):
+                filtered.append(x)
+            elif isinstance(a, set):
+                filtered.add(x)
+            elif isinstance(a, dict):
+                filtered[x] = a[x]
+    return filtered
+
+
+def time24(time):
+    """Convert time to 24hr format.
+
+    Args:
+        time (str): time in reasonable format
+
+    Returns:
+        str: 24hr time in format hh:mm
+
+    Raises:
+        ParseError: Unparseable time input.
+    """
+    from parsing.library.validator import ValidationError
+
+    if isinstance(time, basestring):
+        time = dateparser.parse(time)
+    if not isinstance(time, datetime):
+        raise ValidationError('invalid time input {}'.format(time))
+    return time.strftime('%H:%M')
+
+
+class SimpleNamespace:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+    def __repr__(self):
+        keys = sorted(self.__dict__)
+        items = ("{}={!r}".format(k, self.__dict__[k]) for k in keys)
+        return "{}({})".format(type(self).__name__, ", ".join(items))
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__

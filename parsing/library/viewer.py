@@ -12,13 +12,11 @@
 
 from __future__ import absolute_import, division, print_function
 
-import datetime
+import dateparser
 import progressbar
-import dateutil.parser as dparser
 
 from abc import ABCMeta, abstractmethod
 
-from parsing.library.utils import pretty_json
 from parsing.library.exceptions import PipelineError
 
 
@@ -49,26 +47,27 @@ class Viewer(object):
         """
 
 
-class ProgressBar(Viewer):
+class Timer(progressbar.widgets.FormatLabel,
+            progressbar.widgets.TimeSensitiveWidgetBase):
+    """Custom timer created to take away 'Elapsed Time' string."""
+
+    def __init__(self, format='%(elapsed)s', **kwargs):
+        """Contruct Timer instance."""
+        progressbar.widgets.FormatLabel.__init__(self,
+                                                 format=format,
+                                                 **kwargs)
+        progressbar.widgets.TimeSensitiveWidgetBase.__init__(self,
+                                                             **kwargs)
+
+
+class StatProgressBar(Viewer):
     """Command line progress bar viewer for data pipeline."""
 
     SWITCH_SIZE = 100
 
-    class Timer(progressbar.widgets.FormatLabel,
-                progressbar.widgets.TimeSensitiveWidgetBase):
-        """Custom timer created to take away 'Elapsed Time' string."""
-
-        def __init__(self, format='%(elapsed)s', **kwargs):
-            """Contruct Timer."""
-            progressbar.widgets.FormatLabel.__init__(self,
-                                                     format=format,
-                                                     **kwargs)
-            progressbar.widgets.TimeSensitiveWidgetBase.__init__(self,
-                                                                 **kwargs)
-
-    def __init__(self, stat_format=''):
+    def __init__(self, stat_format='', statistics=None):
         """Construct instance of data pipeline progress bar."""
-        self.statuses = StatView()
+        self.statistics = statistics or StatView()
         self.stat_format = stat_format
 
         self.format_custom_text = progressbar.FormatCustomText(
@@ -77,18 +76,25 @@ class ProgressBar(Viewer):
 
         self.bar = progressbar.ProgressBar(
             redirect_stdout=True,
-            max_value=progressbar.UnknownLength,
+            # max_value=progressbar.UnknownLength,
             widgets=[
-                ' [', ProgressBar.Timer(), '] ',
+                ' [', Timer(), '] ',
                 self.format_custom_text,
             ])
 
     def receive(self, tracker, broadcast_type):
         """Incremental update to progress bar."""
-        self.statuses.receive(tracker, broadcast_type)
-        counters = self.statuses.stats
+        self.statistics.receive(tracker, broadcast_type)
+
+        if (broadcast_type != 'SCHOOL' and
+                broadcast_type != 'TERM' and
+                broadcast_type != 'DEPARTMENT' and
+                broadcast_type != 'STATS'):
+            return
+
+        counters = self.statistics.stats
         formatted_string = ''
-        if progressbar.utils.get_terminal_size()[0] > ProgressBar.SWITCH_SIZE:
+        if progressbar.utils.get_terminal_size()[0] > StatProgressBar.SWITCH_SIZE:
             attrs = ['year', 'term', 'department']
             for attr in attrs:
                 if not hasattr(tracker, attr):
@@ -126,34 +132,31 @@ class ProgressBar(Viewer):
         """Do nothing."""
 
 
-class LogFormatted(Viewer):
-    def __init__(self, logpath):
-        self.logpath = logpath
-        self.statuses = StatView()
+class ETAProgressBar(Viewer):
+    def __init__(self):
+
+        self.format_custom_text = progressbar.FormatCustomText(
+            '(%(school)s) ==%(mode)s== ',
+        )
+
+        self.bar = progressbar.ProgressBar(
+            redirect_stdout=True,
+            max_value=progressbar.UnknownLength,
+            widgets=[
+                ' [', Timer(), '] ',
+                self.format_custom_text,
+                progressbar.Bar(),
+                '(', progressbar.ETA(), ')',
+            ])
 
     def receive(self, tracker, broadcast_type):
-        self.statuses.receive(tracker, broadcast_type)
+        if broadcast_type != 'SCHOOL' and broadcast_type != 'MODE':
+            return
+        self.format_custom_text.update_mapping(school=tracker.school,
+                                               mode=tracker.mode.upper())
 
-    # TODO - report in valid json format
     def report(self, tracker):
-        with open(self.logpath, 'a') as log:
-            print('=' * 40, file=log)
-            print('{}'.format(tracker.school.upper()), file=log)
-            print('=={}=='.format(tracker.mode.upper()), file=log)
-            if tracker.saw_error:
-                print('FAILED:\n\n{}'.format(tracker.error), file=log)
-            print('TIMESTAMP (UTC): {}'.format(tracker.timestamp), file=log)
-            print('ELAPSED: {}'.format(str(datetime.timedelta(seconds=int(tracker.end_time - tracker.start_time)))), file=log)
-            if hasattr(tracker, 'cmd_options'):
-                print('COMMAND OPTIONS:\n{}'.format(pretty_json(tracker.cmd_options)), file=log)
-            statistics = {
-                subject: {
-                    stat: value for stat, value in stats.items() if value != 0
-                } for subject, stats in self.statuses.stats.items() if len(stats) > 0
-            }
-            print('STATS:\n{}'.format(pretty_json(statistics)), file=log)
-            if hasattr(tracker, 'granularity'):
-                print('calculated granularity: {}'.format(tracker.granularity), file=log)
+        """Do nothing."""
 
 
 class StatView(Viewer):
@@ -217,12 +220,13 @@ class StatView(Viewer):
                 Tracker receiving update from.
             broadcast_type (str): Broadcast message from tracker.
         """
-        if broadcast_type != 'STATUS':
+        if broadcast_type != 'STATS':
             return
-        self._increment(tracker.status['kind'], tracker.status['status'])
+        self._increment(tracker.stats['kind'], tracker.stats['status'])
 
-    def report(self, tracker):
-        """Do nothing."""
+    def report(self, tracker=None):
+        """Dump stats."""
+        return self.stats
 
     def _increment(self, kind, status):
         self.stats[kind][status] += 1
@@ -260,22 +264,21 @@ class TimeDistributionView(Viewer):
         if broadcast_type != 'TIME':
             return
 
-        time = getattr(tracker, broadcast_type.lower())
-        dparser.parse(time)
+        time = dateparser.parse(getattr(tracker, broadcast_type.lower()))
 
-        # TODO - analyze distribution and track granularity
+        if time > dateparser.parse('12:00pm'):
+            self.time_distribution[24] += 1
+        else:
+            self.time_distribution[12] += 1
 
-        # if hour > 12:
-        #     self.time_distribution['_24'] += 1
-        # else:
-        #     self.time_distribution['_12'] += 1
-
-        # grains = [60, 30, 20, 15, 10, 5, 3, 2, 1]
-        # for grain in grains:
-        #     if minute % grain == 0:
-        #         if grain < self.granularity:
-        #             self.granularity = grain
-        #         break
+        minute = time.minute if time.minute != 0 else 60
+        grains = [60, 30, 20, 15, 10, 5, 3, 2, 1]
+        for grain in grains:
+            if minute % grain != 0:
+                continue
+            if grain < self.granularity:
+                self.granularity = grain
+            break
 
     def report(self, tracker):
         """Do nothing."""

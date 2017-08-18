@@ -9,3 +9,10 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
+
+import logging.config
+import yaml
+
+with open('/'.join(__name__.split('.') + ['logging.yaml']), 'r') as file:
+    config = file.read()
+logging.config.dictConfig(yaml.safe_load(config))

@@ -11,6 +11,7 @@
 # GNU General Public License for more details.
 
 conjunctions_and_prepositions = {
+    'the',
     # conjunctions
     'and',
     'or',

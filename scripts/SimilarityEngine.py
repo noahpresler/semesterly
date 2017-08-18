@@ -16,14 +16,15 @@ from nltk.corpus import stopwords
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
-from timetable.school_mappers import VALID_SCHOOLS
+from parsing.schools.active import ACTIVE_SCHOOLS
+
 
 class SimilarityFinder:
 
 	def __init__(self):
 		self.cachedStopWords = stopwords.words("english")
 		self.mode_type = ""
-		if len(sys.argv) != 2 or sys.argv[1] not in VALID_SCHOOLS:
+		if len(sys.argv) != 2 or sys.argv[1] not in ACTIVE_SCHOOLS:
 			print "Please provide a valid university."
 			exit()
 		self.school = sys.argv[1]
