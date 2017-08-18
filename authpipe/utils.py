@@ -109,7 +109,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                       access_token,
                   )
             request = urllib.request.Request(url)
-            data = json.loads(urllib.request.urlopen(request).read())
+            data = json.loads(urllib.request.urlopen(request).read().decode('utf-8'))
             new_student.img_url = data['picture']['data']['url']
             url = 'https://graph.facebook.com/{0}/' \
                   '?fields=gender' \
@@ -118,7 +118,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                       access_token,
                   )
             request = urllib.request.Request(url)
-            data = json.loads(urllib.request.urlopen(request).read())
+            data = json.loads(urllib.request.urlopen(request).read().decode('utf-8'))
             try:
                 new_student.gender = data.get('gender', '')
             except BaseException:
@@ -132,7 +132,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                       access_token,
                   )
             request = urllib.request.Request(url)
-            friends = json.loads(urllib.request.urlopen(request).read()).get('data')
+            friends = json.loads(urllib.request.urlopen(request).read().decode('utf-8')).get('data')
 
             for friend in friends:
                 if Student.objects.filter(fbook_uid=friend['id']).exists():

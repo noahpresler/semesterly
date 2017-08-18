@@ -143,7 +143,11 @@ class Searcher:
     def get_cosine_sim(self, sparse_vec1, sparse_vec2):
         """Computes cosine similarity between two sparse vectors."""
         if sparse_vec1 is not None and sparse_vec2 is not None:
-            return np.sum(sparse_vec1.multiply(sparse_vec2))
+            try:
+                return np.sum(sparse_vec1.multiply(sparse_vec2))
+            except:
+                # FIXME -- Python3 Transition (Hugh)
+                return 0
         else:
             return 0
 

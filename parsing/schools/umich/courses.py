@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
-
 from parsing.common.peoplesoft.courses import UPeoplesoftParser
 
 
@@ -43,6 +41,6 @@ class Parser(UPeoplesoftParser):
 
     def start(self, **kwargs):
         """Start parsing."""
-        # FIXME -- years and terms is definitely overlapping with keys in kwarggs
+        # FIXME -- years and terms is definitely overlapping with keys in kwargs
         super(Parser, self).start(years_and_terms=Parser.YEARS_AND_TERMS,
                                   **kwargs)
