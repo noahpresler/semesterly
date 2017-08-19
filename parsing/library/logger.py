@@ -18,7 +18,7 @@ from pygments import highlight, lexers, formatters
 from parsing.library.utils import pretty_json
 
 
-class JSONStreamWriter(object):
+class JSONStreamWriter:
     """Context to stream JSON list to file.
 
     Attributes:

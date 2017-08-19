@@ -21,7 +21,7 @@ from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 
 
-class Requester(object):
+class Requester:
 
     def __init__(self):
         self.session = requests.Session()

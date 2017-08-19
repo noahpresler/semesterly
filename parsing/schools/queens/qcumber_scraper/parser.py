@@ -17,13 +17,13 @@ from datetime import datetime
 import logging
 from .queens_config import LOG_DIR
 
-class SolusParser(object):
+class SolusParser:
     """Parses SOLUS's crappy HTML"""
 
     # For getting the correct tags
     ALL_SUBJECTS = re.compile("DERIVED_SSS_BCC_GROUP_BOX_1\$147\$\$[0-9]+")
     ALL_COURSES = re.compile("CRSE_NBR\$[0-9]+")
-    
+
     ALL_CAREERS = re.compile("CAREER\$[0-9]+")
 
     ALL_SECTIONS = re.compile("CLASS_SECTION\$[0-9]+")
@@ -447,7 +447,7 @@ class SolusParser(object):
                 if box_title == COURSE_DETAIL:
                     # Units and course components
                     labels = table.find_all("span", {"class": EDITBOX_LABEL_CLASS})
-                    
+
                     data = table.find_all("span", {"class": EDITBOX_DATA_CLASS})
 
                     dataIndex = 0

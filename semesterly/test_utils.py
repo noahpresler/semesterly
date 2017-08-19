@@ -48,7 +48,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     This test case extends the Django StaticLiveServerTestCase.
     It creates a selenium ChromeDriver instance on setUp of each
     test. It navigates to the live url for the static live server.
-    It also provides utilities and assertions for navigating and 
+    It also provides utilities and assertions for navigating and
     testing presence of elements or behavior.
 
     Attributes:
@@ -70,7 +70,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super(SeleniumTestCase, cls).setUpClass()
-        cls.TIMEOUT = 10        
+        cls.TIMEOUT = 10
         cls.chrome_options = webdriver.ChromeOptions()
         cls.chrome_options.add_experimental_option(
             "prefs",
@@ -101,7 +101,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         of the current state of self.driver, writing a PNG to self.img_dir, labeled by the provided
         description and a timetstamp.
         """
-        socket.setdefaulttimeout(10 * self.TIMEOUT)                            
+        socket.setdefaulttimeout(10 * self.TIMEOUT)
         try:
             yield
         except Exception as exc:
@@ -240,7 +240,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                             code,
                             course_idx)
                         )
-        else: 
+        else:
             chosen_course = search_results.find_elements_by_class_name('search-course')[course_idx]
         if not by_section:
             add_button = self.find(
@@ -759,7 +759,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             "//input[contains(@class, 'timetable-name') and @value='%s']" % name
         ))
 
-class url_matches_regex(object):
+class url_matches_regex:
     """Expected Condition which waits until the browser's url matches the provided regex"""
     def __init__(self, pattern):
         self.pattern = re.compile(pattern)
@@ -771,7 +771,7 @@ class url_matches_regex(object):
         else:
             return False
 
-class text_to_be_present_in_element_attribute(object):
+class text_to_be_present_in_element_attribute:
     """
     An expectation for checking if the given text is present in the element's
     locator, text
@@ -791,7 +791,7 @@ class text_to_be_present_in_element_attribute(object):
         except StaleElementReferenceException:
             return False
 
-class text_to_be_present_in_nth_element(object):
+class text_to_be_present_in_nth_element:
     """
     An expectation for checking if the given text is present in the nth element's
     locator, text
@@ -812,7 +812,7 @@ class text_to_be_present_in_nth_element(object):
             return False
 
 
-class n_elements_to_be_found(object):
+class n_elements_to_be_found:
     """
     An expectation for checking if the n elements are found
     locator, text
@@ -831,7 +831,7 @@ class n_elements_to_be_found(object):
         except StaleElementReferenceException:
             return False
 
-class function_returns_true(object):
+class function_returns_true:
     """
     An expectation for checking if the provided function returns true
     """

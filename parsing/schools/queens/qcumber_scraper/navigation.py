@@ -42,7 +42,7 @@ class SSLAdapter(HTTPAdapter):
                                        ssl_version=self.ssl_version)
 
 
-class SolusSession(object):
+class SolusSession:
     """Represents a solus browsing session"""
 
     login_url = "https://my.queensu.ca"
@@ -185,24 +185,24 @@ class SolusSession(object):
         action = self.parser.course_action(course_unique)
         if not action:
             raise Exception("Tried to open a course with an invalid unique '{0}'".format(course_unique))
-        
+
         self._catalog_post(action)
-        
+
         #attempt to go one level deeper to deal with courses which have multiple 'careers'
         secondaryAction = self.parser.disambiguation_action()
-        
+
         if secondaryAction:
             logging.error("POSTING: {0}".format(secondaryAction))
             self._catalog_post(secondaryAction)
-        
-        # unsure if this still works 
+
+        # unsure if this still works
         if self.recovery_state < 0:
             self.recovery_stack[2] = course_unique
 
     def return_from_course(self):
         """Navigates back from course to subject"""
         logging.debug("Returning from a course")
-        #hacky, attempt to return from the disambiguation page first 
+        #hacky, attempt to return from the disambiguation page first
         self._catalog_post('DERIVED_SAA_CRS_RETURN_PB')
         self._catalog_post('DERIVED_SSS_SEL_RETURN_PB')
 
