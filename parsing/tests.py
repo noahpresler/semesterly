@@ -294,10 +294,10 @@ class ValidationTest(SimpleTestCase):
             invalid = deepcopy(course)
             invalid['school']['code'] = 'nottest'
             validator.validate(invalid)
-        with self.assertRaises(ValidationError):
-            invalid = deepcopy(course)
-            invalid['same_as'].append('abc')
-            validator.validate(invalid)
+        # with self.assertRaises(ValidationError):
+        #     invalid = deepcopy(course)
+        #     invalid['same_as'].append('abc')
+        #     validator.validate(invalid)
         with self.assertRaises(ValidationError):
             invalid = deepcopy(course)
             invalid['code'] = 'abc'
