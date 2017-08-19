@@ -47,7 +47,7 @@ class Parser(BaseParser):
         Returns:
             Parser
         """
-        new_instance = object.__new__(cls, *args, **kwargs)
+        new_instance = object.__new__(cls)
         cls.CREDENTIALS = {
             'username': get_secret('GW_USER'),
             'password': get_secret('GW_PASS'),
