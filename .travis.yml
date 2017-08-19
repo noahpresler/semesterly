@@ -3,7 +3,7 @@ sudo: required
 dist: trusty
 language: node_js
 python:
-- 3.5
+- '3.5'
 node_js:
 - 7.1.0
 env:
