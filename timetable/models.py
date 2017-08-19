@@ -52,10 +52,10 @@ class Textbook(models.Model):
         title (CharField): the title of the book
     """
     isbn = models.BigIntegerField(primary_key=True)
-    detail_url = models.URLField(max_length=1000)
-    image_url = models.URLField(max_length=1000)
-    author = models.CharField(max_length=500)
-    title = models.CharField(max_length=1500)
+    detail_url = models.URLField(max_length=1000, null=True)
+    image_url = models.URLField(max_length=1000, null=True)
+    author = models.CharField(max_length=500, null=True)
+    title = models.CharField(max_length=1500, null=True)
 
     def get_info(self):
         return model_to_dict(self)

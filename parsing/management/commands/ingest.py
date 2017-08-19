@@ -14,7 +14,6 @@ import logging
 import simplejson as json
 
 from django.core.management.base import BaseCommand
-from timetable.school_mappers import SCHOOLS_MAP
 from parsing.management.commands.arguments import ingest_args
 from parsing.library.exceptions import PipelineException
 from parsing.library.tracker import Tracker
@@ -84,20 +83,20 @@ class Command(BaseCommand):
 
         tracker.end()
 
-    def run(self, parser, tracker, options, data_type, school):
+    def run(self, parser, tracker, options, parser_type, school):
         """Run the command.
 
         Args:
             parser (parsing.library.base_parser.BaseParser)
             tracker (parsing.library.tracker.Tracker)
             options (dict): Command line options for arg parser.
-            data_type (str): {'courses', 'evals', 'textbooks'}
+            parser_type (str): {'courses', 'evals', 'textbooks'}
             school (str): School to parse.
         """
         # Load config file to dictionary.
         if isinstance(options['config'], str):
             with open(options['config'].format(school=school,
-                                               type=data_type), 'r') as file:
+                                               type=parser_type), 'r') as file:
                 options['config'] = json.load(file)
 
         logger = logging.getLogger(parser.__module__ + '.' + parser.__name__)
@@ -109,7 +108,7 @@ class Command(BaseCommand):
                 output_path=options['output'].format(school=school),
                 # output_error_path=options['output_error'].format(
                 #     school=school,
-                #     type=data_type
+                #     type=parser_type
                 # ),
                 break_on_error=options['break_on_error'],
                 break_on_warning=options['break_on_warning'],
@@ -120,7 +119,7 @@ class Command(BaseCommand):
 
             p.start(
                 verbosity=options['verbosity'],
-                textbooks=data_type == 'textbook',
+                textbooks=parser_type == 'textbook',
                 departments_filter=options.get('departments'),
                 years_and_terms_filter=Command._resolve_years_and_terms(
                     options
@@ -130,7 +129,11 @@ class Command(BaseCommand):
             p.end()
 
         except PipelineException:
-            logger.exception('Ingestion failed for ' + school)
+            logger.exception(
+                'Ingestion failed for {school} {parser_type}'.format(
+                    school=school,
+                    parser_type=parser_type)
+            )
             try:
                 logger.debug('Ingestor dump:', p.ingestor)
             except UnboundLocalError:

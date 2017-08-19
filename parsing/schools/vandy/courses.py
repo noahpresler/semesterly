@@ -113,8 +113,11 @@ class Parser(BaseParser):
                     ]
                 }
 
-                departments = self.extract_department_codes()
-                for dept_code, dept_name in dict_filter_by_list(departments, departments_filter):
+                departments = dict_filter_by_list(
+                    dict(self.extract_department_codes()),
+                    departments_filter
+                )
+                for dept_code, dept_name in departments.items():
                     self.ingestor['department_code'] = dept_code
                     self.ingestor['department_name'] = dept_name
 

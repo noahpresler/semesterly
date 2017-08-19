@@ -102,8 +102,7 @@
     "same_as": {
       "type": "array",
       "items": {
-        "type": "string",
-        "maxLength": 20
+        "type": "string"
       }
     },
     "sections": {
