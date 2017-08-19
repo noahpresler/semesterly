@@ -2,8 +2,6 @@ os: linux
 sudo: required
 dist: trusty
 language: node_js
-python:
-- '3.5'
 node_js:
 - 7.1.0
 env:
@@ -24,10 +22,10 @@ install:
 - npm -g install chromedriver
 - npm -g install jest babel-jest
 - npm install
-- pip install numpy==1.13.1
-- pip install scipy==0.19.1
-- pip install requests==2.18.4
-- pip install --user -r requirements.txt
+- pip3 install numpy==1.13.1
+- pip3 install scipy==0.19.1
+- pip3 install requests==2.18.4
+- pip3 install --user -r requirements.txt
 addons:
   apt:
     sources:
@@ -44,5 +42,5 @@ script:
 - npm run build
 - npm run lint
 - npm run test
-- python manage.py test
+- python3.5 manage.py test
 - make html -C docs
