@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
-
 import datetime
 
 from timeit import default_timer as timer

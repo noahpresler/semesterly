@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
-
 # NOTE: module currently unused as it introduces too many bugs.
 #       Might reconsider for later use.
 

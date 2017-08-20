@@ -9,6 +9,7 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
+
 # The Pitt API, to access workable data of the University of Pittsburgh
 # Copyright (C) 2015 Ritwik Gupta
 #
