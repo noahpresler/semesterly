@@ -670,10 +670,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def ptt_equals(self, ptt):
         slots, master_slots, tt_name = ptt
-        self.assertItemsEqual(slots, self.get_elements_as_text((By.CLASS_NAME, 'slot')))
-        self.assertItemsEqual(master_slots,
+        self.assertCountEqual(slots, self.get_elements_as_text((By.CLASS_NAME, 'slot')))
+        self.assertCountEqual(master_slots,
             self.get_elements_as_text((By.CLASS_NAME, 'master-slot')))
-        self.assertItemsEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))
+        self.assertCountEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))
         return True
 
     def ptt_to_tuple(self):
