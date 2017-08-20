@@ -28,5 +28,7 @@ class SearchesConfig(AppConfig):
                 self.searcher = Searcher()
             except Exception as e:
                 self.searcher = None
-                print(("Unable to create Searcher object: setting searcher object to None " +
-                      "and using baseline_search instead. \nError:%s" %e.message))
+                print('Unable to create Searcher object:',
+                      'setting searcher object to None and',
+                      'using baseline_search instead.',
+                      '\nError:', str(e))
