@@ -10,15 +10,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from django.conf import settings
 
-VALID_SCHOOLS = {
-    "uoft",
-    "jhu",
-    "umd",
-    "queens",
-    "vandy",
-    "gw",
-    "umich",
-    "chapman",
-    "salisbury",
-}
+active_file = '{}/{}/schools/active'.format(settings.BASE_DIR,
+                                            settings.PARSING_MODULE)
+
+with open(active_file, 'r') as file:
+    ACTIVE_SCHOOLS = set(file.read().splitlines())

@@ -56,18 +56,18 @@
       "oneOf": [
         {
           "type": "string",
-          "maxLength": 200
+          "maxLength": 100
         },
         {
           "type": "object",
           "properties": {
             "first": {
               "type": "string",
-              "maxLength": 100
+              "maxLength": 50
             },
             "last": {
               "type": "string",
-              "maxLength": 100
+              "maxLength": 50
             }
           },
           "additionalProperties": false,

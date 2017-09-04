@@ -9,11 +9,8 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-"""Make me a module."""
 
 from __future__ import absolute_import, division, print_function
-
-import simplejson as json
 
 from celery.decorators import periodic_task, task
 from celery.task.schedules import crontab
@@ -21,9 +18,8 @@ from celery.utils.log import get_task_logger
 from django.core import management
 from django.conf import settings
 
-from timetable.school_mappers import \
-    FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS, SINGLE_ACCESS_SCHOOLS, \
-    VALID_SCHOOLS, school_to_semesters
+from timetable.school_mappers import SCHOOLS_MAP
+from parsing.schools.active import ACTIVE_SCHOOLS
 
 logger = get_task_logger(__name__)
 
@@ -35,21 +31,21 @@ logger = get_task_logger(__name__)
 )
 def task_parse_current_registration_period(schools=None, textbooks=False):
     """Parse semesters in current registration period."""
-    schools = set(schools or VALID_SCHOOLS)
-    for school in set(school_to_semesters) & schools:
+    schools = set(schools or ACTIVE_SCHOOLS)
+    for school in set(SCHOOLS_MAP) & schools:
         # Grab the most recent year.
-        years = [school_to_semesters[school].items()[-1]]
+        years = [SCHOOLS_MAP[school].active_semesters.items()[-1]]
 
         # Handle case where registration is for full academic year
-        if school in FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS:
-            if len(school_to_semesters[school]) > 2:
-                years.append(school_to_semesters[school].items()[-2])
+        if SCHOOLS_MAP[school].full_academic_year_registration:
+            if len(SCHOOLS_MAP[school].active_semesters) > 2:
+                years.append(SCHOOLS_MAP[school].active_semesters.items()[-2])
 
             # Group all semesters into single parsing call for schools that
             #  cannot support parallel parsing.
-            if school in SINGLE_ACCESS_SCHOOLS:
+            if SCHOOLS_MAP[school].single_access:
                 years_and_terms = {
-                    year: school_to_semesters[school][year][0]
+                    year: SCHOOLS_MAP[school].active_semesters[year][0]
                     for year in years
                 }
                 task_parse_school.delay(
@@ -67,16 +63,16 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
 @task()
 def task_parse_active(schools=None, textbooks=False):
     """Parse all semesters displayed to users (i.e. active semesters)."""
-    schools = set(schools or VALID_SCHOOLS)
-    for school in set(school_to_semesters) & schools:
-        if school in SINGLE_ACCESS_SCHOOLS:
+    schools = set(schools or ACTIVE_SCHOOLS)
+    for school in set(SCHOOLS_MAP) & schools:
+        if SCHOOLS_MAP[school].singe_access:
             task_parse_school.delay(
                 school,
-                school_to_semesters[school]
+                SCHOOLS_MAP[school].active_semesters
             )
             continue
 
-        for year, terms in school_to_semesters[school].items():
+        for year, terms in SCHOOLS_MAP[school].active_semesters.items():
             for term in terms:
                 task_parse_school.delay(school, {year: [term]},
                                         textbooks=textbooks)
@@ -100,9 +96,16 @@ def task_parse_textbooks(schools=None, all=False):
 
 @task()
 def task_parse_school(school, years_and_terms, textbooks=False):
-    """Call the django management commands to start parse."""
-    filename = '{}/{}/data/courses_{}.json'.format(
-        settings.PARSING_DIR,
+    """Call the django management commands to start parse.
+
+    Args:
+        school (str): School to parse.
+        years_and_terms (dict): Years and terms dictionary.
+        textbooks (bool, optional): Flag to parse textbooks.
+    """
+    logger.info('Starting parse for ' + school + ' ' + str(years_and_terms))
+    filename = '{}/schools/{}/data/courses_{}.json'.format(
+        settings.PARSING_MODULE,
         school,
         '-'.join(
             '{}{}'.format(
@@ -113,7 +116,7 @@ def task_parse_school(school, years_and_terms, textbooks=False):
     )
 
     management.call_command('ingest', school,
-                            years_and_terms=json.dumps(years_and_terms),
+                            years_and_terms=years_and_terms,
                             textbooks=textbooks,
                             display_progress_bar=False,
                             verbosity=0,
@@ -123,4 +126,4 @@ def task_parse_school(school, years_and_terms, textbooks=False):
                             display_progress_bar=False,
                             verbosity=0,
                             data=filename)
-    print('Parsed {} {}'.format(school, years_and_terms))
+    logger.info('Finished parse for ' + school + ' ' + str(years_and_terms))

@@ -39,10 +39,5 @@ class Parser(UPeoplesoftParser):
         super(Parser, self).__init__('umich',
                                      Parser.URL,
                                      term_base_url=Parser.TERM_BASE_URL,
+                                     years_and_terms=Parser.YEARS_AND_TERMS,
                                      **kwargs)
-
-    def start(self, **kwargs):
-        """Start parsing."""
-        # FIXME -- years and terms is definitely overlapping with keys in kwarggs
-        super(Parser, self).start(years_and_terms=Parser.YEARS_AND_TERMS,
-                                  **kwargs)

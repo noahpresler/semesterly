@@ -23,11 +23,13 @@ class DataUpdate(models.Model):
 
     Attributes:
         school (CharField): the school code that was updated (e.g. jhu)
-        semester (:obj:`ForeignKey` to :obj:`Semester`): the semester for the update
+        semester (:obj:`ForeignKey` to :obj:`Semester`): the semester for the
+            update
         last_updated (DateTimeField): the datetime last updated
-        reason (CharField): the reason it was updated (default Scheduled Update)
+        reason (CharField): the reason it was updated
+            (default Scheduled Update)
         update_type (CharField): which field was updated
-        UPDATE_TYPE (:obj:`tuple` of :obj:'tuple'): Update types allowed.
+        UPDATE_TYPE (:obj:`tuple` of :obj:`tuple`): Update types allowed.
         COURSES (str): Update type.
         EVALUATIONS (str): Update type.
         MISCELLANEOUS (str): Update type.

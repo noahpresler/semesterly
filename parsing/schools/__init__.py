@@ -9,3 +9,37 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
+
+import logging.config
+import os
+import yaml
+
+
+def qualify(filename):
+    """Wrap filename in absolute path.
+
+    Args:
+        filename (str)
+
+    Returns:
+        str: fully-qualified filename
+    """
+    return os.path.join(os.path.dirname(__file__), filename)
+
+
+def load_school_logger(school):
+    """Load logger for school.
+
+    Args:
+        name (str): module name.
+    """
+    with open(os.path.join(os.path.dirname(__file__), 'logging.yaml'), 'r') as file:
+        config = file.read().format(
+            parsing_log_filename=os.path.join(os.path.dirname(__file__),
+                                              school,
+                                             'logs',
+                                             'parsing.log'),
+            module='parsing.schools.' + school
+        )
+    logging.config.dictConfig(yaml.safe_load(config))
+

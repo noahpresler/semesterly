@@ -10,6 +10,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from __future__ import absolute_import, division, print_function
+
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -21,18 +23,19 @@ from agreement.models import Agreement
 from student.utils import get_student
 from student.serializers import get_student_dict
 from timetable.models import Semester
-from timetable.school_mappers import VALID_SCHOOLS, AM_PM_SCHOOLS, final_exams_available
-from timetable.utils import get_current_semesters, get_old_semesters
+from timetable.school_mappers import SCHOOLS_MAP
+from parsing.schools.active import ACTIVE_SCHOOLS
+from timetable.utils import get_current_semesters
 
 
 class ValidateSubdomainMixin(object):
     """
     Mixin which validates subdomain, redirecting user to index if the school
-    is not in :obj:`VALID_SCHOOLS`.
+    is not in :obj:`ACTIVE_SCHOOLS`.
     """
 
     def dispatch(self, request, *args, **kwargs):
-        if request.subdomain not in VALID_SCHOOLS:
+        if request.subdomain not in ACTIVE_SCHOOLS:
             return render(request, 'index.html')
         return super(ValidateSubdomainMixin, self).dispatch(request, *args, **kwargs)
 
@@ -78,16 +81,27 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             for i in self.student.integrations.all():
                 integrations.append(i.name)
 
+        final_exams = []
+        if SCHOOLS_MAP[self.school].final_exams is None:
+            final_exams = []
+        else:
+            for year, terms in SCHOOLS_MAP[self.school].final_exams.items():
+                for term in terms:
+                    final_exams.append({
+                        'name': term,
+                        'year': str(year)
+                    })
+
         init_data = {
             'school': self.school,
             'currentUser': get_student_dict(self.school, self.student, sem),
             'currentSemester': curr_sem_index,
             'allSemesters': all_semesters,
-            'oldSemesters': get_old_semesters(self.school),
-            'uses12HrTime': self.school in AM_PM_SCHOOLS,
+            # 'oldSemesters': get_old_semesters(self.school),
+            'uses12HrTime': SCHOOLS_MAP[self.school].ampm,
             'studentIntegrations': integrations,
             'examSupportedSemesters': map(all_semesters.index,
-                                          final_exams_available.get(self.school, [])),
+                                          final_exams),
             'timeUpdatedTos': Agreement.objects.latest().last_updated.isoformat(),
 
             'featureFlow': dict(feature_flow, name=self.feature_name)

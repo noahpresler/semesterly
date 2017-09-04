@@ -10,14 +10,15 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from timetable.school_mappers import VALID_SCHOOLS
+from parsing.schools.active import ACTIVE_SCHOOLS
+
 class SubdomainMiddleware(object):
 	def process_request(self, request):
 		subdomain = request.META.get('HTTP_HOST', '')\
 					.split('.')[0]\
 					.strip()\
 					.lower()
-		if subdomain in VALID_SCHOOLS:
+		if subdomain in ACTIVE_SCHOOLS:
 			request.subdomain = subdomain
 		else:
 			request.subdomain = None

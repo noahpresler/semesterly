@@ -17,7 +17,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
 from qcumber_scraper.textbooks import main
-from parsing.common.textbooks.amazon import amazon_textbook_fields
+from parsing.common.textbooks.amazon_textbooks import amazon_textbook_fields
 from timetable.models import Textbook
 
 
