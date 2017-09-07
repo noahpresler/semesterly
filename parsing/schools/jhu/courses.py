@@ -140,6 +140,10 @@ class Parser(BaseParser):
         self.ingestor['department_name'] = ' '.join(
             course['Department'].split()[1:]
         )
+        # if self.ingestor['department_name'] != 'International Economics':
+        # return
+        # print(course, section)
+        # print(self.ingestor['department_name'])
         self.ingestor['campus'] = 1
         self.ingestor['exclusions'] = section_details[0].get(
             'EnrollmentRestrictedTo'
@@ -185,7 +189,7 @@ class Parser(BaseParser):
                         meeting['DOW'] != "None"):
                     self.ingestor['days'] = map(
                         lambda d: Parser.DAY_MAP.get(d.lower()),
-                        re.findall(r'([A-Z][a-z]*)+?', meeting['DOW'])
+                        re.findall(r'(?:T[hH])|(?:S[aA])|[SMTWF]', meeting['DOW'])
                     )
                     if self.ingestor['days'] is None:
                         continue
