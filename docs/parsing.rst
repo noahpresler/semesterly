@@ -16,6 +16,8 @@ Ingest
 
 You may leave out the school code to parse all schools. This will run for a substantial amount of time and is not recommended.
 
+.. note:: To parse JHU data, you will need to acquire an API access key from `sis.jhu.edu/api <sis.jhu.edu/api>`_. Add the key to ``dev_credentials.py`` in the ``semesterly/`` directory.
+
 Digest
 ######
 
