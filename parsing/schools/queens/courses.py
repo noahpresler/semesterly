@@ -30,7 +30,7 @@ class Parser(QPeoplesoftParser):
         Returns:
             Parser
         """
-        new_instance = object.__new__(cls, *args, **kwargs)
+        new_instance = object.__new__(cls)
         cls.CREDENTIALS = {
             'USERNAME': get_secret('QUEENS_USER'),
             'PASSWORD': get_secret('QUEENS_PASS')

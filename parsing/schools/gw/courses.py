@@ -282,7 +282,7 @@ class Parser(BaseParser):
             instructors = meeting.find_all('td')[6].text.split(',')
 
             # NOTE: must constrain instructor length LAW 6683
-            for instructor in instructors[:20]:
+            for instructor in instructors[:5]:
                 # Remove extra internal spaces.
                 instructor = ' '.join(instructor.split())
 

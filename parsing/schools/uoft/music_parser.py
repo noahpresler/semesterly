@@ -39,7 +39,7 @@ class UofTMusicWriter(BaseWriter):
           course_rows.append(next_row)
           next_row = next(self.row_iter)[1]
         # save to be used as header in next iteration of while loop
-        self.next_course_row = next_row 
+        self.next_course_row = next_row
         yield course_rows
     except StopIteration:
       pass
@@ -49,7 +49,7 @@ class UofTMusicWriter(BaseWriter):
     course_code = course_element[0].course_code
     course_data = {
       # mandatory
-      'name': ' '.join([row.title for row in course_element if row.title]), 
+      'name': ' '.join([row.title for row in course_element if row.title]),
       'school': 'uoft',
 
       # optional
@@ -130,16 +130,16 @@ class UofTMusicWriter(BaseWriter):
 
 def get_tt_df(path):
   xl = pd.ExcelFile(path)
-  colnames = ['course_code', 
-              'sem', 
-              'credits', 
-              'title', 
-              'meeting_name', 
-              'hrs', 
-              'day_time', 
-              'location', 
-              'instructor', 
-              'enrol_indicator', 
+  colnames = ['course_code',
+              'sem',
+              'credits',
+              'title',
+              'meeting_name',
+              'hrs',
+              'day_time',
+              'location',
+              'instructor',
+              'enrol_indicator',
               'enrol_controls']
   return xl.parse('FM', skiprows=4, parse_cols=len(colnames) - 1, names=colnames).fillna('')
 

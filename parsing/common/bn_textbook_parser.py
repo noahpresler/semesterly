@@ -17,7 +17,7 @@ from fake_useragent import UserAgent
 from time import sleep
 
 from parsing.library.base_parser import BaseParser
-from parsing.common.textbooks.amazon import amazon_textbook_fields
+from parsing.common.textbooks.amazon_textbooks import amazon_textbook_fields
 
 from timetable.models import Course, Section, Textbook, TextbookLink
 

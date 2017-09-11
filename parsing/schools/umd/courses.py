@@ -189,7 +189,7 @@ class Parser(BaseParser):
               textbooks=True,
               verbosity=3):
         """Start the parse."""
-        for year, terms in list(years_and_terms_filter.items()):
+        for year, terms in years_and_terms_filter.items():
             self.year = year
             for term in terms:
                 self.semester = term

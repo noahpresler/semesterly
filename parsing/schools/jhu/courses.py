@@ -10,7 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-import sys
 import logging
 import re
 
@@ -49,7 +48,7 @@ class Parser(BaseParser):
         Returns:
             Parser
         """
-        new_instance = object.__new__(cls)
+        new_instance = object.__new__(cls, *args, **kwargs)
         cls.KEY = get_secret('JHU_API_KEY')
         return new_instance
 
@@ -179,7 +178,7 @@ class Parser(BaseParser):
                 if (len(meeting['DOW'].strip()) > 0 and
                         meeting['DOW'] != "TBA" and
                         meeting['DOW'] != "None"):
-                    self.ingestor['days'] = [Parser.DAY_MAP.get(d.lower()) for d in re.findall(r'([A-Z][a-z]*)+?', meeting['DOW'])]
+                    self.ingestor['days'] = [Parser.DAY_MAP.get(d.lower()) for d in re.findall(r'(?:T[hH])|(?:S[aA])|[SMTWF]', meeting['DOW'])]
                     if self.ingestor['days'] is None:
                         continue
                     self.ingestor['location'] = {
@@ -205,7 +204,7 @@ class Parser(BaseParser):
             years_and_terms_filter
         )
 
-        for year, terms in list(years_and_terms.items()):
+        for year, terms in years_and_terms.items():
             self.ingestor['year'] = year
             for term in terms:
                 self.ingestor['term'] = term

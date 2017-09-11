@@ -561,7 +561,8 @@ class Vommit(DigestionStrategy):
                 continue
             try:
                 whats[k] = str(v)
-            except django.utils.encoding.DjangoUnicodeDecodeError:
+            except (django.utils.encoding.DjangoUnicodeDecodeError,
+                    UnicodeEncodeError):
                 whats[k] = '<{}: [Bad Unicode data]'.format(k)
 
         # Remove db specific content from model.

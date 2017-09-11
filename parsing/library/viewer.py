@@ -10,6 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+import dateparser
 import progressbar
 
 from abc import ABCMeta, abstractmethod
@@ -259,9 +260,9 @@ class TimeDistributionView(Viewer):
         if broadcast_type != 'TIME':
             return
 
-        time = dateutil.parser.parse(getattr(tracker, broadcast_type.lower()))
+        time = dateparser.parse(getattr(tracker, broadcast_type.lower()))
 
-        if time > dateutil.parser.parse('12:00pm'):
+        if time > dateparser.parse('12:00pm'):
             self.time_distribution[24] += 1
         else:
             self.time_distribution[12] += 1

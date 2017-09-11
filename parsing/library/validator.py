@@ -14,7 +14,6 @@
 #        However, that would ruin the purity of the adapter.
 
 
-
 import dateutil.parser as dparser
 import http.client
 import jsonschema
@@ -224,12 +223,11 @@ class Validator:
             ValidationError: Description
         """
         data = Validator.file_to_json(data_path)['$data']
-        Validator.schema_validate(data, *Validator.SCHEMAS.datalist)
+        # Validator.schema_validate(data, *Validator.SCHEMAS.datalist)
 
-        for obj in data:
-            obj = DotDict(obj)
+        for obj in map(DotDict, data):
             try:
-                self.kind_to_validation_function[obj.kind](obj)
+                self.validate(obj)
                 self.tracker.stats = dict(kind=obj.kind, status='valid')
             except ValidationError as e:
                 logging.exception('Validation error')
@@ -240,6 +238,7 @@ class Validator:
                 # warnings.warn('', e, stacklevel=2)
             self.tracker.stats = dict(kind=obj.kind, status='total')
 
+        # TODO - this should be handled by caller
         self.tracker.end()
 
     def validate_course(self, course):
@@ -683,7 +682,8 @@ class Validator:
         if start > end:
             raise ValidationError('start {} > end {}'.format(start, end))
         elif start == end:
-            raise ValidationWarning('start {} = end {}'.format(start, end))
+            pass  # TODO - this should be reported
+            # raise ValidationWarning('start {} = end {}'.format(start, end))
         # NOTE: there exists an unhandled case if the end time is midnight.
 
     def validate_directory(self, directory):

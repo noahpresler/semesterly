@@ -54,11 +54,6 @@ class Command(BaseCommand):
         tracker = Tracker()
         self.stat_view = StatView()
         tracker.add_viewer(self.stat_view)
-        if options['display_progress_bar']:
-            tracker.add_viewer(StatProgressBar('{valid}/{total}',
-                                               statistics=self.stat_view),
-                               name='progressbar')
-
         tracker.mode = 'digesting'
         tracker.start()
 
@@ -72,8 +67,13 @@ class Command(BaseCommand):
         """Run the command."""
         tracker.school = school
         tracker.mode = 'validating'
+        if options['display_progress_bar']:
+            tracker.add_viewer(
+                StatProgressBar('{valid}/{total}', statistics=self.stat_view),
+                name='progressbar'
+            )
         logger = logging.getLogger('parsing.schools.' + school)
-        logger.debug('Command options:', options)
+        logger.debug('Digest command options:' + str(options))
 
         # Load config file to dictionary.
         if isinstance(options['config'], str):
@@ -95,8 +95,9 @@ class Command(BaseCommand):
             logging.exception('Failed validation before digestion')
             return  # Skip digestion for this school.
 
-        tracker.remove_viewer('progressbar')
-        tracker.add_viewer(ETAProgressBar(), name='progressbar')
+        if options['display_progress_bar']:
+            tracker.remove_viewer('progressbar')
+            tracker.add_viewer(ETAProgressBar(), name='progressbar')
         tracker.mode = 'digesting'
 
         with open(options['data'].format(school=school, type=data_type), 'r') as file:
@@ -111,8 +112,7 @@ class Command(BaseCommand):
                      diff=options['diff'],
                      load=options['load'],
                      output=options['output_diff'].format(school=school,
-                                                         type=data_type),
-            )
+                                                          type=data_type))
 
         except DigestionError:
             logging.exception('Failed digestion')
@@ -121,6 +121,4 @@ class Command(BaseCommand):
         except Exception:
             logging.exception('Failed digestion with uncaught exception')
 
-        logging.info('Digestion overview:', self.stat_view.report())
-
-        # TODO - move to periodic tasks
+        logging.info('Digestion overview for ' + school + ': ' + str(self.stat_view.report()))

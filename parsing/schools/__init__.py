@@ -34,6 +34,11 @@ def load_school_logger(school):
         name (str): module name.
     """
     with open(os.path.join(os.path.dirname(__file__), 'logging.yaml'), 'r') as file:
-        config = file.read().format(school=school,
-                                    module='parsing.schools.' + school)
+        config = file.read().format(
+            parsing_log_filename=os.path.join(os.path.dirname(__file__),
+                                              school,
+                                              'logs',
+                                              'parsing.log'),
+            module='parsing.schools.' + school
+        )
     logging.config.dictConfig(yaml.safe_load(config))

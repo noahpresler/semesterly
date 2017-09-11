@@ -185,7 +185,8 @@ def find_slots_to_fill(start, end, school):
 def get_time_index(hours, minutes, school):
     """Take number of hours and minutes, and return the corresponding time slot index"""
     # earliest possible hour is 8, so we get the number of hours past 8am
-    return (hours - 8) * (60 / SCHOOLS_MAP[school].granularity) + minutes / SCHOOLS_MAP[school].granularity
+    return (hours - 8) * (60 /
+                          SCHOOLS_MAP[school].granularity) + minutes / SCHOOLS_MAP[school].granularity
 
 
 def get_hours_minutes(time_string):

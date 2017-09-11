@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-import simplejson as json
-
 from celery.decorators import periodic_task, task
 from celery.task.schedules import crontab
 from celery.utils.log import get_task_logger
@@ -95,8 +93,15 @@ def task_parse_textbooks(schools=None, all=False):
 
 @task()
 def task_parse_school(school, years_and_terms, textbooks=False):
-    """Call the django management commands to start parse."""
-    filename = '{}/{}/data/courses_{}.json'.format(
+    """Call the django management commands to start parse.
+
+    Args:
+        school (str): School to parse.
+        years_and_terms (dict): Years and terms dictionary.
+        textbooks (bool, optional): Flag to parse textbooks.
+    """
+    logger.info('Starting parse for ' + school + ' ' + str(years_and_terms))
+    filename = '{}/schools/{}/data/courses_{}.json'.format(
         settings.PARSING_MODULE,
         school,
         '-'.join(
@@ -108,7 +113,7 @@ def task_parse_school(school, years_and_terms, textbooks=False):
     )
 
     management.call_command('ingest', school,
-                            years_and_terms=json.dumps(years_and_terms),
+                            years_and_terms=years_and_terms,
                             textbooks=textbooks,
                             display_progress_bar=False,
                             verbosity=0,
@@ -118,4 +123,4 @@ def task_parse_school(school, years_and_terms, textbooks=False):
                             display_progress_bar=False,
                             verbosity=0,
                             data=filename)
-    print('Parsed {} {}'.format(school, years_and_terms))
+    logger.info('Finished parse for ' + school + ' ' + str(years_and_terms))

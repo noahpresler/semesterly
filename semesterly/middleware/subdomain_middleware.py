@@ -12,6 +12,7 @@
 
 from parsing.schools.active import ACTIVE_SCHOOLS
 
+
 class SubdomainMiddleware:
 	def process_request(self, request):
 		subdomain = request.META.get('HTTP_HOST', '')\

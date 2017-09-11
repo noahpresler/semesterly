@@ -89,8 +89,6 @@ def load_parsers(school):
 
 SCHOOLS_MAP = {school: load_school(school) for school in ACTIVE_SCHOOLS}
 
-# print(SCHOOLS_MAP)
-
 # course_parsers = {
 #     'uoft': lambda: UofTParser().start(),
 # }

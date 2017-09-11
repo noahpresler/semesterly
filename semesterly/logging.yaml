@@ -4,6 +4,11 @@ disable_existing_loggers: false
 
 formatters:
 
+  simple:
+    format: '%(levelname)s %(asctime)s %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+    (): parsing.library.logger.JSONFormatter
+
   verbose:
     format: '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
     datefmt: '%Y-%m-%d %H:%M:%S'
@@ -11,7 +16,7 @@ formatters:
   coloredjson:
     format: '%(levelname)s %(asctime)s %(message)s'
     datefmt: '%Y-%m-%d %H:%M:%S'
-    # (): parsing.library.logger.JSONColoredFormatter
+    (): parsing.library.logger.JSONColoredFormatter
 
 handlers:
 

@@ -100,7 +100,7 @@ class Command(BaseCommand):
                 options['config'] = json.load(file)
 
         logger = logging.getLogger(parser.__module__ + '.' + parser.__name__)
-        logger.debug('Command options:', options)
+        logger.debug('Ingest command options:' + str(options))
 
         try:
             p = parser(
@@ -129,19 +129,15 @@ class Command(BaseCommand):
             p.end()
 
         except PipelineException:
-            logger.exception(
-                'Ingestion failed for {school} {parser_type}'.format(
-                    school=school,
-                    parser_type=parser_type)
-            )
+            logger.exception('Ingestion failed for ' + school + ' ' + parser_type)
             try:
-                logger.debug('Ingestor dump:', p.ingestor)
+                logger.debug('Ingestor dump for ' + school, p.ingestor)
             except UnboundLocalError:
                 pass
         except Exception:
-            logger.exception('Ingestion failed for ' + school)
+            logger.exception('Ingestion failed for ' + school + ' ' + parser_type)
 
-        logger.info('Ingestion overview:', self.stat_view.report())
+        logger.info('Ingestion overview for ' + school + ': ' + str(self.stat_view.report()))
 
     @staticmethod
     def _resolve_years_and_terms(options):
