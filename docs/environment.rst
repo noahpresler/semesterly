@@ -10,11 +10,21 @@ Setup Your Database
 
 Semester.ly stores objects like courses, timetables, and students in a Postgres database. Let's get one setup for you.
 
-Let's enter the Postgres shell by typing:
+Let's first initialize Postgres using the default user account ``postgres``
+
+Log into this account with
+
+.. code-block:: bash
+
+    sudo -i -u postgres
+
+Then, enter Postgres environment with
 
 .. code-block:: bash
 
     psql postgres
+
+.. note:: If you see an error in CentOS / Fedora, it's most likely due to postgres is not running. Initialize it with ``sudo service postgresql initdb && sudo service postgresql start``.
 
 Here you can enter SQL to create/manipulate/access databases. Let's create a Semester.ly database. Enter:
 
@@ -39,6 +49,14 @@ Great. You are all set. Enter the following to quit psql:
 .. code-block:: psql
     
     \q
+
+Then enter the following to log out from user ``postgres`` 
+
+.. code-block:: bash
+    
+    exit
+
+.. note:: For CentOS / Fedora, Change all occurances of ident to md5 in pg_hba.conf. You can modify the file through ``sudo vim /var/lib/pgsql9/data/pg_hba.conf``. After you change it, restart postgres with ``sudo service postgresql restart``.
 
 Create Local Settings
 ~~~~~~~~~~~~~~~~~~~~~
@@ -88,13 +106,13 @@ For development purposes, we map http://sem.ly:8000 to http://localhost:8000. To
 
 Set your Environment Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Add the following line to either your ``~/.bash.rc`` or ``~/.zshrc`` which tells webpack you are running a development environment:
+Add the following line to either your ``~/.bashrc`` or ``~/.zshrc`` which tells webpack you are running a development environment:
 
 .. code-block:: bash
 
     export NODE_ENV=development
 
-Then ``source ~/.bash.rc`` or ``source ~/.zshrc``
+Then ``source ~/.bashrc`` or ``source ~/.zshrc``
 
 And make sure the following line returns "development"
 
