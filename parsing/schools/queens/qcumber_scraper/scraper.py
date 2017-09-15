@@ -13,7 +13,7 @@
 import logging
 from . import writer
 
-class SolusScraper(object):
+class SolusScraper:
     """The class that coordinates the actual scraping"""
 
     def __init__(self, session, job, save, semesters=None):
@@ -95,7 +95,7 @@ class SolusScraper(object):
         # Iterate over all courses
         for course_unique in all_courses:
             self.session.open_course(course_unique)
-            
+
             course_attrs = self.session.parser.course_attrs()
             course_attrs['basic']['subject'] = subject['abbreviation']
 
@@ -121,7 +121,7 @@ class SolusScraper(object):
             else:
                 self.scrape_terms(course_attrs)
             self.session.return_from_course()
-            
+
 
     def scrape_terms(self, course):
         """Scrape terms"""
