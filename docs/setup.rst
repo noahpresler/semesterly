@@ -61,18 +61,31 @@ Before installing the python requirements, you must make sure to have PostgreSQL
 
 .. code-block:: bash
 
-    sudo apt-get install postgresql
+    sudo apt-get install sudo apt-get install postgresql python-psycopg2 libpq-dev libxslt-dev libxml2-dev
+
+**On CentOS / Fedora** use yum:
+
+.. code-block:: bash
+
+    sudo yum install postgresql gcc python-lxml postgresql-libs libxslt-devel libxml2-devel
 
 Install Python Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. note:: **ATTENTION MAC USERS:**, you must install the xcode command line tools via ``xcode-select --install`` before proceeding. You may also need to update openssl. If so, please `follow this guide <https://medium.com/@katopz/how-to-upgrade-openssl-8d005554401>`_. 
+.. note:: **ATTENTION MAC USERS:** you must install the xcode command line tools via ``xcode-select --install`` before proceeding. You may also need to update openssl. If so, please `follow this guide <https://medium.com/@katopz/how-to-upgrade-openssl-8d005554401>`_. 
 
 All python dependencies are kept in a file called ``requirements.txt``. Anytime a dependency is added or changed, we update it in this file. To bring your virutal environment up to date with all of these requirements easily, simply execute:
 
 .. code-block:: bash
 
+    pip install --upgrade pip
     pip install -r requirements.txt
+
+There are python modules that are missing from requirements.txt. Install them with:
+
+.. code-block:: bash
+
+    pip install pyyaml pygments kombu==3.0.33 billiard
 
 Install Node Packages
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -90,6 +103,14 @@ Node and node package manager are the backbone of our frontend setup. To begin, 
 
     sudo apt-get install nodejs
     sudo apt-get install npm
+
+**On CentOS / Fedora**:
+
+.. code-block:: bash
+
+    sudo yum install -y gcc-c++ make
+    curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash -
+    sudo yum install nodejs
 
 Then use the newly installed Node Package Manager (npm) to install all javascript dependencies. When you execute this command, it reads from the file ``package.json`` which specifies all dependencies, their versions, and some additional node related configurations:
 
