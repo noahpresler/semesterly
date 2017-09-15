@@ -18,7 +18,7 @@ import re
 import time
 
 from itertools import product
-from urllib2 import urlopen
+from urllib.request import urlopen
 from string import capwords
 from selenium.common.exceptions import WebDriverException
 from selenium import webdriver
@@ -137,7 +137,7 @@ class RutgersParser(BaseParser):
     location = meeting_element.find('span', class_='meetingTimeBuildingAndRoom').text
     if day in ['Saturday', 'Sunday'] or not re.match(time_pattern, time):
       return None
-    time_start, time_end = map(process_time, time.split(' - '))
+    time_start, time_end = list(map(process_time, time.split(' - ')))
     meeting_data = {
       'day': 'R' if day == 'Thursday' else day[0],
       'time_start': time_start,
@@ -197,16 +197,16 @@ def try_until_success(f):
     time.sleep(0.5)
 
 def parse_rutgers():
-  print 'parsing fall:'
+  print('parsing fall:')
   RutgersParser('F').parse_courses()
-  print 'parsing spring:'
+  print('parsing spring:')
   RutgersParser('S').parse_courses()
 
 if __name__ == '__main__':
   if len(sys.argv) < 2:
     parse_rutgers()
   elif sys.argv[1] not in ['F', 'S']:
-    print "Please provide either F or S for semester"
+    print("Please provide either F or S for semester")
   else:
     RutgersParser(sys.argv[1]).parse_courses()
 

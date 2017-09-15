@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 
-from __future__ import absolute_import, division, print_function
+
 
 import re
 
@@ -152,7 +152,7 @@ class Parser(BaseParser):
             all_questions += 'Q: ' + question.text.strip() + '\n'
 
             # Iterate over adjectives
-            for adj, i in zip(adjs, range(len(adjs))):
+            for adj, i in zip(adjs, list(range(len(adjs)))):
 
                 # Label (adjective) to describe numeric score
                 label = adj.contents[0].strip()

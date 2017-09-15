@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
+
 
 import simplejson as json
 from collections import OrderedDict, namedtuple
@@ -45,7 +45,7 @@ def load_school(school):
         config = DotDict(json.load(f))
 
     active_semesters = OrderedDict(
-        sorted(config.active_semesters.items(), key=lambda x: x[0])
+        sorted(list(config.active_semesters.items()), key=lambda x: x[0])
     )
 
     return School(code=config.school.code,
@@ -64,11 +64,11 @@ def load_parsers(school):
     for parser_type in ['courses', 'evals', 'textbooks']:
         try:
             parser = None  # Binding below in exec.
-            exec 'from {}.schools.{}.{} import Parser as parser'.format(
+            exec('from {}.schools.{}.{} import Parser as parser'.format(
                 settings.PARSING_MODULE,
                 school,
                 parser_type
-            )
+            ))
             parsers[parser_type] = parser
         except ImportError:
             pass

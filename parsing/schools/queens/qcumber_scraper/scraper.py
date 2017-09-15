@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 import logging
-import writer
+from . import writer
 
 class SolusScraper(object):
     """The class that coordinates the actual scraping"""
@@ -27,7 +27,7 @@ class SolusScraper(object):
     def start(self):
         """Starts running the scrape outlined in the job"""
 
-        logging.info(u"Starting job: {0}".format(self.job))
+        logging.info("Starting job: {0}".format(self.job))
 
         try:
             if self.save_to_db:
@@ -133,7 +133,7 @@ class SolusScraper(object):
             # print "Trying:", term, course['basic']['subject'], course['basic']['number']
             if self.semesters and (term['season'], term['year']) not in self.semesters:
                 continue
-            print "\tScraping", term["_unique"], "offerings for", course['basic']['subject'], course['basic']['number']
+            print("\tScraping", term["_unique"], "offerings for", course['basic']['subject'], course['basic']['number'])
             # logging.info(u"------Term: {year} - {season}".format(**term))
             self.session.switch_to_term(term["_unique"])
 
@@ -156,7 +156,7 @@ class SolusScraper(object):
             for section in all_sections:
                 # logging.info(u"--------Section: {class_num}-{type} ({solus_id}) -- {status}".format(**section["basic"]))
                 if not self.job["deep"]:
-                    logging.debug(u"SECTION CLASS DATA: {0}".format(section["classes"]))
+                    logging.debug("SECTION CLASS DATA: {0}".format(section["classes"]))
 
         # Deep scrape, go to the section page and add the data there
         if self.job["deep"]:
@@ -169,7 +169,7 @@ class SolusScraper(object):
 
                 self.session.return_from_section()
 
-                logging.debug(u"SECTION DEEP DATA DUMP: {0}".format(all_sections[i]))
+                logging.debug("SECTION DEEP DATA DUMP: {0}".format(all_sections[i]))
 
         for section in all_sections:
             section['basic']['course'] = course['basic']['number']

@@ -14,7 +14,7 @@
 # FIXME -- conform to datapipeline.
 
 import sys
-import requests, cookielib
+import requests, http.cookiejar
 from bs4 import BeautifulSoup
 import re
 import datetime
@@ -66,9 +66,9 @@ class Review:
                 professor=professor,
                 year=year)
             if created:
-                print "Evaluation Object CREATED for: " + course
+                print("Evaluation Object CREATED for: " + course)
             else:
-                print "Evaluation Object FOUND for: " + course
+                print("Evaluation Object FOUND for: " + course)
 
     def __str__(self):
         return (
@@ -81,7 +81,7 @@ class umdReview:
 
     def __init__(self):
         self.s = requests.Session()
-        self.cookies = cookielib.CookieJar()
+        self.cookies = http.cookiejar.CookieJar()
         self.headers = {
             'User-Agent': 'My User Agent 1.0'
         }

@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
+
 
 import re
 import sys
@@ -23,10 +23,8 @@ from parsing.library.exceptions import ParseError
 from parsing.library.utils import dict_filter_by_dict, dict_filter_by_list
 
 
-class PeoplesoftParser(BaseParser):
+class PeoplesoftParser(BaseParser, metaclass=ABCMeta):
     """Generalized Peoplesoft course parser."""
-
-    __metaclass__ = ABCMeta
 
     DAY_MAP = {
         'Mo': 'M',
@@ -81,15 +79,15 @@ class PeoplesoftParser(BaseParser):
             self._get_years_and_terms(soup),
             years_and_terms_filter
         )
-        for year, terms in years_and_terms.items():
+        for year, terms in list(years_and_terms.items()):
             self.ingestor['year'] = year
-            for term_name, term_code in terms.items():
+            for term_name, term_code in list(terms.items()):
                 soup = self._term_update(term_code, params)
                 self.ingestor['term'] = term_name
 
                 # NOTE: schools that do not use groups will return {None: None}
                 groups = self._get_groups(soup, params)
-                for group_id, group_name in groups.items():
+                for group_id, group_name in list(groups.items()):
                     params2 = {}
                     if group_id is not None:
                         soup = self._group_update(group_id, params)
@@ -110,7 +108,7 @@ class PeoplesoftParser(BaseParser):
                         departments_filter
                     )
 
-                    for dept_code, dept_name in departments.iteritems():
+                    for dept_code, dept_name in departments.items():
                         self.ingestor['dept_name'] = dept_name
                         self.ingestor['dept_code'] = dept_code
 
@@ -135,7 +133,7 @@ class PeoplesoftParser(BaseParser):
 
     @staticmethod
     def _find_all_isbns(soup):
-        return zip(
+        return list(zip(
             soup.find_all(
                 'span',
                 id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')
@@ -144,7 +142,7 @@ class PeoplesoftParser(BaseParser):
                 'span',
                 id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')
             )
-        )
+        ))
 
     def _get_years_and_terms(self, soup):
         term_datas = soup.find(
@@ -213,8 +211,8 @@ class PeoplesoftParser(BaseParser):
     def _exclude_ajax_params(params):
         """Filter out params related to ajax."""
         return {
-            k: v for k, v in params.items()
-            if k not in PeoplesoftParser.AJAX_PARAMS.keys()
+            k: v for k, v in list(params.items())
+            if k not in list(PeoplesoftParser.AJAX_PARAMS.keys())
         }
 
     def _get_dept_param_key(self, soup):
@@ -286,9 +284,9 @@ class PeoplesoftParser(BaseParser):
         self.ingestor['course_name'] = rtitle.group(3)
         self.ingestor['section_code'] = rtitle.group(2)
         self.ingestor['credits'] = float(re.match(r'(\d*).*', units).group(1))
-        self.ingestor['prereqs'] = map(lambda x: x.text, filter(None, [req]))
+        self.ingestor['prereqs'] = [x.text for x in [_f for _f in [req] if _f]]
         self.ingestor['descr'] = '\n'.join(
-            map(lambda x: x.text, filter(None, [descr, notes, areas]))
+            [x.text for x in [_f for _f in [descr, notes, areas] if _f]]
         )
         self.ingestor['size'] = int(capacity)
         self.ingestor['enrollment'] = int(enrollment)
@@ -329,10 +327,7 @@ class PeoplesoftParser(BaseParser):
             rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
 
             if rsched:
-                days = map(
-                    lambda d: PeoplesoftParser.DAY_MAP[d],
-                    re.findall(r'[A-Z][^A-Z]*', rsched.group(1))
-                )
+                days = [PeoplesoftParser.DAY_MAP[d] for d in re.findall(r'[A-Z][^A-Z]*', rsched.group(1))]
                 time = (
                     rsched.group(2),
                     rsched.group(3)
@@ -352,7 +347,7 @@ class PeoplesoftParser(BaseParser):
 
     def _parse_textbooks(self, soup):
         # BUG: gaurantee with regex match order and textbook status...?
-        textbooks = zip(
+        textbooks = list(zip(
             soup.find_all(
                 'span',
                 id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')
@@ -360,12 +355,12 @@ class PeoplesoftParser(BaseParser):
             soup.find_all(
                 'span',
                 id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*'))
-        )
+        ))
 
         # Remove extra characters from isbn and tranform Required into boolean.
         for i in range(len(textbooks)):
             textbooks[i] = {
-                'isbn': filter(lambda x: x.isdigit(), textbooks[i][0].text),
+                'isbn': [x for x in textbooks[i][0].text if x.isdigit()],
                 'required': textbooks[i][1].text[0].upper() == 'R',
             }
 

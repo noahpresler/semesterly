@@ -16,7 +16,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from student.models import *
 from timetable.models import Semester
-from mailer import Mailer
+from .mailer import Mailer
 
 if len(sys.argv) < 4:
     print("Please specify a school, a term (e.g. Fall), and a year (e.g. 2017).")

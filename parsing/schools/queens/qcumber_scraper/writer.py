@@ -15,7 +15,7 @@ import json
 import os
 from os import path
 
-from queens_config import OUTPUT_DIR
+from .queens_config import OUTPUT_DIR
 
 
 def json_datetime_dump(obj):

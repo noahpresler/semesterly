@@ -67,7 +67,7 @@ def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
     for course in courses:
         is_optional = course.id in optional_course_ids
         grouped = get_sections_by_section_type(course, semester)
-        for section_type, sections in grouped.iteritems():
+        for section_type, sections in grouped.items():
             locked_section_code = locked_sections.get(str(course.id), {}).get(section_type)
             section_codes = [section.meeting_section for section in sections]
             if locked_section_code in section_codes:
@@ -98,12 +98,12 @@ def slots_to_timetables(slots, school, custom_events, with_conflicts):
     """
     num_offerings, num_permutations_remaining = get_xproduct_indicies(slots)
     total_num_permutations = num_permutations_remaining.pop(0)
-    for p in xrange(total_num_permutations):  # for each possible tt
+    for p in range(total_num_permutations):  # for each possible tt
         current_tt = []
         day_to_usage = get_day_to_usage(custom_events, school)
         num_conflicts = 0
         add_tt = True
-        for i in xrange(len(slots)):  # add an offering for the next section
+        for i in range(len(slots)):  # add an offering for the next section
             j = (p / num_permutations_remaining[i]) % num_offerings[i]
             num_added_conflicts = add_meeting_and_check_conflict(day_to_usage,
                                                                  slots[i][j],
@@ -142,7 +142,7 @@ def get_xproduct_indicies(lists):
     """
     num_offerings = []
     num_permutations_remaining = [1]
-    for i in xrange(len(lists) - 1, -1, -1):
+    for i in range(len(lists) - 1, -1, -1):
         length = len(lists[i])
         num_offerings.insert(0, length)
         num_permutations_remaining.insert(0, length * num_permutations_remaining[0])
@@ -178,8 +178,8 @@ def find_slots_to_fill(start, end, school):
     start_hour, start_minute = get_hours_minutes(start)
     end_hour, end_minute = get_hours_minutes(end)
 
-    return range(get_time_index(start_hour, start_minute, school),
-                 get_time_index(end_hour, end_minute, school))
+    return list(range(get_time_index(start_hour, start_minute, school),
+                 get_time_index(end_hour, end_minute, school)))
 
 
 def get_time_index(hours, minutes, school):
@@ -240,7 +240,7 @@ def get_current_semesters(school):
     (semester name, year) pairs.
     """
     semesters = []
-    for year, terms in reversed(SCHOOLS_MAP[school].active_semesters.items()):
+    for year, terms in reversed(list(SCHOOLS_MAP[school].active_semesters.items())):
         for term in terms:
             # Ensure DB has all semesters.
             Semester.objects.update_or_create(name=term, year=year)

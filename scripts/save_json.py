@@ -47,7 +47,7 @@ class JsonParser(BaseParser):
 
 if __name__ == '__main__':
   if len(sys.argv) != 2:
-    print "Usage: python -m scripts.save_json file.json"
+    print("Usage: python -m scripts.save_json file.json")
     sys.exit(1) 
   filename = sys.argv[1]
   parser = JsonParser(filename)

@@ -19,10 +19,10 @@ try:
     from queue import Empty
 except ImportError:
     # Python 2.x
-    from Queue import Empty
+    from queue import Empty
 
-from navigation import SolusSession
-from scraper import SolusScraper
+from .navigation import SolusSession
+from .scraper import SolusScraper
 
 
 class ScrapeJob(dict):
@@ -82,7 +82,7 @@ class JobManager(object):
                 temp = ScrapeJob(job_letter)
                 temp["subject_start"] = job["subject_start"] + s
                 temp["subject_step"] = threads_per_letter
-                logging.info(u"Made job: {0}".format(temp))
+                logging.info("Made job: {0}".format(temp))
                 self.jobs.put_nowait(temp)
 
     def run_jobs(self, queue):
@@ -160,7 +160,7 @@ if __name__ == "__main__":
 
     # Get credientials
     try:
-        from queens_config import USER, PASS, PROFILE, SAVE_TO_DB
+        from .queens_config import USER, PASS, PROFILE, SAVE_TO_DB
     except ImportError:
         logging.critical("No credientials found. Create a queens_config.py file with USER, PASS, and PROFILE constants")
 

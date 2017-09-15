@@ -18,7 +18,7 @@ from parsing.schools.active import ACTIVE_SCHOOLS
 
 from django.db.models import Q
 from django.utils.encoding import smart_str
-import datetime, logging, os, sys, cookielib, requests, time, re
+import datetime, logging, os, sys, http.cookiejar, requests, time, re
 
 class Command(BaseCommand):
   help = "Initiates sitemapper for all schools."
@@ -33,7 +33,7 @@ class Command(BaseCommand):
 		self.stdout.write(message)
 
   def handle(self, *args, **options):
-  	print os.path.dirname(os.path.realpath(__file__))
+  	print(os.path.dirname(os.path.realpath(__file__)))
   	update_time = str(datetime.datetime.today()).split()[0]
   	logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
   	xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'

@@ -60,10 +60,10 @@ def update_sem_fields(table, get_school, sem_table):
     bar.update(i)
     num_updated += 1
 
-  print "Updated {0}/{1} rows from table {2}".format(num_updated, table.objects.count(), str(table))
-  print "Ignored the following unknown semester codes:"
+  print("Updated {0}/{1} rows from table {2}".format(num_updated, table.objects.count(), str(table)))
+  print("Ignored the following unknown semester codes:")
   pprint(bad_inputs)
-  print
+  print()
 
 def code_to_name(semester_code, school):
   """ Take a valid semester code for a school and return its full name """

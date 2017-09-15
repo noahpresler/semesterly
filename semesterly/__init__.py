@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import print_function, absolute_import, unicode_literals
+
 
 # This will make sure the app is always imported when
 # Django starts so that shared_task will use this app.

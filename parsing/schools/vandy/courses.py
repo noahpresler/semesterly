@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
+
 
 import re
 
@@ -86,9 +86,9 @@ class Parser(BaseParser):
 
         years_and_terms = dict_filter_by_dict(self._parse_years_and_terms(),
                                               years_and_terms_filter)
-        for year, terms in years_and_terms.items():
+        for year, terms in list(years_and_terms.items()):
             self.ingestor['year'] = year
-            for term_name, term_code in terms.items():
+            for term_name, term_code in list(terms.items()):
                 self.ingestor['term'] = term_name
 
                 # Load environment for targeted semester
@@ -117,7 +117,7 @@ class Parser(BaseParser):
                     dict(self.extract_department_codes()),
                     departments_filter
                 )
-                for dept_code, dept_name in departments.items():
+                for dept_code, dept_name in list(departments.items()):
                     self.ingestor['department_code'] = dept_code
                     self.ingestor['department_name'] = dept_name
 
@@ -334,8 +334,8 @@ class Parser(BaseParser):
             raise ParseError('number of labels and values should be the same')
 
         try:
-            for label, value in zip(map(lambda x: x.text.strip(), labels),
-                                    map(lambda x: x.text.strip(), values)):
+            for label, value in zip([x.text.strip() for x in labels],
+                                    [x.text.strip() for x in values]):
                 if len(label) <= 0 or len(value) <= 0:
                     continue
 
@@ -389,7 +389,7 @@ class Parser(BaseParser):
         description = self.ingestor.setdefault('description', [])
         if isinstance(description, list):
             description.append(notes)
-        elif isinstance(description, basestring):
+        elif isinstance(description, str):
             description += '\n' + notes
 
     def extract_description(self, soup):
