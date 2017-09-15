@@ -43,7 +43,7 @@ class ScrapeJob(dict):
         self["course_end"] = self.get("course_end", None)
 
 
-class JobManager(object):
+class JobManager:
     """Handles dividing up the scraping work and starting the scraper threads"""
 
     def __init__(self, user, passwd, save_to_db, config):
@@ -111,7 +111,7 @@ class JobManager(object):
                 cProfile.runctx("SolusScraper(session, job, self.db).start()", globals(), locals())
             else:
                 SolusScraper(session, job, self.db).start()
-                
+
 
     def start_jobs(self):
         """Start the threads that perform the jobs"""

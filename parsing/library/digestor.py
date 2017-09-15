@@ -32,7 +32,7 @@ class DigestionError(PipelineError):
     """Digestor error class."""
 
 
-class Digestor(object):
+class Digestor:
     """Digestor in data pipeline.
 
     Attributes:
@@ -221,7 +221,7 @@ class Digestor(object):
         self.strategy.wrap_up()
 
 
-class DigestionAdapter(object):
+class DigestionAdapter:
     """Converts JSON defititions to model compliant dictionay.
 
     Attributes:

@@ -23,7 +23,7 @@ class TrackerError(PipelineError):
     """Tracker error class."""
 
 
-class Tracker(object):
+class Tracker:
     """Tracks specified attributes and broadcasts to viewers.
 
     @property attributes are defined for all BROADCAST_TYPES

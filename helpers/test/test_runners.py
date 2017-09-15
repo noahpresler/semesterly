@@ -18,9 +18,9 @@ from django.test.runner import DiscoverRunner
 from mock import patch
 
 
-class NoDatabaseMixin(object):
+class NoDatabaseMixin:
     """
-    Test runner mixin which skips the DB setup/teardown when there are no subclasses of 
+    Test runner mixin which skips the DB setup/teardown when there are no subclasses of
     TransactionTestCase to improve the speed of running the tests.
     Adapted from: https://www.caktusgroup.com/blog/2013/10/02/skipping-test-db-creation/
     """

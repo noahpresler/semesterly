@@ -28,7 +28,7 @@ from parsing.schools.active import ACTIVE_SCHOOLS
 from timetable.utils import get_current_semesters
 
 
-class ValidateSubdomainMixin(object):
+class ValidateSubdomainMixin:
     """
     Mixin which validates subdomain, redirecting user to index if the school
     is not in :obj:`ACTIVE_SCHOOLS`.
