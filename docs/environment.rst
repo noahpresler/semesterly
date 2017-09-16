@@ -124,11 +124,20 @@ And make sure the following line returns "development"
 Install & Run Webpack
 ~~~~~~~~~~~~~~~~~~~~~
 
-Webpack compiles our React componenets into one application wide javascript bundle. We use chromedriver to test them. To install these, execute: 
+Webpack compiles our React componenets into one application wide javascript bundle. We use chromedriver to test them. 
+
+To install them if you are testing in chrome install:
 
 .. code-block:: bash
 
     npm install -g webpack chromedriver
+    
+
+To install them if you are using firefox or a 32 bit operating system (like lubuntu) run:
+
+.. code-block:: bash
+    
+    npm install -g webpack
 
 Then run it with:
 
