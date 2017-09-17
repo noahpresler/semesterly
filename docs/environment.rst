@@ -12,7 +12,7 @@ Semester.ly stores objects like courses, timetables, and students in a Postgres 
 
 Let's first initialize Postgres using the default user account ``postgres``
 
-Log into this account with
+**IF ON LINUX ONLY** Log into this account with
 
 .. code-block:: bash
 
