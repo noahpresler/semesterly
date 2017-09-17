@@ -61,11 +61,31 @@ class Command(BaseCommand):
         for parser_type in options['types']:
             for school in options['schools']:
                 tracker.school = school
-                self.run(SCHOOLS_MAP[school].parsers[parser_type],
-                         tracker,
-                         options,
-                         parser_type,
-                         school)
+                try:
+                    parsing = __import__(
+                        'parsing.schools.{school}.{parser_type}'.format(
+                            school=school,
+                            parser_type=parser_type
+                        )
+                    )
+                    parser = eval(
+                        'parsing.schools.{school}.{parser_type}.Parser'.format(
+                            school=school,
+                            parser_type=parser_type
+                        )
+                    )
+                    self.run(parser,
+                             tracker,
+                             options,
+                             parser_type,
+                             school)
+                except ImportError:
+                    logging.exception('Invalid parser')
+                # self.run(SCHOOLS_MAP[school].parsers[parser_type],
+                #          tracker,
+                #          options,
+                #          parser_type,
+                #          school)
         tracker.end()
 
     def run(self, parser, tracker, options, parser_type, school):

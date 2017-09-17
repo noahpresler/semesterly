@@ -56,7 +56,7 @@ def load_school(school):
                   full_academic_year_registration=config.full_academic_year_registration,
                   single_access=config.single_access,
                   final_exams=config.get('final_exams'),
-                  parsers=load_parsers(school))
+                  parsers={})  # load_parsers(school))
 
 
 def load_parsers(school):
@@ -64,13 +64,17 @@ def load_parsers(school):
     for parser_type in ['courses', 'evals', 'textbooks']:
         try:
             parser = None  # Binding below in exec.
-            exec('from {}.schools.{}.{} import Parser as parser'.format(
+            module = '{}.schools.{}.{}'.format(
                 settings.PARSING_MODULE,
                 school,
                 parser_type
-            ))
+            )
+            __import__(module + '.Parser')
+            exec('from ' + module + ' import Parser as parser')
+            print(school, parser_type, parser)
             parsers[parser_type] = parser
         except ImportError:
+            print(school, parser_type)
             pass
     return parsers
 
