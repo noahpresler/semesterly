@@ -116,7 +116,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 trace.append(' File "{1}", line {2}, in {3}'.format(*item))
                 for line in item[4]:
                     trace.append(' ' + line.strip())
-            raise type(exc)(exc.message + '\n'.join(trace) + msg)
+            raise type(exc)(str(exc) + '\n'.join(trace) + msg)
 
     def get_test_url(self, school, path=''):
         """Get's the live server testing url for a given school.
