@@ -247,12 +247,12 @@ class PeoplesoftParser(BaseParser, metaclass=ABCMeta):
         title = soup.find(
             'span',
             id='DERIVED_CLSRCH_DESCR200'
-        ).text.encode('ascii', 'ignore')
+        ).text
 
         subtitle = soup.find(
             'span',
             id='DERIVED_CLSRCH_SSS_PAGE_KEYDESCR'
-        ).text.encode('ascii', 'ignore')
+        ).text
 
         units = soup.find('span', id='SSR_CLS_DTL_WRK_UNITS_RANGE').text
         capacity = soup.find('span', id='SSR_CLS_DTL_WRK_ENRL_CAP').text
@@ -280,7 +280,7 @@ class PeoplesoftParser(BaseParser, metaclass=ABCMeta):
         self.ingestor['section_type'] = subtitle.split('|')[2].strip()
 
         # Place course info into course model
-        self.ingestor['course_code'] = rtitle.group(1)
+        self.ingestor['course_code'] = re.sub(r'\s+', ' ', rtitle.group(1))
         self.ingestor['course_name'] = rtitle.group(3)
         self.ingestor['section_code'] = rtitle.group(2)
         self.ingestor['credits'] = float(re.match(r'(\d*).*', units).group(1))

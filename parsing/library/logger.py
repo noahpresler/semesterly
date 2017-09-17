@@ -81,7 +81,7 @@ class JSONStreamWriter:
             self.file = obj
             self.close_file = False
         else:
-            self.file = open(obj, 'wb')
+            self.file = open(obj, 'w')
             self.close_file = True
         self.open, self.close = JSONStreamWriter.BRACES[type_]
         self.type_ = type_
