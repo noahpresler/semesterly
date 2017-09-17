@@ -12,11 +12,11 @@ Semester.ly stores objects like courses, timetables, and students in a Postgres 
 
 Let's first initialize Postgres using the default user account ``postgres``
 
-**IF ON LINUX ONLY** Log into this account with
+.. note:: If using Linux log into this account with
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    sudo -i -u postgres
+        sudo -i -u postgres
 
 Then, enter Postgres environment with
 
@@ -50,11 +50,11 @@ Great. You are all set. Enter the following to quit psql:
     
     \q
 
-Then enter the following to log out from user ``postgres`` 
+.. note:: If using Linux exit postgres by 
 
-.. code-block:: bash
-    
-    exit
+    .. code-block:: bash
+
+        exit
 
 .. note:: For CentOS / Fedora, Change all occurances of ident to md5 in pg_hba.conf. You can modify the file through ``sudo vim /var/lib/pgsql9/data/pg_hba.conf``. After you change it, restart postgres with ``sudo service postgresql restart``.
 
