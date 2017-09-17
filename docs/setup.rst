@@ -114,6 +114,7 @@ Node and node package manager are the backbone of our frontend setup. To begin, 
 
 .. code-block:: bash
 
+    wget -qO- https://deb.nodesource.com/setup_6.x | sudo bash -
     sudo apt-get install nodejs
     sudo apt-get install npm
 
@@ -121,6 +122,7 @@ Node and node package manager are the backbone of our frontend setup. To begin, 
 
 .. code-block:: bash
 
+    wget -qO- https://deb.nodesource.com/setup_6.x | sudo bash -
     sudo apt install nodejs
     sudo apt install npm
 
