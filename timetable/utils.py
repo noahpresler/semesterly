@@ -104,7 +104,7 @@ def slots_to_timetables(slots, school, custom_events, with_conflicts):
         num_conflicts = 0
         add_tt = True
         for i in range(len(slots)):  # add an offering for the next section
-            j = (p / num_permutations_remaining[i]) % num_offerings[i]
+            j = int((p / num_permutations_remaining[i]) % num_offerings[i])
             num_added_conflicts = add_meeting_and_check_conflict(day_to_usage,
                                                                  slots[i][j],
                                                                  school)
@@ -178,8 +178,8 @@ def find_slots_to_fill(start, end, school):
     start_hour, start_minute = get_hours_minutes(start)
     end_hour, end_minute = get_hours_minutes(end)
 
-    return list(range(get_time_index(start_hour, start_minute, school),
-                 get_time_index(end_hour, end_minute, school)))
+    return list(range(int(get_time_index(start_hour, start_minute, school)),
+                int(get_time_index(end_hour, end_minute, school))))
 
 
 def get_time_index(hours, minutes, school):
@@ -221,7 +221,7 @@ def get_tt_stats(timetable, day_to_usage):
 def get_day_to_usage(custom_events, school):
     """Initialize day_to_usage dictionary, which has custom events blocked out."""
     day_to_usage = {
-        day: [set() for _ in range(14 * 60 / SCHOOLS_MAP[school].granularity)]
+        day: [set() for _ in range(int(14 * 60 / SCHOOLS_MAP[school].granularity))]
         for day in ['M', 'T', 'W', 'R', 'F']
     }
 
