@@ -51,7 +51,7 @@ class Parser(BaseParser):
         Returns:
             Parser
         """
-        new_instance = object.__new__(cls, *args, **kwargs)
+        new_instance = object.__new__(cls)
         cls.KEY = get_secret('JHU_API_KEY')
         return new_instance
 
