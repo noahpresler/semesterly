@@ -4,9 +4,15 @@ dist: trusty
 language: node_js
 node_js:
 - 7.1.0
+python:
+- "3.5"
 env:
-  matrix:
-  - NODE_ENV=production
+  global:
+    - NUMPY_VERSION=1.13.1
+    - SCIPY_VERSION=0.19.1
+    - REQST_VERSION=2.18.4
+    - SETUP_VERSION=36.5.0
+    - NODE_ENV=production
 branches:
   only:
   - master
@@ -17,12 +23,20 @@ cache:
   - node_modules
   - $HOME/.npm
   - $HOME/.cache/pip
+before_install:
+- sudo apt-get update
+- sudo apt-get -y install python3 python3-pip
+- sudo pip3 install --upgrade pip
 install:
 - npm -g install webpack
 - npm -g install chromedriver
 - npm -g install jest babel-jest
 - npm install
-- pip install --user -r requirements.txt
+- pip3 install --user numpy==$NUMPY_VERSION
+- pip3 install --user scipy==$SCIPY_VERSION
+- pip3 install --user requests==$REQST_VERSION
+- pip3 install --user setuptools==$SETUP_VERSION
+- pip3 install --user -r requirements.txt
 addons:
   apt:
     sources:
@@ -39,5 +53,5 @@ script:
 - npm run build
 - npm run lint
 - npm run test
-- python manage.py test
+- python3 manage.py test
 - make html -C docs
