@@ -15,11 +15,9 @@ from __future__ import division
 import cPickle as pickle
 import numpy as np
 import operator
-from sklearn.feature_extraction.text import TfidfTransformer
 from django.db.models import Q
 from timetable.models import Course
 from nltk.stem.porter import *
-import progressbar
 
 
 def baseline_search(school, query, semester):
@@ -46,79 +44,26 @@ def course_name_contains_token(token):
             Q(name__icontains=token.replace("&", "and")) |
             Q(name__icontains=token.replace("and", "&")))
 
-
-class Vectorizer:
-    """ Vectorizer class creates a dictionary over courses and build course vectors using count vectorizer."""
-    def __init__(self):
-        self.TITLE_WEIGHT = 3
-        self.stemmer = PorterStemmer()
-
-    def vectorize(self):
-        """Vectorize function transforms and saves entire course objects into course vectors using TF-IDF."""
-
-        raw_word_counts = []
-        bar = progressbar.ProgressBar(max_value=Course.objects.count())
-
-        print("Stringifying all courses for vectorization...")
-        for current_count, course in enumerate(Course.objects.all().iterator()):
-            raw_word_counts.append(self.course_to_str(course.name,
-                                                      course.description,
-                                                      course.areas,
-                                                      self.TITLE_WEIGHT))
-            bar.update(current_count)
-
-        print("Transforming all courses into vectors...")
-        with open('searches/dictionary.pickle', 'r') as handle:
-            count_vectorizer = pickle.load(handle)
-        processed_word_counts = count_vectorizer.transform(raw_word_counts)
-        tfidf_tf = TfidfTransformer(use_idf=True).fit(processed_word_counts)
-        course_vectors = tfidf_tf.transform(processed_word_counts)
-
-        bar.update(0)
-        print("Saving all course vectors...")
-        # save course vector to model.
-        for current_count, course in enumerate(Course.objects.all().iterator()):
-            course.vector = course_vectors[current_count]
-            course.save()
-            bar.update(current_count)
-
-
-    def course_to_str(self, name, description, area, weight):
-        """Returns a string representation of a course using a Porter Stemmer."""
-        stemmed_doc = ""
-        if name:
-            name_doc = name.encode('ascii', 'ignore')
-            stemmed_name_doc = self.doc_to_lower_stem_str(name_doc)
-            stemmed_doc += (' ' + stemmed_name_doc) * weight + " "
-        if description:
-            desc_doc = description.encode('ascii', 'ignore')
-            stemmed_doc += self.doc_to_lower_stem_str(desc_doc)
-        if area:
-            area_doc = area.encode('ascii', 'ignore')
-            stemmed_doc += self.doc_to_lower_stem_str(area_doc)
-        return stemmed_doc
-
-    def doc_to_lower_stem_str(self, doc):
-        """Converts words in document(string) to lowercase, stemmed words."""
-        return ' '.join([self.stemmer.stem(w.lower()) for w in doc.split(' ')])
-
-
 class Searcher:
     """ Searcher class implements baseline search and vectorized search based on information retrieval techniques. """
     def __init__(self):
-        self.vectorizer = Vectorizer()
         self.count_vectorizer = self.load_count_vectorizer()
         self.MAX_CAPACITY = 300
         self.start_time = 0
+        self.stemmer = PorterStemmer()
 
     def load_count_vectorizer(self):
         """Loads english dictionary count vectorizer pickle object."""
         with open('searches/dictionary.pickle', 'r') as handle:
             return pickle.load(handle)
 
+    def doc_to_lower_stem_str(self, doc):
+        """Converts words in document(string) to lowercase, stemmed words."""
+        return ' '.join([self.stemmer.stem(w.lower()) for w in doc.split(' ')])
+
     def vectorize_query(self, query):
         """Vectorizes a user's query using count vectorizer."""
-        stemmed_qry = self.vectorizer.doc_to_lower_stem_str(query)
+        stemmed_qry = self.doc_to_lower_stem_str(query)
         query_vector = self.count_vectorizer.transform([stemmed_qry])
         return query_vector
 
