@@ -10,24 +10,11 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
-
-
 from django.apps import AppConfig
 
 
-class SearchesConfig(AppConfig):
-    name = 'searches'
-    searcher = None
+class ElasticsearchappConfig(AppConfig):
+    name = 'elasticsearch'
 
     def ready(self):
-        """ Constructs Searcher object to be used if it can be built using course.vector field """
-        return
-        # from searches.utils import Searcher
-        # if not self.searcher:
-        #     try:
-        #         self.searcher = Searcher()
-        #     except Exception as e:
-        #         self.searcher = None
-        #         print(("Unable to create Searcher object: setting searcher object to None " +
-        #               "and using baseline_search instead. \nError:%s" % str(e)))
+        import searches.signals

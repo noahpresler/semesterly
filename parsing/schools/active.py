@@ -12,8 +12,8 @@
 
 from django.conf import settings
 
-active_file = '{}/{}/schools/active'.format(settings.BASE_DIR,
-                                            settings.PARSING_MODULE)
+_active_file = '{}/{}/schools/active'.format(settings.BASE_DIR,
+                                             settings.PARSING_MODULE)
 
-with open(active_file, 'r') as file:
+with open(_active_file, 'r') as file:
     ACTIVE_SCHOOLS = set(file.read().splitlines())

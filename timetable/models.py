@@ -10,13 +10,14 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-import os
-
-os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
+import logging
+import sys
+import re
 
 from django.forms.models import model_to_dict
 from django.db import models
-from picklefield.fields import PickledObjectField
+
+from searches.elastic import GlobSearchIndex
 
 
 class Semester(models.Model):
@@ -115,7 +116,6 @@ class Course(models.Model):
     geneds = models.CharField(max_length=300, null=True, blank=True)
     related_courses = models.ManyToManyField('self', blank=True)
     same_as = models.ForeignKey('self', null=True)
-    vector = PickledObjectField(default=None, null=True)
 
     def __str__(self):
         return self.code + ": " + self.name
@@ -159,6 +159,62 @@ class Course(models.Model):
         """ Return the sum and count of ratings of this course not counting equivalent courses. """
         ratings = Evaluation.objects.only('course', 'score').filter(course=self)
         return sum([rating.score for rating in ratings]), len(ratings)
+
+    def indexing(self):
+        sections = Section.objects.filter(course=self)
+        semesters = [
+            Semester.objects.get(id=s[0])
+            for s in sections.values_list('semester').distinct()
+        ]
+
+        # Mapping from semester id to section and meeting time.
+        info = {}
+        for section in sections:
+            section_info = info.setdefault(str(section.semester.id), {})
+            meeting_times = [
+                {
+                    'day': offering.day,
+                    'time_start': offering.time_start,
+                    'time_end': offering.time_end
+                } for offering in Offering.objects.filter(section=section)
+            ]
+            if len(meeting_times) == 0:
+                continue
+            meeting_info = section_info.setdefault(section.meeting_section, {})
+            meeting_info['offerings'] = meeting_times
+            meeting_info['type'] = section.section_type
+
+        # Prune instructor list.
+        instructors = set()
+        for section in sections:
+            instructors |= set(list(
+                filter(
+                    lambda x: x.lower() != 'tba' and x.lower() != 'staff',
+                    filter(
+                        lambda x: len(re.sub(r'\W', '', x)) > 1,
+                        section.instructors.split()
+                    )
+                )
+            ))
+        obj = GlobSearchIndex(
+            meta={'id': self.id,
+                  'index': self.school + '-glob-search-index'},
+            code=self.code,
+            name=self.name,
+            description=self.description,
+            semesters=list(info.keys()),
+            instructors=list(instructors),
+            department=self.department,
+            info=str(info)
+        )
+        try:
+            obj.save()
+        except:  # FIXME -- specify ConnectionError:
+            print('warning: failed to index document into elastic search.',
+                  file=sys.stderr)
+            logging.warning('Failed to establish connection to elastic search')
+            return None
+        return obj.to_dict(include_meta=True)
 
 
 class Section(models.Model):
@@ -213,6 +269,9 @@ class Section(models.Model):
     def __str__(self):
         return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section,
                                                                  self.semester)
+
+    def indexing(self):
+        return self.course.indexing()
 
 
 class Offering(models.Model):

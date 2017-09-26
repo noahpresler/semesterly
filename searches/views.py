@@ -34,18 +34,23 @@ from functools import reduce
 class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
     """Course Search List."""
     def get(self, request, query, sem_name, year):
+        # print(request, request.subdomain)
+        # print(query, sem_name, year)
+        # return Response("HELLO", status=status.HTTP_200_OK)
         """ Return vectorized search results. """
         school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
         # Use vectorized_search if and only if a valid Searcher object is created, otherwise use baseline_search
-        if apps.get_app_config('searches').searcher:
-            course_match_objs = apps.get_app_config('searches').searcher.vectorized_search(request.subdomain, query, sem)[:4]
-        else:
-            course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
+        # if apps.get_app_config('searches').searcher:
+        #     course_match_objs = apps.get_app_config('searches').searcher.vectorized_search(request.subdomain, query, sem)[:4]
+        # else:
+        course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
         save_analytics_course_search(query[:200], course_match_objs[:2], sem, request.subdomain,
                                      get_student(request))
         course_matches = [CourseSerializer(course, context={'semester': sem, 'school': school}).data
                           for course in course_match_objs]
+        print(course_matches[0])
+        course_matches[0]['name'] = 'Bold <em>me</em>'
         return Response(course_matches, status=status.HTTP_200_OK)
 
     def post(self, request, query, sem_name, year):

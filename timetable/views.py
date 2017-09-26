@@ -30,7 +30,6 @@ from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMi
 from semesterly.settings import get_secret
 
 hashids = Hashids(salt=get_secret('HASHING_SALT'))
-logger = logging.getLogger(__name__)
 
 
 class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):

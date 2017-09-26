@@ -230,7 +230,7 @@ WSGI_APPLICATION = 'semesterly.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '',  # os.path.join(BASE_DIR, 'db.postgresql')
+        'NAME': os.path.join(BASE_DIR, 'db.postgresql'),  # os.path.join(BASE_DIR, 'db.postgresql')
         'USER': '',
         'PASSWORD': '',
         'HOST': 'localhost',
