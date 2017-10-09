@@ -1,0 +1,19 @@
+{
+  "school": {
+    "code": "neu",
+    "name": "Northeastern University"
+  },
+  "course_code_regex": "(.*)",
+  "terms": [
+    "Fall"
+  ],
+  "granularity": 5,
+  "ampm": true,
+  "full_academic_year_registration": false,
+  "single_access": true,
+  "active_semesters": {
+    "2017": [
+      "Fall"
+    ]
+  }
+}
