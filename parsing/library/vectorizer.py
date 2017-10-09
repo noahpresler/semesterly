@@ -15,7 +15,6 @@ import progressbar
 import cPickle as pickle
 
 from parsing.library.exceptions import PipelineError
-from parsing.library.tracker import NullTracker
 from sklearn.feature_extraction.text import TfidfTransformer
 from timetable.models import Course
 from nltk.stem.porter import *
@@ -81,6 +80,15 @@ class Vectorizer(object):
             course.save()
             bar.update(current_count)
 
+    def vectorize_one(self, course):
+        """Vectorize_one function transforms and saves one course objects into course vectors using count vectorizer."""
+        courses = []
+        courses.append(self.course_to_str(course.name, course.description, course.areas, self.TITLE_WEIGHT))
+        with open('searches/dictionary.pickle', 'r') as handle:
+            count_vectorizer = pickle.load(handle)
+        vectorized_courses = count_vectorizer.transform(courses)
+        course.vector = vectorized_courses[0]
+        course.save()
 
     def course_to_str(self, name, description, area, weight):
         """Returns a string representation of a course using a Porter Stemmer."""

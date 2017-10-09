@@ -12,9 +12,10 @@
 
 from rest_framework import status
 from rest_framework.test import APITestCase
-
+from django.test import TestCase
 from timetable.models import Course, Section, Offering, Semester
 from helpers.test.test_cases import UrlTestCase
+from parsing.library.vectorizer import Vectorizer
 
 class BasicSearchTest(APITestCase):
     school = 'uoft'
@@ -38,11 +39,46 @@ class BasicSearchTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
 
+class VectorizedSearchTest(APITestCase):
+    school = 'uoft'
+    vectorizer = Vectorizer(school)
+    request_headers = {
+        'HTTP_HOST': '{}.sem.ly:8000'.format(school)
+    }
+
+    def setUp(self):
+        sem = Semester.objects.create(name='Winter', year='1995')
+        course = Course.objects.create(school=self.school, code='SEA101', name='Intro', description="awesome")
+        section = Section.objects.create(course=course, semester=sem, meeting_section='L1', section_type='L')
+        Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
+
     def test_description_exist(self):
+        course = Course.objects.get(code='SEA101')
+        self.assertEqual(course.vector, None)
+        self.vectorizer.vectorize_one(course)
+
         response = self.client.get('/search/Winter/1995/awesome/', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotEqual(len(response.data), 0)
 
+    def test_description_updated(self):
+        course = Course.objects.get(code='SEA101')
+        self.assertEqual(course.vector, None)
+        self.vectorizer.vectorize_one(course)
+        course.description = "cool"
+
+        response = self.client.get('/search/Winter/1995/awesome/', **self.request_headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(len(response.data), 0)
+
+        self.vectorizer.vectorize_one(course)
+        response = self.client.get('/search/Winter/1995/awesome/', **self.request_headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+        response = self.client.get('/search/Winter/1995/cool/', **self.request_headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(len(response.data), 0)
 
 class AdvancedSearchTest(APITestCase):
     school = 'uoft'
