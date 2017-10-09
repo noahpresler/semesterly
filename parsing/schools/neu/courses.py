@@ -46,6 +46,11 @@ class Parser(BaseParser):
         """
         super(Parser, self).__init__('neu', **kwargs)
 
+    # Required to prevent the python code from writing courses.json.
+    # The JS script saves the courses.json when using search neu scrapers.
+    def end(self):
+      pass
+
     def start(self,
               years_and_terms_filter=None,
               departments_filter=None,
