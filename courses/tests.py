@@ -14,13 +14,14 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from timetable.models import Semester, Course, Section, Offering
-from parsing.models import DataUpdate
+from courses.serializers import CourseSerializer
+from helpers.test.extensions import DatabaseWithElasticTestCase
 from helpers.test.test_cases import UrlTestCase
-from .serializers import CourseSerializer
+from parsing.models import DataUpdate
+from timetable.models import Semester, Course, Section, Offering
 
 
-class Serializers(TestCase):
+class Serializers(DatabaseWithElasticTestCase):
     def test_course_serialization(self):
         self.sem_name = 'Winter'
         self.year = '1995'

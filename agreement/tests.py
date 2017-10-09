@@ -12,9 +12,12 @@
 
 from django.test import TestCase
 
+from helpers.test.extensions import DatabaseWithElasticTestCase
 
-class UrlsTest(TestCase):
+class UrlsTest(DatabaseWithElasticTestCase):
 
     def test_urls_call_correct_templates(self):
-        self.assertTemplateUsed(self.client.get('/termsofservice'), 'termsofservice.html')
-        self.assertTemplateUsed(self.client.get('/privacypolicy'), 'privacypolicy.html')
+        self.assertTemplateUsed(self.client.get('/termsofservice'),
+        	                    'termsofservice.html')
+        self.assertTemplateUsed(self.client.get('/privacypolicy'),
+        	                    'privacypolicy.html')

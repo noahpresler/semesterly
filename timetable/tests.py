@@ -17,14 +17,15 @@ from rest_framework.test import APITestCase
 from helpers.test.data import get_default_tt_request
 
 from analytics.models import SharedTimetable
-from timetable.models import Semester, Course, Section, Offering
-from timetable.utils import DisplayTimetable
-from timetable.serializers import DisplayTimetableSerializer
-from student.models import Student, PersonalTimetable, PersonalEvent
+from helpers.test.extensions import DatabaseWithElasticTestCase
 from helpers.test.test_cases import UrlTestCase
+from student.models import Student, PersonalTimetable, PersonalEvent
+from timetable.models import Semester, Course, Section, Offering
+from timetable.serializers import DisplayTimetableSerializer
+from timetable.utils import DisplayTimetable
 
 
-class Serializers(TestCase):
+class Serializers(DatabaseWithElasticTestCase):
 
     def setUp(self):
         self.sem_name = 'Winter'

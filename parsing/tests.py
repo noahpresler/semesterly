@@ -16,6 +16,7 @@ import io
 from copy import deepcopy
 from django.test import TestCase, SimpleTestCase
 
+from helpers.test.extensions import DatabaseWithElasticTestCase
 from timetable.models import Semester, Course, Section, Offering
 from parsing.library.utils import clean, make_list, DotDict, \
     safe_cast, update, iterrify, titlize, dict_filter_by_dict, \
@@ -540,8 +541,7 @@ class ValidationTest(SimpleTestCase):
             validator.validate(nested_course)
 
 
-class DigestionTest(TestCase):
-
+class DigestionTest(DatabaseWithElasticTestCase):
     config = {
         'kind': 'config',
         'school': {
@@ -569,6 +569,7 @@ class DigestionTest(TestCase):
             ]
         },
     }
+
 
     def test_digest_flat(self):
         meta = {
@@ -788,6 +789,9 @@ class DigestionTest(TestCase):
             len(Offering.objects.filter(section=section_model)),
             3
         )
+
+        digestor.digest(course2, diff=False, load=True)
+
 
     def test_digest_nested(self):
         meta = {

@@ -17,7 +17,7 @@ import re
 from django.forms.models import model_to_dict
 from django.db import models
 
-from searches.elastic import GlobSearchIndex
+from searches.elastic import GlobSearchDocument
 
 
 class Semester(models.Model):
@@ -160,7 +160,7 @@ class Course(models.Model):
         ratings = Evaluation.objects.only('course', 'score').filter(course=self)
         return sum([rating.score for rating in ratings]), len(ratings)
 
-    def indexing(self):
+    def indexing(self, save=True):
         sections = Section.objects.filter(course=self)
         semesters = [
             Semester.objects.get(id=s[0])
@@ -170,7 +170,7 @@ class Course(models.Model):
         # Mapping from semester id to section and meeting time.
         info = {}
         for section in sections:
-            section_info = info.setdefault(str(section.semester.id), {})
+            section_info = info.setdefault(section.semester.id, {})
             meeting_times = [
                 {
                     'day': offering.day,
@@ -196,19 +196,21 @@ class Course(models.Model):
                     )
                 )
             ))
-        obj = GlobSearchIndex(
-            meta={'id': self.id,
-                  'index': self.school + '-glob-search-index'},
+        obj = GlobSearchDocument(
+            meta=dict(id=self.id),
             code=self.code,
             name=self.name,
+            school=self.school,
             description=self.description,
             semesters=list(info.keys()),
             instructors=list(instructors),
             department=self.department,
             info=str(info)
         )
+
         try:
-            obj.save()
+            if save:
+                obj.save()
         except:  # FIXME -- specify ConnectionError:
             print('warning: failed to index document into elastic search.',
                   file=sys.stderr)

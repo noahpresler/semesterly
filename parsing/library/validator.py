@@ -10,12 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
-# TODO - consider something to load db field sizes into validator
-#        However, that would ruin the purity of the adapter.
-
-
-
 import dateutil.parser as dparser
 import http.client
 import jsonschema
