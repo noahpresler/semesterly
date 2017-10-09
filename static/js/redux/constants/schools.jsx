@@ -15,6 +15,7 @@ GNU General Public License for more details.
 export const VALID_SCHOOLS = [
   'uoft',
   'jhu',
+  'neu',
   'umd',
   'uo',
   'queens',
@@ -112,6 +113,18 @@ export const getSchoolSpecificInfo = (school) => {
         // course codes in descriptions have lowercase department names,
         // but I don't want to change the regex to include lowercase
         courseRegex: '([A-Z]{2,5}\\s\\d{4}[W]?)',
+        campuses: {
+          1: '',
+        },
+      };
+    case 'neu':
+      return {
+        primaryDisplay: 'name',
+        areasName: 'Areas',
+        departmentsName: 'Departments',
+        levelsName: 'Levels',
+        timesName: 'Times',
+        courseRegex: '(.*)',
         campuses: {
           1: '',
         },
