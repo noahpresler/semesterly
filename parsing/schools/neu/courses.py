@@ -39,7 +39,7 @@ class Parser(BaseParser):
         return new_instance
 
     def __init__(self, **kwargs):
-        """Construct GW parser object.
+        """Construct NEU parser object.
 
         Args:
             **kwargs: pass-through
