@@ -15,6 +15,7 @@ from rest_framework.test import APITestCase
 
 from timetable.models import Course, Integration, CourseIntegration
 from helpers.test.test_cases import UrlTestCase
+from helpers.test.extensions import TestCaseWithElastic
 
 
 class UrlsTest(UrlTestCase):
@@ -25,7 +26,7 @@ class UrlsTest(UrlTestCase):
                                      kwargs={'integration_id': '1234', 'course_id': '5678'})
 
 
-class IntegrationsGetAddTest(APITestCase):
+class IntegrationsGetAddTest(TestCaseWithElastic, APITestCase):
     request_headers = {
         'HTTP_HOST': 'uoft.sem.ly:8000'
     }
@@ -50,7 +51,7 @@ class IntegrationsGetAddTest(APITestCase):
         CourseIntegration.objects.get(course_id=1, integration_id=1, **data)
 
 
-class IntegrationsDeleteTest(APITestCase):
+class IntegrationsDeleteTest(TestCaseWithElastic, APITestCase):
     request_headers = {
         'HTTP_HOST': 'uoft.sem.ly:8000'
     }

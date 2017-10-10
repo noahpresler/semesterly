@@ -16,7 +16,7 @@ import io
 from copy import deepcopy
 from django.test import TestCase, SimpleTestCase
 
-from helpers.test.extensions import DatabaseWithElasticTestCase
+from helpers.test.extensions import TestCaseWithElastic
 from timetable.models import Semester, Course, Section, Offering
 from parsing.library.utils import clean, make_list, DotDict, \
     safe_cast, update, iterrify, titlize, dict_filter_by_dict, \
@@ -541,7 +541,7 @@ class ValidationTest(SimpleTestCase):
             validator.validate(nested_course)
 
 
-class DigestionTest(DatabaseWithElasticTestCase):
+class DigestionTest(TestCaseWithElastic):
     config = {
         'kind': 'config',
         'school': {

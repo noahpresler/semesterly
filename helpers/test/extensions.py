@@ -12,18 +12,20 @@
 
 from django.test import TestCase
 from elasticsearch import Elasticsearch
+from rest_framework.test import APITestCase
 
 from searches.elastic import GlobSearchDocument
 
-class DatabaseWithElasticTestCase(TestCase):
+
+class TestCaseWithElastic(TestCase):
     @classmethod
     def setUpClass(cls):
         """On inherited classes, run our `setUp` method."""
-        if cls is DatabaseWithElasticTestCase or cls.setUp is DatabaseWithElasticTestCase.setUp:
+        if cls is TestCaseWithElastic or cls.setUp is TestCaseWithElastic.setUp:
             return
         orig_setUp = cls.setUp
         def setUpOverride(self, *args, **kwargs):
-            DatabaseWithElasticTestCase.setUp(self)
+            TestCaseWithElastic.setUp(self)
             return orig_setUp(self, *args, **kwargs)
         cls.setUp = setUpOverride
 
@@ -31,11 +33,11 @@ class DatabaseWithElasticTestCase(TestCase):
     @classmethod
     def tearDownClass(cls):
         """On inherited classes, run our `tearDown` method."""
-        if cls is DatabaseWithElasticTestCase or cls.tearDown is DatabaseWithElasticTestCase.tearDown:
+        if cls is TestCaseWithElastic or cls.tearDown is TestCaseWithElastic.tearDown:
             return
         orig_tearDown = cls.tearDown
         def tearDownOverride(self, *args, **kwargs):
-            DatabaseWithElasticTestCase.setUp(self)
+            TestCaseWithElastic.tearDown(self)
             return orig_tearDown(self, *args, **kwargs)
         cls.tearDown = tearDownOverride
 
@@ -45,5 +47,5 @@ class DatabaseWithElasticTestCase(TestCase):
 
 
     def tearDown(self):
-        Elasticsearch().indices.delete(index='test-search-index',
-                               ignore=[400, 404])
+        Elasticsearch().indices.delete(index=GlobSearchDocument._doc_type.index,
+                                       ignore=[400, 404])

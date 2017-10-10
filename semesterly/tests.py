@@ -12,7 +12,7 @@
 
 from semesterly.test_utils import SeleniumTestCase
 from timetable.models import Semester, Course
-from .settings import get_secret
+from semesterly.settings import get_secret
 
 
 class EndToEndTest(SeleniumTestCase):

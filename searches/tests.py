@@ -15,9 +15,10 @@ from rest_framework.test import APITestCase
 
 from timetable.models import Course, Section, Offering, Semester
 from helpers.test.test_cases import UrlTestCase
+from helpers.test.extensions import TestCaseWithElastic
 
 
-class BasicSearchTest(APITestCase):
+class BasicSearchTest(TestCaseWithElastic, APITestCase):
     school = 'uoft'
     request_headers = {
         'HTTP_HOST': '{}.sem.ly:8000'.format(school)
@@ -46,7 +47,7 @@ class BasicSearchTest(APITestCase):
         # self.assertNotEqual(len(response.data), 0)
 
 
-class AdvancedSearchTest(APITestCase):
+class AdvancedSearchTest(TestCaseWithElastic, APITestCase):
     school = 'uoft'
     request_headers = {
         'HTTP_HOST': '{}.sem.ly:8000'.format(school)

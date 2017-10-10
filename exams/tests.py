@@ -17,6 +17,7 @@ from rest_framework.test import APITestCase
 
 from .jhu_final_exam_scheduler import *
 from helpers.test.test_cases import UrlTestCase
+from helpers.test.extensions import TestCaseWithElastic
 
 SCHEDULER = JHUFinalExamScheduler()
 
@@ -34,7 +35,7 @@ class UrlsTest(UrlTestCase):
             '/exams/links/AbC/', 'exams.views.ExamLink')
 
 
-class ExamLinkTest(APITestCase):
+class ExamLinkTest(TestCaseWithElastic, APITestCase):
     request_headers = {
         'HTTP_HOST': 'uoft.sem.ly:8000'
     }

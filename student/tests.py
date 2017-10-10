@@ -19,6 +19,7 @@ from rest_framework.test import APITestCase, APIRequestFactory, force_authentica
 from student.models import Student, PersonalTimetable, Reaction
 from timetable.models import Semester, Course, Section, Offering
 from helpers.test.test_cases import UrlTestCase
+from helpers.test.extensions import TestCaseWithElastic
 
 
 class UrlsTest(UrlTestCase):
@@ -50,7 +51,7 @@ class UrlsTest(UrlTestCase):
             'student.views.ReactionView')
 
 
-class UserViewTest(APITestCase):
+class UserViewTest(TestCaseWithElastic, APITestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
@@ -87,7 +88,7 @@ class UserViewTest(APITestCase):
                 self.student))
 
 
-class UserTimetableViewTest(APITestCase):
+class UserTimetableViewTest(TestCaseWithElastic, APITestCase):
 
     def setUp(self):
         """ Create a user and personal timetable. """
@@ -235,7 +236,7 @@ class UserTimetableViewTest(APITestCase):
         self.assertFalse(PersonalTimetable.objects.filter(id=20).exists())
 
 
-class ClassmateViewTest(APITestCase):
+class ClassmateViewTest(TestCaseWithElastic, APITestCase):
 
     def setUp(self):
         # set up friends
@@ -360,7 +361,7 @@ class ClassmateViewTest(APITestCase):
         self.assertEqual(len(response.data), 2)
 
 
-class ReactionTest(APITestCase):
+class ReactionTest(TestCaseWithElastic, APITestCase):
 
     def setUp(self):
         """ Create a user and course. """

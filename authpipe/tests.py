@@ -15,6 +15,7 @@ from rest_framework.test import APITestCase
 
 from student.models import RegistrationToken
 from helpers.test.test_cases import UrlTestCase
+from helpers.test.extensions import TestCaseWithElastic
 
 
 class UrlsTest(UrlTestCase):
@@ -41,7 +42,7 @@ class UrlsTest(UrlTestCase):
                                      kwargs={'endpoint': 'google'})
 
 
-class TestToken(APITestCase):
+class TestToken(TestCaseWithElastic, APITestCase):
     """ Test setting and deleting tokens """
     school = 'uoft'
     request_headers = {

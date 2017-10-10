@@ -15,13 +15,13 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from courses.serializers import CourseSerializer
-from helpers.test.extensions import DatabaseWithElasticTestCase
+from helpers.test.extensions import TestCaseWithElastic
 from helpers.test.test_cases import UrlTestCase
 from parsing.models import DataUpdate
 from timetable.models import Semester, Course, Section, Offering
 
 
-class Serializers(DatabaseWithElasticTestCase):
+class Serializers(TestCaseWithElastic):
     def test_course_serialization(self):
         self.sem_name = 'Winter'
         self.year = '1995'
@@ -52,7 +52,7 @@ class Serializers(DatabaseWithElasticTestCase):
         self.assertTrue(serialized.data['code'] == self.code)
 
 
-class CourseDetail(APITestCase):
+class CourseDetail(TestCaseWithElastic, APITestCase):
     school = 'uoft'
     search_endpoint = 'search'
     request_headers = {
@@ -94,7 +94,7 @@ class CourseDetail(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
-class SchoolListTest(APITestCase):
+class SchoolListTest(TestCaseWithElastic, APITestCase):
     school = 'uoft'
 
     def setUp(self):
