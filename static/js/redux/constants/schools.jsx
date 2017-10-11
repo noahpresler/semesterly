@@ -124,7 +124,7 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: 'Departments',
         levelsName: 'Levels',
         timesName: 'Times',
-        courseRegex: '(.*)',
+        courseRegex: '([A-Z]{0,4} [0-9]{4})',
         campuses: {
           1: '',
         },
