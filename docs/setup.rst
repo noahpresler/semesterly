@@ -45,7 +45,14 @@ To enter your virtual environment, execute the following code from your Semester
 
 .. note:: Be sure to execute the above "source" command anytime you are working on Semesterly!
 
+Check your OS info
+~~~~~~~~~~~~~~~~~~
+If you're on a posix OS (Mac, Ubuntu, Fedora, CentOS, etc.) this is how you check what version of OS you're on.
 
+.. code-block:: bash
+
+    uname -n
+    
 Install PostgreSQL
 ~~~~~~~~~~~~~~~~~~
 Before installing the python requirements, you must make sure to have PostgreSQL setup on your device. 
@@ -57,11 +64,17 @@ Before installing the python requirements, you must make sure to have PostgreSQL
     brew install postgres
     pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
 
-**On Ubuntu** use apt:
+**On Ubuntu 14.x.x** use apt-get:
 
 .. code-block:: bash
 
-    sudo apt-get install sudo apt-get install postgresql python-psycopg2 libpq-dev libxslt-dev libxml2-dev
+    sudo apt-get install postgresql python-psycopg2 libpq-dev libxslt-dev libxml2-dev
+
+**On Ubuntu 16.x.x** use apt:
+
+.. code-block:: bash
+
+    sudo apt install postgresql python-psycopg2 libpq-dev libxslt-dev libxml2-dev
 
 **On CentOS / Fedora** use yum:
 
@@ -97,12 +110,21 @@ Node and node package manager are the backbone of our frontend setup. To begin, 
 
     brew install node
 
-**On Ubuntu**:
+**On Ubuntu 14.x.x**:
 
 .. code-block:: bash
 
+    wget -qO- https://deb.nodesource.com/setup_6.x | sudo bash -
     sudo apt-get install nodejs
     sudo apt-get install npm
+
+**On Ubuntu 16.x.x**:
+
+.. code-block:: bash
+
+    wget -qO- https://deb.nodesource.com/setup_6.x | sudo bash -
+    sudo apt install nodejs
+    sudo apt install npm
 
 **On CentOS / Fedora**:
 
