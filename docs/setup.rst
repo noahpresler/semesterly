@@ -37,7 +37,7 @@ Create a virtual environment called ``venv``:
 
     virtualenv -p /usr/bin/python2.7 venv
 
-To enter your virtual environment at anytime, execute the following code from your Semesterly directory just execute: 
+To enter your virtual environment at anytime, execute the following code from your Semesterly directory: 
 
 .. code-block:: bash
 
