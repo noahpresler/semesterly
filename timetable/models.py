@@ -198,6 +198,7 @@ class Course(models.Model):
             ))
         obj = GlobSearchDocument(
             meta=dict(id=self.id),
+            id=self.id,
             code=self.code,
             name=self.name,
             school=self.school,

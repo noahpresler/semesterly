@@ -26,6 +26,7 @@ class GlobSearchDocument(DocType):
         description (elasticsearch_dsl.Text): Course description.
         name (elasticsearch_dsl.Text): Course name.
     """
+    id = Integer()  # NOTE: id not a keyword
     code = Text()
     name = Text()
     semesters = Integer(multi=True)
