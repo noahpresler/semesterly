@@ -155,16 +155,24 @@
   width: 75%;
 }
 
+// List wrapper for each search result course
+.search-results__list-container {
+  position: absolute;
+  width: 66.66%;
+  overflow-y: auto;
+  height: 100%;
+  min-height: 232px;
+}
+
 // Each Course that is listed in the Search Results
 .search-course {
   cursor: pointer;
-  height: 60px;
+  height: 59.5px;
   list-style-type: none;
   max-width: 600px;
   padding: 10px 110px 10px 5px;
   position: relative;
   transition: background-color .2s, color .2s;
-  width: 66.66%;
 
   &.hovered {
     background-color: $gf3f3f3;
