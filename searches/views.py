@@ -23,13 +23,14 @@ from rest_framework.views import APIView
 
 from analytics.views import save_analytics_course_search
 from courses.serializers import CourseSerializer
-from searches.utils import baseline_search
+from searches.utils import baseline_search, glob_search
 from student.models import Student
 from student.utils import get_student
 from timetable.models import Semester
 from helpers.mixins import ValidateSubdomainMixin, CsrfExemptMixin
 from functools import reduce
 
+from collections import OrderedDict
 
 class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
     """Course Search List."""
@@ -37,12 +38,14 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         """ Return vectorized search results. """
         school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
-        course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
-        save_analytics_course_search(query[:200], course_match_objs[:2], sem, request.subdomain,
-                                     get_student(request))
-        course_matches = [CourseSerializer(course, context={'semester': sem, 'school': school}).data
-                          for course in course_match_objs]
-        return Response(course_matches, status=status.HTTP_200_OK)
+        # course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
+        # save_analytics_course_search(query[:200], course_match_objs[:2], sem, request.subdomain,
+        #                              get_student(request))
+        # course_matches = [CourseSerializer(course, context={'semester': sem, 'school': school}).data
+        #                   for course in course_match_objs]
+        hits = glob_search(school, sem.id, query).hits
+        matches = [eval(hit.info)[sem.id] for hit in hits]
+        return Response(matches, status=status.HTTP_200_OK)
 
     def post(self, request, query, sem_name, year):
         """ Return advanced search results. """
@@ -52,7 +55,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         # Filter first by the user's search query.
         course_match_objs = baseline_search(school, query, sem)
 
-        # Filter now by departments, areas, levels, or times if provided.
+        # Filter now by departments, areas, levels, or times if m.
         filters = request.data.get('filters', {})
         if filters.get('areas'):
             course_match_objs = course_match_objs.filter(areas__in=filters.get('areas'))

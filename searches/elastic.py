@@ -11,7 +11,8 @@
 # GNU General Public License for more details.
 
 from elasticsearch_dsl.connections import connections
-from elasticsearch_dsl import DocType, Text, String, Integer, Object, MetaField, Index, Keyword
+from elasticsearch_dsl import DocType, Text, Integer, Object, Binary, \
+    MetaField, Index, Keyword, IntegerRange, Nested
 from elasticsearch.helpers import bulk
 from elasticsearch import Elasticsearch
 
@@ -29,12 +30,18 @@ class GlobSearchDocument(DocType):
     id = Integer()  # NOTE: id not a keyword
     code = Text()
     name = Text()
-    semesters = Integer(multi=True)
     school = Keyword()
-    description = Text()
+    description = Text(fields={'raw': Keyword()})
     instructors = Text(multi=True)
-    department = Text()
-    info = String(index='not_analyzed')
+    department = Text(fields={'raw': Keyword()})
+    info = Binary()  # Text(index=False)
+    semesters = Nested(properties={
+        'id': Integer(),
+        'days': Nested(properties={
+            'name': Keyword(),
+            'times': IntegerRange(multi=True)
+        })
+    })
 
     class Meta:
         index = 'search-index'

@@ -77,7 +77,7 @@ def glob_search(school, semester_id, query, _from=0, size=15):
                         "match": {
                             "instructors": {
                                 "query": query,
-                                "boost": 2.5
+                                "boost": 5
                             }
                         }
                     },
@@ -102,7 +102,12 @@ def glob_search(school, semester_id, query, _from=0, size=15):
                         "term": {
                             "semesters": semester_id
                         }
-                    }
+                    },
+                    {
+                        "term": {
+                            "school": school
+                        }
+                    },
                 ]
             }
         },
@@ -114,5 +119,38 @@ def glob_search(school, semester_id, query, _from=0, size=15):
         }
     }
 
-    school_index = school + '-glob-search-index'
-    return Search(index=school_index).from_dict(search).execute()
+    # TODO - add a minimum_should_match
+
+    return self.do_search(search)
+
+def advanced_search(school, _from=0, size=50, **kwargs):
+    # instructors
+    # departments
+    # levels
+    # areas
+    # day_times
+    search = {
+        "from": _from,
+        "size": size,
+        "query": {
+            "bool": {
+                "should": [],
+                "must": [],
+                "filter": [
+                    {
+                        "term": {
+                            "school": schoool
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+    search['query']['bool']
+
+    return self.do_search(search)
+
+
+def do_search(self, search):
+    return Search(index=GlobSearchDocument._doc_type.index).from_dict(search).execute()

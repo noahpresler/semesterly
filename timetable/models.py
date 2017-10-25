@@ -171,18 +171,31 @@ class Course(models.Model):
         info = {}
         for section in sections:
             section_info = info.setdefault(section.semester.id, {})
-            meeting_times = [
-                {
-                    'day': offering.day,
-                    'time_start': offering.time_start,
-                    'time_end': offering.time_end
-                } for offering in Offering.objects.filter(section=section)
-            ]
-            if len(meeting_times) == 0:
-                continue
-            meeting_info = section_info.setdefault(section.meeting_section, {})
-            meeting_info['offerings'] = meeting_times
-            meeting_info['type'] = section.section_type
+            for offering in Offering.objects.filter(section=section):
+                day_times = section_info.setdefault(offering.day, [])
+                day_times.append({
+                    'gte': offering.time_start.replace(':', ''),
+                    'lte': offering.time_end.replace(':', '')
+                })
+
+        info3 = []
+        for semester_id, days in info.items():
+            info3.append({
+                'id': semester_id,
+                'days': [
+                    {
+                        'name': day,
+                        'times': times
+                    } for day, times in days.items()
+                ]
+            })
+
+        # OVERRIDE: info is serialized course
+        from courses.serializers import CourseSerializer
+        info2 = {
+            sem.id: CourseSerializer(self, context={'semester': sem, 'school': self.school}).data
+            for sem in semesters
+        }
 
         # Prune instructor list.
         instructors = set()
@@ -196,6 +209,7 @@ class Course(models.Model):
                     )
                 )
             ))
+
         obj = GlobSearchDocument(
             meta=dict(id=self.id),
             id=self.id,
@@ -203,10 +217,10 @@ class Course(models.Model):
             name=self.name,
             school=self.school,
             description=self.description,
-            semesters=list(info.keys()),
+            semesters=info3,
             instructors=list(instructors),
             department=self.department,
-            info=str(info)
+            info=str(info2),
         )
 
         try:
@@ -219,6 +233,8 @@ class Course(models.Model):
             return None
         return obj.to_dict(include_meta=True)
 
+def utf8len(s):
+    return len(s.encode('utf-8'))
 
 class Section(models.Model):
     """
