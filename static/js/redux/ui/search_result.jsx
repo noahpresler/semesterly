@@ -185,7 +185,6 @@ SearchResult.propTypes = {
   position: PropTypes.number.isRequired,
   hoverSearchResult: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
-  showIntegrationModal: PropTypes.func.isRequired,
   campuses: PropTypes.shape({
     '*': PropTypes.string,
   }).isRequired,
