@@ -145,16 +145,6 @@ class SearchResult extends React.Component {
       (<div className="label integration">
         <span className="has-pilot" style={integrationLogoImageUrl} />
       </div>) : null;
-    const pilotIntegration = course.integrations.indexOf('Pilot') > -1 ?
-      (<div className="label integration">
-        <a
-          onMouseDown={(event) => {
-            event.stopPropagation();
-            this.props.showIntegrationModal(1, course.id);
-          }}
-        >Add as Pilot
-        </a>
-      </div>) : null;
     const waitlistOnlyFlag = this.hasOnlyWaitlistedSections() ?
       <h4 className="label flag">Waitlist Only</h4> : null;
     return (
@@ -182,7 +172,6 @@ class SearchResult extends React.Component {
             className={classNames('label', 'bubble')}
           >{this.props.campuses[course.campus]}</h4>
           { integrationLogo }
-          { pilotIntegration }
           { waitlistOnlyFlag }
         </div>
       </li>);
@@ -196,7 +185,6 @@ SearchResult.propTypes = {
   position: PropTypes.number.isRequired,
   hoverSearchResult: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
-  showIntegrationModal: PropTypes.func.isRequired,
   campuses: PropTypes.shape({
     '*': PropTypes.string,
   }).isRequired,
