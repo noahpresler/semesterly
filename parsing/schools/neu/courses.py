@@ -18,25 +18,10 @@ import sys
 import os
 import subprocess
 
-from bs4 import NavigableString, Tag
-
 from parsing.library.base_parser import BaseParser
-from parsing.library.exceptions import ParseError
-from parsing.library.utils import safe_cast, dict_filter_by_dict
-from semesterly.settings import get_secret
 
 
 class Parser(BaseParser):
-   
-    def __new__(cls, *args, **kwargs):
-        """Set static variables within closure.
-
-        Returns:
-            Parser
-        """
-        new_instance = object.__new__(cls)
-     
-        return new_instance
 
     def __init__(self, **kwargs):
         """Construct NEU parser object.
@@ -51,14 +36,9 @@ class Parser(BaseParser):
     def end(self):
       pass
 
-    def start(self,
-              years_and_terms_filter=None,
-              departments_filter=None,
-              verbosity=3,
-              textbooks=None):
-
+    def start(self, **kwargs):
 
       path = os.path.join(os.path.dirname(__file__), 'main.js')
-      subprocess.call(['node',  path])
+      subprocess.call(['node', '--max_old_space_size=8192',  path])
       print("done scraping neu")
      

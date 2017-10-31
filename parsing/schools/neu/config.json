@@ -3,7 +3,7 @@
     "code": "neu",
     "name": "Northeastern University"
   },
-  "course_code_regex": "([A-Z]{0,4} [0-9]{4})",
+  "course_code_regex": "([A-Z]{0,4} [0-9]{4})$",
   "terms": [
     "Fall"
   ],
