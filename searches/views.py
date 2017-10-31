@@ -36,11 +36,13 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         """ Return vectorized search results. """
         school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
+        # TODO: use vectorized search after completion.
         # Use vectorized_search if and only if a valid Searcher object is created, otherwise use baseline_search
-        if apps.get_app_config('searches').searcher:
-            course_match_objs = apps.get_app_config('searches').searcher.vectorized_search(request.subdomain, query, sem)[:4]
-        else:
-            course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
+        # if apps.get_app_config('searches').searcher:
+        #     course_match_objs = apps.get_app_config('searches').searcher.vectorized_search(request.subdomain, query, sem)[:4]
+        # else:
+        #     course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
+        course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
         save_analytics_course_search(query[:200], course_match_objs[:2], sem, request.subdomain,
                                      get_student(request))
         course_matches = [CourseSerializer(course, context={'semester': sem, 'school': school}).data
