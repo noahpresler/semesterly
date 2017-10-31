@@ -8,12 +8,12 @@ searchneu.default.main(true).then((retVal) => {
   const semesterlyString = JSON.stringify(retVal, null, 4);
   fs.writeFile(path.join(__dirname, 'data', 'courses.json'), semesterlyString, (err) => {
     if (err) {
-      window.console.log(err);
+      global.console.log(err);
       return;
     }
 
-    window.console.log('saved semesterly data');
+    global.console.log('saved semesterly data');
   });
 }).catch((err) => {
-  window.console.log(err);
+  global.console.log(err);
 });
