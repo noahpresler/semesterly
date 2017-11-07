@@ -1,0 +1,19 @@
+{
+  "school": {
+    "code": "neu",
+    "name": "Northeastern University"
+  },
+  "course_code_regex": "([A-Z]{0,4} [0-9]{4})$",
+  "terms": [
+    "Spring"
+  ],
+  "granularity": 5,
+  "ampm": true,
+  "full_academic_year_registration": false,
+  "single_access": true,
+  "active_semesters": {
+    "2018": [
+      "Spring"
+    ]
+  }
+}
