@@ -84,7 +84,7 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.6.1",
-    "webpack": "^2.3.3",
+    "webpack": "^2.4.1",
     "webpack-bundle-tracker": "^0.2.0",
     "webpack-dev-server": "^2.4.2"
   },
@@ -122,7 +122,6 @@
     "lint-staged"
   ],
   "devDependencies": {
-    "babel-jest": "^20.0.1",
     "jest": "^20.0.1",
     "lint-staged": "^3.4.0",
     "nock": "^9.0.13",
@@ -130,8 +129,7 @@
     "precommit-hook": "^3.0.0",
     "react-test-utils": "0.0.1",
     "regenerator-runtime": "^0.10.5",
-    "sass-loader": "^6.0.3",
-    "webpack": "^2.4.1"
+    "sass-loader": "^6.0.3"
   },
   "lint-staged": {
     "*.jsx?": [
