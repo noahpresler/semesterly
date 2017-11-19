@@ -25,6 +25,7 @@ class EndToEndTest(SeleniumTestCase):
     def test_logged_out_flow(self):
         self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
+        self.change_term("Fall 2017")
         with self.description("search, add, then remove course"):
             self.search_course('calc', 3)
             self.add_course(0, n_slots=4, n_master_slots=1)
