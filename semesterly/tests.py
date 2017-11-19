@@ -84,6 +84,7 @@ class EndToEndTest(SeleniumTestCase):
             self.select_nth_adv_search_result(1, sem)
 
     def test_logged_in_via_fb_flow(self):
+        self.change_term("Fall 2017")        
         self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
         with self.description("succesfully signup with facebook"):
@@ -148,6 +149,7 @@ class EndToEndTest(SeleniumTestCase):
             self.assert_friend_in_modal(friend)
 
     def test_logged_in_via_google_flow(self):
+        self.change_term("Fall 2017")        
         with self.description("setup and clear tutorial"):
             self.driver.set_window_size(1440, 1080)
             self.clear_tutorial()
