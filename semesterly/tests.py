@@ -25,7 +25,6 @@ class EndToEndTest(SeleniumTestCase):
     def test_logged_out_flow(self):
         self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
-        self.change_term("Fall 2017")
         with self.description("search, add, then remove course"):
             self.search_course('calc', 3)
             self.add_course(0, n_slots=4, n_master_slots=1)
@@ -77,14 +76,13 @@ class EndToEndTest(SeleniumTestCase):
                 )
             ])
         with self.description("advanced search basic query executes"):
-            self.change_term("Fall 2017", clear_alert=True)
+            self.change_to_current_term(clear_alert=True)
             sem = Semester.objects.get(year=2017, name='Fall')
             self.open_and_query_adv_search('ca', n_results=3)
             self.select_nth_adv_search_result(0, sem)
             self.select_nth_adv_search_result(1, sem)
 
     def test_logged_in_via_fb_flow(self):
-        self.change_term("Fall 2017")        
         self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
         with self.description("succesfully signup with facebook"):
@@ -128,7 +126,7 @@ class EndToEndTest(SeleniumTestCase):
             self.search_course('AS.110.106', 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.save_ptt()
-            self.change_term("Fall 2017")
+            self.change_to_current_term()
             self.assert_ptt_equals(e2e_ptt)
         with self.description(("add friend with course,"
                                "check for friend circles"
@@ -141,7 +139,7 @@ class EndToEndTest(SeleniumTestCase):
             self.create_personal_timetable_obj(
                 friend,
                 [Course.objects.get(code='AS.110.105')],
-                Semester.objects.get(name='Fall', year=2017)
+                self.current_sem
             )
             self.assert_ptt_const_across_refresh()
             self.assert_friend_image_found(friend)
@@ -149,7 +147,6 @@ class EndToEndTest(SeleniumTestCase):
             self.assert_friend_in_modal(friend)
 
     def test_logged_in_via_google_flow(self):
-        self.change_term("Fall 2017")        
         with self.description("setup and clear tutorial"):
             self.driver.set_window_size(1440, 1080)
             self.clear_tutorial()
