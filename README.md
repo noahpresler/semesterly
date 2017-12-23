@@ -15,7 +15,7 @@ Read the docs and learn more: http://semesterly.readthedocs.io/en/latest/
 
 <p align="center"><img src="http://i.imgur.com/G543QPJ.jpg"></p>
 
-## License
+## License 
 
 Copyright 2017, Semester.ly Technologies, LLC
 
