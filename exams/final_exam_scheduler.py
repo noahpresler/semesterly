@@ -30,6 +30,7 @@ class FinalExamScheduler:
                 'EN.600.440' : " Monday, May 5th 12pm"
             }
         '''
+
         self.schedule = {}
         for course in tt['courses']:
             for rule in self.list_of_rules:
