@@ -5,7 +5,6 @@ client_secret.json
 deploy.sh
 dev_env/
 dev_requirements.txt
-dev_credentials.py
 docs/_build
 docs/build/
 .DS_Store
