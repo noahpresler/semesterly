@@ -37,15 +37,12 @@ class FinalExamScheduler:
         '''
         self.year = tt['courses'][0]["slots"][0]["semester"]["year"]
         self.sem = tt['courses'][0]["slots"][0]["semester"]["name"]
-#         print(self.year)
-#         print(self.sem)
         if self.year  == "2017" and self.sem == "Spring":
             self.list_of_rules = self.s17
         elif self.year  == "2017" and self.sem == "Fall":
             self.list_of_rules = self.f17
-        elif self.year == "2018" and self.sem == "Spring":
+        else:
             self.list_of_rules = self.s18
-#         else
 
         self.schedule = {}
         for course in tt['courses']:
