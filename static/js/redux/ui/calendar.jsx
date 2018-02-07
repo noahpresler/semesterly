@@ -145,7 +145,7 @@ class Calendar extends React.Component {
     const sisButton = (
       <div>
         <button
-          // onClick={this.props.addTTtoSIS()}
+          onClick={this.props.addTTtoSIS()}
           className="save-timetable add-button"
         >
         <p> SIS </p>
