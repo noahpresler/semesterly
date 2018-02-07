@@ -13,6 +13,7 @@ GNU General Public License for more details.
 */
 
 /* server endpoints */
+export const getAddTTtoSISEndpoint = () => 'https://sis.jhu.edu/api/placeholderSISEndpoint';
 export const getAddTTtoGCalEndpoint = () => '/user/gcal/';
 export const getLogiCalEndpoint = () => '/user/log_ical/';
 export const getLogFinalExamViewEndpoint = () => '/user/log_final_exam/';

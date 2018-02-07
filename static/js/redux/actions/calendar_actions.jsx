@@ -17,6 +17,7 @@ import Cookie from 'js-cookie';
 import FileSaver from 'browser-filesaver';
 import {
     getAddTTtoGCalEndpoint,
+    getAddTTtoSISEndpoint,
     getLogiCalEndpoint,
     getRequestShareTimetableLinkEndpoint,
     getCourseShareLink,
@@ -83,6 +84,27 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
         });
 };
 
+export const addTTtoSIS = () => (dispatch, getState) => {
+  const state = getState();
+  fetch(getAddTTtoSISEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      timetable: getActiveDenormTimetable(state),
+      semester: getCurrentSemester(state),
+    }),
+    credentials: 'include',
+  })
+    .then(response => response.json())
+    .then(() => {
+      dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
+    });
+};
+
 export const addTTtoGCal = () => (dispatch, getState) => {
   const state = getState();
 
@@ -104,7 +126,7 @@ export const addTTtoGCal = () => (dispatch, getState) => {
       .then(response => response.json())
       .then(() => {
         dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
-      });
+    });
   }
 };
 

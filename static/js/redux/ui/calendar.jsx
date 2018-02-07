@@ -143,6 +143,33 @@ class Calendar extends React.Component {
     const saveIcon = this.props.saving ? <i className="fa fa-spin fa-circle-o-notch" /> :
     <i className="fa fa-floppy-o" />;
 
+    const addToSISButton = (
+      <div className="cal-btn-wrapper">
+        <button
+          onClick={() => this.props.addTTtoSIS()}
+          className="save-timetable add-button"
+          data-tip
+          data-for="share-btn-tooltip"
+        >
+          <i
+            className={classnames('fa',
+              { 'fa-share-alt': !this.props.isFetchingShareLink },
+              { 'fa-spin fa-circle-o-notch': this.props.isFetchingShareLink })}
+            onClick={this.showShareLink}
+          >SIS</i>
+        </button>
+        <ReactTooltip
+          id="share-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
+          effect="solid"
+        >
+          <span>Add to SIS</span>
+        </ReactTooltip>
+      </div>
+    );
+
     const shareButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -268,6 +295,7 @@ class Calendar extends React.Component {
             <PaginationContainer />
           </div>
           <div className="fc-right">
+            { addToSISButton }
             { shareButton }
             { shareLink }
             { addButton }
