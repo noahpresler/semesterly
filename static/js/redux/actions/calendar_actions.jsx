@@ -103,11 +103,14 @@ export const addTTtoSIS = () => (dispatch, getState) => {
     .then(() => {
       dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
     });
+  console.log('sis');
 };
+
 
 export const addTTtoGCal = () => (dispatch, getState) => {
   const state = getState();
-
+  console.log(getActiveDenormTimetable(state));
+  console.log(getCurrentSemester(state));
   if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
     dispatch({ type: ActionTypes.UPLOAD_CALENDAR });
     fetch(getAddTTtoGCalEndpoint(), {
