@@ -85,6 +85,20 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
 
 export const addTTtoSIS = () => (dispatch, getState) => {
   const state = getState();
+  const tt = getActiveDenormTimetable(state);
+  const sem = getCurrentSemester(state);
+  const postData = '{' +
+        '"action": "AddToCart",' +
+        '"data": {' +
+          '"year": "' + sem.year + '"' +
+          '"term": "' + sem.name + '"' +
+          '"sections": [ ' +
+            '"FILL IN WITH tt CLASSES"' +
+          ']' +
+      '}' +
+    '}';
+
+  const postJSON = JSON.stringify(postData);
   const endpoint = 'http://ptsv2.com/t/l70bk-1518071398/post';
   fetch(endpoint, {
     headers: {
@@ -93,10 +107,7 @@ export const addTTtoSIS = () => (dispatch, getState) => {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     method: 'POST',
-    body: JSON.stringify({
-      timetable: getActiveDenormTimetable(state),
-      semester: getCurrentSemester(state),
-    }),
+    body: postData,
     // credentials: 'include',
   });
     // .then(response => response.json())
