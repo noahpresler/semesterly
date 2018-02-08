@@ -83,6 +83,11 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
         });
 };
 
+export const addTTtoSIS = () => (dispatch, getState) => {
+  const state = getState();
+  console.log("hello");
+}
+
 export const addTTtoGCal = () => (dispatch, getState) => {
   const state = getState();
 

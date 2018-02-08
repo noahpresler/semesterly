@@ -143,6 +143,16 @@ class Calendar extends React.Component {
     const saveIcon = this.props.saving ? <i className="fa fa-spin fa-circle-o-notch" /> :
     <i className="fa fa-floppy-o" />;
 
+    const addSISButton = (
+      <div className="cal-btn-wrapper">
+        <button
+          onClick={() => this.props.addTTtoSIS()}
+          className="save-timetable add-button"
+        >
+          <p> SIS </p>
+        </button>
+      </div>
+    );
     const shareButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -268,6 +278,7 @@ class Calendar extends React.Component {
             <PaginationContainer />
           </div>
           <div className="fc-right">
+            { addSISButton }
             { shareButton }
             { shareLink }
             { addButton }
