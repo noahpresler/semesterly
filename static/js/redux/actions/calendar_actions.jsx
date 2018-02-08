@@ -85,8 +85,27 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
 
 export const addTTtoSIS = () => (dispatch, getState) => {
   const state = getState();
-  console.log("hello");
-}
+  const endpoint = 'http://ptsv2.com/t/l70bk-1518071398/post';
+  fetch(endpoint, {
+    headers: {
+      // 'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      timetable: getActiveDenormTimetable(state),
+      semester: getCurrentSemester(state),
+    }),
+    // credentials: 'include',
+  });
+    // .then(response => response.json())
+    // .then(() => {
+    //   dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
+    // });
+// }
+  console.log("done");
+};
 
 export const addTTtoGCal = () => (dispatch, getState) => {
   const state = getState();
