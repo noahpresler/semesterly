@@ -161,17 +161,18 @@ class Calendar extends React.Component {
       '    }}'
     const jsonData = JSON.stringify(data);
     const toilet = 'http://ptsv2.com/t/l70bk-1518071398/post';
-    const sis = 'https://sisdevelopment.sis.jhu.edu/sem/sswf/go';
+    const sis = 'http://sisdevelopment.sis.jhu.edu/sem/sswf/go';
     const addSISButton = (
       <div>
-        <form id="form1" action={toilet} method="post" target="_blank">
-          <input type="hidden" value={jsonData} name="user_data" />
+        <form id="form1" action={toilet} method="post" encType="application/x-www-form-urlencoded">
+          <input type="hidden" value={jsonData} name="data" />
         </form>
         <button
           type="submit"
           form="form1"
           className="save-timetable add-button"
         > SIS </button>
+        <img src="/static/img/school_logos/jhu-square.png" alt="SIS" style={{maxHeight: "1.5em"}} />
       </div>
     );
     const shareButton = (
