@@ -17,6 +17,7 @@ import Cookie from 'js-cookie';
 import FileSaver from 'browser-filesaver';
 import {
     getAddTTtoGCalEndpoint,
+    getAddTTtoSISEndpoint,
     getLogiCalEndpoint,
     getRequestShareTimetableLinkEndpoint,
     getCourseShareLink,
@@ -85,42 +86,31 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
 
 export const addTTtoSIS = () => (dispatch, getState) => {
   const state = getState();
-  const tt = getActiveDenormTimetable(state);
-  const sem = getCurrentSemester(state);
-  const postData = '{' +
-        '"action": "AddToCart",' +
-        '"data": {' +
-          '"year": "' + sem.year + '"' +
-          '"term": "' + sem.name + '"' +
-          '"sections": [ ' +
-            '"FILL IN WITH tt CLASSES"' +
-          ']' +
-      '}' +
-    '}';
-
-  const postJSON = JSON.stringify(postData);
-  const endpoint = 'http://ptsv2.com/t/l70bk-1518071398/post';
-  fetch(endpoint, {
+  fetch(getAddTTtoSISEndpoint(), {
     headers: {
-      // 'X-CSRFToken': Cookie.get('csrftoken'),
+      'X-CSRFToken': Cookie.get('csrftoken'),
       Accept: 'application/json',
-      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/json',
     },
     method: 'POST',
-    body: postData,
-    // credentials: 'include',
-  });
-    // .then(response => response.json())
-    // .then(() => {
-    //   dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
-    // });
-// }
-  console.log("done");
+    body: JSON.stringify({
+      timetable: getActiveDenormTimetable(state),
+      semester: getCurrentSemester(state),
+    }),
+    credentials: 'include',
+  })
+    .then(response => response.json())
+    .then(() => {
+      dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
+    });
+  console.log('sis');
 };
+
 
 export const addTTtoGCal = () => (dispatch, getState) => {
   const state = getState();
-
+  console.log(getActiveDenormTimetable(state));
+  console.log(getCurrentSemester(state));
   if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
     dispatch({ type: ActionTypes.UPLOAD_CALENDAR });
     fetch(getAddTTtoGCalEndpoint(), {
@@ -139,7 +129,7 @@ export const addTTtoGCal = () => (dispatch, getState) => {
       .then(response => response.json())
       .then(() => {
         dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
-      });
+    });
   }
 };
 
