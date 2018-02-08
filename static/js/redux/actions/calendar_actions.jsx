@@ -93,7 +93,7 @@ export const addTTtoSIS = () => (dispatch, getState) => {
           '"year": "' + sem.year + '"' +
           '"term": "' + sem.name + '"' +
           '"sections": [ ' +
-            '"FILL IN WITH tt CLASSES"' +
+            '"FILL IN WITH tt CLASSESse"' +
           ']' +
       '}' +
     '}';
