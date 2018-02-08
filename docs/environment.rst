@@ -10,11 +10,21 @@ Setup Your Database
 
 Semester.ly stores objects like courses, timetables, and students in a Postgres database. Let's get one setup for you.
 
-Let's enter the Postgres shell by typing:
+Let's first initialize Postgres using the default user account ``postgres``
+
+.. note:: If using Linux log into this account with
+
+    .. code-block:: bash
+
+        sudo -i -u postgres
+
+Then, enter Postgres environment with
 
 .. code-block:: bash
 
     psql postgres
+
+.. note:: If you see an error in CentOS / Fedora, it's most likely due to postgres is not running. Initialize it with ``sudo service postgresql initdb && sudo service postgresql start``.
 
 Here you can enter SQL to create/manipulate/access databases. Let's create a Semester.ly database. Enter:
 
@@ -39,6 +49,14 @@ Great. You are all set. Enter the following to quit psql:
 .. code-block:: psql
     
     \q
+
+.. note:: If using Linux exit postgres by 
+
+    .. code-block:: bash
+
+        exit
+
+.. note:: For CentOS / Fedora, Change all occurances of ident to md5 in pg_hba.conf. You can modify the file through ``sudo vim /var/lib/pgsql9/data/pg_hba.conf``. After you change it, restart postgres with ``sudo service postgresql restart``.
 
 Create Local Settings
 ~~~~~~~~~~~~~~~~~~~~~
@@ -88,13 +106,13 @@ For development purposes, we map http://sem.ly:8000 to http://localhost:8000. To
 
 Set your Environment Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Add the following line to either your ``~/.bash.rc`` or ``~/.zshrc`` which tells webpack you are running a development environment:
+Add the following line to either your ``~/.bashrc`` or ``~/.zshrc`` which tells webpack you are running a development environment:
 
 .. code-block:: bash
 
     export NODE_ENV=development
 
-Then ``source ~/.bash.rc`` or ``source ~/.zshrc``
+Then ``source ~/.bashrc`` or ``source ~/.zshrc``
 
 And make sure the following line returns "development"
 
@@ -106,11 +124,20 @@ And make sure the following line returns "development"
 Install & Run Webpack
 ~~~~~~~~~~~~~~~~~~~~~
 
-Webpack compiles our React componenets into one application wide javascript bundle. We use chromedriver to test them. To install these, execute: 
+Webpack compiles our React componenets into one application wide javascript bundle. We use chromedriver to test them. 
+
+To install them if you are testing in chrome install:
 
 .. code-block:: bash
 
     npm install -g webpack chromedriver
+    
+
+To install them if you are using firefox or a 32 bit operating system (like lubuntu) run:
+
+.. code-block:: bash
+    
+    npm install -g webpack
 
 Then run it with:
 

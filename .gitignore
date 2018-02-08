@@ -55,3 +55,4 @@ venv/
 .vscode/
 webpack-stats.json
 workfile.html
+cache

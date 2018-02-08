@@ -76,7 +76,7 @@ class EndToEndTest(SeleniumTestCase):
                 )
             ])
         with self.description("advanced search basic query executes"):
-            self.change_term("Fall 2017", clear_alert=True)
+            self.change_to_current_term(clear_alert=True)
             sem = Semester.objects.get(year=2017, name='Fall')
             self.open_and_query_adv_search('ca', n_results=3)
             self.select_nth_adv_search_result(0, sem)
@@ -126,7 +126,7 @@ class EndToEndTest(SeleniumTestCase):
             self.search_course('AS.110.106', 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.save_ptt()
-            self.change_term("Fall 2017")
+            self.change_to_current_term()
             self.assert_ptt_equals(e2e_ptt)
         with self.description(("add friend with course,"
                                "check for friend circles"
@@ -139,7 +139,7 @@ class EndToEndTest(SeleniumTestCase):
             self.create_personal_timetable_obj(
                 friend,
                 [Course.objects.get(code='AS.110.105')],
-                Semester.objects.get(name='Fall', year=2017)
+                self.current_sem
             )
             self.assert_ptt_const_across_refresh()
             self.assert_friend_image_found(friend)
