@@ -96,8 +96,8 @@ export const fetchSISTimetableData = () => {
       data: {
         year: sem.year,
         term: sem.name,
+        sections,
       },
-      sections,
     };
     dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
     return sisData;
