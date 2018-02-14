@@ -154,8 +154,7 @@ class Calendar extends React.Component {
       },
     };
     const jsonData = JSON.stringify(jsonRequest);
-    const toilet = 'http://ptsv2.com/t/l70bk-1518071398/post';
-    const sis = 'https://sisdevelopment.sis.jhu.edu/sem/sswf/go/';
+    const sis = 'https://sis.jhu.edu/sswf/go/';
     const addSISButton = (
       <div>
         <form id="form1" action={sis} method="post" encType="application/x-www-form-urlencoded">
