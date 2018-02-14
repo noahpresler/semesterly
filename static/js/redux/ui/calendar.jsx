@@ -74,7 +74,6 @@ class Calendar extends React.Component {
     setInterval(() => {
       this.setState({ timelineStyle: this.getTimelineStyle() });
     }, 60000);
-
     // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
     // let d = new Date("October 13, 2014 11:13:00");
     // let selector = ".fc-" + days[d.getDay()];
@@ -121,8 +120,7 @@ class Calendar extends React.Component {
   fetchShareTimetableLink() {
     if (this.props.shareLinkValid) {
       this.setState({ shareLinkShown: true });
-    }
-    else if (!this.props.isFetchingShareLink) {
+    } else if (!this.props.isFetchingShareLink) {
       this.props.fetchShareTimetableLink();
     }
   }
@@ -142,31 +140,38 @@ class Calendar extends React.Component {
   render() {
     const saveIcon = this.props.saving ? <i className="fa fa-spin fa-circle-o-notch" /> :
     <i className="fa fa-floppy-o" />;
-    const jsonRequest = {
-      action: 'AddToCart',
-      data: {
-        year: '2018',
-        term: 'Spring',
-        sections: [
-          { course: 'EN.601.226', section: '01' },
-          { course: 'EN.601.310', section: '01' },
-        ],
-      },
-    };
-    const jsonData = JSON.stringify(jsonRequest);
-    const toilet = 'http://ptsv2.com/t/l70bk-1518071398/post';
-    const sis = 'https://sisdevelopment.sis.jhu.edu/sem/sswf/go/';
     const addSISButton = (
-      <div>
-        <form id="form1" action={sis} method="post" encType="application/x-www-form-urlencoded">
-          <input type="hidden" value={jsonData} name="data" />
+      <div className="cal-btn-wrapper">
+        <form
+          id="form1"
+          action="https://sisdevelopment.sis.jhu.edu/sem/sswf/go/"
+          method="POST"
+          encType="application/x-www-form-urlencoded"
+        >
+          <input
+            type="hidden"
+            value={JSON.stringify(this.props.fetchSISTimetableData())}
+            name="data"
+          />
         </form>
         <button
           type="submit"
           form="form1"
           className="save-timetable add-button"
-        > SIS </button>
-        <img src="/static/img/school_logos/jhu-square.png" alt="SIS" style={{maxHeight: "1.5em"}} />
+          data-for="sis-btn-tooltip"
+          data-tip
+        >
+          <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: '2px' }} />
+        </button>
+        <ReactTooltip
+          id="sis-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
+          effect="solid"
+        >
+          <span>SIS Add to Cart</span>
+        </ReactTooltip>
       </div>
     );
     const shareButton = (
@@ -323,19 +328,19 @@ class Calendar extends React.Component {
                             />
                             <th className="fc-day-header fc-widget-header fc-mon">
                                                     Mon
-                                                </th>
+                            </th>
                             <th className="fc-day-header fc-widget-header fc-tue">
                                                     Tue
-                                                </th>
+                            </th>
                             <th className="fc-day-header fc-widget-header fc-wed">
                                                     Wed
-                                                </th>
+                            </th>
                             <th className="fc-day-header fc-widget-header fc-thu">
                                                     Thu
-                                                </th>
+                            </th>
                             <th className="fc-day-header fc-widget-header fc-fri">
                                                     Fri
-                                                </th>
+                            </th>
                           </tr>
                         </thead>
                       </table>
@@ -409,6 +414,7 @@ Calendar.propTypes = {
   endHour: PropTypes.number.isRequired,
   handleCreateNewTimetable: PropTypes.func.isRequired,
   shareLinkValid: PropTypes.bool.isRequired,
+  fetchSISTimetableData: PropTypes.func.isRequired,
   fetchShareTimetableLink: PropTypes.func.isRequired,
   saveTimetable: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,

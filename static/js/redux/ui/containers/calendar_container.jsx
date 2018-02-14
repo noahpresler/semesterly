@@ -19,7 +19,7 @@ import { handleCreateNewTimetable } from '../../actions/timetable_actions';
 import {
     createICalFromTimetable,
     fetchShareTimetableLink,
-    addTTtoSIS,
+    fetchSISTimetableData,
 } from '../../actions/calendar_actions';
 import { togglePreferenceModal, triggerSaveCalendarModal } from '../../actions/modal_actions';
 import { getMaxEndHour } from '../../reducers/root_reducer';
@@ -47,7 +47,7 @@ const CalendarContainer = connect(
     triggerSaveCalendarModal,
     createICalFromTimetable,
     handleCreateNewTimetable,
-    addTTtoSIS,
+    fetchSISTimetableData,
   },
 )(Calendar);
 
