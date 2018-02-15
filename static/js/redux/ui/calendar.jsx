@@ -140,11 +140,12 @@ class Calendar extends React.Component {
   render() {
     const saveIcon = this.props.saving ? <i className="fa fa-spin fa-circle-o-notch" /> :
     <i className="fa fa-floppy-o" />;
+    const sis = 'https://sis.jhu.edu/sswf/go/';
     const addSISButton = (
       <div className="cal-btn-wrapper">
         <form
           id="form1"
-          action="https://sisdevelopment.sis.jhu.edu/sem/sswf/go/"
+          action={sis}
           method="POST"
           encType="application/x-www-form-urlencoded"
         >
