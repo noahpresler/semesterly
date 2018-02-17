@@ -7,6 +7,7 @@ approvals:
     users:
       - noahpresler
       - felixzhuologist 
+      - kristinyim
 specification:
   # title requirements AND body AND template requirements have to match
   title:

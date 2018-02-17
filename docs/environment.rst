@@ -12,11 +12,11 @@ Semester.ly stores objects like courses, timetables, and students in a Postgres 
 
 Let's first initialize Postgres using the default user account ``postgres``
 
-Log into this account with
+.. note:: If using Linux log into this account with
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    sudo -i -u postgres
+        sudo -i -u postgres
 
 Then, enter Postgres environment with
 
@@ -50,11 +50,11 @@ Great. You are all set. Enter the following to quit psql:
     
     \q
 
-Then enter the following to log out from user ``postgres`` 
+.. note:: If using Linux exit postgres by 
 
-.. code-block:: bash
-    
-    exit
+    .. code-block:: bash
+
+        exit
 
 .. note:: For CentOS / Fedora, Change all occurances of ident to md5 in pg_hba.conf. You can modify the file through ``sudo vim /var/lib/pgsql9/data/pg_hba.conf``. After you change it, restart postgres with ``sudo service postgresql restart``.
 
@@ -124,11 +124,20 @@ And make sure the following line returns "development"
 Install & Run Webpack
 ~~~~~~~~~~~~~~~~~~~~~
 
-Webpack compiles our React componenets into one application wide javascript bundle. We use chromedriver to test them. To install these, execute: 
+Webpack compiles our React componenets into one application wide javascript bundle. We use chromedriver to test them. 
+
+To install them if you are testing in chrome install:
 
 .. code-block:: bash
 
     npm install -g webpack chromedriver
+    
+
+To install them if you are using firefox or a 32 bit operating system (like lubuntu) run:
+
+.. code-block:: bash
+    
+    npm install -g webpack
 
 Then run it with:
 

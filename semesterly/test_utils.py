@@ -41,6 +41,7 @@ from timetable.models import Course
 from timetable.models import Offering
 from timetable.models import Section
 from timetable.models import Semester
+from timetable.utils import get_current_semesters
 
 
 class SeleniumTestCase(StaticLiveServerTestCase):
@@ -81,6 +82,12 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.img_dir = os.path.dirname(os.path.realpath(__file__)) + '/test_failures'
         self.init_screenshot_dir()
         self.driver = webdriver.Chrome(chrome_options=self.chrome_options)
+        sem = get_current_semesters('jhu')[0]
+        sem, _ = Semester.objects.update_or_create(name=sem['name'], year=sem['year'])
+        for section in Section.objects.filter(semester__name="Fall", semester__year=2017):
+            section.semester = sem
+            section.save()
+        self.current_sem = sem
         self.driver.get(self.get_test_url('jhu'))
         WebDriverWait(self.driver, self.TIMEOUT) \
             .until(lambda driver: driver.find_element_by_tag_name('body'))
@@ -498,6 +505,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 term, 'placeholder'
             )
         )
+    
+    def change_to_current_term(self, clear_alert=False):
+        sem = get_current_semesters('jhu')[0]
+        self.change_term("%s %s" % (sem['name'], sem['year']), clear_alert=clear_alert)
 
     def open_and_query_adv_search(self, query, n_results=None):
         """Open's the advanced search modal and types in the provided query,
