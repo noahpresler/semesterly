@@ -61,32 +61,41 @@ Before installing the python requirements, you must make sure to have PostgreSQL
 
 .. code-block:: bash
 
-    brew install postgres
+    brew unlink postgres
+    brew install postgres@9.5
     pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
 
 **On Ubuntu 14.x.x** use apt-get:
 
 .. code-block:: bash
 
-    sudo apt-get install postgresql python-psycopg2 libpq-dev libxslt-dev libxml2-dev
+    sudo apt-get install postgresql-9.5 python-psycopg2 libpq-dev libxslt-dev libxml2-dev
 
 **On Ubuntu 16.x.x** use apt:
 
 .. code-block:: bash
 
-    sudo apt install postgresql python-psycopg2 libpq-dev libxslt-dev libxml2-dev
+    sudo apt install postgresql-9.5 python-psycopg2 libpq-dev libxslt-dev libxml2-dev
 
 **On CentOS / Fedora** use yum:
 
 .. code-block:: bash
 
-    sudo yum install postgresql gcc python-lxml postgresql-libs libxslt-devel libxml2-devel
+    yum install https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-5-x86_64/pgdg-centos95-9.5-3.noarch.rpm
+    yum install postgresql95
+    yum install postgresql95-server
+    service postgresql-9.5 initdb
+    chkconfig postgresql-9.5 on
+    service postgresql-9.5 start
+    sudo yum install gcc python-lxml postgresql-libs libxslt-devel libxml2-devel
 
 Install Python Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. note:: **ATTENTION MAC USERS:** you must install the xcode command line tools via ``xcode-select --install`` before proceeding. You may also need to update openssl. If so, please `follow this guide <https://medium.com/@katopz/how-to-upgrade-openssl-8d005554401>`_. 
 
+
+For this next step make sure you have activated your semesterly python virtual environment.
 All python dependencies are kept in a file called ``requirements.txt``. Anytime a dependency is added or changed, we update it in this file. To bring your virutal environment up to date with all of these requirements easily, simply execute:
 
 .. code-block:: bash
