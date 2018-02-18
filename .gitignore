@@ -31,7 +31,6 @@ sections
 semes/
 semesterly_backup/
 semesterly/local_settings.py
-semesterly/dev_credentials.py
 semesterly/secret_key.py
 semesterly/secrets.py
 semesterly/sensitive.py
