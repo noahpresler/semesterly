@@ -84,6 +84,9 @@
         }
       ]
     },
+    "is_online": {
+      "type": "boolean"
+    },
     "instructors": {
       "type": "array",
       "items": {
