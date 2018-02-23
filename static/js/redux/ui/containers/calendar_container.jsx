@@ -35,6 +35,7 @@ const mapStateToProps = (state) => {
     shareLinkValid,
     active: state.timetables.active,
     uses12HrTime: state.ui.uses12HrTime,
+    registrarSupported: state.registrar.supported,
   };
 };
 

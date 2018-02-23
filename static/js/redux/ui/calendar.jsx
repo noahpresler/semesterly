@@ -141,7 +141,7 @@ class Calendar extends React.Component {
     const saveIcon = this.props.saving ? <i className="fa fa-spin fa-circle-o-notch" /> :
     <i className="fa fa-floppy-o" />;
     const sis = 'https://sis.jhu.edu/sswf/go/';
-    const addSISButton = (
+    const addSISButton = this.props.registrarSupported ? (
       <div className="cal-btn-wrapper">
         <form
           id="form1"
@@ -174,7 +174,7 @@ class Calendar extends React.Component {
           <span>SIS Add to Cart</span>
         </ReactTooltip>
       </div>
-    );
+    ) : null;
     const shareButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -422,6 +422,7 @@ Calendar.propTypes = {
   saving: PropTypes.bool.isRequired,
   shareLink: PropTypes.string,
   uses12HrTime: PropTypes.bool.isRequired,
+  registrarSupported: PropTypes.bool.isRequired,
 };
 
 export default Calendar;
