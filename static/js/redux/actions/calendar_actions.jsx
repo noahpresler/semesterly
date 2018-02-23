@@ -83,41 +83,6 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
         });
 };
 
-export const addTTtoSIS = () => (dispatch, getState) => {
-  const state = getState();
-  const tt = getActiveDenormTimetable(state);
-  const sem = getCurrentSemester(state);
-  const postData = '{' +
-        '"action": "AddToCart",' +
-        '"data": {' +
-          '"year": "' + sem.year + '"' +
-          '"term": "' + sem.name + '"' +
-          '"sections": [ ' +
-            '"FILL IN WITH tt CLASSESse"' +
-          ']' +
-      '}' +
-    '}';
-
-  const postJSON = JSON.stringify(postData);
-  const endpoint = 'http://ptsv2.com/t/l70bk-1518071398/post';
-  fetch(endpoint, {
-    headers: {
-      // 'X-CSRFToken': Cookie.get('csrftoken'),
-      Accept: 'application/json',
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    method: 'POST',
-    body: postData,
-    // credentials: 'include',
-  });
-    // .then(response => response.json())
-    // .then(() => {
-    //   dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
-    // });
-// }
-  console.log("done");
-};
-
 export const addTTtoGCal = () => (dispatch, getState) => {
   const state = getState();
 
@@ -141,6 +106,27 @@ export const addTTtoGCal = () => (dispatch, getState) => {
         dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
       });
   }
+};
+
+export const fetchSISTimetableData = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const tt = getActiveDenormTimetable(state);
+    const sem = getCurrentSemester(state);
+    const sections = tt.slots.map(slot => (
+      {course: slot.course.code, section: slot.section.meeting_section.replace('(', '').replace(')', '')}
+    ));
+    const sisData = {
+      action: 'AddToCart',
+      data: {
+        year: sem.year,
+        term: sem.name,
+        sections,
+      },
+    };
+    dispatch({type: ActionTypes.EXPORT_SIS_TIMETABLE});
+    return sisData;
+  };
 };
 
 export const createICalFromTimetable = () => (dispatch, getState) => {
