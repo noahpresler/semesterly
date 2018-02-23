@@ -35,8 +35,9 @@ class FinalExamScheduler:
                 'EN.600.440' : " Monday, May 5th 12pm"
             }
         '''
-        self.year = tt['courses'][0]["slots"][0]["semester"]["year"]
-        self.sem = tt['courses'][0]["slots"][0]["semester"]["name"]
+        semester = tt['courses'][0]["slots"][0]["semester"]
+        self.year = semester["year"]
+        self.sem = semester["name"]
         if self.year  == "2017" and self.sem == "Spring":
             self.list_of_rules = self.s17
         elif self.year  == "2017" and self.sem == "Fall":
