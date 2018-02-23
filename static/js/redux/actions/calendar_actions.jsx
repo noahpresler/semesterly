@@ -128,7 +128,6 @@ export const fetchSISTimetableData = () => {
   };
 };
 
-
 export const createICalFromTimetable = () => (dispatch, getState) => {
   const state = getState();
   if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
