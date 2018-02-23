@@ -455,7 +455,7 @@ class GCalView(RedirectToSignupMixin, APIView):
         student = Student.objects.get(user=request.user)
         tt = request.data['timetable']
         credentials = student.get_google_credentials() # assumes is not None
-        http = credentials.authorize(httplib2.Http(timeout=100000000))
+        http = credentials.authorize(httplib2.Http())
         service = discovery.build('calendar', 'v3', http=http)
         school = request.subdomain
 

@@ -74,7 +74,6 @@ class Calendar extends React.Component {
     setInterval(() => {
       this.setState({ timelineStyle: this.getTimelineStyle() });
     }, 60000);
-
     // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
     // let d = new Date("October 13, 2014 11:13:00");
     // let selector = ".fc-" + days[d.getDay()];
@@ -121,8 +120,7 @@ class Calendar extends React.Component {
   fetchShareTimetableLink() {
     if (this.props.shareLinkValid) {
       this.setState({ shareLinkShown: true });
-    }
-    else if (!this.props.isFetchingShareLink) {
+    } else if (!this.props.isFetchingShareLink) {
       this.props.fetchShareTimetableLink();
     }
   }
@@ -142,7 +140,41 @@ class Calendar extends React.Component {
   render() {
     const saveIcon = this.props.saving ? <i className="fa fa-spin fa-circle-o-notch" /> :
     <i className="fa fa-floppy-o" />;
-
+    const sis = 'https://sis.jhu.edu/sswf/go/';
+    const addToSisButton = (
+      <div className="cal-btn-wrapper">
+        <form
+          id="form1"
+          action={sis}
+          method="POST"
+          encType="application/x-www-form-urlencoded"
+        >
+          <input
+            type="hidden"
+            value={JSON.stringify(this.props.fetchSISTimetableData())}
+            name="data"
+          />
+        </form>
+        <button
+          type="sumbit"
+          form="form1"
+          className="save-timetable add-button"
+          data-for="sis-btn-tooltip"
+          data-tip
+        >
+          <img src="/static/img/addtosis.png" alt="SIS" />
+        </button>
+        <ReactTooltip
+          id="sis-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
+          effect="solid"
+        >
+          <span>SIS Add to Cart</span>
+        </ReactTooltip>
+      </div>
+        );
     const shareButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -257,7 +289,7 @@ class Calendar extends React.Component {
           place="bottom"
           effect="solid"
         >
-          <span>Preferences</span>
+            <span>Preferences</span>
         </ReactTooltip>
       </div>
         );
@@ -268,6 +300,7 @@ class Calendar extends React.Component {
             <PaginationContainer />
           </div>
           <div className="fc-right">
+            { addToSisButton }
             { shareButton }
             { shareLink }
             { addButton }
@@ -383,6 +416,7 @@ Calendar.propTypes = {
   handleCreateNewTimetable: PropTypes.func.isRequired,
   shareLinkValid: PropTypes.bool.isRequired,
   fetchShareTimetableLink: PropTypes.func.isRequired,
+  fetchSISTimetableData: PropTypes.func.isRequired,
   saveTimetable: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   saving: PropTypes.bool.isRequired,
