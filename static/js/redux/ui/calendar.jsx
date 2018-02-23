@@ -142,39 +142,41 @@ class Calendar extends React.Component {
   render() {
     const saveIcon = this.props.saving ? <i className="fa fa-spin fa-circle-o-notch" /> :
     <i className="fa fa-floppy-o" />;
-    const data = '{"action": "AddToCart",\n' +
-      '\n' +
-      '    "data": {\n' +
-      '\n' +
-      '        "year": "2018",\n' +
-      '\n' +
-      '        "term": "Spring",\n' +
-      '\n' +
-      '        "sections": [\n' +
-      '\n' +
-      '            { "course": "EN.601.226", "section": "01"},\n' +
-      '\n' +
-      '            { "course": "EN.601.310", "section": "01"}\n' +
-      '\n' +
-      '        ]\n' +
-      '\n' +
-      '    }}'
-    const jsonData = JSON.stringify(data);
-    const toilet = 'http://ptsv2.com/t/l70bk-1518071398/post';
-    const sis = 'https://sisdevelopment.sis.jhu.edu/sem/sswf/go';
-    const addSISButton = (
-      <div>
-        <form id="form1" action={sis} method="post" encType="application/x-www-form-urlencoded">
-          <input type="hidden" value={jsonData} name="data" />
+    const sis = 'https://sis.jhu.edu/sswf/go/';
+    const addToSisButton = (
+      <div className="cal-btn-wrapper">
+        <form
+          id="form1"
+          action={sis}
+          method="POST"
+          encType="application/x-www-form-urlencoded"
+        >
+          <input
+            type="hidden"
+            value={JSON.stringify(this.props.fetchSISTimetableData())}
+            name="data"
+          />
         </form>
         <button
-          type="submit"
+          type="sumbit"
           form="form1"
           className="save-timetable add-button"
-        > SIS </button>
-        <img src="/static/img/school_logos/jhu-square.png" alt="SIS" style={{maxHeight: "1.5em"}} />
+          data-for="sis-btn-tooltip"
+          data-tip
+        >
+          <img src="/static/img/addtosis.png" alt="SIS" />
+        </button>
+        <ReactTooltip
+          id="sis-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
+          effect="solid"
+        >
+          <span>SIS Add to Cart</span>
+        </ReactTooltip>
       </div>
-    );
+        );
     const shareButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -300,7 +302,7 @@ class Calendar extends React.Component {
             <PaginationContainer />
           </div>
           <div className="fc-right">
-            { addSISButton }
+            { addToSisButton }
             { shareButton }
             { shareLink }
             { addButton }
