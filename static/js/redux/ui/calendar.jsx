@@ -74,7 +74,6 @@ class Calendar extends React.Component {
     setInterval(() => {
       this.setState({ timelineStyle: this.getTimelineStyle() });
     }, 60000);
-
     // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
     // let d = new Date("October 13, 2014 11:13:00");
     // let selector = ".fc-" + days[d.getDay()];
@@ -121,8 +120,7 @@ class Calendar extends React.Component {
   fetchShareTimetableLink() {
     if (this.props.shareLinkValid) {
       this.setState({ shareLinkShown: true });
-    }
-    else if (!this.props.isFetchingShareLink) {
+    } else if (!this.props.isFetchingShareLink) {
       this.props.fetchShareTimetableLink();
     }
   }
@@ -291,7 +289,7 @@ class Calendar extends React.Component {
           place="bottom"
           effect="solid"
         >
-          <span>Preferences</span>
+            <span>Preferences</span>
         </ReactTooltip>
       </div>
         );
@@ -418,6 +416,7 @@ Calendar.propTypes = {
   handleCreateNewTimetable: PropTypes.func.isRequired,
   shareLinkValid: PropTypes.bool.isRequired,
   fetchShareTimetableLink: PropTypes.func.isRequired,
+  fetchSISTimetableData: PropTypes.func.isRequired,
   saveTimetable: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   saving: PropTypes.bool.isRequired,

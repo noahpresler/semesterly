@@ -39,7 +39,7 @@ oauthlib==1.1.1
 pep8==1.7.0
 prettytable==0.7.2
 progressbar2==3.32.1
-psycopg2==2.6.2
+psycopg2==2.7.1
 PyJWT==1.4.0
 pyserial==2.6
 python-amazon-simple-product-api==2.2.11

@@ -43,6 +43,7 @@ const CalendarContainer = connect(
   {
     saveTimetable,
     fetchShareTimetableLink,
+    fetchSISTimetableData,
     togglePreferenceModal,
     triggerSaveCalendarModal,
     createICalFromTimetable,
