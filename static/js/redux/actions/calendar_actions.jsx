@@ -85,7 +85,6 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
 
 export const addTTtoGCal = () => (dispatch, getState) => {
   const state = getState();
-
   if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
     dispatch({ type: ActionTypes.UPLOAD_CALENDAR });
     fetch(getAddTTtoGCalEndpoint(), {
@@ -106,6 +105,27 @@ export const addTTtoGCal = () => (dispatch, getState) => {
         dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
       });
   }
+};
+
+export const fetchSISTimetableData = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const tt = getActiveDenormTimetable(state);
+    const sem = getCurrentSemester(state);
+    const sections = tt.slots.map(slot => (
+      {course: slot.course.code, section: slot.section.meeting_section.replace('(', '').replace(')', '')}
+    ));
+    const sisData = {
+      action: 'AddToCart',
+      data: {
+        year: sem.year,
+        term: sem.name,
+        sections,
+      },
+    };
+    dispatch({type: ActionTypes.EXPORT_SIS_TIMETABLE});
+    return sisData;
+  };
 };
 
 export const createICalFromTimetable = () => (dispatch, getState) => {
