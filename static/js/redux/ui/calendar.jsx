@@ -156,7 +156,7 @@ class Calendar extends React.Component {
           />
         </form>
         <button
-          type="submit"
+          type="sumbit"
           form="form1"
           className="save-timetable add-button"
           data-for="sis-btn-tooltip"
@@ -289,7 +289,7 @@ class Calendar extends React.Component {
           place="bottom"
           effect="solid"
         >
-          <span>Preferences</span>
+            <span>Preferences</span>
         </ReactTooltip>
       </div>
         );
@@ -300,7 +300,7 @@ class Calendar extends React.Component {
             <PaginationContainer />
           </div>
           <div className="fc-right">
-            { addSISButton }
+            { addToSisButton }
             { shareButton }
             { shareLink }
             { addButton }
