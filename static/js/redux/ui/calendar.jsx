@@ -300,7 +300,7 @@ class Calendar extends React.Component {
             <PaginationContainer />
           </div>
           <div className="fc-right">
-            { addToSisButton }
+            { addSISButton }
             { shareButton }
             { shareLink }
             { addButton }
