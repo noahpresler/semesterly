@@ -22,6 +22,7 @@ class TimetableNameInput extends React.Component {
     this.alterTimetableName = this.alterTimetableName.bind(this);
     this.setTimetableName = this.setTimetableName.bind(this);
     this.showSignupModal = this.showSignupModal.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.state = { name: this.props.activeLoadedTimetableName };
   }
 
@@ -48,6 +49,12 @@ class TimetableNameInput extends React.Component {
     this.setState({ name: event.target.value });
   }
 
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.setTimetableName();
+    }
+  }
+
   render() {
     return (<input
       className={classnames('timetable-name', { unsaved: !this.props.upToDate })}
@@ -55,6 +62,7 @@ class TimetableNameInput extends React.Component {
       onChange={this.alterTimetableName}
       onBlur={this.setTimetableName}
       onClick={this.showSignupModal}
+      onKeyPress={this.handleKeyPress}
     />);
   }
 }
