@@ -62,6 +62,7 @@ class Calendar extends React.Component {
     this.hideShareLink = this.hideShareLink.bind(this);
     this.showShareLink = this.showShareLink.bind(this);
     this.getTimelineStyle = this.getTimelineStyle.bind(this);
+    this.sisBtnClick = this.sisBtnClick.bind(this);
     this.state = {
       shareLinkShown: false,
       timelineStyle: this.getTimelineStyle(),
@@ -137,30 +138,32 @@ class Calendar extends React.Component {
     });
   }
 
+  sisBtnClick() {
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = 'https://sis.jhu.edu/sswf/go/';
+    form.encType = 'application/x-www-form-urlencoded';
+    document.body.appendChild(form);
+    const input = document.createElement('input');
+    input.name = 'data';
+    input.type = 'hidden';
+    input.value = JSON.stringify(this.props.fetchSISTimetableData());
+    form.appendChild(input);
+    form.submit();
+  }
+
   render() {
     const saveIcon = this.props.saving ? <i className="fa fa-spin fa-circle-o-notch" /> :
     <i className="fa fa-floppy-o" />;
-    const sis = 'https://sis.jhu.edu/sswf/go/';
     const addSISButton = this.props.registrarSupported ? (
       <div className="cal-btn-wrapper">
-        <form
-          id="form1"
-          action={sis}
-          method="POST"
-          encType="application/x-www-form-urlencoded"
-        >
-          <input
-            type="hidden"
-            value={JSON.stringify(this.props.fetchSISTimetableData())}
-            name="data"
-          />
-        </form>
         <button
           type="submit"
           form="form1"
           className="save-timetable add-button"
           data-for="sis-btn-tooltip"
           data-tip
+          onClick={this.sisBtnClick}
         >
           <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: '2px' }} />
         </button>
