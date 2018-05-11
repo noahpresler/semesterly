@@ -22,6 +22,7 @@ install:
 - npm -g install chromedriver
 - npm -g install jest babel-jest
 - npm install
+- pip install --upgrade pip
 - pip install --user -r requirements.txt
 addons:
   apt:
