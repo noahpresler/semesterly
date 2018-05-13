@@ -31,9 +31,9 @@ class CourseSerializer(serializers.ModelSerializer):
     Serialize a Course into a dictionary with detailed information about the course, and all
     related entities (eg Sections). Used for search results and course modals.
     Takes a context with parameters:
-        school: str (required)
-        semester: Semester (required)
-        student: Student (optional)
+    school: str (required)
+    semester: Semester (required)
+    student: Student (optional)
     """
     evals = serializers.SerializerMethodField()
     integrations = serializers.SerializerMethodField()
