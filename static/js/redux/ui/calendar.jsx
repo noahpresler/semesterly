@@ -129,6 +129,7 @@ class Calendar extends React.Component {
     this.setState({ shareLinkShown: false });
   }
 
+  /* eslint-disable class-methods-use-this */
   showShareLink() {
     const idEventTarget = '#clipboard-btn-timetable';
     const clipboard = new Clipboard(idEventTarget);

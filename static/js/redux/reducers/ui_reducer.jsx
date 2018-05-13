@@ -12,7 +12,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import COLOUR_DATA from '../constants/colours';
 import * as ActionTypes from '../constants/actionTypes';
 import { getNextAvailableColour } from '../util';
 import { getCourseIdsFromSlots } from '../reducers/entities_reducer';
