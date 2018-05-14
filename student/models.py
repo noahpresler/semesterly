@@ -132,6 +132,7 @@ class PersonalTimetable(timetable_models.Timetable):
     name = models.CharField(max_length=100)
     student = models.ForeignKey(Student)
     last_updated = models.DateTimeField(auto_now=True)
+    # TODO: change to foreign key from personal event -> personal timetable
     events = models.ManyToManyField(PersonalEvent)
     has_conflict = models.BooleanField(blank=True, default=False)
 
