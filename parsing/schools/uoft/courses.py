@@ -11,6 +11,9 @@ import sys
 import django
 import datetime
 from HTMLParser import HTMLParser
+
+from parsing.library.validator import ValidationError
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
@@ -42,6 +45,8 @@ class Parser(BaseParser):
         self.years_of_study = ["1", "2", "3", "4"]
         self.level_map = {"1": "100", "2": "200", "3": "300", "4": "400"}
         self.day_map = {'MO': 'M', 'TU': 'T', 'WE': 'W', 'TH': 'R', 'FR': 'F', None: ''}
+        self.term_map = {'Fall': 'F', 'Winter': 'S'}
+        self.credit_map = {'F': 0.5, 'S': 0.5, 'Y': 1.0}
         self.errors = 0
         self.host = 'http://coursefinder.utoronto.ca/course-search/search'
         self.urls = None
@@ -139,86 +144,80 @@ class Parser(BaseParser):
             print "Couldn't connect. Found %d new courses (collectively) so far. Now wrapping up..." % (self.new)
         self.wrap_up()
 
-
     def start(self, **kwargs):
-        print "Starting St. George."
-        for year_of_study in self.years_of_study:
-            level = self.level_map[year_of_study]
-            print "Parsing year: {}".format(year_of_study)
-            request_url = "https://timetable.iit.artsci.utoronto.ca/api/courses?org=&code=&section=&studyyear={}&daytime=&weekday=&prof=&breadth=".format(year_of_study)
-            data = json.loads(self.s.get(url=request_url, cookies=self.cookies).text)
-            for key in data:
-                try:
+        try:
+            self.start_utsg(**kwargs)
+        except:
+            print('UTSG failed.')
 
-                    course_data = data[key]
-                    course_code = course_data['code']
-                    num_credits = 1 if course_code[6].upper() == 'Y' else 0.5
+        try:
+            self.start_utm()
+        except:
+            print('UTM failed.')
 
-                    C, created = Course.objects.update_or_create(code=course_code, defaults={
-                            'school': "uoft",
-                            'name': course_data['courseTitle'],
-                            'description': BeautifulSoup(course_data['courseDescription']).p.get_text(),
-                            'campus': course_code[-1],
-                            'areas': course_data['breadthCategories'][-3:],
-                            'prerequisites': course_data['prerequisite'],
-                            'exclusions': course_data['exclusion'],
-                            'num_credits': num_credits,
-                            'level': level,
-                            'department': course_code[:3]
-                        })
-                    print "Course:", C, "New?:", created
-                    if created:
-                        self.new += 1
-                    meetings = course_data['meetings']
-                    semester = course_data['section']
+        try:
+            self.start_utsc()
+        except:
+            print('UTSC failed.')
 
-                    for section_key in meetings:
-                        section = section_key.split("-")[0][0] + section_key.split("-")[-1]
-                        section_data = meetings[section_key]
-                        instructor_data = section_data['instructors']
-                        instructors = ""
-                        for instructor in instructor_data:
-                            instructor_info = instructor_data[instructor]
-                            instructors += instructor_info['firstName'] + " " + instructor_info['lastName']
-                        if instructors and instructors[-1] == ",":
-                            instructors = instructors[:-1]
-                        size = section_data['enrollmentCapacity'] if section_data['enrollmentCapacity'] else 0
-                        S, s_created = Section.objects.update_or_create(
-                            course=C,
-                            meeting_section=section,
-                            section_type=section[0],
-                            semester=semester,
-                            defaults={
-                                'instructors': instructors,
-                                'size': size,
-                                'enrolment': 0,
-                        })
-                        S.save()
-                        S.offering_set.all().delete()
-                        schedule = section_data['schedule']
+        try:
+            self.start_engineering()
+        except:
+            print('Engineering failed.')
 
-                        for offering in schedule:
-                            offering_data = schedule[offering]
+    def start_utsg(self, **kwargs):
+        print('Starting St. George.')
+
+        for school_year in [2016, 2017, 2018]:
+            for term in ['Fall', 'Winter']:  # First (Fall), Second (Winter)
+
+                url = "https://timetable.iit.artsci.utoronto.ca/api/{}9/courses?section={},Y"\
+                    .format(school_year, self.term_map[term])
+                data = json.loads(self.s.get(url=url, cookies=self.cookies).text)
+
+                for course_key in data:
+                    course_data = data[course_key]
+                    self.ingestor['school'] = 'uoft'
+                    self.ingestor['course_code'] = course_data.get('code')
+                    self.ingestor['course_name'] = course_data.get('courseTitle')
+                    self.ingestor['department_name'] = course_data.get('orgName')
+                    self.ingestor['department_code'] = course_data.get('org')
+                    self.ingestor['campus'] = 'St. George'
+                    self.ingestor['areas'] = course_data.get('breadthCategories')
+                    self.ingestor['prerequisites'] = course_data.get('prerequisite')
+                    self.ingestor['exclusions'] = course_data.get('exclusion')
+                    self.ingestor['num_credits'] = self.credit_map.get(course_data.get('section'))
+                    self.ingestor['level'] = self.level_map.get(course_data.get('code', '    ')[3])
+                    self.ingestor['description'] = BeautifulSoup(course_data.get('courseDescription', '')).get_text()
+                    course = self.ingestor.ingest_course()
+
+                    for section_key in course_data.get('meetings', ''):
+                        section_data = course_data['meetings'][section_key]
+                        self.ingestor['section_code'] = section_data.get('teachingMethod', '') + section_data.get('sectionNumber', '')
+                        self.ingestor['section_type'] = section_data.get('teachingMethod')
+                        self.ingestor['term'] = term
+                        self.ingestor['year'] = school_year + (1 if term == 'Winter' else 0)
+                        self.ingestor['instructors'] = ', '.join('{} {}'.format(
+                            section_data['instructors'][i].get('firstName', '').encode('utf-8'),
+                            section_data['instructors'][i].get('lastName', '').encode('utf-8'))
+                                                                 for i in section_data.get('instructors', ''))
+                        self.ingestor['capacity'] = section_data.get('enrollmentCapacity', 0)
+                        self.ingestor['enrollment'] = section_data.get('actualEnrolment', 0)
+                        self.ingestor['waitlist'] = section_data.get('actualWaitlist', 0)
+                        section = self.ingestor.ingest_section(course)
+
+                        for meeting_key in section_data.get('schedule', ''):
+                            meeting_data = section_data['schedule'][meeting_key]
+                            self.ingestor['day'] = self.day_map.get(meeting_data['meetingDay'])
+                            self.ingestor['start_time'] = meeting_data.get('meetingStartTime')
+                            self.ingestor['end_time'] = meeting_data.get('meetingEndTime')
+                            self.ingestor['location'] = meeting_data.get('assignedRoom' + '1' if term == 'Fall' else '2')
                             try:
-                                CO, co_created = Offering.objects.update_or_create(section=S,
-                                    day=self.day_map[offering_data['meetingDay']],
-                                    time_start=offering_data['meetingStartTime'],
-                                    time_end=offering_data['meetingEndTime'],
-                                    location='')
+                                self.ingestor.ingest_meeting(section)
+                            except ValidationError:
+                                pass
 
-                                CO.save()
-                            except Exception as e:
-                                S.delete()
-                                print e
-                                self.errors += 1
-                                break
-                except Exception as f:
-                    import traceback
-                    traceback.print_exc()
-
-        print "Total errors:", self.errors
-        print "Done St. George, found %d new courses. Now starting UTM." % (self.new)
-        self.start_utm()
+        print('Done St. George.')
 
     def start_utm(self):
 
@@ -350,8 +349,7 @@ class Parser(BaseParser):
                         CO.save()
 
                         print "\t\t\t", day, start, end, loc
-        print "Done UTM, found %d new courses (collectively) so far. Now starting UTSC." % (self.new)
-        self.start_utsc()
+        print "Done UTM, found %d new courses (collectively) so far." % (self.new)
 
     def remove_intermediary_spaces(self, text):
         return ' '.join(text.split())
@@ -455,6 +453,8 @@ class Parser(BaseParser):
     def is_tr_new_course(self, tr):
         return tr.find('b') and tr.find('b').find('a')
     def start_utsc(self):
+        print('Starting UTSC.')
+
         payload = {
             'sess': 'year',
             'course': 'DISPLAY_ALL',
@@ -531,8 +531,7 @@ class Parser(BaseParser):
               print "\t\t", section_info['day'] + ":", section_info['time_start'] + "-" + section_info['time_end'], "at", section_info['location']
 
             i += 1
-        print "Done UTSC, found %d new courses (collectively) so far. Now starting Engineering." % (self.new)
-        self.start_engineering()
+        print "Done UTSC, found %d new courses (collectively) so far." % (self.new)
 
     def wrap_up(self):
         print "Done! Total new courses found:", self.new
