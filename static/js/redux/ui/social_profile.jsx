@@ -36,8 +36,13 @@ class SocialProfile extends React.Component {
   }
 
   render() {
+    const googpic = this.props.userInfo.isLoggedIn ?
+      this.props.userInfo.img_url.replace('sz=50', 'sz=100') : '';
+    const profileLink = this.props.userInfo.FacebookSignedUp ?
+      `url(https://graph.facebook.com/${this.props.userInfo.fbook_uid}/picture?type=normal)` :
+      `url(${googpic})`;
     const profileImage = {
-      backgroundImage: `url(${this.props.userInfo.img_url})`,
+      backgroundImage: profileLink,
     };
     const loggedIn = (
       <ClickOutHandler onClickOut={this.hideDropDown}>
