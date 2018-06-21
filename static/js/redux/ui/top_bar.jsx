@@ -62,7 +62,7 @@ class TopBar extends React.Component {
         <img
           alt="Profile"
           className="usr-pic print"
-          src={`https://graph.facebook.com/${this.props.userInfo.fbook_uid}/picture?type=normal`}
+          src={this.props.userInfo.img_url}
         />
         <div className="print-name-major print">
           <span

@@ -211,11 +211,6 @@ class UserSettingsModal extends React.Component {
         </div>
       </div>
         );
-    const googpic = this.props.userInfo.isLoggedIn ?
-      this.props.userInfo.img_url.replace('sz=50', 'sz=100') : '';
-    const propic = this.props.userInfo.FacebookSignedUp ?
-      `url(https://graph.facebook.com/${this.props.userInfo.fbook_uid}/picture?type=normal)` :
-      `url(${googpic})`;
     const fbUpsell = this.props.userInfo.isLoggedIn
       && !this.props.userInfo.FacebookSignedUp ? (
         <div
@@ -258,7 +253,7 @@ class UserSettingsModal extends React.Component {
       >
         <div className="modal-content">
           <div className="modal-header">
-            <div className="pro-pic" style={{ backgroundImage: propic }} />
+            <div className="pro-pic" style={{ backgroundImage: `url(${this.props.userInfo.img_url})` }} />
             <h1>Welcome!</h1>
             { !this.state.isSigningUp ? cancelButton : null }
           </div>
