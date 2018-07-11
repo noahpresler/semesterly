@@ -1,11 +1,11 @@
-from amazonproduct import API
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from django.db.models import Q
 from django.utils.encoding import smart_str
 import cookielib, django, os, re, requests, sys, time
 
-api = API(locale='us')
+from parsing.common.textbooks.amazon_textbooks import amazon_textbook_fields
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
@@ -64,17 +64,11 @@ def parse_results(source):
                 continue
             req = textbook_info.find('p', class_="book-req").text
 
-            info = get_amazon_fields(isbn, api)
+            info = amazon_textbook_fields(isbn)
             if info is None:
                 continue
-            textbook_data = {
-                'detail_url': info['DetailPageURL'],
-                'image_url': info["ImageURL"],
-                'author': info["Author"],
-                'title': info["Title"]
-            }
-            textbook, created = Textbook.objects.update_or_create(isbn=isbn,
-                                                        defaults=textbook_data)
+            textbook, created = Textbook.objects.update_or_create(
+                isbn=isbn, defaults=info)
             textbooks_found_count += int(created)
             for section in course_sections:
                 if section.textbooks.filter(isbn=isbn).exists():
