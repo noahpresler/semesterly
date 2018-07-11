@@ -52,11 +52,6 @@ class Command(BaseCommand):
         tracker = Tracker()
         tracker.mode = 'ingesting'
         self.stat_view = StatView()
-        tracker.add_viewer(self.stat_view)
-        if options['display_progress_bar']:
-            tracker.add_viewer(StatProgressBar('{valid}/{total}',
-                                               statistics=self.stat_view))
-        tracker.start()
 
         for parser_type in options['types']:
             for school in options['schools']:
@@ -84,45 +79,46 @@ class Command(BaseCommand):
                                                type=parser_type), 'r') as file:
                 options['config'] = json.load(file)
 
-        logger = logging.getLogger(parser.__module__ + '.' + parser.__name__)
-        logger.debug('Ingest command options:' + str(options))
+        # logger = logging.getLogger(parser.__module__ + '.' + parser.__name__)
+        # logger.debug('Ingest command options:' + str(options))
 
-        try:
-            p = parser(
-                config=options['config'],
-                output_path=options['output'].format(school=school),
-                # output_error_path=options['output_error'].format(
-                #     school=school,
-                #     type=parser_type
-                # ),
-                break_on_error=options['break_on_error'],
-                break_on_warning=options['break_on_warning'],
-                display_progress_bar=options['display_progress_bar'],
-                validate=options['validate'],
-                tracker=tracker
-            )
+        # try:
+        p = parser(
+            config=options['config'],
+            output_path=options['output'].format(school=school),
+            # output_error_path=options['output_error'].format(
+            #     school=school,
+            #     type=parser_type
+            # ),
+            break_on_error=options['break_on_error'],
+            break_on_warning=options['break_on_warning'],
+            display_progress_bar=options['display_progress_bar'],
+            validate=options['validate'],
+            tracker=tracker
+        )
 
-            p.start(
-                verbosity=options['verbosity'],
-                textbooks=parser_type == 'textbook',
-                departments_filter=options.get('departments'),
-                years_and_terms_filter=Command._resolve_years_and_terms(
-                    options
-                )
-            )
+        # p.start(
+        #     verbosity=options['verbosity'],
+        #     textbooks=parser_type == 'textbook',
+        #     departments_filter=options.get('departments'),
+        #     years_and_terms_filter=Command._resolve_years_and_terms(
+        #         options
+        #     )
+        # )
+        p.start_utm()
 
-            p.end()
+        p.end()
 
-        except PipelineException:
-            logger.exception('Ingestion failed for ' + school + ' ' + parser_type)
-            try:
-                logger.debug('Ingestor dump for ' + school, p.ingestor)
-            except UnboundLocalError:
-                pass
-        except Exception:
-            logger.exception('Ingestion failed for ' + school + ' ' + parser_type)
+        # except PipelineException:
+        #     logger.exception('Ingestion failed for ' + school + ' ' + parser_type)
+        #     try:
+        #         logger.debug('Ingestor dump for ' + school, p.ingestor)
+        #     except UnboundLocalError:
+        #         pass
+        # except Exception:
+        #     logger.exception('Ingestion failed for ' + school + ' ' + parser_type)
 
-        logger.info('Ingestion overview for ' + school + ': ' + str(self.stat_view.report()))
+        # logger.info('Ingestion overview for ' + school + ': ' + str(self.stat_view.report()))
 
     @staticmethod
     def _resolve_years_and_terms(options):
