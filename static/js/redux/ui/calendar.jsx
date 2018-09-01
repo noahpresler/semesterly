@@ -62,6 +62,7 @@ class Calendar extends React.Component {
     this.hideShareLink = this.hideShareLink.bind(this);
     this.showShareLink = this.showShareLink.bind(this);
     this.getTimelineStyle = this.getTimelineStyle.bind(this);
+    this.sisBtnClick = this.sisBtnClick.bind(this);
     this.state = {
       shareLinkShown: false,
       timelineStyle: this.getTimelineStyle(),
@@ -135,6 +136,20 @@ class Calendar extends React.Component {
     clipboard.on('success', () => {
       $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
     });
+  }
+
+  sisBtnClick() {
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = 'https://sis.jhu.edu/sswf/go/';
+    form.encType = 'application/x-www-form-urlencoded';
+    document.body.appendChild(form);
+    const input = document.createElement('input');
+    input.name = 'data';
+    input.type = 'hidden';
+    input.value = JSON.stringify(this.props.fetchSISTimetableData());
+    form.appendChild(input);
+    form.submit();
   }
 
   render() {
