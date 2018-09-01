@@ -10,5 +10,6 @@
 	"full_academic_year_registration": <FULL_ACADEMIC_YEAR_REGISTRATION>,
 	"single_access": <SINGLE_ACCESS>,
 	"active_semesters": {},
-	"buildings": []
+	"buildings": [],
+	"registrar": <REGISTRAR>
 }
