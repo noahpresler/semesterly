@@ -17,6 +17,8 @@ cache:
   - node_modules
   - $HOME/.npm
   - $HOME/.cache/pip
+before_install:
+- pip install --upgrade pip
 install:
 - npm -g install webpack
 - npm -g install chromedriver
@@ -35,7 +37,6 @@ before_script:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
 - sleep 3
-- pip install --upgrade pip
 script:
 - npm run build
 - npm run lint
