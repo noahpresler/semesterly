@@ -17,6 +17,8 @@ cache:
   - node_modules
   - $HOME/.npm
   - $HOME/.cache/pip
+before_install:
+- pip install --upgrade pip
 install:
 - npm -g install webpack
 - npm -g install chromedriver
