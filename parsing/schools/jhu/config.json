@@ -22,12 +22,18 @@
       "Intersession"
     ],
     "2018": [
+      "Fall",
       "Spring"
     ]
   },
   "final_exams": {
     "2017": [
+      "Spring",
+      "Fall"
+    ],
+    "2018": [
       "Spring"
     ]
-  }
+  },
+  "registrar": true
 }
