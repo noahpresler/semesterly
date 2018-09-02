@@ -19,6 +19,7 @@ cache:
   - $HOME/.cache/pip
 before_install:
 - sudo pip install --upgrade pip
+- pip install urllib3[secure]
 install:
 - npm -g install webpack
 - npm -g install chromedriver
