@@ -20,7 +20,6 @@ cache:
 before_install:
 - sudo pip install --upgrade pip
 - pip install urllib3[secure]
-- sudo pip install 'Tornado>=4.0.0,<5.0.0'
 install:
 - npm -g install webpack
 - npm -g install chromedriver
