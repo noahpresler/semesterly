@@ -19,6 +19,7 @@ import { handleCreateNewTimetable } from '../../actions/timetable_actions';
 import {
     createICalFromTimetable,
     fetchShareTimetableLink,
+    fetchSISTimetableData,
 } from '../../actions/calendar_actions';
 import { togglePreferenceModal, triggerSaveCalendarModal } from '../../actions/modal_actions';
 import { getMaxEndHour } from '../../reducers/root_reducer';
@@ -34,6 +35,7 @@ const mapStateToProps = (state) => {
     shareLinkValid,
     active: state.timetables.active,
     uses12HrTime: state.ui.uses12HrTime,
+    registrarSupported: state.registrar.supported,
   };
 };
 
@@ -46,6 +48,7 @@ const CalendarContainer = connect(
     triggerSaveCalendarModal,
     createICalFromTimetable,
     handleCreateNewTimetable,
+    fetchSISTimetableData,
   },
 )(Calendar);
 

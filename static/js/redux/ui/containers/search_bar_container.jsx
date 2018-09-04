@@ -23,7 +23,6 @@ import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/time
 import SearchBar from '../search_bar';
 import { fetchCourseInfo, showExplorationModal } from '../../actions/modal_actions';
 import { getSchoolSpecificInfo } from '../../constants/schools';
-import { openIntegrationModal } from '../../actions/user_actions';
 
 const mapStateToProps = (state) => {
   const { isVisible } = state.explorationModal;
@@ -53,7 +52,6 @@ const SearchBarContainer = connect(
     addRemoveOptionalCourse: addOrRemoveOptionalCourse,
     fetchCourseInfo,
     showExplorationModal,
-    showIntegrationModal: openIntegrationModal,
     hoverSearchResult,
     maybeSetSemester,
   },

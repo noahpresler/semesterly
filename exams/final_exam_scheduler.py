@@ -16,7 +16,12 @@ import re
 class FinalExamScheduler:
     def __init__(self):
         self.list_of_rules = []
+        self.s17 = []
+        self.f17 = []
+        self.s18 = []
         self.schedule = {}
+        self.year = ""
+        self.sem = ""
 
     def make_schedule(self, tt):
         '''
@@ -30,6 +35,16 @@ class FinalExamScheduler:
                 'EN.600.440' : " Monday, May 5th 12pm"
             }
         '''
+        semester = tt['courses'][0]["slots"][0]["semester"]
+        self.year = semester["year"]
+        self.sem = semester["name"]
+        if self.year  == "2017" and self.sem == "Spring":
+            self.list_of_rules = self.s17
+        elif self.year  == "2017" and self.sem == "Fall":
+            self.list_of_rules = self.f17
+        else:
+            self.list_of_rules = self.s18
+
         self.schedule = {}
         for course in tt['courses']:
             for rule in self.list_of_rules:

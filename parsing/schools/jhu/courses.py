@@ -130,6 +130,8 @@ class Parser(BaseParser):
             for p in section_details[0]['Prerequisites']:
                 prereqs.append(p['Description'])
             self.ingestor['prerequisites'] = ' '.join(prereqs)
+        else:
+            self.ingestor['prerequisites'] = ''
 
         self.ingestor['level'] = re.findall(re.compile(r".+?\..+?\.(.{1}).+"),
                                             course['OfferingName'])[0] + "00"
@@ -140,10 +142,6 @@ class Parser(BaseParser):
         self.ingestor['department_name'] = ' '.join(
             course['Department'].split()[1:]
         )
-        # if self.ingestor['department_name'] != 'International Economics':
-        # return
-        # print(course, section)
-        # print(self.ingestor['department_name'])
         self.ingestor['campus'] = 1
         self.ingestor['exclusions'] = section_details[0].get(
             'EnrollmentRestrictedTo'
@@ -208,7 +206,7 @@ class Parser(BaseParser):
         self.verbosity = verbosity
 
         # Default to hardcoded current year.
-        years = {'2017', '2016', '2015'}
+        years = {'2018', '2017', '2016', '2015'}
         terms = {'Spring', 'Fall', 'Summer', 'Intersession'}
 
         years_and_terms = dict_filter_by_dict(
