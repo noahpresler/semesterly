@@ -77,14 +77,14 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
     }),
     credentials: 'include',
   })
-        .then(response => response.json())
-        .then((ref) => {
-          dispatch(receiveShareLink(`${window.location.href.split('/')[2]}/timetables/links/${ref.slug}`));
-        });
+  .then(response => response.json())
+  .then((ref) => {
+    dispatch(receiveShareLink(`${window.location.href.split('/')[2]}/timetables/links/${ref.slug}`));
+  });
 };
 
-export const fetchSISTimetableData = () => {
-  return (dispatch, getState) => {
+export const fetchSISTimetableData = () => (
+  (dispatch, getState) => {
     const state = getState();
     const tt = getActiveDenormTimetable(state);
     const sem = getCurrentSemester(state);
@@ -101,8 +101,8 @@ export const fetchSISTimetableData = () => {
     };
     dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
     return sisData;
-  };
-};
+  }
+);
 
 export const addTTtoGCal = () => (dispatch, getState) => {
   const state = getState();

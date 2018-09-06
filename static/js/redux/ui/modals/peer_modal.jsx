@@ -116,13 +116,15 @@ class PeerModal extends React.Component {
             (<div className="peer-card upsell">
               <div className="peer-card-wrapper upsell cf">
                 <h4>Study Buddies, Delivered</h4>
-                <p className="description">See who your classmates are this semester! Click
-                        below to find
-                        Semester.ly users in your courses, message them, or add them on Facebook!
-                        <i>By accepting this
-                            permission, any Semester.ly students in your courses will be able to
-                            view your name and
-                            public Facebook profile.</i></p>
+                <p className="description">
+                  See who your classmates are this semester! Click
+                  below to find
+                  Semester.ly users in your courses, message them, or add them on Facebook!
+                  <i>
+                    By accepting this permission, any Semester.ly students in your courses
+                    will be able to view your name and public Facebook profile.
+                  </i>
+                </p>
                 <button className="lure-accept" onClick={optInClick}>Yes, I&#39;m In</button>
               </div>
             </div>);
@@ -151,9 +153,9 @@ class PeerModal extends React.Component {
               <a href={p.profile_url} target="_blank" rel="noopener noreferrer">
                 <button className="view-profile-btn"><i
                   className="fa fa-facebook-square"
-                />View
-                                    Profile
-                                </button>
+                />
+                  View Profile
+                </button>
               </a>
               {isFriend}
             </div>
