@@ -5,7 +5,7 @@ Running Tests
 =============
 
 Frontend
-~~~~~~~~
+--------
 
 Run all tests::
 
@@ -16,7 +16,7 @@ Run single test::
     npm test -- static/js/redux/__tests__/schema.test.js
 
 Backend
-~~~~~~~
+-------
 
 Run all tests::
 
@@ -45,7 +45,7 @@ Writing Tests
 =============
 
 Unit Tests
-##########
+----------
 
 Contributors are encouraged to write unit tests for changed or new code.
 By separating out logic into simple pure functions, you can isolate the
@@ -60,7 +60,7 @@ function, or that touches external interfaces. There are a number of strategies
 you can use in these cases.
 
 Integration Tests
-#################
+-----------------
 In the frontend, for testing the logic for rendering a component, look into
 snapshot tests. For testing async (thunk) action creators, our current tests
 create a store with desired initial state, dispatch the action, and then check that the action
@@ -72,7 +72,7 @@ It's also possible to use django's request factory to create requests to provide
 directly as input to your views. 
 
 End to End Tests
-################
+----------------
 As the name implies, end to end tests test the entire app at once by simulating
 a semesterly user. When writing or changing end to end tests, it is recommended
 to familiarize yourself with the methods provided in SeleniumTestCase, which

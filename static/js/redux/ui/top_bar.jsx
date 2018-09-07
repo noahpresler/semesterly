@@ -71,7 +71,7 @@ class TopBar extends React.Component {
           <span className="print-major print">
             {userInfo.major}
             {userInfo.class_year ? `| Class of ${userInfo.class_year}` : null} |
-                        {`${this.props.currentSemester.name} ${this.props.currentSemester.year}`}
+            {`${this.props.currentSemester.name} ${this.props.currentSemester.year}`}
           </span>
         </div>
       </div>

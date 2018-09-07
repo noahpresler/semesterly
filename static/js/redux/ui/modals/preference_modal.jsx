@@ -72,8 +72,8 @@ class PreferenceModal extends React.Component {
               style={{ marginLeft: 'auto', marginRight: '10%' }}
               onClick={() => this.modal.hide()}
             >
-                            Save and Close
-                        </button>
+              Save and Close
+            </button>
           </div>
         </div>
       </Modal>
