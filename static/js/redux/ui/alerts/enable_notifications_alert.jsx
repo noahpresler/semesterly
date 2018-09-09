@@ -48,12 +48,12 @@ class EnableNotificationsAlert extends React.Component {
           onClick={() => this.clickEnable()}
           className="conflict-alert-btn change-semester-btn"
         >
-                    Enable Notifications
-                </button>
+          Enable Notifications
+        </button>
         <small className="alert-extra">
-                    Enable notifications for a heads up when classes are released and course changes
-                    occur!
-                </small>
+          Enable notifications for a heads up when classes are released and course changes
+          occur!
+        </small>
         <a className="decline-notifications" onClick={() => this.clickDecline()}>Don&apos;t ask
                     me again.</a>
       </div>);

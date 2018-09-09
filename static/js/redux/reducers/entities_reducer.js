@@ -56,7 +56,7 @@ export const getSectionTypeToSections = (denormCourse) => {
   return sectionTypeToSections;
 };
 
-export const getTextbooksFromCourse = (course) =>
+export const getTextbooksFromCourse = course =>
   flatMap(Object.keys(course.textbooks), sectionCode => course.textbooks[sectionCode]);
 
 // TIMETABLE SELECTORS

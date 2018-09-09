@@ -98,6 +98,9 @@
     },
     "final_exams": {
       "type": "object"
+    },
+    "registrar": {
+      "type": "boolean"
     }
   },
   "additionalProperties": false,

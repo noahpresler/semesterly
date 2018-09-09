@@ -79,9 +79,9 @@ class FriendsInClassAlert extends React.Component {
         >
           <i className="friends-in-class-done fa fa-check" />
           <small className={'alert-extra'}>
-                        You can now see your friends in classes! To revert these changes, head to
-                        Account Settings.
-                    </small>
+              You can now see your friends in classes! To revert these changes, head to
+              Account Settings.
+          </small>
         </div>
         <div
           className={classnames({
@@ -103,18 +103,18 @@ class FriendsInClassAlert extends React.Component {
             getShareLink={() => null}
           />
           <small className="alert-extra">
-                        Plus {this.props.totalFriendsCount} more in other classes. Enable the friend
-                        feature to find out
-                        who!
-                    </small>
+            Plus {this.props.totalFriendsCount} more in other classes. Enable the friend
+            feature to find out
+            who!
+          </small>
           <button
             onClick={() => {
               this.allowFacebook();
             }}
             className="conflict-alert-btn change-semester-btn"
           >
-                        Find Friends in Classes
-                    </button>
+            Find Friends in Classes
+          </button>
         </div>
       </div>);
   }

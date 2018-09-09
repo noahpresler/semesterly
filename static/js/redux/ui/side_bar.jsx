@@ -248,7 +248,7 @@ SideBar.propTypes = {
 export default SideBar;
 
 export const TextbookList = ({ courses }) => {
-  let tbs = flatMap(courses, getTextbooksFromCourse);
+  const tbs = flatMap(courses, getTextbooksFromCourse);
 
   const img = (!isNaN(parseInt(courses, 0)) && (courses.length >= 5)) ? null :
   <img src="/static/img/emptystates/textbooks.png" alt="No textbooks found." />;
@@ -256,9 +256,10 @@ export const TextbookList = ({ courses }) => {
     return (<div className="empty-state">
       { img }
       <h4>Buy & Rent Textbooks: New, Used or eBook!</h4>
-      <h3>Textbooks for your classes will appear here. Click to find the lowest prices, plus
-                FREE two day shipping
-                with Amazon Student</h3>
+      <h3>
+        Textbooks for your classes will appear here. Click to find the lowest prices,
+        plus FREE two day shipping with Amazon Student
+      </h3>
     </div>);
   }
   return (
@@ -269,6 +270,6 @@ export const TextbookList = ({ courses }) => {
 };
 
 TextbookList.propTypes = {
-  courses:PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
+  courses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
 };
 
