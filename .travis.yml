@@ -18,7 +18,9 @@ cache:
   - $HOME/.npm
   - $HOME/.cache/pip
 before_install:
-- pip install --upgrade pip
+- sudo pip install --upgrade pip
+- pip install urllib3[secure]
+- pip install --upgrade setuptools
 install:
 - npm -g install webpack
 - npm -g install chromedriver
