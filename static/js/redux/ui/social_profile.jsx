@@ -36,14 +36,11 @@ class SocialProfile extends React.Component {
   }
 
   render() {
-    const profileImage = {
-      backgroundImage: `url(${this.props.userInfo.img_url})`,
-    };
     const loggedIn = (
       <ClickOutHandler onClickOut={this.hideDropDown}>
         <div>
           <div onMouseDown={this.toggleDropdown}>
-            <div className="social-pro-pic" style={profileImage} />
+            <div className="social-pro-pic" style={{ backgroundImage: `url(${this.props.userInfo.img_url})` }} />
             <h2>{this.props.userInfo.userFirstNam}</h2>
             <span className={classNames('tip-down', { down: this.state.showDropdown })} />
           </div>
