@@ -35,8 +35,8 @@ class NewTimetableAlert extends React.Component {
           onClick={() => this.handleClick()}
           className="conflict-alert-btn change-semester-btn"
         >
-                    Create Anyway
-                </button>
+          Create Anyway
+        </button>
 
       </div>);
   }

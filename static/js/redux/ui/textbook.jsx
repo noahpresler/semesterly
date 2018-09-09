@@ -41,12 +41,13 @@ const Textbook = ({ tb }) => {
       <h4>
         {exists(tb.title) ? tb.title : `Textbook ISBN: ${tb.isbn}`}
       </h4>
-      { exists(tb.detail_url) &&
+      {
+        exists(tb.detail_url) &&
         <div className="amazon-buy">
           <i className="fa fa-amazon" aria-hidden="true" />
-                Buy or Rent
-            </div>
-            }
+          Buy or Rent
+        </div>
+      }
     </div>
     );
 
