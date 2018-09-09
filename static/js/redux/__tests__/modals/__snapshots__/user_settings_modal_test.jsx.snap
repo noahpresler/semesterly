@@ -39,7 +39,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
             className="pro-pic"
             style={
               Object {
-                "backgroundImage": "url(https://lh5.googleusercontent.com/-jT-TI0NDQHQ/AAAAAAAAAAI/AAAAAAAAQQ8/BM79nJFKph8/photo.jpg?sz=100)",
+                "backgroundImage": "url(https://lh5.googleusercontent.com/-jT-TI0NDQHQ/AAAAAAAAAAI/AAAAAAAAQQ8/BM79nJFKph8/photo.jpg?sz=50)",
               }
             }
           />
@@ -368,7 +368,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
             className="pro-pic"
             style={
               Object {
-                "backgroundImage": "url(https://graph.facebook.com/undefined/picture?type=normal)",
+                "backgroundImage": "url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/18193968_10208799143997309_4182518417368859549_n.jpg?oh=1e9b37d0a11caa04dc04fd43272fe377&oe=59D65C0A)",
               }
             }
           />
@@ -820,7 +820,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
             className="pro-pic"
             style={
               Object {
-                "backgroundImage": "url(https://graph.facebook.com/undefined/picture?type=normal)",
+                "backgroundImage": "url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/18193968_10208799143997309_4182518417368859549_n.jpg?oh=1e9b37d0a11caa04dc04fd43272fe377&oe=59D65C0A)",
               }
             }
           />
