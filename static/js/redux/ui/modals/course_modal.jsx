@@ -60,11 +60,11 @@ class CourseModal extends React.Component {
 
   showShareLink() {
     this.setState({ shareLinkShown: true });
-    const idEventTarget = `#clipboard-btn-modal`;
+    const idEventTarget = '#clipboard-btn-modal';
     const clipboard = new Clipboard(idEventTarget);
     clipboard.on('success', () => {
       $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
-    })
+    });
   }
 
   hideShareLink() {

@@ -85,17 +85,7 @@ def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
 
 
 def slots_to_timetables(slots, school, custom_events, with_conflicts):
-    """
-    Generate timetables in a depth-first manner based on a list of sections.
-    sections: a list of sections, where each section is a list of offerings
-          corresponding to that section. Each offering consists of three
-          elements: the course id (the key in the course table), the meeting
-          section code (meeting section in the courseoffering table), and a
-          list of courseoffering objects which specify the times that the
-          offering in question meets. An example section:
-          [[27, 'L5101', [<CourseOffering>], [27, 'L1001', [<CourseOffering>]]]
-    with_conflicts: True if you want to consider conflicts, False otherwise.
-    """
+    """ Generate timetables in a depth-first manner based on a list of slots. """
     num_offerings, num_permutations_remaining = get_xproduct_indicies(slots)
     total_num_permutations = num_permutations_remaining.pop(0)
     for p in xrange(total_num_permutations):  # for each possible tt

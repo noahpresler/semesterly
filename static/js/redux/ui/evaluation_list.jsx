@@ -62,9 +62,11 @@ class EvaluationList extends React.Component {
 
         // console.log(navs, evals);
 
-    let evaluationScroller = (<p className="empty-intro">
-            No course evaluations for this course yet.
-        </p>);
+    let evaluationScroller = (
+      <p className="empty-intro">
+        No course evaluations for this course yet.
+      </p>
+    );
 
     let customClass = '';
     if (evals.length > 0) {
