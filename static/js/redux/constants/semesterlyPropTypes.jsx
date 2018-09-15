@@ -99,7 +99,7 @@ const relatedCourseFields = {
   areas: PropTypes.string.isRequired,
   campus: PropTypes.string.isRequired,
   evals: PropTypes.arrayOf(evaluation).isRequired,
-  integrations: PropTypes.arrayOf(integration),
+  integrations: PropTypes.arrayOf(integration
   // reactions?
   textbooks: sectionToTextbookMap,
   // regexed courses?

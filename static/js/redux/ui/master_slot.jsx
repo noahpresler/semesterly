@@ -228,6 +228,8 @@ export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (
 ShareLink.propTypes = {
   link: PropTypes.string.isRequired,
   onClickOut: PropTypes.func.isRequired,
+  uniqueId: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default MasterSlot;

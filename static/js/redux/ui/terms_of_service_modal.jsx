@@ -47,17 +47,23 @@ class TermsOfServiceModal extends React.Component {
           </h3>
           <div>
             <a
-              href="/termsofservice" target="_blank"
-              rel="noopener noreferrer" className="legal-links"
+              href="/termsofservice"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="legal-links"
             >
               Terms of Service
-            <i className="fa fa-external-link" /></a>
+              <i className="fa fa-external-link" />
+            </a>
             <a
-              href="/privacypolicy" target="_blank"
-              rel="noopener noreferrer" className="legal-links"
+              href="/privacypolicy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="legal-links"
             >
               Privacy Policy
-            <i className="fa fa-external-link" /></a>
+              <i className="fa fa-external-link" />
+            </a>
           </div>
           <button
             className="accept-tos-btn" onClick={() => {
