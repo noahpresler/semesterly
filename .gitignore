@@ -4,7 +4,6 @@ client_secret.json
 .coverage
 deploy.sh
 dev_env/
-dev_requirements.txt
 docs/_build
 docs/build/
 .DS_Store
@@ -31,6 +30,7 @@ sections
 semes/
 semesterly_backup/
 semesterly/local_settings.py
+semesterly/dev_requirements.txt
 semesterly/secret_key.py
 semesterly/secrets.py
 semesterly/sensitive.py
