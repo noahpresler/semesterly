@@ -35,7 +35,9 @@ class ValidateSubdomainMixin(object):
     """
 
     def dispatch(self, request, *args, **kwargs):
-        if request.subdomain not in ACTIVE_SCHOOLS:
+        if request.subdomain == "queens":
+            return render(request, 'queens_error.html')
+        elif request.subdomain not in ACTIVE_SCHOOLS:
             return render(request, 'index.html')
         return super(ValidateSubdomainMixin, self).dispatch(request, *args, **kwargs)
 
