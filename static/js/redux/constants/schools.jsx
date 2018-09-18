@@ -18,7 +18,6 @@ export const VALID_SCHOOLS = [
   'neu',
   'umd',
   'uo',
-  'queens',
   'vandy',
   'gw',
   'umich',
@@ -54,18 +53,18 @@ export const getSchoolSpecificInfo = (school) => {
           1: '',
         },
       };
-    case 'queens':
-      return {
-        primaryDisplay: 'name',
-        areasName: 'Areas',
-        departmentsName: 'Departments',
-        levelsName: 'Levels',
-        timesName: 'Times',
-        courseRegex: '([A-Z]{2}\\.\\d{3}\\.\\d{3})',
-        campuses: {
-          1: '',
-        },
-      };
+    // case 'queens':
+    //   return {
+    //     primaryDisplay: 'name',
+    //     areasName: 'Areas',
+    //     departmentsName: 'Departments',
+    //     levelsName: 'Levels',
+    //     timesName: 'Times',
+    //     courseRegex: '([A-Z]{2}\\.\\d{3}\\.\\d{3})',
+    //     campuses: {
+    //       1: '',
+    //     },
+    //   };
     case 'umd':
       return {
         primaryDisplay: 'name',
