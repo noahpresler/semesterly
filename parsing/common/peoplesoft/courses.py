@@ -477,53 +477,6 @@ class PeoplesoftParser(BaseParser):
         return self.requester.post(self.base_url, params=query)
 
 
-class QPeoplesoftParser(PeoplesoftParser):
-    """Queens modification.
-
-    Handles situation where initially selected term departments wont load.
-    """
-
-    def __init__(self, *args, **kwargs):
-        """Construct Queens parser."""
-        super(QPeoplesoftParser, self).__init__(*args, **kwargs)
-
-    def parse(self, *args, **kwargs):
-        """Do parse."""
-        soup, _ = self._goto_search_page(kwargs.get('url_params', {}))
-        self.intially_selected_term = self._get_selected_term(soup)
-        self.saved_dept_param_key = super(QPeoplesoftParser, self)._get_dept_param_key(soup)
-        self.saved_departments = super(QPeoplesoftParser, self)._get_departments(soup)
-        return super(QPeoplesoftParser, self).parse(*args, **kwargs)
-
-    @staticmethod
-    def _get_selected_term(soup):
-        terms = soup.find(
-            'select',
-            id='CLASS_SRCH_WRK2_STRM$35$'
-        ).find_all('option')
-
-        for term in terms:
-            if term.get('selected') is not None:
-                return term.text
-
-    def _get_departments(self, soup, departments_filter=None):
-        if self._get_selected_term(soup) == self.intially_selected_term:
-            sys.stderr.write('GET DEPARTMENTS')
-            return dict_filter_by_list(
-                self.saved_departments,
-                departments_filter
-            ), None
-        return super(QPeoplesoftParser, self)._get_departments(
-            soup,
-            departments_filter
-        )
-
-    def _get_dept_param_key(self, soup):
-        if self._get_selected_term(soup) == self.intially_selected_term:
-            return self.saved_dept_param_key
-        return super(QPeoplesoftParser, self)._get_dept_param_key(soup)
-
-
 class UPeoplesoftParser(PeoplesoftParser):
     """Modifies Peoplesoft parser to accomodate different structure (umich)."""
 
