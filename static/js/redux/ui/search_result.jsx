@@ -145,6 +145,13 @@ class SearchResult extends React.Component {
       (<div className="label integration">
         <span className="has-pilot" style={integrationLogoImageUrl} />
       </div>) : null;
+    const learningDenLogoImageUrl = {
+      backgroundImage: 'url(/static/img/integrations/learningDenLogo1.png)',
+    };
+    const learningDenLogo = true ?
+      (<div className="label integration">
+        <span className="has-den" style={learningDenLogoImageUrl} />
+      </div>) : null;
     const waitlistOnlyFlag = this.hasOnlyWaitlistedSections() ?
       <h4 className="label flag">Waitlist Only</h4> : null;
     return (
@@ -172,6 +179,7 @@ class SearchResult extends React.Component {
             className={classNames('label', 'bubble')}
           >{this.props.campuses[course.campus]}</h4>
           { integrationLogo }
+          { learningDenLogo }
           { waitlistOnlyFlag }
         </div>
       </li>);

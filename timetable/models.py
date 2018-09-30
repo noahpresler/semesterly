@@ -292,6 +292,13 @@ class CourseIntegration(models.Model):
     integration = models.ForeignKey(Integration)
     json = models.TextField()
 
+class DenIntegration(models.Model):
+    name = models.CharField(max_length=250)
+
+class CourseDenIntegration(models.Model):
+    course = models.ForeignKey(Course)
+    denIntegration = models.ForeignKey(Integration)
+    json = models.TextField()
 
 class Timetable(models.Model):
     courses = models.ManyToManyField(Course)
