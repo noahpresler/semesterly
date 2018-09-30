@@ -99,7 +99,7 @@ For development purposes, we map http://sem.ly:8000 to http://localhost:8000. To
 
 .. code-block:: bash
 
-    sudo sh -c "echo '127.0.0.1       sem.ly jhu.sem.ly uoft.sem.ly vandy.sem.ly queens.sem.ly chapman.sem.ly queens.sem.ly umich.sem.ly gw.sem.ly umd.sem.ly' >> /etc/hosts"
+    sudo sh -c "echo '127.0.0.1       sem.ly jhu.sem.ly uoft.sem.ly vandy.sem.ly chapman.sem.ly umich.sem.ly gw.sem.ly umd.sem.ly' >> /etc/hosts"
 
 .. note:: If you add a school, be sure to add it to this file!
 

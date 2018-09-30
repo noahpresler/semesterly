@@ -16,7 +16,7 @@ import progressbar
 
 
 # schools whose second semester is called the winter semester (instead of spring)
-winter_schools = {'uoft', 'queens', 'umich', 'umich2'}
+winter_schools = {'uoft', 'umich', 'umich2'}
 
 def get_update_operation(app_name, table_names, get_school):
   """
