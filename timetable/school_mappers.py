@@ -89,5 +89,4 @@ SCHOOLS_MAP = {school: load_school(school) for school in ACTIVE_SCHOOLS}
 
 # textbook_parsers = {
 #     # 'uoft': parse_uoft_textbooks,
-#     # 'queens': parse_queens_textbooks,
 # }
