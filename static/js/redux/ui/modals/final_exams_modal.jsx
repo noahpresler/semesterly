@@ -158,7 +158,7 @@ export default class FinalExamsModal extends React.Component {
         this.updateOrientation();
       }
     });
-    const idEventTarget = `#clipboard-btn-final-exams`;
+    const idEventTarget = '#clipboard-btn-final-exams';
     const clipboard = new Clipboard(idEventTarget);
     clipboard.on('success', () => {
       $(idEventTarget).addClass('clipboardSuccess').text('Copied!');

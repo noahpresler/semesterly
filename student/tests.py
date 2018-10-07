@@ -16,7 +16,7 @@ from django.forms.models import model_to_dict
 from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
 
-from student.models import Student, PersonalTimetable, Reaction
+from student.models import Student, PersonalTimetable, Reaction, PersonalEvent, RegistrationToken
 from timetable.models import Semester, Course, Section, Offering
 from helpers.test.test_cases import UrlTestCase
 
@@ -36,14 +36,19 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView(
             '/user/timetables/',
             'student.views.UserTimetableView')
-        self.assertUrlResolvesToView('/user/timetables/Fall/2016/', 'student.views.UserTimetableView',
-                                     kwargs={'sem_name': 'Fall', 'year': '2016'})
-        self.assertUrlResolvesToView('/user/timetables/Fall/2016/mytt/', 'student.views.UserTimetableView',
-                                     kwargs={'sem_name': 'Fall', 'year': '2016', 'tt_name': 'mytt'})
+        self.assertUrlResolvesToView(
+            '/user/timetables/Fall/2016/',
+            'student.views.UserTimetableView',
+            kwargs={'sem_name': 'Fall', 'year': '2016'})
+        self.assertUrlResolvesToView(
+            '/user/timetables/Fall/2016/mytt/',
+            'student.views.UserTimetableView',
+            kwargs={'sem_name': 'Fall', 'year': '2016', 'tt_name': 'mytt'})
         # social
-        self.assertUrlResolvesToView('/user/classmates/Fall/2016?courseids=1&courseids=2',
-                                     'student.views.ClassmateView',
-                                     kwargs={'sem_name': 'Fall', 'year': '2016'})
+        self.assertUrlResolvesToView(
+            '/user/classmates/Fall/2016?courseids=1&courseids=2',
+            'student.views.ClassmateView',
+            kwargs={'sem_name': 'Fall', 'year': '2016'})
         self.assertUrlResolvesToView('/user/gcal/', 'student.views.GCalView')
         self.assertUrlResolvesToView(
             '/user/reactions/',
@@ -85,6 +90,46 @@ class UserViewTest(APITestCase):
         self.assertDictContainsSubset(
             new_settings, model_to_dict(
                 self.student))
+
+    def test_delete_user(self):
+        sem = Semester.objects.create(name='Winter', year='2000')
+        course = Course.objects.create(school='skool', code='A101', name='intro')
+        section = Section.objects.create(
+            course=course, meeting_section='A', semester=sem)
+        reaction = Reaction.objects.create(student=self.student, title='FIRE')
+        reaction.course.add(course)
+        reaction.save()
+
+        tt = PersonalTimetable.objects.create(
+            semester=sem, school='skool', name='mytt', student=self.student)
+        event = PersonalEvent.objects.create(
+            name='gym', day='T', time_start='8:00', time_end='9:00')
+        tt.events.add(event)
+        tt.courses.add(course)
+        tt.sections.add(section)
+        tt.save()
+
+        token = RegistrationToken(student=self.student)
+
+        request = self.factory.delete('/user/settings/')
+        force_authenticate(request, user=self.user)
+        request.user = self.user
+        view = resolve('/user/settings/').func
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # all student related data should be deleted
+        self.assertFalse(User.objects.exists())
+        self.assertFalse(Student.objects.exists())
+        self.assertFalse(PersonalTimetable.objects.exists())
+        # TODO
+        # self.assertFalse(PersonalEvent.objects.exists())
+        self.assertFalse(RegistrationToken.objects.exists())
+
+        # course data should be untouched
+        self.assertTrue(Course.objects.exists())
+        self.assertTrue(Section.objects.exists())
+        self.assertTrue(Semester.objects.exists())
 
 
 class UserTimetableViewTest(APITestCase):

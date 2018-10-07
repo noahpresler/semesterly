@@ -181,6 +181,11 @@ class UserView(RedirectToSignupMixin, APIView):
         student.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    def delete(self, request):
+        """ Delete this user and all of its data """
+        request.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class UserTimetableView(ValidateSubdomainMixin,
                         RedirectToSignupMixin, APIView):

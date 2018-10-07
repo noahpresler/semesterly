@@ -28,8 +28,8 @@ class TimetableExistsAlert extends React.Component {
   render() {
     return (
       <div className="timetable-exists-alert">
-                You already have a timetable with that name!
-            </div>);
+        You already have a timetable with that name!
+      </div>);
   }
 }
 

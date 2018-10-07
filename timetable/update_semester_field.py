@@ -16,7 +16,7 @@ import progressbar
 
 
 # schools whose second semester is called the winter semester (instead of spring)
-winter_schools = {'uoft', 'queens', 'umich', 'umich2'}
+winter_schools = {'uoft', 'umich', 'umich2'}
 
 def get_update_operation(app_name, table_names, get_school):
   """
@@ -60,10 +60,13 @@ def update_sem_fields(table, get_school, sem_table):
     bar.update(i)
     num_updated += 1
 
-  print "Updated {0}/{1} rows from table {2}".format(num_updated, table.objects.count(), str(table))
-  print "Ignored the following unknown semester codes:"
-  pprint(bad_inputs)
-  print
+  # TODO: log instead of print to stdout
+  if table.objects.count():
+    print "Updated {0}/{1} rows from table {2}".format(num_updated, table.objects.count(), str(table))
+  if bad_inputs:
+    print "Ignored the following unknown semester codes:"
+    pprint(bad_inputs)
+    print
 
 def code_to_name(semester_code, school):
   """ Take a valid semester code for a school and return its full name """

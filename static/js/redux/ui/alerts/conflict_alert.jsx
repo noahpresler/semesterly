@@ -29,13 +29,13 @@ class ConflictAlert extends React.Component {
   render() {
     return (
       <div className="conflict-alert">
-                Adding that {this.props.message} causes a conflict!
-                <button
-                  onClick={() => this.handleClick()}
-                  className="conflict-alert-btn"
-                >
-                    Allow Conflicts!
-                </button>
+        Adding that {this.props.message} causes a conflict!
+        <button
+          onClick={() => this.handleClick()}
+          className="conflict-alert-btn"
+        >
+            Allow Conflicts!
+        </button>
       </div>);
   }
 }

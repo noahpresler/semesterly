@@ -31,8 +31,6 @@ SECRETS = {
     'FB_TEST_PASS': 'asdfasdfdsfdsfadfdsflsdflglfg',
 
     #Not essential for testing, but can be filled in for advanced usage
-    'QUEENS_USER': None,
-    'QUEENS_PASS': None,
     'GW_PASS': None,
     'GW_SECURITY_ANSWER': None,
     'JHU_API_KEY': 'uVCKxXcSGVDCD5HSwKk3BlAVawKzD5Y6',
