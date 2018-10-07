@@ -35,7 +35,7 @@ SECRETS = {
     'QUEENS_PASS': None,
     'GW_PASS': None,
     'GW_SECURITY_ANSWER': None,
-    'JHU_API_KEY': 'ImzBleeY6uIMopBNv2KlG3ZQowhUTGyd',
+    'JHU_API_KEY': 'uVCKxXcSGVDCD5HSwKk3BlAVawKzD5Y6',
     'VANDY_USER': None,
     'VANDY_PASS': None,
 
