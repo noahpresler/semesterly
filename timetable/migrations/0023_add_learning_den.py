@@ -23,15 +23,18 @@ def add_learning_den(apps, schema_editor):
   integration = Integration.objects.create(name="LearningDen")
   integration.save()
 
+
   for c in learning_den_courses:
+   # assumes course in db, if not in db then pass
     course = Courses.filter(code=c)
     courseIntegration = CourseIntegration.objects.create(course=course[0],integration=integration,json='')
+    courseIntegration.integration
     courseIntegration.save()
 
 #      list of codes
 #      for each code in list of codes
 #        course = course.object.get(___)
-        # assumes course in db, if not in db then pass
+
 #        courseintegration.objects.create
 #        course = course
 #        integration = integration

@@ -141,6 +141,7 @@ class SearchResult extends React.Component {
     const integrationLogoImageUrl = {
       backgroundImage: 'url(/static/img/integrations/pilotLogo.png)',
     };
+    console.log(course.integrations);
     const integrationLogo = course.integrations.indexOf('Pilot') > -1 ?
       (<div className="label integration">
         <span className="has-pilot" style={integrationLogoImageUrl} />
