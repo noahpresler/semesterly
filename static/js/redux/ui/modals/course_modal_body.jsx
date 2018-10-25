@@ -231,6 +231,21 @@ class CourseModalBody extends React.Component {
                         weekly to work problems together.</p>
               </li>
             </div>) : null;
+    const learningDenDivStyle = {
+      backgroundImage: 'url(/static/img/integrations/learningDenLogo.jpg)',
+    };
+    const learningDenDisplay = true ?
+      (<div className="modal-module academic-support">
+        <h3 className="modal-module-header">Academic Support</h3>
+        <li className="cf">
+          <span className="integration-image" style={learningDenDivStyle} />
+          <h4>Learning Den</h4>
+          <a href="https://advising.jhu.edu/tutoring-mentoring/learning-den-tutoring-services/" target="_blank" rel="noopener noreferrer">
+            Learn More
+          </a>
+          <p>Description.</p>
+        </li>
+      </div>) : null;
     let friendCircles = (<div className="loading"><span className="img-icon"><div
       className="loader"
     /></span><p>
@@ -372,6 +387,7 @@ class CourseModalBody extends React.Component {
             { prerequisitesDisplay }
             { areasDisplay }
             { academicSupportDisplay }
+            { learningDenDisplay }
             { friendDisplay }
             { hasTakenDisplay }
           </div>
