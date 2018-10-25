@@ -16,16 +16,17 @@ from django.db import migrations
 
 
 def add_learning_den(apps, schema_editor):
-  """ Replace every Y course with one F course and one Y course """
-  Courses = apps.get_model('timetable', 'Course')
+  """ Add Learning Den classes for Spring 2018 """
+  Courses = apps.get_model('timetable', 'Course').objects.all()
   learning_den_courses = ["AS.020.152", "AS.020.306", "AS.030.102"]
 
+  integration = Integration.objects.create(name="LearningDen")
+  integration.save()
+
   for c in learning_den_courses:
-    try:
-        course = Courses.object.get(c)
-        courseintegation.objects.create(c,"LearningDen", "").save()
-    except Exception:
-        pass
+    course = Courses.filter(code=c)
+    courseIntegration = CourseIntegration.objects.create(course=course[0],integration=integration,json='')
+    courseIntegration.save()
 
 #      list of codes
 #      for each code in list of codes
