@@ -138,18 +138,18 @@ class SearchResult extends React.Component {
       info = !inRoster ? 'Add this course to your timetable' :
         'Remove this course from your timetable';
     }
-    const integrationLogoImageUrl = {
+    const pilotLogoImg = {
       backgroundImage: 'url(/static/img/integrations/pilotLogo.png)',
     };
-    const integrationLogo = course.integrations.indexOf('Pilot') > -1 ?
+    const pilotLogo = course.integrations.indexOf('Pilot') > -1 ?
       (<div className="label integration">
-        <span className="has-pilot" style={integrationLogoImageUrl} />
+        <span className="has-pilot" style={pilotLogoImg} />
       </div>) : null;
-    const learningDenLogoImageUrl = {
-      backgroundImage: 'url(/static/img/integrations/learningDenLogo.jpg)',
+    const learningDenLogoImg = {
+      backgroundImage: 'url(/static/img/integrations/learningDen.png)',
     };
     const learningDenLogo = course.integrations.indexOf('LearningDen') > -1 ? (<div className="label integration">
-        <span className="has-den" style={learningDenLogoImageUrl} />
+        <span className="has-den" style={learningDenLogoImg} />
       </div>) : null;
     const waitlistOnlyFlag = this.hasOnlyWaitlistedSections() ?
       <h4 className="label flag">Waitlist Only</h4> : null;
@@ -177,7 +177,7 @@ class SearchResult extends React.Component {
           <h4
             className={classNames('label', 'bubble')}
           >{this.props.campuses[course.campus]}</h4>
-          { integrationLogo }
+          { pilotLogo }
           { learningDenLogo }
           { waitlistOnlyFlag }
         </div>
