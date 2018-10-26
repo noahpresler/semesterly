@@ -239,8 +239,9 @@ class CourseModalBody extends React.Component {
            rel="noopener noreferrer">
           Learn More
         </a>
-        <p>The Learning Den is a peer-to-peer, small group tutoring program that helps students to improve their
-          understanding of course materials, and prepare for exams</p>
+        <p>The Learning Den is a peer-to-peer, small group tutoring program that
+          helps students to improve their understanding of course materials,
+          and prepare for exams</p>
       </li>) : null;
     const academicSupportDisplay = integrationList.indexOf('LearningDen') > -1 || integrationList.indexOf('Pilot') > -1 ?
       (<div className="modal-module academic-support">
