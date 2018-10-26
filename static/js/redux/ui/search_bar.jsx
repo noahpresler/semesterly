@@ -118,7 +118,7 @@ class SearchBar extends React.Component {
         </div>
       </div>
     ) : null;
-    const resultContainer = !this.state.focused || results.length === 0 ? null : (
+    const resultContainer = results.length === 0 ? null : (
       <ul className={resClass}>
         {results}
         {seeMore}
