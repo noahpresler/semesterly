@@ -243,7 +243,6 @@ class CourseModalBody extends React.Component {
            rel="noopener noreferrer">
           Learn More
         </a>
-        <p>Description.</p>
       </li>
     </div>) : null;
     let friendCircles = (<div className="loading"><span className="img-icon"><div
