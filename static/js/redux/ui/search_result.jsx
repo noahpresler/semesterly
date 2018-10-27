@@ -149,8 +149,8 @@ class SearchResult extends React.Component {
       backgroundImage: 'url(/static/img/integrations/learningDen.png)',
     };
     const learningDenLogo = course.integrations.indexOf('LearningDen') > -1 ? (<div className="label integration">
-        <span className="has-den" style={learningDenLogoImg} />
-      </div>) : null;
+      <span className="has-den" style={learningDenLogoImg} />
+    </div>) : null;
     const waitlistOnlyFlag = this.hasOnlyWaitlistedSections() ?
       <h4 className="label flag">Waitlist Only</h4> : null;
     return (

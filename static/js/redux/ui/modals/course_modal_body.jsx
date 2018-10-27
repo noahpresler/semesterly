@@ -231,12 +231,14 @@ class CourseModalBody extends React.Component {
     const learningDenLogoImg = {
       backgroundImage: 'url(/static/img/integrations/learningDen_books.png)',
     };
-    const learningDenDisplay = integrationList.indexOf('LearningDen') > -1  ?
+    const learningDenDisplay = integrationList.indexOf('LearningDen') > -1 ?
       (<li className="cf">
-        <span className="integration-image" style={learningDenLogoImg}/>
+        <span className="integration-image" style={learningDenLogoImg} />
         <h4>Learning Den</h4>
-        <a href="https://advising.jhu.edu/tutoring-mentoring/learning-den-tutoring-services/" target="_blank"
-           rel="noopener noreferrer">
+        <a
+          href="https://advising.jhu.edu/tutoring-mentoring/learning-den-tutoring-services/" target="_blank"
+          rel="noopener noreferrer"
+        >
           Learn More
         </a>
         <p>The Learning Den is a peer-to-peer, small group tutoring program that
