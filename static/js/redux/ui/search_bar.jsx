@@ -120,8 +120,10 @@ class SearchBar extends React.Component {
     ) : null;
     const resultContainer = !this.state.focused || results.length === 0 ? null : (
       <ul className={resClass}>
-        {results}
-        {seeMore}
+        <div className="search-results__list-container">
+          {results}
+          {seeMore}
+        </div>
         <SearchSideBarContainer />
       </ul>
         );
