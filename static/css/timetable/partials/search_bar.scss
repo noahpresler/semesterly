@@ -229,6 +229,8 @@
   }
 
   .integration {
+    margin: 1px 5px 0 0;
+
     a {
       float: left;
       font-size: 12px;
@@ -325,6 +327,20 @@
   transition: visibility .3s, opacity .3s;
   visibility: visible;
   width: 43px;
+}
+
+// If a course has an den integration turned on
+.has-den {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  float: left;
+  height: 15px;
+  margin-right: 5px;
+  opacity: 1;
+  transition: visibility .3s, opacity .3s;
+  visibility: visible;
+  width: 100px;
 }
 
 // Section Listings per Course

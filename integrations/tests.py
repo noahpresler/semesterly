@@ -31,23 +31,28 @@ class IntegrationsGetAddTest(APITestCase):
     }
 
     def setUp(self):
-        Integration.objects.create(id=1, name='myint')
-        Course.objects.create(id=1, school='uoft', code='SEA101', name='Intro')
-        CourseIntegration.objects.create(course_id=1, integration_id=1, json='oldstuff')
+        #get or create
+        self.integration = Integration.objects.create(name='myint')
+        self.integrationIdStr = str(self.integration.id)
+        self.course = Course.objects.create(school='uoft', code='SEA101', name='Intro')
+        self.courseIdStr = str(self.course.id)
+        self.courseIntegration = CourseIntegration.objects.create(course_id=self.course.id, integration_id=self.integration.id, json='oldstuff')
 
     def test_get_existing_integration(self):
-        response = self.client.get('/integrations/1/course/1/', format='json', **self.request_headers)
+        response = self.client.get('/integrations/' + self.integrationIdStr + '/course/' + self.courseIdStr + '/', format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_nonexistent_integration(self):
-        response = self.client.get('/integrations/5/course/3/', format='json', **self.request_headers)
+        nonexistentIntegrationIdStr = str(self.integration.id + 1)
+        nonexistentCourseIdStr = str(self.course.id + 1)
+        response = self.client.get('/integrations/' + nonexistentIntegrationIdStr + '/course/' + nonexistentCourseIdStr + '/', format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_add_integration(self):
         data = {'json': 'newstuff'}
-        response = self.client.post('/integrations/1/course/1/', data, format='json', **self.request_headers)
+        response = self.client.post('/integrations/' + self.integrationIdStr + '/course/' + self.courseIdStr + '/', data, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        CourseIntegration.objects.get(course_id=1, integration_id=1, **data)
+        CourseIntegration.objects.get(course_id=self.course.id, integration_id=self.integration.id, **data)
 
 
 class IntegrationsDeleteTest(APITestCase):
@@ -56,11 +61,13 @@ class IntegrationsDeleteTest(APITestCase):
     }
 
     def setUp(self):
-        Integration.objects.create(id=1, name='myint')
-        Course.objects.create(id=1, school='uoft', code='SEA101', name='Intro')
-        CourseIntegration.objects.create(course_id=1, integration_id=1, json='oldstuff')
+        self.integration = Integration.objects.create(name='myint')
+        self.integrationIdStr = str(self.integration.id)
+        self.course = Course.objects.create(school='uoft', code='SEA101', name='Intro')
+        self.courseIdStr = str(self.course.id)
+        self.courseIntegration = CourseIntegration.objects.create(course_id=self.course.id, integration_id=self.integration.id, json='oldstuff')
 
     def test_delete_integration(self):
-        response = self.client.delete('/integrations/1/course/1/', **self.request_headers)
+        response = self.client.delete('/integrations/' + self.integrationIdStr + '/course/' + self.courseIdStr + '/', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertFalse(CourseIntegration.objects.filter(course_id=1, integration_id=1).exists())
+        self.assertFalse(CourseIntegration.objects.filter(course_id=self.course.id, integration_id=self.integration.id).exists())
