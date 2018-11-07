@@ -447,6 +447,13 @@ export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
     });
 };
 
+// export const deleteAccount = (self) => {
+//   fetch(deleteAccountEndpoint(self), {
+//     method: 'DELETE',
+//     credentials: 'include',
+//   });
+// };
+
 export const delIntegration = (integrationID, courseID) => {
   fetch(getIntegrationEndpoint(integrationID, courseID), {
     headers: {

@@ -235,6 +235,9 @@ DATABASES = {
         'PASSWORD': 'FdaPpl&2017',
         'HOST': 'localhost',
         'PORT': '5432',
+        'TEST': {
+            'NAME': 'test_semesterly',
+        }
     }
 }
 

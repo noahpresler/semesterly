@@ -32,12 +32,15 @@ class UserSettingsModal extends React.Component {
     this.state = {
       sw_capable: 'serviceWorker' in navigator,
       isSigningUp: this.props.isSigningUp,
+      delete: false,
     };
     this.changeForm = this.changeForm.bind(this);
     this.changeMajor = this.changeMajor.bind(this);
     this.changeClassYear = this.changeClassYear.bind(this);
     this.shouldShow = this.shouldShow.bind(this);
     this.hide = this.hide.bind(this);
+    this.toggleDelete = this.toggleDelete.bind(this);
+    this.deleteAccount = this.deleteAccount.bind(this);
   }
 
   componentDidMount() {
@@ -78,6 +81,14 @@ class UserSettingsModal extends React.Component {
     this.props.saveSettings();
   }
 
+  toggleDelete() {
+    this.setState({ delete: !this.state.delete });
+  }
+
+  deleteAccount() {
+    //  do nothing
+  }
+
   changeMajor(val) {
     this.changeForm({ major: val.value });
   }
@@ -98,6 +109,7 @@ class UserSettingsModal extends React.Component {
       this.modal.hide();
       this.props.setHidden();
       this.props.closeUserSettings();
+      this.setState({ delete: false });
     }
   }
 
@@ -243,6 +255,24 @@ class UserSettingsModal extends React.Component {
       <i className="fa fa-times" />
     </div>
     );
+    const option = !this.state.delete ? 'delete' : 'cancel';
+    const deleteDropdown = this.state.delete ? (<div
+      className="show-dropdown"
+    >
+      <div className="preference-wrapper">
+        <h3>This will delete all your timetables and user data</h3>
+        <button
+          className="delete-account-button" onClick={this.deleteAccount}
+        >delete
+      </button>
+      </div>
+    </div>) : null;
+    const deleteButton = (<div className="button-wrapper">
+      <button
+        className="toggle-delete-button" onClick={this.toggleDelete}
+      >{option}
+      </button>
+    </div>);
     return (
       <Modal
         ref={(c) => { this.modal = c; }}
@@ -286,6 +316,8 @@ class UserSettingsModal extends React.Component {
                 onChange={this.changeClassYear}
               />
             </div>
+            { deleteButton }
+            { deleteDropdown }
             { preferences }
             { !this.state.isSigningUp ? notifications : null }
             { fbUpsell }
