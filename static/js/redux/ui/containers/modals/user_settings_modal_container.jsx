@@ -17,6 +17,7 @@ import UserSettingsModal from '../../modals/user_settings_modal';
 import {
   acceptTOS, saveSettings, setARegistrationToken,
   unRegisterAToken,
+  deleteUser,
 } from '../../../actions/user_actions';
 import {
   changeUserInfo, overrideSettingsShow, setUserSettingsModalHidden,
@@ -45,6 +46,7 @@ const UserSettingsModalContainer = connect(
     setHidden: setUserSettingsModalHidden,
     subscribeToNotifications: setARegistrationToken,
     unsubscribeToNotifications: unRegisterAToken,
+    deleteUser,
   },
 )(UserSettingsModal);
 

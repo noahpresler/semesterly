@@ -40,7 +40,6 @@ class UserSettingsModal extends React.Component {
     this.shouldShow = this.shouldShow.bind(this);
     this.hide = this.hide.bind(this);
     this.toggleDelete = this.toggleDelete.bind(this);
-    this.deleteAccount = this.deleteAccount.bind(this);
   }
 
   componentDidMount() {
@@ -83,10 +82,6 @@ class UserSettingsModal extends React.Component {
 
   toggleDelete() {
     this.setState({ delete: !this.state.delete });
-  }
-
-  deleteAccount() {
-    //  do nothing
   }
 
   changeMajor(val) {
@@ -261,17 +256,17 @@ class UserSettingsModal extends React.Component {
       <div className="preference-wrapper">
         <h4>This will delete all timetables and user data!</h4>
         <button
-          className="delete-account-button" onClick={this.deleteAccount}
+          className="delete-account-button" onClick={this.props.deleteUser()}
         > continue
         </button>
         <button
-          className="delete-account-button" onClick={this.toggleDelete}
+          className="hide-delete-button" onClick={this.toggleDelete}
         >cancel
         </button>
       </div>
     </div>) : (<div className="button-wrapper">
       <button
-        className="toggle-delete-button" onClick={this.toggleDelete}
+        className="show-delete-button" onClick={this.toggleDelete}
       >delete
       </button>
     </div>);
@@ -350,6 +345,7 @@ UserSettingsModal.propTypes = {
   acceptTOS: PropTypes.func.isRequired,
   setVisible: PropTypes.func.isRequired,
   setHidden: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
 };
 
 export default UserSettingsModal;

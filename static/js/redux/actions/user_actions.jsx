@@ -29,6 +29,7 @@ import {
     getSaveTimetableEndpoint,
     getSetRegistrationTokenEndpoint,
     acceptTOSEndpoint,
+    deleteUserEndpoint,
 } from '../constants/endpoints';
 import {
   getActiveTimetable,
@@ -447,12 +448,37 @@ export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
     });
 };
 
-// export const deleteAccount = (self) => {
-//   fetch(deleteAccountEndpoint(self), {
-//     method: 'DELETE',
-//     credentials: 'include',
-//   });
-// };
+export const deleteUser = () => (dispatch, getState) => {
+  console.log('delete 2');
+  const state = getState();
+  dispatch({
+    type: ActionTypes.REQUEST_SAVE_TIMETABLE,
+  });
+  fetch(deleteUserEndpoint(getCurrentSemester(state)), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
+    credentials: 'include',
+  })
+    .then(response => response.json())
+    .then((json) => {
+      console.log(json);
+    });
+    //   dispatch({
+    //     type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+    //     timetables: json.timetables,
+    //   });
+    //   if (json.timetables.length > 0) {
+    //     dispatch(loadTimetable(json.timetables[0]));
+    //   } else {
+    //     nullifyTimetable(dispatch);
+    //   }
+    //   return json;
+    // });
+};
 
 export const delIntegration = (integrationID, courseID) => {
   fetch(getIntegrationEndpoint(integrationID, courseID), {

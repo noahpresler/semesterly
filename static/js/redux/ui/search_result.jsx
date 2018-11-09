@@ -177,11 +177,7 @@ class SearchResult extends React.Component {
           <h4
             className={classNames('label', 'bubble')}
           >{this.props.campuses[course.campus]}</h4>
-<<<<<<< HEAD
-          { integrationLogo }
-=======
           { pilotLogo }
->>>>>>> 1b72b09bf060ed9f2449a94e9e733a64a5dd2e4d
           { learningDenLogo }
           { waitlistOnlyFlag }
         </div>
