@@ -46,6 +46,22 @@
       text-align: left;
     }
 
+    h4 {
+      font-size: 15px;
+      margin-bottom: 5px;
+      margin-left: 20px;
+      margin-top: 5px;
+      text-align: left;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      margin-right: 20px;
+      line-height: inherit;
+    }
+  }
+
     .Select {
       margin-bottom: 20px;
       margin-top: 10px;
@@ -98,7 +114,6 @@
       font-size: 16px;
       line-height: 20px;
       margin: 0;
-    }
   }
 
   .abnb-btn {

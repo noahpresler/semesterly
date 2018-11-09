@@ -255,22 +255,24 @@ class UserSettingsModal extends React.Component {
       <i className="fa fa-times" />
     </div>
     );
-    const option = !this.state.delete ? 'delete' : 'cancel';
     const deleteDropdown = this.state.delete ? (<div
       className="show-dropdown"
     >
       <div className="preference-wrapper">
-        <h3>This will delete all your timetables and user data</h3>
+        <h4>This will delete all timetables and user data!</h4>
         <button
           className="delete-account-button" onClick={this.deleteAccount}
-        >delete
-      </button>
+        > continue
+        </button>
+        <button
+          className="delete-account-button" onClick={this.toggleDelete}
+        >cancel
+        </button>
       </div>
-    </div>) : null;
-    const deleteButton = (<div className="button-wrapper">
+    </div>) : (<div className="button-wrapper">
       <button
         className="toggle-delete-button" onClick={this.toggleDelete}
-      >{option}
+      >delete
       </button>
     </div>);
     return (
@@ -316,7 +318,6 @@ class UserSettingsModal extends React.Component {
                 onChange={this.changeClassYear}
               />
             </div>
-            { deleteButton }
             { deleteDropdown }
             { preferences }
             { !this.state.isSigningUp ? notifications : null }
