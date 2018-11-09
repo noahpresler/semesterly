@@ -34,7 +34,7 @@ class Parser(BaseParser):
         verbosity (TYPE): Description
     """
 
-    API_URL = 'https://isis.jhu.edu/api/classes/'
+    API_URL = 'https://sis.jhu.edu/api/classes/'
     DAY_MAP = {
         'm': 'M',
         't': 'T',
@@ -206,7 +206,7 @@ class Parser(BaseParser):
         self.verbosity = verbosity
 
         # Default to hardcoded current year.
-        years = {'2018', '2017', '2016', '2015'}
+        years = {'2019', '2018', '2017', '2016', '2015'}
         terms = {'Spring', 'Fall', 'Summer', 'Intersession'}
 
         years_and_terms = dict_filter_by_dict(

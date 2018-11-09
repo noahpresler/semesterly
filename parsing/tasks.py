@@ -19,7 +19,7 @@ from django.core import management
 from django.conf import settings
 
 from timetable.school_mappers import SCHOOLS_MAP
-from parsing.schools.active import ACTIVE_SCHOOLS
+from parsing.schools.active import ACTIVE_PARSING_SCHOOLS as ACTIVE_SCHOOLS
 
 logger = get_task_logger(__name__)
 
