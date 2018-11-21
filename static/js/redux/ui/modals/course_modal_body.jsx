@@ -392,7 +392,6 @@ class CourseModalBody extends React.Component {
             { prerequisitesDisplay }
             { areasDisplay }
             { academicSupportDisplay }
-            { learningDenDisplay }
             { friendDisplay }
             { hasTakenDisplay }
           </div>

@@ -106,6 +106,7 @@ export const fetchSISTimetableData = () => (
 
 export const addTTtoGCal = () => (dispatch, getState) => {
   const state = getState();
+
   if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
     dispatch({ type: ActionTypes.UPLOAD_CALENDAR });
     fetch(getAddTTtoGCalEndpoint(), {

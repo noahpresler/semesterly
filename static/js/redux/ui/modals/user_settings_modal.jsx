@@ -267,9 +267,8 @@ class UserSettingsModal extends React.Component {
     </div>) : (<h3 className="delete-link" onClick={this.toggleDelete}>
       Delete my account and all related information </h3>);
     if (this.props.isDeleted) {
-      // history.replaceState({}, 'Semester.ly', '/user/logout');
       const link = document.createElement('a');
-      link.href = `/user/logout/`;
+      link.href = '/user/logout/';
       document.body.appendChild(link);
       link.click();
     }

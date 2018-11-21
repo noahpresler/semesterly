@@ -16,10 +16,6 @@ cache:
   - node_modules
   - $HOME/.npm
   - $HOME/.cache/pip
-before_install:
-- sudo pip install --upgrade pip
-- pip install urllib3[secure]
-- pip install --upgrade setuptools
 install:
 - nvm install $NODE_VERSION
 - npm -g install webpack

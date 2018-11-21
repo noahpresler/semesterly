@@ -159,7 +159,7 @@ class Calendar extends React.Component {
     const addSISButton = this.props.registrarSupported ? (
       <div className="cal-btn-wrapper">
         <button
-          type="sumbit"
+          type="submit"
           form="form1"
           className="save-timetable add-button"
           data-for="sis-btn-tooltip"
@@ -293,7 +293,7 @@ class Calendar extends React.Component {
           place="bottom"
           effect="solid"
         >
-            <span>Preferences</span>
+          <span>Preferences</span>
         </ReactTooltip>
       </div>
         );

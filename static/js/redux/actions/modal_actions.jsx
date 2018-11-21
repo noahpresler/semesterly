@@ -112,8 +112,6 @@ export const toggleAcquisitionModal = () => ({ type: ActionTypes.TOGGLE_ACQUISIT
 
 export const toggleIntegrationModal = () => ({ type: ActionTypes.TOGGLE_INTEGRATION_MODAL });
 
-export const toggleDenIntegrationModal = () => ({ type: ActionTypes.TOGGLE_DEN_INTEGRATION_MODAL });
-
 export const togglePeerModal = () => ({ type: ActionTypes.TOGGLE_PEER_MODAL });
 
 export const triggerTextbookModal = () => ({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });

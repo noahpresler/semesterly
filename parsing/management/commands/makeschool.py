@@ -80,12 +80,6 @@ class Command(BaseCommand):
             default=5,
             help='minimum time between section offerings; default: %(default)s'
         )
-        parser.add_argument(
-            '--registrar',
-            type=bool,
-            default=False,
-            help='registrar integration; default: %(default)s'
-        )
 
     def handle(self, *args, **options):
         """Handle the command."""
@@ -100,7 +94,6 @@ class Command(BaseCommand):
             ('SINGLE_ACCESS', options['single_access']),
             ('FULL_ACADEMIC_YEAR_REGISTRATION',
                 options['full_academic_year_registration']),
-            ('REGISTRAR', options['registrar']),
         )
 
         school_dir_path = '{}/{}/schools/{}'.format(os.getcwd(),
