@@ -292,6 +292,7 @@ class CourseIntegration(models.Model):
     integration = models.ForeignKey(Integration)
     json = models.TextField()
 
+
 class Timetable(models.Model):
     courses = models.ManyToManyField(Course)
     sections = models.ManyToManyField(Section)
