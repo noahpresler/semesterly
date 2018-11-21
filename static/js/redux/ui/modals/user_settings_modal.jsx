@@ -32,7 +32,7 @@ class UserSettingsModal extends React.Component {
     this.state = {
       sw_capable: 'serviceWorker' in navigator,
       isSigningUp: this.props.isSigningUp,
-      delete: false,
+      showDelete: false,
     };
     this.changeForm = this.changeForm.bind(this);
     this.changeMajor = this.changeMajor.bind(this);
@@ -81,7 +81,7 @@ class UserSettingsModal extends React.Component {
   }
 
   toggleDelete() {
-    this.setState({ delete: !this.state.delete });
+    this.setState({ showDelete: !this.state.showDelete });
   }
 
   changeMajor(val) {
@@ -104,7 +104,7 @@ class UserSettingsModal extends React.Component {
       this.modal.hide();
       this.props.setHidden();
       this.props.closeUserSettings();
-      this.setState({ delete: false });
+      this.setState({ showDelete: false });
     }
   }
 
@@ -250,26 +250,29 @@ class UserSettingsModal extends React.Component {
       <i className="fa fa-times" />
     </div>
     );
-    const deleteDropdown = this.state.delete ? (<div
-      className="show-dropdown"
+    const deleteDropdown = this.state.showDelete ? (<div
+      className="show-delete-dropdown"
     >
       <div className="preference-wrapper">
-        <h4>This will delete all timetables and user data!</h4>
+        <h4 className="delete-btn-text">This will delete all timetables and user data!</h4>
         <button
-          className="delete-account-button" onClick={this.props.deleteUser()}
-        > continue
+          className="delete-btn" onClick={() => this.props.deleteUser()}
+        > Delete
         </button>
         <button
-          className="hide-delete-button" onClick={this.toggleDelete}
-        >cancel
+          className="delete-btn cancel-delete" onClick={this.toggleDelete}
+        > Cancel
         </button>
       </div>
-    </div>) : (<div className="button-wrapper">
-      <button
-        className="show-delete-button" onClick={this.toggleDelete}
-      >delete
-      </button>
-    </div>);
+    </div>) : (<h3 className="delete-link" onClick={this.toggleDelete}>
+      Delete my account and all related information </h3>);
+    if (this.props.isDeleted) {
+      // history.replaceState({}, 'Semester.ly', '/user/logout');
+      const link = document.createElement('a');
+      link.href = `/user/logout/`;
+      document.body.appendChild(link);
+      link.click();
+    }
     return (
       <Modal
         ref={(c) => { this.modal = c; }}
@@ -313,11 +316,11 @@ class UserSettingsModal extends React.Component {
                 onChange={this.changeClassYear}
               />
             </div>
-            { deleteDropdown }
             { preferences }
             { !this.state.isSigningUp ? notifications : null }
             { fbUpsell }
             { tos }
+            { !this.state.isSigningUp ? deleteDropdown : null }
             <div className="button-wrapper">
               <button
                 className="signup-button" onClick={this.hide}
@@ -346,6 +349,7 @@ UserSettingsModal.propTypes = {
   setVisible: PropTypes.func.isRequired,
   setHidden: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
+  isDeleted: PropTypes.bool.isRequired,
 };
 
 export default UserSettingsModal;

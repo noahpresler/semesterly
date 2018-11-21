@@ -22,6 +22,7 @@ export const initialState = {
   isVisible: false,
   saving: false,
   isFetching: false,
+  isDeleted: false,
 };
 
 const userInfo = (state = initialState, action) => {
@@ -51,6 +52,8 @@ const userInfo = (state = initialState, action) => {
       return Object.assign({}, state, { isVisible: true });
     case ActionTypes.SET_SETTINGS_MODAL_HIDDEN:
       return Object.assign({}, state, { isVisible: false });
+    case ActionTypes.DELETED_ACCOUNT:
+      return Object.assign({}, state, { isDeleted: true });
     default:
       return state;
   }

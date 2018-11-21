@@ -33,6 +33,7 @@ const mapStateToProps = state => ({
   highlightNotifs: state.ui.highlightNotifs,
   isUserInfoIncomplete: getIsUserInfoIncomplete(state),
   isSigningUp: !state.userInfo.overrideShow && getIsUserInfoIncomplete(state),
+  isDeleted: state.userInfo.isDeleted,
 });
 
 const UserSettingsModalContainer = connect(
