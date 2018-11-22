@@ -57,7 +57,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
               What's your major?
             </h3>
             <div
-              className="Select Select--single is-clearable is-searchable"
+              className="Select is-clearable is-searchable Select--single"
               style={undefined}
             >
               <div
@@ -69,7 +69,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                 onTouchStart={[Function]}
                 style={undefined}
               >
-                <span
+                <div
                   className="Select-multi-value-wrapper"
                   id="react-select-6--value"
                 >
@@ -95,6 +95,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                       aria-labelledby={undefined}
                       aria-owns=""
                       className={undefined}
+                      id={undefined}
                       onBlur={[Function]}
                       onChange={[Function]}
                       onFocus={[Function]}
@@ -125,25 +126,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                       
                     </div>
                   </div>
-                </span>
-                <span
-                  aria-label="Clear value"
-                  className="Select-clear-zone"
-                  onMouseDown={[Function]}
-                  onTouchEnd={[Function]}
-                  onTouchMove={[Function]}
-                  onTouchStart={[Function]}
-                  title="Clear value"
-                >
-                  <span
-                    className="Select-clear"
-                    dangerouslySetInnerHTML={
-                      Object {
-                        "__html": "&times;",
-                      }
-                    }
-                  />
-                </span>
+                </div>
                 <span
                   className="Select-arrow-zone"
                   onMouseDown={[Function]}
@@ -163,7 +146,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
               What's your graduating class year?
             </h3>
             <div
-              className="Select Select--single is-clearable is-searchable"
+              className="Select is-clearable is-searchable Select--single"
               style={undefined}
             >
               <div
@@ -175,7 +158,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                 onTouchStart={[Function]}
                 style={undefined}
               >
-                <span
+                <div
                   className="Select-multi-value-wrapper"
                   id="react-select-7--value"
                 >
@@ -201,6 +184,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                       aria-labelledby={undefined}
                       aria-owns=""
                       className={undefined}
+                      id={undefined}
                       onBlur={[Function]}
                       onChange={[Function]}
                       onFocus={[Function]}
@@ -231,7 +215,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                       
                     </div>
                   </div>
-                </span>
+                </div>
                 <span
                   className="Select-arrow-zone"
                   onMouseDown={[Function]}
@@ -410,7 +394,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
               What's your major?
             </h3>
             <div
-              className="Select Select--single is-clearable is-searchable has-value"
+              className="Select has-value is-clearable is-searchable Select--single"
               style={undefined}
             >
               <input
@@ -428,7 +412,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
                 onTouchStart={[Function]}
                 style={undefined}
               >
-                <span
+                <div
                   className="Select-multi-value-wrapper"
                   id="react-select-4--value"
                 >
@@ -463,6 +447,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
                       aria-labelledby={undefined}
                       aria-owns=""
                       className={undefined}
+                      id={undefined}
                       onBlur={[Function]}
                       onChange={[Function]}
                       onFocus={[Function]}
@@ -493,7 +478,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
                       
                     </div>
                   </div>
-                </span>
+                </div>
                 <span
                   aria-label="Clear value"
                   className="Select-clear-zone"
@@ -531,7 +516,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
               What's your graduating class year?
             </h3>
             <div
-              className="Select Select--single is-clearable is-searchable has-value"
+              className="Select has-value is-clearable is-searchable Select--single"
               style={undefined}
             >
               <input
@@ -549,7 +534,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
                 onTouchStart={[Function]}
                 style={undefined}
               >
-                <span
+                <div
                   className="Select-multi-value-wrapper"
                   id="react-select-5--value"
                 >
@@ -584,6 +569,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
                       aria-labelledby={undefined}
                       aria-owns=""
                       className={undefined}
+                      id={undefined}
                       onBlur={[Function]}
                       onChange={[Function]}
                       onFocus={[Function]}
@@ -614,7 +600,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
                       
                     </div>
                   </div>
-                </span>
+                </div>
                 <span
                   aria-label="Clear value"
                   className="Select-clear-zone"
@@ -763,12 +749,6 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
               Use Another Browser To Enable Device Notifications
             </h3>
           </div>
-          <h3
-            className="delete-link"
-            onClick={[Function]}
-          >
-            Delete my account and all related information 
-          </h3>
           <div
             className="button-wrapper"
           >
@@ -858,7 +838,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
               What's your major?
             </h3>
             <div
-              className="Select Select--single is-clearable is-searchable"
+              className="Select is-clearable is-searchable Select--single"
               style={undefined}
             >
               <div
@@ -870,7 +850,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                 onTouchStart={[Function]}
                 style={undefined}
               >
-                <span
+                <div
                   className="Select-multi-value-wrapper"
                   id="react-select-2--value"
                 >
@@ -896,6 +876,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                       aria-labelledby={undefined}
                       aria-owns=""
                       className={undefined}
+                      id={undefined}
                       onBlur={[Function]}
                       onChange={[Function]}
                       onFocus={[Function]}
@@ -926,7 +907,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                       
                     </div>
                   </div>
-                </span>
+                </div>
                 <span
                   className="Select-arrow-zone"
                   onMouseDown={[Function]}
@@ -946,7 +927,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
               What's your graduating class year?
             </h3>
             <div
-              className="Select Select--single is-clearable is-searchable"
+              className="Select is-clearable is-searchable Select--single"
               style={undefined}
             >
               <div
@@ -958,7 +939,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                 onTouchStart={[Function]}
                 style={undefined}
               >
-                <span
+                <div
                   className="Select-multi-value-wrapper"
                   id="react-select-3--value"
                 >
@@ -984,6 +965,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                       aria-labelledby={undefined}
                       aria-owns=""
                       className={undefined}
+                      id={undefined}
                       onBlur={[Function]}
                       onChange={[Function]}
                       onFocus={[Function]}
@@ -1014,7 +996,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                       
                     </div>
                   </div>
-                </span>
+                </div>
                 <span
                   className="Select-arrow-zone"
                   onMouseDown={[Function]}
