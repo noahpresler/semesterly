@@ -44,6 +44,7 @@
     "loose-envify": "^1.1.0",
     "moment": "^2.11.2",
     "nock": "^9.0.13",
+    "node-sass": "^4.5.2",
     "normalizr": "^3.2.3",
     "phantom": "^4.0.0",
     "phantomjs": "^2.1.7",
@@ -125,12 +126,9 @@
   "devDependencies": {
     "jest": "^20.0.1",
     "lint-staged": "^3.4.0",
-    "nock": "^9.0.13",
-    "node-sass": "^4.7.2",
     "precommit-hook": "^3.0.0",
     "react-test-utils": "0.0.1",
-    "regenerator-runtime": "^0.10.5",
-    "sass-loader": "^6.0.3"
+    "regenerator-runtime": "^0.10.5"
   },
   "lint-staged": {
     "*.jsx?": [
