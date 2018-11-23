@@ -148,10 +148,6 @@ export const lockTimetable = timetable => (dispatch, getState) => {
   }
 };
 
-const generateId = () => {
-  return generateCustomEventId() + Math.floor((Math.random() * 10000) + 1);
-};
-
 // load a personal timetable into state
 export const loadTimetable = (timetable, isLoadingNewTimetable = false) => (dispatch, getState) => {
   const state = getState();
@@ -163,7 +159,7 @@ export const loadTimetable = (timetable, isLoadingNewTimetable = false) => (disp
   const displayTimetable = {
     ...timetable,
     events: timetable.events.map(event =>
-      ({ ...event, id: generateId(), preview: false })),
+      ({ ...event, id: generateCustomEventId(), preview: false })),
   };
 
   dispatch({
@@ -419,18 +415,11 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
 };
 
 export const updateCustomSlot = (newValues, id) => (dispatch) => {
-  if (newValues.time_start !== undefined && newValues.time_start == newValues.time_end) {
-      dispatch({
-          type: ActionTypes.REMOVE_CUSTOM_SLOT,
-          id,
-      });
-  } else {
-      dispatch({
-          type: ActionTypes.UPDATE_CUSTOM_SLOT,
-          newValues,
-          id,
-      });
-  }
+  dispatch({
+    type: ActionTypes.UPDATE_CUSTOM_SLOT,
+    newValues,
+    id,
+  });
   const changedProps = Object.keys(newValues);
   const onlyChangingName = changedProps.length === 1 && changedProps[0] === 'name';
   if (onlyChangingName) {
