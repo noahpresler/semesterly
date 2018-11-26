@@ -28,7 +28,7 @@ import {
     getSaveSettingsEndpoint,
     getSaveTimetableEndpoint,
     getSetRegistrationTokenEndpoint,
-    acceptTOSEndpoint
+    acceptTOSEndpoint,
 } from '../constants/endpoints';
 import {
   getActiveTimetable,
