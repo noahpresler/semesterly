@@ -28,8 +28,7 @@ import {
     getSaveSettingsEndpoint,
     getSaveTimetableEndpoint,
     getSetRegistrationTokenEndpoint,
-    acceptTOSEndpoint,
-    deleteUserEndpoint,
+    acceptTOSEndpoint
 } from '../constants/endpoints';
 import {
   getActiveTimetable,
@@ -449,7 +448,7 @@ export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
 };
 
 export const deleteUser = () => (dispatch) => {
-  fetch(deleteUserEndpoint(), {
+  fetch(getSaveSettingsEndpoint(), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),
       Accept: 'application/json',

@@ -24,7 +24,6 @@ export const getTimetablesEndpoint = () => '/timetables/';
 export const getLoadSavedTimetablesEndpoint = semester => `/user/timetables/${semester.name}/${semester.year}/`;
 export const getSaveTimetableEndpoint = () => '/user/timetables/';
 export const getDeleteTimetableEndpoint = (semester, name) => `/user/timetables/${semester.name}/${semester.year}/${name}/`;
-export const deleteUserEndpoint = () => '/user/settings/delete/';
 export const getSaveSettingsEndpoint = () => '/user/settings/';
 export const getClassmatesEndpoint = (semester, courses) => `/user/classmates/${semester.name}/${semester.year}?${$.param({ course_ids: courses })}`;
 export const getClassmatesInCourseEndpoint = (school, semester, courseId) => `/course_classmates/${school}/${semester}/id/${courseId}/`;

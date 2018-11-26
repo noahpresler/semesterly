@@ -22,7 +22,6 @@ urlpatterns = patterns('',
   url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
   url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', student.views.unsubscribe),
   url(r'^user/settings/$', student.views.UserView.as_view()),
-  url(r'^user/settings/delete/$', student.views.UserView.as_view()),
 
   # timetable management
   url(r'^user/timetables/$', student.views.UserTimetableView.as_view()),
