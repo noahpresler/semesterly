@@ -31,8 +31,8 @@ You now have semesterly running. If this is the first time, you will want some d
 
 Getting JHU data for a given term
 * In a new terminal run the following
-docker ps 
-(this will list all running containers, grab the name of your container, it will look like: semesterly_web_1_972d650bb19d you will use this in the following 2 commands)
-docker exec -it name_of_container python manage.py ingest jhu --term Spring --years 2018
-docker exec -it name_of_container python manage.py digest jhu
-* Open a browser and visit http://jhu.sem.ly:8000 and you should be good to go
+docker ps -q --filter "expose=8000"
+(this will give you the id of your container which you will use for commands below. ex: 73f48ab997aa)
+docker exec -it id_of_container python manage.py ingest jhu --term Spring --years 2018
+docker exec -it id_of_container python manage.py digest jhu
+* Open a browser and visit http://jhu.sem.ly:8000 and hack away
