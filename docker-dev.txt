@@ -1,6 +1,7 @@
 Developing Semester.ly on Docker
 
 Steps are below on getting your local development environment running:
+* Download and install docker for your environment (Windows/Mac/Linux are supporter): https://www.docker.com/get-started
 * Clone this repository
 * Create semesterly/local_settings.py as follows:
 DEBUG = True
@@ -23,7 +24,7 @@ DATABASES = {
 127.0.0.1       sem.ly jhu.sem.ly
 
 
-Build and run your container (first time takes longer as it has to download, subsequent runs are pretty quick)
+Launch terminal or a command window and run:
 * docker-compose build
 * docker-compose up
 You now have semesterly running. If this is the first time, you will want some data.
