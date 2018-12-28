@@ -1,0 +1,38 @@
+Developing Semester.ly on Docker
+
+Steps are below on getting your local development environment running:
+* Download and install docker for your environment (Windows/Mac/Linux are supporter): https://www.docker.com/get-started
+* Clone this repository
+* Create semesterly/local_settings.py as follows:
+DEBUG = True
+
+TEMPLATE_DEBUG = DEBUG
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres', 
+        'USER': 'postgres',
+        'PASSWORD': '',
+        'HOST': 'db',
+        'PORT': '5432',
+    }
+}
+* Edit semesterly/dev_credentials.py and add a value for JHU_API_KEY in single quotes like below. You can get this from sis.jhu.edu/api
+'JHU_API_KEY': 'xxxxxxxx',
+* add entry to your hosts file as follows (This file is in c:\Windows\System32\drivers\etc\hosts or /etc/hosts)
+127.0.0.1       sem.ly jhu.sem.ly
+
+
+Launch terminal or a command window and run:
+* docker-compose build
+* docker-compose up
+You now have semesterly running. If this is the first time, you will want some data.
+
+Getting JHU data for a given term
+* In a new terminal run the following
+docker ps -q --filter "expose=8000"
+(this will give you the id of your container which you will use for commands below. ex: 73f48ab997aa)
+docker exec -it id_of_container python manage.py ingest jhu --term Spring --years 2018
+docker exec -it id_of_container python manage.py digest jhu
+* Open a browser and visit http://jhu.sem.ly:8000 and hack away
