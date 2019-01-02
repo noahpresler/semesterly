@@ -420,10 +420,7 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
 
 export const updateCustomSlot = (newValues, id) => (dispatch) => {
   if (newValues.time_start !== undefined && newValues.time_start == newValues.time_end) {
-      dispatch({
-          type: ActionTypes.REMOVE_CUSTOM_SLOT,
-          id,
-      });
+      dispatch(removeCustomSlot(id));
   } else {
       dispatch({
           type: ActionTypes.UPDATE_CUSTOM_SLOT,

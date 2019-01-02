@@ -74,7 +74,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         optional_course_subsets = [subset for subset_size in range(max_optional, -1, -1)
                                    for subset in itertools.combinations(optional_courses,
                                                                         subset_size)]
-        # TODO remove orphan events if all references are deleted
+        # TODO remove orphan PersonalEvent row if all timetable references are deleted
         custom_events = params.get('customSlots', [])
         preferences = params['preferences']
         with_conflicts = preferences.get('try_with_conflicts', False)
