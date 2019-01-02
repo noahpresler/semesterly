@@ -11,6 +11,8 @@ WORKDIR /code
 ADD . /code/
 
 RUN pip install -r /code/requirements.txt
+RUN pip install psycopg2-binary
 
 RUN npm install
 RUN npm run build
+
