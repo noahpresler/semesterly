@@ -49,11 +49,11 @@ python-openid==2.2.5
 python-social-auth==0.2.19
 python-utils==2.0.0
 pytz==2016.4
-pywebpush==1.7.0
+pywebpush==0.4.0
 PyYAML==3.10
 recommonmark==0.4.0
 redis==2.10.5
-requests==2.20.0
+requests==2.9.1
 requests-oauthlib==0.6.1
 rollbar==0.13.11
 scikit-learn==0.18.1
@@ -69,5 +69,5 @@ sphinx-rtd-theme==0.1.9
 ssh-import-id==3.21
 supervisor==3.3.1
 toolz==0.7.4
-urllib3==1.24.1
+urllib3==1.7.1
 virtualenv==1.11.4
