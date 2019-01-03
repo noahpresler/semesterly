@@ -15,15 +15,8 @@
   "full_academic_year_registration": false,
   "single_access": false,
   "active_semesters": {
-    "2017": [
-      "Fall",
-      "Summer",
-      "Spring",
-      "Intersession"
-    ],
     "2018": [
-      "Fall",
-      "Spring"
+      "Fall"
     ],
     "2019": [
       "Spring"
