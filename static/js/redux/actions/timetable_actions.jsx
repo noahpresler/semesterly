@@ -148,10 +148,6 @@ export const lockTimetable = timetable => (dispatch, getState) => {
   }
 };
 
-const generateId = () => {
-  return generateCustomEventId() + Math.floor((Math.random() * 10000) + 1);
-};
-
 // load a personal timetable into state
 export const loadTimetable = (timetable, isLoadingNewTimetable = false) => (dispatch, getState) => {
   const state = getState();
@@ -163,7 +159,7 @@ export const loadTimetable = (timetable, isLoadingNewTimetable = false) => (disp
   const displayTimetable = {
     ...timetable,
     events: timetable.events.map(event =>
-      ({ ...event, id: generateId(), preview: false })),
+      ({ ...event, id: generateCustomEventId(), preview: false })),
   };
 
   dispatch({
