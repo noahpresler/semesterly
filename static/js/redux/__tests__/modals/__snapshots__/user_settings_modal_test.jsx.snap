@@ -749,6 +749,12 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
               Use Another Browser To Enable Device Notifications
             </h3>
           </div>
+          <h3
+            className="delete-link"
+            onClick={[Function]}
+          >
+            Delete my account and all related information 
+          </h3>
           <div
             className="button-wrapper"
           >

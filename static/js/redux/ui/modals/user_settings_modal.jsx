@@ -32,12 +32,14 @@ class UserSettingsModal extends React.Component {
     this.state = {
       sw_capable: 'serviceWorker' in navigator,
       isSigningUp: this.props.isSigningUp,
+      showDelete: false,
     };
     this.changeForm = this.changeForm.bind(this);
     this.changeMajor = this.changeMajor.bind(this);
     this.changeClassYear = this.changeClassYear.bind(this);
     this.shouldShow = this.shouldShow.bind(this);
     this.hide = this.hide.bind(this);
+    this.toggleDelete = this.toggleDelete.bind(this);
   }
 
   componentDidMount() {
@@ -78,6 +80,10 @@ class UserSettingsModal extends React.Component {
     this.props.saveSettings();
   }
 
+  toggleDelete() {
+    this.setState({ showDelete: !this.state.showDelete });
+  }
+
   changeMajor(val) {
     this.changeForm({ major: val.value });
   }
@@ -98,6 +104,7 @@ class UserSettingsModal extends React.Component {
       this.modal.hide();
       this.props.setHidden();
       this.props.closeUserSettings();
+      this.setState({ showDelete: false });
     }
   }
 
@@ -243,6 +250,28 @@ class UserSettingsModal extends React.Component {
       <i className="fa fa-times" />
     </div>
     );
+    const deleteDropdown = this.state.showDelete ? (<div
+      className="show-delete-dropdown"
+    >
+      <div className="preference-wrapper">
+        <h4 className="delete-btn-text">This will delete all timetables and user data!</h4>
+        <button
+          className="delete-btn" onClick={() => this.props.deleteUser()}
+        > Delete
+        </button>
+        <button
+          className="delete-btn cancel-delete" onClick={this.toggleDelete}
+        > Cancel
+        </button>
+      </div>
+    </div>) : (<h3 className="delete-link" onClick={this.toggleDelete}>
+      Delete my account and all related information </h3>);
+    if (this.props.isDeleted) {
+      const link = document.createElement('a');
+      link.href = '/user/logout/';
+      document.body.appendChild(link);
+      link.click();
+    }
     return (
       <Modal
         ref={(c) => { this.modal = c; }}
@@ -290,6 +319,7 @@ class UserSettingsModal extends React.Component {
             { !this.state.isSigningUp ? notifications : null }
             { fbUpsell }
             { tos }
+            { !this.state.isSigningUp ? deleteDropdown : null }
             <div className="button-wrapper">
               <button
                 className="signup-button" onClick={this.hide}
@@ -317,6 +347,8 @@ UserSettingsModal.propTypes = {
   acceptTOS: PropTypes.func.isRequired,
   setVisible: PropTypes.func.isRequired,
   setHidden: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+  isDeleted: PropTypes.bool.isRequired,
 };
 
 export default UserSettingsModal;
