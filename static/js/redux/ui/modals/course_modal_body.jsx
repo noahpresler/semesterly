@@ -191,8 +191,6 @@ class CourseModalBody extends React.Component {
       ? null : prerequisites.match(courseRegex);
 
     const newPrerequisites = (prerequisites === '' || prerequisites === null) ? 'None' :
-
-
       prerequisites.split(courseRegex).map((t, i) => {
 
         if (matchedCoursesPrerequisites === null || matchedCoursesPrerequisites.indexOf(t) === -1) {
@@ -205,10 +203,7 @@ class CourseModalBody extends React.Component {
             key={t} num={i} code={t}
             name={this.props.data.regexed_courses[t]}
             getShareLinkFromModal={this.props.getShareLinkFromModal}
-          />
-
-
-        );
+          />);
         }
         return <span className="textItem" key={t}>{t}</span>;
       });
