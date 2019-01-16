@@ -194,7 +194,7 @@ class CourseModalBody extends React.Component {
 
 
       prerequisites.split(courseRegex).map((t, i) => {
-        
+
         if (matchedCoursesPrerequisites === null || matchedCoursesPrerequisites.indexOf(t) === -1) {
           return t;
         }
