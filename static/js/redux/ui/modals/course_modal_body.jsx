@@ -1,4 +1,4 @@
-  /*
+/*
 Copyright (C) 2017 Semester.ly Technologies, LLC
 
 Semester.ly is free software: you can redistribute it and/or modify
@@ -189,16 +189,13 @@ class CourseModalBody extends React.Component {
       });
     const matchedCoursesPrerequisites = prerequisites === null
       ? null : prerequisites.match(courseRegex);
-
     const newPrerequisites = (prerequisites === '' || prerequisites === null) ? 'None' :
       prerequisites.split(courseRegex).map((t, i) => {
-
         if (matchedCoursesPrerequisites === null || matchedCoursesPrerequisites.indexOf(t) === -1) {
           return t;
         }
         if (matchedCoursesPrerequisites.indexOf(t) !== -1 &&
           Object.keys(this.props.data.regexed_courses).indexOf(t) !== -1) {
-
           return (<SlotHoverTip
             key={t} num={i} code={t}
             name={this.props.data.regexed_courses[t]}
