@@ -17,6 +17,7 @@ import UserSettingsModal from '../../modals/user_settings_modal';
 import {
   acceptTOS, saveSettings, setARegistrationToken,
   unRegisterAToken,
+  deleteUser,
 } from '../../../actions/user_actions';
 import {
   changeUserInfo, overrideSettingsShow, setUserSettingsModalHidden,
@@ -32,6 +33,7 @@ const mapStateToProps = state => ({
   highlightNotifs: state.ui.highlightNotifs,
   isUserInfoIncomplete: getIsUserInfoIncomplete(state),
   isSigningUp: !state.userInfo.overrideShow && getIsUserInfoIncomplete(state),
+  isDeleted: state.userInfo.isDeleted,
 });
 
 const UserSettingsModalContainer = connect(
@@ -45,6 +47,7 @@ const UserSettingsModalContainer = connect(
     setHidden: setUserSettingsModalHidden,
     subscribeToNotifications: setARegistrationToken,
     unsubscribeToNotifications: unRegisterAToken,
+    deleteUser,
   },
 )(UserSettingsModal);
 

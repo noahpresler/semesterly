@@ -6,7 +6,7 @@
   > div {
     height: 100%;
     outline: none;
-	}
+  }
 
   .modal-header {
     background-color: $geee;
@@ -44,6 +44,49 @@
       margin-bottom: 5px;
       margin-top: 5px;
       text-align: left;
+    }
+
+    h4 {
+      font-size: 15px;
+      margin-bottom: 5px;
+      margin-left: 20px;
+      margin-top: 5px;
+      text-align: left;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      margin-right: 20px;
+      line-height: inherit;
+    }
+
+    .delete-link {
+      color: red;
+      text-align: center;
+      margin-top: 15px;
+      text-decoration: underline;
+    }
+
+    .delete-btn {
+      color: white;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      background-color: red;
+      padding: 6px 10px;
+      margin: 10px;
+    }
+
+    .cancel-delete {
+      background-color: grey;
+    }
+
+    .delete-btn-text {
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .show-delete-dropdown {
+      border-bottom: 1px solid #eee;
     }
 
     .Select {
