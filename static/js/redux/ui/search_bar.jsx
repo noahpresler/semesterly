@@ -43,7 +43,6 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = { focused: false, showDropdown: false };
-    this.toggleDropdown = this.toggleDropdown.bind(this);
     this.fetchSearchResults = this.fetchSearchResults.bind(this);
     SearchBar.getAbbreviatedSemesterName = SearchBar.getAbbreviatedSemesterName.bind(this);
     this.onClickOut = this.onClickOut.bind(this);
@@ -60,7 +59,7 @@ class SearchBar extends React.Component {
         }
       } else if ($('input:focus').length !== 0) {
         const numSearchResults = this.props.searchResults.length;
-        if (e.key === 'Enter' && numSearchResults > 0) {
+        if (e.key === 'Enter' && numSearchResults > 0 && this.state.showDropdown) {
           this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id);
         } else if (e.key === 'ArrowDown') {
           this.props.hoverSearchResult((this.props.hoveredPosition + 1) % numSearchResults);

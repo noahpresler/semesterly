@@ -48,6 +48,15 @@ class TimetableNameInput extends React.Component {
     this.setState({ name: event.target.value });
   }
 
+  componentWillMount(){
+    $(document.body).on('keydown', (e) => {
+       if(e.key == 'Enter') {
+          this.setTimetableName();
+         $('input.timetable-name').blur();
+        }
+      });
+    }
+
   render() {
     return (<input
       className={classnames('timetable-name', { unsaved: !this.props.upToDate })}
