@@ -415,11 +415,15 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
 };
 
 export const updateCustomSlot = (newValues, id) => (dispatch) => {
-  dispatch({
-    type: ActionTypes.UPDATE_CUSTOM_SLOT,
-    newValues,
-    id,
-  });
+  if (newValues.time_start !== undefined && newValues.time_start == newValues.time_end) {
+      dispatch(removeCustomSlot(id));
+  } else {
+      dispatch({
+          type: ActionTypes.UPDATE_CUSTOM_SLOT,
+          newValues,
+          id,
+      });
+  }
   const changedProps = Object.keys(newValues);
   const onlyChangingName = changedProps.length === 1 && changedProps[0] === 'name';
   if (onlyChangingName) {
