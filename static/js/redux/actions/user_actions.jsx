@@ -447,6 +447,24 @@ export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
     });
 };
 
+export const deleteUser = () => (dispatch) => {
+  fetch(getSaveSettingsEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
+    credentials: 'include',
+  })
+    .then((response) => {
+      dispatch({
+        type: ActionTypes.DELETED_ACCOUNT,
+        status: response.status,
+      });
+    });
+};
+
 export const delIntegration = (integrationID, courseID) => {
   fetch(getIntegrationEndpoint(integrationID, courseID), {
     headers: {
