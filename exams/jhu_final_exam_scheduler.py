@@ -113,7 +113,9 @@ class JHUFinalExamScheduler(FinalExamScheduler):
             Rule(list_of_days=['T'], start_time='18:00', result='5/15 6-9', start_only=True),
             Rule(list_of_days=['R'], start_time='18:00', result='5/10 6-9', start_only=True)
         ]
-        self.f18 [
+
+        #FALL 2018
+        self.f18 = [
             Rule(
                 list_of_codes=['AS.110.105', 'AS.110.106', 'AS.110.107', 'AS.110.108', 'AS.110.109',
                                'AS.110.201', 'AS.110.202', 'AS.110.302'], result='12/12 9-12'),

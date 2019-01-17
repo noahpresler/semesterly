@@ -55,6 +55,7 @@ export const fetchFinalExamSchedule = () => (dispatch, getState) => {
   })
     .then(response => response.json())
     .then((json) => {
+      console.log(json);
       dispatch({ type: ActionTypes.RECEIVE_FINAL_EXAMS, json });
     });
 };

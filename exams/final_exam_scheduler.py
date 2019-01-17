@@ -45,7 +45,7 @@ class FinalExamScheduler:
             self.list_of_rules = self.f17
         elif self.year == "2018" and self.sem == "Fall":
             self.list_of_rules = self.f18
-        elif self.year == "2018" and self.sem == "Spring":
+        else:
             self.list_of_rules = self.s18
 
         self.schedule = {}
