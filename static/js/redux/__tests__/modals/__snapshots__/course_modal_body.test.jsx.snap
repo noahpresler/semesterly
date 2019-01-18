@@ -64,11 +64,7 @@ exports[`CourseModalBody correctly renders 1`] = `
           Prerequisites
         </h3>
         <p>
-          <span
-            className="textItem"
-          >
-            
-          </span>
+          
           <a
             className="course-link"
             href={null}
@@ -104,11 +100,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </span>
             </span>
           </a>
-          <span
-            className="textItem"
-          >
-            (67%)/(
-          </span>
+          (67%)/(
           <a
             className="course-link"
             href={null}
@@ -144,11 +136,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </span>
             </span>
           </a>
-          <span
-            className="textItem"
-          >
-            (63%), 
-          </span>
+          (63%), 
           <a
             className="course-link"
             href={null}
@@ -184,11 +172,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </span>
             </span>
           </a>
-          <span
-            className="textItem"
-          >
-            (63%))/
-          </span>
+          (63%))/
           <a
             className="course-link"
             href={null}
@@ -224,11 +208,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </span>
             </span>
           </a>
-          <span
-            className="textItem"
-          >
-            (80%); 
-          </span>
+          (80%); 
           <a
             className="course-link"
             href={null}
@@ -264,11 +244,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </span>
             </span>
           </a>
-          <span
-            className="textItem"
-          >
-            /(
-          </span>
+          /(
           <a
             className="course-link"
             href={null}
@@ -304,11 +280,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </span>
             </span>
           </a>
-          <span
-            className="textItem"
-          >
-            , 
-          </span>
+          , 
           <a
             className="course-link"
             href={null}
@@ -344,11 +316,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </span>
             </span>
           </a>
-          <span
-            className="textItem"
-          >
-            )/
-          </span>
+          )/
           <a
             className="course-link"
             href={null}
@@ -384,11 +352,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </span>
             </span>
           </a>
-          <span
-            className="textItem"
-          >
-            /
-          </span>
+          /
           <a
             className="course-link"
             href={null}
@@ -424,6 +388,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </span>
             </span>
           </a>
+          
         </p>
       </div>
       <div
