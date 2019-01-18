@@ -433,7 +433,7 @@ class DigestionAdapter(object):
                 'time_start': meeting.time.start,
                 'time_end': meeting.time.end,
                 'defaults': {
-                    'location': meeting.get('location', {}).get('where', '')
+                    'location': meeting.get('location', {}).get('building', '') + ' ' + meeting.get('location', {}).get('room', '')
                 }
             }
             yield offering
