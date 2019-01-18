@@ -6,8 +6,12 @@
   width: 49%;
 
   input {
-    border: 1px solid $ge6e6e6;
+    border: 1px solid #ffff;
     font-size: 16px;
+    border-radius: 25px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    background-color: #f2f3f5;
     height: 30px;
     line-height: 30px;
     outline: 0;
@@ -51,16 +55,22 @@
 }
 
 .search-bar__semester {
-  background-color: $gfff;
-  border: 1px solid $ge6e6e6;
-  border-right: 0;
+  background-color: #f2f3f5;
+  border: 0px;
+  border-right: 0px;
+  border-radius: 25px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
   color: $g777;
   cursor: pointer;
   float: left;
   font-size: 14px;
   font-weight: 400;
+  text-align: center;
   line-height: 18px;
-  padding: 5px 7px 5px 20px;
+  margin-top: 1px;
+  margin-left: 2px;
+  padding: 6px 7px 4px 20px;
 
   > .tip-down {
     left: 1px;
