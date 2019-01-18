@@ -113,4 +113,33 @@ class JHUFinalExamScheduler(FinalExamScheduler):
             Rule(list_of_days=['T'], start_time='18:00', result='5/15 6-9', start_only=True),
             Rule(list_of_days=['R'], start_time='18:00', result='5/10 6-9', start_only=True)
         ]
+
+        #FALL 2018
+        self.f18 = [
+            Rule(
+                list_of_codes=['AS.110.105', 'AS.110.106', 'AS.110.107', 'AS.110.108', 'AS.110.109',
+                               'AS.110.201', 'AS.110.202', 'AS.110.302'], result='12/12 9-12'),
+            Rule(code_regex=r'AS\.(210|373|375|377|378|380|381|384).(1|2)..',
+                 result='Exam time not found'),
+            Rule(list_of_codes=['AS.171.101', 'AS.171.107'], result='12/19 9-12'),
+            Rule(list_of_codes=['EN.601.220, EN.500.112'], result='12/18 2-5'),
+            Rule(list_of_days=['M'], start_time='8:00', result='12/19 9-12', start_only=True),
+            Rule(list_of_days=['M'], start_time='9:00', result='12/14 2-5', start_only=True),
+            Rule(list_of_days=['M'], start_time='10:00', result='12/20 2-5', start_only=True),
+            Rule(list_of_days=['M'], start_time='11:00', result='12/19 2-5', start_only=True),
+            Rule(list_of_days=['M'], start_time='12:00', result='12/15 10-1', start_only=True),
+            Rule(list_of_days=['M'], start_time='13:30', result='12/13 9-12', start_only=True),
+            Rule(list_of_days=['M'], start_time='15:00', result='12/14 9-12', start_only=True),
+            Rule(list_of_days=['M'], start_time='16:30', result='12/18 2-5', start_only=True),
+            Rule(list_of_days=['M'], start_time='18:00', result='12/17 6-9', start_only=True),
+            Rule(list_of_days=['W'], start_time='18:00', result='12/19 6-9', start_only=True),
+            Rule(list_of_days=['T'], start_time='9:00', result='12/17 2-5', start_only=True),
+            Rule(list_of_days=['T'], start_time='10:30', result='12/18 9-12', start_only=True),
+            Rule(list_of_days=['T'], start_time='12:00', result='12/17 9-12', start_only=True),
+            Rule(list_of_days=['T'], start_time='13:30', result='12/21 9-12', start_only=True),
+            Rule(list_of_days=['T'], start_time='15:00', result='12/12 2-5', start_only=True),
+            Rule(list_of_days=['T'], start_time='16:30', result='12/20 9-12', start_only=True),
+            Rule(list_of_days=['T'], start_time='18:00', result='12/18 6-9', start_only=True),
+            Rule(list_of_days=['R'], start_time='18:00', result='12/13 6-9', start_only=True)
+        ]
         self.schedule = {}
