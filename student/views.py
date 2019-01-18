@@ -494,6 +494,7 @@ class GCalView(RedirectToSignupMixin, APIView):
             sem_start = datetime(semester_year, 1, 27)
             sem_end = datetime(semester_year, 5, 1)
         else:
+            #default to Spring 2020
             sem_start = datetime(semester_year, 1, 27)
             sem_end = datetime(semester_year, 5, 1)
 
@@ -504,10 +505,10 @@ class GCalView(RedirectToSignupMixin, APIView):
             for offering in slot['offerings']:
                 start = next_weekday(sem_start, offering['day'])
                 start = start.replace(hour=int(offering['time_start'].split(':')[0]),
-                                  minute=int(offering['time_start'].split(':')[1]))
+                                      minute=int(offering['time_start'].split(':')[1]))
                 end = next_weekday(sem_start, offering['day'])
                 end = end.replace(hour=int(offering['time_end'].split(':')[0]),
-                              minute=int(offering['time_end'].split(':')[1]))
+                                  minute=int(offering['time_end'].split(':')[1]))
                 until = next_weekday(sem_end, offering['day'])
 
                 description = course.get('description', '')
@@ -515,6 +516,7 @@ class GCalView(RedirectToSignupMixin, APIView):
                     section.get('instructors', '')) > 0 else ''
 
                 if start.date() == extra_day.date() + timedelta(days=4):
+                    #If you're on the first Monday, you want to put it in Thursday
                     res = {
                         'summary': course['name'] + " " + course['code'] + section['meeting_section'],
                         'location': offering['location'],
@@ -553,8 +555,8 @@ class GCalView(RedirectToSignupMixin, APIView):
                         ],
                     }
                 service.events().insert(
-                   calendarId=created_calendar['id'],
-                   body=res).execute()
+                 calendarId=created_calendar['id'],
+                 body=res).execute()
 
         analytic = CalendarExport.objects.create(
             student=student,
