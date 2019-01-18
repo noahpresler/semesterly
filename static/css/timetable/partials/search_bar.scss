@@ -6,11 +6,13 @@
   width: 49%;
 
   input {
-    border: 1px solid #ffff;
+    border: 0px;
+    margin-left: 0px;
     font-size: 16px;
     border-radius: 25px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
+    border-left-color: #f2f3f;
     background-color: #f2f3f5;
     height: 30px;
     line-height: 30px;
@@ -61,16 +63,19 @@
   border-radius: 25px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+  border-right_color: #f2f3f5;
   color: $g777;
   cursor: pointer;
   float: left;
   font-size: 14px;
   font-weight: 400;
   text-align: center;
+  text-justify: distribute-center-last;
   line-height: 18px;
-  margin-top: 1px;
-  margin-left: 2px;
-  padding: 6px 7px 4px 20px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  padding: 3px 4px 9px 22px;
 
   > .tip-down {
     left: 1px;
