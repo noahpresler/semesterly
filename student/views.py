@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 
 import httplib2
@@ -473,17 +473,30 @@ class GCalView(RedirectToSignupMixin, APIView):
         # create calendar
         calendar = {'summary': tt_name, 'timeZone': 'America/New_York'}
         created_calendar = service.calendars().insert(body=calendar).execute()
-
+        extra_day = datetime(1, 1, 1)
         semester_name = request.data['semester']['name']
         semester_year = int(request.data['semester']['year'])
-        if semester_name == 'Fall':
-            # ignore year, year is set to current year
-            sem_start = datetime(semester_year, 8, 30, 17, 0, 0)
-            sem_end = datetime(semester_year, 12, 20, 17, 0, 0)
+        if semester_name == 'Spring' and semester_year == 2018:
+            sem_start = datetime(semester_year, 1, 29)
+            sem_end = datetime(semester_year, 5, 4)
+        elif semester_name == 'Fall' and semester_year == 2018:
+            sem_start = datetime(semester_year, 8, 31)
+            sem_end = datetime(semester_year, 12, 7)
+            extra_day = datetime(semester_year, 8, 30)
+        elif semester_name == 'Spring' and semester_year == 2019:
+            sem_start = datetime(semester_year, 1, 28)
+            sem_end = datetime(semester_year, 5, 3)
+        elif semester_name == 'Fall' and semester_year == 2019:
+            sem_start = datetime(semester_year, 8, 30)
+            sem_end = datetime(semester_year, 12, 6)
+            extra_day = datetime(semester_year, 8, 29)
+        elif semester_name == 'Spring' and semester_year == 2020:
+            sem_start = datetime(semester_year, 1, 27)
+            sem_end = datetime(semester_year, 5, 1)
         else:
-            # ignore year, year is set to current year
-            sem_start = datetime(semester_year, 1, 30, 17, 0, 0)
-            sem_end = datetime(semester_year, 5, 5, 17, 0, 0)
+            #default to Spring 2020
+            sem_start = datetime(semester_year, 1, 27)
+            sem_end = datetime(semester_year, 5, 1)
 
         # add events
         for slot in tt['slots']:
@@ -502,27 +515,48 @@ class GCalView(RedirectToSignupMixin, APIView):
                 instructors = 'Taught by: ' + section['instructors'] + '\n' if len(
                     section.get('instructors', '')) > 0 else ''
 
-                res = {
-                    'summary': course['name'] + " " + course['code'] + section['meeting_section'],
-                    'location': offering['location'],
-                    'description': course['code'] + section['meeting_section'] + '\n' + instructors +
-                    description + '\n\n' + 'Created by Semester.ly',
-                    'start': {
-                        'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
-                        'timeZone': 'America/New_York',
-                    },
-                    'end': {
-                        'dateTime': end.strftime("%Y-%m-%dT%H:%M:%S"),
-                        'timeZone': 'America/New_York',
-                    },
-                    'recurrence': [
-                        'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' +
-                        DAY_MAP[offering['day']]
-                    ],
-                }
+                if start.date() == extra_day.date() + timedelta(days=4):
+                    #If you're on the first Monday, you want to put it in Thursday
+                    res = {
+                        'summary': course['name'] + " " + course['code'] + section['meeting_section'],
+                        'location': offering['location'],
+                        'description': course['code'] + section['meeting_section'] + '\n' + instructors +
+                                       description + '\n\n' + 'Created by Semester.ly',
+                        'start': {
+                            'dateTime': extra_day.replace(hour=int(offering['time_start'].split(':')[0]),
+                                                          minute=int(offering['time_start'].split(':')[1]))
+                                                            .strftime("%Y-%m-%dT%H:%M:%S"),
+                                'timeZone': 'America/New_York',
+                        },
+                        'end': {
+                            'dateTime': extra_day.replace(hour=int(offering['time_end'].split(':')[0]),
+                                                          minute=int(offering['time_end'].split(':')[1]))
+                                                            .strftime("%Y-%m-%dT%H:%M:%S"),
+                            'timeZone': 'America/New_York',
+                        }
+                    }
+                else:
+                    res = {
+                        'summary': course['name'] + " " + course['code'] + section['meeting_section'],
+                        'location': offering['location'],
+                        'description': course['code'] + section['meeting_section'] + '\n' + instructors +
+                        description + '\n\n' + 'Created by Semester.ly',
+                        'start': {
+                          'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
+                            'timeZone': 'America/New_York',
+                     },
+                        'end': {
+                            'dateTime': end.strftime("%Y-%m-%dT%H:%M:%S"),
+                            'timeZone': 'America/New_York',
+                        },
+                        'recurrence': [
+                            'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' +
+                            DAY_MAP[offering['day']]
+                        ],
+                    }
                 service.events().insert(
-                    calendarId=created_calendar['id'],
-                    body=res).execute()
+                 calendarId=created_calendar['id'],
+                 body=res).execute()
 
         analytic = CalendarExport.objects.create(
             student=student,
