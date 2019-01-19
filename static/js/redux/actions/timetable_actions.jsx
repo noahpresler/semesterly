@@ -414,15 +414,23 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
   dispatch(autoFetch());
 };
 
+export const removeCustomSlot = id => (dispatch) => {
+  dispatch({
+    type: ActionTypes.REMOVE_CUSTOM_SLOT,
+    id,
+  });
+  dispatch(autoFetch());
+};
+
 export const updateCustomSlot = (newValues, id) => (dispatch) => {
-  if (newValues.time_start !== undefined && newValues.time_start == newValues.time_end) {
-      dispatch(removeCustomSlot(id));
+  if (newValues.time_start !== undefined && newValues.time_start === newValues.time_end) {
+    dispatch(removeCustomSlot(id));
   } else {
-      dispatch({
-          type: ActionTypes.UPDATE_CUSTOM_SLOT,
-          newValues,
-          id,
-      });
+    dispatch({
+      type: ActionTypes.UPDATE_CUSTOM_SLOT,
+      newValues,
+      id,
+    });
   }
   const changedProps = Object.keys(newValues);
   const onlyChangingName = changedProps.length === 1 && changedProps[0] === 'name';
@@ -431,14 +439,6 @@ export const updateCustomSlot = (newValues, id) => (dispatch) => {
   } else { // only refetch if we are changing the slot time
     dispatch(autoFetch());
   }
-};
-
-export const removeCustomSlot = id => (dispatch) => {
-  dispatch({
-    type: ActionTypes.REMOVE_CUSTOM_SLOT,
-    id,
-  });
-  dispatch(autoFetch());
 };
 
 export const addOrRemoveOptionalCourse = course => (dispatch, getState) => {
