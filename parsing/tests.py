@@ -752,7 +752,7 @@ class DigestionTest(TestCase):
                 },
                 "$new": {
                     "day": "M",
-                    "location": "",
+                    "location": "Malone Ugrad",
                     "time_end": "14:50",
                     "time_start": "14:00"
                 }
@@ -763,7 +763,7 @@ class DigestionTest(TestCase):
                 },
                 "$new": {
                     "day": "W",
-                    "location": "",
+                    "location": "Malone Ugrad",
                     "time_end": "14:50",
                     "time_start": "14:00"
                 }
@@ -774,7 +774,7 @@ class DigestionTest(TestCase):
                 },
                 "$new": {
                     "day": "F",
-                    "location": "",
+                    "location": "Malone Ugrad",
                     "time_end": "14:50",
                     "time_start": "14:00"
                 }
@@ -935,7 +935,7 @@ class DigestionTest(TestCase):
                 },
                 "$new": {
                     "day": "M",
-                    "location": "",
+                    "location": "Malone Ugrad",
                     "time_end": "14:50",
                     "time_start": "14:00"
                 }
@@ -946,7 +946,7 @@ class DigestionTest(TestCase):
                 },
                 "$new": {
                     "day": "F",
-                    "location": "",
+                    "location": "Malone Ugrad",
                     "time_end": "14:50",
                     "time_start": "14:00"
                 }
@@ -957,7 +957,7 @@ class DigestionTest(TestCase):
                 },
                 "$new": {
                     "day": "W",
-                    "location": "",
+                    "location": " ",
                     "time_end": "12:15",
                     "time_start": "10:00"
                 }
