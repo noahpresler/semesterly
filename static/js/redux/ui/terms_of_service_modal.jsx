@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'boron/WaveModal';
-import { userInfoPropType } from '../constants/semesterlyPropTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class TermsOfServiceModal extends React.Component {
   componentDidMount() {
@@ -127,7 +127,7 @@ class TermsOfServiceModal extends React.Component {
 }
 
 TermsOfServiceModal.propTypes = {
-  userInfo: userInfoPropType.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   isVisible: PropTypes.bool.isRequired,
   acceptTOS: PropTypes.func.isRequired,
   description: PropTypes.string.isRequired,

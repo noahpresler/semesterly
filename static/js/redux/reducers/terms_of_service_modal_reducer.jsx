@@ -16,6 +16,7 @@ import * as ActionTypes from '../constants/actionTypes';
 
 const initialState = {
   isVisible: false,
+  // see agreement/serializers.py for shape
   latestAgreement: null,
 };
 
