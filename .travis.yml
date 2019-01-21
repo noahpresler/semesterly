@@ -20,7 +20,7 @@ install:
 - nvm install $NODE_VERSION
 - npm -g install webpack
 - npm -g install chromedriver
-- npm -g install jest babel-jest@20
+- npm -g install jest@20
 - npm install
 - pip install --upgrade pip
 - pip install -r requirements.txt
