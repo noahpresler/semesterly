@@ -173,7 +173,9 @@ const setup = () => (dispatch) => {
   dispatch(showFriendAlert());
 
   if (initData.featureFlow.name === null) {
-    dispatch(handleAgreement(initData.currentUser, Date.parse(initData.timeUpdatedTos)));
+    dispatch(handleAgreement(
+      initData.currentUser,
+      Date.parse(initData.latestAgreement.timeUpdated)));
   }
 
   dispatch(handleFlows(initData.featureFlow));
