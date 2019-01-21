@@ -18,7 +18,6 @@ cache:
   - $HOME/.cache/pip
 install:
 - nvm install $NODE_VERSION
-- npm -g install webpack
 - npm -g install chromedriver
 - npm -g install jest@20
 - npm install
