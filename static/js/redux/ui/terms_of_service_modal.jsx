@@ -15,6 +15,7 @@ GNU General Public License for more details.
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'boron/WaveModal';
+import { userInfoPropType } from '../constants/semesterlyPropTypes';
 
 class TermsOfServiceModal extends React.Component {
   componentDidMount() {
@@ -38,7 +39,7 @@ class TermsOfServiceModal extends React.Component {
           Welcome to Semester.ly! Please take a look at our Terms of Service and
           Privacy Policy before getting started:
         </h3>
-      )
+      );
     } else if (description && url) {
       return (
         <h3>
@@ -46,29 +47,29 @@ class TermsOfServiceModal extends React.Component {
           <a href={url} target="_blank">here</a>, and review our updated
           Terms of Service and Privacy Policy here:
         </h3>
-      )
+      );
     } else if (url) {
       return (
         <h3>
-          We've made some changes that we think you should know about - you can
+          We have made some changes that we think you should know about - you can
           read our announcement about it <a href={url} target="_blank">here</a>,
           and review our updated Terms of Service and Privacy Policy here:
         </h3>
-      )
+      );
     } else if (description) {
       return (
         <h3>
           {description}. Please review our updated Terms of Service and Privacy
           Policy here:
         </h3>
-      )
+      );
     } else {
       return (
         <h3>
           Our Terms of Service and Privacy Policy have been updated. Please
           review them here:
         </h3>
-      )
+      );
     }
   }
 
@@ -126,6 +127,7 @@ class TermsOfServiceModal extends React.Component {
 }
 
 TermsOfServiceModal.propTypes = {
+  userInfo: userInfoPropType.isRequired,
   isVisible: PropTypes.bool.isRequired,
   acceptTOS: PropTypes.func.isRequired,
   description: PropTypes.string.isRequired,

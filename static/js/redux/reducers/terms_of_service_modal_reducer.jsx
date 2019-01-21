@@ -22,7 +22,7 @@ const initialState = {
 const termsOfServiceModal = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.INIT_STATE:
-      return { ...state, latestAgreement: action.data.latestAgreement};
+      return { ...state, latestAgreement: action.data.latestAgreement };
     case ActionTypes.TRIGGER_TOS_MODAL:
       return { ...state, isVisible: true };
     case ActionTypes.CLOSE_TOS_MODAL:
