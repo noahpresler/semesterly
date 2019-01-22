@@ -33,6 +33,7 @@ class TermsOfServiceModal extends React.Component {
   getBody() {
     const { description, url } = this.props;
     const isNewUser = !this.props.userInfo.timeAcceptedTos;
+    const link = <a href={url} target="_blank" rel="noopener noreferrer">here</a>;
     if (isNewUser) {
       return (
         <h3>
@@ -44,15 +45,14 @@ class TermsOfServiceModal extends React.Component {
       return (
         <h3>
           <strong>{description}</strong> - you can read our announcement about it{' '}
-          <a href={url} target="_blank">here</a>, and review our updated
-          Terms of Service and Privacy Policy here:
+          {link}, and review our updated Terms of Service and Privacy Policy here:
         </h3>
       );
     } else if (url) {
       return (
         <h3>
           We have made some changes that we think you should know about - you can
-          read our announcement about it <a href={url} target="_blank">here</a>,
+          read our announcement about it {link},
           and review our updated Terms of Service and Privacy Policy here:
         </h3>
       );

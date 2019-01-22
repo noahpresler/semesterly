@@ -20,7 +20,7 @@ export const tosModalFixture = {
     timeUpdated: '2019-01-21T18:14:56.518069Z',
     description: '',
     url: '',
-  }
+  },
 };
 
 export const userInfoFixture = {
