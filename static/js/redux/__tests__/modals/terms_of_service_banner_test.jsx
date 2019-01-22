@@ -17,7 +17,7 @@ import thunk from 'redux-thunk';
 import Provider from 'react-redux/src/components/Provider';
 import configureMockStore from 'redux-mock-store';
 import renderer from 'react-test-renderer';
-import unacceptedFixture from '../../__fixtures__/terms_of_service_modal.fixture';
+import { userInfoFixture } from '../../__fixtures__/terms_of_service_modal.fixture';
 import { handleAgreement } from '../../actions/user_actions';
 import * as ActionTypes from '../../constants/actionTypes';
 import TermsOfServiceBannerContainer from '../../ui/containers/terms_of_service_banner_container';
@@ -37,7 +37,7 @@ describe('TOS Banner Renders As Expected', () => {
       termsOfServiceBanner: {
         isVisible: true,
       },
-      userInfo: unacceptedFixture.userInfo,
+      userInfo: userInfoFixture,
     });
     const tree = renderer.create(
       <Provider store={store}><TermsOfServiceBannerContainer /></Provider>,
@@ -50,7 +50,7 @@ describe('TOS Banner Renders As Expected', () => {
       termsOfServiceBanner: {
         isVisible: false,
       },
-      userInfo: unacceptedFixture.userInfo,
+      userInfo: userInfoFixture,
     });
     const tree = renderer.create(
       <Provider store={store}><TermsOfServiceBannerContainer /></Provider>,
@@ -65,7 +65,7 @@ describe('TOS Banner is correctly triggered by handleAgreement', () => {
       termsOfServiceModal: {
         isVisible: true,
       },
-      userInfo: unacceptedFixture.userInfo,
+      userInfo: userInfoFixture,
     });
 
     const currentUser = {
@@ -82,7 +82,7 @@ describe('TOS Banner is correctly triggered by handleAgreement', () => {
       termsOfServiceModal: {
         isVisible: true,
       },
-      userInfo: unacceptedFixture.userInfo,
+      userInfo: userInfoFixture,
     });
 
     const currentUser = {
@@ -103,7 +103,7 @@ describe('TOS Banner is correctly triggered by handleAgreement', () => {
       termsOfServiceModal: {
         isVisible: true,
       },
-      userInfo: unacceptedFixture.userInfo,
+      userInfo: userInfoFixture,
     });
 
     const currentUser = {
