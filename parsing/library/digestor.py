@@ -16,6 +16,7 @@ import sys
 import django
 import jsondiff
 import simplejson as json
+import logging
 
 from abc import ABCMeta, abstractmethod
 
@@ -519,13 +520,12 @@ class DigestionAdapter(object):
         Returns:
             dict: Description
         """
-        print(evaluation)
         evaluation = {
             'course': evaluation.course,
             'score': evaluation.score,
             'summary': evaluation.summary,
-            'professor': evaluation.professor,
-            'course_code': evaluation.course_code,
+            'professor': evaluation.instructors,
+            'course_code': evaluation.course.code,
             'year': evaluation.year,
         }
         for key in evaluation:
@@ -558,9 +558,12 @@ class Vommit(DigestionStrategy):
             #     continue
             def closure(name, model):
                 def digest(self, model_params):
+                    logger = logging.getLogger('parsing.schools.jhu')
                     obj = model.objects.filter(
                         **exclude(model_params)
                     ).first()
+                    logger.info(obj)
+                    # obj = model.objects
                     self.diff(name, model_params, obj)
                     return obj
                 return digest

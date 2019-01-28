@@ -424,7 +424,8 @@ class Ingestor(dict):
             'instructors': self._resolve_instructors(),
             'course': {
                 'code': self._get('course_code')
-            }
+            },
+            'summary': self._get('summary')
         }
 
         evaluation = clean(evaluation)
