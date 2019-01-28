@@ -107,6 +107,7 @@ class Digestor(object):
             'meeting': lambda x: self.digest_meeting(x),
             'textbook': lambda x: self.digest_textbook(x),
             'textbook_link': lambda x: self.digest_textbook_link(x),
+            'eval': lambda x: self.digest_eval(x),
         }
 
         if self.tracker.has_viewer('progressbar'):
@@ -216,6 +217,17 @@ class Digestor(object):
                 section_obj=section_obj))[0]
         )
         self._update_progress('textbook_link', bool(textbook_link_model))
+
+    def digest_eval(self, evaluation):
+        """Digest evaluation.
+
+        Args:
+            evaluation (dict)
+        """
+        evaluation_model = self.strategy.digest_evaluation(
+            self.adapter.adapt_evaluation(evaluation)
+        )
+        self._update_progress('evaluation', bool(evaluation_model))
 
     def wrap_up(self):
         self.strategy.wrap_up()
@@ -498,6 +510,28 @@ class DigestionAdapter(object):
             }
         # NOTE: no current usage of course linked textbooks (listified yield will always be length 1)
 
+    def adapt_evaluation(self, evaluation):
+        """Adapt evaluation to model dictionary.
+
+        Args:
+            evaluation (dict): validated evaluation.
+
+        Returns:
+            dict: Description
+        """
+        print(evaluation)
+        evaluation = {
+            'course': evaluation.course,
+            'score': evaluation.score,
+            'summary': evaluation.summary,
+            'professor': evaluation.professor,
+            'course_code': evaluation.course_code,
+            'year': evaluation.year,
+        }
+        for key in evaluation:
+            if evaluation[key] is None:
+                evaluation[key] = 'Cannot be found'
+        return evaluation
 
 class DigestionStrategy(object):
     __metaclass__ = ABCMeta
