@@ -1,0 +1,19 @@
+.indent {
+    text-indent: 2em;
+}
+.notice-body {
+    width: 80%;
+    max-width: 600px;
+    padding-top: 60px;
+    padding-bottom: 20px;
+    margin: auto;
+    background-color; #F3F3F3;
+    text-align: justify;
+    line-height: 1.4;
+}
+
+@media(max-width: 580px) {
+    .notice-body {
+        font-size: 12px;
+    }
+}

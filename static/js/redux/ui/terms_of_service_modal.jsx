@@ -15,6 +15,7 @@ GNU General Public License for more details.
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'boron/WaveModal';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class TermsOfServiceModal extends React.Component {
   componentDidMount() {
@@ -29,10 +30,54 @@ class TermsOfServiceModal extends React.Component {
     }
   }
 
+  getBody() {
+    const { description, url } = this.props;
+    const isNewUser = !this.props.userInfo.timeAcceptedTos;
+    const link = <a href={url} target="_blank" rel="noopener noreferrer">here</a>;
+    if (isNewUser) {
+      return (
+        <h3>
+          Welcome to Semester.ly! Please take a look at our Terms of Service and
+          Privacy Policy before getting started:
+        </h3>
+      );
+    } else if (description && url) {
+      return (
+        <h3>
+          <strong>{description}</strong> - you can read our announcement about it{' '}
+          {link}, and review our updated Terms of Service and Privacy Policy here:
+        </h3>
+      );
+    } else if (url) {
+      return (
+        <h3>
+          We have made some changes that we think you should know about - you can
+          read our announcement about it {link},
+          and review our updated Terms of Service and Privacy Policy here:
+        </h3>
+      );
+    } else if (description) {
+      return (
+        <h3>
+          {description}. Please review our updated Terms of Service and Privacy
+          Policy here:
+        </h3>
+      );
+    } else {
+      return (
+        <h3>
+          Our Terms of Service and Privacy Policy have been updated. Please
+          review them here:
+        </h3>
+      );
+    }
+  }
+
   render() {
     const modalStyle = {
       width: '100%',
     };
+
     return (
       <Modal
         ref={(c) => { this.modal = c; }}
@@ -42,9 +87,7 @@ class TermsOfServiceModal extends React.Component {
       >
         <div className="tos-modal-container">
           <h1>Terms of Service and Privacy Policy</h1>
-          <h3>
-              Our Terms of Service and Privacy Policy have been updated. Please review them here:
-          </h3>
+          {this.getBody()}
           <div>
             <a
               href="/termsofservice"
@@ -84,8 +127,12 @@ class TermsOfServiceModal extends React.Component {
 }
 
 TermsOfServiceModal.propTypes = {
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   isVisible: PropTypes.bool.isRequired,
   acceptTOS: PropTypes.func.isRequired,
+  description: PropTypes.string.isRequired,
+  // local path to announcement page
+  url: PropTypes.string.isRequired,
 };
 
 export default TermsOfServiceModal;

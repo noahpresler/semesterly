@@ -10,19 +10,19 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import unicode_literals
+from rest_framework import serializers
 
-from django.db import models
+from agreement.models import Agreement
 
-
-class Agreement(models.Model):
-    """ Database object representing updates to the ToS/privacy policy. """
-    # time of the update
-    last_updated = models.DateTimeField()
-    # short description of what the change is
-    description = models.CharField(max_length=200, blank=True, default='')
-    # url to the announcement page, if any. should be a local path (e.g. /notice)
-    url = models.CharField(max_length=50, blank=True, default='')
+class AgreementSerializer(serializers.ModelSerializer):
+    timeUpdated = serializers.DateTimeField(source='last_updated')
+    description = serializers.CharField()
+    url = serializers.CharField()
 
     class Meta:
-        get_latest_by = "last_updated"
+        model = Agreement
+        fields = (
+            'timeUpdated',
+            'description',
+            'url',
+        )

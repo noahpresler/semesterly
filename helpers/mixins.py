@@ -20,6 +20,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.views import APIView
 
 from agreement.models import Agreement
+from agreement.serializers import AgreementSerializer
 from student.utils import get_student
 from student.serializers import get_student_dict
 from timetable.models import Semester
@@ -104,7 +105,7 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             'studentIntegrations': integrations,
             'examSupportedSemesters': map(all_semesters.index,
                                           final_exams),
-            'timeUpdatedTos': Agreement.objects.latest().last_updated.isoformat(),
+            'latestAgreement': AgreementSerializer(Agreement.objects.latest()).data,
             'registrar': SCHOOLS_MAP[self.school].registrar,
 
             'featureFlow': dict(feature_flow, name=self.feature_name)

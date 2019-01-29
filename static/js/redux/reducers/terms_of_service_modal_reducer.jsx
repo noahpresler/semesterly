@@ -14,12 +14,20 @@ GNU General Public License for more details.
 
 import * as ActionTypes from '../constants/actionTypes';
 
-const termsOfServiceModal = (state = { isVisible: false }, action) => {
+const initialState = {
+  isVisible: false,
+  // see agreement/serializers.py for shape
+  latestAgreement: null,
+};
+
+const termsOfServiceModal = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.INIT_STATE:
+      return { ...state, latestAgreement: action.data.latestAgreement };
     case ActionTypes.TRIGGER_TOS_MODAL:
-      return { isVisible: true };
+      return { ...state, isVisible: true };
     case ActionTypes.CLOSE_TOS_MODAL:
-      return { isVisible: false };
+      return { ...state, isVisible: false };
     default:
       return state;
   }
