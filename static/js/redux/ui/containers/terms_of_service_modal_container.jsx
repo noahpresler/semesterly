@@ -23,6 +23,8 @@ const mapStateToProps = state => ({
     !(!state.userInfo.overrideShow && getIsUserInfoIncomplete(state)) &&
     !state.userInfo.isVisible,
   userInfo: state.userInfo.data,
+  description: state.termsOfServiceModal.latestAgreement.description,
+  url: state.termsOfServiceModal.latestAgreement.url,
   isUserInfoIncomplete: getIsUserInfoIncomplete(state),
 });
 
