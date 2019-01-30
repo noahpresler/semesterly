@@ -10,9 +10,11 @@ RUN apt-get update && \
 	libxslt-dev \
 	git \
 	curl \
-	nginx && \
+	nginx \
+
     # Install node 8.x
-    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
-    apt-get install -y nodejs && \
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+    apt-get install -y nodejs \
+
     # This saves some build time by installing base requirements
-    pip install -r /tmp/requirements_base.txt
+RUN pip install -r /tmp/requirements_base.txt
