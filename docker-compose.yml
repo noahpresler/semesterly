@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+  web:
+    image: semesterly
+    environment:
+      - NODE_ENV=development
+    build: .
+    command: bash -c "python manage.py migrate; npm run watch & python /code/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+      - /code/node_modules # Use local node_modules from image
+    ports:
+      - "8000:8000"
+      - "3000:3000"
+    depends_on:
+      - db
