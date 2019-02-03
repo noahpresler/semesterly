@@ -160,7 +160,7 @@ class SearchBar extends React.Component {
               <div className="tip" />
               { availableSemesters }
             </div>
-            <div className="vertical-bar"> <img className="bar-image" src="/static/img/barfinal.png"/> </div>
+            <div className="vertical-bar"> <img className="bar-image" src="/static/img/bar.png"/> </div>
           </ClickOutHandler>
 
           <div className="search-bar__input-wrapper">
