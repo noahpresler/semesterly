@@ -6,8 +6,13 @@
   width: 49%;
 
   input {
-    border: 1px solid $ge6e6e6;
+    border: 0px;
+    margin-left: 0px;
     font-size: 16px;
+    border-radius: 25px;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+    background-color: #f2f3f5;
     height: 30px;
     line-height: 30px;
     outline: 0;
@@ -40,6 +45,15 @@
   }
 }
 
+.vertical-bar {
+  border: 0px;
+  float: left;
+}
+
+.bar-image {
+  height: 30px;
+}
+
 .search-bar__input-wrapper {
   overflow: hidden;
   width: auto;
@@ -51,16 +65,22 @@
 }
 
 .search-bar__semester {
-  background-color: $gfff;
-  border: 1px solid $ge6e6e6;
-  border-right: 0;
+  background-color: #f2f3f5;
+  border: 1px;
+  border-radius: 25px;
   color: $g777;
   cursor: pointer;
   float: left;
   font-size: 14px;
   font-weight: 400;
+  text-align: center;
   line-height: 18px;
-  padding: 5px 7px 5px 20px;
+  margin-top: 0px;
+  margin-bottom: 10px;
+  margin-left: 0px;
+  padding: 6px 4px 6px 22px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 
   > .tip-down {
     left: 1px;
