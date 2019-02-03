@@ -283,11 +283,11 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
   const state = getState();
   const isLoggedIn = state.userInfo.data.isLoggedIn;
   if (!isLoggedIn) {
-    return { type: ActionTypes.TOGGLE_SIGNUP_MODAL };
+    return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
 
   if (getActiveTimetable(state).slots.length > 0 && !state.savingTimetable.upToDate) {
-    return { type: ActionTypes.ALERT_NEW_TIMETABLE };
+    return dispatch({ type: ActionTypes.ALERT_NEW_TIMETABLE });
   }
 
   return dispatch(createNewTimetable(getNumberedName('Untitled Schedule',
