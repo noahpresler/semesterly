@@ -146,6 +146,7 @@ class SearchBar extends React.Component {
     return (
       <div className="search-bar no-print">
         <div className="search-bar__wrapper">
+
           <ClickOutHandler onClickOut={this.onClickOut}>
             <div className="search-bar__semester" onMouseDown={this.toggleDropdown}>
               <span
@@ -159,7 +160,9 @@ class SearchBar extends React.Component {
               <div className="tip" />
               { availableSemesters }
             </div>
+            <div className="vertical-bar"> <img className="bar-image" src="/static/img/barfinal.png"/> </div>
           </ClickOutHandler>
+
           <div className="search-bar__input-wrapper">
             <input
               ref={(c) => { this.input = c; }}
