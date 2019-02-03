@@ -149,7 +149,10 @@ export const lockTimetable = timetable => (dispatch, getState) => {
 };
 
 // load a personal timetable into state
-export const loadTimetable = (timetable, isLoadingNewTimetable = false, autoLockAll = true) => (dispatch, getState) => {
+export const loadTimetable = (
+  timetable, isLoadingNewTimetable = false,
+  autoLockAll = true,
+) => (dispatch, getState) => {
   const state = getState();
   const isLoggedIn = state.userInfo.data.isLoggedIn;
   if (!isLoggedIn) {
@@ -161,7 +164,7 @@ export const loadTimetable = (timetable, isLoadingNewTimetable = false, autoLock
     events: timetable.events.map(event =>
       ({ ...event, id: generateCustomEventId(), preview: false })),
   };
-  if(autoLockAll) {
+  if (autoLockAll) {
     dispatch({
       type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
       timetable: displayTimetable,
