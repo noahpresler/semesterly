@@ -16,7 +16,7 @@
     height: 30px;
     line-height: 30px;
     outline: 0;
-    padding: 0 10px;
+    padding: 0 5px;
     width: 100%;
 
     &::-webkit-input-placeholder {
@@ -37,10 +37,6 @@
     &:-moz-placeholder { // Firefox 18-
       font-size: 14px;
       line-height: 30px;
-    }
-
-    &:focus {
-      border: 1px solid #0095FF;
     }
   }
 }
@@ -78,7 +74,7 @@
   margin-top: 0px;
   margin-bottom: 10px;
   margin-left: 0px;
-  padding: 6px 4px 6px 22px;
+  padding: 6px 4px 6px 30px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
 
@@ -101,7 +97,7 @@
   padding-bottom: 7px;
   padding-top: 7px;
   position: absolute;
-  top: 37px;
+  top: 30px;
   z-index: 100;
 
   &.down {
