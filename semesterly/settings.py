@@ -80,6 +80,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
     'approval_promt': 'force'  # Enables refresh_token
 }
 
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True if (os.environ.get('HOSTING_ENV') == 'stage' or\
+                                         os.environ.get('HOSTING_ENV') == 'prod') else False
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
