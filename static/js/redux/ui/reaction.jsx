@@ -22,16 +22,17 @@ import REACTION_MAP from '../constants/reactions';
 class Reaction extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      didSelect: this.props.selected === true,
-      animating: true,
-    };
+    this.state = { didSelect: this.props.selected === true, animating: true };
     this.toggleSelected = this.toggleSelected.bind(this);
     this.animate = this.animate.bind(this);
   }
 
   componentDidMount() {
     this.animate();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ didSelect: nextProps.selected === true });
   }
 
   animate() {
