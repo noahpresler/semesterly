@@ -147,6 +147,12 @@ class Parser(BaseParser):
             'EnrollmentRestrictedTo'
         )
 
+        tags = [];
+        for tag in section_details[0]['PosTags']:
+            tags.append(tag['Tag'])
+
+        self.ingestor['pos']=tags
+
         # Add specialty areas for computer science department
         if course['Department'] == 'EN Computer Science':
             cs_areas_re = r'\bApplications|\bAnalysis|\bSystems|\bGeneral'

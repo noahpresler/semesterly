@@ -105,6 +105,7 @@ class Ingestor(dict):
         'score',
         'summary',
         'same_as',
+        'pos',
     }
 
     def __init__(self, config, output,
@@ -240,7 +241,7 @@ class Ingestor(dict):
         Returns:
             dict: course
         """
-        course = {
+        self.self_ = {
             'kind': 'course',
             'school': {
                 'code': self.school,
@@ -266,11 +267,13 @@ class Ingestor(dict):
             'homepage': self._get('homepage', 'website'),
             'same_as': make_list(self._get('same_as')),
             'description': self._get('description', 'descr'),
+            'pos': make_list(self._get('pos')),
             # 'description': extract_info_from_text(
             #     self._get('description', 'descr'),
             #     inject=self
             # ),
         }
+        course = self.self_
 
         course = clean(course)
         self._validate_and_log(course)
@@ -307,7 +310,7 @@ class Ingestor(dict):
             'fees': safe_cast(self._get('fees', 'fee', 'cost'), float),
             'final_exam': self._get('final_exam'),
             'textbooks': self._get('textbooks'),
-            'meetings': self._get('offerings', 'meetings')
+            'meetings': self._get('offerings', 'meetings'),
         }
 
         section = clean(section)

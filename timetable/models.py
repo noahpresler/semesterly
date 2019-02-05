@@ -17,6 +17,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 from django.forms.models import model_to_dict
 from django.db import models
 from picklefield.fields import PickledObjectField
+from django.contrib.postgres.fields import ArrayField
 
 
 class Semester(models.Model):
@@ -116,6 +117,8 @@ class Course(models.Model):
     related_courses = models.ManyToManyField('self', blank=True)
     same_as = models.ForeignKey('self', null=True)
     vector = PickledObjectField(default=None, null=True)
+    pos = ArrayField(models.TextField(default='', null=True), default=list)
+
 
     def __str__(self):
         return self.code + ": " + self.name
