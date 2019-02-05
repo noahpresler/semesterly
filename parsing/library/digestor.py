@@ -282,6 +282,8 @@ class DigestionAdapter(object):
             adapted['geneds'] = ', '.join(course.geneds)
         if 'level' in course:
             adapted['level'] = course.level
+        if 'pos' in course:
+            adapted['pos'] = course.pos;
 
         # Combine pre and co requisites into one field
         if 'corequisites' in adapted and 'prerequisites' not in adapted:
