@@ -119,11 +119,22 @@ class Parser(BaseParser):
         except:
             num_credits = 0
 
-        # Load core course fields
-        self.ingestor['areas'] = filter(lambda a: a != "None",
-                                        course['Areas'].split(','))
+
+        areas = []
+        if course['Areas'][0] != 'B' and course['Areas'][0] != 'P' and course['Areas'][0] != 'A' and course['Areas'] != 'None':
+            for letter in course['Areas']:
+                areas.append(letter.encode('ascii', 'ignore'))
+            # Add specialty areas for computer science department
+            if course['Department'] == 'EN Computer Science':
+                cs_areas_re = r'\bApplications|\bAnalysis|\bSystems|\bGeneral'
+                for match in re.findall(cs_areas_re, self.ingestor['description']):
+                    areas.append(match[0])
+            self.ingestor['areas'] = areas
+        else:
+            self.ingestor['areas'] = None
+
         if course['IsWritingIntensive'] == "Yes":
-            self.ingestor['areas'] += ['Writing Intensive']
+           self.ingestor['writing_intensive'] = True
 
         if len(section_details[0]['Prerequisites']) > 0:
             prereqs = []
@@ -150,14 +161,7 @@ class Parser(BaseParser):
         tags = [];
         for tag in section_details[0]['PosTags']:
             tags.append(tag['Tag'])
-
         self.ingestor['pos']=tags
-
-        # Add specialty areas for computer science department
-        if course['Department'] == 'EN Computer Science':
-            cs_areas_re = r'\bApplications|\bAnalysis|\bSystems|\bGeneral'
-            for match in re.findall(cs_areas_re, self.ingestor['description']):
-                self.ingestor['areas'] += [match]
 
         created_course = self.ingestor.ingest_course()
         if self.last_course \

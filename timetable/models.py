@@ -108,7 +108,6 @@ class Course(models.Model):
     corequisites = models.TextField(default='', null=True)
     exclusions = models.TextField(default='')
     num_credits = models.FloatField(default=-1)
-    areas = models.CharField(max_length=600, default='', null=True)
     department = models.CharField(max_length=250, default='', null=True)
     level = models.CharField(max_length=500, default='', null=True)
     # TODO generalize core/gened/breadth field
@@ -118,6 +117,8 @@ class Course(models.Model):
     same_as = models.ForeignKey('self', null=True)
     vector = PickledObjectField(default=None, null=True)
     pos = ArrayField(models.TextField(default='', null=True), default=list)
+    areas = ArrayField(models.TextField(default='', null=True), default=list)
+    writing_intensive = models.BooleanField(default=False)
 
 
     def __str__(self):
