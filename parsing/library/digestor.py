@@ -275,7 +275,7 @@ class DigestionAdapter(object):
         if 'exclusions' in course:
             adapted['exclusions'] = ', '.join(course.exclusions)
         if 'areas' in course:
-            adapted['areas'] = ', '.join(course.areas)
+            adapted['areas'] = course.areas
         if 'cores' in course:
             adapted['cores'] = ', '.join(course.cores)
         if 'geneds' in course:
@@ -284,6 +284,8 @@ class DigestionAdapter(object):
             adapted['level'] = course.level
         if 'pos' in course:
             adapted['pos'] = course.pos;
+        if 'writing_intensive' in course:
+            adapted['writing_intensive'] = course.writing_intensive
 
         # Combine pre and co requisites into one field
         if 'corequisites' in adapted and 'prerequisites' not in adapted:
