@@ -16,7 +16,6 @@ import sys
 import django
 import jsondiff
 import simplejson as json
-import logging
 
 from abc import ABCMeta, abstractmethod
 
@@ -530,13 +529,11 @@ class DigestionAdapter(object):
             for instructor in evaluation.instructors:
                 instructor = DotDict(instructor)
                 if isinstance(instructor.name, basestring):
-                    professor += ', ' + instructor.name
-                elif isinstance(instructor.name, dict):
-                    professor += ', {} {}'.format(instructor.name.first, instructor.name.last)
+                    if professor is not '':
+                        professor += ', '
+                    professor += instructor.name
                 else:
                     raise DigestionError('get your instructors straight')
-        logger=logging.getLogger('parsing.schools.jhu')
-        logger.info(professor)
 
         evaluation = {
             'course': Course.objects.get(code=evaluation.course.code),
