@@ -81,6 +81,7 @@ export const react = (cid, title) => (dispatch) => {
     if (!json.error) {
       dispatch({
         type: ActionTypes.SET_COURSE_REACTIONS,
+        cid: cid,
         reactions: json.reactions,
       });
     }
