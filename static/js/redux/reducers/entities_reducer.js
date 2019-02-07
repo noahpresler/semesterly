@@ -16,7 +16,7 @@ const entities = (state = {}, action) => {
         return Object.assign({}, state,
           {
             courses: Object.assign({}, state.courses, {
-              [action.cid]: { ...state.courses[action.cid], reactions: action.reactions }
+              [action.id]: { ...state.courses[action.id], reactions: action.reactions },
             }),
           });
       default:
