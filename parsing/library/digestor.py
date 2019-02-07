@@ -110,7 +110,6 @@ class Digestor(object):
             'textbook_link': lambda x: self.digest_textbook_link(x),
             'eval': lambda x: self.digest_eval(x),
         }
-
         if self.tracker.has_viewer('progressbar'):
             bar = self.tracker.get_viewer('progressbar').bar
             for obj in bar(make_list(self.data)):
@@ -225,6 +224,12 @@ class Digestor(object):
         Args:
             evaluation (dict)
         """
+        # Skip if there's no related Course
+        try:
+            Course.objects.get(code=evaluation.course.code)
+        except Course.DoesNotExist:
+            return
+
         evaluation_model = self.strategy.digest_evaluation(
             self.adapter.adapt_evaluation(evaluation)
         )
@@ -520,11 +525,24 @@ class DigestionAdapter(object):
         Returns:
             dict: Description
         """
+        professor = ''
+        if evaluation.instructors is not None:
+            for instructor in evaluation.instructors:
+                instructor = DotDict(instructor)
+                if isinstance(instructor.name, basestring):
+                    professor += ', ' + instructor.name
+                elif isinstance(instructor.name, dict):
+                    professor += ', {} {}'.format(instructor.name.first, instructor.name.last)
+                else:
+                    raise DigestionError('get your instructors straight')
+        logger=logging.getLogger('parsing.schools.jhu')
+        logger.info(professor)
+
         evaluation = {
-            'course': evaluation.course,
+            'course': Course.objects.get(code=evaluation.course.code),
             'score': evaluation.score,
             'summary': evaluation.summary,
-            'professor': evaluation.instructors,
+            'professor': professor,
             'course_code': evaluation.course.code,
             'year': evaluation.year,
         }
@@ -555,15 +573,12 @@ class Vommit(DigestionStrategy):
 
         for name, model in Digestor.MODELS.items():
             # if hasattr(self, 'digest_' + name):
-            #     continue
+                # continue
             def closure(name, model):
                 def digest(self, model_params):
-                    logger = logging.getLogger('parsing.schools.jhu')
                     obj = model.objects.filter(
                         **exclude(model_params)
                     ).first()
-                    logger.info(obj)
-                    # obj = model.objects
                     self.diff(name, model_params, obj)
                     return obj
                 return digest
@@ -594,7 +609,7 @@ class Vommit(DigestionStrategy):
             # Transform django object to dictionary.
             dbmodel = dbmodel.__dict__
 
-        context = {'section', 'course', 'semester', 'textbook'}
+        context = {'section', 'course', 'semester', 'textbook', 'evaluation'}
 
         whats = {}
         for k, v in inmodel.iteritems():
