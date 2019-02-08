@@ -7,21 +7,20 @@ import * as ActionTypes from '../constants/actionTypes';
 const entities = (state = {}, action) => {
   if (action.response && action.response.entities) {
     return merge(state, action.response.entities);
-  } else {
-    switch (action.type) {
-      case ActionTypes.SET_COURSE_REACTIONS:
-        if (state.id === null) {
-          return state;
-        }
-        return Object.assign({}, state,
-          {
-            courses: Object.assign({}, state.courses, {
-              [action.id]: { ...state.courses[action.id], reactions: action.reactions },
-            }),
-          });
-      default:
+  }
+  switch (action.type) {
+    case ActionTypes.SET_COURSE_REACTIONS:
+      if (state.id === null) {
         return state;
-    }
+      }
+      return Object.assign({}, state,
+        {
+          courses: Object.assign({}, state.courses, {
+            [action.id]: { ...state.courses[action.id], reactions: action.reactions },
+          }),
+        });
+    default:
+      return state;
   }
 };
 
