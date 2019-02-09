@@ -42,7 +42,17 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         #     course_match_objs = apps.get_app_config('searches').searcher.vectorized_search(request.subdomain, query, sem)[:4]
         # else:
         #     course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
-        course_match_objs = baseline_search(request.subdomain, query, sem).distinct()[:4]
+        # sort by course number
+        def course_comparator(x, y):
+            x=str(x)[7:10]
+            y=str(y)[7:10]
+            if x < y:
+                return -1
+            elif x > y:
+                return 1
+            else:
+                return 0
+        course_match_objs = sorted(baseline_search(request.subdomain, query, sem).distinct(), cmp=course_comparator)[:16]
         save_analytics_course_search(query[:200], course_match_objs[:2], sem, request.subdomain,
                                      get_student(request))
         course_matches = [CourseSerializer(course, context={'semester': sem, 'school': school}).data
