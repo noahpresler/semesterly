@@ -92,7 +92,7 @@ class Parser(BaseParser):
             if len(section) == 0:
                 logging.warn(self._get_section_url(course))
                 continue
-            self._load_ingestor(course, section)
+            self._load_ingestor(school['Name'], course, section)
 
     def _compute_size_enrollment(self, course):
         try:
@@ -112,7 +112,9 @@ class Parser(BaseParser):
             waitlist = None
         return (section_size, section_enrolment, waitlist)
 
-    def _load_ingestor(self, course, section):
+    def _load_ingestor(self, school, course, section):
+        self.ingestor['sub_school'] = school;
+
         section_details = section[0]['SectionDetails']
         try:
             num_credits = float(course['Credits'])
@@ -128,13 +130,12 @@ class Parser(BaseParser):
             if course['Department'] == 'EN Computer Science':
                 cs_areas_re = r'\bApplications|\bAnalysis|\bSystems|\bGeneral'
                 for match in re.findall(cs_areas_re, self.ingestor['description']):
-                    areas.append(match[0])
+                    areas.append(match.encode('ascii', 'ignore'))
             self.ingestor['areas'] = areas
         else:
-            self.ingestor['areas'] = None
+            self.ingestor['areas'] = ['None']
 
-        if course['IsWritingIntensive'] == "Yes":
-           self.ingestor['writing_intensive'] = True
+        self.ingestor['writing_intensive'] = course['IsWritingIntensive']
 
         if len(section_details[0]['Prerequisites']) > 0:
             prereqs = []

@@ -107,6 +107,7 @@ class Ingestor(dict):
         'same_as',
         'pos',
         'writing_intensive',
+        'sub_school',
     }
 
     def __init__(self, config, output,
@@ -269,7 +270,8 @@ class Ingestor(dict):
             'same_as': make_list(self._get('same_as')),
             'description': self._get('description', 'descr'),
             'pos': make_list(self._get('pos')),
-            'writing_intensive': self._get('writing_intensive')
+            'writing_intensive': self._get('writing_intensive'),
+            'sub_school': self._get('sub_school'),
             # 'description': extract_info_from_text(
             #     self._get('description', 'descr'),
             #     inject=self
