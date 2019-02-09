@@ -286,6 +286,8 @@ class DigestionAdapter(object):
             adapted['pos'] = course.pos;
         if 'writing_intensive' in course:
             adapted['writing_intensive'] = course.writing_intensive
+        if 'sub_school' in course:
+            adapted['sub_school'] = course.sub_school
 
         # Combine pre and co requisites into one field
         if 'corequisites' in adapted and 'prerequisites' not in adapted:
