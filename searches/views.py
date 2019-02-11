@@ -42,13 +42,15 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         #     course_match_objs = apps.get_app_config('searches').searcher.vectorized_search(request.subdomain, query, sem)[:4]
         # else:
         #     course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
-        # sort by course number
-        def course_comparator(x, y):
-            x=str(x)[7:10]
-            y=str(y)[7:10]
-            if x < y:
+
+        # sorts queries by course number through a comparator
+        def course_comparator(course1, course2):
+            #isolate course number from XX.XXX.XXX
+            c1=str(course2)[7:10]
+            c2=str(course2)[7:10]
+            if c1 < c2:
                 return -1
-            elif x > y:
+            elif c1 > c2:
                 return 1
             else:
                 return 0
