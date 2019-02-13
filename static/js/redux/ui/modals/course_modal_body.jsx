@@ -395,6 +395,9 @@ class CourseModalBody extends React.Component {
             { friendDisplay }
             { hasTakenDisplay }
           </div>
+
+            <p> HELLO!!! { this.props.data.pos} </p>
+
           <div className="col-8-16">
             { showCapacityAttention && !this.state.mobile &&
                         attentioncapacityTracker
