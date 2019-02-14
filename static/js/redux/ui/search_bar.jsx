@@ -62,11 +62,17 @@ class SearchBar extends React.Component {
         if (e.key === 'Enter' && numSearchResults > 0 && this.state.showDropdown) {
           this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id);
         } else if (e.key === 'ArrowDown') {
-          this.props.hoverSearchResult((this.props.hoveredPosition + 1) % numSearchResults);
+          let newHoveredPosition = this.props.hoveredPosition;
+          newHoveredPosition = newHoveredPosition < numSearchResults-1 ? newHoveredPosition+1 : newHoveredPosition;
+          this.props.hoverSearchResult(newHoveredPosition);
+          if($('#results_scroll').scrollTop()<$('#results_scroll').prop("scrollHeight")/numSearchResults*(this.props.hoveredPosition-3))
+            $('#results_scroll').animate({scrollTop: $('#results_scroll').prop("scrollHeight")/numSearchResults*(this.props.hoveredPosition-3)}, 0);
         } else if (e.key === 'ArrowUp') {
           let newHoveredPosition = this.props.hoveredPosition - 1;
-          newHoveredPosition = newHoveredPosition < 0 ? numSearchResults - 1 : newHoveredPosition;
+          newHoveredPosition = newHoveredPosition < 0 ? 0 : newHoveredPosition;
           this.props.hoverSearchResult(newHoveredPosition);
+          if($('#results_scroll').scrollTop()>$('#results_scroll').prop("scrollHeight")/numSearchResults*(this.props.hoveredPosition))
+              $('#results_scroll').animate({scrollTop: $('#results_scroll').prop("scrollHeight")/numSearchResults*(this.props.hoveredPosition)}, 0);
         } else if (e.key === 'Escape') {
           this.setState({ focused: false });
           $('.search-bar input').blur();
@@ -119,7 +125,7 @@ class SearchBar extends React.Component {
     ) : null;
     const resultContainer = !this.state.focused || results.length === 0 ? null : (
       <ul className={resClass}>
-        <div className="search-results__list-container">
+        <div id="results_scroll" className="search-results__list-container">
           {results}
           {seeMore}
         </div>
