@@ -543,13 +543,6 @@ exports[`CourseModalBody correctly renders 1`] = `
                   0
                 </span>
               </div>
-              <div
-                className="emoji-check"
-              >
-                <i
-                  className="fa fa-check"
-                />
-              </div>
             </div>
             <div
               className="reaction-dropdown"
@@ -601,13 +594,6 @@ exports[`CourseModalBody correctly renders 1`] = `
                 <span>
                   0
                 </span>
-              </div>
-              <div
-                className="emoji-check"
-              >
-                <i
-                  className="fa fa-check"
-                />
               </div>
             </div>
             <div
@@ -661,13 +647,6 @@ exports[`CourseModalBody correctly renders 1`] = `
                   0
                 </span>
               </div>
-              <div
-                className="emoji-check"
-              >
-                <i
-                  className="fa fa-check"
-                />
-              </div>
             </div>
             <div
               className="reaction-dropdown"
@@ -719,13 +698,6 @@ exports[`CourseModalBody correctly renders 1`] = `
                 <span>
                   0
                 </span>
-              </div>
-              <div
-                className="emoji-check"
-              >
-                <i
-                  className="fa fa-check"
-                />
               </div>
             </div>
             <div
@@ -779,13 +751,6 @@ exports[`CourseModalBody correctly renders 1`] = `
                   0
                 </span>
               </div>
-              <div
-                className="emoji-check"
-              >
-                <i
-                  className="fa fa-check"
-                />
-              </div>
             </div>
             <div
               className="reaction-dropdown"
@@ -837,13 +802,6 @@ exports[`CourseModalBody correctly renders 1`] = `
                 <span>
                   0
                 </span>
-              </div>
-              <div
-                className="emoji-check"
-              >
-                <i
-                  className="fa fa-check"
-                />
               </div>
             </div>
             <div
@@ -897,13 +855,6 @@ exports[`CourseModalBody correctly renders 1`] = `
                   0
                 </span>
               </div>
-              <div
-                className="emoji-check"
-              >
-                <i
-                  className="fa fa-check"
-                />
-              </div>
             </div>
             <div
               className="reaction-dropdown"
@@ -955,13 +906,6 @@ exports[`CourseModalBody correctly renders 1`] = `
                 <span>
                   0
                 </span>
-              </div>
-              <div
-                className="emoji-check"
-              >
-                <i
-                  className="fa fa-check"
-                />
               </div>
             </div>
             <div
