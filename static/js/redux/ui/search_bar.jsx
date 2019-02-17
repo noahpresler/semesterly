@@ -50,6 +50,16 @@ class SearchBar extends React.Component {
     this.changeTimer = false;
   }
 
+  //fires jquery to animate to a certain position
+  scrollToCourse(position) {
+    $('#results_scroll').animate({scrollTop: $('#results_scroll').prop("scrollHeight")/numSearchResults*(position)}, 0);
+  }
+
+  //gets the scroll pixel height based on the current hovered course
+  getScrollHeight(position) {
+    return $('#results_scroll').prop("scrollHeight")/numSearchResults*(position);
+  }
+
   componentWillMount() {
     $(document.body).on('keydown', (e) => {
       if ($('input:focus').length === 0 && !this.props.explorationModalIsVisible && !e.ctrlKey) {
@@ -63,16 +73,17 @@ class SearchBar extends React.Component {
           this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id);
         } else if (e.key === 'ArrowDown') {
           let newHoveredPosition = this.props.hoveredPosition;
-          newHoveredPosition = newHoveredPosition < numSearchResults-1 ? newHoveredPosition+1 : newHoveredPosition;
+          var lastPosition = numSearchResults-1;
+          newHoveredPosition = newHoveredPosition < lastPosition ? newHoveredPosition+1 : newHoveredPosition;
           this.props.hoverSearchResult(newHoveredPosition);
-          if($('#results_scroll').scrollTop()<$('#results_scroll').prop("scrollHeight")/numSearchResults*(this.props.hoveredPosition-3))
-            $('#results_scroll').animate({scrollTop: $('#results_scroll').prop("scrollHeight")/numSearchResults*(this.props.hoveredPosition-3)}, 0);
+          if($('#results_scroll').scrollTop()<getScrollHeight(this.props.hoveredPosition-3))
+            scrollToCourse(this.props.hoveredPosition-3);
         } else if (e.key === 'ArrowUp') {
           let newHoveredPosition = this.props.hoveredPosition - 1;
           newHoveredPosition = newHoveredPosition < 0 ? 0 : newHoveredPosition;
           this.props.hoverSearchResult(newHoveredPosition);
-          if($('#results_scroll').scrollTop()>$('#results_scroll').prop("scrollHeight")/numSearchResults*(this.props.hoveredPosition))
-              $('#results_scroll').animate({scrollTop: $('#results_scroll').prop("scrollHeight")/numSearchResults*(this.props.hoveredPosition)}, 0);
+          if($('#results_scroll').scrollTop()>getScrollHeight(this.props.hoveredPosition))
+            scrollToCourse(this.props.hoveredPosition);
         } else if (e.key === 'Escape') {
           this.setState({ focused: false });
           $('.search-bar input').blur();
