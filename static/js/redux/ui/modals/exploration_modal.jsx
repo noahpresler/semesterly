@@ -255,7 +255,7 @@ class ExplorationModal extends React.Component {
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
-      key={c.id} code={c.code} name={c.name}
+      key={c.id} code={c.code} name={c.name} areas={c.areas} pos={c.pos} writing_intensive={c.writing_intensive}
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />));
     let courseModal = null;
@@ -271,7 +271,7 @@ class ExplorationModal extends React.Component {
         <div className="modal-content">
           <div className="modal-header">
             <h1>{ selectedCourse.name }</h1>
-            <h2>{ selectedCourse.code }</h2>
+            <h2>{ selectedCourse.code }{ selectedCourse.areas[0]!='None' ? ' - '+selectedCourse.areas : ''}</h2>
             <div className="modal-share" onClick={this.showShareLink}>
               <i className="fa fa-share-alt" />
             </div>
@@ -439,16 +439,18 @@ class ExplorationModal extends React.Component {
   }
 }
 
-const ExplorationSearchResult = ({ name, code, onClick }) => (
+const ExplorationSearchResult = ({ name, code, areas, writing_intensive, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
     <h4>{ name }</h4>
-    <h5>{ code }</h5>
+    <h5>{ code }  { areas[0]!='None' ? '- '+areas : '' }{ writing_intensive=='Yes' ? ', Writing Intensive' : ''} </h5>
   </div>
 );
 
 ExplorationSearchResult.propTypes = {
   name: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
+  areas: PropTypes.string.isRequired,
+  writing_intensive: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 

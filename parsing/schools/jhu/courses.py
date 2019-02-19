@@ -113,7 +113,7 @@ class Parser(BaseParser):
         return (section_size, section_enrolment, waitlist)
 
     def _load_ingestor(self, school, course, section):
-        self.ingestor['sub_school'] = school;
+        #self.ingestor['subSchool'] = school;
 
         section_details = section[0]['SectionDetails']
         try:
@@ -133,7 +133,7 @@ class Parser(BaseParser):
             #        areas.append(match.encode('ascii', 'ignore'))
             self.ingestor['areas'] = areas
         else:
-            self.ingestor['areas'] = ['None']
+            self.ingestor['areas'] = []
 
         self.ingestor['writing_intensive'] = course['IsWritingIntensive']
 

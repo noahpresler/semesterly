@@ -212,8 +212,22 @@ class CourseModalBody extends React.Component {
     const areasDisplay =
             (<div className="modal-module areas">
               <h3 className="modal-module-header">{this.props.schoolSpecificInfo.areasName}</h3>
-              <p>{ this.props.data.areas || 'None' }</p>
+              <p>{ this.props.data.areas.join('') || 'None' }</p>
             </div>);
+    const writingIntensiveDisplay =
+        (<div className="modal-module areas">
+          <h3 className="modal-module-header">Writing Intensive</h3>
+          <p> { this.props.data.writing_intensive || 'N/A' }</p>
+        </div>);
+    const posHeader =
+      (<div className="modal-module areas">
+        <h3 className="modal-module-header">Program of Study Tags</h3>
+      </div>);
+    const posTags = this.props.data.pos.length ? <p>{this.props.data.pos.join(', ')}</p> : <p>None</p>
+    const subSchoolHeader =
+      (<div className="modal-module areas">
+        <h3 className="modal-module-header">Specific School</h3>
+      </div>);
     const pilotLogoImg = {
       backgroundImage: 'url(/static/img/integrations/pilot.png)',
     };
@@ -391,12 +405,14 @@ class CourseModalBody extends React.Component {
                         }
             { prerequisitesDisplay }
             { areasDisplay }
+            { writingIntensiveDisplay }
+            { posHeader }
+            { posTags }
+            { subSchoolHeader }
             { academicSupportDisplay }
             { friendDisplay }
             { hasTakenDisplay }
           </div>
-
-            <p> HELLO!!! { this.props.data.pos} </p>
 
           <div className="col-8-16">
             { showCapacityAttention && !this.state.mobile &&
