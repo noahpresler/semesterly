@@ -113,7 +113,8 @@ class Parser(BaseParser):
         return (section_size, section_enrolment, waitlist)
 
     def _load_ingestor(self, school, course, section):
-        #self.ingestor['subSchool'] = school;
+        self.ingestor['sub_school'] = school;
+        print(self.ingestor['sub_school'])
 
         section_details = section[0]['SectionDetails']
         try:

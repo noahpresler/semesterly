@@ -228,6 +228,13 @@ class CourseModalBody extends React.Component {
       (<div className="modal-module areas">
         <h3 className="modal-module-header">Specific School</h3>
       </div>);
+    const subSchool = this.props.data.code[0] == 'E' ? <p>Whiting School of Engineering</p> :
+        this.props.data.code[0] == 'A' ? <p>Krieger School of Arts and Sciences</p> :
+          this.props.data.code[0] == 'P'  && this.props.data.code[1] == 'H' ? <p>Bloomberg School of Public Health</p> :
+           this.props.data.code[0] == 'P' && this.props.data.code[1] == 'Y' ? <p>The Peabody Institute</p> :
+              this.props.data.code[0] == 'M' ? <p>School of Medicine</p> :
+               this.props.data.code[0] == 'S' ? <p>Nitze School of Advanced International Studies</p> :
+                  this.props.data.code[0]=='B' ? <p>Carey School of Business</p> : ''
     const pilotLogoImg = {
       backgroundImage: 'url(/static/img/integrations/pilot.png)',
     };
@@ -409,6 +416,7 @@ class CourseModalBody extends React.Component {
             { posHeader }
             { posTags }
             { subSchoolHeader }
+            { subSchool }
             { academicSupportDisplay }
             { friendDisplay }
             { hasTakenDisplay }

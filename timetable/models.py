@@ -119,6 +119,7 @@ class Course(models.Model):
     pos = ArrayField(models.TextField(default='', null=True), default=list)
     areas = ArrayField(models.TextField(default='', null=True), default=list)
     writing_intensive = models.TextField(default='', null=True)
+    sub_school = models.TextField(default='', null=True)
 
     def __str__(self):
         return self.code + ": " + self.name

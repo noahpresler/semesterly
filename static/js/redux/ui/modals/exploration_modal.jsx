@@ -271,7 +271,7 @@ class ExplorationModal extends React.Component {
         <div className="modal-content">
           <div className="modal-header">
             <h1>{ selectedCourse.name }</h1>
-            <h2>{ selectedCourse.code }{ selectedCourse.areas[0]!='None' ? ' - '+selectedCourse.areas : ''}</h2>
+            <h2>{ selectedCourse.code }{ selectedCourse.areas[0]!='None'  ? ' - '+selectedCourse.areas.join('') : ''}</h2>
             <div className="modal-share" onClick={this.showShareLink}>
               <i className="fa fa-share-alt" />
             </div>
@@ -442,7 +442,7 @@ class ExplorationModal extends React.Component {
 const ExplorationSearchResult = ({ name, code, areas, writing_intensive, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
     <h4>{ name }</h4>
-    <h5>{ code }  { areas[0]!='None' ? '- '+areas : '' }{ writing_intensive=='Yes' ? ', Writing Intensive' : ''} </h5>
+    <h5>{ code }  { areas[0]!='None' ? '- '+areas.join('') : '' }  { areas[0]!='None' && writing_intensive=='Yes' ? ', Writing Intensive' : ''} </h5>
   </div>
 );
 
