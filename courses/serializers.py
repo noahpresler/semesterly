@@ -149,7 +149,8 @@ class CourseSerializer(serializers.ModelSerializer):
             'areas',
             'is_waitlist_only',
             'pos',
-            'writing_intensive'
+            'writing_intensive',
+            'sub_school',
         )
 
 
