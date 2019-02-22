@@ -114,8 +114,6 @@ class Parser(BaseParser):
 
     def _load_ingestor(self, school, course, section):
         self.ingestor['sub_school'] = school;
-        print(self.ingestor['sub_school'])
-
         section_details = section[0]['SectionDetails']
         try:
             num_credits = float(course['Credits'])
