@@ -20,3 +20,11 @@ services:
       - "3000:3000"
     depends_on:
       - db
+  localssl:
+    image: abiosoft/caddy
+    volumes:
+      - ./build/Caddyfile:/etc/Caddyfile
+    ports:
+      - "443:443"
+    depends_on:
+      - web
