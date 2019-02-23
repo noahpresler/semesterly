@@ -21,9 +21,9 @@ services:
     depends_on:
       - db
   localssl:
-    image: abiosoft/caddy
+    image: jhuopensource/semesterly-caddy
     volumes:
-      - ./build/Caddyfile:/etc/Caddyfile
+      - ./build/caddy/Caddyfile:/etc/Caddyfile
     ports:
       - "443:443"
     depends_on:
