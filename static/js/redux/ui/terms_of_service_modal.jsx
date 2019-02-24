@@ -86,7 +86,7 @@ class TermsOfServiceModal extends React.Component {
         closeOnClick={false}
       >
         <div className="tos-modal-container">
-          <h1>Terms of Service and Privacy Policy</h1>
+          <h1>Terms of Service and Privacy Policy {this.props.title}</h1>
           {this.getBody()}
           <div>
             <a

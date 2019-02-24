@@ -18,6 +18,7 @@ class AgreementSerializer(serializers.ModelSerializer):
     timeUpdated = serializers.DateTimeField(source='last_updated')
     description = serializers.CharField()
     url = serializers.CharField()
+    title = serializers.CharField()
 
     class Meta:
         model = Agreement
@@ -25,4 +26,5 @@ class AgreementSerializer(serializers.ModelSerializer):
             'timeUpdated',
             'description',
             'url',
+            'title',
         )
