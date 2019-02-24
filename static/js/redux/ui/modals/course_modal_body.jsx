@@ -209,11 +209,20 @@ class CourseModalBody extends React.Component {
               <h3 className="modal-module-header">Prerequisites</h3>
               <p>{ newPrerequisites }</p>
             </div>);
+
+    const areaBubbles = this.props.data.areas ?
+      this.props.data.areas.map((letter) =>
+          <div className="areas-bubble">{letter}</div>
+      ) : ''
+
     const areasDisplay =
-            (<div className="modal-module areas">
-              <h3 className="modal-module-header">{this.props.schoolSpecificInfo.areasName}</h3>
-              <p>{ this.props.data.areas.join('') || 'None' }</p>
-            </div>);
+      (<div className="modal-module areas">
+        <h3 className="modal-module-header">Areas</h3>
+        <div className="areas-container">
+          {areaBubbles}
+        </div>
+      </div>);
+
     const writingIntensiveDisplay =
         (<div className="modal-module areas">
           <h3 className="modal-module-header">Writing Intensive</h3>

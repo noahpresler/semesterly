@@ -65,6 +65,32 @@
   border-top-left-radius: 5px;
 }
 
+.areas-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: flex-start;
+  height: 25px;
+  color: #0aa98a;
+}
+
+.areas-bubble {
+  background: blue;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  font-family: $font-body;
+  font-size: 15px;
+  height: 25px;
+  min-width: 25px;
+  max-width: 25px;
+  margin: 5px;
+  text-align: center;
+}
+
 .course-modal .img-icon {
   left: 50%;
   position: absolute;
