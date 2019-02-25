@@ -73,6 +73,7 @@
   align-items: center;
   align-content: flex-start;
   height: 25px;
+  margin: 5px;
 }
 
 .areas-bubble {
@@ -108,6 +109,57 @@
 
 .Q {
   background: #FFD462;
+}
+
+.areas-bubble-top-row {
+  background: blue;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  font-family: $font-body;
+  font-size: 20px;
+  font-weight: 600;
+  height: 23px;
+  min-width: 25px;
+  max-width: 25px;
+  margin: 3px;
+  text-align: center;
+}
+.H {
+  background: #FD7473;
+}
+
+.S {
+  background: #408EA9;
+}
+
+.N {
+  background: #B177C7;
+}
+
+.E {
+  background: #259B82;
+}
+
+.Q {
+  background: #FFD462;
+}
+
+.writing-intensive-bubble {
+  background: #375994;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  font-family: $font-body;
+  font-size: 17.5px;
+  font-weight: 400;
+  height: 23px;
+  min-width: 155px;
+  max-width: 155px;
+  margin: 3px;
+  text-align: center;
 }
 
 

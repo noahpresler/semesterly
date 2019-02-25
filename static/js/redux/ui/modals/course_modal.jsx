@@ -126,11 +126,24 @@ class CourseModal extends React.Component {
         })}
       />
     </div>) : null;
+    const areaBubbles = this.props.data.areas ?
+      this.props.data.areas.map((letter) =>
+        letter=='H' ? <div className="areas-bubble-top-row H">{letter}</div> :
+          letter=='S' ? <div className="areas-bubble-top-row S">{letter}</div> :
+            letter=='N' ? <div className="areas-bubble-top-row N">{letter}</div> :
+              letter=='E' ? <div className="areas-bubble-top-row E">{letter}</div> :
+                letter=='Q' ? <div className="areas-bubble-top-row Q">{letter}</div> : '') : '';
+
+    const writingIntensive = this.props.data.writing_intensive == 'Yes' ?
+      <div className="writing-intensive-bubble">Writing Intensive</div> : '';
+
+    const subHeader = <div className="areas-container">{courseAndDept}{areaBubbles}{writingIntensive}</div>;
+
     const content =
             (<div className="modal-content">
               <div className="modal-header">
                 <h1>{data.name}</h1>
-                <h2>{courseAndDept}</h2>
+                <h2>{subHeader}</h2>
                 <div className="modal-close" onClick={() => this.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>
