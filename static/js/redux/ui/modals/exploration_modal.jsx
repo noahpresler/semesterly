@@ -439,10 +439,18 @@ class ExplorationModal extends React.Component {
   }
 }
 
+const areaBubbles = ({ areas })=> (
+   areas ? areas.map((letter) =>
+    letter=='H' ? <div className="areas-bubble" style={{ backgroundColor: '#FD7473' }}>{letter}</div> :
+      letter=='S' ? <div className="areas-bubble" style={{ backgroundColor: '#408EA9' }}>{letter}</div> :
+        letter=='N' ? <div className="areas-bubble" style={{ backgroundColor: '#B177C7' }}>{letter}</div> :
+          letter=='E' ? <div className="areas-bubble" style={{ backgroundColor: '#259B82' }}>{letter}</div> :
+            letter=='Q' ? <div className="areas-bubble" style={{ backgroundColor: '#FFD462' }}>{letter}</div> : '') : '');
+
 const ExplorationSearchResult = ({ name, code, areas, writing_intensive, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
     <h4>{ name }</h4>
-    <h5>{ code }{ areas && areas[0]!='None'  }{ areas[0]!='None' && writing_intensive=='Yes' ? ', Writing Intensive' : ''}</h5>
+    <h5>{ code }{ areaBubbles } { areas[0]!='None' && writing_intensive=='Yes' ? ', Writing Intensive' : ''}</h5>
   </div>
 );
 
