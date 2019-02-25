@@ -212,8 +212,11 @@ class CourseModalBody extends React.Component {
 
     const areaBubbles = this.props.data.areas ?
       this.props.data.areas.map((letter) =>
-          <div className="areas-bubble">{letter}</div>
-      ) : ''
+          letter=='H' ? <div className="areas-bubble" style={{ backgroundColor: '#FD7473' }}>{letter}</div> :
+            letter=='S' ? <div className="areas-bubble" style={{ backgroundColor: '#408EA9' }}>{letter}</div> :
+              letter=='N' ? <div className="areas-bubble" style={{ backgroundColor: '#B177C7' }}>{letter}</div> :
+                letter=='E' ? <div className="areas-bubble" style={{ backgroundColor: '#259B82' }}>{letter}</div> :
+                  letter=='Q' ? <div className="areas-bubble" style={{ backgroundColor: '#FFD462' }}>{letter}</div> : '') : ''
 
     const areasDisplay =
       (<div className="modal-module areas">
