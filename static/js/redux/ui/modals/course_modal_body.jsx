@@ -209,28 +209,6 @@ class CourseModalBody extends React.Component {
               <h3 className="modal-module-header">Prerequisites</h3>
               <p>{ newPrerequisites }</p>
             </div>);
-
-    const areaBubbles = this.props.data.areas ?
-      this.props.data.areas.map((letter) =>
-          letter=='H' ? <div className="areas-bubble H">{letter}</div> :
-            letter=='S' ? <div className="areas-bubble S">{letter}</div> :
-              letter=='N' ? <div className="areas-bubble N">{letter}</div> :
-                letter=='E' ? <div className="areas-bubble E">{letter}</div> :
-                  letter=='Q' ? <div className="areas-bubble Q">{letter}</div> : '') : ''
-
-    const areasDisplay =
-      (<div className="modal-module areas">
-        <h3 className="modal-module-header">Areas</h3>
-        <div className="areas-container">
-          {areaBubbles}
-        </div>
-      </div>);
-
-    const writingIntensiveDisplay =
-        (<div className="modal-module areas">
-          <h3 className="modal-module-header">Writing Intensive</h3>
-          <p> { this.props.data.writing_intensive || 'N/A' }</p>
-        </div>);
     const posHeader =
       (<div className="modal-module areas">
         <h3 className="modal-module-header">Program of Study Tags</h3>
@@ -417,8 +395,6 @@ class CourseModalBody extends React.Component {
                         attentioncapacityTracker
                         }
             { prerequisitesDisplay }
-            { areasDisplay }
-            { writingIntensiveDisplay }
             { posHeader }
             { posTags }
             { subSchoolHeader }
