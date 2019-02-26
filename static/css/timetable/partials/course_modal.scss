@@ -113,13 +113,13 @@
 
 .areas-bubble-top-row {
   background: blue;
-  border-radius: 50%;
+  border-radius: 0px;
   color: white;
   text-align: center;
   vertical-align: middle;
   font-family: $font-body;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 550;
   height: 23px;
   min-width: 25px;
   max-width: 25px;
@@ -148,12 +148,12 @@
 
 .writing-intensive-bubble {
   background: #375994;
-  border-radius: 15px;
+  border-radius: 0px;
   color: white;
   text-align: center;
   vertical-align: middle;
   font-family: $font-body;
-  font-size: 17.5px;
+  font-size: 19.5px;
   font-weight: 400;
   height: 23px;
   min-width: 155px;

@@ -261,6 +261,16 @@ class ExplorationModal extends React.Component {
     let courseModal = null;
     if (active >= 0 && active < advancedSearchResults.length) {
       const selectedCourse = advancedSearchResults[active];
+      const areaBubbles = selectedCourse.areas ?
+        selectedCourse.areas.map((letter) =>
+          letter=='H' ? <div className="areas-bubble-top-row H">{letter}</div> :
+            letter=='S' ? <div className="areas-bubble-top-row S">{letter}</div> :
+              letter=='N' ? <div className="areas-bubble-top-row N">{letter}</div> :
+                letter=='E' ? <div className="areas-bubble-top-row E">{letter}</div> :
+                  letter=='Q' ? <div className="areas-bubble-top-row Q">{letter}</div> : '') : '';
+      const writingIntensive = selectedCourse.writing_intensive == 'Yes' ?
+        <div className="writing-intensive-bubble">Writing Intensive</div> : '';
+      const subHeader = <div className="areas-container">{selectedCourse.code}{areaBubbles}{writingIntensive}</div>;
       const shareLink = this.state.shareLinkShown ?
                 (<ShareLink
                   link={this.props.getShareLink(selectedCourse.code)}
@@ -271,7 +281,7 @@ class ExplorationModal extends React.Component {
         <div className="modal-content">
           <div className="modal-header">
             <h1>{ selectedCourse.name }</h1>
-            <h2>{ selectedCourse.code }{ selectedCourse.areas[0]!='None'  ? ' - '+selectedCourse.areas.join('') : ''}{ selectedCourse.areas[0]!='None' && selectedCourse.writing_intensive=='Yes' ? ', Writing Intensive' : ''}</h2>
+            <h2>{ subHeader }</h2>
             <div className="modal-share" onClick={this.showShareLink}>
               <i className="fa fa-share-alt" />
             </div>
@@ -439,18 +449,10 @@ class ExplorationModal extends React.Component {
   }
 }
 
-const areaBubbles = ({ areas })=> (
-   areas ? areas.map((letter) =>
-    letter=='H' ? <div className="areas-bubble" style={{ backgroundColor: '#FD7473' }}>{letter}</div> :
-      letter=='S' ? <div className="areas-bubble" style={{ backgroundColor: '#408EA9' }}>{letter}</div> :
-        letter=='N' ? <div className="areas-bubble" style={{ backgroundColor: '#B177C7' }}>{letter}</div> :
-          letter=='E' ? <div className="areas-bubble" style={{ backgroundColor: '#259B82' }}>{letter}</div> :
-            letter=='Q' ? <div className="areas-bubble" style={{ backgroundColor: '#FFD462' }}>{letter}</div> : '') : '');
-
-const ExplorationSearchResult = ({ name, code, areas, writing_intensive, onClick }) => (
+const ExplorationSearchResult = ({ name, code, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
     <h4>{ name }</h4>
-    <h5>{ code }{ areaBubbles } { areas[0]!='None' && writing_intensive=='Yes' ? ', Writing Intensive' : ''}</h5>
+    <h5>{ code }</h5>
   </div>
 );
 
