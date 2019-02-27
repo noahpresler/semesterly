@@ -57,6 +57,7 @@ class ExplorationModal extends React.Component {
     this.handleTimesChange = this.handleTimesChange.bind(this);
     this.removeTimeFilter = this.removeTimeFilter.bind(this);
     this.addDayForTimesFilter = this.addDayForTimesFilter.bind(this);
+    this.tagsBubbles = this.tagsBubbles.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -246,6 +247,19 @@ class ExplorationModal extends React.Component {
     this.fetchAdvancedSearchResults(Object.assign({}, this.state, stateUpdate));
   }
 
+  tagsBubbles(selectedCourse) {
+    const areaBubbles = selectedCourse.areas ?
+      selectedCourse.areas.map((letter) =>
+        letter=='H' ? <div className="areas-bubble-top-row H">{letter}</div> :
+          letter=='S' ? <div className="areas-bubble-top-row S">{letter}</div> :
+            letter=='N' ? <div className="areas-bubble-top-row N">{letter}</div> :
+              letter=='E' ? <div className="areas-bubble-top-row E">{letter}</div> :
+                letter=='Q' ? <div className="areas-bubble-top-row Q">{letter}</div> : '') : '';
+    const writingIntensive = selectedCourse.writing_intensive == 'Yes' ?
+      <div className="writing-intensive-bubble">Writing Intensive</div> : '';
+      return <div className="areas-container">{areaBubbles}{writingIntensive}</div>;
+  }
+
   render() {
     const modalStyle = {
       width: '100%',
@@ -255,22 +269,14 @@ class ExplorationModal extends React.Component {
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
-      key={c.id} code={c.code} name={c.name} areas={c.areas} pos={c.pos} writing_intensive={c.writing_intensive} sub_school={c.sub_school}
+      key={c.id} code={c.code} name={c.name} tags={this.tagsBubbles(c)} areas={c.areas} pos={c.pos} writing_intensive={c.writing_intensive} sub_school={c.sub_school}
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />));
     let courseModal = null;
     if (active >= 0 && active < advancedSearchResults.length) {
       const selectedCourse = advancedSearchResults[active];
-      const areaBubbles = selectedCourse.areas ?
-        selectedCourse.areas.map((letter) =>
-          letter=='H' ? <div className="areas-bubble-top-row H">{letter}</div> :
-            letter=='S' ? <div className="areas-bubble-top-row S">{letter}</div> :
-              letter=='N' ? <div className="areas-bubble-top-row N">{letter}</div> :
-                letter=='E' ? <div className="areas-bubble-top-row E">{letter}</div> :
-                  letter=='Q' ? <div className="areas-bubble-top-row Q">{letter}</div> : '') : '';
-      const writingIntensive = selectedCourse.writing_intensive == 'Yes' ?
-        <div className="writing-intensive-bubble">Writing Intensive</div> : '';
-      const subHeader = <div className="areas-container">{selectedCourse.code}{areaBubbles}{writingIntensive}</div>;
+      const tags = this.tagsBubbles(selectedCourse);
+      const subHeader = <div className="areas-container">{selectedCourse.code}{tags}</div>;
       const shareLink = this.state.shareLinkShown ?
                 (<ShareLink
                   link={this.props.getShareLink(selectedCourse.code)}
@@ -449,10 +455,12 @@ class ExplorationModal extends React.Component {
   }
 }
 
-const ExplorationSearchResult = ({ name, code, onClick }) => (
+
+const ExplorationSearchResult = ({ name, code, tags, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
     <h4>{ name }</h4>
     <h5>{ code }</h5>
+    <h1> { tags }</h1>
   </div>
 );
 
