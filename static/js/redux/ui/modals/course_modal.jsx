@@ -87,6 +87,7 @@ class CourseModal extends React.Component {
     let courseAndDept = data.code;
     courseAndDept = data.department && data.department !== '' ?
             `${courseAndDept}, ${data.department}` : courseAndDept;
+    courseAndDept = <span className="course-and-dept-container">{ courseAndDept }</span>;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               link={this.props.getShareLink(data.code)}

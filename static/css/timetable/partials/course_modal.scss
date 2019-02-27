@@ -73,7 +73,24 @@
   align-items: center;
   align-content: flex-start;
   height: 25px;
-  margin: 5px;
+  margin: 4px;
+}
+.search {
+  margin: 2px;
+}
+
+.course-and-dept-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: flex-start;
+  height: 21px;
+  margin: 0px 7px 0px 0px;
+}
+.search {
+  margin: 0px 2px 0px 0px;
 }
 
 .areas-bubble {
@@ -88,7 +105,7 @@
   height: 25px;
   min-width: 25px;
   max-width: 25px;
-  margin: 3px;
+  margin: 4px;
   text-align: center;
 }
 .H {
@@ -118,12 +135,12 @@
   text-align: center;
   vertical-align: middle;
   font-family: $font-body;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 550;
-  height: 23px;
-  min-width: 25px;
-  max-width: 25px;
-  margin: 4px;
+  height: 21px;
+  width: 21px;
+  padding: 1px 2px 0px 2px;
+  margin: 2px;
   text-align: center;
 }
 .H {
@@ -153,12 +170,12 @@
   text-align: center;
   vertical-align: middle;
   font-family: $font-body;
-  font-size: 18.5px;
+  font-size: 17px;
   font-weight: 400;
   height: 21px;
-  min-width: 160px;
-  max-width: 160px;
-  margin: 3px;
+  width: 145px;
+  margin: 2px;
+  padding: 1px 2px 0px 2px;
   text-align: center;
 }
 

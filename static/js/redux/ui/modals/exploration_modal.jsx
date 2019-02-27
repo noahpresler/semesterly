@@ -269,14 +269,15 @@ class ExplorationModal extends React.Component {
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
-      key={c.id} code={c.code} name={c.name} tags={this.tagsBubbles(c)} areas={c.areas} pos={c.pos} writing_intensive={c.writing_intensive} sub_school={c.sub_school}
+      key={c.id} code={c.code} name={c.name} tags={this.tagsBubbles(c)} areas={c.areas} pos={c.pos} writing_intensive={c.writing_intensive} sub_school={c.sub_school} department={c.department}
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />));
     let courseModal = null;
     if (active >= 0 && active < advancedSearchResults.length) {
       const selectedCourse = advancedSearchResults[active];
       const tags = this.tagsBubbles(selectedCourse);
-      const subHeader = <div className="areas-container">{selectedCourse.code}{tags}</div>;
+      const courseAndDept = <span className="course-and-dept-container search">{selectedCourse.code}, {selectedCourse.department}</span>;
+      const subHeader = <div className="areas-container">{courseAndDept}{tags}</div>;
       const shareLink = this.state.shareLinkShown ?
                 (<ShareLink
                   link={this.props.getShareLink(selectedCourse.code)}
