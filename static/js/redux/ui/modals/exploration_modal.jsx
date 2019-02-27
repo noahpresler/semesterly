@@ -276,7 +276,7 @@ class ExplorationModal extends React.Component {
     if (active >= 0 && active < advancedSearchResults.length) {
       const selectedCourse = advancedSearchResults[active];
       const tags = this.tagsBubbles(selectedCourse);
-      const courseAndDept = <span className="course-and-dept-container search">{selectedCourse.code}, {selectedCourse.department}</span>;
+      const courseAndDept = <span className="course-and-dept-container">{selectedCourse.code}, {selectedCourse.department}</span>;
       const subHeader = <div className="areas-container">{courseAndDept}{tags}</div>;
       const shareLink = this.state.shareLinkShown ?
                 (<ShareLink
