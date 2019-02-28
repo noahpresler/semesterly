@@ -247,6 +247,19 @@ class ExplorationModal extends React.Component {
     this.fetchAdvancedSearchResults(Object.assign({}, this.state, stateUpdate));
   }
 
+  barTagsBubbles(selectedCourse) {
+    const areaBubbles = selectedCourse.areas ?
+      selectedCourse.areas.map((letter) =>
+        letter=='H' ? <div className="areas-bubble-search H">{letter}</div> :
+          letter=='S' ? <div className="areas-bubble-search S">{letter}</div> :
+            letter=='N' ? <div className="areas-bubble-search N">{letter}</div> :
+              letter=='E' ? <div className="areas-bubble-search E">{letter}</div> :
+                letter=='Q' ? <div className="areas-bubble-search Q">{letter}</div> : '') : '';
+    const writingIntensive = selectedCourse.writing_intensive == 'Yes' ?
+      <div className="writing-intensive-bubble B">Writing Intensive</div> : '';
+      return <div className="areas-container-search">{areaBubbles}{writingIntensive}</div>;
+  }
+
   tagsBubbles(selectedCourse) {
     const areaBubbles = selectedCourse.areas ?
       selectedCourse.areas.map((letter) =>
@@ -257,7 +270,7 @@ class ExplorationModal extends React.Component {
                 letter=='Q' ? <div className="areas-bubble-top-row Q">{letter}</div> : '') : '';
     const writingIntensive = selectedCourse.writing_intensive == 'Yes' ?
       <div className="writing-intensive-bubble">Writing Intensive</div> : '';
-      return <div className="areas-container">{areaBubbles}{writingIntensive}</div>;
+    return <div className="areas-container">{areaBubbles}{writingIntensive}</div>;
   }
 
   render() {
@@ -269,15 +282,15 @@ class ExplorationModal extends React.Component {
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
-      key={c.id} code={c.code} name={c.name} tags={this.tagsBubbles(c)} areas={c.areas} pos={c.pos} writing_intensive={c.writing_intensive} sub_school={c.sub_school} department={c.department}
+      key={c.id} code={c.code} name={c.name} modalTags={this.tagsBubbles(c)} barTags={this.barTagsBubbles(c, "bar")} areas={c.areas} pos={c.pos} writing_intensive={c.writing_intensive} sub_school={c.sub_school} department={c.department}
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />));
     let courseModal = null;
     if (active >= 0 && active < advancedSearchResults.length) {
       const selectedCourse = advancedSearchResults[active];
-      const tags = this.tagsBubbles(selectedCourse);
+      const modalTags = this.tagsBubbles(selectedCourse);
       const courseAndDept = <span className="course-and-dept-container">{selectedCourse.code}, {selectedCourse.department}</span>;
-      const subHeader = <div className="areas-container">{courseAndDept}{tags}</div>;
+      const subHeader = <div className="areas-container">{courseAndDept}{modalTags}</div>;
       const shareLink = this.state.shareLinkShown ?
                 (<ShareLink
                   link={this.props.getShareLink(selectedCourse.code)}
@@ -457,21 +470,19 @@ class ExplorationModal extends React.Component {
 }
 
 
-const ExplorationSearchResult = ({ name, code, tags, onClick }) => (
+const ExplorationSearchResult = ({ name, code, barTags, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
     <h4>{ name }</h4>
     <h5>{ code }</h5>
-    <h1> { tags }</h1>
+    <h5> { barTags }</h5>
   </div>
 );
 
 ExplorationSearchResult.propTypes = {
   name: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
-  areas: PropTypes.string.isRequired,
-  writing_intensive: PropTypes.string.isRequired,
-  sub_school: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  barTags: PropTypes.func.isRequired,
 };
 
 ExplorationModal.defaultProps = {
