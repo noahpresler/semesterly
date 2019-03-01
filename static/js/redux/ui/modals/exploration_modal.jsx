@@ -250,24 +250,24 @@ class ExplorationModal extends React.Component {
   barTagsBubbles(selectedCourse) {
     const areaBubbles = selectedCourse.areas ?
       selectedCourse.areas.map((letter) =>
-        letter=='H' ? <div className="areas-bubble-search H">{letter}</div> :
-          letter=='S' ? <div className="areas-bubble-search S">{letter}</div> :
-            letter=='N' ? <div className="areas-bubble-search N">{letter}</div> :
-              letter=='E' ? <div className="areas-bubble-search E">{letter}</div> :
-                letter=='Q' ? <div className="areas-bubble-search Q">{letter}</div> : '') : '';
+        letter=='H' ? <div className="area-bubble search H">{letter}</div> :
+          letter=='S' ? <div className="area-bubble search S">{letter}</div> :
+            letter=='N' ? <div className="area-bubble search N">{letter}</div> :
+              letter=='E' ? <div className="area-bubble search E">{letter}</div> :
+                letter=='Q' ? <div className="area-bubble search Q">{letter}</div> : '') : '';
     const writingIntensive = selectedCourse.writing_intensive == 'Yes' ?
-      <div className="writing-intensive-bubble B">Writing Intensive</div> : '';
-      return <div className="areas-container-search">{areaBubbles}{writingIntensive}</div>;
+      <div className="writing-intensive-bubble search">Writing Intensive</div> : '';
+      return <div className="areas-container search">{areaBubbles}{writingIntensive}</div>;
   }
 
   tagsBubbles(selectedCourse) {
     const areaBubbles = selectedCourse.areas ?
       selectedCourse.areas.map((letter) =>
-        letter=='H' ? <div className="areas-bubble-top-row H">{letter}</div> :
-          letter=='S' ? <div className="areas-bubble-top-row S">{letter}</div> :
-            letter=='N' ? <div className="areas-bubble-top-row N">{letter}</div> :
-              letter=='E' ? <div className="areas-bubble-top-row E">{letter}</div> :
-                letter=='Q' ? <div className="areas-bubble-top-row Q">{letter}</div> : '') : '';
+        letter=='H' ? <div className="area-bubble H">{letter}</div> :
+          letter=='S' ? <div className="area-bubble S">{letter}</div> :
+            letter=='N' ? <div className="area-bubble N">{letter}</div> :
+              letter=='E' ? <div className="area-bubble E">{letter}</div> :
+                letter=='Q' ? <div className="area-bubble Q">{letter}</div> : '') : '';
     const writingIntensive = selectedCourse.writing_intensive == 'Yes' ?
       <div className="writing-intensive-bubble">Writing Intensive</div> : '';
     return <div className="areas-container">{areaBubbles}{writingIntensive}</div>;
