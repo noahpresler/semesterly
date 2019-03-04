@@ -18,21 +18,17 @@ from student.models import *
 from timetable.models import *
 from django.db.models import Q
 from django.forms.models import model_to_dict
-from scripts import mailer
-# from mailer import Mailer
+from mailer import Mailer
 
-# if len(sys.argv) < 4:
-#     print("Please specify a school, a term (e.g. Fall), and a year (e.g. 2017).")
-#     exit(0)
-# school = sys.argv[1]
-# term = sys.argv[2]
-# year = int(sys.argv[3])
-school = 'jhu'
-term = 'Fall'
-year = '2018'
+if len(sys.argv) < 4:
+    print("Please specify a school, a term (e.g. Fall), and a year (e.g. 2017).")
+    exit(0)
+school = sys.argv[1]
+term = sys.argv[2]
+year = int(sys.argv[3])
 
 semester = Semester.objects.filter(name=term, year=year)
-client = mailer.Mailer()
+client = Mailer()
 
 students = PersonalTimetable.objects.filter(school=school, semester=semester).values_list("student", flat=True).distinct()
 
@@ -44,11 +40,11 @@ for student_id in students:
 
     tt = student.personaltimetable_set.filter(semester=semester).order_by('last_updated').last()
     textbook_json = map(lambda c:
-                    {
-                        "textbooks": map(lambda t: model_to_dict(Textbook.objects.get(isbn=t)), tt.sections.filter(~Q(textbooks=None), course=c).values_list("textbooks", flat=True).distinct()),
-                        "course_name": c.name,
-                        "course_code": c.code,
-                    }, tt.courses.all())
+                        {
+                            "textbooks": map(lambda t: model_to_dict(Textbook.objects.get(isbn=t)), tt.sections.filter(~Q(textbooks=None), course=c).values_list("textbooks", flat=True).distinct()),
+                            "course_name": c.name,
+                            "course_code": c.code,
+                        }, tt.courses.all())
 
     # Go through textbooks. If all empty lists (no textbooks), go to next student.
     have_textbooks = False
