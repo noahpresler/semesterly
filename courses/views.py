@@ -168,7 +168,7 @@ class SchoolList(APIView):
 
         json_data = {
             'areas': sorted(list(Course.objects.filter(school=school)
-                                 .exclude(areas__exact='')
+                                 .exclude(areas__exact=[])
                                  .values_list('areas', flat=True)
                                  .distinct())),
             'departments': sorted(list(Course.objects.filter(school=school)

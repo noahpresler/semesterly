@@ -37,7 +37,8 @@
 .course-modal.trans .modal-body p a,
 .course-modal.trans .modal-body .credits h4,
 .course-modal.trans .modal-body .rating-module h4,
-.course-modal.trans .modal-body .modal-module {
+.course-modal.trans .modal-body .modal-module
+.course-modal.trans .modal-header .area-bubble {
   background-color: transparent;
   border-color: transparent;
   color: transparent;
@@ -73,7 +74,7 @@
   align-items: center;
   align-content: flex-start;
   height: 25px;
-  margin: 4px;
+  margin: 6px;
   &.search {
     height: 20px;
     margin: 0px;
@@ -223,6 +224,47 @@
     margin: 10px 0;
     padding-right: 15%;
     transition: color .2s;
+  }
+  .area-bubble {
+    background: blue;
+    border-radius: 25%;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    font-family: $font-body;
+    font-size: 17px;
+    font-weight: bold;
+    height: 21px;
+    width: 21px;
+    padding: 1px 2.5px 0px 2px;
+    margin: 2px;
+    text-align: center;
+    &.search {
+      font-size: 15px;
+      height: 20px;
+      width: 20px;
+      margin: 4px;
+      padding: 2px;
+    }
+    &.H {
+      background: #FD7473;
+    }
+
+    &.S {
+      background: #408EA9;
+    }
+
+    &.N {
+      background: #B177C7;
+    }
+
+    &.E {
+      background: #259B82;
+    }
+
+    &.Q {
+      background: #FFD462;
+    }
   }
 }
 
