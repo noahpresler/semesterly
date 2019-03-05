@@ -29,12 +29,13 @@ import smtplib
 # year = int(sys.argv[3])
 school = 'jhu'
 term = 'Spring'
-year = '2019'
+year = '2017'
 
-semester = Semester.objects.filter(name=term, year=year)
+# semester = Semester.objects.filter(name=term, year=year)
 client = test_mailer.TestMailer()
 
-students = PersonalTimetable.objects.filter(school=school, semester=semester).values_list("student", flat=True).distinct()
+# students = PersonalTimetable.objects.filter(school=school, semester=semester).values_list("student", flat=True).distinct()
+students = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct()
 
 for student_id in students:
     student = Student.objects.get(id=student_id)
