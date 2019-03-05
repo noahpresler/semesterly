@@ -18,43 +18,25 @@ from student.models import *
 from timetable.models import *
 from django.db.models import Q
 from django.forms.models import model_to_dict
-from test_mailer import TestMailer
+from scripts import test_mailer
+import smtplib
 
-if len(sys.argv) < 4:
-    print("Please specify a school, a term (e.g. Fall), and a year (e.g. 2017).")
-    exit(0)
-school = sys.argv[1]
-term = sys.argv[2]
-year = int(sys.argv[3])
+# if len(sys.argv) < 4:
+#     print("Please specify a school, a term (e.g. Fall), and a year (e.g. 2017).")
+#     exit(0)
+# school = sys.argv[1]
+# term = sys.argv[2]
+# year = int(sys.argv[3])
+school = 'jhu'
+term = 'Spring'
+year = '2019'
 
 semester = Semester.objects.filter(name=term, year=year)
-client = TestMailer()
+client = test_mailer.TestMailer()
 
 students = PersonalTimetable.objects.filter(school=school, semester=semester).values_list("student", flat=True).distinct()
 
 for student_id in students:
     student = Student.objects.get(id=student_id)
-
-    if not student.emails_enabled or not student.user.email:
-        continue
-
-    tt = student.personaltimetable_set.filter(semester=semester).order_by('last_updated').last()
-    textbook_json = map(lambda c:
-                        {
-                            "textbooks": map(lambda t: model_to_dict(Textbook.objects.get(isbn=t)), tt.sections.filter(~Q(textbooks=None), course=c).values_list("textbooks", flat=True).distinct()),
-                            "course_name": c.name,
-                            "course_code": c.code,
-                        }, tt.courses.all())
-
-    # Go through textbooks. If all empty lists (no textbooks), go to next student.
-    have_textbooks = False
-    for dic in textbook_json:
-        if dic["textbooks"]:
-            have_textbooks = True
-            break
-
-    if not have_textbooks:
-        continue
-
-    client.send_mail(student, "Exciting news from Semester.ly!", "email_textbooks.html", {'textbooks_json': textbook_json})
+    client.send_mail(student, "Exciting news from Semester.ly!", "email_notice.html", {'textbooks_json': None})
 client.cleanup()
