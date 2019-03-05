@@ -18,7 +18,7 @@ from student.models import *
 from timetable.models import *
 from django.db.models import Q
 from django.forms.models import model_to_dict
-from mailer import Mailer
+from test_mailer import TestMailer
 
 if len(sys.argv) < 4:
     print("Please specify a school, a term (e.g. Fall), and a year (e.g. 2017).")
@@ -28,7 +28,7 @@ term = sys.argv[2]
 year = int(sys.argv[3])
 
 semester = Semester.objects.filter(name=term, year=year)
-client = Mailer()
+client = TestMailer()
 
 students = PersonalTimetable.objects.filter(school=school, semester=semester).values_list("student", flat=True).distinct()
 
@@ -56,5 +56,5 @@ for student_id in students:
     if not have_textbooks:
         continue
 
-    client.send_mail(student, "Happy First Day of Classes - Textbooks from Semester.ly", "email_textbooks.html", {'textbooks_json': textbook_json})
+    client.send_mail(student, "Exciting news from Semester.ly!", "email_textbooks.html", {'textbooks_json': textbook_json})
 client.cleanup()
