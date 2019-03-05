@@ -26,7 +26,7 @@ class TestMailer():
         # self.server.login(get_secret('MAILER_USER'), get_secret('MAILER_PASSWORD'))
 
         # Define to
-        self.sender = 'textbooks@semester.ly'
+        self.sender = 'contact@semester.ly'
 
     def cleanup(self):
         self.server.quit()
@@ -62,7 +62,6 @@ class TestMailer():
         msg['From'] = self.sender
         msg['To'] = recipient
         print ("Sending to: " + str(recipient))
-
         try:
             # Perform operations via server
             # TODO: Ping their email address to make sure it's fine
