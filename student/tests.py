@@ -53,6 +53,9 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView(
             '/user/reactions/',
             'student.views.ReactionView')
+        self.assertUrlResolvesToView(
+            '/delete_account/',
+            'helpers.mixins.FeatureFlowView')
 
 
 class UserViewTest(APITestCase):
