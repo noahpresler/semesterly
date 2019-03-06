@@ -31,14 +31,15 @@
 
 .course-modal.trans .modal-content,
 .course-modal.trans .modal-header,
+.course-modal.trans .modal-header div,
 .course-modal.trans .modal-header h1,
-.course-modal.trans .modal-header h2,
 .course-modal.trans .modal-body p,
 .course-modal.trans .modal-body p a,
 .course-modal.trans .modal-body .credits h4,
 .course-modal.trans .modal-body .rating-module h4,
-.course-modal.trans .modal-body .modal-module
-.course-modal.trans .modal-header .area-bubble {
+.course-modal.trans .modal-body .modal-module,
+.cour-modal.trans .modal-header .areas-container div,
+.cour-modal.trans .modal-header .area-bubble div {
   background-color: transparent;
   border-color: transparent;
   color: transparent;
