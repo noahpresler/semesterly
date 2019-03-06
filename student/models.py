@@ -44,7 +44,6 @@ class Student(models.Model):
     img_url = models.CharField(max_length=300, default=-1)
     friends = models.ManyToManyField("self", blank=True)
     fbook_uid = models.CharField(max_length=255, default='')
-    gender = models.CharField(max_length=255, default='')
     major = models.CharField(max_length=255, default='')
     social_courses = models.NullBooleanField(null=True)
     social_offerings = models.NullBooleanField(null=True)
@@ -113,7 +112,7 @@ class Reaction(models.Model):
 class PersonalEvent(models.Model):
     """
     A custom event that has been saved to a user's PersonalTimetable
-    so that it persists across refresh, device, and session. Marks 
+    so that it persists across refresh, device, and session. Marks
     when a user is not free. Courses are scheduled around it.abs
 
     """
@@ -139,7 +138,7 @@ class PersonalTimetable(timetable_models.Timetable):
 
 class RegistrationToken(models.Model):
     """
-    A push notification token for Chrome noitification via 
+    A push notification token for Chrome noitification via
     Google Cloud Messaging
     """
     auth = models.TextField(default='')

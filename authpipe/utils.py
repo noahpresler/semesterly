@@ -90,9 +90,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                 get_secret('GOOGLE_API_KEY')),
             params={'access_token': access_token}
         )
-        print(response.json()['picture'])
         new_student.img_url = response.json()['picture']
-        # new_student.gender = response.json().get('gender', '')
         new_student.save()
 
     elif backend_name == 'facebook':
