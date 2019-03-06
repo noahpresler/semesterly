@@ -85,13 +85,12 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         except TypeError:
             access_token = json.loads(social_user.extra_data)["access_token"]
         response = requests.get(
-            'https://www.googleapis.com/plus/v1/people/me'.format(
+            'https://www.googleapis.com/userinfo/v2/me'.format(
                 social_user.uid,
                 get_secret('GOOGLE_API_KEY')),
             params={'access_token': access_token}
         )
-        new_student.img_url = response.json()['image'].get('url', '')
-        new_student.gender = response.json().get('gender', '')
+        new_student.img_url = response.json()['picture']
         new_student.save()
 
     elif backend_name == 'facebook':
