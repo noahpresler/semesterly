@@ -15,6 +15,7 @@ from __future__ import absolute_import, division, print_function
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.views import APIView
@@ -49,6 +50,7 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
     can be overridden to launch a feature or action on homepage load.
     """
     feature_name = None
+    allow_unauthenticated = True
 
     def get_feature_flow(self, request, *args, **kwargs):
         """
@@ -60,6 +62,8 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
         return {}
 
     def get(self, request, *args, **kwargs):
+        if not self.allow_unauthenticated and not request.user.is_authenticated():
+            return HttpResponseRedirect('/')
         self.school = request.subdomain
         self.student = get_student(request)
 
