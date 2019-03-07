@@ -34,7 +34,5 @@ client = test_mailer.TestMailer()
 students = PersonalTimetable.objects.exclude(school=school).values_list("student", flat=True).distinct()
 for student_id in students:
     student = Student.objects.get(id=student_id)
-    school = student.school
-    print(school)
     client.send_mail(student, "Update from Semester.ly!", "email_nonjhu_notice.html", {'school': school})
 client.cleanup()
