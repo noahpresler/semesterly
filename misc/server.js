@@ -18,6 +18,7 @@ var config = require('../webpack.config')
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
+  disableHostCheck : true, // This is needed for SSL reverse proxy in development environment
   hot: true,
   inline: true,
   historyApiFallback: true

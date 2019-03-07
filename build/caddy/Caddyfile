@@ -1,0 +1,21 @@
+#This is a local self-signed SSL proxy for development
+*.sem.ly:443 {
+    tls self_signed
+    proxy / web:8000 {
+        transparent
+    }
+    # Send requests for assets to webpack dev server
+    proxy /assets web:3000
+    filter rule {
+        path /
+        content_type text/html
+        search_pattern http://localhost:3000/assets/
+        replacement https://jhu.sem.ly/assets/
+    }
+}
+sem.ly:443 {
+    tls self_signed
+    proxy / web:8000 {
+        transparent
+    }
+}
