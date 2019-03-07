@@ -103,17 +103,11 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         if social_user:
             new_student.img_url = 'https://graph.facebook.com/' + social_user.uid + '/picture?type=normal'
             url = u'https://graph.facebook.com/{0}/' \
-                  u'?fields=gender' \
                   u'&access_token={1}'.format(
                       social_user.uid,
                       access_token,
                   )
             request = urllib2.Request(url)
-            data = json.loads(urllib2.urlopen(request).read())
-            try:
-                new_student.gender = data.get('gender', '')
-            except BaseException:
-                pass
             new_student.fbook_uid = social_user.uid
             new_student.save()
             url = u'https://graph.facebook.com/{0}/' \

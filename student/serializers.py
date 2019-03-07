@@ -50,7 +50,6 @@ class StudentSerializer(serializers.ModelSerializer):
             'class_year',
             'img_url',
             'fbook_uid',
-            'gender',
             'major',
             'social_courses',
             'social_offerings',
