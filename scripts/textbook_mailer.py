@@ -18,21 +18,17 @@ from student.models import *
 from timetable.models import *
 from django.db.models import Q
 from django.forms.models import model_to_dict
-from scripts import mailer
-# from mailer import Mailer
+from mailer import Mailer
 
-# if len(sys.argv) < 4:
-#     print("Please specify a school, a term (e.g. Fall), and a year (e.g. 2017).")
-#     exit(0)
-# school = sys.argv[1]
-# term = sys.argv[2]
-# year = int(sys.argv[3])
-school = 'jhu'
-term = 'Fall'
-year = '2018'
+if len(sys.argv) < 4:
+    print("Please specify a school, a term (e.g. Fall), and a year (e.g. 2017).")
+    exit(0)
+school = sys.argv[1]
+term = sys.argv[2]
+year = int(sys.argv[3])
 
 semester = Semester.objects.filter(name=term, year=year)
-client = mailer.Mailer()
+client = Mailer()
 
 students = PersonalTimetable.objects.filter(school=school, semester=semester).values_list("student", flat=True).distinct()
 

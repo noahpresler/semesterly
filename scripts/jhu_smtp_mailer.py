@@ -19,11 +19,10 @@ from student.models import *
 from student.views import create_unsubscribe_link
 from semesterly.settings import get_secret
 
-class TestMailer():
+class JHUSMTPMailer():
     def __init__(self):
         # Create server object with SSL option
         self.server = smtplib.SMTP('smtp.johnshopkins.edu')
-        # self.server.login(get_secret('MAILER_USER'), get_secret('MAILER_PASSWORD'))
 
         # Define to
         self.sender = 'contact@semester.ly'
@@ -70,6 +69,3 @@ class TestMailer():
             e = sys.exc_info()[0]
             print("skipped " + str(student.user.email))
             traceback.print_exc()
-
-        # self.server = smtplib.SMTP_SSL(MAILER_SERVER)
-        # self.server.login(MAILER_USER, MAILER_PASSWORD)

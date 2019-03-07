@@ -23,7 +23,6 @@ class Agreement(models.Model):
     description = models.CharField(max_length=200, blank=True, default='')
     # url to the announcement page, if any. should be a local path (e.g. /notice)
     url = models.CharField(max_length=50, blank=True, default='')
-    title = models.CharField(max_length=50, blank=True, default='')
 
     class Meta:
         get_latest_by = "last_updated"
