@@ -17,21 +17,24 @@ django.setup()
 from student.models import *
 from scripts import test_mailer
 
-school = 'jhu'
+school = 'uoft'
 client = test_mailer.TestMailer()
 
 # JHU EMAIL
-students = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct()
-
-for student_id in students:
-    student = Student.objects.get(id=student_id)
-    client.send_mail(student, "Exciting news from Semester.ly!", "email_notice.html", {'data': None})
-client.cleanup()
-
-# NON-JHU EMAIL
-# students = PersonalTimetable.objects.exclude(school=school).values_list("student", flat=True).distinct()
+############
+# students = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct()
 #
 # for student_id in students:
 #     student = Student.objects.get(id=student_id)
-#     client.send_mail(student, "Update from Semester.ly!", "email_nonjhu_notice.html", {'textbooks_json': None})
+#     client.send_mail(student, "Exciting news from Semester.ly!", "email_notice.html", {'data': None})
 # client.cleanup()
+
+# NON-JHU EMAIL
+################
+students = PersonalTimetable.objects.exclude(school=school).values_list("student", flat=True).distinct()
+for student_id in students:
+    student = Student.objects.get(id=student_id)
+    school = student.school
+    print(school)
+    client.send_mail(student, "Update from Semester.ly!", "email_nonjhu_notice.html", {'school': school})
+client.cleanup()
