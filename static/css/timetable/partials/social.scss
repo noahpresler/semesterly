@@ -30,15 +30,12 @@
 }
 
 .tip-down {
-  border-color: transparent;
-  border-style: solid dashed dashed;
-  border-top-color: $primary-navy;
-  border-width: 6.5px 6.5px 0;
-  cursor: pointer;
-  display: inline-block;
-  height: 0;
-  margin-left: 5px;
   width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #777777;
+  margin-left: 10px;
   z-index: 1;
 
   &.down {
@@ -152,22 +149,18 @@
 }
 
 .tip-border {
-  border-color: transparent transparent $gccc;
-  border-style: dashed dashed solid;
-  border-width: 0 8.5px 8.5px;
-  height: 0;
-  position: absolute;
-  width: 0;
-  z-index: 1;
+  //if we want to add a tip shadow later
 }
 
 .tip {
-  border-color: transparent transparent $gfff;
-  border-style: dashed dashed solid;
-  border-width: 0 8.5px 8.5px;
-  height: 0;
-  position: absolute;
   width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #fff;
+  margin-left: 8px;
+  margin-top: -1px;
+  position: absolute;
   z-index: 1;
 }
 

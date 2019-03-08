@@ -149,7 +149,10 @@ export const lockTimetable = timetable => (dispatch, getState) => {
 };
 
 // load a personal timetable into state
-export const loadTimetable = (timetable, isLoadingNewTimetable = false) => (dispatch, getState) => {
+export const loadTimetable = (
+  timetable, isLoadingNewTimetable = false,
+  autoLockAll = true,
+) => (dispatch, getState) => {
   const state = getState();
   const isLoggedIn = state.userInfo.data.isLoggedIn;
   if (!isLoggedIn) {
@@ -161,14 +164,20 @@ export const loadTimetable = (timetable, isLoadingNewTimetable = false) => (disp
     events: timetable.events.map(event =>
       ({ ...event, id: generateCustomEventId(), preview: false })),
   };
+  if (autoLockAll) {
+    dispatch({
+      type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
+      timetable: displayTimetable,
+      upToDate: !isLoadingNewTimetable,
+    });
 
-  dispatch({
+    return dispatch(lockTimetable(displayTimetable));
+  }
+  return dispatch({
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
     timetable: displayTimetable,
     upToDate: !isLoadingNewTimetable,
   });
-
-  return dispatch(lockTimetable(displayTimetable));
 };
 
 export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) => {
@@ -274,11 +283,11 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
   const state = getState();
   const isLoggedIn = state.userInfo.data.isLoggedIn;
   if (!isLoggedIn) {
-    return { type: ActionTypes.TOGGLE_SIGNUP_MODAL };
+    return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
 
   if (getActiveTimetable(state).slots.length > 0 && !state.savingTimetable.upToDate) {
-    return { type: ActionTypes.ALERT_NEW_TIMETABLE };
+    return dispatch({ type: ActionTypes.ALERT_NEW_TIMETABLE });
   }
 
   return dispatch(createNewTimetable(getNumberedName('Untitled Schedule',

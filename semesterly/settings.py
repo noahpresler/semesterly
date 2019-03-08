@@ -66,12 +66,12 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'user_friends',
 ]
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id,name,email,gender'
+    'fields': 'id,name,email'
 }
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-    'https://www.googleapis.com/auth/plus.login',
-    'https://www.googleapis.com/auth/plus.me',
+    # 'https://www.googleapis.com/auth/plus.login',
+    # 'https://www.googleapis.com/auth/plus.me',
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/calendar'
 ]
@@ -80,6 +80,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
     'approval_promt': 'force'  # Enables refresh_token
 }
 
+# We always use SSL as FB requires it
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True #if (os.environ.get('HOSTING_ENV') == 'stage' or\
+                                     #    os.environ.get('HOSTING_ENV') == 'prod') else False
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'

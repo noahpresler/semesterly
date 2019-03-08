@@ -137,7 +137,11 @@ export const fetchClassmates = timetable => (dispatch, getState) => {
     });
 };
 
-export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch, getState) => {
+export const saveTimetable = (
+  isAutoSave = false,
+  callback = null,
+  autoLockAll = false,
+) => (dispatch, getState) => {
   const state = getState();
   if (!state.userInfo.data.isLoggedIn) {
     return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
@@ -169,7 +173,7 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
     .then(checkStatus)
     .then(response => response.json())
     .then((json) => {
-      dispatch(loadTimetable(json.saved_timetable));
+      dispatch(loadTimetable(json.saved_timetable, false, autoLockAll));
       dispatch({
         type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
         timetables: json.timetables,

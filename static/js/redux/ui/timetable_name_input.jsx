@@ -25,6 +25,15 @@ class TimetableNameInput extends React.Component {
     this.state = { name: this.props.activeLoadedTimetableName };
   }
 
+  componentWillMount() {
+    $(document.body).on('keydown', (e) => {
+      if (e.key === 'Enter') {
+        this.setTimetableName();
+        $('input.timetable-name').blur();
+      }
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({ name: nextProps.activeLoadedTimetableName });
   }

@@ -49,7 +49,8 @@ urlpatterns = patterns('',
 
                        # error page testing
                        url(r'^404testing/', TemplateView.as_view(template_name='404.html')),
-                       url(r'^500testing/', TemplateView.as_view(template_name='500.html'))
+                       url(r'^500testing/', TemplateView.as_view(template_name='500.html')),
+                       url(r'^maintenance_testing/', TemplateView.as_view(template_name='maintenance.html'))
                        )
 
 if getattr(settings, 'STAGING', False):

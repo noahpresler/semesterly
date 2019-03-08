@@ -486,7 +486,6 @@ const courseModalBodyFixture = {
         sections: [
           '(01)',
         ],
-        gender: 'female',
         social_offerings: true,
         class_year: 2018,
         social_all: true,
@@ -507,7 +506,6 @@ const courseModalBodyFixture = {
         sections: [
           '(01)',
         ],
-        gender: 'female',
         social_offerings: true,
         class_year: 2018,
         social_all: true,
@@ -526,7 +524,6 @@ const courseModalBodyFixture = {
         sections: [
           '(01)',
         ],
-        gender: 'male',
         social_offerings: true,
         class_year: 2017,
         social_all: true,

@@ -9,6 +9,7 @@ services:
     image: semesterly
     environment:
       - NODE_ENV=development
+      - PYTHONUNBUFFERED=0
     build: .
     command: bash -c "python manage.py migrate; npm run watch & python /code/manage.py runserver 0.0.0.0:8000"
     volumes:
@@ -19,3 +20,11 @@ services:
       - "3000:3000"
     depends_on:
       - db
+  localssl:
+    image: jhuopensource/semesterly-caddy
+    volumes:
+      - ./build/caddy/Caddyfile:/etc/Caddyfile
+    ports:
+      - "443:443"
+    depends_on:
+      - web

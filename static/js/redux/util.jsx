@@ -169,7 +169,8 @@ export const isIncomplete = prop => prop === undefined || prop === '' || prop ==
 export const getNextAvailableColour = courseToColourIndex =>
   range(COLOUR_DATA.length).find(i => !Object.values(courseToColourIndex).some(x => x === i));
 
-export const generateCustomEventId = () => Math.floor((Math.random() * 10000) + 1);
+export const generateCustomEventId = () =>
+  new Date().getTime() + Math.floor((Math.random() * 10000) + 1);
 
 export const slotToDisplayOffering = (course, section, offering, colourId) => ({
   ...offering,

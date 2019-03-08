@@ -32,7 +32,6 @@ export const userInfoFixture = {
     GoogleSignedUp: false,
     school: 'jhu',
     fbook_uid: '10206009352974277',
-    gender: 'male',
     timetables: [],
     FacebookSignedUp: true,
     social_offerings: false,
