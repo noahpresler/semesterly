@@ -150,16 +150,16 @@ class UserSettingsModal extends React.Component {
     //   >
     //     <h4>Notifications</h4>
     //     {notificationsButton}
-      </div>
-            ) :
-                (<div
-                  className={classnames('preference welcome-modal__notifications cf', {
-                    'preference-attn-yellow': this.props.highlightNotifs,
-                  })}
-                >
-                  <h3>Use Another Browser To Enable Device Notifications</h3>
-                </div>)
-        ;
+    //   </div>
+    //         ) :
+    //             (<div
+    //               className={classnames('preference welcome-modal__notifications cf', {
+    //                 'preference-attn-yellow': this.props.highlightNotifs,
+    //               })}
+    //             >
+    //               <h3>Use Another Browser To Enable Device Notifications</h3>
+    //             </div>)
+    //     ;
     const preferences = !this.props.userInfo.FacebookSignedUp ? null : (
       <div>
         <div className="preference cf">

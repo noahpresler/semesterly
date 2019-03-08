@@ -135,6 +135,7 @@ class SearchBar extends React.Component {
       </div>
     ) : null;
     const resultContainer = !this.state.focused || results.length === 0 ? null : (
+    // const resultContainer = results.length === 0 ? null : (
       <ul className={resClass}>
         <div id="results_scroll" className="search-results__list-container">
           {results}
@@ -165,7 +166,7 @@ class SearchBar extends React.Component {
         <div className="search-bar__wrapper">
 
           <ClickOutHandler onClickOut={this.onClickOut}>
-            <div className="search-bar__semester" onMouseDown={this.toggleDropdown}>
+            <div className={classNames('search-bar__semester', { search_drop: this.state.focused && results.length !== 0 })} onMouseDown={this.toggleDropdown}>
               <span
                 className={classNames('tip-down', { down: this.state.showDropdown })}
               />
@@ -186,7 +187,7 @@ class SearchBar extends React.Component {
             <input
               ref={(c) => { this.input = c; }}
               placeholder={`Searching ${currSem}`}
-              className={this.props.isFetching ? 'results-loading-gif' : ''}
+              className={classNames(this.props.isFetching ? 'results-loading-gif' : '', { search_drop: this.state.focused && results.length !== 0 })}
               onInput={this.fetchSearchResults}
               onFocus={() => this.setState({ focused: true, showDropdown: false })}
               onBlur={() => this.setState({ focused: false })}
