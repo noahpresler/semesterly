@@ -140,16 +140,16 @@ class UserSettingsModal extends React.Component {
         </p>
       </div>
     </div>) : null;
-    const notificationsButton = this.props.tokenRegistered
-        ? (<a onClick={this.props.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
-        : (<a onClick={this.props.subscribeToNotifications}><h3>Turn On Notifications</h3></a>);
-    const notifications = this.state.sw_capable ? (
-      <div
-        className={classnames('preference welcome-modal__notifications cf',
-          { 'preference-attn': this.props.highlightNotifs })}
-      >
-        <h4>Notifications</h4>
-        {notificationsButton}
+    // const notificationsButton = this.props.tokenRegistered
+    //     ? (<a onClick={this.props.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
+    //     : (<a onClick={this.props.subscribeToNotifications}><h3>Turn On Notifications</h3></a>);
+    // const notifications = this.state.sw_capable ? (
+    //   <div
+    //     className={classnames('preference welcome-modal__notifications cf',
+    //       { 'preference-attn': this.props.highlightNotifs })}
+    //   >
+    //     <h4>Notifications</h4>
+    //     {notificationsButton}
       </div>
             ) :
                 (<div
@@ -316,7 +316,7 @@ class UserSettingsModal extends React.Component {
               />
             </div>
             { preferences }
-            { !this.state.isSigningUp ? notifications : null }
+            {/*{ !this.state.isSigningUp ? notifications : null }*/}
             { fbUpsell }
             { tos }
             { !this.state.isSigningUp ? deleteDropdown : null }
