@@ -9,15 +9,17 @@
     border: 0px;
     margin-left: 0px;
     font-size: 16px;
-    border-radius: 25px;
-    border-bottom-left-radius: 0px;
-    border-top-left-radius: 0px;
+    border-radius: 0px 25px 25px 0px;
     background-color: #f2f3f5;
     height: 30px;
     line-height: 30px;
     outline: 0;
     padding: 0 5px;
     width: 100%;
+
+    &.search_drop {
+      border-radius: 0px;
+    }
 
     &::-webkit-input-placeholder {
       font-size: 14px;
@@ -62,26 +64,23 @@
 
 .search-bar__semester {
   background-color: #f2f3f5;
-  border: 1px;
-  border-radius: 25px;
   color: #757575;
   cursor: pointer;
   float: left;
   font-size: 14px;
   font-weight: 400;
-  text-align: center;
   line-height: 18px;
-  margin-top: 0px;
-  margin-bottom: 10px;
-  margin-left: 0px;
   padding: 6px 4px 6px 30px;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
+  border-radius: 25px 0px 0px 25px;
 
   > .tip-down {
     left: 1px;
     position: absolute;
     top: 12px;
+  }
+
+  &.search_drop {
+    border-radius: 0px;
   }
 }
 
@@ -174,7 +173,7 @@
 // List wrapper for each search result course
 .search-results__list-container {
   position: absolute;
-  width: 66.3%;
+  width: 67%;
   overflow-y: auto;
   height: 100%;
   min-height: 232px;

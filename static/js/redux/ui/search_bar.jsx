@@ -50,16 +50,6 @@ class SearchBar extends React.Component {
     this.changeTimer = false;
   }
 
-  //fires jquery to animate to a certain position
-  scrollToCourse(position) {
-    $('#results_scroll').animate({scrollTop: $('#results_scroll').prop("scrollHeight")/numSearchResults*(position)}, 0);
-  }
-
-  //gets the scroll pixel height based on the current hovered course
-  getScrollHeight(position) {
-    return $('#results_scroll').prop("scrollHeight")/numSearchResults*(position);
-  }
-
   componentWillMount() {
     $(document.body).on('keydown', (e) => {
       if ($('input:focus').length === 0 && !this.props.explorationModalIsVisible && !e.ctrlKey) {
@@ -72,18 +62,11 @@ class SearchBar extends React.Component {
         if (e.key === 'Enter' && numSearchResults > 0 && this.state.showDropdown) {
           this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id);
         } else if (e.key === 'ArrowDown') {
-          let newHoveredPosition = this.props.hoveredPosition;
-          var lastPosition = numSearchResults-1;
-          newHoveredPosition = newHoveredPosition < lastPosition ? newHoveredPosition+1 : newHoveredPosition;
-          this.props.hoverSearchResult(newHoveredPosition);
-          if($('#results_scroll').scrollTop()<getScrollHeight(this.props.hoveredPosition-3))
-            scrollToCourse(this.props.hoveredPosition-3);
+          this.props.hoverSearchResult((this.props.hoveredPosition + 1) % numSearchResults);
         } else if (e.key === 'ArrowUp') {
           let newHoveredPosition = this.props.hoveredPosition - 1;
-          newHoveredPosition = newHoveredPosition < 0 ? 0 : newHoveredPosition;
+          newHoveredPosition = newHoveredPosition < 0 ? numSearchResults - 1 : newHoveredPosition;
           this.props.hoverSearchResult(newHoveredPosition);
-          if($('#results_scroll').scrollTop()>getScrollHeight(this.props.hoveredPosition))
-            scrollToCourse(this.props.hoveredPosition);
         } else if (e.key === 'Escape') {
           this.setState({ focused: false });
           $('.search-bar input').blur();
@@ -136,7 +119,7 @@ class SearchBar extends React.Component {
     ) : null;
     const resultContainer = !this.state.focused || results.length === 0 ? null : (
       <ul className={resClass}>
-        <div id="results_scroll" className="search-results__list-container">
+        <div className="search-results__list-container">
           {results}
           {seeMore}
         </div>
@@ -165,7 +148,7 @@ class SearchBar extends React.Component {
         <div className="search-bar__wrapper">
 
           <ClickOutHandler onClickOut={this.onClickOut}>
-            <div className="search-bar__semester" onMouseDown={this.toggleDropdown}>
+            <div className={classNames('search-bar__semester', { search_drop: this.state.focused && results.length !== 0 })} onMouseDown={this.toggleDropdown}>
               <span
                 className={classNames('tip-down', { down: this.state.showDropdown })}
               />
@@ -186,7 +169,7 @@ class SearchBar extends React.Component {
             <input
               ref={(c) => { this.input = c; }}
               placeholder={`Searching ${currSem}`}
-              className={this.props.isFetching ? 'results-loading-gif' : ''}
+              className={classNames(this.props.isFetching ? 'results-loading-gif' : '', { search_drop: this.state.focused && results.length !== 0 })}
               onInput={this.fetchSearchResults}
               onFocus={() => this.setState({ focused: true, showDropdown: false })}
               onBlur={() => this.setState({ focused: false })}

@@ -756,13 +756,6 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
               </div>
             </div>
           </div>
-          <div
-            className="preference welcome-modal__notifications cf"
-          >
-            <h3>
-              Use Another Browser To Enable Device Notifications
-            </h3>
-          </div>
           <h3
             className="delete-link"
             onClick={[Function]}
