@@ -150,7 +150,7 @@ class SearchBar extends React.Component {
 
           <ClickOutHandler onClickOut={this.onClickOut}>
             <div className="search-bar__semester" onMouseDown={this.toggleDropdown}
-                 style={{borderRadius: transformSearchAppearance ? '10px 0px 0px 0px' : '25px 0px 0px 25px'}}>
+                 style={{borderRadius: transformSearchAppearance ? '10px 0px 0px 0px' : '25px 0px 0px 25px' }}>
               <span
                 className={classNames('tip-down', { down: this.state.showDropdown })}
               />
