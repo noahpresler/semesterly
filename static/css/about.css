@@ -255,34 +255,16 @@ footer h6 {
 	margin: 0;
 }
 
-@media(max-width: 776px) {
-<<<<<<< HEAD
-	footer li {
-		text-align: center;
-	}
-}
-
 @media(max-width: 445px) {
 	header h1 {
 		display: none;
 	}
-<<<<<<< HEAD
 }
 @media(max-width: 776px) {
 	#hero h2 {
 		font-size: 40px;
 	}
-=======
->>>>>>> 9da9a06e6842efa6069c9ca824c88f9e557aadec
 	footer li {
 		text-align: center;
 	}
-}
-
-@media(max-width: 445px) {
-	header h1 {
-		display: none;
-	}
-=======
->>>>>>> 295d91836b887ad08e379466515d7f6b9e21c380
 }

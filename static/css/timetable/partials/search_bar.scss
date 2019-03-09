@@ -64,6 +64,7 @@
 
 .search-bar__semester {
   background-color: #f2f3f5;
+  border: 1px;
   color: #757575;
   cursor: pointer;
   float: left;
@@ -127,7 +128,7 @@
 .search-results {
   background-color: $gfff;
   border: 1px solid $ge6e6e6;
-  border-top-color: $gd9d9d9;
+  border-top: none;
   box-shadow: 0 2px 4px $black-transparent-2;
   margin: 0;
   overflow: hidden;

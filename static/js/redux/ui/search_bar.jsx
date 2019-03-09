@@ -59,7 +59,7 @@ class SearchBar extends React.Component {
         }
       } else if ($('input:focus').length !== 0) {
         const numSearchResults = this.props.searchResults.length;
-        if (e.key === 'Enter' && numSearchResults > 0 && this.state.showDropdown) {
+        if (e.key === 'Enter' && numSearchResults > 0 && this.state.focused) {
           this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id);
         } else if (e.key === 'ArrowDown') {
           this.props.hoverSearchResult((this.props.hoveredPosition + 1) % numSearchResults);
@@ -143,12 +143,14 @@ class SearchBar extends React.Component {
     const currSem = ($(window).width() < 767) ?
             SearchBar.getAbbreviatedSemesterName(this.props.semester) :
             SearchBar.getSemesterName(this.props.semester);
+    let transformSearchAppearance = this.props.searchResults.length>0 && this.state.focused;
     return (
       <div className="search-bar no-print">
         <div className="search-bar__wrapper">
 
           <ClickOutHandler onClickOut={this.onClickOut}>
-            <div className={classNames('search-bar__semester', { search_drop: this.state.focused && results.length !== 0 })} onMouseDown={this.toggleDropdown}>
+            <div className="search-bar__semester" onMouseDown={this.toggleDropdown}
+                 style={{borderRadius: transformSearchAppearance ? '10px 0px 0px 0px' : '25px 0px 0px 25px'}}>
               <span
                 className={classNames('tip-down', { down: this.state.showDropdown })}
               />
@@ -171,8 +173,9 @@ class SearchBar extends React.Component {
               placeholder={`Searching ${currSem}`}
               className={classNames(this.props.isFetching ? 'results-loading-gif' : '', { search_drop: this.state.focused && results.length !== 0 })}
               onInput={this.fetchSearchResults}
-              onFocus={() => this.setState({ focused: true, showDropdown: false })}
+              onFocus={() => this.setState({ focused: true, showDropdown: false})}
               onBlur={() => this.setState({ focused: false })}
+              style={{borderRadius: transformSearchAppearance ? '0px 10px 0px 0px' : '0px 25px 25px 0px'}}
             />
           </div>
           <div
