@@ -57,8 +57,8 @@
 .trans .exploration-body p,
 .trans .exp-modal .modal-header,
 .trans .exp-modal .modal-header h1,
-.trans .expo-modal .modal-header div,
 .trans .exp-modal .modal-header h2,
+.trans .exp-modal .modal-header div,
 .trans .exp-modal .modal-content,
 .trans .modal-body .credits h4,
 .trans .exp-modal .modal-share,
@@ -404,12 +404,10 @@
 
   h1 {
     font-size: 22px;
-    padding: 0;
   }
 
   h2 {
     font-size: 14px;
-    padding: 0 20% 0 0;
   }
 
   .modal-body {
