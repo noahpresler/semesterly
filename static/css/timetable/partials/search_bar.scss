@@ -397,8 +397,7 @@
 
   li,
   .search-section,
-  .search-course h4,
-  .search-course .label {
+  .search-course h4 {
     // This makes it semi transparent
     color: $navy-transparent-0;
   }
@@ -414,6 +413,10 @@
   .search-bar__side,
   .search-course .label {
     background-color: transparent;
+  }
+
+  .search-course div > div > span {
+    opacity: 0;
   }
 
   .see-more__inner {
