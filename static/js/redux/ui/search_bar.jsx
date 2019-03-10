@@ -146,18 +146,20 @@ class SearchBar extends React.Component {
     const transformSearchAppearance = this.props.searchResults.length > 0 && this.state.focused;
     return (
       <div className="search-bar no-print">
-        <div className="search-bar__wrapper">
+        <div className="search-bar__wrapper" style={{ borderRadius: transformSearchAppearance ? '10px 10px 0px 0px' : '25px 25px 25px 25px',
+          boxShadow: transformSearchAppearance ? '0 2px 10px rgba(0, 0, 0, .2)' : 'none',
+          border: transformSearchAppearance ? '1px solid #e6e6e6' : 'none' }}>
 
           <ClickOutHandler onClickOut={this.onClickOut}>
             <div
               className="search-bar__semester"
               onMouseDown={this.toggleDropdown}
-              style={{ borderRadius: transformSearchAppearance ? '10px 0px 0px 0px' : '25px 0px 0px 25px' }}
+              style={{ backgroundColor: transformSearchAppearance ? '#ffffff' : '#f2f3f5' }}
             >
               <span
                 className={classNames('tip-down', { down: this.state.showDropdown })}
               />
-              {currSem}</div>
+              {currSem}   |</div>
             <div
               className={classNames('semester-picker', { down: this.state.showDropdown })}
             >
@@ -165,12 +167,9 @@ class SearchBar extends React.Component {
               <div className="tip" />
               { availableSemesters }
             </div>
-            <div className="vertical-bar">
-              <img alt="" className="bar-image" src="/static/img/bar.png" />
-            </div>
           </ClickOutHandler>
 
-          <div className="search-bar__input-wrapper">
+          <div className="search-bar__input-wrapper" >
             <input
               ref={(c) => { this.input = c; }}
               placeholder={`Searching ${currSem}`}
@@ -178,7 +177,8 @@ class SearchBar extends React.Component {
               onInput={this.fetchSearchResults}
               onFocus={() => this.setState({ focused: true, showDropdown: false })}
               onBlur={() => this.setState({ focused: false })}
-              style={{ borderRadius: transformSearchAppearance ? '0px 10px 0px 0px' : '0px 25px 25px 0px' }}
+              style={{ borderRadius: transformSearchAppearance ? '0px 10px 0px 0px' : '0px 25px 25px 0px',
+                backgroundColor: transformSearchAppearance ? '#ffffff' : '#f2f3f5' }}
             />
           </div>
           <div
