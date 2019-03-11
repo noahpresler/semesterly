@@ -146,15 +146,12 @@ class SearchBar extends React.Component {
     const transformSearchAppearance = this.props.searchResults.length > 0 && this.state.focused;
     return (
       <div className="search-bar no-print">
-        <div className="search-bar__wrapper" style={{ borderRadius: transformSearchAppearance ? '10px 10px 0px 0px' : '25px 25px 25px 25px',
-          boxShadow: transformSearchAppearance ? '0 2px 10px rgba(0, 0, 0, .2)' : 'none',
-          border: transformSearchAppearance ? '1px solid #e6e6e6' : 'none' }}>
+        <div className={"search-bar__wrapper " + (transformSearchAppearance ? 'search-bar-wrapper__after' : 'search-bar-wrapper__before')} >
 
           <ClickOutHandler onClickOut={this.onClickOut}>
             <div
-              className="search-bar__semester"
+              className={"search-bar__semester "+(transformSearchAppearance ? 'white-background' : 'grey-background')}
               onMouseDown={this.toggleDropdown}
-              style={{ backgroundColor: transformSearchAppearance ? '#ffffff' : '#f2f3f5' }}
             >
               <span
                 className={classNames('tip-down', { down: this.state.showDropdown })}
@@ -173,12 +170,11 @@ class SearchBar extends React.Component {
             <input
               ref={(c) => { this.input = c; }}
               placeholder={`Searching ${currSem}`}
-              className={classNames(this.props.isFetching ? 'results-loading-gif' : '', { search_drop: this.state.focused && results.length !== 0 })}
+              className={classNames(this.props.isFetching ? 'results-loading-gif' : '', { search_drop: this.state.focused && results.length !== 0 })
+              +(transformSearchAppearance ? 'search-bar-wrapper-input__after white-background' : 'search-bar-wrapper-input__before grey-background')}
               onInput={this.fetchSearchResults}
               onFocus={() => this.setState({ focused: true, showDropdown: false })}
               onBlur={() => this.setState({ focused: false })}
-              style={{ borderRadius: transformSearchAppearance ? '0px 10px 0px 0px' : '0px 25px 25px 0px',
-                backgroundColor: transformSearchAppearance ? '#ffffff' : '#f2f3f5' }}
             />
           </div>
           <div
