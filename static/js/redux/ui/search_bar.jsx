@@ -146,7 +146,7 @@ class SearchBar extends React.Component {
     const transformSearchAppearance = this.props.searchResults.length > 0 && this.state.focused;
     return (
       <div className="search-bar no-print">
-        <div className={"search-bar__wrapper " + (transformSearchAppearance ? 'search-bar-wrapper__after' : 'search-bar-wrapper__before')} >
+        <div className={"search-bar__wrapper " + (transformSearchAppearance ? '__after' : '__before')} >
 
           <ClickOutHandler onClickOut={this.onClickOut}>
             <div
@@ -171,7 +171,7 @@ class SearchBar extends React.Component {
               ref={(c) => { this.input = c; }}
               placeholder={`Searching ${currSem}`}
               className={classNames(this.props.isFetching ? 'results-loading-gif' : '', { search_drop: this.state.focused && results.length !== 0 })
-              +(transformSearchAppearance ? 'search-bar-wrapper-input__after white-background' : 'search-bar-wrapper-input__before grey-background')}
+              +(transformSearchAppearance ? '__after white-background' : '__before grey-background')}
               onInput={this.fetchSearchResults}
               onFocus={() => this.setState({ focused: true, showDropdown: false })}
               onBlur={() => this.setState({ focused: false })}
