@@ -250,25 +250,25 @@ class ExplorationModal extends React.Component {
   barTagsBubbles(selectedCourse) {
     const areaBubbles = selectedCourse.areas ?
       selectedCourse.areas.map((letter) =>
-        letter=='H' ? <div className="area-bubble search H">{letter}</div> :
-          letter=='S' ? <div className="area-bubble search S">{letter}</div> :
-            letter=='N' ? <div className="area-bubble search N">{letter}</div> :
-              letter=='E' ? <div className="area-bubble search E">{letter}</div> :
-                letter=='Q' ? <div className="area-bubble search Q">{letter}</div> : '') : '';
-    const writingIntensive = selectedCourse.writing_intensive == 'Yes' ?
+        letter === 'H' ? <div className="area-bubble search H">{letter}</div> :
+          letter === 'S' ? <div className="area-bubble search S">{letter}</div> :
+            letter === 'N' ? <div className="area-bubble search N">{letter}</div> :
+              letter === 'E' ? <div className="area-bubble search E">{letter}</div> :
+                letter === 'Q' ? <div className="area-bubble search Q">{letter}</div> : '') : '';
+    const writingIntensive = selectedCourse.writing_intensive === 'Yes' ?
       <div className="writing-intensive-bubble search">Writing Intensive</div> : '';
-      return <div className="areas-container search">{areaBubbles}{writingIntensive}</div>;
+    return <div className="areas-container search">{areaBubbles}{writingIntensive}</div>;
   }
 
   tagsBubbles(selectedCourse) {
     const areaBubbles = selectedCourse.areas ?
       selectedCourse.areas.map((letter) =>
-        letter=='H' ? <div className="area-bubble H">{letter}</div> :
-          letter=='S' ? <div className="area-bubble S">{letter}</div> :
-            letter=='N' ? <div className="area-bubble N">{letter}</div> :
-              letter=='E' ? <div className="area-bubble E">{letter}</div> :
-                letter=='Q' ? <div className="area-bubble Q">{letter}</div> : '') : '';
-    const writingIntensive = selectedCourse.writing_intensive == 'Yes' ?
+        letter === 'H' ? <div className="area-bubble H">{letter}</div> :
+          letter === 'S' ? <div className="area-bubble S">{letter}</div> :
+            letter === 'N' ? <div className="area-bubble N">{letter}</div> :
+              letter === 'E' ? <div className="area-bubble E">{letter}</div> :
+                letter === 'Q' ? <div className="area-bubble Q">{letter}</div> : '') : '';
+    const writingIntensive = selectedCourse.writing_intensive === 'Yes' ?
       <div className="writing-intensive-bubble">Writing Intensive</div> : '';
     return <div className="areas-container">{areaBubbles}{writingIntensive}</div>;
   }
@@ -282,14 +282,15 @@ class ExplorationModal extends React.Component {
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
-      key={c.id} code={c.code} name={c.name} modalTags={this.tagsBubbles(c)} barTags={this.barTagsBubbles(c, "bar")} areas={c.areas} pos={c.pos} writing_intensive={c.writing_intensive} sub_school={c.sub_school} department={c.department}
+      key={c.id} code={c.code} name={c.name} modalTags={this.tagsBubbles(c)} barTags={this.barTagsBubbles(c)} areas={c.areas} pos={c.pos} writing_intensive={c.writing_intensive} sub_school={c.sub_school} department={c.department}
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />));
     let courseModal = null;
     if (active >= 0 && active < advancedSearchResults.length) {
       const selectedCourse = advancedSearchResults[active];
       const modalTags = this.tagsBubbles(selectedCourse);
-      const courseAndDept = <span className="course-and-dept-container">{selectedCourse.code}, {selectedCourse.department}</span>;
+      const courseAndDept = (<span className="course-and-dept-container">{selectedCourse.code},
+        {selectedCourse.department}</span>);
       const subHeader = <div className="areas-container">{courseAndDept}{modalTags}</div>;
       const shareLink = this.state.shareLinkShown ?
                 (<ShareLink

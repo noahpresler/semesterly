@@ -128,17 +128,18 @@ class CourseModal extends React.Component {
       />
     </div>) : null;
     const areaBubbles = this.props.data.areas ?
-      this.props.data.areas.map((letter) =>
-        letter=='H' ? <div className="area-bubble H">{letter}</div> :
-          letter=='S' ? <div className="area-bubble S">{letter}</div> :
-            letter=='N' ? <div className="area-bubble N">{letter}</div> :
-              letter=='E' ? <div className="area-bubble E">{letter}</div> :
-                letter=='Q' ? <div className="area-bubble Q">{letter}</div> : '') : '';
+      this.props.data.areas.map(letter =>
+        letter === 'H' ? <div className="area-bubble H">{letter}</div> :
+          letter === 'S' ? <div className="area-bubble S">{letter}</div> :
+            letter === 'N' ? <div className="area-bubble N">{letter}</div> :
+              letter === 'E' ? <div className="area-bubble E">{letter}</div> :
+                letter === 'Q' ? <div className="area-bubble Q">{letter}</div> : '') : '';
 
-    const writingIntensive = this.props.data.writing_intensive == 'Yes' ?
+    const writingIntensive = this.props.data.writing_intensive === 'Yes' ?
       <div className="writing-intensive-bubble">Writing Intensive</div> : '';
 
-    const subHeader = <div className="areas-container">{courseAndDept}{areaBubbles}{writingIntensive}</div>;
+    const subHeader = (<div className="areas-container">{courseAndDept}
+      {areaBubbles}{writingIntensive}</div>);
 
     const content =
             (<div className="modal-content">
