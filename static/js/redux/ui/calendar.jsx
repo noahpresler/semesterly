@@ -22,6 +22,7 @@ import SlotManagerContainer from './containers/slot_manager_container';
 import CellContainer from './containers/cell_container';
 import { DAYS } from '../constants/constants';
 import { ShareLink } from './master_slot';
+import * as ActionTypes from "../constants/actionTypes";
 
 const Row = (props) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
@@ -142,17 +143,25 @@ class Calendar extends React.Component {
   }
 
   sisBtnClick() {
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.action = 'https://sis.jhu.edu/sswf/go/';
-    form.encType = 'application/x-www-form-urlencoded';
-    document.body.appendChild(form);
-    const input = document.createElement('input');
-    input.name = 'data';
-    input.type = 'hidden';
-    input.value = JSON.stringify(this.props.fetchSISTimetableData());
-    form.appendChild(input);
-    form.submit();
+    let isLoggedIn=false;
+
+    if(isLoggedIn) {
+      const form = document.createElement('form');
+      form.method = 'post';
+      form.action = 'https://sis.jhu.edu/sswf/go/';
+      form.encType = 'application/x-www-form-urlencoded';
+      document.body.appendChild(form);
+      const input = document.createElement('input');
+      input.name = 'data';
+      input.type = 'hidden';
+      input.value = JSON.stringify(this.props.fetchSISTimetableData());
+      form.appendChild(input);
+      form.submit();
+    }
+    else
+    {
+      this.props.triggerImportSISModal();
+    }
   }
 
   hoverCustomSlot() {
@@ -427,6 +436,7 @@ Calendar.defaultProps = {
 Calendar.propTypes = {
   togglePreferenceModal: PropTypes.func.isRequired,
   triggerSaveCalendarModal: PropTypes.func.isRequired,
+  triggerImportSISModal: PropTypes.func.isRequired,
   isFetchingShareLink: PropTypes.bool.isRequired,
   endHour: PropTypes.number.isRequired,
   handleCreateNewTimetable: PropTypes.func.isRequired,
