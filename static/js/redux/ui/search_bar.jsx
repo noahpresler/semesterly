@@ -27,6 +27,9 @@ class SearchBar extends React.Component {
   }
 
   static abbreviateSemesterName(semesterName) {
+    if (semesterName === 'Summer') {
+      return 'Su';
+    }
     return semesterName[0];
   }
 
@@ -130,6 +133,7 @@ class SearchBar extends React.Component {
       const name = ($(window).width() < 767) ?
                 SearchBar.getAbbreviatedSemesterName(semester) :
                 SearchBar.getSemesterName(semester);
+      console.log(name);
       return (
         <div
           key={name}
