@@ -173,7 +173,7 @@
 // List wrapper for each search result course
 .search-results__list-container {
   position: absolute;
-  width: 67%;
+  width: 100%;
   overflow-y: auto;
   height: 100%;
   min-height: 232px;
@@ -504,6 +504,7 @@
 
   .search-results {
     width: 100%;
+    height: 240px;
   }
 
   .search-course {
