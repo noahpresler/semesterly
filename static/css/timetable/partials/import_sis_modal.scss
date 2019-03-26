@@ -1,0 +1,156 @@
+.abnb-modal {
+  height: 465px;
+  max-width: 450px;
+  overflow: auto;
+
+  > div {
+    outline: none;
+  }
+
+  .modal-header {
+    background-color: $geee;
+    border-bottom: 1px solid $gddd;
+    padding: 25px;
+    position: relative;
+  }
+}
+
+.save-calendar-modal__container {
+  padding: 0px 0px 0px;
+}
+
+.header-pic {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  bottom: -30px;
+  height: 80px;
+  position: absolute;
+  right: 10%;
+  width: 80px;
+}
+
+.img-icon {
+  > img {
+    float: left;
+    height: 22px;
+    width: 22px;
+  }
+
+  > i {
+    float: left;
+    font-size: 22px;
+  }
+
+  > .done {
+    color: #42A770;
+    transform: scale(1.1);
+    transition: all .2s ease-in-out;
+  }
+
+  > .loader {
+    animation: spin 2s linear infinite;
+    border: 10px solid $gf3f3f3;
+    border-radius: 50%;
+    border-top: 10px solid #3498db;
+    float: left;
+    height: 10px;
+    width: 10px;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.abnb-btn {
+  background: $gfff;
+  border: 1px solid;
+  border-color: $gc4c4c4;
+  border-radius: 4px;
+  color: $g484848;
+  padding: 20px 27px !important;
+  width: 100%;
+
+  &:hover,
+  &:focus {
+    border-color: $gaaa;
+    color: $g484848;
+  }
+
+  &.secondary {
+    > span {
+      color: $g484848;
+      font-weight: 300;
+    }
+  }
+}
+
+.or-separator {
+  background: none;
+  height: 34px;
+  margin-bottom: 22px;
+  position: relative;
+  text-align: center;
+
+  hr {
+    margin: -16px auto 10px;
+    width: 100%;
+  }
+}
+
+.or-separator--text {
+  background-color: $gfff;
+  color: $g777;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 8px 8px 0;
+}
+
+.method-details {
+  color: $g777;
+  font-size: 12px;
+  font-weight: 200;
+  margin-bottom: 2px;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.cal-name {
+  border: 1px solid $ge6e6e6;
+  border-radius: 4px;
+  color: $gaaa;
+  font-size: 16px;
+  font-weight: 300;
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 10px;
+  outline: 0;
+  padding: 0 10px;
+  text-align: center;
+  width: 100%;
+}
+
+@media(max-width: 776px) {
+  .abnb-modal {
+    max-width: 1200px;
+  }
+
+  .header-pic {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    bottom: 10px;
+    height: 50px;
+    position: absolute;
+    right: 7%;
+    width: 50px;
+  }
+}
