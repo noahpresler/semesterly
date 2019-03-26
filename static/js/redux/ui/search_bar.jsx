@@ -133,7 +133,6 @@ class SearchBar extends React.Component {
       const name = ($(window).width() < 767) ?
                 SearchBar.getAbbreviatedSemesterName(semester) :
                 SearchBar.getSemesterName(semester);
-      console.log(name);
       return (
         <div
           key={name}
