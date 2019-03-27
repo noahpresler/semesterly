@@ -364,7 +364,7 @@
 .exp-s-result {
   background-color: $gfff;
   cursor: pointer;
-  padding: 10px;
+  padding-bottom: 35px;
   position: relative;
   transition: background-color .3s;
 
@@ -386,6 +386,12 @@
     margin: 5px 0;
     display: inline;
   }
+
+  > .areas-container.search {
+    height: 30px;
+    margin: 10px;
+  }
+
 }
 
 // Exploration Course Content

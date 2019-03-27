@@ -314,7 +314,7 @@ class Ingestor(dict):
             'fees': safe_cast(self._get('fees', 'fee', 'cost'), float),
             'final_exam': self._get('final_exam'),
             'textbooks': self._get('textbooks'),
-            'meetings': self._get('offerings', 'meetings'),
+            'meetings': self._get('offerings', 'meetings')
         }
 
         section = clean(section)

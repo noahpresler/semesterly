@@ -487,8 +487,11 @@ class ExplorationModal extends React.Component {
 
 const ExplorationSearchResult = ({ name, code, barTags, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
-    <div><h4>{ name } </h4> <h5> - {code}</h5></div>
-    <h5> { barTags }</h5>
+    <div className="areas-container">
+      <h4>{ name } </h4>
+      <h5> - {code}</h5>
+      {barTags}
+    </div>
   </div>
 );
 

@@ -68,7 +68,7 @@
 .areas-container {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
   align-content: flex-start;
@@ -76,7 +76,8 @@
   margin: 6px;
   &.search {
     height: 20px;
-    margin: 0px;
+    margin: 5px;
+    float: left;
   }
 }
 
@@ -89,6 +90,7 @@
   align-content: flex-start;
   height: 21px;
   margin: 0px 7px 0px 0px;
+  float: left;
 }
 
 .area-bubble {
@@ -109,8 +111,9 @@
     font-size: 15px;
     height: 20px;
     width: 20px;
-    margin: 4px;
-    padding: 2px;
+    margin-left: 4px;
+    margin-top: 0px;
+    padding: 1px;
   }
   &.H {
     background: #FD7473;
@@ -151,8 +154,9 @@
     font-size: 15px;
     height: 18px;
     width: 121px;
-    margin: 2px;
-    padding: 1px 0px 0px 0px;
+    margin-top: -6px;
+    margin-bottom: -3px;
+    padding: 0px 0px 0px 0px;
   }
 }
 
@@ -224,52 +228,7 @@
     padding-right: 15%;
     transition: color .2s;
   }
-  .area-bubble {
-    background: blue;
-    border-radius: 25%;
-    color: white;
-    text-align: center;
-    vertical-align: middle;
-    font-family: $font-body;
-    font-size: 17px;
-    font-weight: bold;
-    height: 21px;
-    width: 21px;
-    padding: 1px 2.5px 0px 2px;
-    margin: 2px;
-    text-align: center;
-    &.search {
-      font-size: 15px;
-      height: 20px;
-      width: 20px;
-      margin: 4px;
-      padding: 2px;
-    }
-    &.H {
-      background: #FD7473;
-    }
-
-    &.S {
-      background: #408EA9;
-    }
-
-    &.N {
-      background: #B177C7;
-    }
-
-    &.E {
-      background: #259B82;
-    }
-
-    &.Q {
-      background: #FFD462;
-    }
-  }
 }
-
-
-// Course Modal Corner Actions
-.modal-close,
 .modal-share,
 .modal-save {
   color: $g777;
