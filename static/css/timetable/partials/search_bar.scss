@@ -9,16 +9,16 @@
     border: 0px;
     margin-left: 0px;
     font-size: 16px;
-    border-radius: 0px 25px 25px 0px;
+    border-radius: 0 25px 25px 0;
     background-color: #f2f3f5;
     height: 30px;
     line-height: 30px;
     outline: 0;
-    padding: 0 5px;
     width: 100%;
 
-    &.search_drop {
-      border-radius: 0px;
+    &.results {
+      border-radius: 0 10px 0 0;
+      background-color: #ffffff;
     }
 
     &::-webkit-input-placeholder {
@@ -43,15 +43,6 @@
   }
 }
 
-.vertical-bar {
-  border: 0px;
-  float: left;
-}
-
-.bar-image {
-  height: 30px;
-}
-
 .search-bar__input-wrapper {
   overflow: hidden;
   width: auto;
@@ -60,6 +51,13 @@
 .search-bar__wrapper {
   background-color: $gfff;
   width: 100%;
+  border-radius: 25px;
+
+  &.results {
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+    border: 1px solid #e6e6e6;
+  }
 }
 
 .search-bar__semester {
@@ -70,8 +68,8 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 18px;
-  padding: 6px 4px 6px 30px;
-  border-radius: 25px 0px 0px 25px;
+  padding: 5px 0 6px 30px;
+  border-radius: 25px 0 0 25px;
 
   > .tip-down {
     left: 1px;
@@ -79,8 +77,14 @@
     top: 12px;
   }
 
-  &.search_drop {
-    border-radius: 0px;
+  > .bar {
+    margin: 0 4px 0 5px;
+    font-size: 18px;
+    font-weight: 200;
+  }
+
+  &.results {
+    background-color: #ffffff;
   }
 }
 
@@ -104,7 +108,7 @@
   }
 
   .tip-border {
-    left: 6;
+    left: 6px;
     top: -9px;
   }
 
@@ -127,8 +131,9 @@
 .search-results {
   background-color: $gfff;
   border: 1px solid $ge6e6e6;
-  border-top-color: $gd9d9d9;
-  box-shadow: 0 2px 4px $black-transparent-2;
+  border-radius: 0 0 10px 10px;
+  border-top: 0;
+  box-shadow: 0 3px 4px $black-transparent-2;
   margin: 0;
   overflow: hidden;
   padding: 0;
@@ -173,7 +178,7 @@
 // List wrapper for each search result course
 .search-results__list-container {
   position: absolute;
-  width: 100%;
+  width: 66.66%;
   overflow-y: auto;
   height: 100%;
   min-height: 232px;
@@ -182,6 +187,7 @@
 // Each Course that is listed in the Search Results
 .search-course {
   cursor: pointer;
+  border-right: 1px solid #f3f3f3;
   height: 59.5px;
   list-style-type: none;
   max-width: 600px;
@@ -518,29 +524,33 @@
   .see-more {
     display: none;
   }
+
+  .search-results__list-container {
+    width: 100%;
+  }
 }
 
 @media (max-width: 500px) {
-	.search-bar {
+  .search-bar {
     left: 0;
     width: 100%;
-	}
+  }
 
-	.search-bar__wrapper {
-    left: 57px;
+  .search-bar__wrapper {
+    left: 50px;
     position: absolute;
-    right: 107px;
+    right: 85px;
     width: auto;
-	}
+
+    &.results {
+      border-radius: 0;
+    }
+  }
 
   .search-results {
     top: 39px;
-	}
-
-	.search-bar__wrapper {
-    left: 50px;
-    right: 85px;
-	}
+    border: 0;
+  }
 }
 
 @media (min-width: 767px) {
