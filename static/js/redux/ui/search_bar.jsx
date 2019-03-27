@@ -27,6 +27,9 @@ class SearchBar extends React.Component {
   }
 
   static abbreviateSemesterName(semesterName) {
+    if (semesterName === 'Summer') {
+      return 'Su';
+    }
     return semesterName[0];
   }
 
@@ -59,7 +62,7 @@ class SearchBar extends React.Component {
         }
       } else if ($('input:focus').length !== 0) {
         const numSearchResults = this.props.searchResults.length;
-        if (e.key === 'Enter' && numSearchResults > 0 && this.state.showDropdown) {
+        if (e.key === 'Enter' && numSearchResults > 0 && this.state.focused) {
           this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id);
         } else if (e.key === 'ArrowDown') {
           this.props.hoverSearchResult((this.props.hoveredPosition + 1) % numSearchResults);
@@ -143,16 +146,20 @@ class SearchBar extends React.Component {
     const currSem = ($(window).width() < 767) ?
             SearchBar.getAbbreviatedSemesterName(this.props.semester) :
             SearchBar.getSemesterName(this.props.semester);
+    const resultsShown = results.length !== 0 && this.state.focused;
     return (
       <div className="search-bar no-print">
-        <div className="search-bar__wrapper">
+        <div className={classNames('search-bar__wrapper', { results: resultsShown })}>
 
           <ClickOutHandler onClickOut={this.onClickOut}>
-            <div className="search-bar__semester" onMouseDown={this.toggleDropdown}>
+            <div
+              className={classNames('search-bar__semester', { results: resultsShown })}
+              onMouseDown={this.toggleDropdown}
+            >
               <span
                 className={classNames('tip-down', { down: this.state.showDropdown })}
               />
-              {currSem}</div>
+              {currSem}<span className="bar">|</span></div>
             <div
               className={classNames('semester-picker', { down: this.state.showDropdown })}
             >
@@ -160,16 +167,13 @@ class SearchBar extends React.Component {
               <div className="tip" />
               { availableSemesters }
             </div>
-            <div className="vertical-bar">
-              <img alt="" className="bar-image" src="/static/img/bar.png" />
-            </div>
           </ClickOutHandler>
 
-          <div className="search-bar__input-wrapper">
+          <div className="search-bar__input-wrapper" >
             <input
               ref={(c) => { this.input = c; }}
               placeholder={`Searching ${currSem}`}
-              className={this.props.isFetching ? 'results-loading-gif' : ''}
+              className={classNames(this.props.isFetching ? 'results-loading-gif' : '', { results: resultsShown })}
               onInput={this.fetchSearchResults}
               onFocus={() => this.setState({ focused: true, showDropdown: false })}
               onBlur={() => this.setState({ focused: false })}

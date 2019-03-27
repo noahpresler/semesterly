@@ -155,7 +155,6 @@ export const userInfo = PropTypes.shape({
   class_year: PropTypes.number,
   img_url: PropTypes.string,
   fbook_uid: PropTypes.string,
-  gender: PropTypes.string,
   major: PropTypes.string,
   social_courses: PropTypes.bool,
   social_offerings: PropTypes.bool,
@@ -191,7 +190,6 @@ export const foreignUser = PropTypes.shape({
   userFirstName: PropTypes.string,
   userLastName: PropTypes.string,
   img_url: PropTypes.string.isRequired,
-  gender: PropTypes.string,
   class_year: PropTypes.number,
 });
 

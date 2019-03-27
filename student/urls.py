@@ -13,6 +13,7 @@
 from django.conf.urls import patterns, url
 from django.contrib import admin
 
+from helpers.mixins import FeatureFlowView
 import student.views
 
 admin.autodiscover()
@@ -22,6 +23,10 @@ urlpatterns = patterns('',
   url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
   url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', student.views.unsubscribe),
   url(r'^user/settings/$', student.views.UserView.as_view()),
+  url(
+    r'^delete_account/$',
+    FeatureFlowView.as_view(
+      feature_name='DELETE_ACCOUNT', allow_unauthenticated=False)),
 
   # timetable management
   url(r'^user/timetables/$', student.views.UserTimetableView.as_view()),

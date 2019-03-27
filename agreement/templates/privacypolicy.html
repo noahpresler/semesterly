@@ -6,7 +6,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 		<meta name="description" content="{{ course.name }} at {{ school_name }}: {{ course.description }}">
-		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo">
+		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Kristin Yim">
 
 		<!-- Facebook thumbnail info -->
 		<meta property="og:title" content="{{ course.code }} {{ course.name }} | Semester.ly" />
@@ -23,7 +23,7 @@
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
-		
+
 		<!-- <img class="timer-logo" height=75 src="{% static 'img/logo2.0.png' %}"/> -->
 		<link rel="stylesheet" href="{% static 'css/course-page.css' %}">
 	</head>
@@ -42,7 +42,7 @@
 			<div id="top-bg"></div>
 			<div id="top" class="grid cf">
 				<div class="card-width">
-					<h1>Privacy Policy | March 30, 2017</h1>
+					<h1>Privacy Policy | March 8, 2019</h1>
 				</div>
 			</div>
 			<div id="content">
@@ -76,7 +76,7 @@
 <p>We use various technologies to collect information from your computer or other internet access device related to your use of the Service.</p>
 <p>Our website (https://semester.ly) captures e‑mail addresses, mobile phone numbers, and other log‑in information from visitors who opt‑in by providing their email address, mobile phone numbers and/or log‑in information. It also captures non‑personally‑identifiable information for purposes of analytics that assess visitor trends, such as numbers of users, pages visited, and IP address country of origin.</p>
 <p>Our encrypted invite system website (https://semester.ly) captures user IP addresses to prevent misuse of our system and to enforce sender‑specified message restrictions. It also collects user and device information for, among other things, authentication and system integrity. In addition, we collect date/time information and recipient service links (<em>e.g.</em>, user identifier associated with a particular type of application). For purposes of facilitating the transmission of user messages on the Service, Semester.ly will rely on specific contact information that users provide (<em>e.g.</em>, an e‑mail address for a message recipient). Semester.ly does not collect any other information from users’ contact lists or devices.</p>
-<p>Our platform (https://semester.ly) collects additional information necessary to provide the Semester.ly service. This information include IP addresses to prevent misuse of our system and to enforce sender‑specified message restrictions. It also includes user‑specific device information and, if the user opts in, may collect the email addresses, SMS addresses, and/or Facebook/Google accounts associated with the user’s Semester.ly account.</p>
+<p>Our platform (https://semester.ly) collects additional information necessary to provide the Semester.ly service. This information include IP addresses to prevent misuse of our system and to enforce sender‑specified message restrictions. It also includes user‑specific device information and, if the user opts in, may collect the email addresses, SMS addresses, University specific log-in credentials, and/or Facebook/Google accounts associated with the user’s Semester.ly account.</p>
 <p>We use google analytics to collect basic, anonymous information about our users for aggregate analysis, traffic monitoring, and growth metrics. (Information about Google Analytics usage of data and privacy policies can be found here).</p>
 <h4 id="non-registered-logged-out-users"><strong>Non-Registered &amp; Logged Out Users</strong></h4>
 <p>Outside of the use of Google Analytics, for non-registered/logged out users we exclusively collect completely anonymous data.</p>
@@ -88,7 +88,6 @@
 <p>When a user is logged in (and therefore registered), but has not enabled any permissions we store the following information about the student (some info drawn from Facebook/Google API which the user has logged in with and approved):</p>
 <p>1. Name (Facebook/Google API)</p>
 <p>2. Email (Facebook/Google API)</p>
-<p>3. Gender (Facebook/Google API)</p>
 <p>4. Class Year</p>
 <p>5. Major</p>
 <p>6. Profile Picture (Facebook/Google API)</p>
@@ -100,7 +99,7 @@
 <p>We maintain the capability to view the user’s list of friends through the Facebook/Google API</p>
 <h4 id="registered-logged-in-user-social-course-permission-enabled"><strong>Registered &amp; Logged in User – Social Course Permission Enabled</strong></h4>
 <p>In this state, the user has all that the previous state does with additional features/exposures of data.</p>
-<p>Users with social course permission enabled can see which of their Facebook or Google+ friends are in the courses indicated through use of the Semester.ly platform, and in return friends can see that they are in the course as well. <em>This feature works only for Facebook</em>/Google <em>Friends</em> – if the two students are not officially friends according to the Facebook/Google official API, this relationship is not exposed.</p>
+<p>Users with social course permission enabled can see which of their Facebook friends are in the courses indicated through use of the Semester.ly platform, and in return friends can see that they are in the course as well. <em>This feature works only for Facebook</em>/Google <em>Friends</em> – if the two students are not officially friends according to the Facebook/Google official API, this relationship is not exposed.</p>
 <p>The exact time a user is taking the course is not exposed – only that they are taking the course.</p>
 <p>The user’s social graph is never exposed in any other form to any other user.</p>
 <h4 id="registered-logged-in-user-social-course-social-sections-permission-enabled"><strong>Registered &amp; Logged in User – Social Course &amp; Social Sections Permission Enabled</strong></h4>
@@ -113,7 +112,8 @@
 <p>Google connected users provide Semester.ly with access to their Google Calendars via the Google Calendar API. When opted for, Semester.ly can and may create new calendars and events for the user representing information the user has entered via the Semester.ly application.</p>
 <p>If the user opts in, Semester.ly can and may use the previously stated Google Calendar API to access information about the user’s daily free/busy intervals. No event names are ever shared with other users. Free/busy information alone will be shared only with the user’s explicit permission to other users who the calendar owner has explicitly indicated, chosen, or shared the link with.</p>
 <p>Semester.ly may use the user’s google calendar information for internal analytics but no information will be shared with any other user or third party without explicit permission</p>
-
+<p><strong>Johns Hopkins University Student Information Systems (SIS) Connected Users - Opt-in Data Import</strong></p>
+<p>Student Information Systems (SIS) connected users provide Semester.ly with access to their SIS data. When opted in, Semester.ly can pull users' year, major, and course history in the form of course codes and year/term the course was taken. This information will help Semester.ly tailor course results, check pre-requisites, offer degree planning tips, and gather course reviews. This will be done at both a personal and aggregate level. Individual data will be checked against a database of popular classes and sequences for certain degrees in order to give users tailored search results and recommendations. Aggregated data will be used to create this database and no personal identifiers will be tied to any analysis. This is the full extent of any data collection and usage and will be updated for any future changes. Semester.ly will never pull any sensitive information like student standing or financials. Personal data will never be viewed by JHU IT personnel or Semester.ly team members. Users always have the option to opt-out of this feature and/or delete their account if these terms are unsatisfactory.</p>
 <h1 id="how-we-use-information-we-collect-about-you"><strong><em>How We Use Information We Collect About You</em></strong></h1>
 <p>The information collected from our website will be used for standard, non‑invasive, non‑personally‑identifiable visitor trend analytics, simply to help us measure how users interact with our website content.</p>
 <p>With regard to the Semester.ly app/SaaS, the Service’s end‑to‑end encryption prevents us from accessing user‑specific content.</p>
@@ -133,7 +133,7 @@
 <p>You can choose not to provide us with certain information, but that may result in you being unable to use certain features of the Service because such information may be required in order to validate your identity, utilize the Service, or to contact us for information. Further you can choose certain levels of permission, as discussed above.</p>
 <p>All non‑authentication or network communication use of our Service is opt‑in. The system at launch begins as “anonymous”. As users add in service links, they must confirm that they want the service being added to their account by visiting a link e‑mailed or texted to them (Facebook or Google are OAuth presentations).</p>
 <p>When you contact us through the Service, your account will be set up to receive e‑mail messages unless you indicate that you do not wish to receive e‑mails. At any time, you can choose to stop receiving such e‑mails by following the instructions found in the e‑mails.</p>
-<p>All facets of the Service are opt‑in and users are free to annihilate any of their data stored by our system, except for access logs, which will be purged periodically.</p>
+<p>All facets of the Service are opt‑in and users are free to annihilate any of their data stored by our system, except for access logs, which will be purged periodically. As of March 8th, 2019, users can delete their accounts through the Account Settings portal.</p>
 <h1 id="protection-of-personal-information"><strong><em>Protection of Personal Information</em></strong></h1>
 <p>We take appropriate security measures to help safeguard your personal information from unauthorized access and disclosure.</p>
 <p>We want you to feel confident using the Service; however, no system can guarantee absolute security. Therefore, it is important for you to protect against unauthorized access to your password and to your computer or other internet access device. In addition, it is recommended that you do not send personal health or other sensitive information to Semester.ly or anyone else using unsecured means. Should you choose to supply confidential information in this manner, you do so at your own risk.</p>
@@ -160,7 +160,7 @@
 		</div>
 
 		<footer>
-			
+
 		</footer>
 
 		<!-- Google analytics script -->

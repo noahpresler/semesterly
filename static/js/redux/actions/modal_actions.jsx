@@ -80,6 +80,7 @@ export const react = (cid, title) => (dispatch) => {
   .then((json) => {
     if (!json.error) {
       dispatch({
+        id: cid,
         type: ActionTypes.SET_COURSE_REACTIONS,
         reactions: json.reactions,
       });

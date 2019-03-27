@@ -20,6 +20,7 @@ class FinalExamScheduler:
         self.f17 = []
         self.s18 = []
         self.f18 = []
+        self.s19 = []
         self.schedule = {}
         self.year = ""
         self.sem = ""
@@ -45,8 +46,10 @@ class FinalExamScheduler:
             self.list_of_rules = self.f17
         elif self.year == "2018" and self.sem == "Fall":
             self.list_of_rules = self.f18
-        else:
+        elif self.year == "2018" and self.sem == "Spring":
             self.list_of_rules = self.s18
+        elif self.year =="2019" and self.sem == "Spring":
+            self.list_of_rules = self.s19
 
         self.schedule = {}
         for course in tt['courses']:

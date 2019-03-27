@@ -85,13 +85,12 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         except TypeError:
             access_token = json.loads(social_user.extra_data)["access_token"]
         response = requests.get(
-            'https://www.googleapis.com/plus/v1/people/me'.format(
+            'https://www.googleapis.com/userinfo/v2/me'.format(
                 social_user.uid,
                 get_secret('GOOGLE_API_KEY')),
             params={'access_token': access_token}
         )
-        new_student.img_url = response.json()['image'].get('url', '')
-        new_student.gender = response.json().get('gender', '')
+        new_student.img_url = response.json()['picture']
         new_student.save()
 
     elif backend_name == 'facebook':
@@ -104,17 +103,11 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         if social_user:
             new_student.img_url = 'https://graph.facebook.com/' + social_user.uid + '/picture?type=normal'
             url = u'https://graph.facebook.com/{0}/' \
-                  u'?fields=gender' \
                   u'&access_token={1}'.format(
                       social_user.uid,
                       access_token,
                   )
             request = urllib2.Request(url)
-            data = json.loads(urllib2.urlopen(request).read())
-            try:
-                new_student.gender = data.get('gender', '')
-            except BaseException:
-                pass
             new_student.fbook_uid = social_user.uid
             new_student.save()
             url = u'https://graph.facebook.com/{0}/' \

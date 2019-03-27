@@ -7,25 +7,103 @@ This guide will bring you through the steps of creating a local Semester.ly serv
 
 Fork/Clone The Repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Forking Semester.ly will create your own version of Semester.ly listed on your GitHub! 
-Cloning your Semester.ly fork will create a directory with all of the code required to run your own local development server. Navigate to the directory you wish to work from, then execute: 
+Forking Semester.ly will create your own version of Semester.ly listed on your GitHub!
+Cloning your Semester.ly fork will create a directory with all of the code required to run your own local development server. Navigate to the directory you wish to work from, then execute:
 
 1. **Fork** navigate to our `GitHub repository <https://github.com/noahpresler/semesterly>`_ then, in the top-right corner of the page, click Fork.
 
 2. **Clone** by executing this line on the command line:
 
-    .. note:: **ATTENTION:** Be sure to replace [YOUR-USERNAME] with your own git username 
+    .. note:: **ATTENTION:** Be sure to replace [YOUR-USERNAME] with your own git username
 
     .. code-block:: bash
 
          git clone https://github.com/[YOUR-USERNAME]/semesterly
 
+Option 1: Set up using Docker
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Steps are below on getting your local development environment running:
 
-Setup a Python Virtual Enviroment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1. **Download and install docker** for your environment (Windows/Mac/Linux are supporter)
+    https://www.docker.com/get-started
+
+2. Create **semesterly/local_settings.py** as follows:
+
+    .. code-block:: bash
+
+        DEBUG = True
+        TEMPLATE_DEBUG = DEBUG
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                'NAME': 'postgres',
+                'USER': 'postgres',
+                'PASSWORD': '',
+                'HOST': 'db',
+                'PORT': '5432',
+            }
+        }
+
+    .. note:: **ATTENTION:** When you clone the repo, you get a folder called semesterly and inside there is another folder called semesterly. Put this in the second semesterly folder.
+
+3. Edit **semesterly/dev_credentials.py** and add a value for JHU_API_KEY in single quotes like below.
+
+    You can request this API KEY from http://sis.jhu.edu/api.
+
+    .. code-block:: bash
+
+        'JHU_API_KEY': 'xxxxxxxx',
+
+    .. note:: **ATTENTION:** This is also in the second semesterly directory.
+
+        Now run this command in your terminal to make sure that this file isn't tracked by Git and your API key stays local to you.
+
+    .. code-block:: bash
+
+        git update-index --skip-worktree semesterly/dev_credentials.py
+
+4. Add this entry to your hosts file as follows (This file is in c:\Windows\System32\drivers\etc\hosts or /etc/hosts)
+
+    .. code-block:: bash
+
+        127.0.0.1       sem.ly jhu.sem.ly
+
+    .. note:: **ATTENTION:** If you're working on other schools, add their URLs here as well (i.e. uoft.sem.ly for University of Toronto).
+
+5. Launch terminal or a command window and run:
+
+    .. code-block:: bash
+
+        docker-compose build
+        docker-compose up
+        The **build** command creates a local Database and build of your source code.
+        The **up** command runs everything. Be careful not to build when you don't need to as this will destroy your entire database and you'll need to ingest/digest again to get your course data (which takes about 30 minutes).
+
+    You now have Semester.ly running. If this is the first time, you will want some data which done in the next step.
+
+6. Getting JHU data for a given term. In a new terminal run the following
+
+     .. code-block:: bash
+
+        docker exec -it $(docker ps -q -f ancestor=semesterly) /bin/bash
+        * OR *
+        docker exec -it $(docker ps -q -f ancestor=semesterly) shell
+
+     This will put you inside of the shell. Now you can get courses by running these commands:
+
+     .. code-block:: bash
+
+         python manage.py ingest jhu --term Spring --years 2018
+         python manage.py digest jhu
+
+7.  Open a browser and visit http://jhu.sem.ly:8000 and hack away.
+    You can skip ahead to **Advanced Configuration** or **How it All Works** now.
+
+Option 2: Setup using a Python Virtual Environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Make sure you have installed Python 2.7. If you have not you can `follow this <https://wiki.python.org/moin/BeginnersGuide/Download>`_. Please also download the python installer, `PIP (install guide) <https://pip.pypa.io/en/stable/installing/>`_. We will now install and setup a python virtual environment. This keeps your dependencies for other projects and classes seperate from those required for Semester.ly.
 
-Install virtualenv: 
+Install virtualenv:
 
 .. code-block:: bash
 
@@ -37,7 +115,7 @@ Create a virtual environment called ``venv``:
 
     virtualenv -p /usr/bin/python2.7 venv
 
-To enter your virtual environment, execute the following code from your Semesterly directory: 
+To enter your virtual environment, execute the following code from your Semesterly directory:
 
 .. code-block:: bash
 
@@ -52,12 +130,12 @@ If you're on a posix OS (Mac, Ubuntu, Fedora, CentOS, etc.) this is how you chec
 .. code-block:: bash
 
     uname -n
-    
+
 Install PostgreSQL
 ~~~~~~~~~~~~~~~~~~
-Before installing the python requirements, you must make sure to have PostgreSQL setup on your device. 
+Before installing the python requirements, you must make sure to have PostgreSQL setup on your device.
 
-**On mac**, `install Homebrew <http://brew.sh/>`_ and run: 
+**On mac**, `install Homebrew <http://brew.sh/>`_ and run:
 
 .. code-block:: bash
 
@@ -85,7 +163,7 @@ Before installing the python requirements, you must make sure to have PostgreSQL
 Install Python Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. note:: **ATTENTION MAC USERS:** you must install the xcode command line tools via ``xcode-select --install`` before proceeding. You may also need to update openssl. If so, please `follow this guide <https://medium.com/@katopz/how-to-upgrade-openssl-8d005554401>`_. 
+.. note:: **ATTENTION MAC USERS:** you must install the xcode command line tools via ``xcode-select --install`` before proceeding. You may also need to update openssl. If so, please `follow this guide <https://medium.com/@katopz/how-to-upgrade-openssl-8d005554401>`_.
 
 All python dependencies are kept in a file called ``requirements.txt``. Anytime a dependency is added or changed, we update it in this file. To bring your virutal environment up to date with all of these requirements easily, simply execute:
 
@@ -102,7 +180,7 @@ There are python modules that are missing from requirements.txt. Install them wi
 
 Install Node Packages
 ~~~~~~~~~~~~~~~~~~~~~~
-Node and node package manager are the backbone of our frontend setup. To begin, install Node Package Manager (npm). 
+Node and node package manager are the backbone of our frontend setup. To begin, install Node Package Manager (npm).
 
 **On mac**:
 

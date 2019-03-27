@@ -190,6 +190,9 @@ class Parser(BaseParser):
                     r'(\d{2}:\d{2} [AP]M) - (\d{2}:\d{2} [AP]M)',
                     time
                 )
+                if time_pieces is None:
+                    print("Skipping " + course['Title'] + " invalid time of " + time + ". Expecting a range.")
+                    continue
                 self.ingestor['time_start'] = time_pieces.group(1)
                 self.ingestor['time_end'] = time_pieces.group(2)
                 if (len(meeting['DOW'].strip()) > 0 and

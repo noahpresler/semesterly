@@ -74,7 +74,6 @@ export const googleFixture = {
       GoogleSignedUp: true,
       school: 'jhu',
       fbook_uid: '',
-      gender: 'other',
       timetables: [],
       FacebookSignedUp: false,
       social_offerings: null,

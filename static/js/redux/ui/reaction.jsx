@@ -80,9 +80,6 @@ class Reaction extends React.Component {
           <div className="emoji-count">
             <span>{this.props.count}</span>
           </div>
-          <div className="emoji-check">
-            <i className="fa fa-check" />
-          </div>
         </div>
         <div className="reaction-dropdown">
           <div className="tip-border" />

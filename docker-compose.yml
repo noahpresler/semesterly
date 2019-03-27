@@ -20,3 +20,11 @@ services:
       - "3000:3000"
     depends_on:
       - db
+  localssl:
+    image: jhuopensource/semesterly-caddy
+    volumes:
+      - ./build/caddy/Caddyfile:/etc/Caddyfile
+    ports:
+      - "443:443"
+    depends_on:
+      - web

@@ -37,6 +37,8 @@
   border-top: 6px solid #777777;
   margin-left: 10px;
   z-index: 1;
+  display: inline-block;
+  cursor: pointer;
 
   &.down {
     transform: rotate(180deg);
@@ -203,12 +205,6 @@
 
     .tip-down {
       display: none;
-    }
-  }
-
-  .search-bar {
-    input {
-      padding: 0 0 0 10px;
     }
   }
 

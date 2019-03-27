@@ -1,13 +1,27 @@
 import merge from 'lodash/merge';
 import uniq from 'lodash/uniq';
 import flatMap from 'lodash/flatMap';
+import * as ActionTypes from '../constants/actionTypes';
 
 // TODO: garbage collect (e.g. clear when changing semesters)
 const entities = (state = {}, action) => {
   if (action.response && action.response.entities) {
     return merge(state, action.response.entities);
   }
-  return state;
+  switch (action.type) {
+    case ActionTypes.SET_COURSE_REACTIONS:
+      if (state.id === null) {
+        return state;
+      }
+      return Object.assign({}, state,
+        {
+          courses: Object.assign({}, state.courses, {
+            [action.id]: { ...state.courses[action.id], reactions: action.reactions },
+          }),
+        });
+    default:
+      return state;
+  }
 };
 
 // OFFERING SELECTORS

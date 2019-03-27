@@ -26,7 +26,7 @@ import {
   lockTimetable,
 } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
-import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
+import { fetchCourseClassmates, setCourseInfo, overrideSettingsShow } from './actions/modal_actions';
 import { receiveCourses } from './actions/search_actions';
 import {
     browserSupportsLocalStorage,
@@ -151,6 +151,9 @@ const handleFlows = featureFlow => (dispatch) => {
       break;
     case 'EXPORT_SIS_TIMETABLE':
       dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
+      break;
+    case 'DELETE_ACCOUNT':
+      dispatch(overrideSettingsShow(true));
       break;
     default:
       // unexpected feature name
