@@ -15,9 +15,11 @@
     outline: 0;
     padding: 0 5px;
     width: 100%;
+    background-color: #f2f3f5;
 
-    &.search_drop {
-      border-radius: 0px;
+    &.results {
+      border-radius: 0 10px 0 0;
+      background-color: #ffffff;
     }
 
     &::-webkit-input-placeholder {
@@ -45,22 +47,6 @@
 .search-bar__input-wrapper {
   overflow: hidden;
   width: auto;
-
-  .__after {
-    border-radius: 0 10px 0 0;
-  }
-
-  .__before {
-    border-radius: 0 25px 25px 0;
-  }
-}
-
-.white-background{
-  background-color: #ffffff;
-}
-
-.grey-background{
-  background-color: #f2f3f5;
 }
 
 .search-bar__wrapper {
@@ -93,10 +79,6 @@
     top: 12px;
   }
 
-  &.search_drop {
-    border-radius: 0px;
-  }
-
   &.results {
     background-color: #ffffff;
   }
@@ -122,7 +104,7 @@
   }
 
   .tip-border {
-    left: 6;
+    left: 6px;
     top: -9px;
   }
 

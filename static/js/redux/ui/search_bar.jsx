@@ -143,15 +143,14 @@ class SearchBar extends React.Component {
     const currSem = ($(window).width() < 767) ?
             SearchBar.getAbbreviatedSemesterName(this.props.semester) :
             SearchBar.getSemesterName(this.props.semester);
-    const transformSearchAppearance = this.props.searchResults.length > 0 && this.state.focused;
+    const resultsShown = results.length !== 0 && this.state.focused;
     return (
       <div className="search-bar no-print">
-        <div className={classNames('search-bar__wrapper', { results: this.props.searchResults.length > 0 && this.state.focused })} >
+        <div className={classNames('search-bar__wrapper', { results: resultsShown })}>
 
           <ClickOutHandler onClickOut={this.onClickOut}>
             <div
-              // className={"search-bar__semester "+(transformSearchAppearance ? 'white-background' : 'grey-background')}
-              className={classNames('search-bar__semester', { results: this.props.searchResults.length > 0 && this.state.focused })}
+              className={classNames('search-bar__semester', { results: resultsShown })}
               onMouseDown={this.toggleDropdown}
             >
               <span
@@ -171,8 +170,7 @@ class SearchBar extends React.Component {
             <input
               ref={(c) => { this.input = c; }}
               placeholder={`Searching ${currSem}`}
-              className={classNames(this.props.isFetching ? 'results-loading-gif' : '', { search_drop: this.state.focused && results.length !== 0 })
-              +(transformSearchAppearance ? '__after white-background' : '__before grey-background')}
+              className={classNames(this.props.isFetching ? 'results-loading-gif' : '', { results: resultsShown })}
               onInput={this.fetchSearchResults}
               onFocus={() => this.setState({ focused: true, showDropdown: false })}
               onBlur={() => this.setState({ focused: false })}
