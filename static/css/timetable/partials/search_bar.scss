@@ -9,22 +9,15 @@
     border: 0px;
     margin-left: 0px;
     font-size: 16px;
-    border-radius: 0 25px 25px 0;
-    background-color: #f2f3f5;
+    border-radius: 0px 25px 25px 0px;
     height: 30px;
     line-height: 30px;
     outline: 0;
     padding: 0 5px;
     width: 100%;
 
-    //&.search_drop {
-    //  border-radius: 0px;
-    //  background-color: #ffffff;
-    //}
-    //
-    .results {
-      border-radius: 0 10px 0 0;
-      background-color: #ffffff;
+    &.search_drop {
+      border-radius: 0px;
     }
 
     &::-webkit-input-placeholder {
@@ -48,56 +41,51 @@
     }
   }
 }
-//
-//.vertical-bar {
-//  border: 0px;
-//  float: left;
-//}
-//
-//.bar-image {
-//  height: 30px;
-//}
+
+.vertical-bar {
+  border: 0px;
+  float: left;
+}
+
+.bar-image {
+  height: 30px;
+}
 
 .search-bar__input-wrapper {
   overflow: hidden;
   width: auto;
 
-  &.results {
-    border-radius: 10px 10px 0px 0px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
-    border: 1px solid #e6e6e6;
+  .__after {
+    border-radius: 0 10px 0 0;
+  }
+
+  .__before {
+    border-radius: 0 25px 25px 0;
   }
 }
-  //input {
-  //  border-radius: 0 25px 25px 0;
-  //  background-color: #f2f3f5;
-  //}
-  //.results {
-  //  border-radius: 0 10px 0 0;
-  //  background-color: #ffffff;
-  //}
-//}
-//
-//.white-background{
-//  background-color: #ffffff;
-//}
-//
-//.grey-background{
-//  background-color: #f2f3f5;
-//}
+
+.white-background{
+  background-color: #ffffff;
+}
+
+.grey-background{
+  background-color: #f2f3f5;
+}
 
 .search-bar__wrapper {
   background-color: $gfff;
   width: 100%;
+
+  &.__after {
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+    border: 1px solid #e6e6e6;
+  }
+
+  &.__before {
+    border-radius: 25px 25px 25px 25px;
+  }
 }
-  //border-radius: 25px 25px 25px 25px;
-  //
-  //&.results {
-  //  border-radius: 10px 10px 0px 0px;
-  //  box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
-  //  border: 1px solid #e6e6e6;
-  //}
-//}
 
 .search-bar__semester {
   border: 1px;
@@ -109,7 +97,6 @@
   line-height: 18px;
   padding: 6px 4px 6px 30px;
   border-radius: 25px 0px 0px 25px;
-  background-color: #f2f3f5;
 
   > .tip-down {
     left: 1px;
@@ -117,13 +104,8 @@
     top: 12px;
   }
 
-  //&.search_drop {
-  //  border-radius: 0px;
-  //}
-
-  &.results {
+  &.search_drop {
     border-radius: 0px;
-    background-color: #ffffff;
   }
 }
 
