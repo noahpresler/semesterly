@@ -79,11 +79,11 @@ class CourseModal extends React.Component {
   }
   tagsLetter(letter) {
     switch (letter) {
-      case 'H': return <div className="area-bubble H">{letter}</div>;
-      case 'S': return <div className="area-bubble S">{letter}</div>;
-      case 'N': return <div className="area-bubble N">{letter}</div>;
-      case 'E': return <div className="area-bubble E">{letter}</div>;
-      case 'Q': return <div className="area-bubble Q">{letter}</div>;
+      case 'H': return <div className="bubble area H">{letter}</div>;
+      case 'S': return <div className="bubble area S">{letter}</div>;
+      case 'N': return <div className="bubble area N">{letter}</div>;
+      case 'E': return <div className="bubble area E">{letter}</div>;
+      case 'Q': return <div className="bubble area Q">{letter}</div>;
       default: return this.areas;
     }
   }
@@ -141,7 +141,7 @@ class CourseModal extends React.Component {
       this.props.data.areas.map(letter => this.tagsLetter(letter)) : '';
 
     const writingIntensive = this.props.data.writing_intensive === 'Yes' ?
-      <div className="writing-intensive-bubble">Writing Intensive</div> : '';
+      <div className="bubble writing">Writing Intensive</div> : '';
 
     const subHeader = (<div className="areas-container">{courseAndDept}
       {areaBubbles}{writingIntensive}</div>);

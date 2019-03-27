@@ -249,11 +249,11 @@ class ExplorationModal extends React.Component {
 
   barTagsLetter(letter) {
     switch (letter) {
-      case 'H': return <div className="area-bubble search H">{letter}</div>;
-      case 'S': return <div className="area-bubble search S">{letter}</div>;
-      case 'N': return <div className="area-bubble search N">{letter}</div>;
-      case 'E': return <div className="area-bubble search E">{letter}</div>;
-      case 'Q': return <div className="area-bubble search Q">{letter}</div>;
+      case 'H': return <div className="bubble area search H">{letter}</div>;
+      case 'S': return <div className="bubble area search S">{letter}</div>;
+      case 'N': return <div className="bubble area search N">{letter}</div>;
+      case 'E': return <div className="bubble area search E">{letter}</div>;
+      case 'Q': return <div className="bubble area search Q">{letter}</div>;
       default: return this.areas;
     }
   }
@@ -262,17 +262,17 @@ class ExplorationModal extends React.Component {
     const areaBubbles = selectedCourse.areas ?
       selectedCourse.areas.map(letter => this.barTagsLetter(letter)) : '';
     const writingIntensive = selectedCourse.writing_intensive === 'Yes' ?
-      <div className="writing-intensive-bubble search">Writing Intensive</div> : '';
+      <div className="bubble writing search">Writing Intensive</div> : '';
     return <div className="areas-container search">{areaBubbles}{writingIntensive}</div>;
   }
 
   tagsLetter(letter) {
     switch (letter) {
-      case 'H': return <div className="area-bubble H">{letter}</div>;
-      case 'S': return <div className="area-bubble S">{letter}</div>;
-      case 'N': return <div className="area-bubble N">{letter}</div>;
-      case 'E': return <div className="area-bubble E">{letter}</div>;
-      case 'Q': return <div className="area-bubble Q">{letter}</div>;
+      case 'H': return <div className="bubble area H">{letter}</div>;
+      case 'S': return <div className="bubble area S">{letter}</div>;
+      case 'N': return <div className="bubble area N">{letter}</div>;
+      case 'E': return <div className="bubble area E">{letter}</div>;
+      case 'Q': return <div className="bubble area Q">{letter}</div>;
       default: return this.areas;
     }
   }
@@ -281,7 +281,7 @@ class ExplorationModal extends React.Component {
     const areaBubbles = selectedCourse.areas ?
       selectedCourse.areas.map(letter => this.tagsLetter(letter)) : '';
     const writingIntensive = selectedCourse.writing_intensive === 'Yes' ?
-      <div className="writing-intensive-bubble">Writing Intensive</div> : '';
+      <div className="bubble writing">Writing Intensive</div> : '';
     return <div className="areas-container">{areaBubbles}{writingIntensive}</div>;
   }
 
