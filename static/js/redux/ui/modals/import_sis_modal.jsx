@@ -31,6 +31,7 @@ class ImportSISModal extends React.Component {
   }
 
   render() {
+
     const modalHeader =
             (<div className="modal-content">
               <div className="modal-header">
@@ -46,7 +47,7 @@ class ImportSISModal extends React.Component {
     return (
       <Modal
         ref={(c) => { this.modal = c; }}
-        className="save-calendar-modal abnb-modal max-modal"
+        className="save-calendar-modal sis-import-modal max-modal"
         modalStyle={modalStyle}
         onHide={() => {
           this.props.toggleImportSISModal();
@@ -54,6 +55,7 @@ class ImportSISModal extends React.Component {
         }}
       >
         {modalHeader}
+        <div className="sis-import-modal__container">
         <p>In Partnership with the JHU IT department, we can now import your SIS data to check  prerequisites and improve your search results.</p>
 
         <div>
@@ -89,6 +91,7 @@ class ImportSISModal extends React.Component {
             <span> I accept  </span>
           </div>
         </a>
+        </div>
         </div>
       </Modal>
     );
