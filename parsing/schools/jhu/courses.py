@@ -122,7 +122,7 @@ class Parser(BaseParser):
 
 
         areas = []
-        if course['Areas'][0] != 'B' and course['Areas'][0] != 'P' and course['Areas'][0] != 'A' and course['Areas'] != 'None':
+        if school == "Krieger School of Arts and Sciences" or school == "Whiting School of Engineering":
             for letter in course['Areas']:
                 areas.append(letter.encode('ascii', 'ignore'))
             # Add specialty areas for computer science department

@@ -243,7 +243,7 @@ class Ingestor(dict):
         Returns:
             dict: course
         """
-        self.self_ = {
+        course = {
             'kind': 'course',
             'school': {
                 'code': self.school,
@@ -277,7 +277,6 @@ class Ingestor(dict):
             #     inject=self
             # ),
         }
-        course = self.self_
 
         course = clean(course)
         self._validate_and_log(course)
