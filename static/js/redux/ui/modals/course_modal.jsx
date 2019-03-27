@@ -77,6 +77,16 @@ class CourseModal extends React.Component {
     this.props.hideModal();
     this.modal.hide();
   }
+  tagsLetter(letter) {
+    switch (letter) {
+      case 'H': return <div className="area-bubble H">{letter}</div>;
+      case 'S': return <div className="area-bubble S">{letter}</div>;
+      case 'N': return <div className="area-bubble N">{letter}</div>;
+      case 'E': return <div className="area-bubble E">{letter}</div>;
+      case 'Q': return <div className="area-bubble Q">{letter}</div>;
+      default: return this.areas;
+    }
+  }
 
   render() {
     const modalStyle = {
@@ -128,12 +138,7 @@ class CourseModal extends React.Component {
       />
     </div>) : null;
     const areaBubbles = this.props.data.areas ?
-      this.props.data.areas.map(letter =>
-        letter === 'H' ? <div className="area-bubble H">{letter}</div> :
-          letter === 'S' ? <div className="area-bubble S">{letter}</div> :
-            letter === 'N' ? <div className="area-bubble N">{letter}</div> :
-              letter === 'E' ? <div className="area-bubble E">{letter}</div> :
-                letter === 'Q' ? <div className="area-bubble Q">{letter}</div> : '') : '';
+      this.props.data.areas.map(letter => this.tagsLetter(letter)) : '';
 
     const writingIntensive = this.props.data.writing_intensive === 'Yes' ?
       <div className="writing-intensive-bubble">Writing Intensive</div> : '';
