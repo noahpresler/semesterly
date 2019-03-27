@@ -126,7 +126,7 @@
 .search-results {
   background-color: $gfff;
   border: 1px solid $ge6e6e6;
-  border-radius: 0 10px 10px 10px;
+  border-radius: 0 0 10px 10px;
   border-top: 0;
   box-shadow: 0 3px 4px $black-transparent-2;
   margin: 0;
@@ -505,6 +505,7 @@
 
   .search-results {
     width: 100%;
+    height: 240px;
   }
 
   .search-course {
@@ -518,29 +519,33 @@
   .see-more {
     display: none;
   }
+
+  .search-results__list-container {
+    width: 100%;
+  }
 }
 
 @media (max-width: 500px) {
-	.search-bar {
+  .search-bar {
     left: 0;
     width: 100%;
-	}
+  }
 
-	.search-bar__wrapper {
-    left: 57px;
+  .search-bar__wrapper {
+    left: 50px;
     position: absolute;
-    right: 107px;
+    right: 85px;
     width: auto;
-	}
+
+    &.results {
+      border-radius: 0;
+    }
+  }
 
   .search-results {
     top: 39px;
-	}
-
-	.search-bar__wrapper {
-    left: 50px;
-    right: 85px;
-	}
+    border: none;
+  }
 }
 
 @media (min-width: 767px) {

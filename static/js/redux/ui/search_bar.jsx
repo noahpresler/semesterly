@@ -156,7 +156,7 @@ class SearchBar extends React.Component {
               <span
                 className={classNames('tip-down', { down: this.state.showDropdown })}
               />
-              {currSem}   |</div>
+              {currSem}     |</div>
             <div
               className={classNames('semester-picker', { down: this.state.showDropdown })}
             >
