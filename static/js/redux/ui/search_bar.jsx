@@ -150,7 +150,8 @@ class SearchBar extends React.Component {
 
           <ClickOutHandler onClickOut={this.onClickOut}>
             <div
-              className={"search-bar__semester "+(transformSearchAppearance ? 'white-background' : 'grey-background')}
+              // className={"search-bar__semester "+(transformSearchAppearance ? 'white-background' : 'grey-background')}
+              className={classNames('search-bar__semester', { results: this.props.searchResults.length > 0 && this.state.focused })}
               onMouseDown={this.toggleDropdown}
             >
               <span

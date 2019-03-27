@@ -85,6 +85,7 @@
   line-height: 18px;
   padding: 6px 4px 6px 30px;
   border-radius: 25px 0px 0px 25px;
+  background-color: #f2f3f5;
 
   > .tip-down {
     left: 1px;
@@ -94,6 +95,10 @@
 
   &.search_drop {
     border-radius: 0px;
+  }
+
+  &.results {
+    background-color: #ffffff;
   }
 }
 
