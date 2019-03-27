@@ -146,8 +146,7 @@ class SearchBar extends React.Component {
     const transformSearchAppearance = this.props.searchResults.length > 0 && this.state.focused;
     return (
       <div className="search-bar no-print">
-        {/*<div className={"search-bar__wrapper " + (transformSearchAppearance ? '__after' : '__before')} >*/}
-        <div className={classNames('search-bar wrapper', { results: this.props.searchResults.length > 0 && this.state.focused })} >
+        <div className={classNames('search-bar__wrapper', { results: this.props.searchResults.length > 0 && this.state.focused })} >
 
           <ClickOutHandler onClickOut={this.onClickOut}>
             <div
