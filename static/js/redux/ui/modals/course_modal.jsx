@@ -125,7 +125,7 @@ class CourseModal extends React.Component {
     </div>) : null;
     const areaBubbles = this.props.data.areas ?
       this.props.data.areas.map(area =>
-        <div className="bubble area H" key={area}>{area}</div>) : '';
+        <div className={`bubble area ${area}`} key={area}>{area}</div>) : '';
     const writingIntensive = this.props.data.writing_intensive === 'Yes' ?
       <div className="bubble writing">Writing Intensive</div> : '';
     const courseAndDept = data.department && data.department !== '' ?

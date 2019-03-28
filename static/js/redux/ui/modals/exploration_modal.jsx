@@ -247,39 +247,17 @@ class ExplorationModal extends React.Component {
     this.fetchAdvancedSearchResults(Object.assign({}, this.state, stateUpdate));
   }
 
-  barTagsLetter(letter) {
-    switch (letter) {
-      case 'H': return <div className="bubble area search H">{letter}</div>;
-      case 'S': return <div className="bubble area search S">{letter}</div>;
-      case 'N': return <div className="bubble area search N">{letter}</div>;
-      case 'E': return <div className="bubble area search E">{letter}</div>;
-      case 'Q': return <div className="bubble area search Q">{letter}</div>;
-      default: return this.areas;
-    }
-  }
-
   barTagsBubbles(selectedCourse) {
     const areaBubbles = selectedCourse.areas ?
-      selectedCourse.areas.map(letter => this.barTagsLetter(letter)) : '';
+      selectedCourse.areas.map(area => <div className={`bubble area search ${area}`}>{area}</div>) : '';
     const writingIntensive = selectedCourse.writing_intensive === 'Yes' ?
       <div className="bubble writing search">Writing Intensive</div> : '';
     return <div className="areas-container search">{areaBubbles}{writingIntensive}</div>;
   }
 
-  tagsLetter(letter) {
-    switch (letter) {
-      case 'H': return <div className="bubble area H">{letter}</div>;
-      case 'S': return <div className="bubble area S">{letter}</div>;
-      case 'N': return <div className="bubble area N">{letter}</div>;
-      case 'E': return <div className="bubble area E">{letter}</div>;
-      case 'Q': return <div className="bubble area Q">{letter}</div>;
-      default: return this.areas;
-    }
-  }
-
   tagsBubbles(selectedCourse) {
     const areaBubbles = selectedCourse.areas ?
-      selectedCourse.areas.map(letter => this.tagsLetter(letter)) : '';
+      selectedCourse.areas.map(area => <div className={`bubble area ${area}`} >{area}</div>) : '';
     const writingIntensive = selectedCourse.writing_intensive === 'Yes' ?
       <div className="bubble writing">Writing Intensive</div> : '';
     return <div className="areas-container">{areaBubbles}{writingIntensive}</div>;
@@ -294,9 +272,7 @@ class ExplorationModal extends React.Component {
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
-      key={c.id} code={c.code} name={c.name} modalTags={this.tagsBubbles(c)}
-      barTags={this.barTagsBubbles(c)} areas={c.areas} pos={c.pos}
-      writing_intensive={c.writing_intensive} sub_school={c.sub_school} department={c.department}
+      key={c.id} code={c.code} name={c.name} barTags={this.barTagsBubbles(c)}
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />));
     let courseModal = null;
