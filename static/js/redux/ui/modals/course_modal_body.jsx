@@ -213,12 +213,12 @@ class CourseModalBody extends React.Component {
       (<div className="modal-module areas">
         <h3 className="modal-module-header">Program of Study Tags</h3>
       </div>);
-    const posTags = this.props.data.pos.length ? <p>{this.props.data.pos.join(', ')}</p> : <p>None</p>;
+    const posTags = this.props.data.pos.length ? <p key={cid + "-pos"}>{this.props.data.pos.join(', ')}</p> : <p>None</p>;
     const subSchoolHeader =
       (<div className="modal-module areas">
         <h3 className="modal-module-header">Specific School</h3>
       </div>);
-    const subSchool = <p>{ this.props.data.sub_school }</p>;
+    const subSchool = <p key={cid + "-subSchool"}>{ this.props.data.sub_school }</p>;
     const pilotLogoImg = {
       backgroundImage: 'url(/static/img/integrations/pilot.png)',
     };
