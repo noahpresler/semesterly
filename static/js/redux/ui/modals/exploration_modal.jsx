@@ -57,7 +57,6 @@ class ExplorationModal extends React.Component {
     this.handleTimesChange = this.handleTimesChange.bind(this);
     this.removeTimeFilter = this.removeTimeFilter.bind(this);
     this.addDayForTimesFilter = this.addDayForTimesFilter.bind(this);
-    this.tagsBubbles = this.tagsBubbles.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -247,22 +246,6 @@ class ExplorationModal extends React.Component {
     this.fetchAdvancedSearchResults(Object.assign({}, this.state, stateUpdate));
   }
 
-  barTagsBubbles(selectedCourse) {
-    const areaBubbles = selectedCourse.areas ?
-      selectedCourse.areas.map(area => <div className={`bubble area search ${area}`}>{area}</div>) : '';
-    const writingIntensive = selectedCourse.writing_intensive === 'Yes' ?
-      <div className="bubble writing search">Writing Intensive</div> : '';
-    return <div className="areas-container search">{areaBubbles}{writingIntensive}</div>;
-  }
-
-  tagsBubbles(selectedCourse) {
-    const areaBubbles = selectedCourse.areas ?
-      selectedCourse.areas.map(area => <div className={`bubble area ${area}`} >{area}</div>) : '';
-    const writingIntensive = selectedCourse.writing_intensive === 'Yes' ?
-      <div className="bubble writing">Writing Intensive</div> : '';
-    return <div className="areas-container">{areaBubbles}{writingIntensive}</div>;
-  }
-
   render() {
     const modalStyle = {
       width: '100%',
@@ -272,16 +255,13 @@ class ExplorationModal extends React.Component {
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
-      key={c.id} code={c.code} name={c.name} barTags={this.barTagsBubbles(c)}
+      key={c.id} code={c.code} name={c.name} areas={c.areas}
+      isWritingIntensive={c.writing_intensive}
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />));
     let courseModal = null;
     if (active >= 0 && active < advancedSearchResults.length) {
       const selectedCourse = advancedSearchResults[active];
-      const modalTags = this.tagsBubbles(selectedCourse);
-      const courseAndDept = (<span className="course-and-dept-container">{selectedCourse.code},
-        {selectedCourse.department}</span>);
-      const subHeader = <div className="areas-container">{courseAndDept}{modalTags}</div>;
       const shareLink = this.state.shareLinkShown ?
                 (<ShareLink
                   link={this.props.getShareLink(selectedCourse.code)}
@@ -292,7 +272,12 @@ class ExplorationModal extends React.Component {
         <div className="modal-content">
           <div className="modal-header">
             <h1>{ selectedCourse.name }</h1>
-            <h2>{ subHeader }</h2>
+            <h2>
+              <div className="subtitle">
+                <AreaBubble areas={selectedCourse.areas} />
+                <WritingIntensive isWritingIntensive={selectedCourse.writing_intensive} />
+              </div>
+            </h2>
             <div className="modal-share" onClick={this.showShareLink}>
               <i className="fa fa-share-alt" />
             </div>
@@ -460,14 +445,26 @@ class ExplorationModal extends React.Component {
   }
 }
 
+const AreaBubble = ({ areas }) => (areas.length > 0 ? (<div>
+  {areas.map(area => <div className={`bubble area ${area}`}>{area}</div>)}</div>) : null);
 
-const ExplorationSearchResult = ({ name, code, barTags, onClick }) => (
+AreaBubble.propTypes = {
+  areas: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+const WritingIntensive = ({ isWritingIntensive }) => (isWritingIntensive === 'Yes' ?
+  <div className="bubble writing">Writing Intensive</div> : null);
+
+WritingIntensive.propTypes = {
+  isWritingIntensive: PropTypes.string.isRequired,
+};
+
+const ExplorationSearchResult = ({ name, code, areas, isWritingIntensive, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
-    <div className="areas-container">
-      <h4>{ name } </h4>
-      <h5> - {code}</h5>
-      {barTags}
-    </div>
+    <h4>{ name } </h4>
+    <h5> - {code}</h5>
+    <AreaBubble areas={areas} />
+    <WritingIntensive isWritingIntensive={isWritingIntensive} />
   </div>
 );
 
@@ -475,7 +472,8 @@ ExplorationSearchResult.propTypes = {
   name: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
-  barTags: PropTypes.func.isRequired,
+  areas: PropTypes.arrayOf(PropTypes.string).isRequired,
+  isWritingIntensive: PropTypes.string.isRequired,
 };
 
 ExplorationModal.defaultProps = {
