@@ -386,12 +386,6 @@
     margin: 5px 0;
     display: inline;
   }
-
-  > .areas-container.search {
-    height: 30px;
-    margin: 10px;
-  }
-
 }
 
 // Exploration Course Content
@@ -406,6 +400,15 @@
   .modal-header {
     background-color: $gfff;
     padding: 20px 10px 30px;
+
+    > .subtitle {
+      h2 {
+        padding: 0;
+      }
+      div {
+        font-size: 14px;
+      }
+    }
   }
 
   h1 {
