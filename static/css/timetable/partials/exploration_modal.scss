@@ -195,6 +195,9 @@
     color: $g777;
     font-size: 12px;
   }
+  .subtitle div {
+    font-size: 12px;
+  }
 }
 
 .exp-header {
@@ -404,9 +407,6 @@
     > .subtitle {
       h2 {
         padding: 0;
-      }
-      div {
-        font-size: 14px;
       }
     }
   }
