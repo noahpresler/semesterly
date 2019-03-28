@@ -19,6 +19,7 @@ import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
+import { AreaBubble, WritingIntensive } from '../search_result';
 import {
   Filter, SelectedFilter, SelectedFilterSection,
 } from '../advanced_search_filters';
@@ -443,20 +444,6 @@ class ExplorationModal extends React.Component {
     );
   }
 }
-
-const AreaBubble = ({ areas }) => (areas.length > 0 ? (<div>
-  {areas.map(area => <div className={`bubble area ${area}`}>{area}</div>)}</div>) : null);
-
-AreaBubble.propTypes = {
-  areas: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
-
-const WritingIntensive = ({ isWritingIntensive }) => (isWritingIntensive === 'Yes' ?
-  <div className="bubble writing">Writing Intensive</div> : null);
-
-WritingIntensive.propTypes = {
-  isWritingIntensive: PropTypes.string.isRequired,
-};
 
 const ExplorationSearchResult = ({ name, code, areas, isWritingIntensive, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>

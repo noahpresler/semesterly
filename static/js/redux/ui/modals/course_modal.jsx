@@ -16,6 +16,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import Clipboard from 'clipboard';
+import { AreaBubble, WritingIntensive } from '../search_result';
 import Modal from 'boron/WaveModal';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
@@ -123,11 +124,6 @@ class CourseModal extends React.Component {
         })}
       />
     </div>) : null;
-    const areaBubbles = this.props.data.areas ? (<div className="area">
-      {this.props.data.areas.map(area =>
-        <div className={`bubble ${area}`} key={area}>{area}</div>)}</div>) : '';
-    const writingIntensive = this.props.data.writing_intensive === 'Yes' ?
-      <div className="bubble writing">Writing Intensive</div> : '';
     const courseAndDept = data.department && data.department !== '' ?
       <div>{data.code}, {data.department}</div> : data.code;
 
@@ -138,8 +134,8 @@ class CourseModal extends React.Component {
                 <h2>
                   <div className="subtitle">
                     {courseAndDept}
-                    {areaBubbles}
-                    {writingIntensive}
+                    <AreaBubble areas={data.areas} />
+                    <WritingIntensive isWritingIntensive={data.writing_intensive} />
                   </div>
                 </h2>
                 <div className="modal-close" onClick={() => this.modal.hide()}>
