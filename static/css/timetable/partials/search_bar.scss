@@ -420,10 +420,6 @@
     background-color: transparent;
   }
 
-  .search-course div > div > span {
-    opacity: 0;
-  }
-
   .see-more__inner {
     border: 1px solid $white-transparent-0;
     color: transparent;
@@ -433,7 +429,8 @@
     background-color: $white-transparent-9;
   }
 
-  .has-pilot {
+  .has-pilot,
+  .has-den {
     opacity: 0;
     visibility: hidden;
   }

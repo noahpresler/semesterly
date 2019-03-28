@@ -379,7 +379,6 @@
     font-size: 14px;
     margin: 0;
     display: inline;
-    overflow: hidden;
   }
 
   h5 {
@@ -413,10 +412,12 @@
 
   h1 {
     font-size: 22px;
+    padding: 0;
   }
 
   h2 {
     font-size: 14px;
+    padding: 0 20% 0 0;
   }
 
   .modal-body {
