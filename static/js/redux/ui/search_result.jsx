@@ -200,8 +200,8 @@ SearchResult.propTypes = {
   addRemoveOptionalCourse: PropTypes.func.isRequired,
 };
 
-export const AreaBubble = ({ areas }) => (areas.length > 0 ? (<div className="area bubble">
-  {areas.map(area => <div className={area} key={area.id}>{area}</div>)}</div>) : null);
+export const AreaBubble = ({ areas }) => (areas.length > 0 ? (<div className="areas">
+  {areas.map(area => <div className={`bubble ${area}`}>{area}</div>)}</div>) : null);
 
 AreaBubble.propTypes = {
   areas: PropTypes.arrayOf(PropTypes.string).isRequired,

@@ -85,6 +85,8 @@ class CourseModal extends React.Component {
       backgroundColor: 'transparent',
     };
     const { data, inRoster } = this.props;
+    const courseAndDept = data.department && data.department !== '' ?
+      (<div>{data.code}, {data.department} </div>) : data.code;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               link={this.props.getShareLink(data.code)}
@@ -124,9 +126,6 @@ class CourseModal extends React.Component {
         })}
       />
     </div>) : null;
-    const courseAndDept = data.department && data.department !== '' ?
-      <div>{data.code}, {data.department}</div> : data.code;
-
     const content =
             (<div className="modal-content">
               <div className="modal-header">

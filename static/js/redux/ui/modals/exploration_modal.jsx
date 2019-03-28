@@ -449,8 +449,10 @@ const ExplorationSearchResult = ({ name, code, areas, isWritingIntensive, onClic
   <div className="exp-s-result" onClick={onClick}>
     <h4>{ name } </h4>
     <h5> - {code}</h5>
-    <AreaBubble areas={areas} />
-    <WritingIntensive isWritingIntensive={isWritingIntensive} />
+    <div className="subtitle">
+      <AreaBubble areas={areas} />
+      <WritingIntensive isWritingIntensive={isWritingIntensive} />
+    </div>
   </div>
 );
 
