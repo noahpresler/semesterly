@@ -77,16 +77,6 @@ class CourseModal extends React.Component {
     this.props.hideModal();
     this.modal.hide();
   }
-  tagsLetter(letter) {
-    switch (letter) {
-      case 'H': return <div className="bubble area H">{letter}</div>;
-      case 'S': return <div className="bubble area S">{letter}</div>;
-      case 'N': return <div className="bubble area N">{letter}</div>;
-      case 'E': return <div className="bubble area E">{letter}</div>;
-      case 'Q': return <div className="bubble area Q">{letter}</div>;
-      default: return this.areas;
-    }
-  }
 
   render() {
     const modalStyle = {
@@ -94,10 +84,6 @@ class CourseModal extends React.Component {
       backgroundColor: 'transparent',
     };
     const { data, inRoster } = this.props;
-    let courseAndDept = data.code;
-    courseAndDept = data.department && data.department !== '' ?
-            `${courseAndDept}, ${data.department}` : courseAndDept;
-    courseAndDept = <span className="course-and-dept-container">{ courseAndDept }</span>;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               link={this.props.getShareLink(data.code)}
@@ -138,19 +124,24 @@ class CourseModal extends React.Component {
       />
     </div>) : null;
     const areaBubbles = this.props.data.areas ?
-      this.props.data.areas.map(letter => this.tagsLetter(letter)) : '';
-
+      this.props.data.areas.map(area =>
+        <div className="bubble area H" key={area}>{area}</div>) : '';
     const writingIntensive = this.props.data.writing_intensive === 'Yes' ?
       <div className="bubble writing">Writing Intensive</div> : '';
-
-    const subHeader = (<div className="areas-container">{courseAndDept}
-      {areaBubbles}{writingIntensive}</div>);
+    const courseAndDept = data.department && data.department !== '' ?
+      <div>{data.code}, {data.department}</div> : data.code;
 
     const content =
             (<div className="modal-content">
               <div className="modal-header">
                 <h1>{data.name}</h1>
-                <h2>{subHeader}</h2>
+                <h2>
+                  <div className="subtitle">
+                    {courseAndDept}
+                    {areaBubbles}
+                    {writingIntensive}
+                  </div>
+                </h2>
                 <div className="modal-close" onClick={() => this.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>

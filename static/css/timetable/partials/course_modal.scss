@@ -65,57 +65,36 @@
   border-top-left-radius: 5px;
 }
 
-.areas-container {
+.subtitle {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
   align-items: center;
-  align-content: flex-start;
-  height: 25px;
   margin: 6px;
-  &.search {
-    height: 20px;
-    margin: 5px;
-    float: left;
+  >div {
+    margin: 3px;
   }
-}
-
-.course-and-dept-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: center;
-  align-content: flex-start;
-  height: 21px;
-  margin: 0px 7px 0px 0px;
-  float: left;
+  //&.search {
+  //  height: 20px;
+  //  margin: 5px;
+  //  float: left;
+  //}
 }
 
 .bubble {
   color: white;
   text-align: center;
-  vertical-align: middle;
-  font-family: $font-body;
-  font-size: 17px;
-  height: 21px;
-  text-align: center;
+  font-size: 16px;
+  margin: 3px;
+  padding: 2px 4px;
   &.area {
     border-radius: 25%;
-    font-weight: bold;
-    height: 21px;
-    width: 21px;
-    padding: 1px 2.5px 0px 2px;
-    margin: 2px;
-    &.search {
-      font-size: 15px;
-      height: 20px;
-      width: 20px;
-      margin-left: 4px;
-      margin-top: 0px;
-      padding: 1px;
-    }
+    //&.search {
+    //  font-size: 15px;
+    //  height: 20px;
+    //  width: 20px;
+    //  margin-left: 4px;
+    //  margin-top: 0px;
+    //  padding: 1px;
+    //}
     &.H {
       background: #FD7473;
     }
@@ -139,19 +118,14 @@
   &.writing {
     background: #375994;
     border-radius: 7px;
-    font-weight: 400;
-    height: 21px;
-    width: 138px;
-    margin: 2px;
-    padding: 1px 2px 0px 2px;
-    &.search {
-      font-size: 15px;
-      height: 18px;
-      width: 121px;
-      margin-top: -6px;
-      margin-bottom: -3px;
-      padding: 0px 0px 0px 0px;
-    }
+    //&.search {
+    //  font-size: 15px;
+    //  height: 18px;
+    //  width: 121px;
+    //  margin-top: -6px;
+    //  margin-bottom: -3px;
+    //  padding: 0px 0px 0px 0px;
+    //}
   }
 }
 
