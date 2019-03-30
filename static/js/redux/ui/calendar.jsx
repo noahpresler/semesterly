@@ -160,7 +160,6 @@ class Calendar extends React.Component {
   }
 
   render() {
-    <i className="fa fa-floppy-o" />;
     const addSISButton = this.props.registrarSupported ? (
       <div className="cal-btn-wrapper">
         <button
@@ -428,9 +427,7 @@ Calendar.propTypes = {
   shareLinkValid: PropTypes.bool.isRequired,
   fetchSISTimetableData: PropTypes.func.isRequired,
   fetchShareTimetableLink: PropTypes.func.isRequired,
-  saveTimetable: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
-  saving: PropTypes.bool.isRequired,
   shareLink: PropTypes.string,
   uses12HrTime: PropTypes.bool.isRequired,
   registrarSupported: PropTypes.bool.isRequired,

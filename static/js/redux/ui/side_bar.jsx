@@ -86,21 +86,6 @@ class SideBar extends React.Component {
         />);
       }) : null;
 
-    let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
-      const colourIndex = (course.id in this.props.courseToColourIndex) ?
-          this.props.courseToColourIndex[course.id] :
-          getNextAvailableColour(this.props.courseToColourIndex);
-      return (<MasterSlot
-        key={course.id}
-        onTimetable={this.props.isCourseInRoster(course.id)}
-        colourIndex={colourIndex}
-        classmates={this.props.courseToClassmates[course.id]}
-        course={course}
-        fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
-        removeCourse={() => this.props.removeOptionalCourse(course)}
-        getShareLink={this.props.getShareLink}
-      />);
-    }) : null;
     const dropItDown = savedTimetables && savedTimetables.length !== 0 ?
             (<div
               className="timetable-drop-it-down"
@@ -174,8 +159,8 @@ class SideBar extends React.Component {
         </div>
         <div className="empty-state">
           <h4>Try adding your own Custom Event!</h4>
-          <h3>Click the pencil in the toolbar above your calendar.<br/>
-            Click, drag, and release to create your event.<br/>
+          <h3>Click the pencil in the toolbar above your calendar.<br />
+            Click, drag, and release to create your event.<br />
             Press the x in the corner to delete.</h3>
         </div>
       </div>
@@ -194,8 +179,6 @@ SideBar.propTypes = {
     name: PropTypes.string,
   })),
   mandatoryCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
-  optionalCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
-  coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
@@ -206,10 +189,8 @@ SideBar.propTypes = {
   duplicateTimetable: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   removeCourse: PropTypes.func.isRequired,
-  removeOptionalCourse: PropTypes.func.isRequired,
   launchFinalExamsModal: PropTypes.func.isRequired,
   launchPeerModal: PropTypes.func.isRequired,
-  launchTextbookModal: PropTypes.func.isRequired,
   semester: PropTypes.shape({
     name: PropTypes.string.isRequired,
     year: PropTypes.numberisRequired,
