@@ -397,11 +397,21 @@ exports[`CourseModalBody correctly renders 1`] = `
         <h3
           className="modal-module-header"
         >
-          Breadths
+          Program of Study Tags
         </h3>
         <p>
-          (3)
+          None
         </p>
+      </div>
+      <div
+        className="modal-module areas"
+      >
+        <h3
+          className="modal-module-header"
+        >
+          School
+        </h3>
+        <p />
       </div>
       <div
         className="modal-module friends"
