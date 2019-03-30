@@ -320,6 +320,7 @@ class ExplorationModal extends React.Component {
               key={filterType} filterType={filterType}
               add={this.addFilter} show={this.state[`show_${filterType}`]}
               isFiltered={this.isFiltered}
+              isFetching={this.props.isFetching}
               onClickOut={this.hideAll}
               schoolSpecificInfo={this.props.schoolSpecificInfo}
             />
@@ -368,7 +369,7 @@ class ExplorationModal extends React.Component {
     const explorationLoader = this.props.isFetching ?
       <i className="fa fa-spin fa-refresh" /> : null;
     const content = (
-      <div className={classNames('exploration-content', {loading: this.props.isFetching})}>
+      <div className={classNames('exploration-content', { loading: this.props.isFetching })}>
         <div
           className="exploration-header cf"
         >
@@ -420,6 +421,7 @@ class ExplorationModal extends React.Component {
             filterType={'times'}
             add={this.addDayForTimesFilter} show={this.state.show_times}
             isFiltered={this.isFiltered}
+            isFetching={this.props.isFetching}
             onClickOut={this.hideAll}
             schoolSpecificInfo={this.props.schoolSpecificInfo}
           />
@@ -448,8 +450,8 @@ class ExplorationModal extends React.Component {
 const ExplorationSearchResult = ({ name, code, areas, isWritingIntensive, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
     <h4>{ name } </h4>
-    <h5> - {code}</h5>
     <div className="subtitle">
+      <h5> { code }</h5>
       <AreaBubble areas={areas} />
       <WritingIntensive isWritingIntensive={isWritingIntensive} />
     </div>
