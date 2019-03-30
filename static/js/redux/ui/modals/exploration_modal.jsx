@@ -312,12 +312,11 @@ class ExplorationModal extends React.Component {
         </div>
       );
     }
-    const areasResults = this.props['areas'].map(area => area.join());
     const filterTypes = ['departments', 'areas', 'levels'];
     const filters = filterTypes.map(filterType => (
             this.props[filterType].length === 0 ? null :
             <Filter
-              results={filterType !== 'areas' ? this.props[filterType] : areasResults}
+              results={this.props[filterType]}
               key={filterType} filterType={filterType}
               add={this.addFilter} show={this.state[`show_${filterType}`]}
               isFiltered={this.isFiltered}
