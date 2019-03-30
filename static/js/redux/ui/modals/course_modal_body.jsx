@@ -209,16 +209,19 @@ class CourseModalBody extends React.Component {
               <h3 className="modal-module-header">Prerequisites</h3>
               <p>{ newPrerequisites }</p>
             </div>);
-    const posHeader =
+    const posTags = (this.props.data.pos && this.props.data.pos.length) ?
       (<div className="modal-module areas">
         <h3 className="modal-module-header">Program of Study Tags</h3>
-      </div>);
-    const posTags = this.props.data.pos.length ? <p key={`${cid}-pos`}>{this.props.data.pos.join(', ')}</p> : <p>None</p>;
-    const subSchoolHeader =
+        <p key={`${cid}-pos`}>{this.props.data.pos.join(', ')}</p>
+      </div>) :
       (<div className="modal-module areas">
-        <h3 className="modal-module-header">Specific School</h3>
+        <h3 className="modal-module-header">Program of Study Tags</h3>
+        <p>None</p>
       </div>);
-    const subSchool = <p key={`${cid}-subSchool`}>{ this.props.data.sub_school }</p>;
+    const subSchool = (<div className="modal-module areas">
+      <h3 className="modal-module-header">School</h3>
+      <p key={`${cid}-subSchool`}>{ this.props.data.sub_school }</p>
+    </div>);
     const pilotLogoImg = {
       backgroundImage: 'url(/static/img/integrations/pilot.png)',
     };
@@ -395,9 +398,7 @@ class CourseModalBody extends React.Component {
                         attentioncapacityTracker
                         }
             { prerequisitesDisplay }
-            { posHeader }
             { posTags }
-            { subSchoolHeader }
             { subSchool }
             { academicSupportDisplay }
             { friendDisplay }
