@@ -36,6 +36,10 @@
   height: 100%;
   position: relative;
   width: 100%;
+
+  &.loading {
+    cursor: wait;
+  }
 }
 
 @media (max-width: 766px) {
