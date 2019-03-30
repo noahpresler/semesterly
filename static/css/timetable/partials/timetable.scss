@@ -12,6 +12,14 @@ body {
   th {
     font-family: $font-primary;
   }
+
+  &.hoverCustomSlot {
+    cursor: crosshair;
+  }
+}
+
+.addingCustomSlot {
+  color: #16a085;
 }
 
 .cal-btn-wrapper {

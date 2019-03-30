@@ -117,25 +117,6 @@ class SideBar extends React.Component {
                         in the class</h3>
         </div>);
     }
-    const optionalSlotsHeader = (optionalSlots.length === 0 && masterSlots.length > 3) ? null :
-    <h4 className="sb-header">Optional Courses</h4>;
-    if (optionalSlots.length === 0 && masterSlots.length > 3) {
-      optionalSlots = null;
-    } else if (optionalSlots.length === 0) {
-      const img = (
-        <img
-          src="/static/img/emptystates/optionalslots.png"
-          alt="No optional courses added."
-        />);
-      optionalSlots = (
-        <div className="empty-state">
-          { img }
-          <h4>Give Optional Courses a Spin!</h4>
-          <h3>Load this list with courses you aren&#39;t 100% sure you want to take - we&#39;ll
-                        fit as many as
-                        possible, automatically</h3>
-        </div>);
-    }
     const finalScheduleLink = (masterSlots.length > 0 &&
       this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0
       && this.props.hasLoaded) ?
@@ -191,17 +172,12 @@ class SideBar extends React.Component {
           { masterSlots }
           { finalScheduleLink }
         </div>
-        { optionalSlotsHeader }
-        { optionalSlots }
-        <div id="sb-optional-slots" />
-        {/*<a onClick={this.props.launchTextbookModal}>*/}
-          {/*<h4 className="sb-header"> Textbooks*/}
-            {/*<div className="sb-header-link"><i className="fa fa-external-link" />&nbsp;See all</div>*/}
-          {/*</h4>*/}
-        {/*</a>*/}
-        {/*<div className="side-bar-section">*/}
-          {/*<TextbookList courses={this.props.coursesInTimetable} />*/}
-        {/*</div>*/}
+        <div className="empty-state">
+          <h4>Try adding your own Custom Event!</h4>
+          <h3>Click the pencil in the toolbar above your calendar.<br/>
+            Click, drag, and release to create your event.<br/>
+            Press the x in the corner to delete.</h3>
+        </div>
       </div>
     );
   }
