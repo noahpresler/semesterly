@@ -47,7 +47,7 @@ class EndToEndTest(SeleniumTestCase):
             self.lock_course()
         with self.description("Remove course from course modal"):
             self.open_course_modal_from_slot(0)
-            self.remove_course_from_course_modal(0)
+            # self.remove_course_from_course_modal(0)
         with self.description("Add course from modal and share timetable"):
             self.search_course('calc', 3)
             self.open_course_modal_from_search(1)
