@@ -56,7 +56,7 @@ def add_pilot_s19(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0024_courseintegration_semester'),
+        ('timetable', '0028_course_sub_school'),
     ]
 
     operations = [
