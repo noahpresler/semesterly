@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import PropTypes from 'prop-types';
 import React from 'react';
 import ClickOutHandler from 'react-onclickout';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 export class Filter extends React.Component {
@@ -52,9 +52,10 @@ export class Filter extends React.Component {
     const results = this.state.results.map((r, i) => (<li
       key={r}
       onClick={() => this.props.add(filterType, r)}
+      className={classNames({ loading: this.props.isFetching })}
     >
       <i
-        className={classnames({
+        className={classNames({
           fa: true,
           'fa-check': this.props.isFiltered(filterType, r),
         })}
@@ -89,6 +90,7 @@ Filter.propTypes = {
   add: PropTypes.func.isRequired,
   isFiltered: PropTypes.func.isRequired,
   onClickOut: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
 };
 
 // eslint-disable-next-line react/prop-types

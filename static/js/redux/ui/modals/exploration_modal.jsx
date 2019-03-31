@@ -19,6 +19,7 @@ import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
+import { AreaBubble, WritingIntensive } from '../search_result';
 import {
   Filter, SelectedFilter, SelectedFilterSection,
 } from '../advanced_search_filters';
@@ -255,7 +256,8 @@ class ExplorationModal extends React.Component {
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
-      key={c.id} code={c.code} name={c.name}
+      key={c.id} code={c.code} name={c.name} areas={c.areas}
+      isWritingIntensive={c.writing_intensive}
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />));
     let courseModal = null;
@@ -271,7 +273,11 @@ class ExplorationModal extends React.Component {
         <div className="modal-content">
           <div className="modal-header">
             <h1>{ selectedCourse.name }</h1>
-            <h2>{ selectedCourse.code }</h2>
+            <div className="subtitle">
+              <h2>{ selectedCourse.code }</h2>
+              <AreaBubble areas={selectedCourse.areas} />
+              <WritingIntensive isWritingIntensive={selectedCourse.writing_intensive} />
+            </div>
             <div className="modal-share" onClick={this.showShareLink}>
               <i className="fa fa-share-alt" />
             </div>
@@ -314,6 +320,7 @@ class ExplorationModal extends React.Component {
               key={filterType} filterType={filterType}
               add={this.addFilter} show={this.state[`show_${filterType}`]}
               isFiltered={this.isFiltered}
+              isFetching={this.props.isFetching}
               onClickOut={this.hideAll}
               schoolSpecificInfo={this.props.schoolSpecificInfo}
             />
@@ -362,7 +369,7 @@ class ExplorationModal extends React.Component {
     const explorationLoader = this.props.isFetching ?
       <i className="fa fa-spin fa-refresh" /> : null;
     const content = (
-      <div className="exploration-content">
+      <div className={classNames('exploration-content', { loading: this.props.isFetching })}>
         <div
           className="exploration-header cf"
         >
@@ -414,6 +421,7 @@ class ExplorationModal extends React.Component {
             filterType={'times'}
             add={this.addDayForTimesFilter} show={this.state.show_times}
             isFiltered={this.isFiltered}
+            isFetching={this.props.isFetching}
             onClickOut={this.hideAll}
             schoolSpecificInfo={this.props.schoolSpecificInfo}
           />
@@ -439,10 +447,14 @@ class ExplorationModal extends React.Component {
   }
 }
 
-const ExplorationSearchResult = ({ name, code, onClick }) => (
+const ExplorationSearchResult = ({ name, code, areas, isWritingIntensive, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
-    <h4>{ name }</h4>
-    <h5>{ code }</h5>
+    <h4>{ name } </h4>
+    <div className="subtitle">
+      <h5> { code }</h5>
+      <AreaBubble areas={areas} />
+      <WritingIntensive isWritingIntensive={isWritingIntensive} />
+    </div>
   </div>
 );
 
@@ -450,6 +462,8 @@ ExplorationSearchResult.propTypes = {
   name: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  areas: PropTypes.arrayOf(PropTypes.string).isRequired,
+  isWritingIntensive: PropTypes.string.isRequired,
 };
 
 ExplorationModal.defaultProps = {

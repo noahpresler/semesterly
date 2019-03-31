@@ -113,6 +113,13 @@ class SideBar extends React.Component {
                 See Finals Schedule
             </div>)
             : null;
+    const newFeatureNotice = masterSlots.length > 0 ? (
+      <div className="empty-state">
+        <h4>Try adding your own Custom Event!</h4>
+        <h3>Click the pencil in the toolbar above your calendar.<br />
+          Click, drag, and release to create your event.<br />
+          Press the x in the corner to delete.</h3>
+      </div>) : null;
     return (
       <div className="side-bar no-print">
         <div className="sb-name">
@@ -157,12 +164,7 @@ class SideBar extends React.Component {
           { masterSlots }
           { finalScheduleLink }
         </div>
-        <div className="empty-state">
-          <h4>Try adding your own Custom Event!</h4>
-          <h3>Click the pencil in the toolbar above your calendar.<br />
-            Click, drag, and release to create your event.<br />
-            Press the x in the corner to delete.</h3>
-        </div>
+        { newFeatureNotice }
       </div>
     );
   }

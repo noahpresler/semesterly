@@ -402,8 +402,7 @@
 
   li,
   .search-section,
-  .search-course h4,
-  .search-course .label {
+  .search-course h4 {
     // This makes it semi transparent
     color: $navy-transparent-0;
   }
@@ -430,7 +429,8 @@
     background-color: $white-transparent-9;
   }
 
-  .has-pilot {
+  .has-pilot,
+  .has-den {
     opacity: 0;
     visibility: hidden;
   }
