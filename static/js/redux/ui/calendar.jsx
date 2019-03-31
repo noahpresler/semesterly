@@ -63,9 +63,11 @@ class Calendar extends React.Component {
     this.showShareLink = this.showShareLink.bind(this);
     this.getTimelineStyle = this.getTimelineStyle.bind(this);
     this.sisBtnClick = this.sisBtnClick.bind(this);
+    this.hoverCustomSlot = this.hoverCustomSlot.bind(this);
     this.state = {
       shareLinkShown: false,
       timelineStyle: this.getTimelineStyle(),
+      hoverCustomSlot: false,
     };
   }
 
@@ -153,9 +155,11 @@ class Calendar extends React.Component {
     form.submit();
   }
 
+  hoverCustomSlot() {
+    this.setState({ hoverCustomSlot: !this.state.hoverCustomSlot });
+  }
+
   render() {
-    const saveIcon = this.props.saving ? <i className="fa fa-spin fa-circle-o-notch" /> :
-    <i className="fa fa-floppy-o" />;
     const addSISButton = this.props.registrarSupported ? (
       <div className="cal-btn-wrapper">
         <button
@@ -234,15 +238,15 @@ class Calendar extends React.Component {
         </ReactTooltip>
       </div>
         );
-    const saveButton = (
+    const addCustomEventButton = (
       <div className="cal-btn-wrapper">
         <button
           className="save-timetable add-button"
-          onMouseDown={this.props.saveTimetable}
+          onMouseDown={this.hoverCustomSlot}
           data-tip
           data-for="save-btn-tooltip"
         >
-          {saveIcon}
+          <i className={classnames('fa fa-pencil', { addingCustomSlot: this.state.hoverCustomSlot })} />
         </button>
         <ReactTooltip
           id="save-btn-tooltip"
@@ -251,7 +255,7 @@ class Calendar extends React.Component {
           place="bottom"
           effect="solid"
         >
-          <span>Save Timetable</span>
+          <span>Add Custom Event</span>
         </ReactTooltip>
       </div>
         );
@@ -298,17 +302,19 @@ class Calendar extends React.Component {
       </div>
         );
     return (
-      <div className="calendar fc fc-ltr fc-unthemed week-calendar">
+      <div className={classnames('calendar fc fc-ltr fc-unthemed week-calendar',
+        { hoverCustomSlot: this.state.hoverCustomSlot })}
+      >
         <div className="fc-toolbar no-print">
           <div className="fc-left">
             <PaginationContainer />
           </div>
           <div className="fc-right">
             { addSISButton }
+            { addCustomEventButton }
             { shareButton }
             { shareLink }
             { addButton }
-            { saveButton }
             { saveToCalendarButton }
             { preferenceButton }
           </div>
@@ -421,9 +427,7 @@ Calendar.propTypes = {
   shareLinkValid: PropTypes.bool.isRequired,
   fetchSISTimetableData: PropTypes.func.isRequired,
   fetchShareTimetableLink: PropTypes.func.isRequired,
-  saveTimetable: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
-  saving: PropTypes.bool.isRequired,
   shareLink: PropTypes.string,
   uses12HrTime: PropTypes.bool.isRequired,
   registrarSupported: PropTypes.bool.isRequired,
