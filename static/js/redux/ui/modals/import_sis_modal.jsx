@@ -35,7 +35,7 @@ class ImportSISModal extends React.Component {
     const modalHeader =
             (<div className="modal-content">
               <div className="modal-header">
-                <h1>Allow Semester.ly to Import SIS data?</h1>
+                <h1>Semester.ly is now partnering with the JHU IT Department!</h1>
                 <div className="modal-close" onClick={() => this.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>
@@ -47,7 +47,7 @@ class ImportSISModal extends React.Component {
     return (
       <Modal
         ref={(c) => { this.modal = c; }}
-        className="save-calendar-modal sis-import-modal max-modal"
+        className="sis-import-modal max-modal"
         modalStyle={modalStyle}
         onHide={() => {
           this.props.toggleImportSISModal();
@@ -55,8 +55,9 @@ class ImportSISModal extends React.Component {
         }}
       >
         {modalHeader}
+
         <div className="sis-import-modal__container">
-        <p>In Partnership with the JHU IT department, we can now import your SIS data to check  prerequisites and improve your search results.</p>
+        <p>In Partnership with the JHU IT department, we can now import your SIS data to check prerequisites for you and improve your search results.</p>
 
         <div>
           <a
@@ -85,10 +86,8 @@ class ImportSISModal extends React.Component {
         <div className="call-to-action">
         <a href="/import_sis">
           <div className="signup-button">
-            <i
-                className="fa fa-check"
-            />
-            <span> I accept  </span>
+            <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: '2px' }} />
+            <span> I accept, import!  </span>
           </div>
         </a>
         </div>
