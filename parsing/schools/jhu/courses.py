@@ -123,16 +123,15 @@ class Parser(BaseParser):
 
         areas = []
         if school == "Krieger School of Arts and Sciences" or school == "Whiting School of Engineering":
-            for letter in course['Areas']:
-                areas.append(letter.encode('ascii', 'ignore'))
+            if course['Areas'] != "None":
+                for letter in course['Areas']:
+                    areas.append(letter.encode('ascii', 'ignore'))
             # Add specialty areas for computer science department
             #if course['Department'] == 'EN Computer Science':
             #    cs_areas_re = r'\bApplications|\bAnalysis|\bSystems|\bGeneral'
             #    for match in re.findall(cs_areas_re, self.ingestor['description']):
             #        areas.append(match.encode('ascii', 'ignore'))
-            self.ingestor['areas'] = areas
-        else:
-            self.ingestor['areas'] = []
+        self.ingestor['areas'] = areas
 
         self.ingestor['writing_intensive'] = course['IsWritingIntensive']
 
