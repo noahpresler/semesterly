@@ -1531,7 +1531,10 @@
         "cores": null,
         "geneds": null,
         "same_as": null,
-        "related_courses": []
+        "related_courses": [],
+        "sub_school": "",
+        "writing_intensive": "",
+        "pos": []
     }
 },
 {
@@ -1556,7 +1559,10 @@
         "cores": null,
         "geneds": null,
         "same_as": null,
-        "related_courses": []
+        "related_courses": [],
+        "sub_school": "",
+        "writing_intensive": "",
+        "pos": []
     }
 },
 {
@@ -1581,7 +1587,10 @@
         "cores": null,
         "geneds": null,
         "same_as": null,
-        "related_courses": []
+        "related_courses": [],
+        "sub_school": "",
+        "writing_intensive": "",
+        "pos": []
     }
 }
 ]

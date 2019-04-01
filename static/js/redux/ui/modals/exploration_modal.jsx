@@ -276,7 +276,7 @@ class ExplorationModal extends React.Component {
             <div className="subtitle">
               <h2>{ selectedCourse.code }</h2>
               { selectedCourse.areas ? <AreaBubble areas={selectedCourse.areas} /> : null }
-              <WritingIntensive isWritingIntensive={selectedCourse.writing_intensive} />
+              { selectedCourse.writing_intensive ? <WritingIntensive isWritingIntensive={selectedCourse.writing_intensive} /> : null }
             </div>
             <div className="modal-share" onClick={this.showShareLink}>
               <i className="fa fa-share-alt" />
@@ -453,7 +453,7 @@ const ExplorationSearchResult = ({ name, code, areas, isWritingIntensive, onClic
     <div className="subtitle">
       <h5> { code }</h5>
       { areas ? <AreaBubble areas={areas} /> : null }
-      <WritingIntensive isWritingIntensive={isWritingIntensive} />
+      { isWritingIntensive ? <WritingIntensive isWritingIntensive={isWritingIntensive} /> : null }
     </div>
   </div>
 );
