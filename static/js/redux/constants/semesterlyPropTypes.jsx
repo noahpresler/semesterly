@@ -96,7 +96,7 @@ const relatedCourseFields = {
   description: PropTypes.string.isRequired,
   department: PropTypes.string.isRequired,
   num_credits: PropTypes.number.isRequired,
-  areas: PropTypes.array.isRequired,
+  areas: PropTypes.string.isRequired,
   campus: PropTypes.string.isRequired,
   evals: PropTypes.arrayOf(evaluation).isRequired,
   integrations: PropTypes.arrayOf(integration),

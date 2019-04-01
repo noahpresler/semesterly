@@ -92,7 +92,7 @@ class Parser(BaseParser):
             if len(section) == 0:
                 logging.warn(self._get_section_url(course))
                 continue
-            self._load_ingestor(school['Name'], course, section)
+            self._load_ingestor(course, section)
 
     def _compute_size_enrollment(self, course):
         try:
@@ -112,28 +112,18 @@ class Parser(BaseParser):
             waitlist = None
         return (section_size, section_enrolment, waitlist)
 
-    def _load_ingestor(self, school, course, section):
-        self.ingestor['sub_school'] = school;
+    def _load_ingestor(self, course, section):
         section_details = section[0]['SectionDetails']
         try:
             num_credits = float(course['Credits'])
         except:
             num_credits = 0
 
-
-        areas = []
-        if school == "Krieger School of Arts and Sciences" or school == "Whiting School of Engineering":
-            if course['Areas'] != "None":
-                for letter in course['Areas']:
-                    areas.append(letter.encode('ascii', 'ignore'))
-            # Add specialty areas for computer science department
-            #if course['Department'] == 'EN Computer Science':
-            #    cs_areas_re = r'\bApplications|\bAnalysis|\bSystems|\bGeneral'
-            #    for match in re.findall(cs_areas_re, self.ingestor['description']):
-            #        areas.append(match.encode('ascii', 'ignore'))
-        self.ingestor['areas'] = areas
-
-        self.ingestor['writing_intensive'] = course['IsWritingIntensive']
+        # Load core course fields
+        self.ingestor['areas'] = filter(lambda a: a != "None",
+                                        course['Areas'].split(','))
+        if course['IsWritingIntensive'] == "Yes":
+            self.ingestor['areas'] += ['Writing Intensive']
 
         if len(section_details[0]['Prerequisites']) > 0:
             prereqs = []
@@ -157,10 +147,11 @@ class Parser(BaseParser):
             'EnrollmentRestrictedTo'
         )
 
-        tags = [];
-        for tag in section_details[0]['PosTags']:
-            tags.append(tag['Tag'])
-        self.ingestor['pos']=tags
+        # Add specialty areas for computer science department
+        if course['Department'] == 'EN Computer Science':
+            cs_areas_re = r'\bApplications|\bAnalysis|\bSystems|\bGeneral'
+            for match in re.findall(cs_areas_re, self.ingestor['description']):
+                self.ingestor['areas'] += [match]
 
         created_course = self.ingestor.ingest_course()
         if self.last_course \
