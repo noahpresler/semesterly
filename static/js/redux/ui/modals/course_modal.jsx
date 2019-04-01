@@ -17,7 +17,6 @@ import React from 'react';
 import classNames from 'classnames';
 import Clipboard from 'clipboard';
 import Modal from 'boron/WaveModal';
-import { AreaBubble, WritingIntensive } from '../search_result';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
 import { normalizedCourse } from '../../constants/semesterlyPropTypes';
@@ -85,8 +84,9 @@ class CourseModal extends React.Component {
       backgroundColor: 'transparent',
     };
     const { data, inRoster } = this.props;
-    const courseAndDept = data.department && data.department !== '' ?
-      (<div>{data.code}, {data.department} </div>) : data.code;
+    let courseAndDept = data.code;
+    courseAndDept = data.department && data.department !== '' ?
+            `${courseAndDept}, ${data.department}` : courseAndDept;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               link={this.props.getShareLink(data.code)}
@@ -130,13 +130,7 @@ class CourseModal extends React.Component {
             (<div className="modal-content">
               <div className="modal-header">
                 <h1>{data.name}</h1>
-                <h2>
-                  <div className="subtitle">
-                    {courseAndDept}
-                    <AreaBubble areas={data.areas} />
-                    <WritingIntensive isWritingIntensive={data.writing_intensive} />
-                  </div>
-                </h2>
+                <h2>{courseAndDept}</h2>
                 <div className="modal-close" onClick={() => this.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>

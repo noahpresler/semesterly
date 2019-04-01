@@ -209,19 +209,11 @@ class CourseModalBody extends React.Component {
               <h3 className="modal-module-header">Prerequisites</h3>
               <p>{ newPrerequisites }</p>
             </div>);
-    const posTags = (this.props.data.pos && this.props.data.pos.length) ?
-      (<div className="modal-module areas">
-        <h3 className="modal-module-header">Program of Study Tags</h3>
-        <p key={`${cid}-pos`}>{this.props.data.pos.join(', ')}</p>
-      </div>) :
-      (<div className="modal-module areas">
-        <h3 className="modal-module-header">Program of Study Tags</h3>
-        <p>None</p>
-      </div>);
-    const subSchool = (<div className="modal-module areas">
-      <h3 className="modal-module-header">School</h3>
-      <p key={`${cid}-subSchool`}>{ this.props.data.sub_school }</p>
-    </div>);
+    const areasDisplay =
+            (<div className="modal-module areas">
+              <h3 className="modal-module-header">{this.props.schoolSpecificInfo.areasName}</h3>
+              <p>{ this.props.data.areas || 'None' }</p>
+            </div>);
     const pilotLogoImg = {
       backgroundImage: 'url(/static/img/integrations/pilot.png)',
     };
@@ -398,13 +390,11 @@ class CourseModalBody extends React.Component {
                         attentioncapacityTracker
                         }
             { prerequisitesDisplay }
-            { posTags }
-            { subSchool }
+            { areasDisplay }
             { academicSupportDisplay }
             { friendDisplay }
             { hasTakenDisplay }
           </div>
-
           <div className="col-8-16">
             { showCapacityAttention && !this.state.mobile &&
                         attentioncapacityTracker

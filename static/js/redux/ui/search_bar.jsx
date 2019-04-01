@@ -146,7 +146,7 @@ class SearchBar extends React.Component {
     const currSem = ($(window).width() < 767) ?
             SearchBar.getAbbreviatedSemesterName(this.props.semester) :
             SearchBar.getSemesterName(this.props.semester);
-    const resultsShown = results.length !== 0 && this.state.focused && !this.props.hasHoveredResult;
+    const resultsShown = results.length !== 0 && this.state.focused;
     return (
       <div className="search-bar no-print">
         <div className={classNames('search-bar__wrapper', { results: resultsShown })}>
