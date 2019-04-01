@@ -133,7 +133,7 @@ class CourseModal extends React.Component {
                 <h2>
                   <div className="subtitle">
                     {courseAndDept}
-                    <AreaBubble areas={data.areas} />
+                    { data.areas ? <AreaBubble areas={data.areas} /> : null }
                     <WritingIntensive isWritingIntensive={data.writing_intensive} />
                   </div>
                 </h2>

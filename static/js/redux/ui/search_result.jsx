@@ -203,23 +203,15 @@ SearchResult.propTypes = {
 export const AreaBubble = ({ areas }) => (areas.length > 0 ? (<div className="areas">
   {areas.map(area => <div className={`bubble ${area}`} key={area}>{area}</div>)}</div>) : null);
 
-AreaBubble.defaultProps = {
-  areas: null,
-};
-
 AreaBubble.propTypes = {
-  areas: PropTypes.arrayOf(PropTypes.string),
+  areas: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export const WritingIntensive = ({ isWritingIntensive }) => (isWritingIntensive === 'Yes' ?
   <div className="bubble writing">Writing Intensive</div> : null);
 
-WritingIntensive.defaultProps = {
-  isWritingIntensive: null,
-};
-
 WritingIntensive.propTypes = {
-  isWritingIntensive: PropTypes.string,
+  isWritingIntensive: PropTypes.string.isRequired,
 };
 
 export default SearchResult;
