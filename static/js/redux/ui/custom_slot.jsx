@@ -192,7 +192,7 @@ class CustomSlot extends React.Component {
   }
 
   editName() {
-    $('.fc-time input').select();
+    $(`#${this.props.id} .fc-time input`).select();
   }
 
   updateName(event) {
