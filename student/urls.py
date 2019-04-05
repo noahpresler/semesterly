@@ -39,6 +39,7 @@ urlpatterns = patterns('',
      student.views.ClassmateView.as_view()),
   url(r'^user/gcal/?$', student.views.GCalView.as_view()),
   url(r'^user/reactions/?$', student.views.ReactionView.as_view()),
+  url(r'^user/importsis/?$', student.views.ImportSISView.as_view()),
 
   # for accepting TOS.
   url(r'^tos/accept/', 'student.views.accept_tos'),
