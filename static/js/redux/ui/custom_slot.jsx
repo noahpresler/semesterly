@@ -139,6 +139,14 @@ class CustomSlot extends React.Component {
     this.editName = this.editName.bind(this);
   }
 
+  componentDidMount() {
+    $(`#${this.props.id} .fc-time input`).on('keydown', (e) => {
+      if (e.key === 'Enter') {
+        $(`#${this.props.id} .fc-time input`).blur();
+      }
+    });
+  }
+
   onSlotHover() {
     this.setState({ hovered: true });
   }
