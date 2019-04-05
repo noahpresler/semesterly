@@ -26,6 +26,13 @@ from semesterly.settings import get_secret
 
 hashids = Hashids(salt=get_secret('HASHING_SALT'))
 
+class CompletedSemester(models.Model):
+    major = models.CharField(max_length=255)
+    year_of_study = models.CharField(max_length=255)
+    personal_timetable = models.ForeignKey(PersonalTimetable)
+
+class History(models.Model):
+    completed_semesters = models.ManyToManyField(CompletedSemester)
 
 class Student(models.Model):
     """ Database object representing a student.
@@ -54,7 +61,7 @@ class Student(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=100, null=True)
     time_accepted_tos = models.DateTimeField(null=True)
-    history = models.ManyToManyField(models.History)
+    history = models.ForeignKey(History)
 
     def get_token(self):
         return TimestampSigner().sign(self.id).split(':', 1)[1]
@@ -135,7 +142,7 @@ class PersonalTimetable(timetable_models.Timetable):
     # TODO: change to foreign key from personal event -> personal timetable
     events = models.ManyToManyField(PersonalEvent)
     has_conflict = models.BooleanField(blank=True, default=False)
-
+    is_official = models.BooleanField(blank=False, default=False)
 
 class RegistrationToken(models.Model):
     """
@@ -147,13 +154,4 @@ class RegistrationToken(models.Model):
     endpoint = models.TextField(default='')
     student = models.ForeignKey(Student, null=True, default=None)
 
-class History(models.Model):
-    completed_semesters = models.ManyToManyField(models.CompletedSemester)
-
-class Course(models.Model):
-    name=models.CharField(max_length=255)
-
-class CompletedSemester(models.Model):
-    semester=models.CharField(max_length=100)
-    courses=models.ManyToManyField(models.Course)
 
