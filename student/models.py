@@ -54,6 +54,7 @@ class Student(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=100, null=True)
     time_accepted_tos = models.DateTimeField(null=True)
+    history = models.ManyToManyField(models.History)
 
     def get_token(self):
         return TimestampSigner().sign(self.id).split(':', 1)[1]
@@ -138,10 +139,21 @@ class PersonalTimetable(timetable_models.Timetable):
 
 class RegistrationToken(models.Model):
     """
-    A push notification token for Chrome noitification via
+    A push notification token for Chrome notification via
     Google Cloud Messaging
     """
     auth = models.TextField(default='')
     p256dh = models.TextField(default='')
     endpoint = models.TextField(default='')
     student = models.ForeignKey(Student, null=True, default=None)
+
+class History(models.Model):
+    completed_semesters = models.ManyToManyField(models.CompletedSemester)
+
+class Course(models.Model):
+    name=models.CharField(max_length=255)
+
+class CompletedSemester(models.Model):
+    semester=models.CharField(max_length=100)
+    courses=models.ManyToManyField(models.Course)
+

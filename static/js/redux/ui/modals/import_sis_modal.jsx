@@ -30,6 +30,24 @@ class ImportSISModal extends React.Component {
     }
   }
 
+  importSIS() {
+      const form = document.createElement('form');
+      form.method = 'post';
+      form.action = 'http://sisdevelopment.sis.jhu.edu/semtest/';
+      form.encType = 'application/x-www-form-urlencoded';
+      document.body.appendChild(form);
+      const input = document.createElement('input');
+      input.name = 'data';
+      input.type = 'hidden';
+
+      const sisData = {
+          action:'FetchStudentData',
+      };
+      input.value = JSON.stringify(sisData);
+      form.appendChild(input);
+      form.submit();
+  }
+
   render() {
 
     const modalHeader =
@@ -84,12 +102,18 @@ class ImportSISModal extends React.Component {
           </a>
         </div>
         <div className="call-to-action">
-        <a href="/import_sis">
+          <button
+              type="submit"
+              form="form1"
+              data-for="sis-btn-tooltip"
+              data-tip
+              onClick={this.importSIS}
+          >
           <div className="signup-button">
             <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: '2px' }} />
             <span> I accept, import!  </span>
           </div>
-        </a>
+          </button>
         </div>
         </div>
       </Modal>
