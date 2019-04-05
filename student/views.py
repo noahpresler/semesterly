@@ -12,7 +12,6 @@
 
 from datetime import datetime, timedelta
 import json
-
 import httplib2
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Count
@@ -26,6 +25,7 @@ from hashids import Hashids
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from helpers.mixins import CsrfExemptMixin
 
 from authpipe.utils import check_student_token
 from analytics.models import CalendarExport
@@ -593,4 +593,16 @@ class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         course.save()
 
         response = {'reactions': course.get_reactions(student=student)}
+        return Response(response, status=status.HTTP_200_OK)
+
+class ImportSISView(CsrfExemptMixin, APIView):
+    """
+    Manages the import of SIS data
+    """
+
+    def post(self, request):
+
+        courses_data = request.data
+
+        response = {'status': 'good'}
         return Response(response, status=status.HTTP_200_OK)
