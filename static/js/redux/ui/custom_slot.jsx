@@ -136,7 +136,6 @@ class CustomSlot extends React.Component {
     this.state = { hovered: false };
     this.onSlotHover = this.onSlotHover.bind(this);
     this.onSlotUnhover = this.onSlotUnhover.bind(this);
-    this.editName = this.editName.bind(this);
   }
 
   componentDidMount() {
@@ -199,10 +198,6 @@ class CustomSlot extends React.Component {
     };
   }
 
-  editName() {
-    $(`#${this.props.id} .fc-time input`).select();
-  }
-
   updateName(event) {
     this.props.updateCustomSlot({ name: event.target.value }, this.props.id);
   }
@@ -231,7 +226,7 @@ class CustomSlot extends React.Component {
           style={this.getSlotStyles()}
           onMouseEnter={this.onSlotHover}
           onMouseLeave={this.onSlotUnhover}
-          onClick={this.editName}
+          onClick={() => $(`#${this.props.id} .fc-time input`).select()}
           id={this.props.id}
         >
           <div className="slot-bar" style={{ backgroundColor: '#aaa' }} />
