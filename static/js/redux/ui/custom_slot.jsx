@@ -138,6 +138,14 @@ class CustomSlot extends React.Component {
     this.onSlotUnhover = this.onSlotUnhover.bind(this);
   }
 
+  componentDidMount() {
+    $(`#${this.props.id} .fc-time input`).on('keydown', (e) => {
+      if (e.key === 'Enter') {
+        $(`#${this.props.id} .fc-time input`).blur();
+      }
+    });
+  }
+
   onSlotHover() {
     this.setState({ hovered: true });
   }
@@ -218,6 +226,7 @@ class CustomSlot extends React.Component {
           style={this.getSlotStyles()}
           onMouseEnter={this.onSlotHover}
           onMouseLeave={this.onSlotUnhover}
+          onClick={() => $(`#${this.props.id} .fc-time input`).select()}
           id={this.props.id}
         >
           <div className="slot-bar" style={{ backgroundColor: '#aaa' }} />
