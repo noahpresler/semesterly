@@ -107,8 +107,8 @@ class Digestor(object):
             'meeting': lambda x: self.digest_meeting(x),
             'textbook': lambda x: self.digest_textbook(x),
             'textbook_link': lambda x: self.digest_textbook_link(x),
+            'eval': lambda x: self.digest_eval(x),
         }
-
         if self.tracker.has_viewer('progressbar'):
             bar = self.tracker.get_viewer('progressbar').bar
             for obj in bar(make_list(self.data)):
@@ -216,6 +216,23 @@ class Digestor(object):
                 section_obj=section_obj))[0]
         )
         self._update_progress('textbook_link', bool(textbook_link_model))
+
+    def digest_eval(self, evaluation):
+        """Digest evaluation.
+
+        Args:
+            evaluation (dict)
+        """
+        # Skip if there's no related Course
+        try:
+            Course.objects.get(code=evaluation.course.code)
+        except Course.DoesNotExist:
+            return
+
+        evaluation_model = self.strategy.digest_evaluation(
+            self.adapter.adapt_evaluation(evaluation)
+        )
+        self._update_progress('evaluation', bool(evaluation_model))
 
     def wrap_up(self):
         self.strategy.wrap_up()
@@ -498,6 +515,38 @@ class DigestionAdapter(object):
             }
         # NOTE: no current usage of course linked textbooks (listified yield will always be length 1)
 
+    def adapt_evaluation(self, evaluation):
+        """Adapt evaluation to model dictionary.
+
+        Args:
+            evaluation (dict): validated evaluation.
+
+        Returns:
+            dict: Description
+        """
+        professor = ''
+        if evaluation.instructors is not None:
+            for instructor in evaluation.instructors:
+                instructor = DotDict(instructor)
+                if isinstance(instructor.name, basestring):
+                    if professor is not '':
+                        professor += ', '
+                    professor += instructor.name
+                else:
+                    raise DigestionError('get your instructors straight')
+
+        evaluation = {
+            'course': Course.objects.get(code=evaluation.course.code),
+            'score': evaluation.score,
+            'summary': evaluation.summary,
+            'professor': professor,
+            'course_code': evaluation.course.code,
+            'year': evaluation.year,
+        }
+        for key in evaluation:
+            if evaluation[key] is None:
+                evaluation[key] = 'Cannot be found'
+        return evaluation
 
 class DigestionStrategy(object):
     __metaclass__ = ABCMeta
@@ -521,7 +570,7 @@ class Vommit(DigestionStrategy):
 
         for name, model in Digestor.MODELS.items():
             # if hasattr(self, 'digest_' + name):
-            #     continue
+                # continue
             def closure(name, model):
                 def digest(self, model_params):
                     obj = model.objects.filter(
@@ -557,7 +606,7 @@ class Vommit(DigestionStrategy):
             # Transform django object to dictionary.
             dbmodel = dbmodel.__dict__
 
-        context = {'section', 'course', 'semester', 'textbook'}
+        context = {'section', 'course', 'semester', 'textbook', 'evaluation'}
 
         whats = {}
         for k, v in inmodel.iteritems():

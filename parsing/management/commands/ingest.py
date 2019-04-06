@@ -86,11 +86,10 @@ class Command(BaseCommand):
 
         logger = logging.getLogger(parser.__module__ + '.' + parser.__name__)
         logger.debug('Ingest command options:' + str(options))
-
         try:
             p = parser(
                 config=options['config'],
-                output_path=options['output'].format(school=school),
+                output_path=options['output'].format(school=school, type=parser_type),
                 # output_error_path=options['output_error'].format(
                 #     school=school,
                 #     type=parser_type
