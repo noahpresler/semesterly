@@ -158,8 +158,7 @@ class SchoolList(APIView):
         last_updated = DataUpdate.objects.filter(
             school=school,
             update_type=DataUpdate.COURSES
-        ).order_by('timestamp').latest()
-        print(last_updated)
+        ).order_by('timestamp').first()
 
         if last_updated is not None:
             last_updated = '{} {}'.format(
