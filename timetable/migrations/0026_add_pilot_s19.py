@@ -17,7 +17,7 @@ from timetable.models import Integration, CourseIntegration, Course, Semester
 
 
 def add_pilot_s19(apps, schema_editor):
-    """ Learning Den classes for Spring 2018 """
+    """ PILOT classes for Spring 2019"""
     pilot_codes = [
         "AS.110.106",
         "AS.110.107",
