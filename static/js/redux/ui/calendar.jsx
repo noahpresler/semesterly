@@ -310,7 +310,7 @@ class Calendar extends React.Component {
       >
         <div className="fc-toolbar no-print">
           <div className="fc-left">
-            <PaginationContainer />
+            { !this.state.hoverCustomSlot ? <PaginationContainer /> : null }
             { description }
           </div>
           <div className="fc-right">

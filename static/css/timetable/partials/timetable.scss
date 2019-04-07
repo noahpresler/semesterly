@@ -125,10 +125,12 @@ button {
   .custom-instructions {
     line-height: 30px;
     margin: 0 10px;
-    font-size: 18px;
+    font-size: 15px;
+    font-weight: 300;
+    color: #777;
   }
 
-  @media screen and (max-width: 1220px) {
+  @media screen and (max-width: 550px) {
     .custom-instructions{
       display: none;
     }
