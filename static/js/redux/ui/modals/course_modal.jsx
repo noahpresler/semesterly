@@ -134,7 +134,8 @@ class CourseModal extends React.Component {
                   <div className="subtitle">
                     {courseAndDept}
                     { data.areas ? <AreaBubble areas={data.areas} /> : null }
-                    { data.writing_intensive ? <WritingIntensive isWritingIntensive={data.writing_intensive} /> : null }
+                    { data.writing_intensive ?
+                      <WritingIntensive isWritingIntensive={data.writing_intensive} /> : null }
                   </div>
                 </h2>
                 <div className="modal-close" onClick={() => this.modal.hide()}>
