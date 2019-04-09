@@ -19,7 +19,6 @@ import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
-import { AreaBubble, WritingIntensive } from '../search_result';
 import {
   Filter, SelectedFilter, SelectedFilterSection,
 } from '../advanced_search_filters';
@@ -256,8 +255,7 @@ class ExplorationModal extends React.Component {
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
-      key={c.id} code={c.code} name={c.name} areas={c.areas}
-      isWritingIntensive={c.writing_intensive}
+      key={c.id} code={c.code} name={c.name}
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />));
     let courseModal = null;
@@ -273,11 +271,7 @@ class ExplorationModal extends React.Component {
         <div className="modal-content">
           <div className="modal-header">
             <h1>{ selectedCourse.name }</h1>
-            <div className="subtitle">
-              <h2>{ selectedCourse.code }</h2>
-              { selectedCourse.areas ? <AreaBubble areas={selectedCourse.areas} /> : null }
-              { selectedCourse.writing_intensive ? <WritingIntensive isWritingIntensive={selectedCourse.writing_intensive} /> : null }
-            </div>
+            <h2>{ selectedCourse.code }</h2>
             <div className="modal-share" onClick={this.showShareLink}>
               <i className="fa fa-share-alt" />
             </div>
@@ -447,14 +441,10 @@ class ExplorationModal extends React.Component {
   }
 }
 
-const ExplorationSearchResult = ({ name, code, areas, isWritingIntensive, onClick }) => (
+const ExplorationSearchResult = ({ name, code, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
     <h4>{ name } </h4>
-    <div className="subtitle">
-      <h5> { code }</h5>
-      { areas ? <AreaBubble areas={areas} /> : null }
-      { isWritingIntensive ? <WritingIntensive isWritingIntensive={isWritingIntensive} /> : null }
-    </div>
+    <h5> { code }</h5>
   </div>
 );
 
@@ -462,8 +452,6 @@ ExplorationSearchResult.propTypes = {
   name: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
-  areas: PropTypes.arrayOf(PropTypes.string).isRequired,
-  isWritingIntensive: PropTypes.string.isRequired,
 };
 
 ExplorationModal.defaultProps = {
