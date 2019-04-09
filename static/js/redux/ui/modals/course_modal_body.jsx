@@ -218,10 +218,6 @@ class CourseModalBody extends React.Component {
         <h3 className="modal-module-header">Program of Study Tags</h3>
         <p>None</p>
       </div>);
-    const subSchool = (<div className="modal-module areas">
-      <h3 className="modal-module-header">School</h3>
-      <p key={`${cid}-subSchool`}>{ this.props.data.sub_school }</p>
-    </div>);
     const pilotLogoImg = {
       backgroundImage: 'url(/static/img/integrations/pilot.png)',
     };
@@ -399,7 +395,6 @@ class CourseModalBody extends React.Component {
                         }
             { prerequisitesDisplay }
             { posTags }
-            { subSchool }
             { academicSupportDisplay }
             { friendDisplay }
             { hasTakenDisplay }
