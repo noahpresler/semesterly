@@ -71,7 +71,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super(SeleniumTestCase, cls).setUpClass()
-        cls.TIMEOUT = 10
+        cls.TIMEOUT = 100
         cls.chrome_options = webdriver.ChromeOptions()
         cls.chrome_options.add_experimental_option(
             "prefs",
