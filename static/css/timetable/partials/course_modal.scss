@@ -85,26 +85,26 @@
   margin-left: 5px;
   padding: 2px 4px;
   &.H {
-    background: #FD7473;
+    background: rgba(255, 118, 118, 0.7);
   }
 
   &.S {
-    background: #408EA9;
+    background: rgba(64, 142, 169, 0.7);
   }
 
   &.N {
-    background: #B177C7;
+    background: rgba(177, 119, 199, 0.7);
   }
 
   &.E {
-    background: #259B82;
+    background: rgba(37, 155, 130, 0.7);
   }
 
   &.Q {
-    background: #FFD462;
+    background: rgba(255, 212, 98, 0.7);
   }
   &.writing {
-    background: #375994;
+    background: rgba(55, 89, 148, 0.7);
     border-radius: 7px;
   }
 }
