@@ -148,14 +148,6 @@ class CourseDetail(ValidateSubdomainMixin, APIView):
         return Response(json_data.data, status=status.HTTP_200_OK)
 
 
-def get_distinct_areas(areas_group):
-    distinct_areas = []
-    for group in areas_group:
-        if group != list('None'):
-            for area in group:
-                    distinct_areas.append(area)
-    return set(distinct_areas)
-
 class SchoolList(APIView):
     def get(self, request, school):
         """
@@ -166,7 +158,7 @@ class SchoolList(APIView):
         last_updated = DataUpdate.objects.filter(
             school=school,
             update_type=DataUpdate.COURSES
-        ).order_by('timestamp').first()
+        ).order_by('timestamp').last()
 
         if last_updated is not None:
             last_updated = '{} {}'.format(
@@ -175,10 +167,10 @@ class SchoolList(APIView):
             )
 
         json_data = {
-            'areas': get_distinct_areas(sorted(list(Course.objects.filter(school=school)
-                                             .exclude(areas__exact=[])
-                                             .values_list('areas', flat=True)
-                                             .distinct()))),
+            'areas': sorted(list(Course.objects.filter(school=school)
+                                 .exclude(areas__exact='')
+                                 .values_list('areas', flat=True)
+                                 .distinct())),
             'departments': sorted(list(Course.objects.filter(school=school)
                                        .exclude(department__exact='')
                                        .values_list('department', flat=True)

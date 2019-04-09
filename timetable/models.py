@@ -17,7 +17,6 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 from django.forms.models import model_to_dict
 from django.db import models
 from picklefield.fields import PickledObjectField
-from django.contrib.postgres.fields import ArrayField
 
 
 class Semester(models.Model):
@@ -108,6 +107,7 @@ class Course(models.Model):
     corequisites = models.TextField(default='', null=True)
     exclusions = models.TextField(default='')
     num_credits = models.FloatField(default=-1)
+    areas = models.CharField(max_length=600, default='', null=True)
     department = models.CharField(max_length=250, default='', null=True)
     level = models.CharField(max_length=500, default='', null=True)
     # TODO generalize core/gened/breadth field
@@ -116,11 +116,6 @@ class Course(models.Model):
     related_courses = models.ManyToManyField('self', blank=True)
     same_as = models.ForeignKey('self', null=True)
     vector = PickledObjectField(default=None, null=True)
-    pos = ArrayField(models.TextField(default='', null=True), default=list)
-    areas = ArrayField(models.TextField(default='', null=True), default=list)
-    sub_school = models.TextField(default='', null=True)
-    writing_intensive = models.TextField(default='', null=True)
-
 
     def __str__(self):
         return self.code + ": " + self.name

@@ -402,7 +402,8 @@
 
   li,
   .search-section,
-  .search-course h4 {
+  .search-course h4,
+  .search-course .label {
     // This makes it semi transparent
     color: $navy-transparent-0;
   }

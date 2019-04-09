@@ -97,7 +97,7 @@ class SchoolListTest(APITestCase):
     school = 'uoft'
 
     def setUp(self):
-        self.areas = ['area']
+        self.areas = 'area'
         self.departments = 'math'
         self.level = 'hard'
         Course.objects.create(school=self.school,

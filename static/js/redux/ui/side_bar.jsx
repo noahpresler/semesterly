@@ -85,7 +85,21 @@ class SideBar extends React.Component {
           getShareLink={this.props.getShareLink}
         />);
       }) : null;
-
+    let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
+      const colourIndex = (course.id in this.props.courseToColourIndex) ?
+        this.props.courseToColourIndex[course.id] :
+        getNextAvailableColour(this.props.courseToColourIndex);
+      return (<MasterSlot
+        key={course.id}
+        onTimetable={this.props.isCourseInRoster(course.id)}
+        colourIndex={colourIndex}
+        classmates={this.props.courseToClassmates[course.id]}
+        course={course}
+        fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+        removeCourse={() => this.props.removeOptionalCourse(course)}
+        getShareLink={this.props.getShareLink}
+      />);
+    }) : null;
     const dropItDown = savedTimetables && savedTimetables.length !== 0 ?
             (<div
               className="timetable-drop-it-down"
@@ -102,6 +116,25 @@ class SideBar extends React.Component {
                         in the class</h3>
         </div>);
     }
+    const optionalSlotsHeader = (optionalSlots.length === 0 && masterSlots.length > 3) ? null :
+    <h4 className="sb-header">Optional Courses</h4>;
+    if (optionalSlots.length === 0 && masterSlots.length > 3) {
+      optionalSlots = null;
+    } else if (optionalSlots.length === 0) {
+      const img = (
+        <img
+          src="/static/img/emptystates/optionalslots.png"
+          alt="No optional courses added."
+        />);
+      optionalSlots = (
+        <div className="empty-state">
+          { img }
+          <h4>Give Optional Courses a Spin!</h4>
+          <h3>Load this list with courses you aren&#39;t 100% sure you want to take - we&#39;ll
+            fit as many as
+            possible, automatically</h3>
+        </div>);
+    }
     const finalScheduleLink = (masterSlots.length > 0 &&
       this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0
       && this.props.hasLoaded) ?
@@ -113,13 +146,6 @@ class SideBar extends React.Component {
                 See Finals Schedule
             </div>)
             : null;
-    const newFeatureNotice = masterSlots.length > 0 ? (
-      <div className="empty-state">
-        <h4>Try adding your own Custom Event!</h4>
-        <h3>Click the pencil in the toolbar above your calendar.<br />
-          Click, drag, and release to create your event.<br />
-          Press the x in the corner to delete.</h3>
-      </div>) : null;
     return (
       <div className="side-bar no-print">
         <div className="sb-name">
@@ -164,7 +190,16 @@ class SideBar extends React.Component {
           { masterSlots }
           { finalScheduleLink }
         </div>
-        { newFeatureNotice }
+        <div className="empty-state">
+          <h4 style={{ fontSize: 18 }}>Class registration is here!</h4>
+          <h4>Click the shield to add your classes to SIS!</h4>
+          <h3>Current Freshman: Fri 6/12
+          <br />Current Sophomores: Wed 6/10
+          <br />Current Juniors: Mon 6/8</h3>
+        </div>
+        { optionalSlotsHeader }
+        { optionalSlots }
+        <div id="sb-optional-slots" />
       </div>
     );
   }
@@ -181,6 +216,8 @@ SideBar.propTypes = {
     name: PropTypes.string,
   })),
   mandatoryCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
+  optionalCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
+  coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
@@ -192,6 +229,7 @@ SideBar.propTypes = {
   fetchCourseInfo: PropTypes.func.isRequired,
   removeCourse: PropTypes.func.isRequired,
   launchFinalExamsModal: PropTypes.func.isRequired,
+  removeOptionalCourse: PropTypes.func.isRequired,
   launchPeerModal: PropTypes.func.isRequired,
   semester: PropTypes.shape({
     name: PropTypes.string.isRequired,

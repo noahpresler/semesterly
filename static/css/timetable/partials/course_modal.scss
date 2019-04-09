@@ -31,7 +31,6 @@
 
 .course-modal.trans .modal-content,
 .course-modal.trans .modal-header,
-.course-modal.trans .modal-header div,
 .course-modal.trans .modal-header h1,
 .course-modal.trans .modal-header h2,
 .course-modal.trans .modal-body p,
@@ -64,49 +63,6 @@
 .course-modal .master-slot .slot-bar {
   border-bottom-left-radius: 5px;
   border-top-left-radius: 5px;
-}
-
-.subtitle {
-  display: flex;
-  align-items: center;
-  margin: 6px;
-  >.areas {
-    display: flex;
-    > div {
-      border-radius: 25%;
-    }
-  }
-}
-
-.bubble {
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  margin-left: 5px;
-  padding: 2px 4px;
-  &.H {
-    background: #FD7473;
-  }
-
-  &.S {
-    background: #408EA9;
-  }
-
-  &.N {
-    background: #B177C7;
-  }
-
-  &.E {
-    background: #259B82;
-  }
-
-  &.Q {
-    background: #FFD462;
-  }
-  &.writing {
-    background: #375994;
-    border-radius: 7px;
-  }
 }
 
 .course-modal .img-icon {

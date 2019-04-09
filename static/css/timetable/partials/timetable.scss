@@ -121,6 +121,20 @@ button {
   border-bottom: 0;
   margin-top: 20px;
   padding: 5px;
+
+  .custom-instructions {
+    line-height: 30px;
+    margin: 0 10px;
+    font-size: 15px;
+    font-weight: 300;
+    color: #777;
+  }
+
+  @media screen and (max-width: 550px) {
+    .custom-instructions{
+      display: none;
+    }
+  }
 }
 
 .cal-cell {

@@ -160,6 +160,11 @@ class Calendar extends React.Component {
   }
 
   render() {
+    const description = this.state.hoverCustomSlot ?
+      (<h4 className="custom-instructions">
+        Click, drag, and release to create your custom event
+      </h4>)
+      : null;
     const addSISButton = this.props.registrarSupported ? (
       <div className="cal-btn-wrapper">
         <button
@@ -307,7 +312,8 @@ class Calendar extends React.Component {
       >
         <div className="fc-toolbar no-print">
           <div className="fc-left">
-            <PaginationContainer />
+            { !this.state.hoverCustomSlot ? <PaginationContainer /> : null }
+            { description }
           </div>
           <div className="fc-right">
             { addSISButton }
