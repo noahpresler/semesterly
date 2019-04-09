@@ -185,7 +185,7 @@ class CourseModalBody extends React.Component {
             getShareLinkFromModal={this.props.getShareLinkFromModal}
           />);
         }
-        return <span className="textItem" key={`textItem${t}`}>{t}</span>;
+        return <span className="textItem" key={`textItem${t.id}`}>{t}</span>;
       });
     const matchedCoursesPrerequisites = prerequisites === null
       ? null : prerequisites.match(courseRegex);
