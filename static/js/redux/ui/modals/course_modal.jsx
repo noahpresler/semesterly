@@ -17,6 +17,7 @@ import React from 'react';
 import classNames from 'classnames';
 import Clipboard from 'clipboard';
 import Modal from 'boron/WaveModal';
+import { AreaBubble, WritingIntensive } from '../search_result';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
 import { normalizedCourse } from '../../constants/semesterlyPropTypes';
@@ -84,9 +85,8 @@ class CourseModal extends React.Component {
       backgroundColor: 'transparent',
     };
     const { data, inRoster } = this.props;
-    let courseAndDept = data.code;
-    courseAndDept = data.department && data.department !== '' ?
-            `${courseAndDept}, ${data.department}` : courseAndDept;
+    const courseAndDept = data.department && data.department !== '' ?
+      (<div>{data.code}, {data.department} </div>) : data.code;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               link={this.props.getShareLink(data.code)}
