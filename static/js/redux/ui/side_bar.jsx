@@ -148,10 +148,11 @@ class SideBar extends React.Component {
             : null;
     const newFeatureNotice = masterSlots.length > 0 ? (
       <div className="empty-state">
-        <h4>Try adding your own Custom Event!</h4>
-        <h3>Click the pencil in the toolbar above your calendar.<br />
-          Click, drag, and release to create your event.<br />
-          Press the x in the corner to delete.</h3>
+        <h4 style={{ fontSize: 18 }}>Class registration is here!</h4>
+        <h4>Click the shield to add your classes to SIS!</h4>
+        <h3>Current Freshman: Fri 6/12
+          <br />Current Sophomores: Wed 6/10
+          <br />Current Juniors: Mon 6/8</h3>
       </div>) : null;
     return (
       <div className="side-bar no-print">
@@ -197,13 +198,7 @@ class SideBar extends React.Component {
           { masterSlots }
           { finalScheduleLink }
         </div>
-        <div className="empty-state">
-          <h4 style={{ fontSize: 18 }}>Class registration is here!</h4>
-          <h4>Click the shield to add your classes to SIS!</h4>
-          <h3>Current Freshman: Fri 6/12
-          <br />Current Sophomores: Wed 6/10
-          <br />Current Juniors: Mon 6/8</h3>
-        </div>
+        { newFeatureNotice }
         { optionalSlotsHeader }
         { optionalSlots }
         <div id="sb-optional-slots" />
