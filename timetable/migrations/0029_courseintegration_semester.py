@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0023_add_learning_den'),
+        ('timetable', '0028_course_sub_school'),
     ]
 
     operations = [
