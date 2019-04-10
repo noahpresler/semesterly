@@ -52,6 +52,8 @@ def add_pilot_s19(apps, schema_editor):
                     courseIntegration.save()
                 courseIntegration.semester.add(s19)
                 courseIntegration.save()
+            else:
+                print("Course doesn't exist " + str(code))
 
 class Migration(migrations.Migration):
 
