@@ -71,7 +71,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super(SeleniumTestCase, cls).setUpClass()
-        cls.TIMEOUT = 100
+        cls.TIMEOUT = 10
         cls.chrome_options = webdriver.ChromeOptions()
         cls.chrome_options.add_experimental_option(
             "prefs",
@@ -362,6 +362,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             url (str): the url to follow and validate
             validate (func): the function which validates the new page
         """
+        # Some versions of chrome don't like if url does not start with http
+        if not str(url).startswith("http"):
+            url = '%s%s' % ('http://', url)
         self.driver.execute_script("window.open()")
         self.driver.switch_to_window(self.driver.window_handles[1])
         self.driver.get(url)
