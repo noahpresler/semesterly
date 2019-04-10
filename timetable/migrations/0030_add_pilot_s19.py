@@ -39,7 +39,7 @@ def add_pilot_s19(apps, schema_editor):
         "AS.171.108"
     ]
 
-    integration, created = Integration.objects.get_or_create(name="PILOT")
+    integration, created = Integration.objects.get_or_create(name="Pilot")
     integration.save()
 
     if Semester.objects.filter(year="2019", name="Spring").exists():
