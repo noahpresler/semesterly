@@ -1525,13 +1525,16 @@
         "corequisites": "",
         "exclusions": "",
         "num_credits": 4.0,
-        "areas": "Q",
+        "areas": ["Q"],
         "department": "AS Mathematics",
         "level": "100",
         "cores": null,
         "geneds": null,
         "same_as": null,
-        "related_courses": []
+        "related_courses": [],
+        "sub_school": "",
+        "writing_intensive": "",
+        "pos": []
     }
 },
 {
@@ -1550,13 +1553,16 @@
         "corequisites": "",
         "exclusions": "",
         "num_credits": 4.0,
-        "areas": "Q",
+        "areas": ["Q"],
         "department": "AS Mathematics",
         "level": "100",
         "cores": null,
         "geneds": null,
         "same_as": null,
-        "related_courses": []
+        "related_courses": [],
+        "sub_school": "",
+        "writing_intensive": "",
+        "pos": []
     }
 },
 {
@@ -1575,13 +1581,16 @@
         "corequisites": "",
         "exclusions": "",
         "num_credits": 0.0,
-        "areas": "Q",
+        "areas": ["Q"],
         "department": "AS Mathematics",
         "level": "700",
         "cores": null,
         "geneds": null,
         "same_as": null,
-        "related_courses": []
+        "related_courses": [],
+        "sub_school": "",
+        "writing_intensive": "",
+        "pos": []
     }
 }
 ]

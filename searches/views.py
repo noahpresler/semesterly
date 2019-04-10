@@ -61,7 +61,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         # Filter now by departments, areas, levels, or times if provided.
         filters = request.data.get('filters', {})
         if filters.get('areas'):
-            course_match_objs = course_match_objs.filter(areas__in=filters.get('areas'))
+            course_match_objs = course_match_objs.filter(areas__contains=filters.get('areas'))
         if filters.get('departments'):
             course_match_objs = course_match_objs.filter(department__in=filters.get('departments'))
         if filters.get('levels'):
