@@ -30,9 +30,9 @@ from helpers.mixins import CsrfExemptMixin
 from authpipe.utils import check_student_token
 from analytics.models import CalendarExport
 from courses.serializers import CourseSerializer
-from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable
+from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable, HistoricalPersonalTimetable
 from student.utils import next_weekday, get_classmates_from_course_id, get_student_tts
-from timetable.models import Semester, Course, Section
+from timetable.models import Semester, Course, Section, Timetable
 from timetable.serializers import DisplayTimetableSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
@@ -595,14 +595,41 @@ class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         response = {'reactions': course.get_reactions(student=student)}
         return Response(response, status=status.HTTP_200_OK)
 
+
 class ImportSISView(CsrfExemptMixin, APIView):
     """
     Manages the import of SIS data
     """
 
     def post(self, request):
+        request_data = json.loads(request.data['data'])
+        student = get_object_or_404(Student, user=request.user)
 
-        courses_data = request.data
+        for term in request_data['terms']:
+            # create personal_tt
+            semester_str = term['name']
 
+
+            courses = models.ManyToManyField(Course)
+sections = models.ManyToManyField(Section)
+semester = models.ForeignKey(Semester)
+school = models.CharField(max_length=50)
+
+            time_table =  Timetable(sections=)
+            personal_tt = PersonalTimetable(student=student, name=("Official SIS " + semester_str))
+            personal_tt.save()
+            # for every course in courses_data, add that course to personal_tt
+            for enrollment in term['enrollments']:
+                print enrollment["section"]
+                if Course.objects.filter(code=enrollment["section"]).exists():
+                    next_course = Course.objects.get(code=enrollment["section"])
+                    personal_tt.courses.add(next_course)
+            personal_tt.save()
+
+            # create HistoricalPTT
+            historical_personal_tt=HistoricalPersonalTimetable(personal_tt=personal_tt, year_of_study=term["YearOfStudy"], major=term["Major"])
+            historical_personal_tt.save()
+
+        # send response to frontend. Send all PTT
         response = {'status': 'good'}
         return Response(response, status=status.HTTP_200_OK)
