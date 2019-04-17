@@ -61,8 +61,8 @@ class CourseSerializer(serializers.ModelSerializer):
         return evals
 
     def get_integrations(self, course):
-        ids = CourseIntegration.objects.filter(course__id=course.id).values_list("integration",
-                                                                                 flat=True)
+        ids = CourseIntegration.objects.filter(course__id=course.id, semester__id=self.context['semester'].id) \
+            .values_list("integration", flat=True)
         return list(Integration.objects.filter(id__in=ids).values_list("name", flat=True))
 
     # TODO: use course serializer but only recurse one level

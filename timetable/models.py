@@ -296,6 +296,7 @@ class CourseIntegration(models.Model):
     course = models.ForeignKey(Course)
     integration = models.ForeignKey(Integration)
     json = models.TextField()
+    semester = models.ManyToManyField(Semester)
 
 
 class Timetable(models.Model):
