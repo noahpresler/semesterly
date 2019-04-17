@@ -601,30 +601,60 @@ class ImportSISView(CsrfExemptMixin, APIView):
     Manages the import of SIS data
     """
 
+    def update_tt(self, tt, new_name, new_has_conflict, new_slots):
+        tt.name = new_name
+        tt.has_conflict = new_has_conflict
+
+        tt.courses.clear()
+        tt.sections.clear()
+        added_courses = set()
+        for slot in new_slots:
+            section_id = slot['section']
+            print section_id
+            section = Section.objects.get(id=section_id)
+            tt.sections.add(section)
+            if section.course.id not in added_courses:
+                tt.courses.add(section.course)
+                added_courses.add(section.course.id)
+
+        tt.save()
+
     def post(self, request):
         request_data = json.loads(request.data['data'])
-        student = get_object_or_404(Student, user=request.user)
+
 
         for term in request_data['terms']:
             # create personal_tt
-            semester_str = term['name']
+            semester_arr = term['name'].split()
+            semester_name=semester_arr[0]
+            semester_year=semester_arr[1]
 
+            school = 'jhu'
+            name = 'Official'
+            has_conflicts = False
 
-            courses = models.ManyToManyField(Course)
-sections = models.ManyToManyField(Section)
-semester = models.ForeignKey(Semester)
-school = models.CharField(max_length=50)
+            print request.user
+            semester, _ = Semester.objects.get_or_create(name=semester_name, year=semester_year)
+            #student = Student.objects.get(user=request.user)
+            student = Student.objects.get(id=3)
+            params = {
+                'school': school,
+                'name': name,
+                'semester': semester,
+                'student': student
+            }
 
-            time_table =  Timetable(sections=)
-            personal_tt = PersonalTimetable(student=student, name=("Official SIS " + semester_str))
-            personal_tt.save()
-            # for every course in courses_data, add that course to personal_tt
-            for enrollment in term['enrollments']:
-                print enrollment["section"]
-                if Course.objects.filter(code=enrollment["section"]).exists():
-                    next_course = Course.objects.get(code=enrollment["section"])
-                    personal_tt.courses.add(next_course)
-            personal_tt.save()
+            personal_tt = PersonalTimetable.objects.create(**params)
+            self.update_tt(personal_tt, name, has_conflicts, term['enrollments'])
+            # # for every course in courses_data, add that course to personal_tt
+            # for enrollment in term['enrollments']:
+            #     print enrollment["section"]
+            #     if Course.objects.filter(code=enrollment["section"]).exists():
+            #         next_course = Course.objects.get(code=enrollment["section"])
+            #         personal_tt.courses.add(next_course)
+            #
+            # personal_tt = PersonalTimetable(student=student, name=("Official SIS " + semester_str))
+            # personal_tt.save()
 
             # create HistoricalPTT
             historical_personal_tt=HistoricalPersonalTimetable(personal_tt=personal_tt, year_of_study=term["YearOfStudy"], major=term["Major"])
