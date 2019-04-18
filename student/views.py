@@ -601,22 +601,15 @@ class ImportSISView(CsrfExemptMixin, APIView):
     Manages the import of SIS data
     """
 
-    def update_tt(self, tt, new_name, new_has_conflict, new_slots):
-        tt.name = new_name
-        tt.has_conflict = new_has_conflict
-
-        tt.courses.clear()
-        tt.sections.clear()
+    def add_courses(self, tt, new_slots):
         added_courses = set()
         for slot in new_slots:
             section_id = slot['section']
-            print section_id
             section = Section.objects.get(id=section_id)
             tt.sections.add(section)
             if section.course.id not in added_courses:
                 tt.courses.add(section.course)
                 added_courses.add(section.course.id)
-
         tt.save()
 
     def post(self, request):
@@ -635,16 +628,18 @@ class ImportSISView(CsrfExemptMixin, APIView):
 
             semester, _ = Semester.objects.get_or_create(name=semester_name, year=semester_year)
             student = get_student(request)
-            print student
             params = {
                 'school': school,
                 'name': name,
                 'semester': semester,
-                'student': student
+                'student': student,
+                'year_of_study': term["YearOfStudy"],
+                'major': term["Major"],
+                'has_conflict': False
             }
 
-            personal_tt = PersonalTimetable.objects.create(**params)
-            self.update_tt(personal_tt, name, has_conflicts, term['enrollments'])
+            # personal_tt = PersonalTimetable.objects.create(**params)
+            # tt = self.update_tt(personal_tt, name, has_conflicts, term['enrollments'])
             # # for every course in courses_data, add that course to personal_tt
             # for enrollment in term['enrollments']:
             #     print enrollment["section"]
@@ -656,8 +651,8 @@ class ImportSISView(CsrfExemptMixin, APIView):
             # personal_tt.save()
 
             # create HistoricalPTT
-            historical_personal_tt=HistoricalPersonalTimetable(personaltimetable_ptr=personal_tt, year_of_study=term["YearOfStudy"], major=term["Major"])
-            historical_personal_tt.save()
+            historical_personal_tt = HistoricalPersonalTimetable.objects.create(**params)
+            self.add_courses(historical_personal_tt, term['enrollments'])
 
         # send response to frontend. Send all PTT
         response = {'status': 'good'}
