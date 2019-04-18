@@ -31,7 +31,7 @@ from authpipe.utils import check_student_token
 from analytics.models import CalendarExport
 from courses.serializers import CourseSerializer
 from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable, HistoricalPersonalTimetable
-from student.utils import next_weekday, get_classmates_from_course_id, get_student_tts
+from student.utils import next_weekday, get_classmates_from_course_id, get_student_tts, get_student
 from timetable.models import Semester, Course, Section, Timetable
 from timetable.serializers import DisplayTimetableSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
@@ -633,10 +633,9 @@ class ImportSISView(CsrfExemptMixin, APIView):
             name = 'Official'
             has_conflicts = False
 
-            print request.user
             semester, _ = Semester.objects.get_or_create(name=semester_name, year=semester_year)
-            #student = Student.objects.get(user=request.user)
-            student = Student.objects.get(id=3)
+            student = get_student(request)
+            print student
             params = {
                 'school': school,
                 'name': name,
@@ -657,7 +656,7 @@ class ImportSISView(CsrfExemptMixin, APIView):
             # personal_tt.save()
 
             # create HistoricalPTT
-            historical_personal_tt=HistoricalPersonalTimetable(personal_tt=personal_tt, year_of_study=term["YearOfStudy"], major=term["Major"])
+            historical_personal_tt=HistoricalPersonalTimetable(personaltimetable_ptr=personal_tt, year_of_study=term["YearOfStudy"], major=term["Major"])
             historical_personal_tt.save()
 
         # send response to frontend. Send all PTT
