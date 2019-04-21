@@ -26,6 +26,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from helpers.mixins import CsrfExemptMixin
+from helpers.mixins import FeatureFlowView
 
 from authpipe.utils import check_student_token
 from analytics.models import CalendarExport
@@ -596,11 +597,12 @@ class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         return Response(response, status=status.HTTP_200_OK)
 
 
-class ImportSISView(CsrfExemptMixin, APIView):
+class ImportSISView(CsrfExemptMixin, FeatureFlowView):
     """
     Manages the import of SIS data
     """
 
+    feature_name = 'IMPORT_SIS'
     def add_courses(self, tt, new_slots):
         added_courses = set()
         for slot in new_slots:
@@ -612,9 +614,13 @@ class ImportSISView(CsrfExemptMixin, APIView):
                 added_courses.add(section.course.id)
         tt.save()
 
-    def post(self, request):
-        request_data = json.loads(request.data['data'])
+    def get_feature_flow(self, request):
 
+        return {"historical_ptt": 'test'}
+
+    def post(self, request):
+
+        request_data = json.loads(request.data['data'])
 
         for term in request_data['terms']:
             # create personal_tt
@@ -627,6 +633,7 @@ class ImportSISView(CsrfExemptMixin, APIView):
             has_conflicts = False
 
             semester, _ = Semester.objects.get_or_create(name=semester_name, year=semester_year)
+
             student = get_student(request)
             params = {
                 'school': school,
@@ -654,6 +661,4 @@ class ImportSISView(CsrfExemptMixin, APIView):
             historical_personal_tt = HistoricalPersonalTimetable.objects.create(**params)
             self.add_courses(historical_personal_tt, term['enrollments'])
 
-        # send response to frontend. Send all PTT
-        response = {'status': 'good'}
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
