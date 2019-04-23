@@ -146,14 +146,17 @@ class Calendar extends React.Component {
     let isLoggedIn=false;
 
     if(isLoggedIn) {
+      // move this to a function in timetable_actions
       const form = document.createElement('form');
       form.method = 'post';
+      // put this link in urls.py
       form.action = 'https://sis.jhu.edu/sswf/go/';
       form.encType = 'application/x-www-form-urlencoded';
       document.body.appendChild(form);
       const input = document.createElement('input');
       input.name = 'data';
       input.type = 'hidden';
+      // make this function fetch data and send it
       input.value = JSON.stringify(this.props.fetchSISTimetableData());
       form.appendChild(input);
       form.submit();
