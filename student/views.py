@@ -660,5 +660,8 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
             # create HistoricalPTT
             historical_personal_tt = HistoricalPersonalTimetable.objects.create(**params)
             self.add_courses(historical_personal_tt, term['enrollments'])
+            json_data = {
+                'historical_ptt': historical_personal_tt,
+            }
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(json_data, status=status.HTTP_200_OK)
