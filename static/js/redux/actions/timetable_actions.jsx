@@ -482,3 +482,4 @@ export const removeMetric = metric => ({ type: ActionTypes.REMOVE_METRIC, metric
 export const changeMetric = (add, del) => ({ type: ActionTypes.SWITCH_METRIC, add, del });
 
 export const toggleMetricOrder = metric => ({ type: ActionTypes.TOGGLE_METRIC_ORDER, metric });
+
