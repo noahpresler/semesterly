@@ -21,7 +21,6 @@ const importSISModal = (state = {
         case ActionTypes.TOGGLE_IMPORT_SIS_MODAL:
             return { isVisible: !state.isVisible };
         case ActionTypes.TRIGGER_IMPORT_SIS_MODAL:
-            console.log("hi");
             return {
                 isVisible: true,
             };

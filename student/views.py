@@ -661,4 +661,4 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
             historical_personal_tt = HistoricalPersonalTimetable.objects.create(**params)
             self.add_courses(historical_personal_tt, term['enrollments'])
 
-        return Response(status=status.HTTP_200_OK)
+        return HttpResponseRedirect("/user/settings")
