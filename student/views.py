@@ -663,5 +663,4 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
             json_data = {
                 'historical_ptt': historical_personal_tt,
             }
-
-        return Response(json_data, status=status.HTTP_200_OK)
+        return HttpResponseRedirect("/user/settings")

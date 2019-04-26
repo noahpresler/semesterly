@@ -155,12 +155,6 @@ const handleFlows = featureFlow => (dispatch) => {
     case 'DELETE_ACCOUNT':
       dispatch(overrideSettingsShow(true));
       break;
-    case 'IMPORT_SIS':
-      console.log("success");
-      console.log(featureFlow.exam);
-    //  dispatch({ type: ActionTypes.,
-            //      json: featureFlow.exam});
-      break;
     default:
       // unexpected feature name
       break;

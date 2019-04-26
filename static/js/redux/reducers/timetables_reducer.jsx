@@ -72,6 +72,14 @@ const timetables = (state = initialState, action) => {
     case ActionTypes.UPDATE_LAST_COURSE_ADDED:
       return Object.assign({}, state, { lastSlotAdded: action.course });
 
+
+    case ActionTypes.RECEIVE_SIS_DATA:
+      dispatch({
+        type: ActionTypes.RECEIVE_SIS_DATA,
+        json: {semesters: 4},
+      });
+      break;
+
     default:
       return state;
   }
