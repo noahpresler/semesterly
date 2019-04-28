@@ -147,6 +147,15 @@ class UserView(RedirectToSignupMixin, APIView):
             has_facebook = False
         has_notifications_enabled = RegistrationToken.objects.filter(
             student=student).exists()
+
+        historical_ptt = HistoricalPersonalTimetable.objects.filter(student=student)
+
+        #extract the year from the term name. e.g. "Fall 2018"
+        #first_term_name = historical_ptt[0].name
+        #first_year = first_term_name.split[-1]
+
+        num_terms = len(historical_ptt)
+        has_historical_ptt = False if num_terms==0 else True
         context = {
             'name': student.user,
             'major': student.major,
@@ -156,7 +165,9 @@ class UserView(RedirectToSignupMixin, APIView):
             'img_url': img_url,
             'hasGoogle': has_google,
             'hasFacebook': has_facebook,
-            'notifications': has_notifications_enabled
+            'notifications': has_notifications_enabled,
+            'num_terms': num_terms,
+            'has_historical_ptt': has_historical_ptt
         }
         for r in reactions:
             context[r['title']] = r['count']
@@ -621,7 +632,10 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
     def post(self, request):
 
         request_data = json.loads(request.data['data'])
-
+        # clear HistoricalPTT first
+        student = get_student(request)
+        HistoricalPersonalTimetable.objects.filter(student=student).delete()
+        last_major=''
         for term in request_data['terms']:
             # create personal_tt
             semester_arr = term['name'].split()
@@ -634,7 +648,7 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
 
             semester, _ = Semester.objects.get_or_create(name=semester_name, year=semester_year)
 
-            student = get_student(request)
+
             params = {
                 'school': school,
                 'name': name,
@@ -642,9 +656,9 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
                 'student': student,
                 'year_of_study': term["YearOfStudy"],
                 'major': term["Major"],
-                'has_conflict': False
+                'has_conflict': has_conflicts
             }
-
+            last_major=term["Major"]
             # personal_tt = PersonalTimetable.objects.create(**params)
             # tt = self.update_tt(personal_tt, name, has_conflicts, term['enrollments'])
             # # for every course in courses_data, add that course to personal_tt
@@ -660,7 +674,6 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
             # create HistoricalPTT
             historical_personal_tt = HistoricalPersonalTimetable.objects.create(**params)
             self.add_courses(historical_personal_tt, term['enrollments'])
-            json_data = {
-                'historical_ptt': historical_personal_tt,
-            }
+
+        #Student.objects.filter(student=student).major=last_major
         return HttpResponseRedirect("/user/settings")
