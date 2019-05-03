@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 import json
 import httplib2
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, Count
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect
@@ -617,12 +618,18 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
     def add_courses(self, tt, new_slots):
         added_courses = set()
         for slot in new_slots:
-            section_id = slot['section']
-            section = Section.objects.get(id=section_id)
-            tt.sections.add(section)
-            if section.course.id not in added_courses:
-                tt.courses.add(section.course)
-                added_courses.add(section.course.id)
+            course_code = slot['offering']
+            try:
+                course = Course.objects.get(code=course_code)
+                section = Section.objects.get(course=course, meeting_section=slot['section'])
+                print(section)
+                tt.sections.add(section)
+                if section.course.id not in added_courses:
+                    tt.courses.add(section.course)
+                    added_courses.add(section.course.id)
+            except ObjectDoesNotExist:
+                print 'course or section not found'
+
         tt.save()
 
     def get_feature_flow(self, request):
