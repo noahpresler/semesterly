@@ -1,0 +1,14 @@
+.course-card {
+
+    margin-left: 25%;
+    margin-right: 25%;
+    height:10%;
+    background-color: rgb(253, 116, 115);
+    border-radius: 10px;
+
+}
+
+.card-container {
+
+    text-align: center;
+}

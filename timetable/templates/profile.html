@@ -25,6 +25,7 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="{% static 'css/global.css'%}">
 		<link rel="stylesheet" href="{% static 'css/student/profile.css'%}">
+        <link rel="stylesheet" href="{% static 'css/stats.css'%}">
 
 	</head>
 	<body>
@@ -84,6 +85,18 @@
 				<div id="sis-data">
 					<p>You've taken {{num_terms}} semesters of classes!</p>
 
+
+                    {% for key,value in semester_dictionary.items %}
+                        <p>{{key}}</p>
+
+                        <div class="card-container">
+                        {% for tuple in value %}
+                            <div class="course-card">
+                            <p>{{tuple.0}} {{tuple.1}} {{tuple.2  }}</p>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% endfor %}
 				</div>
 				<!-- Reaction Counter -->
 				<div id="reaction-counter">

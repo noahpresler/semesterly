@@ -151,11 +151,37 @@ class UserView(RedirectToSignupMixin, APIView):
 
         historical_ptt = HistoricalPersonalTimetable.objects.filter(student=student)
 
-        #extract the year from the term name. e.g. "Fall 2018"
-        #first_term_name = historical_ptt[0].name
-        #first_year = first_term_name.split[-1]
-
         num_terms = len(historical_ptt)
+        official_tt_id_list = historical_ptt.values_list('personaltimetable_ptr_id', flat=True)
+
+        #keys are semester names, values are lists of courses associated with each semester
+        official_tt_dictionary = {}
+        for tt_id in official_tt_id_list:
+            timetable=PersonalTimetable.objects.filter(id=tt_id)
+            semester_id=timetable.values_list('semester_id', flat=True)[0]
+
+            #obtaining list of semesters
+            curr_semester=Semester.objects.filter(id=semester_id)
+            name=curr_semester.values_list('name', flat=True)[0]
+            year=curr_semester.values_list('year', flat=True)[0]
+            semester_name=name+" "+year
+
+            #adding to dictionary semester: course_list key-value pairs
+
+            section_id_list=timetable.values_list('sections', flat=True)
+
+            section_tuples = []
+            for section_id in section_id_list:
+                #get the necessary info for displaying a list of courses
+               section_object=Section.objects.filter(id=section_id)
+               course_code=section_object.values_list('course', flat=True)[0]
+               section_name=Course.objects.filter(id=course_code).values_list('name', flat=True)[0]
+               section_code=Course.objects.filter(id=course_code).values_list('code', flat=True)[0]
+               section_meeting_section=section_object.values_list('meeting_section', flat=True)[0]
+               section_tuple = (section_code, section_name, section_meeting_section)
+               section_tuples.append(section_tuple)
+            official_tt_dictionary[semester_name]=section_tuples
+
         has_historical_ptt = False if num_terms==0 else True
         context = {
             'name': student.user,
@@ -168,7 +194,8 @@ class UserView(RedirectToSignupMixin, APIView):
             'hasFacebook': has_facebook,
             'notifications': has_notifications_enabled,
             'num_terms': num_terms,
-            'has_historical_ptt': has_historical_ptt
+            'has_historical_ptt': has_historical_ptt,
+            'semester_dictionary': official_tt_dictionary
         }
         for r in reactions:
             context[r['title']] = r['count']
@@ -615,22 +642,22 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
     """
 
     feature_name = 'IMPORT_SIS'
-    def add_courses(self, tt, new_slots):
+    def add_courses(self, historical_tt, new_slots):
         added_courses = set()
         for slot in new_slots:
             course_code = slot['offering']
             try:
                 course = Course.objects.get(code=course_code)
-                section = Section.objects.get(course=course, meeting_section=slot['section'])
-                print(section)
-                tt.sections.add(section)
+                section_string = '('+slot['section']+')'
+                section = Section.objects.get(course=course, meeting_section=section_string)
+                historical_tt.sections.add(section)
                 if section.course.id not in added_courses:
-                    tt.courses.add(section.course)
+                    historical_tt.courses.add(section.course)
                     added_courses.add(section.course.id)
             except ObjectDoesNotExist:
                 print 'course or section not found'
 
-        tt.save()
+        historical_tt.save()
 
     def get_feature_flow(self, request):
 
@@ -642,11 +669,14 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
         # clear HistoricalPTT first
         student = get_student(request)
         HistoricalPersonalTimetable.objects.filter(student=student).delete()
-        last_major=''
+
         for term in request_data['terms']:
             # create personal_tt
+
             semester_arr = term['name'].split()
             semester_name=semester_arr[0]
+            #hardcoded line below for dev purposes
+            #semester_name='Spring'
             semester_year=semester_arr[1]
 
             school = 'jhu'
@@ -654,7 +684,6 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
             has_conflicts = False
 
             semester, _ = Semester.objects.get_or_create(name=semester_name, year=semester_year)
-
 
             params = {
                 'school': school,
@@ -666,21 +695,15 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
                 'has_conflict': has_conflicts
             }
             last_major=term["Major"]
-            # personal_tt = PersonalTimetable.objects.create(**params)
-            # tt = self.update_tt(personal_tt, name, has_conflicts, term['enrollments'])
-            # # for every course in courses_data, add that course to personal_tt
-            # for enrollment in term['enrollments']:
-            #     print enrollment["section"]
-            #     if Course.objects.filter(code=enrollment["section"]).exists():
-            #         next_course = Course.objects.get(code=enrollment["section"])
-            #         personal_tt.courses.add(next_course)
-            #
-            # personal_tt = PersonalTimetable(student=student, name=("Official SIS " + semester_str))
-            # personal_tt.save()
+            student.major=last_major
+            student.sub_school=term["AcademicProgram"]
+
 
             # create HistoricalPTT
             historical_personal_tt = HistoricalPersonalTimetable.objects.create(**params)
             self.add_courses(historical_personal_tt, term['enrollments'])
-
+        #make sure sis is now enabled
+        student.sis_enabled=True
+        student.save()
         #Student.objects.filter(student=student).major=last_major
         return HttpResponseRedirect("/user/settings")
