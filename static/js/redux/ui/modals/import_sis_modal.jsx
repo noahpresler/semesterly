@@ -108,11 +108,10 @@ class ImportSISModal extends React.Component {
               data-for="sis-btn-tooltip"
               data-tip
               onClick={this.importSIS}
+              className="signup-button"
           >
-          <div className="signup-button">
-            <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: '2px' }} />
+
             <span> I accept, import!  </span>
-          </div>
           </button>
         </div>
         </div>

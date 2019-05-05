@@ -67,7 +67,8 @@
 				<div id="filter"></div>
 				<div id="profile-banner-content">
 					<h1>{{ name.first_name }} {{ name.last_name }}</h1>
-					<h2>{{ major }}, Class of {{ class }}</h2>
+					<h2>{{ major }}, {{ sub_school }}</h2>
+                    <h2>Class of {{ class }}</h2>
 				</div>
 				<div id="profile-image">
 					<div id="profile-image-social" style="background-image: url({{ img_url }});"></div>
@@ -82,20 +83,29 @@
 					</p>
 				</div> -->
 
-				<div id="sis-data">
-					<p>You've taken {{num_terms}} semesters of classes!</p>
-
+				<div class="sis-data">
+					<p class="title-text">You've taken {{num_terms}} semesters of classes!<p/>
+                    <div class="scroll-container">
                     {% for key,value in semester_dictionary.items %}
-                        <p>{{key}}</p>
+                        <p class="semester-title"><b>{{key}}</b></p>
 
                         <div class="card-container">
+
                         {% for tuple in value %}
-                            <div class="course-card">
-                            <p>{{tuple.0}} {{tuple.1}} {{tuple.2  }}</p>
+
+                            <div class="course-card
+                                {%  cycle 'red' 'blue' 'green' 'yellow' %}">
+                                <div class="slot-bar
+                                    {%  cycle 'dark-red' 'dark-blue' 'dark-green' 'dark-yellow' %}"></div>
+                                <p>{{tuple.0}}</p><br>
+                            <p><b>{{tuple.1}}</b> {{tuple.2 }}</p>
                             </div>
                         {% endfor %}
                         </div>
+                        <br>
+
                     {% endfor %}
+                    </div>
 				</div>
 				<!-- Reaction Counter -->
 				<div id="reaction-counter">

@@ -453,3 +453,87 @@ footer h6 {
 		border-radius: 30px;
 	}
 }
+
+.course-card {
+	border-radius: 5px;
+	color: rgb(34,34,34);
+
+	margin: 10px;
+	height: 80px;
+}
+.course-card p{
+	font-size: 0.8em;
+	margin: 0;
+	display: inline-block;
+	width: 80%;
+}
+
+
+.red {
+	background-color: rgb(253, 116, 115);
+}
+
+.blue {
+	background-color: rgb(82, 183, 217);
+}
+
+.green {
+	background-color: rgb(54, 222, 187);
+}
+
+.yellow {
+	background-color: rgb(255, 212, 98);
+}
+
+.dark-red {
+	background-color: rgb(177, 81, 80);
+}
+
+.dark-blue {
+	background-color: rgb(64, 142, 169);
+}
+
+.dark-green {
+	background-color: rgb(37, 155, 130);
+}
+
+.dark-yellow {
+	background-color: rgb(178, 148, 68);
+}
+
+.card-container {
+	display: grid;
+	margin: auto;
+
+	justify-content: center;
+	background-color: rgb(220, 220, 220);
+	border-radius: 5px;
+	grid-column-gap: 5px;
+	grid-template-columns: 50% 50%;
+}
+
+
+.slot-bar{
+	border-radius: 5px 0 0 5px;
+	width: 10px;
+	height: 100%;
+	float: left;
+}
+
+.title-text{
+	font-size: 1.5em;
+}
+
+.scroll-container{
+	height: 500px;
+	margin: auto;
+	width: 40%;
+	overflow-y: scroll;
+}
+
+
+@media(max-width: 800px) {
+	.scroll-container {
+		width: 75%;
+	}
+}

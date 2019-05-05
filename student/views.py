@@ -182,6 +182,9 @@ class UserView(RedirectToSignupMixin, APIView):
                section_tuples.append(section_tuple)
             official_tt_dictionary[semester_name]=section_tuples
 
+        student = get_student(request)
+        sub_school_code=student.sub_school;
+        sub_school_map={'EN': 'Whiting School of Engineering', 'AS': 'Krieger School of Arts and Sciences'}
         has_historical_ptt = False if num_terms==0 else True
         context = {
             'name': student.user,
@@ -195,7 +198,8 @@ class UserView(RedirectToSignupMixin, APIView):
             'notifications': has_notifications_enabled,
             'num_terms': num_terms,
             'has_historical_ptt': has_historical_ptt,
-            'semester_dictionary': official_tt_dictionary
+            'semester_dictionary': official_tt_dictionary,
+            'sub_school': sub_school_map[sub_school_code]
         }
         for r in reactions:
             context[r['title']] = r['count']
