@@ -42,10 +42,14 @@ class DisplayTimetableSerializer(serializers.Serializer):
     name = serializers.CharField()
     avg_rating = serializers.FloatField()
     events = EventSerializer(many=True)
+    is_official = serializers.BooleanField()
 
     @classmethod
     def from_model(cls, timetable, **kwargs):
+
+        is_official_state =  True
+
         if kwargs.get('many') is True:
-            timetables = [DisplayTimetable.from_model(tt) for tt in timetable]
+            timetables = [DisplayTimetable.from_model(tt, is_official_state) for tt in timetable]
             return DisplayTimetableSerializer(timetables, **kwargs)
-        return DisplayTimetableSerializer(DisplayTimetable.from_model(timetable), **kwargs)
+        return DisplayTimetableSerializer(DisplayTimetable.from_model(timetable, is_official_state), **kwargs)

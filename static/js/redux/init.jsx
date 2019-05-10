@@ -163,7 +163,7 @@ const handleFlows = featureFlow => (dispatch) => {
 
 const setup = () => (dispatch) => {
   initData = JSON.parse(initData);
-
+  console.log(initData.currentUser.timetables);
   dispatch({ type: ActionTypes.INIT_STATE, data: initData });
 
   dispatch(receiveCourses(initData.currentUser.courses));

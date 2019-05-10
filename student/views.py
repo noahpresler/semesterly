@@ -175,8 +175,9 @@ class UserView(RedirectToSignupMixin, APIView):
                 #get the necessary info for displaying a list of courses
                section_object=Section.objects.filter(id=section_id)
                course_code=section_object.values_list('course', flat=True)[0]
-               section_name=Course.objects.filter(id=course_code).values_list('name', flat=True)[0]
-               section_code=Course.objects.filter(id=course_code).values_list('code', flat=True)[0]
+               course_object=Course.objects.filter(id=course_code)
+               section_name=course_object.values_list('name', flat=True)[0]
+               section_code=course_object.values_list('code', flat=True)[0]
                section_meeting_section=section_object.values_list('meeting_section', flat=True)[0]
                section_tuple = (section_code, section_name, section_meeting_section)
                section_tuples.append(section_tuple)
@@ -241,11 +242,24 @@ class UserTimetableView(ValidateSubdomainMixin,
         student = Student.objects.get(user=request.user)
         timetables = student.personaltimetable_set.filter(
             school=request.subdomain, semester=sem).order_by('-last_updated')
+
+        official_tables = []
+        unofficial_tables = []
+        for timetable in timetables:
+            if HistoricalPersonalTimetable.objects.filter(student=student, personaltimetable_ptr_id=timetable.id).count()>0:
+                official_tables.append(timetable)
+            else:
+                unofficial_tables.append(timetable)
         courses = {course for timetable in timetables for course in timetable.courses.all()}
         context = {'semester': sem, 'school': request.subdomain, 'student': student}
+
+        serialized_official=DisplayTimetableSerializer.from_model(official_tables, many=True, is_official=True).data
+        serialized_unofficial=DisplayTimetableSerializer.from_model(unofficial_tables, many=True, is_official=False).data
+        # print(serialized_official+serialized_unofficial)
         return Response({
-            'timetables': DisplayTimetableSerializer.from_model(timetables, many=True).data,
+            'timetables': serialized_official+serialized_unofficial,
             'courses': CourseSerializer(courses, context=context, many=True).data
+
         }, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -646,14 +660,16 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
     """
 
     feature_name = 'IMPORT_SIS'
-    def add_courses(self, historical_tt, new_slots):
+    def add_courses(self, historical_tt, new_slots, sem_name, sem_year):
         added_courses = set()
         for slot in new_slots:
             course_code = slot['offering']
             try:
                 course = Course.objects.get(code=course_code)
                 section_string = '('+slot['section']+')'
-                section = Section.objects.get(course=course, meeting_section=section_string)
+                semester_id = Semester.objects.filter(name=sem_name, year=sem_year)[0].id
+                section = Section.objects.get(course=course, meeting_section=section_string, semester_id=semester_id)
+
                 historical_tt.sections.add(section)
                 if section.course.id not in added_courses:
                     historical_tt.courses.add(section.course)
@@ -705,9 +721,10 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
 
             # create HistoricalPTT
             historical_personal_tt = HistoricalPersonalTimetable.objects.create(**params)
-            self.add_courses(historical_personal_tt, term['enrollments'])
+            self.add_courses(historical_personal_tt, term['enrollments'], semester_name, semester_year)
         #make sure sis is now enabled
         student.sis_enabled=True
+
         student.save()
         #Student.objects.filter(student=student).major=last_major
         return HttpResponseRedirect("/user/settings")
