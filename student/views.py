@@ -253,11 +253,12 @@ class UserTimetableView(ValidateSubdomainMixin,
         courses = {course for timetable in timetables for course in timetable.courses.all()}
         context = {'semester': sem, 'school': request.subdomain, 'student': student}
 
-        serialized_official=DisplayTimetableSerializer.from_model(official_tables, many=True, is_official=True).data
-        serialized_unofficial=DisplayTimetableSerializer.from_model(unofficial_tables, many=True, is_official=False).data
+        serialized_official=DisplayTimetableSerializer.from_model(official_tables, is_official=True, many=True).data
+        # serialized_unofficial=DisplayTimetableSerializer.from_model(unofficial_tables, many=True, is_official=False).data
         # print(serialized_official+serialized_unofficial)
+        # TODO @Jimmy: Might need to concat the two tables
         return Response({
-            'timetables': serialized_official+serialized_unofficial,
+            'timetables': serialized_official,
             'courses': CourseSerializer(courses, context=context, many=True).data
 
         }, status=status.HTTP_200_OK)

@@ -37,18 +37,17 @@ class DisplayTimetable:
         self.avg_rating = get_avg_rating(slots)
         self.events = events or []
         self.id = id
-        self.is_official=is_official
+        self.is_official = is_official
 
     @classmethod
-    def from_model(cls, timetable, is_official=False):
+    def from_model(cls, timetable, is_official):
         """ Create DisplayTimetable from Timetable instance. """
         slots = [Slot(section.course, section, section.offering_set.all(),
                       is_optional=False, is_locked=True)
                  for section in timetable.sections.all()]
         id = timetable.id if isinstance(timetable, PersonalTimetable) else None
-        temp = DisplayTimetable(slots, timetable.has_conflict, getattr(timetable, 'name', ''),
+        return DisplayTimetable(slots, timetable.has_conflict, getattr(timetable, 'name', ''),
                                 getattr(timetable, 'events', []), id, is_official)
-        print(temp.is_official)
 
 
 def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):

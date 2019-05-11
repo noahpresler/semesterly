@@ -5,8 +5,8 @@ import * as ActionTypes from '../constants/actionTypes';
 
 const entities = (state = {}, action) => {
   switch (action.type) {
-    //case ActionTypes.SET_SEMESTER:
-      //return null;
+    // case ActionTypes.SET_SEMESTER:
+      // return null;
     case ActionTypes.SET_COURSE_REACTIONS:
       if (state.id === null) {
         return state;

@@ -45,11 +45,12 @@ class DisplayTimetableSerializer(serializers.Serializer):
     is_official = serializers.BooleanField()
 
     @classmethod
-    def from_model(cls, timetable, **kwargs):
-
-        is_official_state =  True
-
+    def from_model(cls, timetable, is_official=False, **kwargs):
+        # Jimmy: By putting and getting is_official from kwargs, it was being reused below
+        # so instead I made it another parameter with a default so that it isn't required to be set by
+        # all calls.
+        # is_official = kwargs.get('is_official')
         if kwargs.get('many') is True:
-            timetables = [DisplayTimetable.from_model(tt, is_official_state) for tt in timetable]
-            return DisplayTimetableSerializer(timetables, **kwargs)
-        return DisplayTimetableSerializer(DisplayTimetable.from_model(timetable, is_official_state), **kwargs)
+            timetables = [DisplayTimetable.from_model(tt, is_official) for tt in timetable]
+            return DisplayTimetableSerializer(timetables, **kwargs) # Jimmy: kwargs used again
+        return DisplayTimetableSerializer(DisplayTimetable.from_model(timetable, is_official), **kwargs)
