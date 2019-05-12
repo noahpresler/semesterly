@@ -59,11 +59,13 @@ class SearchSideBar extends React.Component {
     });
     return (
       <div className="search-bar__side">
+        {!this.props.isOfficial &&
         <div className="search-bar__side-sections">
           <h3>{this.props.hoveredResult.name}</h3>
           <p>Hover over a section below for a preview on your timetable! </p>
           {sectionGrid}
         </div>
+        }
       </div>
     );
   }

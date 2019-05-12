@@ -31,6 +31,7 @@ from helpers.mixins import ValidateSubdomainMixin, CsrfExemptMixin
 
 
 class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
+
     """Course Search List."""
     def get(self, request, query, sem_name, year):
         """ Return vectorized search results. """
@@ -43,6 +44,8 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         # else:
         #     course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
         course_match_objs = baseline_search(request.subdomain, query, sem).distinct()[:4]
+        #for course in course_match_objs:
+            #self.generate_prereq_set(course)
         save_analytics_course_search(query[:200], course_match_objs[:2], sem, request.subdomain,
                                      get_student(request))
         course_matches = [CourseSerializer(course, context={'semester': sem, 'school': school}).data

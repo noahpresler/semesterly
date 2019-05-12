@@ -423,13 +423,15 @@ class CourseModalBody extends React.Component {
             {textbooksDisplay}
 
           </div>
+          {!this.props.isOfficial &&
           <div
-            id="modal-section-lists"
-            className="col-5-16 cf"
+              id="modal-section-lists"
+              className="col-5-16 cf"
           >
             {sectionGrid}
             {similarCourses}
           </div>
+          }
         </div>
       </div>
     );

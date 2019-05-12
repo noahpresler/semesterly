@@ -50,6 +50,7 @@ const mapStateToProps = (state) => {
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
     getShareLinkFromModal: courseCode =>
       getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
+      isOfficial: state.savingTimetable.isOfficial
   };
 };
 

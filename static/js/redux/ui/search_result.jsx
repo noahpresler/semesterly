@@ -163,8 +163,8 @@ class SearchResult extends React.Component {
         onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
       >
         <h3>{course.name || course.code} </h3>
-        { addOptionalCourseButton}
-        { addRemoveButton }
+        { !this.props.isOfficial && addOptionalCourseButton}
+        { !this.props.isOfficial && addRemoveButton }
         <div className="search-result-labels">
           <h4
             className={classNames('label', {
