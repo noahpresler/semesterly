@@ -22,7 +22,7 @@ class TimetableNameInput extends React.Component {
     this.alterTimetableName = this.alterTimetableName.bind(this);
     this.setTimetableName = this.setTimetableName.bind(this);
     this.showSignupModal = this.showSignupModal.bind(this);
-    this.state = { name: this.props.activeLoadedTimetableName };
+    this.state = {name: this.props.activeLoadedTimetableName};
   }
 
   componentWillMount() {
@@ -35,13 +35,13 @@ class TimetableNameInput extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ name: nextProps.activeLoadedTimetableName });
+    this.setState({name: nextProps.activeLoadedTimetableName});
   }
 
   setTimetableName() {
     const newName = this.state.name;
     if (newName.length === 0) {
-      this.setState({ name: this.props.activeLoadedTimetableName });
+      this.setState({name: this.props.activeLoadedTimetableName});
     } else if (newName !== this.props.activeLoadedTimetableName) {
       this.props.changeTimetableName(newName);
     }
@@ -54,25 +54,30 @@ class TimetableNameInput extends React.Component {
   }
 
   alterTimetableName(event) {
-    this.setState({ name: event.target.value });
+    this.setState({name: event.target.value});
   }
 
   render() {
-    return (<div  >
-      {this.props.isOfficial && <img alt='logo' className='official-course-icon-large' src='/static/img/official_course_icon.png/'/>}
+    return (<div>
+      {this.props.isOfficial &&
+
+      <img alt='logo'
+           className='official-course-icon-large'
+           src="/static/img/official_course_icon.png/" />}
       {!this.props.isOfficial ? <input
-      className={classnames('timetable-name', { unsaved: !this.props.upToDate })}
-      value={this.state.name}
-      onChange={this.alterTimetableName}
-      onBlur={this.setTimetableName}
-      onClick={this.showSignupModal}
-    /> : <input
-          className={classnames('timetable-name', 'ninety-width', 'small-left-pad', { unsaved: !this.props.upToDate })}
-          value={this.state.name}
-          style={{pointerEvents : 'none'}}
+        className={classnames('timetable-name', { unsaved: !this.props.upToDate })}
+        value={this.state.name}
+        onChange={this.alterTimetableName}
+        onBlur={this.setTimetableName}
+        onClick={this.showSignupModal}
+      /> :
+      <input
+        className={classnames('timetable-name', 'ninety-width', 'small-left-pad', { unsaved: !this.props.upToDate })}
+        value={this.state.name}
+        style={{ pointerEvents: 'none' }}
       />
       }
-      </div>);
+    </div>);
   }
 }
 
@@ -81,7 +86,7 @@ TimetableNameInput.propTypes = {
   openSignUpModal: PropTypes.func.isRequired,
   upToDate: PropTypes.bool.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
-  changeTimetableName: PropTypes.func.isRequired
+  changeTimetableName: PropTypes.func.isRequired,
 };
 
 

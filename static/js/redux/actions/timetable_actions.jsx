@@ -151,7 +151,7 @@ export const lockTimetable = timetable => (dispatch, getState) => {
 // load a personal timetable into state
 export const loadTimetable = (
   timetable, isLoadingNewTimetable = false,
-  autoLockAll = true, isOfficial=false
+  autoLockAll = true, isOfficialState = false,
 ) => (dispatch, getState) => {
   const state = getState();
   const isLoggedIn = state.userInfo.data.isLoggedIn;
@@ -169,7 +169,7 @@ export const loadTimetable = (
       type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
       timetable: displayTimetable,
       upToDate: !isLoadingNewTimetable,
-      isOfficial: isOfficial
+      isOfficial: isOfficialState,
     });
 
     return dispatch(lockTimetable(displayTimetable));
@@ -178,7 +178,7 @@ export const loadTimetable = (
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
     timetable: displayTimetable,
     upToDate: !isLoadingNewTimetable,
-    isOfficial: isOfficial
+    isOfficial: isOfficialState,
   });
 };
 

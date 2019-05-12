@@ -15,17 +15,17 @@ GNU General Public License for more details.
 import * as ActionTypes from '../constants/actionTypes';
 
 const importSISModal = (state = {
-    isVisible: false,
+  isVisible: false,
 }, action) => {
-    switch (action.type) {
-        case ActionTypes.TOGGLE_IMPORT_SIS_MODAL:
-            return { isVisible: !state.isVisible };
-        case ActionTypes.TRIGGER_IMPORT_SIS_MODAL:
-            return {
-                isVisible: true,
-            };
-        default:
-            return state;
+  switch (action.type) {
+     case ActionTypes.TOGGLE_IMPORT_SIS_MODAL:
+         return { isVisible: !state.isVisible };
+     case ActionTypes.TRIGGER_IMPORT_SIS_MODAL:
+         return {
+             isVisible: true,
+         };
+     default:
+         return state;
     }
 };
 

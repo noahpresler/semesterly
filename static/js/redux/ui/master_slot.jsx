@@ -178,7 +178,7 @@ MasterSlot.defaultProps = {
   slots: null,
   removeCourse: null,
   classmates: { current: [], past: [] },
-  isOfficial: false
+  isOfficial: false,
 };
 
 MasterSlot.propTypes = {

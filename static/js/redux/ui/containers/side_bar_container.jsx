@@ -40,7 +40,7 @@ const mapStateToProps = (state) => {
     slot => !slot.is_optional));
   const optionalCourses = state.optionalCourses.courses.map(cid => getDenormCourseById(state, cid));
   return {
-      isOfficial: state.savingTimetable.isOfficial,
+    isOfficial: state.savingTimetable.isOfficial,
     semester: getCurrentSemester(state),
     semesterIndex: state.semester.current,
     examSupportedSemesters: state.semester.exams,
