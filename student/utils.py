@@ -15,7 +15,7 @@ import datetime
 from django.db.models import Q
 from django.forms import model_to_dict
 
-from student.models import Student, PersonalTimetable
+from student.models import Student, PersonalTimetable, HistoricalPersonalTimetable
 from timetable.models import Course
 from timetable.serializers import DisplayTimetableSerializer
 
@@ -114,6 +114,19 @@ def get_classmates_from_tts(student, course_id, tts):
         classmates.append(classmate)
     return classmates
 
+def filter_official(timetables, student):
+
+    official_tables = []
+    unofficial_tables = []
+    for timetable in timetables:
+        if HistoricalPersonalTimetable.objects.filter(student=student, personaltimetable_ptr_id=timetable.id).count()>0:
+            official_tables.append(timetable)
+        else:
+            unofficial_tables.append(timetable)
+
+    serialized_official=DisplayTimetableSerializer.from_model(official_tables, is_official=True, many=True).data
+    serialized_unofficial=DisplayTimetableSerializer.from_model(unofficial_tables, is_official=False, many=True).data
+    return serialized_unofficial+serialized_official
 
 def get_student_tts(student, school, semester):
     """
@@ -122,4 +135,4 @@ def get_student_tts(student, school, semester):
     """
     timetables = student.personaltimetable_set.filter(
         school=school, semester=semester).order_by('-last_updated')
-    return DisplayTimetableSerializer.from_model(timetables, many=True).data
+    return filter_official(timetables, student)

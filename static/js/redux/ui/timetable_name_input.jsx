@@ -58,13 +58,21 @@ class TimetableNameInput extends React.Component {
   }
 
   render() {
-    return (<input
+    return (<div  >
+      {this.props.isOfficial && <img alt='logo' className='official-course-icon-large' src='/static/img/official_course_icon.png/'/>}
+      {!this.props.isOfficial ? <input
       className={classnames('timetable-name', { unsaved: !this.props.upToDate })}
       value={this.state.name}
       onChange={this.alterTimetableName}
       onBlur={this.setTimetableName}
       onClick={this.showSignupModal}
-    />);
+    /> : <input
+          className={classnames('timetable-name', 'ninety-width', 'small-left-pad', { unsaved: !this.props.upToDate })}
+          value={this.state.name}
+          style={{pointerEvents : 'none'}}
+      />
+      }
+      </div>);
   }
 }
 
@@ -73,7 +81,7 @@ TimetableNameInput.propTypes = {
   openSignUpModal: PropTypes.func.isRequired,
   upToDate: PropTypes.bool.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
-  changeTimetableName: PropTypes.func.isRequired,
+  changeTimetableName: PropTypes.func.isRequired
 };
 
 

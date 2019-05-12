@@ -36,7 +36,6 @@ describe('maybeSetSemester', () => {
     backend
       .get(`/user/timetables/${name}/${year}/`)
       .reply(200, { timetables: [], courses: [] });
-
     return store.dispatch(maybeSetSemester(1)).then(() => {
       expect(store.getState().semester.current).toEqual(newSemester);
     });

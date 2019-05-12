@@ -248,8 +248,8 @@ class Slot extends React.Component {
                 className="slot-bar"
                 style={{ backgroundColor: COLOUR_DATA[this.props.colourId].border }}
               />
-              { removeButton }
-              { lockButton }
+              { !this.props.isOfficial && removeButton }
+              { !this.props.isOfficial && lockButton }
               <div className="fc-content">
                 <div className="fc-time">
                   <span>{ convertedStart } – { convertedEnd }</span>

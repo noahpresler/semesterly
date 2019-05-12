@@ -50,20 +50,33 @@ class SideBar extends React.Component {
 
   render() {
     const savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => (
-      <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>
-        {t.name}
-        <button
-          onClick={event => this.stopPropagation(() => this.props.deleteTimetable(t), event)}
-          className="row-button"
-        >
-          <i className="fa fa-trash-o" />
-        </button>
-        <button
-          onClick={event => this.stopPropagation(() => this.props.duplicateTimetable(t), event)}
-          className="row-button"
-        >
-          <i className="fa fa-clone" />
-        </button>
+      <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t, false, true, t.is_official)}>
+
+          {t.is_official &&
+          <div className='inline'>
+            <img alt='logo' className='official-course-icon-small' src='/static/img/official_course_icon.png/'/>{' '}
+          </div>}{t.name}
+          {!t.is_official ?
+              <div className='inline'>
+          <button
+              onClick={event => this.stopPropagation(() => this.props.deleteTimetable(t), event)}
+              className="row-button"
+          >
+              <i className="fa fa-trash-o"/>
+          </button>
+          < button
+              onClick={event => this.stopPropagation(() => this.props.duplicateTimetable(t), event)}
+              className="row-button"
+              >
+              <i className="fa fa-clone" />
+              </button>
+              </div> :  < button
+                  onClick={event => this.stopPropagation(() => this.props.duplicateTimetable(t), event)}
+                  className="row-button"
+              >
+                <i className="fa fa-clone" />
+              </button>
+          }
       </div>
         )) : null;
     // TOOD: code duplication between masterslots/optionalslots
@@ -83,6 +96,7 @@ class SideBar extends React.Component {
           fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
           removeCourse={() => this.props.removeCourse(course.id)}
           getShareLink={this.props.getShareLink}
+          isOfficial={this.props.isOfficial}
         />);
       }) : null;
     let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
@@ -182,10 +196,10 @@ class SideBar extends React.Component {
             </div>
           </h4>
         </a>
-        <h4 className="sb-tip">
+        {!this.props.isOfficial && <h4 className="sb-tip">
           <b>ProTip:</b> use <i className="fa fa-lock" />
           to lock a section in place.
-        </h4>
+        </h4>}
         <div className="sb-master-slots">
           { masterSlots }
           { finalScheduleLink }

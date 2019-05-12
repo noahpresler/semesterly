@@ -329,7 +329,7 @@ class Calendar extends React.Component {
           </div>
           <div className="fc-right">
             { addSISButton }
-            { addCustomEventButton }
+            { !this.props.isOfficial && addCustomEventButton }
             { shareButton }
             { shareLink }
             { addButton }

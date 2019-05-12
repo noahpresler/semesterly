@@ -47,7 +47,7 @@ const store = createStore(rootReducer,
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
   if (userTimetables.length > 0) {
     const activeTimetable = userTimetables[0];
-    dispatch(loadTimetable(activeTimetable));
+    dispatch(loadTimetable(activeTimetable, false, true, activeTimetable.is_official));
     setTimeout(() => {
       dispatch(fetchMostClassmatesCount(activeTimetable));
     }, 500);
@@ -163,7 +163,6 @@ const handleFlows = featureFlow => (dispatch) => {
 
 const setup = () => (dispatch) => {
   initData = JSON.parse(initData);
-  console.log(initData.currentUser.timetables);
   dispatch({ type: ActionTypes.INIT_STATE, data: initData });
 
   dispatch(receiveCourses(initData.currentUser.courses));

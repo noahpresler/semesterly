@@ -26,6 +26,7 @@ const mapStateToProps = (state) => {
     saving: savingTimetable.saving,
     upToDate: savingTimetable.upToDate,
     isLoggedIn: state.userInfo.data.isLoggedIn,
+      isOfficial: savingTimetable.isOfficial
   };
 };
 const TimetableNameInputContainer = connect(

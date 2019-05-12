@@ -236,12 +236,7 @@ class UserTimetableView(ValidateSubdomainMixin,
                         RedirectToSignupMixin, APIView):
     """ Responsible for the viewing and managing of all Students' :obj:`PersonalTimetable`. """
 
-    def get(self, request, sem_name, year):
-        """ Returns student's personal timetables """
-        sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-        student = Student.objects.get(user=request.user)
-        timetables = student.personaltimetable_set.filter(
-            school=request.subdomain, semester=sem).order_by('-last_updated')
+    def filter_official(self, timetables, student):
 
         official_tables = []
         unofficial_tables = []
@@ -250,15 +245,23 @@ class UserTimetableView(ValidateSubdomainMixin,
                 official_tables.append(timetable)
             else:
                 unofficial_tables.append(timetable)
+
+        serialized_official=DisplayTimetableSerializer.from_model(official_tables, is_official=True, many=True).data
+        serialized_unofficial=DisplayTimetableSerializer.from_model(unofficial_tables, is_official=False, many=True).data
+        return serialized_unofficial+serialized_official
+
+    def get(self, request, sem_name, year):
+        """ Returns student's personal timetables """
+        sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+        student = Student.objects.get(user=request.user)
+        timetables = student.personaltimetable_set.filter(
+            school=request.subdomain, semester=sem).order_by('-last_updated')
+
         courses = {course for timetable in timetables for course in timetable.courses.all()}
         context = {'semester': sem, 'school': request.subdomain, 'student': student}
 
-        serialized_official=DisplayTimetableSerializer.from_model(official_tables, is_official=True, many=True).data
-        # serialized_unofficial=DisplayTimetableSerializer.from_model(unofficial_tables, many=True, is_official=False).data
-        # print(serialized_official+serialized_unofficial)
-        # TODO @Jimmy: Might need to concat the two tables
         return Response({
-            'timetables': serialized_official,
+            'timetables': self.filter_official(timetables, student),
             'courses': CourseSerializer(courses, context=context, many=True).data
 
         }, status=status.HTTP_200_OK)
@@ -291,7 +294,6 @@ class UserTimetableView(ValidateSubdomainMixin,
             duplicate.courses = courses
             duplicate.sections = sections
             duplicate.events = events
-
             response = {
                 'timetables': get_student_tts(student, school, semester),
                 'saved_timetable': DisplayTimetableSerializer.from_model(duplicate).data
@@ -701,7 +703,7 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
             semester_year=semester_arr[1]
 
             school = 'jhu'
-            name = 'Official'
+            name = 'Official '+semester_name+" "+semester_year
             has_conflicts = False
 
             semester, _ = Semester.objects.get_or_create(name=semester_name, year=semester_year)
