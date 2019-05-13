@@ -192,6 +192,7 @@ CourseModal.propTypes = {
   // Must be included to be passed down into CourseModalBody, which needs to either refer to
   // state.courseInfo.isFetching or state.explorationModal.isFetching depending on its parent
   isFetching: PropTypes.bool.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default CourseModal;

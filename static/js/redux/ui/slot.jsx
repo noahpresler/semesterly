@@ -300,6 +300,7 @@ Slot.propTypes = {
   connectCreateTarget: PropTypes.func.isRequired,
   connectDragTarget: PropTypes.func.isRequired,
   uses12HrTime: PropTypes.bool.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(

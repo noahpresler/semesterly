@@ -15,9 +15,27 @@ GNU General Public License for more details.
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/WaveModal';
-import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 class ImportSISModal extends React.Component {
+
+  static importSIS() {
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = 'http://sisdevelopment.sis.jhu.edu/semtest/';
+    form.encType = 'application/x-www-form-urlencoded';
+    document.body.appendChild(form);
+    const input = document.createElement('input');
+    input.name = 'data';
+    input.type = 'hidden';
+
+    const sisData = {
+      action: 'FetchStudentData',
+    };
+    input.value = JSON.stringify(sisData);
+    form.appendChild(input);
+    form.submit();
+  }
+
   componentDidMount() {
     if (this.props.isVisible) {
       this.modal.show();
@@ -30,26 +48,7 @@ class ImportSISModal extends React.Component {
     }
   }
 
-  importSIS() {
-      const form = document.createElement('form');
-      form.method = 'post';
-      form.action = 'http://sisdevelopment.sis.jhu.edu/semtest/';
-      form.encType = 'application/x-www-form-urlencoded';
-      document.body.appendChild(form);
-      const input = document.createElement('input');
-      input.name = 'data';
-      input.type = 'hidden';
-
-      const sisData = {
-          action:'FetchStudentData',
-      };
-      input.value = JSON.stringify(sisData);
-      form.appendChild(input);
-      form.submit();
-  }
-
   render() {
-
     const modalHeader =
             (<div className="modal-content">
               <div className="modal-header">
@@ -75,45 +74,46 @@ class ImportSISModal extends React.Component {
         {modalHeader}
 
         <div className="sis-import-modal__container">
-        <p>In Partnership with the JHU IT department, we can now import your SIS data to check prerequisites for you and improve your search results.</p>
-
-        <div>
-          <a
+          <p>In Partnership with the JHU IT department,
+            we can now import your SIS data to check prerequisites
+            for you and improve your search results.
+          </p>
+          <div>
+            <a
               className="legal-links"
               href="/termsofservice"
               rel="noopener noreferrer"
               target="_blank"
-          >
+            >
             Terms of Service
-            <i
+              <i
                 className="fa fa-external-link"
-            />
-          </a>
-          <a
+              />
+            </a>
+            <a
               className="legal-links"
               href="/privacypolicy"
               rel="noopener noreferrer"
               target="_blank"
-          >
+            >
             Privacy Policy
-            <i
+              <i
                 className="fa fa-external-link"
-            />
-          </a>
-        </div>
-        <div className="call-to-action">
-          <button
+              />
+            </a>
+          </div>
+          <div className="call-to-action">
+            <button
               type="submit"
               form="form1"
               data-for="sis-btn-tooltip"
               data-tip
               onClick={this.importSIS}
               className="signup-button"
-          >
-
-            <span> I accept, import!  </span>
-          </button>
-        </div>
+            >
+              <span>I accept, import!</span>
+            </button>
+          </div>
         </div>
       </Modal>
     );

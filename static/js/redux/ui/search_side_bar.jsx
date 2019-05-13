@@ -87,6 +87,7 @@ SearchSideBar.propTypes = {
   isSectionOnActiveTimetable: PropTypes.func.isRequired,
   hoverSection: PropTypes.func.isRequired,
   unHoverSection: PropTypes.func.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default SearchSideBar;

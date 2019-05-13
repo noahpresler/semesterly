@@ -182,13 +182,13 @@ class SearchBar extends React.Component {
           </div>
           {!this.props.isOfficial &&
           <div
-              className="show-exploration"
-              onMouseDown={this.props.showExplorationModal}
+            className="show-exploration"
+            onMouseDown={this.props.showExplorationModal}
           >
-            <i className="fa fa-compass"/>
+            <i className="fa fa-compass" />
             <span>Advanced Search</span>
           </div>}
-          < /div>
+        </div>
 
         {resultContainer}
       </div>
@@ -211,6 +211,7 @@ SearchBar.propTypes = {
   semester: SemesterlyPropTypes.semester.isRequired,
   showExplorationModal: PropTypes.func.isRequired,
   allSemesters: PropTypes.arrayOf(SemesterlyPropTypes.semester).isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default SearchBar;

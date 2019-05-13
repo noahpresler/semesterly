@@ -22,7 +22,6 @@ import SlotManagerContainer from './containers/slot_manager_container';
 import CellContainer from './containers/cell_container';
 import { DAYS } from '../constants/constants';
 import { ShareLink } from './master_slot';
-import * as ActionTypes from "../constants/actionTypes";
 
 const Row = (props) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
@@ -143,9 +142,7 @@ class Calendar extends React.Component {
   }
 
   sisBtnClick() {
-    let isLoggedIn=false;
-
-    if(isLoggedIn) {
+    if (!this.props.isLoggedIn) {
       // move this to a function in timetable_actions
       const form = document.createElement('form');
       form.method = 'post';
@@ -160,9 +157,7 @@ class Calendar extends React.Component {
       input.value = JSON.stringify(this.props.fetchSISTimetableData());
       form.appendChild(input);
       form.submit();
-    }
-    else
-    {
+    } else {
       this.props.triggerImportSISModal();
     }
   }
@@ -450,6 +445,7 @@ Calendar.propTypes = {
   shareLink: PropTypes.string,
   uses12HrTime: PropTypes.bool.isRequired,
   registrarSupported: PropTypes.bool.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default Calendar;

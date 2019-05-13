@@ -198,6 +198,7 @@ SearchResult.propTypes = {
   addCourse: PropTypes.func.isRequired,
   isHovered: PropTypes.func.isRequired,
   addRemoveOptionalCourse: PropTypes.func.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export const AreaBubble = ({ areas }) => (areas.length > 0 ? (<div className="areas">

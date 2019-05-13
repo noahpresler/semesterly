@@ -425,8 +425,8 @@ class CourseModalBody extends React.Component {
           </div>
           {!this.props.isOfficial &&
           <div
-              id="modal-section-lists"
-              className="col-5-16 cf"
+            id="modal-section-lists"
+            className="col-5-16 cf"
           >
             {sectionGrid}
             {similarCourses}
@@ -481,6 +481,7 @@ CourseModalBody.propTypes = {
   unHoverSection: PropTypes.func.isRequired,
   getShareLink: PropTypes.func.isRequired,
   getShareLinkFromModal: PropTypes.func.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default CourseModalBody;

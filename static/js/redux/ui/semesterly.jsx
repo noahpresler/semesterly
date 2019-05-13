@@ -156,7 +156,7 @@ class Semesterly extends React.Component {
         <IntegrationModalContainer />
         <TutModalContainer />
         <PeerModalContainer />
-          <ImportSISModalContainer />
+        <ImportSISModalContainer />
         <SaveCalendarModalContainer />
         <FinalExamsModalContainer />
         <UserAcquisitionModalContainer />

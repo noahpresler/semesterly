@@ -20,13 +20,17 @@ import { changeTimetableName } from '../../actions/user_actions';
 
 const mapStateToProps = (state) => {
   const savingTimetable = state.savingTimetable;
+  let isOfficialState = false;
+  if (savingTimetable.isOfficial) {
+    isOfficialState = true;
+  }
   return {
     // the name of the user's "being-edited" saved timetable
     activeLoadedTimetableName: savingTimetable.activeTimetable.name,
     saving: savingTimetable.saving,
     upToDate: savingTimetable.upToDate,
     isLoggedIn: state.userInfo.data.isLoggedIn,
-    isOfficial: savingTimetable.isOfficial,
+    isOfficial: isOfficialState,
   };
 };
 const TimetableNameInputContainer = connect(

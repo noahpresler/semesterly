@@ -55,7 +55,7 @@ const mapStateToProps = (state, ownProps) => ({
   },
   days: ownProps.days,
   uses12HrTime: state.ui.uses12HrTime,
-  isOfficial: state.savingTimetable.isOfficial,
+  isOfficial: Boolean(state.savingTimetable.isOfficial),
 });
 
 const SlotManagerContainer = connect(

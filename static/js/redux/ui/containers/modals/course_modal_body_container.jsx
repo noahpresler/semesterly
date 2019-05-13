@@ -41,7 +41,8 @@ const mapStateToProps = (state, ownProps) => {
       activeTimetable.slots.some(slot => slot.course === courseId && slot.section === sectionId),
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
     getShareLinkFromModal: courseCode =>
-      getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
+    getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
+    isOfficial: Boolean(state.savingTimetable.isOfficial),
   };
 };
 

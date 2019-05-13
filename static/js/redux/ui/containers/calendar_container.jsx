@@ -36,7 +36,7 @@ const mapStateToProps = (state) => {
     active: state.timetables.active,
     uses12HrTime: state.ui.uses12HrTime,
     registrarSupported: state.registrar.supported,
-      isOfficial: state.savingTimetable.isOfficial
+    isOfficial: Boolean(state.savingTimetable.isOfficial),
   };
 };
 
@@ -47,7 +47,7 @@ const CalendarContainer = connect(
     fetchShareTimetableLink,
     togglePreferenceModal,
     triggerSaveCalendarModal,
-      triggerImportSISModal,
+    triggerImportSISModal,
     createICalFromTimetable,
     handleCreateNewTimetable,
     fetchSISTimetableData,

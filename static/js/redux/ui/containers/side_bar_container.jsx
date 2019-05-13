@@ -40,7 +40,6 @@ const mapStateToProps = (state) => {
     slot => !slot.is_optional));
   const optionalCourses = state.optionalCourses.courses.map(cid => getDenormCourseById(state, cid));
   return {
-    isOfficial: state.savingTimetable.isOfficial,
     semester: getCurrentSemester(state),
     semesterIndex: state.semester.current,
     examSupportedSemesters: state.semester.exams,
@@ -54,6 +53,7 @@ const mapStateToProps = (state) => {
     isCourseInRoster: courseId => timetable.slots.some(s => s.course === courseId),
     hasLoaded: !state.timetables.isFetching,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
+    isOfficial: Boolean(state.savingTimetable.isOfficial),
   };
 };
 

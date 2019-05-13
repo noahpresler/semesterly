@@ -18,15 +18,15 @@ const importSISModal = (state = {
   isVisible: false,
 }, action) => {
   switch (action.type) {
-     case ActionTypes.TOGGLE_IMPORT_SIS_MODAL:
-         return { isVisible: !state.isVisible };
-     case ActionTypes.TRIGGER_IMPORT_SIS_MODAL:
-         return {
-             isVisible: true,
-         };
-     default:
-         return state;
-    }
+    case ActionTypes.TOGGLE_IMPORT_SIS_MODAL:
+      return { isVisible: !state.isVisible };
+    case ActionTypes.TRIGGER_IMPORT_SIS_MODAL:
+      return {
+        isVisible: true,
+      };
+    default:
+      return state;
+  }
 };
 
 export default importSISModal;

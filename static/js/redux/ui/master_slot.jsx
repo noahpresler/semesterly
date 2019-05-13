@@ -202,6 +202,7 @@ MasterSlot.propTypes = {
   fetchCourseInfo: PropTypes.func.isRequired,
   removeCourse: PropTypes.func,
   getShareLink: PropTypes.func.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (

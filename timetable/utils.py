@@ -40,7 +40,7 @@ class DisplayTimetable:
         self.is_official = is_official
 
     @classmethod
-    def from_model(cls, timetable, is_official):
+    def from_model(cls, timetable, is_official=False):
         """ Create DisplayTimetable from Timetable instance. """
         slots = [Slot(section.course, section, section.offering_set.all(),
                       is_optional=False, is_locked=True)

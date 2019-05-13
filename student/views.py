@@ -187,6 +187,8 @@ class UserView(RedirectToSignupMixin, APIView):
         sub_school_code=student.sub_school;
         sub_school_map={'EN': 'Whiting School of Engineering', 'AS': 'Krieger School of Arts and Sciences'}
         has_historical_ptt = False if num_terms==0 else True
+        if sub_school_code is None:
+            sub_school_code = 'EN'
         context = {
             'name': student.user,
             'major': student.major,

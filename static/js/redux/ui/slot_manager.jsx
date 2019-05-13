@@ -238,6 +238,7 @@ SlotManager.propTypes = {
   primaryDisplayAttribute: PropTypes.string.isRequired,
   socialSections: PropTypes.bool,
   uses12HrTime: PropTypes.bool.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default SlotManager;

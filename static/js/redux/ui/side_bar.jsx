@@ -50,33 +50,36 @@ class SideBar extends React.Component {
 
   render() {
     const savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => (
-      <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t, false, true, t.is_official)}>
-
-          {t.is_official &&
-          <div className='inline'>
-            <img alt='logo' className='official-course-icon-small' src='/static/img/official_course_icon.png/'/>{' '}
+      <div
+        className="tt-name" key={t.id}
+        onMouseDown={() => this.props.loadTimetable(t, false, true, t.is_official)}
+      >
+        {t.is_official &&
+          <div className="inline">
+            <img alt="logo" className="official-course-icon-small" src="/static/img/official_course_icon.png/" />{' '}
           </div>}{t.name}
-          {!t.is_official ?
-              <div className='inline'>
-          <button
+        {!t.is_official ?
+          <div className="inline">
+            <button
               onClick={event => this.stopPropagation(() => this.props.deleteTimetable(t), event)}
               className="row-button"
-          >
-              <i className="fa fa-trash-o"/>
-          </button>
-          < button
+            >
+              <i className="fa fa-trash-o" />
+            </button>
+            <button
               onClick={event => this.stopPropagation(() => this.props.duplicateTimetable(t), event)}
               className="row-button"
-              >
+            >
               <i className="fa fa-clone" />
-              </button>
-              </div> :  < button
-                  onClick={event => this.stopPropagation(() => this.props.duplicateTimetable(t), event)}
-                  className="row-button"
-              >
-                <i className="fa fa-clone" />
-              </button>
-          }
+            </button>
+          </div> :
+          <button
+            onClick={event => this.stopPropagation(() => this.props.duplicateTimetable(t), event)}
+            className="row-button"
+          >
+            <i className="fa fa-clone" />
+          </button>
+        }
       </div>
         )) : null;
     // TOOD: code duplication between masterslots/optionalslots
@@ -112,6 +115,7 @@ class SideBar extends React.Component {
         fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
         removeCourse={() => this.props.removeOptionalCourse(course)}
         getShareLink={this.props.getShareLink}
+        isOfficial={this.props.isOfficial}
       />);
     }) : null;
     const dropItDown = savedTimetables && savedTimetables.length !== 0 ?
@@ -247,6 +251,7 @@ SideBar.propTypes = {
   examSupportedSemesters: PropTypes.arrayOf(PropTypes.number).isRequired,
   hasLoaded: PropTypes.bool.isRequired,
   getShareLink: PropTypes.func.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default SideBar;

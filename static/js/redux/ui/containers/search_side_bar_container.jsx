@@ -21,6 +21,7 @@ import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/t
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
   let hoveredResult = getSearchResult(state, state.ui.searchHover);
+
   if (!hoveredResult) {
     hoveredResult = getSearchResult(state, 0);
   }
@@ -38,7 +39,7 @@ const mapStateToProps = (state) => {
     },
     isSectionOnActiveTimetable: (course, section) =>
       activeTimetable.slots.some(slot => slot.course === course.id && slot.section === section.id),
-    isOfficial: state.savingTimetable.isOfficial
+    isOfficial: Boolean(state.savingTimetable.isOfficial),
   };
 };
 
