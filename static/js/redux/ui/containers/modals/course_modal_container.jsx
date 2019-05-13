@@ -39,7 +39,6 @@ const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
   const courseInfoId = getCourseInfoId(state);
   const denormCourseInfo = !courseInfoId ? {} : getDenormCourseById(state, courseInfoId);
-
   return {
     isFetchingClasmates: state.courseInfo.isFetchingClassmates,
     classmates: state.courseInfo.classmates,

@@ -21,7 +21,6 @@ import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/t
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
   let hoveredResult = getSearchResult(state, state.ui.searchHover);
-
   if (!hoveredResult) {
     hoveredResult = getSearchResult(state, 0);
   }

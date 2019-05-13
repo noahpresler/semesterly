@@ -30,7 +30,6 @@ const explorationModal = (state = {
     case ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS:
       return Object.assign({}, state, { isFetching: true });
     case ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS: {
-      console.log(action.response);
       let results = action.response.result;
       if (state.page > 1) {
         if (results) {

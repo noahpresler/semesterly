@@ -100,8 +100,6 @@ export const fetchSISTimetableData = () => (
       },
     };
     dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
-    // TODO: dispatch to sisExportEndpoint
-    // then on response, dispatch another action to change the UI
     return sisData;
   }
 );

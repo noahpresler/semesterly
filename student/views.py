@@ -684,24 +684,15 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
 
         historical_tt.save()
 
-    def get_feature_flow(self, request):
-
-        return {"historical_ptt": 'test'}
-
     def post(self, request):
 
         request_data = json.loads(request.data['data'])
-        # clear HistoricalPTT first
         student = get_student(request)
         HistoricalPersonalTimetable.objects.filter(student=student).delete()
 
         for term in request_data['terms']:
-            # create personal_tt
-
             semester_arr = term['name'].split()
             semester_name=semester_arr[0]
-            #hardcoded line below for dev purposes
-            #semester_name='Spring'
             semester_year=semester_arr[1]
 
             school = 'jhu'
@@ -723,13 +714,8 @@ class ImportSISView(CsrfExemptMixin, FeatureFlowView):
             student.major=last_major
             student.sub_school=term["AcademicProgram"]
 
-
-            # create HistoricalPTT
             historical_personal_tt = HistoricalPersonalTimetable.objects.create(**params)
             self.add_courses(historical_personal_tt, term['enrollments'], semester_name, semester_year)
-        #make sure sis is now enabled
         student.sis_enabled=True
-
         student.save()
-        #Student.objects.filter(student=student).major=last_major
         return HttpResponseRedirect("/user/settings")

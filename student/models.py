@@ -26,6 +26,7 @@ from semesterly.settings import get_secret
 
 hashids = Hashids(salt=get_secret('HASHING_SALT'))
 
+
 class Student(models.Model):
     """ Database object representing a student.
 
@@ -135,6 +136,7 @@ class PersonalTimetable(timetable_models.Timetable):
     # TODO: change to foreign key from personal event -> personal timetable
     events = models.ManyToManyField(PersonalEvent)
     has_conflict = models.BooleanField(blank=True, default=False)
+
 
 class RegistrationToken(models.Model):
     """
