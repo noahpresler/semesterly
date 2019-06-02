@@ -1,0 +1,32 @@
+/* official colors  */
+.red {
+    background-color: rgb(253, 116, 115);
+}
+
+.blue {
+    background-color: rgb(82, 183, 217);
+}
+
+.green {
+    background-color: rgb(54, 222, 187);
+}
+
+.yellow {
+    background-color: rgb(255, 212, 98);
+}
+
+.dark-red {
+    background-color: rgb(177, 81, 80);
+}
+
+.dark-blue {
+    background-color: rgb(64, 142, 169);
+}
+
+.dark-green {
+    background-color: rgb(37, 155, 130);
+}
+
+.dark-yellow {
+    background-color: rgb(178, 148, 68);
+}

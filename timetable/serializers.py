@@ -48,5 +48,5 @@ class DisplayTimetableSerializer(serializers.Serializer):
     def from_model(cls, timetable, is_official=False, **kwargs):
         if kwargs.get('many') is True:
             timetables = [DisplayTimetable.from_model(tt, is_official) for tt in timetable]
-            return DisplayTimetableSerializer(timetables, **kwargs) # Jimmy: kwargs used again
+            return DisplayTimetableSerializer(timetables, **kwargs)
         return DisplayTimetableSerializer(DisplayTimetable.from_model(timetable, is_official), **kwargs)

@@ -150,8 +150,8 @@ export const lockTimetable = timetable => (dispatch, getState) => {
 
 // load a personal timetable into state
 export const loadTimetable = (
-  timetable, isLoadingNewTimetable = false,
-  autoLockAll = true, isOfficialState = false,
+  timetable, isLoadingNewTimetable, isOfficialState = false,
+  autoLockAll = true,
 ) => (dispatch, getState) => {
   const state = getState();
   const isLoggedIn = state.userInfo.data.isLoggedIn;
