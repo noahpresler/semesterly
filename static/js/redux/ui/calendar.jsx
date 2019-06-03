@@ -63,6 +63,7 @@ class Calendar extends React.Component {
     this.showShareLink = this.showShareLink.bind(this);
     this.getTimelineStyle = this.getTimelineStyle.bind(this);
     this.sisBtnClick = this.sisBtnClick.bind(this);
+    this.importSIS = this.importSIS.bind(this);
     this.hoverCustomSlot = this.hoverCustomSlot.bind(this);
     this.state = {
       shareLinkShown: false,
@@ -142,24 +143,24 @@ class Calendar extends React.Component {
   }
 
   sisBtnClick() {
-    if (!this.props.isLoggedIn) {
-      // move this to a function in timetable_actions
-      const form = document.createElement('form');
-      form.method = 'post';
-      // put this link in urls.py
-      form.action = 'https://sis.jhu.edu/sswf/go/';
-      form.encType = 'application/x-www-form-urlencoded';
-      document.body.appendChild(form);
-      const input = document.createElement('input');
-      input.name = 'data';
-      input.type = 'hidden';
-      // make this function fetch data and send it
-      input.value = JSON.stringify(this.props.fetchSISTimetableData());
-      form.appendChild(input);
-      form.submit();
-    } else {
-      this.props.triggerImportSISModal();
-    }
+    // move this to a function in timetable_actions
+    const form = document.createElement('form');
+    form.method = 'post';
+    // put this link in urls.py
+    form.action = 'https://sis.jhu.edu/sswf/go/';
+    form.encType = 'application/x-www-form-urlencoded';
+    document.body.appendChild(form);
+    const input = document.createElement('input');
+    input.name = 'data';
+    input.type = 'hidden';
+    // make this function fetch data and send it
+    input.value = JSON.stringify(this.props.fetchSISTimetableData());
+    form.appendChild(input);
+    form.submit();
+  }
+
+  importSIS() {
+    this.props.triggerImportSISModal();
   }
 
   hoverCustomSlot() {
@@ -172,6 +173,29 @@ class Calendar extends React.Component {
         Click, drag, and release to create your custom event
       </h4>)
       : null;
+    const importSISButton  = (
+      <div className="cal-btn-wrapper">
+        <button
+          type="submit"
+          form="form1"
+          className="save-timetable add-button sis-btn"
+          data-for="import-sis-btn-tooltip"
+          data-tip
+          onClick={this.importSIS}
+        >
+        <p>SIS</p>
+        </button>
+        <ReactTooltip
+          id="import-sis-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
+          effect="solid"
+        >
+        <span>Import SIS Data</span>
+        </ReactTooltip>
+      </div>
+    )
     const addSISButton = this.props.registrarSupported ? (
       <div className="cal-btn-wrapper">
         <button
@@ -323,6 +347,7 @@ class Calendar extends React.Component {
             { description }
           </div>
           <div className="fc-right">
+            { importSISButton }
             { addSISButton }
             { !this.props.isOfficial && addCustomEventButton }
             { shareButton }
