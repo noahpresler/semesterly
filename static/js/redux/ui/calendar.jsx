@@ -173,29 +173,6 @@ class Calendar extends React.Component {
         Click, drag, and release to create your custom event
       </h4>)
       : null;
-    const importSISButton  = (
-      <div className="cal-btn-wrapper">
-        <button
-          type="submit"
-          form="form1"
-          className="save-timetable add-button sis-btn"
-          data-for="import-sis-btn-tooltip"
-          data-tip
-          onClick={this.importSIS}
-        >
-        <p>SIS</p>
-        </button>
-        <ReactTooltip
-          id="import-sis-btn-tooltip"
-          class="tooltip"
-          type="dark"
-          place="bottom"
-          effect="solid"
-        >
-        <span>Import SIS Data</span>
-        </ReactTooltip>
-      </div>
-    )
     const addSISButton = this.props.registrarSupported ? (
       <div className="cal-btn-wrapper">
         <button
@@ -347,7 +324,6 @@ class Calendar extends React.Component {
             { description }
           </div>
           <div className="fc-right">
-            { importSISButton }
             { addSISButton }
             { !this.props.isOfficial && addCustomEventButton }
             { shareButton }
