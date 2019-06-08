@@ -63,7 +63,6 @@ class Calendar extends React.Component {
     this.showShareLink = this.showShareLink.bind(this);
     this.getTimelineStyle = this.getTimelineStyle.bind(this);
     this.sisBtnClick = this.sisBtnClick.bind(this);
-    this.importSIS = this.importSIS.bind(this);
     this.hoverCustomSlot = this.hoverCustomSlot.bind(this);
     this.state = {
       shareLinkShown: false,
@@ -157,10 +156,6 @@ class Calendar extends React.Component {
     input.value = JSON.stringify(this.props.fetchSISTimetableData());
     form.appendChild(input);
     form.submit();
-  }
-
-  importSIS() {
-    this.props.triggerImportSISModal();
   }
 
   hoverCustomSlot() {
@@ -435,7 +430,6 @@ Calendar.defaultProps = {
 Calendar.propTypes = {
   togglePreferenceModal: PropTypes.func.isRequired,
   triggerSaveCalendarModal: PropTypes.func.isRequired,
-  triggerImportSISModal: PropTypes.func.isRequired,
   isFetchingShareLink: PropTypes.bool.isRequired,
   endHour: PropTypes.number.isRequired,
   handleCreateNewTimetable: PropTypes.func.isRequired,

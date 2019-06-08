@@ -18,7 +18,25 @@ import Modal from 'boron/WaveModal';
 
 class ImportSISModal extends React.Component {
 
-  static importSIS() {
+  constructor(props) {
+    super(props);
+    this.importSISRequest = this.importSISRequest.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.isVisible) {
+      this.modal.show();
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.isVisible) {
+      this.modal.show();
+    }
+  }
+
+  /*eslint-disable*/
+  importSISRequest() {
     const form = document.createElement('form');
     form.method = 'post';
     form.action = 'http://sisdevelopment.sis.jhu.edu/semtest/';
@@ -35,18 +53,7 @@ class ImportSISModal extends React.Component {
     form.appendChild(input);
     form.submit();
   }
-
-  componentDidMount() {
-    if (this.props.isVisible) {
-      this.modal.show();
-    }
-  }
-
-  componentDidUpdate() {
-    if (this.props.isVisible) {
-      this.modal.show();
-    }
-  }
+  /*eslint-enable*/
 
   render() {
     const modalHeader =
@@ -66,6 +73,7 @@ class ImportSISModal extends React.Component {
         ref={(c) => { this.modal = c; }}
         className="sis-import-modal max-modal"
         modalStyle={modalStyle}
+        closeOnClick={false}
         onHide={() => {
           this.props.toggleImportSISModal();
           history.replaceState({}, 'Semester.ly', '/');
@@ -74,9 +82,9 @@ class ImportSISModal extends React.Component {
         {modalHeader}
 
         <div className="sis-import-modal__container">
-          <p>In Partnership with the JHU IT department,
-            we can now import your SIS data to check prerequisites
-            for you and improve your search results.
+          <p>In partnership with the JHU IT department,
+            we can now import your SIS data to enable your account for PILOT
+            registration.
           </p>
           <div>
             <a
@@ -108,7 +116,7 @@ class ImportSISModal extends React.Component {
               form="form1"
               data-for="sis-btn-tooltip"
               data-tip
-              onClick={this.importSIS}
+              onClick={this.importSISRequest}
               className="signup-button"
             >
               <span>I accept, import!</span>
