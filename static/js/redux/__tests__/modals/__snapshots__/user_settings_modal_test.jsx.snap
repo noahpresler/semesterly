@@ -269,6 +269,21 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
             </p>
           </div>
           <div
+            className="button-wrapper"
+          >
+            <button
+              className="signup-button"
+              onClick={[Function]}
+            >
+              Import SIS Data
+            </button>
+            <p
+              className="disclaimer ctr"
+            >
+              Importing your SIS data enables your account for PILOT registration!
+            </p>
+          </div>
+          <div
             className="preference cf"
           >
             <label
@@ -756,6 +771,21 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
               </div>
             </div>
           </div>
+          <div
+            className="button-wrapper"
+          >
+            <button
+              className="signup-button"
+              onClick={[Function]}
+            >
+              Import SIS Data
+            </button>
+            <p
+              className="disclaimer ctr"
+            >
+              Importing your SIS data enables your account for PILOT registration!
+            </p>
+          </div>
           <h3
             className="delete-link"
             onClick={[Function]}
@@ -1130,6 +1160,21 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                 </p>
               </div>
             </div>
+          </div>
+          <div
+            className="button-wrapper"
+          >
+            <button
+              className="signup-button"
+              onClick={[Function]}
+            >
+              Import SIS Data
+            </button>
+            <p
+              className="disclaimer ctr"
+            >
+              Importing your SIS data enables your account for PILOT registration!
+            </p>
           </div>
           <div
             className="preference cf"

@@ -249,8 +249,8 @@ class UserSettingsModal extends React.Component {
                     information is never
                     shared with any other party.</p>
         </div>) : null;
-    const importSISButton = (<div>
-      <div>
+    const importSISButton = (
+      <div className="button-wrapper">
         <button
           className="signup-button" onClick={this.importSIS}
         >Import SIS Data
@@ -258,7 +258,6 @@ class UserSettingsModal extends React.Component {
         <p className="disclaimer ctr">Importing your SIS data enables your account for PILOT
           registration!</p>
       </div>
-    </div>
 
     );
     const cancelButton = (<div
