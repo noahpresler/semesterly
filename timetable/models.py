@@ -165,6 +165,31 @@ class Course(models.Model):
         ratings = Evaluation.objects.only('course', 'score').filter(course=self)
         return sum([rating.score for rating in ratings]), len(ratings)
 
+class PILOTCourse(models.Model):
+    code = models.CharField(max_length=20)
+    course = models.ForeignKey(Course)
+    name = models.CharField(max_length=250)
+    professor = models.CharField(max_length=250)
+    prerequisites = models.TextField(default='', null=True)
+    same_as = models.ForeignKey('self', null=True)
+
+class PILOTSection(models.Model):
+    course = models.ForeignKey(PILOTCourse)
+    size = models.IntegerField(default=-1)
+    enrolment = models.IntegerField(default=-1)
+    waitlist = models.IntegerField(default=-1)
+    waitlist_size = models.IntegerField(default=-1)
+    semester = models.ForeignKey(Semester)
+
+class PILOTOffering(models.Model):
+    section = models.ForeignKey(PILOTSection)
+    day = models.CharField(max_length=1)
+    time_start = models.CharField(max_length=15)
+    time_end = models.CharField(max_length=15)
+    location = models.CharField(max_length=200, default='TBA')
+
+    def __unicode__(self):
+        return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
 
 class Section(models.Model):
     """
