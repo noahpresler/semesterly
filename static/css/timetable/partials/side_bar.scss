@@ -82,23 +82,25 @@
   }
 }
 
+.official-icon-wrapper{
+  display: inline !important;
+}
+
 .official-course-icon-large{
   width: 22px;
   height: 22px;
 }
+
 .official-course-icon-small{
   width: 14px;
   height: 14px;
 }
-.small-left-pad{
+
+.timetable-name-disabled{
   padding-left: 3px !important;
-}
-.ninety-width {
   width: 90% !important;
 }
-.inline {
-  display: inline !important;
-}
+
 .timetable-names-dropdown {
   background-color: $gfff;
   border: 1px solid $ge6e6e6;

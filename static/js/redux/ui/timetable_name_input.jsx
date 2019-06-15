@@ -74,7 +74,7 @@ class TimetableNameInput extends React.Component {
           onClick={this.showSignupModal}
         /> :
         <input
-          className={classnames('timetable-name', 'ninety-width', 'small-left-pad', { unsaved: !this.props.upToDate })}
+          className={classnames('timetable-name', 'timetable-name-disabled', { unsaved: !this.props.upToDate })}
           value={this.state.name}
           style={{ pointerEvents: 'none' }}
         />

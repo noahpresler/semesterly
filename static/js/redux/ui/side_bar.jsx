@@ -55,11 +55,11 @@ class SideBar extends React.Component {
         onMouseDown={() => this.props.loadTimetable(t, false, true, t.is_official)}
       >
         {t.is_official &&
-          <div className="inline">
+          <div className="official-icon-wrapper">
             <img alt="logo" className="official-course-icon-small" src="/static/img/official_course_icon.png/" />{' '}
           </div>}{t.name}
         {!t.is_official ?
-          <div className="inline">
+          <div className="official-icon-wrapper">
             <button
               onClick={event => this.stopPropagation(() => this.props.deleteTimetable(t), event)}
               className="row-button"
