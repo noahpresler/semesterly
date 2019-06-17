@@ -95,9 +95,9 @@
                         {% for tuple in value %}
 
                             <div class="course-card
-                                {%  cycle 'red' 'blue' 'green' 'yellow' %}">
+                                {%  cycle 'semesterly-red' 'semesterly-blue' 'semesterly-green' 'semesterly-yellow' %}">
                                 <div class="slot-bar
-                                    {%  cycle 'dark-red' 'dark-blue' 'dark-green' 'dark-yellow' %}"></div>
+                                    {%  cycle 'semesterly-dark-red' 'semesterly-dark-blue' 'semesterly-dark-green' 'semesterly-dark-yellow' %}"></div>
                                 <p>{{tuple.0}}</p><br>
                             <p><b>{{tuple.1}}</b> {{tuple.2 }}</p>
                             </div>
