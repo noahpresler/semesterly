@@ -38,7 +38,7 @@ def integrate_PILOT(apps, schema_editor):
 class Migration(migrations.Migration):
 
 	dependencies = [
-		('timetable', '0032_auto_20190610_2206'),
+		('timetable', '0031_auto_20190610_2206'),
 	]
 
 	operations = [
