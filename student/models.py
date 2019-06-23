@@ -56,6 +56,8 @@ class Student(models.Model):
     time_accepted_tos = models.DateTimeField(null=True)
     sub_school = models.CharField(max_length=100, null=True)
     sis_enabled = models.NullBooleanField(null=True, default=False)
+    pre_health = models.NullBooleanField(null=True, default=False)
+    pre_law = models.NullBooleanField(null=True, default=False)
 
     def get_token(self):
         return TimestampSigner().sign(self.id).split(':', 1)[1]
