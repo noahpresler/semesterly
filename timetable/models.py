@@ -11,6 +11,7 @@
 # GNU General Public License for more details.
 
 import os
+from student import models as student_models
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 
@@ -258,7 +259,7 @@ class PILOTOffering(models.Model):
 	enrolment = models.IntegerField(default=-1)
 	waitlist = models.IntegerField(default=-1)
 	waitlist_size = models.IntegerField(default=-1)
-	students = models.ManyToManyField(Student)
+	students = models.ManyToManyField(student_models.Student)
 
 	def __unicode__(self):
 		return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
