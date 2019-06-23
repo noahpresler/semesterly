@@ -244,6 +244,24 @@ class Section(models.Model):
         return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section,
                                                                  self.semester)
 
+class PILOTSection(models.Model):
+	sections = models.OneToManyField(Section)
+
+
+class PILOTOffering(models.Model):
+	section = models.ManyToOneField(PILOTSection)
+	day = models.CharField(max_length=1)
+	time_start = models.CharField(max_length=15)
+	time_end = models.CharField(max_length=15)
+	location = models.CharField(max_length=200, default='TBA')
+	size = models.IntegerField(default=-1)
+	enrolment = models.IntegerField(default=-1)
+	waitlist = models.IntegerField(default=-1)
+	waitlist_size = models.IntegerField(default=-1)
+	students = models.ManyToManyField(Student)
+
+	def __unicode__(self):
+		return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
 
 class Offering(models.Model):
     """
