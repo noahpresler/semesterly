@@ -12,9 +12,9 @@
 
 from datetime import datetime, timedelta
 import json
-
 import httplib2
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, Count
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect
@@ -26,13 +26,15 @@ from hashids import Hashids
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from helpers.mixins import CsrfExemptMixin
+from helpers.mixins import FeatureFlowView
 
 from authpipe.utils import check_student_token
 from analytics.models import CalendarExport
 from courses.serializers import CourseSerializer
-from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable
-from student.utils import next_weekday, get_classmates_from_course_id, get_student_tts
-from timetable.models import Semester, Course, Section
+from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable, HistoricalPersonalTimetable
+from student.utils import next_weekday, get_classmates_from_course_id, get_student_tts, get_student
+from timetable.models import Semester, Course, Section, Timetable
 from timetable.serializers import DisplayTimetableSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
@@ -146,6 +148,47 @@ class UserView(RedirectToSignupMixin, APIView):
             has_facebook = False
         has_notifications_enabled = RegistrationToken.objects.filter(
             student=student).exists()
+
+        historical_ptt = HistoricalPersonalTimetable.objects.filter(student=student)
+
+        num_terms = len(historical_ptt)
+        official_tt_id_list = historical_ptt.values_list('personaltimetable_ptr_id', flat=True)
+
+        #keys are semester names, values are lists of courses associated with each semester
+        official_tt_dictionary = {}
+        for tt_id in official_tt_id_list:
+            timetable=PersonalTimetable.objects.filter(id=tt_id)
+            semester_id=timetable.values_list('semester_id', flat=True)[0]
+
+            #obtaining list of semesters
+            curr_semester=Semester.objects.filter(id=semester_id)
+            name=curr_semester.values_list('name', flat=True)[0]
+            year=curr_semester.values_list('year', flat=True)[0]
+            semester_name=name+" "+year
+
+            #adding to dictionary semester: course_list key-value pairs
+
+            section_id_list=timetable.values_list('sections', flat=True)
+
+            section_tuples = []
+            for section_id in section_id_list:
+                #get the necessary info for displaying a list of courses
+               section_object=Section.objects.filter(id=section_id)
+               course_code=section_object.values_list('course', flat=True)[0]
+               course_object=Course.objects.filter(id=course_code)
+               section_name=course_object.values_list('name', flat=True)[0]
+               section_code=course_object.values_list('code', flat=True)[0]
+               section_meeting_section=section_object.values_list('meeting_section', flat=True)[0]
+               section_tuple = (section_code, section_name, section_meeting_section)
+               section_tuples.append(section_tuple)
+            official_tt_dictionary[semester_name]=section_tuples
+
+        student = get_student(request)
+        sub_school_code=student.sub_school;
+        sub_school_map={'EN': 'Whiting School of Engineering', 'AS': 'Krieger School of Arts and Sciences'}
+        has_historical_ptt = False if num_terms==0 else True
+        if sub_school_code is None:
+            sub_school_code = 'EN'
         context = {
             'name': student.user,
             'major': student.major,
@@ -155,7 +198,11 @@ class UserView(RedirectToSignupMixin, APIView):
             'img_url': img_url,
             'hasGoogle': has_google,
             'hasFacebook': has_facebook,
-            'notifications': has_notifications_enabled
+            'notifications': has_notifications_enabled,
+            'num_terms': num_terms,
+            'has_historical_ptt': has_historical_ptt,
+            'semester_dictionary': official_tt_dictionary,
+            'sub_school': sub_school_map[sub_school_code]
         }
         for r in reactions:
             context[r['title']] = r['count']
@@ -191,17 +238,34 @@ class UserTimetableView(ValidateSubdomainMixin,
                         RedirectToSignupMixin, APIView):
     """ Responsible for the viewing and managing of all Students' :obj:`PersonalTimetable`. """
 
+    def filter_official(self, timetables, student):
+
+        official_tables = []
+        unofficial_tables = []
+        for timetable in timetables:
+            if HistoricalPersonalTimetable.objects.filter(student=student, personaltimetable_ptr_id=timetable.id).count()>0:
+                official_tables.append(timetable)
+            else:
+                unofficial_tables.append(timetable)
+
+        serialized_official=DisplayTimetableSerializer.from_model(official_tables, is_official=True, many=True).data
+        serialized_unofficial=DisplayTimetableSerializer.from_model(unofficial_tables, is_official=False, many=True).data
+        return serialized_unofficial+serialized_official
+
     def get(self, request, sem_name, year):
         """ Returns student's personal timetables """
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         student = Student.objects.get(user=request.user)
         timetables = student.personaltimetable_set.filter(
             school=request.subdomain, semester=sem).order_by('-last_updated')
+
         courses = {course for timetable in timetables for course in timetable.courses.all()}
         context = {'semester': sem, 'school': request.subdomain, 'student': student}
+
         return Response({
-            'timetables': DisplayTimetableSerializer.from_model(timetables, many=True).data,
+            'timetables': self.filter_official(timetables, student),
             'courses': CourseSerializer(courses, context=context, many=True).data
+
         }, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -232,7 +296,6 @@ class UserTimetableView(ValidateSubdomainMixin,
             duplicate.courses = courses
             duplicate.sections = sections
             duplicate.events = events
-
             response = {
                 'timetables': get_student_tts(student, school, semester),
                 'saved_timetable': DisplayTimetableSerializer.from_model(duplicate).data
@@ -594,3 +657,65 @@ class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
         response = {'reactions': course.get_reactions(student=student)}
         return Response(response, status=status.HTTP_200_OK)
+
+
+class ImportSISView(CsrfExemptMixin, FeatureFlowView):
+    """
+    Manages the import of SIS data
+    """
+
+    feature_name = 'IMPORT_SIS'
+    def add_courses(self, historical_tt, new_slots, sem_name, sem_year):
+        added_courses = set()
+        for slot in new_slots:
+            course_code = slot['offering']
+            try:
+                course = Course.objects.get(code=course_code)
+                section_string = '('+slot['section']+')'
+                semester_id = Semester.objects.filter(name=sem_name, year=sem_year)[0].id
+                section = Section.objects.get(course=course, meeting_section=section_string, semester_id=semester_id)
+
+                historical_tt.sections.add(section)
+                if section.course.id not in added_courses:
+                    historical_tt.courses.add(section.course)
+                    added_courses.add(section.course.id)
+            except ObjectDoesNotExist:
+                print 'course or section not found'
+
+        historical_tt.save()
+
+    def post(self, request):
+
+        request_data = json.loads(request.data['data'])
+        student = get_student(request)
+        HistoricalPersonalTimetable.objects.filter(student=student).delete()
+
+        for term in request_data['terms']:
+            semester_arr = term['name'].split()
+            semester_name=semester_arr[0]
+            semester_year=semester_arr[1]
+
+            school = 'jhu'
+            name = 'Official '+semester_name+" "+semester_year
+            has_conflicts = False
+
+            semester, _ = Semester.objects.get_or_create(name=semester_name, year=semester_year)
+
+            params = {
+                'school': school,
+                'name': name,
+                'semester': semester,
+                'student': student,
+                'year_of_study': term["YearOfStudy"],
+                'major': term["Major"],
+                'has_conflict': has_conflicts
+            }
+            last_major=term["Major"]
+            student.major=last_major
+            student.sub_school=term["AcademicProgram"]
+
+            historical_personal_tt = HistoricalPersonalTimetable.objects.create(**params)
+            self.add_courses(historical_personal_tt, term['enrollments'], semester_name, semester_year)
+        student.sis_enabled=True
+        student.save()
+        return HttpResponseRedirect("/user/settings")

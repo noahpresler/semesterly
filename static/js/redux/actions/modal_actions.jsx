@@ -88,6 +88,10 @@ export const react = (cid, title) => (dispatch) => {
   });
 };
 
+export const triggerImportSISModal = () => ({ type: ActionTypes.TRIGGER_IMPORT_SIS_MODAL });
+
+export const toggleImportSISModal = () => ({ type: ActionTypes.TOGGLE_IMPORT_SIS_MODAL });
+
 export const togglePreferenceModal = () => ({ type: ActionTypes.TOGGLE_PREFERENCE_MODAL });
 
 export const triggerSaveCalendarModal = () => ({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });

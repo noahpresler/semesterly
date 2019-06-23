@@ -38,6 +38,7 @@ const mapStateToProps = (state) => {
     },
     isSectionOnActiveTimetable: (course, section) =>
       activeTimetable.slots.some(slot => slot.course === course.id && slot.section === section.id),
+    isOfficial: Boolean(state.savingTimetable.isOfficial),
   };
 };
 

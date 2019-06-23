@@ -142,14 +142,17 @@ class Calendar extends React.Component {
   }
 
   sisBtnClick() {
+    // move this to a function in timetable_actions
     const form = document.createElement('form');
     form.method = 'post';
+    // put this link in urls.py
     form.action = 'https://sis.jhu.edu/sswf/go/';
     form.encType = 'application/x-www-form-urlencoded';
     document.body.appendChild(form);
     const input = document.createElement('input');
     input.name = 'data';
     input.type = 'hidden';
+    // make this function fetch data and send it
     input.value = JSON.stringify(this.props.fetchSISTimetableData());
     form.appendChild(input);
     form.submit();
@@ -317,7 +320,7 @@ class Calendar extends React.Component {
           </div>
           <div className="fc-right">
             { addSISButton }
-            { addCustomEventButton }
+            { !this.props.isOfficial && addCustomEventButton }
             { shareButton }
             { shareLink }
             { addButton }
@@ -437,6 +440,7 @@ Calendar.propTypes = {
   shareLink: PropTypes.string,
   uses12HrTime: PropTypes.bool.isRequired,
   registrarSupported: PropTypes.bool.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default Calendar;

@@ -248,8 +248,8 @@ class Slot extends React.Component {
                 className="slot-bar"
                 style={{ backgroundColor: COLOUR_DATA[this.props.colourId].border }}
               />
-              { removeButton }
-              { lockButton }
+              { !this.props.isOfficial && removeButton }
+              { !this.props.isOfficial && lockButton }
               <div className="fc-content">
                 <div className="fc-time">
                   <span>{ convertedStart } – { convertedEnd }</span>
@@ -300,6 +300,7 @@ Slot.propTypes = {
   connectCreateTarget: PropTypes.func.isRequired,
   connectDragTarget: PropTypes.func.isRequired,
   uses12HrTime: PropTypes.bool.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(

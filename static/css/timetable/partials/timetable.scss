@@ -27,6 +27,11 @@ body {
 }
 
 button {
+
+  &.sis-btn {
+    width: 40px !important;
+  }
+
   &.save-timetable {
     background-color: transparent;
     border: 0;

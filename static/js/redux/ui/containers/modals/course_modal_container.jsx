@@ -49,7 +49,8 @@ const mapStateToProps = (state) => {
     inRoster: courseSections[state.courseInfo.id] !== undefined,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
     getShareLinkFromModal: courseCode =>
-      getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
+    getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
+    isOfficial: Boolean(state.savingTimetable.isOfficial),
   };
 };
 

@@ -21,7 +21,7 @@ import {
 } from '../../../actions/user_actions';
 import {
   changeUserInfo, overrideSettingsShow, setUserSettingsModalHidden,
-  setUserSettingsModalVisible,
+  setUserSettingsModalVisible, triggerImportSISModal,
 } from '../../../actions/modal_actions';
 import { getIsUserInfoIncomplete } from '../../../reducers/root_reducer';
 
@@ -48,6 +48,7 @@ const UserSettingsModalContainer = connect(
     subscribeToNotifications: setARegistrationToken,
     unsubscribeToNotifications: unRegisterAToken,
     deleteUser,
+    triggerImportSISModal,
   },
 )(UserSettingsModal);
 

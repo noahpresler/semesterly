@@ -18,6 +18,7 @@ const initState = {
   activeTimetable: { name: String('Untitled Schedule') },
   saving: false, // true if we are currently waiting for a response from the backend
   upToDate: false,
+  isOfficial: false,
 };
 
 const savingTimetable = (state = initState, action) => {
@@ -33,6 +34,7 @@ const savingTimetable = (state = initState, action) => {
         activeTimetable: action.timetable,
         saving: false,
         upToDate: action.upToDate,
+        isOfficial: action.isOfficial,
       };
 
     case ActionTypes.ALERT_TIMETABLE_EXISTS:

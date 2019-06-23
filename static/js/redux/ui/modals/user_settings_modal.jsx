@@ -40,6 +40,7 @@ class UserSettingsModal extends React.Component {
     this.shouldShow = this.shouldShow.bind(this);
     this.hide = this.hide.bind(this);
     this.toggleDelete = this.toggleDelete.bind(this);
+    this.importSIS = this.importSIS.bind(this);
   }
 
   componentDidMount() {
@@ -97,6 +98,11 @@ class UserSettingsModal extends React.Component {
         props.showOverrided ||
         this.props.isUserInfoIncomplete)
       );
+  }
+
+  importSIS() {
+    this.hide();
+    this.props.triggerImportSISModal();
   }
 
   hide() {
@@ -243,6 +249,17 @@ class UserSettingsModal extends React.Component {
                     information is never
                     shared with any other party.</p>
         </div>) : null;
+    const importSISButton = (
+      <div className="button-wrapper">
+        <button
+          className="signup-button" onClick={this.importSIS}
+        >Import SIS Data
+        </button>
+        <p className="disclaimer ctr">Importing your SIS data enables your account for PILOT
+          registration!</p>
+      </div>
+
+    );
     const cancelButton = (<div
       className="modal-close"
       onClick={this.hide}
@@ -318,6 +335,7 @@ class UserSettingsModal extends React.Component {
             { preferences }
             {/* { !this.state.isSigningUp ? notifications : null } */}
             { fbUpsell }
+            { importSISButton }
             { tos }
             { !this.state.isSigningUp ? deleteDropdown : null }
             <div className="button-wrapper">
@@ -349,6 +367,7 @@ UserSettingsModal.propTypes = {
   setHidden: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
   isDeleted: PropTypes.bool.isRequired,
+  triggerImportSISModal: PropTypes.func.isRequired,
 };
 
 export default UserSettingsModal;

@@ -41,6 +41,7 @@ const mapStateToProps = (state) => {
     isHovered: position => state.ui.searchHover === position,
     hoveredPosition: state.ui.searchHover,
     explorationModalIsVisible: isVisible,
+    isOfficial: Boolean(state.savingTimetable.isOfficial),
   };
 };
 

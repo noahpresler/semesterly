@@ -109,6 +109,7 @@ class SearchBar extends React.Component {
       inRoster={this.props.isCourseInRoster(c.id)}
       inOptionRoster={this.props.isCourseOptional(c.id)}
       position={i}
+      isOfficial={this.props.isOfficial}
     />));
     const seeMore = results.length > 0 && results.length < 3 ? (
       <div className="see-more" style={{ height: 240 - (60 * results.length) }}>
@@ -179,14 +180,16 @@ class SearchBar extends React.Component {
               onBlur={() => this.setState({ focused: false })}
             />
           </div>
+          {!this.props.isOfficial &&
           <div
             className="show-exploration"
             onMouseDown={this.props.showExplorationModal}
           >
             <i className="fa fa-compass" />
             <span>Advanced Search</span>
-          </div>
+          </div>}
         </div>
+
         {resultContainer}
       </div>
     );
@@ -208,6 +211,7 @@ SearchBar.propTypes = {
   semester: SemesterlyPropTypes.semester.isRequired,
   showExplorationModal: PropTypes.func.isRequired,
   allSemesters: PropTypes.arrayOf(SemesterlyPropTypes.semester).isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default SearchBar;

@@ -150,7 +150,7 @@ export const lockTimetable = timetable => (dispatch, getState) => {
 
 // load a personal timetable into state
 export const loadTimetable = (
-  timetable, isLoadingNewTimetable = false,
+  timetable, isLoadingNewTimetable, isOfficialState = false,
   autoLockAll = true,
 ) => (dispatch, getState) => {
   const state = getState();
@@ -169,6 +169,7 @@ export const loadTimetable = (
       type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
       timetable: displayTimetable,
       upToDate: !isLoadingNewTimetable,
+      isOfficial: isOfficialState,
     });
 
     return dispatch(lockTimetable(displayTimetable));
@@ -177,6 +178,7 @@ export const loadTimetable = (
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
     timetable: displayTimetable,
     upToDate: !isLoadingNewTimetable,
+    isOfficial: isOfficialState,
   });
 };
 
@@ -482,3 +484,4 @@ export const removeMetric = metric => ({ type: ActionTypes.REMOVE_METRIC, metric
 export const changeMetric = (add, del) => ({ type: ActionTypes.SWITCH_METRIC, add, del });
 
 export const toggleMetricOrder = metric => ({ type: ActionTypes.TOGGLE_METRIC_ORDER, metric });
+

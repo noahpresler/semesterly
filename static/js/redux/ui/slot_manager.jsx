@@ -165,6 +165,7 @@ class SlotManager extends React.Component {
             updateCustomSlot={this.props.updateCustomSlot}
             addCustomSlot={this.props.addCustomSlot}
             uses12HrTime={this.props.uses12HrTime}
+            isOfficial={this.props.isOfficial}
           />
           :
           <Slot
@@ -185,6 +186,7 @@ class SlotManager extends React.Component {
             updateCustomSlot={this.props.updateCustomSlot}
             addCustomSlot={this.props.addCustomSlot}
             uses12HrTime={this.props.uses12HrTime}
+            isOfficial={this.props.isOfficial}
           />;
       });
       return (
@@ -236,6 +238,7 @@ SlotManager.propTypes = {
   primaryDisplayAttribute: PropTypes.string.isRequired,
   socialSections: PropTypes.bool,
   uses12HrTime: PropTypes.bool.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default SlotManager;

@@ -163,8 +163,8 @@ class SearchResult extends React.Component {
         onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
       >
         <h3>{course.name || course.code} </h3>
-        { addOptionalCourseButton}
-        { addRemoveButton }
+        { !this.props.isOfficial && addOptionalCourseButton}
+        { !this.props.isOfficial && addRemoveButton }
         <div className="search-result-labels">
           <h4
             className={classNames('label', {
@@ -198,6 +198,7 @@ SearchResult.propTypes = {
   addCourse: PropTypes.func.isRequired,
   isHovered: PropTypes.func.isRequired,
   addRemoveOptionalCourse: PropTypes.func.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export const AreaBubble = ({ areas }) => (areas.length > 0 ? (<div className="areas">

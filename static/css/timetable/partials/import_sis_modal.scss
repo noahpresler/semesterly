@@ -1,0 +1,78 @@
+.sis-import-modal {
+  height: 465px;
+  max-width: 450px;
+  overflow: auto;
+  text-align: center;
+
+  > div {
+    outline: none;
+  }
+
+  .modal-header {
+    background-color: $geee;
+    border-bottom: 1px solid $gddd;
+    padding: 25px;
+    position: relative;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 25px;
+    padding: 0;
+  }
+
+  h3 {
+    color: $g555;
+    font-size: 14px;
+    margin: 20px 10px;
+  }
+
+  img {
+    width: 10px;
+  }
+
+  .legal-links {
+    color: $blue;
+    display: block;
+    font-size: 15px;
+    margin: 3px 20px;
+
+    i {
+      font-size: 13px;
+      margin-left: 3px;
+    }
+  }
+}
+
+.sis-import-modal__container {
+  padding: 30px 20px;
+}
+
+.abnb-btn {
+  background: $gfff;
+  border: 1px solid;
+  border-color: $gc4c4c4;
+  border-radius: 4px;
+  color: $g484848;
+  padding: 20px 27px !important;
+  width: 100%;
+
+  &:hover,
+  &:focus {
+    border-color: $gaaa;
+    color: $g484848;
+  }
+
+  &.secondary {
+    > span {
+      color: $g484848;
+      font-weight: 300;
+    }
+  }
+}
+
+@media(max-width: 776px) {
+  .sis-import-modal {
+    max-width: 1200px;
+  }
+}

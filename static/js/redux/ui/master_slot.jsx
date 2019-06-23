@@ -153,7 +153,7 @@ class MasterSlot extends React.Component {
         />
         {shareLink}
         {
-          !this.props.hideCloseButton ?
+          !this.props.hideCloseButton && !this.props.isOfficial ?
             <i
               className="fa fa-times"
               onClick={event => this.stopPropagation(this.props.removeCourse, event)}
@@ -178,6 +178,7 @@ MasterSlot.defaultProps = {
   slots: null,
   removeCourse: null,
   classmates: { current: [], past: [] },
+  isOfficial: false,
 };
 
 MasterSlot.propTypes = {
@@ -201,6 +202,7 @@ MasterSlot.propTypes = {
   fetchCourseInfo: PropTypes.func.isRequired,
   removeCourse: PropTypes.func,
   getShareLink: PropTypes.func.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (

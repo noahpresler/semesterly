@@ -30,23 +30,24 @@ Timetable = namedtuple('Timetable', 'courses sections has_conflict')
 class DisplayTimetable:
     """ Object that represents the frontend's interpretation of a timetable. """
 
-    def __init__(self, slots, has_conflict, name='', events=None, id=None):
+    def __init__(self, slots, has_conflict, name='', events=None, id=None, is_official=False):
         self.slots = slots
         self.has_conflict = has_conflict
         self.name = name
         self.avg_rating = get_avg_rating(slots)
         self.events = events or []
         self.id = id
+        self.is_official = is_official
 
     @classmethod
-    def from_model(cls, timetable):
+    def from_model(cls, timetable, is_official=False):
         """ Create DisplayTimetable from Timetable instance. """
         slots = [Slot(section.course, section, section.offering_set.all(),
                       is_optional=False, is_locked=True)
                  for section in timetable.sections.all()]
         id = timetable.id if isinstance(timetable, PersonalTimetable) else None
         return DisplayTimetable(slots, timetable.has_conflict, getattr(timetable, 'name', ''),
-                                getattr(timetable, 'events', []), id)
+                                getattr(timetable, 'events', []), id, is_official)
 
 
 def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):

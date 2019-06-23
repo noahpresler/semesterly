@@ -59,11 +59,13 @@ class SearchSideBar extends React.Component {
     });
     return (
       <div className="search-bar__side">
+        {!this.props.isOfficial &&
         <div className="search-bar__side-sections">
           <h3>{this.props.hoveredResult.name}</h3>
           <p>Hover over a section below for a preview on your timetable! </p>
           {sectionGrid}
         </div>
+        }
       </div>
     );
   }
@@ -85,6 +87,7 @@ SearchSideBar.propTypes = {
   isSectionOnActiveTimetable: PropTypes.func.isRequired,
   hoverSection: PropTypes.func.isRequired,
   unHoverSection: PropTypes.func.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default SearchSideBar;

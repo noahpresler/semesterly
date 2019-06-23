@@ -39,6 +39,7 @@ import notificationToken from './notification_token_reducer';
 import integrationModal from './integration_modal_reducer';
 import integrations from './integrations_reducer';
 import saveCalendarModal from './save_calendar_modal_reducer';
+import importSISModal from './import_sis_modal_reducer';
 import termsOfServiceModal from './terms_of_service_modal_reducer';
 import termsOfServiceBanner from './terms_of_service_banner_reducer';
 import userAcquisitionModal from './user_acquisition_modal_reducer';
@@ -67,6 +68,7 @@ const rootReducer = combineReducers({
   preferences,
   registrar,
   saveCalendarModal,
+  importSISModal,
   savingTimetable,
   school,
   searchResults,

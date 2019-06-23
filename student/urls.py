@@ -15,6 +15,7 @@ from django.contrib import admin
 
 from helpers.mixins import FeatureFlowView
 import student.views
+from student.views import ImportSISView
 
 admin.autodiscover()
 
@@ -39,6 +40,10 @@ urlpatterns = patterns('',
      student.views.ClassmateView.as_view()),
   url(r'^user/gcal/?$', student.views.GCalView.as_view()),
   url(r'^user/reactions/?$', student.views.ReactionView.as_view()),
+
+  url(r'^user/importsis/?$',
+      ImportSISView.as_view()),
+  #url(r'^user/importsis/?$', student.views.ImportSISView.as_view()),
 
   # for accepting TOS.
   url(r'^tos/accept/', 'student.views.accept_tos'),

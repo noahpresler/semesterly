@@ -146,7 +146,7 @@ class CourseModal extends React.Component {
                 </div>
                 { shareLink }
                 { addOptional }
-                { add }
+                { !this.props.isOfficial && add }
               </div>
               <CourseModalBodyContainer
                 inRoster={this.props.inRoster}
@@ -157,6 +157,7 @@ class CourseModal extends React.Component {
                 unHoverSection={this.props.unHoverSection}
                 getShareLink={this.props.getShareLink}
                 getShareLinkFromModal={this.props.getShareLinkFromModal}
+                isOfficial={this.props.isOfficial}
               />
             </div>);
     return (
@@ -191,6 +192,7 @@ CourseModal.propTypes = {
   // Must be included to be passed down into CourseModalBody, which needs to either refer to
   // state.courseInfo.isFetching or state.explorationModal.isFetching depending on its parent
   isFetching: PropTypes.bool.isRequired,
+  isOfficial: PropTypes.bool.isRequired,
 };
 
 export default CourseModal;

@@ -219,7 +219,7 @@ export const duplicateTimetable = timetable => (dispatch, getState) => {
   })
   .then(response => response.json())
   .then((json) => {
-    dispatch(loadTimetable(json.saved_timetable));
+    dispatch(loadTimetable(json.saved_timetable, false, true, json.saved_timetable.is_official));
     dispatch({
       type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
       timetables: json.timetables,
@@ -254,7 +254,7 @@ export const deleteTimetable = timetable => (dispatch, getState) => {
         timetables: json.timetables,
       });
       if (json.timetables.length > 0) {
-        dispatch(loadTimetable(json.timetables[0]));
+        dispatch(loadTimetable(json.timetables[0], false, true, json.timetables[0].is_official));
       } else {
         nullifyTimetable(dispatch);
       }
@@ -312,7 +312,7 @@ export const getUserSavedTimetables = semester => (dispatch) => {
         timetables,
       });
       if (timetables[0]) {
-        dispatch(loadTimetable(timetables[0]));
+        dispatch(loadTimetable(timetables[0], false, true, timetables[0].is_official));
       } else {
         dispatch(nullifyTimetable(dispatch));
       }
