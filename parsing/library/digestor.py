@@ -449,12 +449,14 @@ class DigestionAdapter(object):
                     # raise DigestionError('no section object for meeting', meeting)
 
         # NOTE: ignoring dates for now
-        for day in meeting.get('days', []):
+        for day in meeting.get('days', []):            
             offering = {
                 'section': section_model,
                 'day': day,
                 'time_start': meeting.time.start,
                 'time_end': meeting.time.end,
+                'date_start': meeting.dates.start,
+                'date_end': meeting.dates.end,
                 'defaults': {
                     'location': meeting.get('location', {}).get('building', '') + ' ' + meeting.get('location', {}).get('room', '')
                 }
