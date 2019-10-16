@@ -268,6 +268,9 @@ class Slot extends React.Component {
                   {friends}
                   { this.props.location }
                 </div>
+                <div className="fc-time">                  
+                  { this.props.date_start } to { this.props.date_end }
+                </div>
               </div>
             </div>
           </div>

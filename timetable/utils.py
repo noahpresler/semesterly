@@ -148,20 +148,35 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting, school):
     """
     course_offerings = new_meeting[2]
     new_conflicts = 0
-    
+
     for offering in course_offerings:
         day = offering.day
         if day != 'U':
             for slot in find_slots_to_fill(offering.time_start, offering.time_end, school):
                 previous_len = max(1, len(day_to_usage[day][slot]))
+                # If two course offerings cannot even possibly conflict because the date ranges
+                # they are offered don't overlap, then there conflict calculation based on the
+                # timeslots shouldn't apply. To check this we will use potential_conflict_found
+                # variable.
                 potential_conflict_found = False
-                for existing_offering in day_to_usage[day][slot]:
-                    if not potential_conflict_found:
+                # If the offering already has a "has_potential_conflict" flag, then we
+                # already checked the conflict condition and we can get the value from it and
+                # assign it to potential_conflict_found variable to use below when checking
+                # timeslots. Because this value based on date ranges, there is no need to check
+                # each and every time slot of a given two course offerings.
+                if hasattr(offering, 'has_potential_conflict'):
+                    potential_conflict_found = offering.has_potential_conflict
+                else:
+                    for existing_offering in day_to_usage[day][slot]:
                         course_1_date_start = short_date(existing_offering.date_start)
                         course_1_date_end = short_date(existing_offering.date_end)
                         course_2_date_start = short_date(offering.date_start)
                         course_2_date_end = short_date(offering.date_end)
-                        potential_conflict_found = course_2_date_start <= course_1_date_end and course_2_date_end >= course_1_date_start                    
+                        potential_conflict_found = \
+                                course_2_date_start <= course_1_date_end \
+                            and course_2_date_end >= course_1_date_start
+                        offering.has_potential_conflict = potential_conflict_found
+                        break
                 day_to_usage[day][slot].add(offering)
                 if potential_conflict_found:
                     new_conflicts += len(day_to_usage[day][slot]) - previous_len
