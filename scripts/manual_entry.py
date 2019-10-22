@@ -104,13 +104,16 @@ while True:
 				day = raw_input("day: ")
 				start = raw_input("time_start (XX:YY) : ")
 				end = raw_input("time_end (XX:YY) : ")
+				offer_date_start = raw_input("date_start mm-dd-yyyy : ")
+				offer_date_end = raw_input("date_end mm-dd-yyyy : ")
 				location = raw_input("location: ")
-
 				offering, OfferingCreated = Offering.objects.update_or_create(
 						section = section,
 						day = day,
 						time_start = start,
 						time_end = end,
+						date_start = offer_date_start,
+						date_end = offer_date_end,
 						defaults = {
 					    	'location':location
 						}

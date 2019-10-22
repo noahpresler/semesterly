@@ -139,7 +139,6 @@ def get_xproduct_indicies(lists):
         num_permutations_remaining.insert(0, length * num_permutations_remaining[0])
     return num_offerings, num_permutations_remaining
 
-# TODO - Ferhat - Update this method to use date interval when checking conflicts
 def add_meeting_and_check_conflict(day_to_usage, new_meeting, school):
     """
     Takes a @day_to_usage dictionary and a @new_meeting section and

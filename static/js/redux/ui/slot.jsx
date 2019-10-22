@@ -268,7 +268,7 @@ class Slot extends React.Component {
                   {friends}
                   { this.props.location }
                 </div>
-                <div className="fc-time">                  
+                <div className="fc-time">
                   { this.props.date_start } to { this.props.date_end }
                 </div>
               </div>
@@ -287,6 +287,8 @@ Slot.propTypes = {
   classmates: SemesterlyPropTypes.classmatesArray.isRequired,
   colourId: PropTypes.number.isRequired,
   courseId: PropTypes.number.isRequired,
+  date_start: PropTypes.string.isRequired,
+  date_end: PropTypes.string.isRequired,
   depth_level: PropTypes.number.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
