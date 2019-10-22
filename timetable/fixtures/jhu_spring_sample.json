@@ -21,7 +21,9 @@
     "fields": {
         "section": 1124,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -32,7 +34,9 @@
     "fields": {
         "section": 1124,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -43,7 +47,9 @@
     "fields": {
         "section": 1124,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -54,7 +60,9 @@
     "fields": {
         "section": 1124,
         "day": "T",
-        "time_start": "16:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "16:30",
         "time_end": "17:20",
         "location": ""
     }
@@ -65,7 +73,9 @@
     "fields": {
         "section": 1125,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -76,7 +86,9 @@
     "fields": {
         "section": 1125,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -87,7 +99,9 @@
     "fields": {
         "section": 1125,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -98,7 +112,9 @@
     "fields": {
         "section": 1125,
         "day": "T",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "15:50",
         "location": ""
     }
@@ -109,7 +125,9 @@
     "fields": {
         "section": 1126,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -120,7 +138,9 @@
     "fields": {
         "section": 1126,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -131,7 +151,9 @@
     "fields": {
         "section": 1126,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -142,7 +164,9 @@
     "fields": {
         "section": 1126,
         "day": "R",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "15:50",
         "location": ""
     }
@@ -153,7 +177,9 @@
     "fields": {
         "section": 1127,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -164,7 +190,9 @@
     "fields": {
         "section": 1127,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -175,7 +203,9 @@
     "fields": {
         "section": 1127,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -186,7 +216,9 @@
     "fields": {
         "section": 1127,
         "day": "R",
-        "time_start": "13:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "13:30",
         "time_end": "14:20",
         "location": ""
     }
@@ -197,7 +229,9 @@
     "fields": {
         "section": 8239,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -208,7 +242,9 @@
     "fields": {
         "section": 8239,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -219,7 +255,9 @@
     "fields": {
         "section": 8239,
         "day": "T",
-        "time_start": "13:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "13:30",
         "time_end": "14:20",
         "location": ""
     }
@@ -230,7 +268,9 @@
     "fields": {
         "section": 8239,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -241,7 +281,9 @@
     "fields": {
         "section": 8240,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -252,7 +294,9 @@
     "fields": {
         "section": 8240,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -263,7 +307,9 @@
     "fields": {
         "section": 8240,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -274,7 +320,9 @@
     "fields": {
         "section": 8240,
         "day": "T",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "15:50",
         "location": ""
     }
@@ -285,7 +333,9 @@
     "fields": {
         "section": 8241,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -296,7 +346,9 @@
     "fields": {
         "section": 8241,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -307,7 +359,9 @@
     "fields": {
         "section": 8241,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -318,7 +372,9 @@
     "fields": {
         "section": 8241,
         "day": "R",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "15:50",
         "location": ""
     }
@@ -329,7 +385,9 @@
     "fields": {
         "section": 8242,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -340,7 +398,9 @@
     "fields": {
         "section": 8242,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -351,7 +411,9 @@
     "fields": {
         "section": 8242,
         "day": "R",
-        "time_start": "16:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "16:30",
         "time_end": "17:20",
         "location": ""
     }
@@ -362,7 +424,9 @@
     "fields": {
         "section": 8242,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -373,7 +437,9 @@
     "fields": {
         "section": 8243,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -384,7 +450,9 @@
     "fields": {
         "section": 8243,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -395,7 +463,9 @@
     "fields": {
         "section": 8243,
         "day": "F",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -406,7 +476,9 @@
     "fields": {
         "section": 8243,
         "day": "R",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "15:50",
         "location": ""
     }
@@ -417,7 +489,9 @@
     "fields": {
         "section": 8244,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -428,7 +502,9 @@
     "fields": {
         "section": 8244,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -439,7 +515,9 @@
     "fields": {
         "section": 8244,
         "day": "F",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -450,7 +528,9 @@
     "fields": {
         "section": 8244,
         "day": "T",
-        "time_start": "16:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "16:30",
         "time_end": "17:20",
         "location": ""
     }
@@ -461,7 +541,9 @@
     "fields": {
         "section": 8245,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -472,7 +554,9 @@
     "fields": {
         "section": 8245,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -483,7 +567,9 @@
     "fields": {
         "section": 8245,
         "day": "F",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -494,7 +580,9 @@
     "fields": {
         "section": 8245,
         "day": "T",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "15:50",
         "location": ""
     }
@@ -505,7 +593,9 @@
     "fields": {
         "section": 8246,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -516,7 +606,9 @@
     "fields": {
         "section": 8246,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -527,7 +619,9 @@
     "fields": {
         "section": 8246,
         "day": "F",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -538,7 +632,9 @@
     "fields": {
         "section": 8246,
         "day": "R",
-        "time_start": "13:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "13:30",
         "time_end": "14:20",
         "location": ""
     }
@@ -549,7 +645,9 @@
     "fields": {
         "section": 1115,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -560,7 +658,9 @@
     "fields": {
         "section": 1115,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -571,7 +671,9 @@
     "fields": {
         "section": 1115,
         "day": "T",
-        "time_start": "16:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "16:30",
         "time_end": "17:20",
         "location": ""
     }
@@ -582,7 +684,9 @@
     "fields": {
         "section": 1115,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -593,7 +697,9 @@
     "fields": {
         "section": 1116,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -604,7 +710,9 @@
     "fields": {
         "section": 1116,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -615,7 +723,9 @@
     "fields": {
         "section": 1116,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -626,7 +736,9 @@
     "fields": {
         "section": 1116,
         "day": "T",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "15:50",
         "location": ""
     }
@@ -637,7 +749,9 @@
     "fields": {
         "section": 1117,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -648,7 +762,9 @@
     "fields": {
         "section": 1117,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -659,7 +775,9 @@
     "fields": {
         "section": 1117,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -670,7 +788,9 @@
     "fields": {
         "section": 1117,
         "day": "R",
-        "time_start": "16:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "16:30",
         "time_end": "17:20",
         "location": ""
     }
@@ -681,7 +801,9 @@
     "fields": {
         "section": 1118,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -692,7 +814,9 @@
     "fields": {
         "section": 1118,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -703,7 +827,9 @@
     "fields": {
         "section": 1118,
         "day": "R",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "15:50",
         "location": ""
     }
@@ -714,7 +840,9 @@
     "fields": {
         "section": 1118,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -725,7 +853,9 @@
     "fields": {
         "section": 1119,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -736,7 +866,9 @@
     "fields": {
         "section": 1119,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -747,7 +879,9 @@
     "fields": {
         "section": 1119,
         "day": "F",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -758,7 +892,9 @@
     "fields": {
         "section": 1119,
         "day": "R",
-        "time_start": "13:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "13:30",
         "time_end": "14:20",
         "location": ""
     }
@@ -769,7 +905,9 @@
     "fields": {
         "section": 1120,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -780,7 +918,9 @@
     "fields": {
         "section": 1120,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -791,7 +931,9 @@
     "fields": {
         "section": 1120,
         "day": "F",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -802,7 +944,9 @@
     "fields": {
         "section": 1120,
         "day": "R",
-        "time_start": "16:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "16:30",
         "time_end": "17:20",
         "location": ""
     }
@@ -813,7 +957,9 @@
     "fields": {
         "section": 1121,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -824,7 +970,9 @@
     "fields": {
         "section": 1121,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -835,7 +983,9 @@
     "fields": {
         "section": 1121,
         "day": "R",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "15:50",
         "location": ""
     }
@@ -846,7 +996,9 @@
     "fields": {
         "section": 1121,
         "day": "F",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -857,7 +1009,9 @@
     "fields": {
         "section": 1122,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -868,7 +1022,9 @@
     "fields": {
         "section": 1122,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -879,7 +1035,9 @@
     "fields": {
         "section": 1122,
         "day": "F",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -890,7 +1048,9 @@
     "fields": {
         "section": 1122,
         "day": "T",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "15:50",
         "location": ""
     }
@@ -901,7 +1061,9 @@
     "fields": {
         "section": 1123,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -912,7 +1074,9 @@
     "fields": {
         "section": 1123,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -923,7 +1087,9 @@
     "fields": {
         "section": 1123,
         "day": "F",
-        "time_start": "11:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "11:00",
         "time_end": "11:50",
         "location": ""
     }
@@ -934,7 +1100,9 @@
     "fields": {
         "section": 1123,
         "day": "T",
-        "time_start": "13:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "13:30",
         "time_end": "14:20",
         "location": ""
     }
@@ -945,7 +1113,9 @@
     "fields": {
         "section": 8236,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -956,7 +1126,9 @@
     "fields": {
         "section": 8236,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -967,7 +1139,9 @@
     "fields": {
         "section": 8236,
         "day": "T",
-        "time_start": "13:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "13:30",
         "time_end": "14:20",
         "location": ""
     }
@@ -978,7 +1152,9 @@
     "fields": {
         "section": 8236,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -989,7 +1165,9 @@
     "fields": {
         "section": 8237,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -1000,7 +1178,9 @@
     "fields": {
         "section": 8237,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -1011,7 +1191,9 @@
     "fields": {
         "section": 8237,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -1022,7 +1204,9 @@
     "fields": {
         "section": 8237,
         "day": "R",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "15:50",
         "location": ""
     }
@@ -1033,7 +1217,9 @@
     "fields": {
         "section": 8238,
         "day": "M",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -1044,7 +1230,9 @@
     "fields": {
         "section": 8238,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -1055,7 +1243,9 @@
     "fields": {
         "section": 8238,
         "day": "F",
-        "time_start": "10:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "10:00",
         "time_end": "10:50",
         "location": ""
     }
@@ -1066,7 +1256,9 @@
     "fields": {
         "section": 8238,
         "day": "R",
-        "time_start": "16:30",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "16:30",
         "time_end": "17:20",
         "location": ""
     }
@@ -1077,7 +1269,9 @@
     "fields": {
         "section": 1199,
         "day": "M",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "17:30",
         "location": ""
     }
@@ -1088,7 +1282,9 @@
     "fields": {
         "section": 8310,
         "day": "M",
-        "time_start": "15:00",
+        "date_start": "02-01-2017",
+		"date_end": "05-10-2017",
+		"time_start": "15:00",
         "time_end": "17:20",
         "location": ""
     }

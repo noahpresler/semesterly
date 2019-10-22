@@ -155,7 +155,7 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting, school):
             for slot in find_slots_to_fill(offering.time_start, offering.time_end, school):
                 previous_len = max(1, len(day_to_usage[day][slot]))
                 # If two course offerings cannot even possibly conflict because the date ranges
-                # they are offered don't overlap, then there conflict calculation based on the
+                # they are offered don't overlap, then conflict calculation based on the
                 # timeslots shouldn't apply. To check this we will use potential_conflict_found
                 # variable.
                 potential_conflict_found = False

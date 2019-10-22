@@ -39,6 +39,8 @@ class Serializers(TestCase):
         Offering.objects.create(
             section=section,
             day='M',
+            date_start='08-29-1995',
+            date_end='12-10-1995',
             time_start='8:00',
             time_end='10:00')
 
@@ -75,6 +77,8 @@ class CourseDetail(APITestCase):
         Offering.objects.create(
             section=section,
             day='M',
+            date_start='08-29-1995',
+            date_end='12-10-1995',
             time_start='8:00',
             time_end='10:00')
 

@@ -149,7 +149,7 @@ class UserTimetableViewTest(APITestCase):
         section = Section.objects.create(
             id=1, course=course, semester=self.sem, meeting_section='L1')
         Offering.objects.create(
-            id=1, section=section, day='M', time_start='8:00', time_end='10:00')
+            id=1, section=section, day='M', date_start='08-29-1995', date_end='12-10-1995', time_start='8:00', time_end='10:00')
         tt = PersonalTimetable.objects.create(
             name='tt', school='uoft', semester=self.sem, student=self.student)
         tt.courses.add(course)
@@ -326,6 +326,8 @@ class ClassmateViewTest(APITestCase):
         Offering.objects.create(
             section=section1,
             day='M',
+            date_start='08-29-2000',
+            date_end='12-10-2000',
             time_start='8:00',
             time_end='10:00')
 
@@ -334,6 +336,8 @@ class ClassmateViewTest(APITestCase):
         Offering.objects.create(
             section=section2,
             day='W',
+            date_start='08-29-2000',
+            date_end='12-10-2000',
             time_start='8:00',
             time_end='10:00')
 

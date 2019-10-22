@@ -372,6 +372,10 @@ class ValidationTest(SimpleTestCase):
                 'term': 'Bar'
             },
             'days': ['M', 'W', 'F'],
+            'dates': {
+                'start': '08-29-2017',
+                'end': '12-10-2017',
+            },
             'time': {
                 'start': '14:00',
                 'end': '14:50'
@@ -496,6 +500,10 @@ class ValidationTest(SimpleTestCase):
                     'meetings': [
                         {
                             'days': ['M', 'F'],
+                            'dates': {
+                                'start': '08-29-2017',
+                                'end': '12-10-2017',
+                            },
                             'time': {
                                 'start': '14:00',
                                 'end': '14:50'
@@ -508,6 +516,10 @@ class ValidationTest(SimpleTestCase):
                         },
                         {
                             'days': ['W'],
+                            'dates': {
+                                'start': '08-29-2017',
+                                'end': '12-10-2017',
+                            },
                             'time': {
                                 'start': '10:00',
                                 'end': '12:15'
@@ -732,6 +744,10 @@ class DigestionTest(TestCase):
                 'term': 'Bar'
             },
             'days': ['M', 'W', 'F'],
+            'dates': {
+                'start': '08-29-2017',
+                'end': '12-10-2017',
+            },
             'time': {
                 'start': '14:00',
                 'end': '14:50'
@@ -753,6 +769,8 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "M",
                     "location": "Malone Ugrad",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "14:50",
                     "time_start": "14:00"
                 }
@@ -764,6 +782,8 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "W",
                     "location": "Malone Ugrad",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "14:50",
                     "time_start": "14:00"
                 }
@@ -775,6 +795,8 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "F",
                     "location": "Malone Ugrad",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "14:50",
                     "time_start": "14:00"
                 }
@@ -860,6 +882,10 @@ class DigestionTest(TestCase):
                     'meetings': [
                         {
                             'days': ['M', 'F'],
+                            'dates': {
+                                'start': '08-29-2017',
+                                'end': '12-10-2017',
+                            },
                             'time': {
                                 'start': '14:00',
                                 'end': '14:50'
@@ -872,6 +898,10 @@ class DigestionTest(TestCase):
                         },
                         {
                             'days': ['W'],
+                            'dates': {
+                                'start': '08-29-2017',
+                                'end': '12-10-2017',
+                            },
                             'time': {
                                 'start': '10:00',
                                 'end': '12:15'
@@ -936,6 +966,8 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "M",
                     "location": "Malone Ugrad",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "14:50",
                     "time_start": "14:00"
                 }
@@ -947,6 +979,8 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "F",
                     "location": "Malone Ugrad",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "14:50",
                     "time_start": "14:00"
                 }
@@ -958,6 +992,8 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "W",
                     "location": " ",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "12:15",
                     "time_start": "10:00"
                 }
