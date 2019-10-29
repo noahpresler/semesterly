@@ -477,6 +477,214 @@
 },
 {
     "model": "timetable.offering",
+    "pk": 849,
+    "fields": {
+        "section": 1124,
+        "day": "M",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 850,
+    "fields": {
+        "section": 1124,
+        "day": "W",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 851,
+    "fields": {
+        "section": 1124,
+        "day": "F",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 852,
+    "fields": {
+        "section": 1124,
+        "day": "T",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "16:30",
+        "time_end": "17:20",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 853,
+    "fields": {
+        "section": 1125,
+        "day": "M",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 854,
+    "fields": {
+        "section": 1125,
+        "day": "W",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 855,
+    "fields": {
+        "section": 1125,
+        "day": "F",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 856,
+    "fields": {
+        "section": 1125,
+        "day": "T",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "15:00",
+        "time_end": "15:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 857,
+    "fields": {
+        "section": 1126,
+        "day": "M",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 858,
+    "fields": {
+        "section": 1126,
+        "day": "W",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 859,
+    "fields": {
+        "section": 1126,
+        "day": "F",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 860,
+    "fields": {
+        "section": 1126,
+        "day": "R",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "15:00",
+        "time_end": "15:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 861,
+    "fields": {
+        "section": 1127,
+        "day": "M",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 862,
+    "fields": {
+        "section": 1127,
+        "day": "W",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 863,
+    "fields": {
+        "section": 1127,
+        "day": "F",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "10:00",
+        "time_end": "10:50",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 864,
+    "fields": {
+        "section": 1127,
+        "day": "R",
+        "date_start": "08-29-2017",
+		"date_end": "12-10-2017",
+		"time_start": "13:30",
+        "time_end": "14:20",
+        "location": ""
+    }
+},
+{
+    "model": "timetable.offering",
     "pk": 809,
     "fields": {
         "section": 1114,
@@ -590,6 +798,70 @@
 		"time_start": "13:30",
         "time_end": "14:20",
         "location": ""
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 1124,
+    "fields": {
+        "course": 424,
+        "meeting_section": "(01)",
+        "size": 30,
+        "enrolment": 3,
+        "waitlist": 0,
+        "waitlist_size": -1,
+        "section_type": "L",
+        "instructors": "X. Zheng",
+        "semester": 4,
+        "was_full": false
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 1125,
+    "fields": {
+        "course": 424,
+        "meeting_section": "(02)",
+        "size": 30,
+        "enrolment": 1,
+        "waitlist": 0,
+        "waitlist_size": -1,
+        "section_type": "L",
+        "instructors": "X. Zheng",
+        "semester": 4,
+        "was_full": false
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 1126,
+    "fields": {
+        "course": 424,
+        "meeting_section": "(03)",
+        "size": 30,
+        "enrolment": 1,
+        "waitlist": 0,
+        "waitlist_size": -1,
+        "section_type": "L",
+        "instructors": "X. Zheng",
+        "semester": 4,
+        "was_full": false
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 1127,
+    "fields": {
+        "course": 424,
+        "meeting_section": "(04)",
+        "size": 30,
+        "enrolment": 2,
+        "waitlist": 0,
+        "waitlist_size": -1,
+        "section_type": "L",
+        "instructors": "X. Zheng",
+        "semester": 4,
+        "was_full": false
     }
 },
 {
@@ -798,6 +1070,34 @@
         "instructors": "C. Sogge",
         "semester": 4,
         "was_full": false
+    }
+},
+{
+    "model": "timetable.course",
+    "pk": 424,
+    "fields": {
+        "school": "jhu",
+        "code": "AS.110.107",
+        "name": "Calculus II (For Biological and Social Science)",
+        "description": "Differential and integral Calculus. Includes analytic geometry, functions, limits, integrals and derivatives, introduction to differential equations, functions of several variables, linear systems, applications for systems of linear differential equations, probability distributions. Applications to the biological and social sciences will be discussed, and the courses are designed to meet the needs of students in these disciplines.",
+        "notes": "",
+        "info": "",
+        "unstopped_description": "",
+        "campus": "",
+        "prerequisites": "",
+        "corequisites": "",
+        "exclusions": "",
+        "num_credits": 4.0,
+        "areas": ["Q"],
+        "department": "AS Mathematics",
+        "level": "100",
+        "cores": null,
+        "geneds": null,
+        "same_as": null,
+        "related_courses": [],
+        "sub_school": "",
+        "writing_intensive": "",
+        "pos": []
     }
 },
 {
