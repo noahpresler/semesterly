@@ -801,6 +801,84 @@
     }
 },
 {
+    "model": "timetable.offering",
+    "pk": 7333,
+    "fields": {
+        "section": 1201,
+        "day": "M",
+		"date_start": "08-29-2019",
+		"date_end": "10-18-2019",
+        "time_start": "13:30",
+        "time_end": "14:45",
+        "location": "Remsen Hall 101"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 7334,
+    "fields": {
+        "section": 1201,
+        "day": "W",
+		"date_start": "08-29-2019",
+		"date_end": "10-18-2019",
+        "time_start": "13:30",
+        "time_end": "14:45",
+        "location": "Remsen Hall 101"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 7335,
+    "fields": {
+        "section": 1201,
+        "day": "F",
+		"date_start": "08-29-2019",
+		"date_end": "10-18-2019",
+        "time_start": "09:00",
+        "time_end": "09:50",
+        "location": "Croft Hall G02"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 7336,
+    "fields": {
+        "section": 1202,
+        "day": "M",
+		"date_start": "10-21-2019",
+		"date_end": "12-06-2019",
+        "time_start": "13:30",
+        "time_end": "14:45",
+        "location": "Remsen Hall 101"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 7337,
+    "fields": {
+        "section": 1202,
+        "day": "W",
+		"date_start": "10-21-2019",
+		"date_end": "12-06-2019",
+        "time_start": "13:30",
+        "time_end": "14:45",
+        "location": "Remsen Hall 101"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 7338,
+    "fields": {
+        "section": 1202,
+        "day": "F",
+		"date_start": "10-21-2019",
+		"date_end": "12-06-2019",
+        "time_start": "09:00",
+        "time_end": "09:50",
+        "location": "Croft Hall G02"
+    }
+},
+{
     "model": "timetable.section",
     "pk": 1124,
     "fields": {
@@ -1070,6 +1148,94 @@
         "instructors": "C. Sogge",
         "semester": 4,
         "was_full": false
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 1201,
+    "fields": {
+        "course": 241,
+        "meeting_section": "(01)",
+        "size": 30,
+        "enrolment": 26,
+        "waitlist": 0,
+        "waitlist_size": -1,
+        "section_type": "L",
+        "instructors": "M. Beer",
+        "semester": 4,
+        "was_full": false
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 1202,
+    "fields": {
+        "course": 243,
+        "meeting_section": "(01)",
+        "size": 30,
+        "enrolment": 21,
+        "waitlist": 0,
+        "waitlist_size": -1,
+        "section_type": "L",
+        "instructors": "M. Miller",
+        "semester": 4,
+        "was_full": false
+    }
+},
+{
+    "model": "timetable.course",
+    "pk": 241,
+    "fields": {
+        "school": "jhu",
+        "code": "EN.580.241",
+        "name": "Statistical Physics",
+        "description": "Basic principles of statistical physics and thermodynamics of biological systems.  Topics included quantitative statistical formulation of entropy and its application in thermodynamic optimization\r\nand conversion principles, the Gibbs/Boltzmann distribution, mixing, and phase transitions.\r\nRecommended Background:  AS.110.108-109, AS.030.101-102, AS 171.101-102 or equivalent.",
+        "notes": "",
+        "info": "",
+        "unstopped_description": "",
+        "campus": "",
+        "prerequisites": "",
+        "corequisites": "",
+        "exclusions": "",
+        "num_credits": 2.0,
+        "areas": ["E"],
+        "department": "Biomedical Engineering",
+        "level": "200",
+        "cores": null,
+        "geneds": null,
+        "same_as": null,
+        "related_courses": [],
+        "sub_school": "Whiting School of Engineering",
+        "writing_intensive": "",
+        "pos": []
+    }
+},
+{
+    "model": "timetable.course",
+    "pk": 243,
+    "fields": {
+        "school": "jhu",
+        "code": "EN.580.243",
+        "name": "Linear Signals and Systems",
+        "description": "An introduction to signals and linear systems.  Topics include first and second order systems, linear time variant discrete and continuous systems, convolution, Fourier series, and Fourier transforms.\r\nRecommended background: AS.171.102 and AS.110.201, AS.110.302, or 553.291.  110.302 may be taken at the same time.",
+        "notes": "",
+        "info": "",
+        "unstopped_description": "",
+        "campus": "",
+        "prerequisites": "",
+        "corequisites": "",
+        "exclusions": "",
+        "num_credits": 2.0,
+        "areas": ["E"],
+        "department": "Biomedical Engineering",
+        "level": "200",
+        "cores": null,
+        "geneds": null,
+        "same_as": null,
+        "related_courses": [],
+        "sub_school": "Whiting School of Engineering",
+        "writing_intensive": "",
+        "pos": []
     }
 },
 {
