@@ -31,8 +31,6 @@ class EndToEndTest(SeleniumTestCase):
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.remove_course(0, n_slots_expected=0)
         with self.description("Add two short courses and then remove"):
-            # clean up previously added course from "Add course from modal and share timetable"
-            # self.remove_course(0, n_slots_expected=0)
             self.search_course('EN.580.241', 1)
             self.add_course(0, n_slots=3, n_master_slots=1, code="EN.580.241")
             self.search_course('EN.580.243', 1)
