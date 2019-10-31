@@ -283,7 +283,7 @@ Slot = Radium(Slot);
 Slot.propTypes = {
   classmates: SemesterlyPropTypes.classmatesArray.isRequired,
   colourId: PropTypes.number.isRequired,
-  courseId: PropTypes.number.isRequired,  
+  courseId: PropTypes.number.isRequired,
   depth_level: PropTypes.number.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
