@@ -240,6 +240,8 @@ class Offering(models.Model):
     """
     section = models.ForeignKey(Section)
     day = models.CharField(max_length=1)
+    date_start = models.CharField(max_length=15, null=True)
+    date_end = models.CharField(max_length=15, null=True)
     time_start = models.CharField(max_length=15)
     time_end = models.CharField(max_length=15)
     location = models.CharField(max_length=200, default='TBA')

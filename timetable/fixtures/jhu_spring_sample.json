@@ -1,14 +1,6 @@
 [
 {
     "model": "timetable.semester",
-    "pk": 4,
-    "fields": {
-        "name": "Fall",
-        "year": "2017"
-    }
-},
-{
-    "model": "timetable.semester",
     "pk": 2,
     "fields": {
         "name": "Spring",
@@ -17,186 +9,12 @@
 },
 {
     "model": "timetable.offering",
-    "pk": 849,
-    "fields": {
-        "section": 1124,
-        "day": "M",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 850,
-    "fields": {
-        "section": 1124,
-        "day": "W",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 851,
-    "fields": {
-        "section": 1124,
-        "day": "F",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 852,
-    "fields": {
-        "section": 1124,
-        "day": "T",
-        "time_start": "16:30",
-        "time_end": "17:20",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 853,
-    "fields": {
-        "section": 1125,
-        "day": "M",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 854,
-    "fields": {
-        "section": 1125,
-        "day": "W",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 855,
-    "fields": {
-        "section": 1125,
-        "day": "F",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 856,
-    "fields": {
-        "section": 1125,
-        "day": "T",
-        "time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 857,
-    "fields": {
-        "section": 1126,
-        "day": "M",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 858,
-    "fields": {
-        "section": 1126,
-        "day": "W",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 859,
-    "fields": {
-        "section": 1126,
-        "day": "F",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 860,
-    "fields": {
-        "section": 1126,
-        "day": "R",
-        "time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 861,
-    "fields": {
-        "section": 1127,
-        "day": "M",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 862,
-    "fields": {
-        "section": 1127,
-        "day": "W",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 863,
-    "fields": {
-        "section": 1127,
-        "day": "F",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 864,
-    "fields": {
-        "section": 1127,
-        "day": "R",
-        "time_start": "13:30",
-        "time_end": "14:20",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
     "pk": 6628,
     "fields": {
         "section": 8239,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -208,6 +26,8 @@
     "fields": {
         "section": 8239,
         "day": "F",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -219,6 +39,8 @@
     "fields": {
         "section": 8239,
         "day": "T",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "13:30",
         "time_end": "14:20",
         "location": ""
@@ -230,6 +52,8 @@
     "fields": {
         "section": 8239,
         "day": "W",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -241,6 +65,8 @@
     "fields": {
         "section": 8240,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -252,6 +78,8 @@
     "fields": {
         "section": 8240,
         "day": "W",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -263,6 +91,8 @@
     "fields": {
         "section": 8240,
         "day": "F",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -274,6 +104,8 @@
     "fields": {
         "section": 8240,
         "day": "T",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "15:00",
         "time_end": "15:50",
         "location": ""
@@ -285,6 +117,8 @@
     "fields": {
         "section": 8241,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -296,6 +130,8 @@
     "fields": {
         "section": 8241,
         "day": "W",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -307,6 +143,8 @@
     "fields": {
         "section": 8241,
         "day": "F",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -318,6 +156,8 @@
     "fields": {
         "section": 8241,
         "day": "R",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "15:00",
         "time_end": "15:50",
         "location": ""
@@ -329,6 +169,8 @@
     "fields": {
         "section": 8242,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -340,6 +182,8 @@
     "fields": {
         "section": 8242,
         "day": "W",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -351,6 +195,8 @@
     "fields": {
         "section": 8242,
         "day": "R",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "16:30",
         "time_end": "17:20",
         "location": ""
@@ -362,6 +208,8 @@
     "fields": {
         "section": 8242,
         "day": "F",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -373,6 +221,8 @@
     "fields": {
         "section": 8243,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -384,6 +234,8 @@
     "fields": {
         "section": 8243,
         "day": "W",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -395,6 +247,8 @@
     "fields": {
         "section": 8243,
         "day": "F",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -406,6 +260,8 @@
     "fields": {
         "section": 8243,
         "day": "R",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "15:00",
         "time_end": "15:50",
         "location": ""
@@ -417,6 +273,8 @@
     "fields": {
         "section": 8244,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -428,6 +286,8 @@
     "fields": {
         "section": 8244,
         "day": "W",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -439,6 +299,8 @@
     "fields": {
         "section": 8244,
         "day": "F",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -450,6 +312,8 @@
     "fields": {
         "section": 8244,
         "day": "T",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "16:30",
         "time_end": "17:20",
         "location": ""
@@ -461,6 +325,8 @@
     "fields": {
         "section": 8245,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -472,6 +338,8 @@
     "fields": {
         "section": 8245,
         "day": "W",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -483,6 +351,8 @@
     "fields": {
         "section": 8245,
         "day": "F",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -494,6 +364,8 @@
     "fields": {
         "section": 8245,
         "day": "T",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "15:00",
         "time_end": "15:50",
         "location": ""
@@ -505,6 +377,8 @@
     "fields": {
         "section": 8246,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -516,6 +390,8 @@
     "fields": {
         "section": 8246,
         "day": "W",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -527,6 +403,8 @@
     "fields": {
         "section": 8246,
         "day": "F",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "11:00",
         "time_end": "11:50",
         "location": ""
@@ -538,402 +416,8 @@
     "fields": {
         "section": 8246,
         "day": "R",
-        "time_start": "13:30",
-        "time_end": "14:20",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 814,
-    "fields": {
-        "section": 1115,
-        "day": "W",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 815,
-    "fields": {
-        "section": 1115,
-        "day": "F",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 816,
-    "fields": {
-        "section": 1115,
-        "day": "T",
-        "time_start": "16:30",
-        "time_end": "17:20",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 813,
-    "fields": {
-        "section": 1115,
-        "day": "M",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 817,
-    "fields": {
-        "section": 1116,
-        "day": "M",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 818,
-    "fields": {
-        "section": 1116,
-        "day": "W",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 819,
-    "fields": {
-        "section": 1116,
-        "day": "F",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 820,
-    "fields": {
-        "section": 1116,
-        "day": "T",
-        "time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 821,
-    "fields": {
-        "section": 1117,
-        "day": "M",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 822,
-    "fields": {
-        "section": 1117,
-        "day": "W",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 823,
-    "fields": {
-        "section": 1117,
-        "day": "F",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 824,
-    "fields": {
-        "section": 1117,
-        "day": "R",
-        "time_start": "16:30",
-        "time_end": "17:20",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 825,
-    "fields": {
-        "section": 1118,
-        "day": "M",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 827,
-    "fields": {
-        "section": 1118,
-        "day": "F",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 828,
-    "fields": {
-        "section": 1118,
-        "day": "R",
-        "time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 826,
-    "fields": {
-        "section": 1118,
-        "day": "W",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 829,
-    "fields": {
-        "section": 1119,
-        "day": "M",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 830,
-    "fields": {
-        "section": 1119,
-        "day": "W",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 831,
-    "fields": {
-        "section": 1119,
-        "day": "F",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 832,
-    "fields": {
-        "section": 1119,
-        "day": "R",
-        "time_start": "13:30",
-        "time_end": "14:20",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 833,
-    "fields": {
-        "section": 1120,
-        "day": "M",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 834,
-    "fields": {
-        "section": 1120,
-        "day": "W",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 835,
-    "fields": {
-        "section": 1120,
-        "day": "F",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 836,
-    "fields": {
-        "section": 1120,
-        "day": "R",
-        "time_start": "16:30",
-        "time_end": "17:20",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 837,
-    "fields": {
-        "section": 1121,
-        "day": "M",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 838,
-    "fields": {
-        "section": 1121,
-        "day": "W",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 840,
-    "fields": {
-        "section": 1121,
-        "day": "R",
-        "time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 839,
-    "fields": {
-        "section": 1121,
-        "day": "F",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 841,
-    "fields": {
-        "section": 1122,
-        "day": "M",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 842,
-    "fields": {
-        "section": 1122,
-        "day": "W",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 843,
-    "fields": {
-        "section": 1122,
-        "day": "F",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 844,
-    "fields": {
-        "section": 1122,
-        "day": "T",
-        "time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 845,
-    "fields": {
-        "section": 1123,
-        "day": "M",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 846,
-    "fields": {
-        "section": 1123,
-        "day": "W",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 847,
-    "fields": {
-        "section": 1123,
-        "day": "F",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 848,
-    "fields": {
-        "section": 1123,
-        "day": "T",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "13:30",
         "time_end": "14:20",
         "location": ""
@@ -945,6 +429,8 @@
     "fields": {
         "section": 8236,
         "day": "W",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -956,6 +442,8 @@
     "fields": {
         "section": 8236,
         "day": "F",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -967,6 +455,8 @@
     "fields": {
         "section": 8236,
         "day": "T",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "13:30",
         "time_end": "14:20",
         "location": ""
@@ -978,6 +468,8 @@
     "fields": {
         "section": 8236,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -989,6 +481,8 @@
     "fields": {
         "section": 8237,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -1000,6 +494,8 @@
     "fields": {
         "section": 8237,
         "day": "W",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -1011,6 +507,8 @@
     "fields": {
         "section": 8237,
         "day": "F",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -1022,6 +520,8 @@
     "fields": {
         "section": 8237,
         "day": "R",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "15:00",
         "time_end": "15:50",
         "location": ""
@@ -1033,6 +533,8 @@
     "fields": {
         "section": 8238,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -1044,6 +546,8 @@
     "fields": {
         "section": 8238,
         "day": "W",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -1055,6 +559,8 @@
     "fields": {
         "section": 8238,
         "day": "F",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "10:00",
         "time_end": "10:50",
         "location": ""
@@ -1066,19 +572,10 @@
     "fields": {
         "section": 8238,
         "day": "R",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "16:30",
         "time_end": "17:20",
-        "location": ""
-    }
-},
-{
-    "model": "timetable.offering",
-    "pk": 1090,
-    "fields": {
-        "section": 1199,
-        "day": "M",
-        "time_start": "15:00",
-        "time_end": "17:30",
         "location": ""
     }
 },
@@ -1088,73 +585,11 @@
     "fields": {
         "section": 8310,
         "day": "M",
+        "date_start": "02-01-2017",
+        "date_end": "05-10-2017",
         "time_start": "15:00",
         "time_end": "17:20",
         "location": ""
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1124,
-    "fields": {
-        "course": 424,
-        "meeting_section": "(01)",
-        "size": 30,
-        "enrolment": 3,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "X. Zheng",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1125,
-    "fields": {
-        "course": 424,
-        "meeting_section": "(02)",
-        "size": 30,
-        "enrolment": 1,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "X. Zheng",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1126,
-    "fields": {
-        "course": 424,
-        "meeting_section": "(03)",
-        "size": 30,
-        "enrolment": 1,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "X. Zheng",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1127,
-    "fields": {
-        "course": 424,
-        "meeting_section": "(04)",
-        "size": 30,
-        "enrolment": 2,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "X. Zheng",
-        "semester": 4,
-        "was_full": false
     }
 },
 {
@@ -1287,150 +722,6 @@
 },
 {
     "model": "timetable.section",
-    "pk": 1115,
-    "fields": {
-        "course": 423,
-        "meeting_section": "(01)",
-        "size": 30,
-        "enrolment": 2,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1116,
-    "fields": {
-        "course": 423,
-        "meeting_section": "(02)",
-        "size": 30,
-        "enrolment": 1,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1117,
-    "fields": {
-        "course": 423,
-        "meeting_section": "(03)",
-        "size": 30,
-        "enrolment": 1,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1118,
-    "fields": {
-        "course": 423,
-        "meeting_section": "(04)",
-        "size": 30,
-        "enrolment": 1,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1119,
-    "fields": {
-        "course": 423,
-        "meeting_section": "(05)",
-        "size": 30,
-        "enrolment": 4,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1120,
-    "fields": {
-        "course": 423,
-        "meeting_section": "(06)",
-        "size": 30,
-        "enrolment": 2,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1121,
-    "fields": {
-        "course": 423,
-        "meeting_section": "(07)",
-        "size": 30,
-        "enrolment": 0,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1122,
-    "fields": {
-        "course": 423,
-        "meeting_section": "(08)",
-        "size": 30,
-        "enrolment": 2,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1123,
-    "fields": {
-        "course": 423,
-        "meeting_section": "(09)",
-        "size": 30,
-        "enrolment": 2,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
     "pk": 8236,
     "fields": {
         "course": 423,
@@ -1474,22 +765,6 @@
         "section_type": "L",
         "instructors": "S. Vigogna",
         "semester": 2,
-        "was_full": false
-    }
-},
-{
-    "model": "timetable.section",
-    "pk": 1199,
-    "fields": {
-        "course": 460,
-        "meeting_section": "(01)",
-        "size": 25,
-        "enrolment": 0,
-        "waitlist": -1,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "C. Mese, W. Wilson",
-        "semester": 4,
         "was_full": false
     }
 },

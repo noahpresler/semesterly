@@ -30,6 +30,13 @@ class EndToEndTest(SeleniumTestCase):
             self.search_course('calc', 3)
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.remove_course(0, n_slots_expected=0)
+        with self.description("Add two short courses and then remove"):
+            self.search_course('EN.580.241', 1)
+            self.add_course(0, n_slots=3, n_master_slots=1, code="EN.580.241")
+            self.search_course('EN.580.243', 1)
+            self.add_course(0, n_slots=6, n_master_slots=2, code="EN.580.243")
+            self.remove_course(0, n_slots_expected=3)
+            self.remove_course(0, n_slots_expected=0)
         with self.description("open course modal from search and share"):
             self.search_course('calc', 3)
             self.open_course_modal_from_search(1)
@@ -79,9 +86,9 @@ class EndToEndTest(SeleniumTestCase):
         with self.description("advanced search basic query executes"):
             self.change_to_current_term(clear_alert=True)
             sem = Semester.objects.get(year=2017, name='Fall')
-            self.open_and_query_adv_search('ca', n_results=3)
-            self.select_nth_adv_search_result(0, sem)
+            self.open_and_query_adv_search('ca', n_results=4)
             self.select_nth_adv_search_result(1, sem)
+            self.select_nth_adv_search_result(2, sem)
 
     @unittest.skip('TODO: fix on mac')
     def test_logged_in_via_fb_flow(self):

@@ -21,7 +21,9 @@
     "fields": {
         "section": 29129,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -32,7 +34,9 @@
     "fields": {
         "section": 25805,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -43,7 +47,9 @@
     "fields": {
         "section": 29128,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -54,7 +60,9 @@
     "fields": {
         "section": 20380,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -65,7 +73,9 @@
     "fields": {
         "section": 29127,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -76,7 +86,9 @@
     "fields": {
         "section": 25804,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -87,7 +99,9 @@
     "fields": {
         "section": 29126,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -98,7 +112,9 @@
     "fields": {
         "section": 17645,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -109,7 +125,9 @@
     "fields": {
         "section": 29125,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -120,7 +138,9 @@
     "fields": {
         "section": 25803,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -131,7 +151,9 @@
     "fields": {
         "section": 29124,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -142,7 +164,9 @@
     "fields": {
         "section": 20379,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -153,7 +177,9 @@
     "fields": {
         "section": 29123,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -164,7 +190,9 @@
     "fields": {
         "section": 25802,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -175,7 +203,9 @@
     "fields": {
         "section": 29122,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -186,7 +216,9 @@
     "fields": {
         "section": 15807,
         "day": "R",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -197,7 +229,9 @@
     "fields": {
         "section": 27521,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -208,7 +242,9 @@
     "fields": {
         "section": 25001,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -219,7 +255,9 @@
     "fields": {
         "section": 27520,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -230,7 +268,9 @@
     "fields": {
         "section": 19978,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -241,7 +281,9 @@
     "fields": {
         "section": 27519,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -252,7 +294,9 @@
     "fields": {
         "section": 25000,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -263,7 +307,9 @@
     "fields": {
         "section": 27518,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -274,7 +320,9 @@
     "fields": {
         "section": 17245,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -285,7 +333,9 @@
     "fields": {
         "section": 27517,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -296,7 +346,9 @@
     "fields": {
         "section": 24999,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -307,7 +359,9 @@
     "fields": {
         "section": 27516,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -318,7 +372,9 @@
     "fields": {
         "section": 19977,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -329,7 +385,9 @@
     "fields": {
         "section": 27515,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -340,7 +398,9 @@
     "fields": {
         "section": 24998,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -351,7 +411,9 @@
     "fields": {
         "section": 27514,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -362,7 +424,9 @@
     "fields": {
         "section": 16150,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -373,7 +437,9 @@
     "fields": {
         "section": 15808,
         "day": "W",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS"
     }
@@ -384,7 +450,9 @@
     "fields": {
         "section": 16141,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "12:00",
         "location": "116"
     }
@@ -395,7 +463,9 @@
     "fields": {
         "section": 15753,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "116"
     }
@@ -406,7 +476,9 @@
     "fields": {
         "section": 15751,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "116"
     }
@@ -417,7 +489,9 @@
     "fields": {
         "section": 15752,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "12:00",
         "location": "116"
     }
@@ -428,7 +502,9 @@
     "fields": {
         "section": 27961,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -439,7 +515,9 @@
     "fields": {
         "section": 27961,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -450,7 +528,9 @@
     "fields": {
         "section": 25221,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -461,7 +541,9 @@
     "fields": {
         "section": 25221,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -472,7 +554,9 @@
     "fields": {
         "section": 27960,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -483,7 +567,9 @@
     "fields": {
         "section": 27960,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -494,7 +580,9 @@
     "fields": {
         "section": 20088,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -505,7 +593,9 @@
     "fields": {
         "section": 20088,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -516,7 +606,9 @@
     "fields": {
         "section": 27959,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -527,7 +619,9 @@
     "fields": {
         "section": 27959,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -538,7 +632,9 @@
     "fields": {
         "section": 25220,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -549,7 +645,9 @@
     "fields": {
         "section": 25220,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -560,7 +658,9 @@
     "fields": {
         "section": 27958,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -571,7 +671,9 @@
     "fields": {
         "section": 27958,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -582,7 +684,9 @@
     "fields": {
         "section": 17355,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -593,7 +697,9 @@
     "fields": {
         "section": 17355,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -604,7 +710,9 @@
     "fields": {
         "section": 27957,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -615,7 +723,9 @@
     "fields": {
         "section": 27957,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -626,7 +736,9 @@
     "fields": {
         "section": 27957,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -637,7 +749,9 @@
     "fields": {
         "section": 25219,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -648,7 +762,9 @@
     "fields": {
         "section": 25219,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -659,7 +775,9 @@
     "fields": {
         "section": 25219,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -670,7 +788,9 @@
     "fields": {
         "section": 27956,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -681,7 +801,9 @@
     "fields": {
         "section": 27956,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -692,7 +814,9 @@
     "fields": {
         "section": 27956,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -703,7 +827,9 @@
     "fields": {
         "section": 20087,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -714,7 +840,9 @@
     "fields": {
         "section": 20087,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -725,7 +853,9 @@
     "fields": {
         "section": 20087,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -736,7 +866,9 @@
     "fields": {
         "section": 27955,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -747,7 +879,9 @@
     "fields": {
         "section": 27955,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -758,7 +892,9 @@
     "fields": {
         "section": 27955,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -769,7 +905,9 @@
     "fields": {
         "section": 25218,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -780,7 +918,9 @@
     "fields": {
         "section": 25218,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -791,7 +931,9 @@
     "fields": {
         "section": 25218,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -802,7 +944,9 @@
     "fields": {
         "section": 27954,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -813,7 +957,9 @@
     "fields": {
         "section": 27954,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -824,7 +970,9 @@
     "fields": {
         "section": 27954,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -835,7 +983,9 @@
     "fields": {
         "section": 17354,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -846,7 +996,9 @@
     "fields": {
         "section": 17354,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -857,7 +1009,9 @@
     "fields": {
         "section": 17354,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -868,7 +1022,9 @@
     "fields": {
         "section": 27953,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -879,7 +1035,9 @@
     "fields": {
         "section": 27953,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -890,7 +1048,9 @@
     "fields": {
         "section": 25217,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -901,7 +1061,9 @@
     "fields": {
         "section": 25217,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -912,7 +1074,9 @@
     "fields": {
         "section": 27952,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -923,7 +1087,9 @@
     "fields": {
         "section": 27952,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -934,7 +1100,9 @@
     "fields": {
         "section": 20086,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -945,7 +1113,9 @@
     "fields": {
         "section": 20086,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -956,7 +1126,9 @@
     "fields": {
         "section": 27951,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -967,7 +1139,9 @@
     "fields": {
         "section": 27951,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -978,7 +1152,9 @@
     "fields": {
         "section": 25216,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -989,7 +1165,9 @@
     "fields": {
         "section": 25216,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1000,7 +1178,9 @@
     "fields": {
         "section": 27950,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1011,7 +1191,9 @@
     "fields": {
         "section": 27950,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1022,7 +1204,9 @@
     "fields": {
         "section": 17353,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1033,7 +1217,9 @@
     "fields": {
         "section": 17353,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1044,7 +1230,9 @@
     "fields": {
         "section": 27561,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1055,7 +1243,9 @@
     "fields": {
         "section": 27561,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1066,7 +1256,9 @@
     "fields": {
         "section": 25021,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1077,7 +1269,9 @@
     "fields": {
         "section": 25021,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1088,7 +1282,9 @@
     "fields": {
         "section": 27560,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1099,7 +1295,9 @@
     "fields": {
         "section": 27560,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1110,7 +1308,9 @@
     "fields": {
         "section": 19988,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1121,7 +1321,9 @@
     "fields": {
         "section": 19988,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1132,7 +1334,9 @@
     "fields": {
         "section": 27559,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1143,7 +1347,9 @@
     "fields": {
         "section": 27559,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1154,7 +1360,9 @@
     "fields": {
         "section": 25020,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1165,7 +1373,9 @@
     "fields": {
         "section": 25020,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1176,7 +1386,9 @@
     "fields": {
         "section": 27558,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1187,7 +1399,9 @@
     "fields": {
         "section": 27558,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1198,7 +1412,9 @@
     "fields": {
         "section": 17255,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1209,7 +1425,9 @@
     "fields": {
         "section": 17255,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1220,7 +1438,9 @@
     "fields": {
         "section": 36185,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1231,7 +1451,9 @@
     "fields": {
         "section": 36185,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1242,7 +1464,9 @@
     "fields": {
         "section": 23862,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1253,7 +1477,9 @@
     "fields": {
         "section": 23862,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1264,7 +1490,9 @@
     "fields": {
         "section": 36184,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1275,7 +1503,9 @@
     "fields": {
         "section": 36184,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1286,7 +1516,9 @@
     "fields": {
         "section": 19407,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1297,7 +1529,9 @@
     "fields": {
         "section": 19407,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1308,7 +1542,9 @@
     "fields": {
         "section": 36183,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1319,7 +1555,9 @@
     "fields": {
         "section": 36183,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1330,7 +1568,9 @@
     "fields": {
         "section": 23861,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1341,7 +1581,9 @@
     "fields": {
         "section": 23861,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1352,7 +1594,9 @@
     "fields": {
         "section": 36182,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1363,7 +1607,9 @@
     "fields": {
         "section": 36182,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1374,7 +1620,9 @@
     "fields": {
         "section": 16149,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1385,7 +1633,9 @@
     "fields": {
         "section": 16149,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -1396,7 +1646,9 @@
     "fields": {
         "section": 36181,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1407,7 +1659,9 @@
     "fields": {
         "section": 36181,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -1418,7 +1672,9 @@
     "fields": {
         "section": 36181,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1429,7 +1685,9 @@
     "fields": {
         "section": 23860,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1440,7 +1698,9 @@
     "fields": {
         "section": 23860,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -1451,7 +1711,9 @@
     "fields": {
         "section": 23860,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1462,7 +1724,9 @@
     "fields": {
         "section": 36180,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1473,7 +1737,9 @@
     "fields": {
         "section": 36180,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -1484,7 +1750,9 @@
     "fields": {
         "section": 36180,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1495,7 +1763,9 @@
     "fields": {
         "section": 19406,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1506,7 +1776,9 @@
     "fields": {
         "section": 19406,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -1517,7 +1789,9 @@
     "fields": {
         "section": 19406,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1528,7 +1802,9 @@
     "fields": {
         "section": 36179,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1539,7 +1815,9 @@
     "fields": {
         "section": 36179,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -1550,7 +1828,9 @@
     "fields": {
         "section": 36179,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1561,7 +1841,9 @@
     "fields": {
         "section": 23859,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1572,7 +1854,9 @@
     "fields": {
         "section": 23859,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -1583,7 +1867,9 @@
     "fields": {
         "section": 23859,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1594,7 +1880,9 @@
     "fields": {
         "section": 36178,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1605,7 +1893,9 @@
     "fields": {
         "section": 36178,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -1616,7 +1906,9 @@
     "fields": {
         "section": 36178,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1627,7 +1919,9 @@
     "fields": {
         "section": 16148,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1638,7 +1932,9 @@
     "fields": {
         "section": 16148,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -1649,7 +1945,9 @@
     "fields": {
         "section": 16148,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -1660,7 +1958,9 @@
     "fields": {
         "section": 36177,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1671,7 +1971,9 @@
     "fields": {
         "section": 36177,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1682,7 +1984,9 @@
     "fields": {
         "section": 23858,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1693,7 +1997,9 @@
     "fields": {
         "section": 23858,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1704,7 +2010,9 @@
     "fields": {
         "section": 36176,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1715,7 +2023,9 @@
     "fields": {
         "section": 36176,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1726,7 +2036,9 @@
     "fields": {
         "section": 19405,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1737,7 +2049,9 @@
     "fields": {
         "section": 19405,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1748,7 +2062,9 @@
     "fields": {
         "section": 36175,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1759,7 +2075,9 @@
     "fields": {
         "section": 36175,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1770,7 +2088,9 @@
     "fields": {
         "section": 23857,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1781,7 +2101,9 @@
     "fields": {
         "section": 23857,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1792,7 +2114,9 @@
     "fields": {
         "section": 36174,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1803,7 +2127,9 @@
     "fields": {
         "section": 36174,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1814,7 +2140,9 @@
     "fields": {
         "section": 16147,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1825,7 +2153,9 @@
     "fields": {
         "section": 16147,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -1836,7 +2166,9 @@
     "fields": {
         "section": 35789,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1847,7 +2179,9 @@
     "fields": {
         "section": 35789,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1858,7 +2192,9 @@
     "fields": {
         "section": 23664,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1869,7 +2205,9 @@
     "fields": {
         "section": 23664,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1880,7 +2218,9 @@
     "fields": {
         "section": 35788,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1891,7 +2231,9 @@
     "fields": {
         "section": 35788,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1902,7 +2244,9 @@
     "fields": {
         "section": 19308,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1913,7 +2257,9 @@
     "fields": {
         "section": 19308,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1924,7 +2270,9 @@
     "fields": {
         "section": 35787,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1935,7 +2283,9 @@
     "fields": {
         "section": 35787,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1946,7 +2296,9 @@
     "fields": {
         "section": 23663,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1957,7 +2309,9 @@
     "fields": {
         "section": 23663,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1968,7 +2322,9 @@
     "fields": {
         "section": 35786,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1979,7 +2335,9 @@
     "fields": {
         "section": 35786,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -1990,7 +2348,9 @@
     "fields": {
         "section": 15803,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -2001,7 +2361,9 @@
     "fields": {
         "section": 15803,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-UJS"
     }
@@ -2012,7 +2374,9 @@
     "fields": {
         "section": 15806,
         "day": "T",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -2023,7 +2387,9 @@
     "fields": {
         "section": 15806,
         "day": "R",
-        "time_start": "19:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "19:00",
         "time_end": "9:00",
         "location": "90W-UJS"
     }
@@ -2034,7 +2400,9 @@
     "fields": {
         "section": 15805,
         "day": "T",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -2045,7 +2413,9 @@
     "fields": {
         "section": 15805,
         "day": "F",
-        "time_start": "17:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "17:00",
         "time_end": "18:00",
         "location": "90W-UJS"
     }
@@ -2056,7 +2426,9 @@
     "fields": {
         "section": 15805,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "90W-UJS"
     }
@@ -2067,7 +2439,9 @@
     "fields": {
         "section": 15804,
         "day": "M",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -2078,7 +2452,9 @@
     "fields": {
         "section": 15804,
         "day": "W",
-        "time_start": "11:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "11:00",
         "time_end": "13:00",
         "location": "90W-380"
     }
@@ -2089,7 +2465,9 @@
     "fields": {
         "section": 28901,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2100,7 +2478,9 @@
     "fields": {
         "section": 25691,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2111,7 +2491,9 @@
     "fields": {
         "section": 28900,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2122,7 +2504,9 @@
     "fields": {
         "section": 20323,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2133,7 +2517,9 @@
     "fields": {
         "section": 28899,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2144,7 +2530,9 @@
     "fields": {
         "section": 25690,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2155,7 +2543,9 @@
     "fields": {
         "section": 28898,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2166,7 +2556,9 @@
     "fields": {
         "section": 17590,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2177,7 +2569,9 @@
     "fields": {
         "section": 27949,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2188,7 +2582,9 @@
     "fields": {
         "section": 25215,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2199,7 +2595,9 @@
     "fields": {
         "section": 27948,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2210,7 +2608,9 @@
     "fields": {
         "section": 20085,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2221,7 +2621,9 @@
     "fields": {
         "section": 27947,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2232,7 +2634,9 @@
     "fields": {
         "section": 25214,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2243,7 +2647,9 @@
     "fields": {
         "section": 27946,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2254,7 +2660,9 @@
     "fields": {
         "section": 17352,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2265,7 +2673,9 @@
     "fields": {
         "section": 27553,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2276,7 +2686,9 @@
     "fields": {
         "section": 25017,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2287,7 +2699,9 @@
     "fields": {
         "section": 27552,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2298,7 +2712,9 @@
     "fields": {
         "section": 19986,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2309,7 +2725,9 @@
     "fields": {
         "section": 27551,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2320,7 +2738,9 @@
     "fields": {
         "section": 25016,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2331,7 +2751,9 @@
     "fields": {
         "section": 27550,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2342,7 +2764,9 @@
     "fields": {
         "section": 17253,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2353,7 +2777,9 @@
     "fields": {
         "section": 26185,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2364,7 +2790,9 @@
     "fields": {
         "section": 24333,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2375,7 +2803,9 @@
     "fields": {
         "section": 26184,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2386,7 +2816,9 @@
     "fields": {
         "section": 19643,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2397,7 +2829,9 @@
     "fields": {
         "section": 26183,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2408,7 +2842,9 @@
     "fields": {
         "section": 24332,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2419,7 +2855,9 @@
     "fields": {
         "section": 26182,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2430,7 +2868,9 @@
     "fields": {
         "section": 16146,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2441,7 +2881,9 @@
     "fields": {
         "section": 36173,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2452,7 +2894,9 @@
     "fields": {
         "section": 23856,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2463,7 +2907,9 @@
     "fields": {
         "section": 36172,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2474,7 +2920,9 @@
     "fields": {
         "section": 19404,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2485,7 +2933,9 @@
     "fields": {
         "section": 36171,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2496,7 +2946,9 @@
     "fields": {
         "section": 23855,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2507,7 +2959,9 @@
     "fields": {
         "section": 36170,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2518,7 +2972,9 @@
     "fields": {
         "section": 16145,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2529,7 +2985,9 @@
     "fields": {
         "section": 35841,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2540,7 +2998,9 @@
     "fields": {
         "section": 23690,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2551,7 +3011,9 @@
     "fields": {
         "section": 35840,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2562,7 +3024,9 @@
     "fields": {
         "section": 19321,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2573,7 +3037,9 @@
     "fields": {
         "section": 35839,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2584,7 +3050,9 @@
     "fields": {
         "section": 23689,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2595,7 +3063,9 @@
     "fields": {
         "section": 35838,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2606,7 +3076,9 @@
     "fields": {
         "section": 15799,
         "day": "T",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2617,7 +3089,9 @@
     "fields": {
         "section": 15801,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "320"
     }
@@ -2628,7 +3102,9 @@
     "fields": {
         "section": 15800,
         "day": "T",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "15:00",
         "location": "320"
     }
@@ -2639,7 +3115,9 @@
     "fields": {
         "section": 29133,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2650,7 +3128,9 @@
     "fields": {
         "section": 25807,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2661,7 +3141,9 @@
     "fields": {
         "section": 29132,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2672,7 +3154,9 @@
     "fields": {
         "section": 20381,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2683,7 +3167,9 @@
     "fields": {
         "section": 29131,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2694,7 +3180,9 @@
     "fields": {
         "section": 25806,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2705,7 +3193,9 @@
     "fields": {
         "section": 29130,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2716,7 +3206,9 @@
     "fields": {
         "section": 17646,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2727,7 +3219,9 @@
     "fields": {
         "section": 27945,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2738,7 +3232,9 @@
     "fields": {
         "section": 25213,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2749,7 +3245,9 @@
     "fields": {
         "section": 27944,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2760,7 +3258,9 @@
     "fields": {
         "section": 20084,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2771,7 +3271,9 @@
     "fields": {
         "section": 27943,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2782,7 +3284,9 @@
     "fields": {
         "section": 25212,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2793,7 +3297,9 @@
     "fields": {
         "section": 27942,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2804,7 +3310,9 @@
     "fields": {
         "section": 17351,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2815,7 +3323,9 @@
     "fields": {
         "section": 26423,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2826,7 +3336,9 @@
     "fields": {
         "section": 24452,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2837,7 +3349,9 @@
     "fields": {
         "section": 26422,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2848,7 +3362,9 @@
     "fields": {
         "section": 19703,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2859,7 +3375,9 @@
     "fields": {
         "section": 26421,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2870,7 +3388,9 @@
     "fields": {
         "section": 24451,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2881,7 +3401,9 @@
     "fields": {
         "section": 26420,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2892,7 +3414,9 @@
     "fields": {
         "section": 15797,
         "day": "M",
-        "time_start": "14:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "14:00",
         "time_end": "16:00",
         "location": "90W-UJS/LJS"
     }
@@ -2903,7 +3427,9 @@
     "fields": {
         "section": 36169,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2914,7 +3440,9 @@
     "fields": {
         "section": 23854,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2925,7 +3453,9 @@
     "fields": {
         "section": 36168,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2936,7 +3466,9 @@
     "fields": {
         "section": 19403,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2947,7 +3479,9 @@
     "fields": {
         "section": 36167,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2958,7 +3492,9 @@
     "fields": {
         "section": 23853,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2969,7 +3505,9 @@
     "fields": {
         "section": 36166,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2980,7 +3518,9 @@
     "fields": {
         "section": 16144,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -2991,7 +3531,9 @@
     "fields": {
         "section": 15798,
         "day": "R",
-        "time_start": "13:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "13:00",
         "time_end": "14:00",
         "location": "90W-UJS"
     }
@@ -3002,7 +3544,9 @@
     "fields": {
         "section": 28081,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3013,7 +3557,9 @@
     "fields": {
         "section": 25281,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3024,7 +3570,9 @@
     "fields": {
         "section": 28080,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3035,7 +3583,9 @@
     "fields": {
         "section": 20118,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3046,7 +3596,9 @@
     "fields": {
         "section": 28079,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3057,7 +3609,9 @@
     "fields": {
         "section": 25280,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3068,7 +3622,9 @@
     "fields": {
         "section": 28078,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3079,7 +3635,9 @@
     "fields": {
         "section": 17385,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3090,7 +3648,9 @@
     "fields": {
         "section": 27585,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3101,7 +3661,9 @@
     "fields": {
         "section": 25033,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3112,7 +3674,9 @@
     "fields": {
         "section": 27584,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3123,7 +3687,9 @@
     "fields": {
         "section": 19994,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3134,7 +3700,9 @@
     "fields": {
         "section": 27583,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3145,7 +3713,9 @@
     "fields": {
         "section": 25032,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3156,7 +3726,9 @@
     "fields": {
         "section": 27582,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3167,7 +3739,9 @@
     "fields": {
         "section": 17261,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3178,7 +3752,9 @@
     "fields": {
         "section": 36309,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3189,7 +3765,9 @@
     "fields": {
         "section": 23924,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3200,7 +3778,9 @@
     "fields": {
         "section": 36308,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3211,7 +3791,9 @@
     "fields": {
         "section": 19438,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3222,7 +3804,9 @@
     "fields": {
         "section": 36307,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3233,7 +3817,9 @@
     "fields": {
         "section": 23923,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3244,7 +3830,9 @@
     "fields": {
         "section": 36306,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3255,7 +3843,9 @@
     "fields": {
         "section": 16139,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3266,7 +3856,9 @@
     "fields": {
         "section": 35813,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3277,7 +3869,9 @@
     "fields": {
         "section": 23676,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3288,7 +3882,9 @@
     "fields": {
         "section": 35812,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3299,7 +3895,9 @@
     "fields": {
         "section": 19314,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3310,7 +3908,9 @@
     "fields": {
         "section": 35811,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3321,7 +3921,9 @@
     "fields": {
         "section": 23675,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3332,7 +3934,9 @@
     "fields": {
         "section": 35810,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3343,7 +3947,9 @@
     "fields": {
         "section": 15736,
         "day": "R",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "320"
     }
@@ -3354,7 +3960,9 @@
     "fields": {
         "section": 15737,
         "day": "R",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "320"
     }
@@ -3365,7 +3973,9 @@
     "fields": {
         "section": 15725,
         "day": "W",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "120"
     }
@@ -3376,7 +3986,9 @@
     "fields": {
         "section": 16134,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "120"
     }
@@ -3387,7 +3999,9 @@
     "fields": {
         "section": 16133,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "120"
     }
@@ -3398,7 +4012,9 @@
     "fields": {
         "section": 15727,
         "day": "W",
-        "time_start": "9:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "9:00",
         "time_end": "10:00",
         "location": "120"
     }
@@ -3409,7 +4025,9 @@
     "fields": {
         "section": 15726,
         "day": "W",
-        "time_start": "10:00",
+        "date_start": "08-29-2016",
+		"date_end": "12-10-2016",
+		"time_start": "10:00",
         "time_end": "11:00",
         "location": "120"
     }

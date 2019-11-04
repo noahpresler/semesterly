@@ -44,6 +44,8 @@ class Serializers(TestCase):
         self.offering = Offering.objects.create(
             section=self.section,
             day='M',
+            date_start='08-29-1995',
+            date_end='12-10-1995',
             time_start='8:00',
             time_end='10:00')
         self.event = PersonalEvent.objects.create(name='gym', day='T',
@@ -162,6 +164,8 @@ class TimetableLinkViewTest(APITestCase):
         Offering.objects.create(
             section=section,
             day='M',
+            date_start='08-29-2000',
+            date_end='12-10-2000',
             time_start='8:00',
             time_end='10:00')
 

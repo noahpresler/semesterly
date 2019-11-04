@@ -18,7 +18,7 @@ from parsing.library.logger import JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
 from parsing.library.viewer import Hoarder
-from parsing.library.utils import clean, make_list, safe_cast, titlize, time24
+from parsing.library.utils import clean, make_list, safe_cast, titlize, time24, short_date
 from parsing.library.exceptions import PipelineError, PipelineWarning
 from parsing.library.validator import ValidationError, ValidationWarning, \
     MultipleDefinitionsWarning
@@ -94,6 +94,8 @@ class Ingestor(dict):
         'offerings', 'meetings',
         'time_start', 'start_time',
         'time_end', 'end_time',
+        'date_start',
+        'date_end',
         'location',
         'loc', 'where',
         'days', 'day', 'dates', 'date',
@@ -222,6 +224,15 @@ class Ingestor(dict):
             )
         return instructors
 
+    def _resolve_date(self):
+        dates = self._get('date')
+        if 'dates' not in self:
+            dates = {
+                'start': short_date(self._get('date_start')),
+                'end': short_date(self._get('date_end'))
+            }
+        return dates
+
     def _resolve_time(self):
         time = self._get('time')
         if 'time' not in self:
@@ -346,7 +357,7 @@ class Ingestor(dict):
                 'term': term,
             },
             'days': make_list(self._get('days', 'day')),
-            'dates': make_list(self._get('dates', 'date')),
+            'dates': self._resolve_date(),
             'time': self._resolve_time(),
             'location': self._resolve_location()
         }

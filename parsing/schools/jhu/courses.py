@@ -183,6 +183,11 @@ class Parser(BaseParser):
             created_section = self.ingestor.ingest_section(created_course)
 
             # Load offering fields.
+            dates = meeting['Dates'].split(' to ')
+            self.ingestor['date_start'] = dates[0]
+            self.ingestor['date_end'] = dates[1]
+            
+
             times = meeting['Times']
             for time in filter(lambda t: len(t) > 0, times.split(',')):
                 time_pieces = re.search(
@@ -207,6 +212,7 @@ class Parser(BaseParser):
                         'building': meeting['Building'],
                         'room': meeting['Room']
                     }
+                    # print(self.ingestor)
                     self.ingestor.ingest_meeting(created_section)
 
     def start(self,

@@ -21,6 +21,10 @@ new WebpackDevServer(webpack(config), {
   disableHostCheck : true, // This is needed for SSL reverse proxy in development environment
   hot: true,
   inline: true,
+  watchOptions: {
+    aggregateTimeout: 500, 
+    poll: 1000 
+  },
   historyApiFallback: true
 }).listen(3000, '0.0.0.0', function (err, result) {
   if (err) {
