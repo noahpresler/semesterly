@@ -167,19 +167,54 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting, school):
                     potential_conflict_found = offering.has_potential_conflict
                 else:
                     for existing_offering in day_to_usage[day][slot]:
-                        course_1_date_start = short_date(existing_offering.date_start)
-                        course_1_date_end = short_date(existing_offering.date_end)
-                        course_2_date_start = short_date(offering.date_start)
-                        course_2_date_end = short_date(offering.date_end)
-                        potential_conflict_found = \
-                                course_2_date_start <= course_1_date_end \
-                            and course_2_date_end >= course_1_date_start
+                        potential_conflict_found = can_potentially_conflict(
+                            existing_offering.date_start,
+                            existing_offering.date_end,
+                            offering.date_start,
+                            offering.date_end
+                        )
                         offering.has_potential_conflict = potential_conflict_found
                         break
                 day_to_usage[day][slot].add(offering)
                 if potential_conflict_found:
                     new_conflicts += len(day_to_usage[day][slot]) - previous_len
     return new_conflicts
+
+def can_potentially_conflict(
+        course_1_date_start,
+        course_1_date_end,
+        course_2_date_start,
+        course_2_date_end
+    ):
+    """Checks two courses start & end dates to see whether they can overlap and 
+    hence potentially conflict. If any of the values are passed as None it will 
+    automatically consider that they can potentially conflict. Input type is 
+    string but has to be in a reasonable date format.
+
+    Arguments:
+        course_1_date_start {[string]} -- [course 1 start date in a reasonable date format]
+        course_1_date_end {[string]} -- [course 1 end date in a reasonable date format]
+        course_2_date_start {[string]} -- [course 2 start date in a reasonable date format]
+        course_2_date_end {[string]} -- [course 2 end date in a reasonable date format]
+    
+    Returns:
+        [bool] -- [True if if dates ranges of course 1 and 2 overlap, otherwise False]
+    """
+    potential_conflict_found = False
+    course_1_date_start = short_date(course_1_date_start)
+    course_1_date_end = short_date(course_1_date_end)
+    course_2_date_start = short_date(course_2_date_start)
+    course_2_date_end = short_date(course_2_date_end)
+    if course_1_date_start is None \
+        or course_1_date_end is None \
+        or course_2_date_start is None \
+        or course_2_date_end is None:
+        potential_conflict_found = True
+    else:
+        potential_conflict_found = \
+            course_2_date_start <= course_1_date_end \
+        and course_2_date_end >= course_1_date_start
+    return potential_conflict_found
 
 def find_slots_to_fill(start, end, school):
     """
