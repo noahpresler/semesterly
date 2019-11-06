@@ -334,24 +334,28 @@ def time24(time):
     return time.strftime('%H:%M')
 
 def short_date(date):
-    """Convert input to %m-%d-%y format.
+    """Convert input to %m-%d-%y format. Returns None if input is None.
 
     Args:
         date (str): date in reasonable format
 
     Returns:
-        str: Date in format %m-%d-%y
+        str: Date in format %m-%d-%y if the input is not None.
 
     Raises:
         ParseError: Unparseable time input.
     """
     from parsing.library.validator import ValidationError
 
-    if isinstance(date, basestring):
-        date = dateparser.parse(date)
-    if not isinstance(date, datetime):
-        raise ValidationError('invalid date input {}'.format(date))
-    return date.strftime('%m-%d-%y')
+    if date is not None:
+        if isinstance(date, basestring):
+            date = dateparser.parse(date)
+        if not isinstance(date, datetime):
+            raise ValidationError('invalid date input {}'.format(date))
+        return date.strftime('%m-%d-%y')
+    else:
+        return None
+
 
 
 class SimpleNamespace:
