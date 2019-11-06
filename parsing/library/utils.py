@@ -357,6 +357,22 @@ def short_date(date):
         return None
 
 
+def is_short_course(date_start, date_end, short_course_weeks=8):
+
+    from parsing.library.validator import ValidationError
+
+    if isinstance(date_start, basestring):
+        date_start = dateparser.parse(date_start)
+    if isinstance(date_end, basestring):
+        date_end = dateparser.parse(date_end)
+    if not isinstance(date_start, datetime):
+        raise ValidationError('invalid date input {}'.format(date_start))
+    if not isinstance(date_end, datetime):
+        raise ValidationError('invalid date input {}'.format(date_end))
+    date_diff = date_end - date_start
+
+    return date_diff.days <= short_course_weeks * 7
+
 
 class SimpleNamespace:
     def __init__(self, **kwargs):

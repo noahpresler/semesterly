@@ -115,6 +115,22 @@ class CourseModalBody extends React.Component {
       );
     }
 
+    let shortCourseSection = "";
+    let offeringSample = this.props.sectionTypeToSections.L[0].offering_set[0];
+    if(offeringSample.is_short_course)
+    {
+      shortCourseSection = (
+        <div>
+              <p>
+                <img alt="Short Course" src="/static/img/short_course_icon_15x15.png" />: This is a short term course. Dates offered: 
+                <b>{offeringSample.date_start}</b>
+                <span> to </span>
+                <b>{offeringSample.date_end}</b>
+              </p>
+          </div>
+      );
+    }
+
     const sectionGrid = Object.keys(this.props.sectionTypeToSections).sort().map((sType, i) => {
       const sectionTitle = `${getSectionTypeDisplayName(sType)} Sections`;
       const subTitle = i === 0 ? <small>(Hover to see the section on your timetable)</small> : null;
@@ -415,6 +431,7 @@ class CourseModalBody extends React.Component {
             <div>
               <h3 className="modal-module-header">Course Description</h3>
               <p>{description}</p>
+              { shortCourseSection}
             </div>
             <div className="modal-module">
               <h3 className="modal-module-header">Course Evaluations</h3>

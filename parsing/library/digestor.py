@@ -16,6 +16,7 @@ import sys
 import django
 import jsondiff
 import simplejson as json
+from parsing.library.utils import is_short_course
 
 from abc import ABCMeta, abstractmethod
 
@@ -457,6 +458,7 @@ class DigestionAdapter(object):
                 'time_end': meeting.time.end,
                 'date_start': meeting.dates.start,
                 'date_end': meeting.dates.end,
+                'is_short_course': is_short_course(meeting.dates.start, meeting.dates.end, 8),
                 'defaults': {
                     'location': meeting.get('location', {}).get('building', '') + ' ' + meeting.get('location', {}).get('room', '')
                 }

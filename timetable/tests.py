@@ -47,7 +47,8 @@ class Serializers(TestCase):
             date_start='08-29-1995',
             date_end='12-10-1995',
             time_start='8:00',
-            time_end='10:00')
+            time_end='10:00',
+            is_short_course=False)
         self.event = PersonalEvent.objects.create(name='gym', day='T',
                                                   time_start='7:00', time_end='8:30')
 
@@ -167,7 +168,8 @@ class TimetableLinkViewTest(APITestCase):
             date_start='08-29-2000',
             date_end='12-10-2000',
             time_start='8:00',
-            time_end='10:00')
+            time_end='10:00',
+            is_short_course=False)
 
     def test_create_then_get_link(self):
         data = {

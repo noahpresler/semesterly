@@ -16,6 +16,7 @@ import sys
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
+from parsing.library.utils import is_short_course
 
 if len(sys.argv) < 3:
     print("Please specify a school and semester.")
@@ -114,6 +115,7 @@ while True:
 						time_end = end,
 						date_start = offer_date_start,
 						date_end = offer_date_end,
+						is_short_course = is_short_course(date_start, date_end),
 						defaults = {
 					    	'location':location
 						}

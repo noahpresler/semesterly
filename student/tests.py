@@ -329,7 +329,8 @@ class ClassmateViewTest(APITestCase):
             date_start='08-29-2000',
             date_end='12-10-2000',
             time_start='8:00',
-            time_end='10:00')
+            time_end='10:00',
+            is_short_course=False)
 
         section2 = Section.objects.create(
             course=course, semester=sem, meeting_section='L2')
@@ -339,7 +340,8 @@ class ClassmateViewTest(APITestCase):
             date_start='08-29-2000',
             date_end='12-10-2000',
             time_start='8:00',
-            time_end='10:00')
+            time_end='10:00',
+            is_short_course=False)
 
         # students have a timetable in common
         tt1 = PersonalTimetable.objects.create(

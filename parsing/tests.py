@@ -384,7 +384,8 @@ class ValidationTest(SimpleTestCase):
                 'campus': 'Homewood',
                 'building': 'Malone',
                 'room': 'Ugrad'
-            }
+            },
+            'is_short_course': False
         }
 
         with self.assertRaises(ValidationError):
@@ -512,7 +513,8 @@ class ValidationTest(SimpleTestCase):
                                 'campus': 'Homewood',
                                 'building': 'Malone',
                                 'room': 'Ugrad'
-                            }
+                            },
+                            'is_short_course': False
                         },
                         {
                             'days': ['W'],
@@ -523,7 +525,8 @@ class ValidationTest(SimpleTestCase):
                             'time': {
                                 'start': '10:00',
                                 'end': '12:15'
-                            }
+                            },
+                            'is_short_course': False
                         }
                     ]
                 }
@@ -756,7 +759,8 @@ class DigestionTest(TestCase):
                 'campus': 'Homewood',
                 'building': 'Malone',
                 'room': 'Ugrad'
-            }
+            },
+            'is_short_course': False
         }
 
         output = StringIO.StringIO()
@@ -772,7 +776,8 @@ class DigestionTest(TestCase):
                     "date_start": "08-29-2017",
                     "date_end": "12-10-2017",
                     "time_end": "14:50",
-                    "time_start": "14:00"
+                    "time_start": "14:00",
+                    "is_short_course": False
                 }
             },
             {
@@ -785,7 +790,8 @@ class DigestionTest(TestCase):
                     "date_start": "08-29-2017",
                     "date_end": "12-10-2017",
                     "time_end": "14:50",
-                    "time_start": "14:00"
+                    "time_start": "14:00",
+                    "is_short_course": False
                 }
             },
             {
@@ -798,7 +804,8 @@ class DigestionTest(TestCase):
                     "date_start": "08-29-2017",
                     "date_end": "12-10-2017",
                     "time_end": "14:50",
-                    "time_start": "14:00"
+                    "time_start": "14:00",
+                    "is_short_course": False
                 }
             }
         ]
@@ -894,7 +901,8 @@ class DigestionTest(TestCase):
                                 'campus': 'Homewood',
                                 'building': 'Malone',
                                 'room': 'Ugrad'
-                            }
+                            },
+                            'is_short_course': False
                         },
                         {
                             'days': ['W'],
@@ -905,7 +913,8 @@ class DigestionTest(TestCase):
                             'time': {
                                 'start': '10:00',
                                 'end': '12:15'
-                            }
+                            },
+                            'is_short_course': False
                         }
                     ]
                 }
@@ -969,7 +978,8 @@ class DigestionTest(TestCase):
                     "date_start": "08-29-2017",
                     "date_end": "12-10-2017",
                     "time_end": "14:50",
-                    "time_start": "14:00"
+                    "time_start": "14:00",
+                    "is_short_course": False
                 }
             },
             {
@@ -982,7 +992,8 @@ class DigestionTest(TestCase):
                     "date_start": "08-29-2017",
                     "date_end": "12-10-2017",
                     "time_end": "14:50",
-                    "time_start": "14:00"
+                    "time_start": "14:00",
+                    "is_short_course": False
                 }
             },
             {
@@ -995,7 +1006,8 @@ class DigestionTest(TestCase):
                     "date_start": "08-29-2017",
                     "date_end": "12-10-2017",
                     "time_end": "12:15",
-                    "time_start": "10:00"
+                    "time_start": "10:00",
+                    "is_short_course": False
                 }
             }
         ]
