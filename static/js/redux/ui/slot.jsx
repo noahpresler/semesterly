@@ -214,10 +214,11 @@ class Slot extends React.Component {
 
     let lockButton = null;
     let shortCourseIndicator = '';
-    if (this.props.is_short_course){
+    if (this.props.is_short_course) {
       shortCourseIndicator = (
         <span>&nbsp;&nbsp;&nbsp;
-        <img alt="Short Course" src="/static/img/short_course_icon_15x15.png" /></span>
+          <img alt="Short Course" src="/static/img/short_course_icon_15x15.png" />
+        </span>
       );
     }
     if (this.props.locked) {
