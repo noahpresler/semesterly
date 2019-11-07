@@ -17,6 +17,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
 from parsing.library.utils import is_short_course
+from timetable.school_mappers import SCHOOLS_MAP
 
 if len(sys.argv) < 3:
     print("Please specify a school and semester.")
@@ -96,12 +97,15 @@ while True:
 			print "-----------------SECTION CREATED----------------"
 
 			while section and True:
+				
 				cont = raw_input("ENTER OFFERING? Y/N")
 				if cont != 'Y':
 					print "EXITTING"
 					break 
 
 				print days
+
+				short_course_weeks_limit = SCHOOLS_MAP[school].short_course_weeks_limit
 				day = raw_input("day: ")
 				start = raw_input("time_start (XX:YY) : ")
 				end = raw_input("time_end (XX:YY) : ")
@@ -115,7 +119,7 @@ while True:
 						time_end = end,
 						date_start = offer_date_start,
 						date_end = offer_date_end,
-						is_short_course = is_short_course(date_start, date_end),
+						is_short_course = is_short_course(date_start, date_end, short_course_weeks_limit),
 						defaults = {
 					    	'location':location
 						}

@@ -47,5 +47,5 @@
     ]
   },
   "registrar": true,
-  "short_course_weeks" : 8
+  "short_course_weeks_limit" : 8
 }

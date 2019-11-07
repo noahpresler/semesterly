@@ -27,6 +27,7 @@ from parsing.library.utils import DotDict, make_list
 from parsing.library.logger import JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.exceptions import PipelineError
+from timetable.school_mappers import SCHOOLS_MAP
 
 
 class DigestionError(PipelineError):
@@ -78,7 +79,11 @@ class Digestor(object):
         ))
 
         self.school = school
-        self.adapter = DigestionAdapter(school, self.cache)
+        self.adapter = DigestionAdapter(
+            school,
+            self.cache,
+            SCHOOLS_MAP[self.school].short_course_weeks_limit
+        )
         self.meta = meta
 
         # Setup tracker for digestion and progress bar.
@@ -247,18 +252,25 @@ class DigestionAdapter(object):
         school (str): School code.
     """
 
-    def __init__(self, school, cached):
+    def __init__(self, school, cached, short_course_weeks_limit):
         """Construct DigestionAdapter instance.
 
         Args:
             school (str): School code.
             cached (dict): Cache last created course and section to avoid
                 redundant Django calls
+            short_course_weeks_limit (str): Use the following attribute to 
+                determine up to how many weeks a course can be defined as 
+                a "short term course".            
         """
         self.school = school
 
         # Cache last created course and section to avoid redundant Django calls
         self.cache = cached
+
+        # Use the following attribute to determine up to how many weeks
+        # a course can be defined as a "short term course".
+        self.short_course_weeks_limit = short_course_weeks_limit
 
     def adapt_course(self, course):
         """Adapt course for digestion.
@@ -448,9 +460,9 @@ class DigestionAdapter(object):
                         meeting.section.code
                     ), file=sys.stderr)
                     # raise DigestionError('no section object for meeting', meeting)
-
-        # NOTE: ignoring dates for now
-        for day in meeting.get('days', []):            
+        
+        
+        for day in meeting.get('days', []):
             offering = {
                 'section': section_model,
                 'day': day,
@@ -458,7 +470,11 @@ class DigestionAdapter(object):
                 'time_end': meeting.time.end,
                 'date_start': meeting.dates.start,
                 'date_end': meeting.dates.end,
-                'is_short_course': is_short_course(meeting.dates.start, meeting.dates.end, 8),
+                'is_short_course': is_short_course(
+                    meeting.dates.start,
+                    meeting.dates.end,
+                    self.short_course_weeks_limit
+                ),
                 'defaults': {
                     'location': meeting.get('location', {}).get('building', '') + ' ' + meeting.get('location', {}).get('room', '')
                 }
