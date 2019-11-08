@@ -63,9 +63,12 @@ const offering = PropTypes.shape({
   id: PropTypes.number.isRequired,
   section: PropTypes.number.isRequired,
   day: PropTypes.string.isRequired,
+  date_start: PropTypes.string.isRequired,
+  date_end: PropTypes.string.isRequired,
   time_start: PropTypes.string.isRequired,
   time_end: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
+  is_short_course: PropTypes.bool.isRequired,
 });
 
 // should match SectionSerializer

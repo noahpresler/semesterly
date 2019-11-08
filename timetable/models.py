@@ -245,6 +245,7 @@ class Offering(models.Model):
     time_start = models.CharField(max_length=15)
     time_end = models.CharField(max_length=15)
     location = models.CharField(max_length=200, default='TBA')
+    is_short_course = models.BooleanField(default=False)
 
     def __unicode__(self):
         return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)

@@ -149,7 +149,8 @@
           "time": {},
           "location": {},
           "course": {},
-          "section": {}
+          "section": {},
+          "is_short_course": {}
         },
         "additionalProperties": false,
         "required": [

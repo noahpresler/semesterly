@@ -357,6 +357,42 @@ def short_date(date):
         return None
 
 
+def is_short_course(date_start, date_end, short_course_weeks_limit):
+    """ Checks whether a course's duration is longer than a short term
+        course week limit or not. Limit is defined in the config file for
+        the corresponding school.
+    
+    Arguments:
+        date_start {str} -- Any reasonable date value for start date
+        date_end {str} -- Any reasonable date value for end date
+        short_course_weeks_limit {int} -- Number of weeks a course can be 
+        defined as "short term".
+    
+    Raises:
+        ValidationError: Invalid date input
+        ValidationError:  Invalid date input
+    
+    Returns:
+        bool -- Defines whether the course is short term or not.
+    """
+
+    from parsing.library.validator import ValidationError
+
+    is_short = False
+
+    if short_course_weeks_limit is not None:
+        if isinstance(date_start, basestring):
+            date_start = dateparser.parse(date_start)
+        if isinstance(date_end, basestring):
+            date_end = dateparser.parse(date_end)
+        if not isinstance(date_start, datetime):
+            raise ValidationError('invalid date input {}'.format(date_start))
+        if not isinstance(date_end, datetime):
+            raise ValidationError('invalid date input {}'.format(date_end))
+        date_diff = date_end - date_start
+        is_short = date_diff.days <= short_course_weeks_limit * 7
+
+    return is_short
 
 class SimpleNamespace:
     def __init__(self, **kwargs):

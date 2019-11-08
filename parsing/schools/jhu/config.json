@@ -46,5 +46,6 @@
       "Spring"
     ]
   },
-  "registrar": true
+  "registrar": true,
+  "short_course_weeks_limit" : 8
 }
