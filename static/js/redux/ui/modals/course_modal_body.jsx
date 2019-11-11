@@ -122,11 +122,16 @@ class CourseModalBody extends React.Component {
       shortCourseSection = (
         <div>
           <p>
-            <img alt="Short Course" src="/static/img/short_course_icon_15x15.png" />:
-            This is a short term course. Dates offered:
-            <b>{offeringSample.date_start}</b>
-            <span> to </span>
-            <b>{offeringSample.date_end}</b>
+            <p>
+              <img alt="Short Course" src="/static/img/short_course_icon_25x25.png" />:
+              This is a short term course. <br />
+            </p>
+            <p>
+              Dates offered:&nbsp;
+              <b>{offeringSample.date_start}</b>
+              <span> to </span>
+              <b>{offeringSample.date_end}</b>
+            </p>
           </p>
         </div>
       );
