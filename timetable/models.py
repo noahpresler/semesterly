@@ -309,3 +309,15 @@ class Timetable(models.Model):
 
     class Meta:
         abstract = True
+
+
+class PilotOffering(models.Model):
+    sections = models.ManyToManyField(Section)
+    day = models.CharField(max_length=1)
+    date_start = models.CharField(max_length=15, null=True)
+    date_end = models.CharField(max_length=15, null=True)
+    time_start = models.CharField(max_length=15)
+    time_end = models.CharField(max_length=15)
+    size = models.IntegerField(default=-1)
+    enrolment = models.IntegerField(default=-1)
+    waitlist = models.IntegerField(default=-1)
