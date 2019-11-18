@@ -25,7 +25,8 @@
     "instructors": {},
     "final_exam": {},
     "textbooks": {},
-    "meetings": {}
+    "meetings": {},
+    "course_section_id": {}
   },
   "additionalProperties": false,
   "required": [

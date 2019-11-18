@@ -89,7 +89,7 @@ export const fetchSISTimetableData = () => (
     const tt = getActiveDenormTimetable(state);
     const sem = getCurrentSemester(state);
     const sections = tt.slots.map(slot => (
-      { course: slot.course.code, section: slot.section.meeting_section.replace('(', '').replace(')', '') }
+      { course: slot.course.code, section: slot.section.meeting_section.replace('(', '').replace(')', ''), course_section_id: slot.section.course_section_id }
     ));
     const sisData = {
       action: 'AddToCart',

@@ -207,6 +207,7 @@ class Section(models.Model):
     semester = models.ForeignKey(Semester)
     textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
     was_full = models.BooleanField(default=False)
+    course_section_id = models.IntegerField(default=0)
 
     def get_textbooks(self):
         """ Returns the textbook info using `tb.get_info()` for each textbook """

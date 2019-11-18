@@ -67,6 +67,9 @@
     "remaining_seats": {
       "type": "integer"
     },
+    "course_section_id": {
+      "type": "integer"
+    },
     "type": {
       "type": "string",
       "minLength": 1,

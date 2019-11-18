@@ -113,7 +113,8 @@ class Parser(BaseParser):
         return (section_size, section_enrolment, waitlist)
 
     def _load_ingestor(self, school, course, section):
-        self.ingestor['sub_school'] = school;
+        self.ingestor['sub_school'] = school
+        self.ingestor['course_section_id'] = section[0]['SSS_SectionsID']
         section_details = section[0]['SectionDetails']
         try:
             num_credits = float(course['Credits'])
