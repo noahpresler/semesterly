@@ -381,6 +381,8 @@ class DigestionAdapter(object):
         if 'remaining_seats' in section:
             pass  # NOTE: possible logic conflict with other data
             # adapted['remaining_seats'] = section.remaining_seats
+        if 'course_section_id' in section:
+            adapted['course_section_id'] = section.course_section_id
         section_type_map = {
             'Lecture': 'L',
             'Laboratory': 'P',

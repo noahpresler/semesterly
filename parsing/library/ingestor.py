@@ -110,6 +110,7 @@ class Ingestor(dict):
         'pos',
         'writing_intensive',
         'sub_school',
+        'course_section_id',
     }
 
     def __init__(self, config, output,
@@ -324,7 +325,8 @@ class Ingestor(dict):
             'fees': safe_cast(self._get('fees', 'fee', 'cost'), float),
             'final_exam': self._get('final_exam'),
             'textbooks': self._get('textbooks'),
-            'meetings': self._get('offerings', 'meetings')
+            'meetings': self._get('offerings', 'meetings'),
+            'course_section_id': safe_cast(self._get('course_section_id'), int)
         }
 
         section = clean(section)
