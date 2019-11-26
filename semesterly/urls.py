@@ -21,6 +21,7 @@ from rest_framework.schemas import get_schema_view
 import helpers.mixins
 import semesterly.views
 import timetable.utils
+import pilot.urls
 
 
 admin.autodiscover()

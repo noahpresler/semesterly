@@ -56,6 +56,7 @@ class Student(models.Model):
     time_accepted_tos = models.DateTimeField(null=True)
     hopid = models.CharField(max_length=10, null=True, default='')
     jhed = models.CharField(max_length=10, null=True, default='')
+    pre_health = models.NullBooleanField(null=True, default=False)
 
 
     def get_token(self):
