@@ -167,7 +167,8 @@ class SectionSerializer(serializers.ModelSerializer):
             'section_type',
             'instructors',
             'semester',
-            'offering_set'
+            'offering_set',
+            'course_section_id'
         )
         depth = 1 # also serializer offerings
 
