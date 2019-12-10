@@ -7,7 +7,7 @@
 		{% csrf_token %}
 		<div class="form-group">
 			<label for="id_hopid">HopID:</label>
-			<input value="{{student.hopid}}"type="text" class="form-control" placeholder="Tip: Your HopID can be found in the top right of SIS." name="hopid" required id="id_hopid">
+			<input value="{{student.hopid}}" type="text" class="form-control" placeholder="Tip: Your HopID can be found in the top right of SIS." name="hopid" required id="id_hopid">
 		</div>
 		<div class="form-group">
 			<label for="id_jhed">JHED:</label>
@@ -85,7 +85,7 @@
 				<option value="False">No</option>
 			</select>
 		</div>
-		<input type="submit" value="Submit">
+		<input type="submit" value="Submit" formmethod="post">
 	</form>
 </div>
 {% endblock content %}

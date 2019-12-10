@@ -13,12 +13,15 @@ for course in Course.objects.all():
 CHOICES = [
     (True, 'Yes'), (False, 'No')
 ]
+
+
 class StudentForm(forms.Form):
     hopid = forms.CharField(required=True, widget=forms.TextInput)
     jhed = forms.CharField(required=True, widget=forms.TextInput)
     major = forms.ChoiceField(required=True, widget=forms.Select, choices=MAJOR_CHOICES)
     class_year = forms.ChoiceField(required=True, widget=forms.Select, choices=GRAD_YEAR_CHOICES)
     pre_health = forms.ChoiceField(required=True, widget=forms.Select, choices=CHOICES)
-#TODO: add 'is valid' function
+
+
 class CourseForm(forms.Form):
     classes = forms.ModelMultipleChoiceField(required=True, widget=forms.CheckboxSelectMultiple, queryset= Course.objects.all(), to_field_name="id" )

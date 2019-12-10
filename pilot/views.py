@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
-
 # Create your views here.
 from django.http import HttpResponse
 from student.utils import get_student
-from django.shortcuts import get_object_or_404
 from timetable.models import Semester, Course, Section
 from student.models import Student
 from .forms import StudentForm
@@ -18,6 +16,7 @@ def index(request, id):
 			'student': student
 		}
 		return render(request, 'pilot/welcome.html/', context=context)
+
 
 def info(request, id):
 	if request.method == 'POST':
@@ -34,15 +33,9 @@ def info(request, id):
 	else:
 		return render(request, 'pilot/get_info.html/')
 
-def studentinfo(request, id):
-	student = Student.objects.get_or_create(id=id)
-	# if this is a POST request we need to process the form data
+
+def student_info(request, id):
 	if request.method == 'POST':
-		return redirect('one:detail', id=student.id)
-	# if a GET (or any other method) we'll create a blank form
+		return redirect('pilot:home', id=id)
 	else:
-		context = {
-			'title': 'Your Information | PILOT Registration',
-			'student': student
-		}
-	return render(request, 'pilot/student_info.html/')
+		return render(request, 'pilot/student_info.html/')
