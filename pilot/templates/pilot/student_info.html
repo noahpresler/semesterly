@@ -10,5 +10,11 @@
 		<li><b>Graduation Year:</b> {{student.class_year}}</li>
 		<li><b>Pre-Health:</b> {{student.pre_health}}</li>
 	</ul><br>
+	<button class="red-button">
+		<a style="text-decoration: none; color: white;" href="{% url 'pilot:info' student.id %}">Edit</a>
+	</button>
+	<button class="green-button">
+		<a style="text-decoration: none; color: white;" href="{% url 'pilot:courses' student.id %}">Confirm</a>
+	</button>
 </div>
 {% endblock content %}

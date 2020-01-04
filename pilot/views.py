@@ -1,5 +1,6 @@
 
 from student.models import Student
+from timetable.models import CourseIntegration, Course
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import StudentForm
 
@@ -34,10 +35,27 @@ def info(request, id):
 
 def student_info(request, id):
 	if request.method == 'POST':
-		return redirect('pilot:home', id=id)
+		return redirect('pilot:courses', id=id)
 	else:
 		student, created = Student.objects.get_or_create(id=id)
 		context = {
 			'student': student
 		}
 		return render(request, 'pilot/student_info.html/', context=context)
+
+
+def courses(request, id):
+	student = Student.objects.filter(id=id).first()
+	if request.method == 'POST':
+		return redirect('pilot:home', id=student.id)
+	else:
+		COURSE_LIST = []
+		for course in Course.objects.all():
+			if CourseIntegration.objects.filter(course_id=course.id, integration_id=3).exists():
+				course_choice = (course.__str__(), course)
+				COURSE_LIST.append(course_choice)
+		context = {
+			'courses': COURSE_LIST,
+			'student': student
+		}
+		return render(request, 'pilot/courses.html', context=context)
