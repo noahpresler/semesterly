@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (C) 2017 Semester.ly Technologies, LLC
 #
 # Semester.ly is free software: you can redistribute it and/or modify
@@ -164,6 +165,9 @@ class Course(models.Model):
         """ Return the sum and count of ratings of this course not counting equivalent courses. """
         ratings = Evaluation.objects.only('course', 'score').filter(course=self)
         return sum([rating.score for rating in ratings]), len(ratings)
+
+    def __unicode__(self):
+        return u'%s' % (self.name)
 
 
 class Section(models.Model):

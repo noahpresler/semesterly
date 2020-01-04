@@ -6,11 +6,13 @@
 
 	<form method="post">
 		{% csrf_token %}
-		<fieldset>
-		{%for course in courses%}
-				<input type="checkbox" name="{{course.name}}" value="{{course}}">{{course.name}}<br>
-		{%endfor%}
-		</fieldset>
+		<div class="form-group">
+			{%for course in courses%}
+				<input type="checkbox" class="form-control" name="{{course}}" value="{{course}}" required id="course_id">
+				<label for="course_id">{{ course.name }}</label>
+				<br>
+			{%endfor%}
+		</div>
 		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">
 		<p id="select_text" class="errorlist">
 

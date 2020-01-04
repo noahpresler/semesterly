@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 from student.models import Student
 from timetable.models import CourseIntegration, Course
 from django.shortcuts import get_object_or_404, render, redirect
@@ -52,8 +52,7 @@ def courses(request, id):
 		COURSE_LIST = []
 		for course in Course.objects.all():
 			if CourseIntegration.objects.filter(course_id=course.id, integration_id=3).exists():
-				course_choice = (course.__str__(), course)
-				COURSE_LIST.append(course_choice)
+				COURSE_LIST.append(course)
 		context = {
 			'courses': COURSE_LIST,
 			'student': student
