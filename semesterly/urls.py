@@ -41,6 +41,7 @@ urlpatterns = patterns('',
                        url('', include('analytics.urls')),
                        url('', include('agreement.urls')),
                        url('', include('pilot.urls')),
+                       url(r'admin/*', include(admin.site.urls)),
 
                        # Automatic deployment endpoint
                        url(r'deploy_staging/', 'semesterly.views.deploy_staging'),

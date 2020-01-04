@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from . import views
@@ -11,3 +11,5 @@ urlpatterns = patterns('',
                        url('pilot/(?P<id>[0-9])/', view.index, name='home'),
                        url('info/(?P<id>[0-9])/', view.info, name='info'),
                        )
+
+
