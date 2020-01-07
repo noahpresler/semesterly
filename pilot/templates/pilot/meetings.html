@@ -7,10 +7,13 @@
 	<form method="post">
 		{% csrf_token %}
 		<div class="form-group">
-			{%for course in courses%}
-				<input type="checkbox" class="form-control" name="course_list" value="{{course.id}}" id="course_id">
-				<label for="course_id">{{ course.name }}</label>
-				<br>
+			{%for course, sections in courses.items%}
+				{{ course.name }} <br>
+				{%for section in sections%}
+					<input type="radio" class="form-control" name="{{course.id}}" value="{{section.id}}" id="sect_id">
+					<label for="sect_id">{{ section.instructors }}, {{section.meeting_section}}</label>
+					<br>
+				{%endfor%}
 			{%endfor%}
 		</div>
 		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">

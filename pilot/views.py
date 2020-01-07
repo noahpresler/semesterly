@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from student.models import Student
-from timetable.models import CourseIntegration, Course
+from timetable.models import CourseIntegration, Course, Section, Semester
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import StudentForm
 
@@ -46,8 +46,23 @@ def student_info(request, id):
 
 def courses(request, id):
 	student = Student.objects.filter(id=id).first()
+	semester = Semester.objects.filter(name='Spring', year='2020')
 	if request.method == 'POST':
-		return redirect('pilot:home', id=student.id)
+		course_list = request.POST.getlist('course_list')
+		decoded_list = {}
+		for course in course_list:
+			course_decode = Course.objects.get(id=course.encode("ascii"))
+			sections = list(Section.objects.filter(course=course_decode, semester=semester))
+			decoded_list[course_decode] = sections
+
+		print(decoded_list)
+
+		#meetings
+		context = {
+			'courses': decoded_list,
+			'student': student
+		}
+		return render(request, 'pilot/meetings.html', context=context)
 	else:
 		COURSE_LIST = []
 		for course in Course.objects.all():
