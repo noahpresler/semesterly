@@ -10,6 +10,7 @@ urlpatterns = patterns('',
                        url('courses/(?P<id>[0-9])/', view.courses, name='courses'),
                        url('pilot/(?P<id>[0-9])/', view.index, name='home'),
                        url('info/(?P<id>[0-9])/', view.info, name='info'),
+                       url('courses/(?P<id>[0-9])/offerings/', view.offerings, name='offerings'),
                        )
 
 

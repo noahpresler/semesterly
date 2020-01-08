@@ -4,15 +4,17 @@
 	<h3>Select your currently enrolled courses </h3>
 	<p class="text-muted">Take a look at the PILOT-supported courses below and select the courses you are registered for. <b>Some courses are distinguished by professor.</b></p>
 
-	<form method="post">
+	<form action="offerings/" method="get">
 		{% csrf_token %}
 		<div class="form-group">
 			{%for course, sections in courses.items%}
 				{{ course.name }} <br>
-				{%for section in sections%}
-					<input type="radio" class="form-control" name="{{course.id}}" value="{{section.id}}" id="sect_id">
-					<label for="sect_id">{{ section.instructors }}, {{section.meeting_section}}</label>
-					<br>
+				{%for section, offerings in sections.items%}
+					{{ section.instructors }}, {{section.meeting_section}}
+					{%for offering in offerings%}
+						<input type="radio" class="form-control" name="{{course.id}}" value="{{section.id}}" id="sect_id">
+						<label for="sect_id">{{offering.day}}, {{offering.time_start}}-{{offering.time_end}}</label><br>
+					{%endfor%}
 				{%endfor%}
 			{%endfor%}
 		</div>
@@ -23,10 +25,10 @@
 	</form>
 	<script>
 		function validateAndSend() {
-			if ($('input[type=checkbox]').is(":checked")) {
+			if ($('input[type=radio]').is(":checked")) {
 				return true;
 			} else {
-				$("#select_text").text("Select a course");
+				$("#select_text").text("Select a Section");
 				return false;
 			}
 		}

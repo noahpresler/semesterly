@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from student.models import Student
+from student.models import Student, PilotOffering
 from timetable.models import CourseIntegration, Course, Section, Semester
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import StudentForm
@@ -43,6 +43,7 @@ def student_info(request, id):
 		}
 		return render(request, 'pilot/student_info.html/', context=context)
 
+course_decoded_list = []
 
 def courses(request, id):
 	student = Student.objects.filter(id=id).first()
@@ -52,10 +53,13 @@ def courses(request, id):
 		decoded_list = {}
 		for course in course_list:
 			course_decode = Course.objects.get(id=course.encode("ascii"))
+			course_decoded_list.append(course_decode)
 			sections = list(Section.objects.filter(course=course_decode, semester=semester))
-			decoded_list[course_decode] = sections
-
-		print(decoded_list)
+			sections_offerings = {}
+			for section in sections:
+				offerings = list(PilotOffering.objects.filter(sections=section))
+				sections_offerings[section] = offerings
+			decoded_list[course_decode] = sections_offerings
 
 		#meetings
 		context = {
@@ -73,3 +77,15 @@ def courses(request, id):
 			'student': student
 		}
 		return render(request, 'pilot/courses.html', context=context)
+
+def offerings(request, id):
+	print('HERE')
+	student = Student.objects.filter(id=id).first()
+	semester = Semester.objects.filter(name='Spring', year='2020')
+	if request.method == 'POST':
+		sections = []
+		for course in course_decoded_list:
+			section_list = request.POST.getlist(course.id)
+			print("LIST:" + section_list)
+			sections.append(section_list)
+	return redirect('pilot:home', id=id)
