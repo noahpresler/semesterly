@@ -220,8 +220,10 @@ class Section(models.Model):
         return self.enrolment >= 0 and self.size >= 0 and self.enrolment >= self.size
 
     def __str__(self):
-        return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section,
-                                                                 self.semester)
+        return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section, self.semester)
+
+    def __unicode__(self):
+        return "Course: %s; Section: %s; Semester: %s" % (self.course, self.meeting_section, self.semester)
 
 
 class Offering(models.Model):
@@ -313,15 +315,3 @@ class Timetable(models.Model):
 
     class Meta:
         abstract = True
-
-
-class PilotOffering(models.Model):
-    sections = models.ManyToManyField(Section)
-    day = models.CharField(max_length=1)
-    date_start = models.CharField(max_length=15, null=True)
-    date_end = models.CharField(max_length=15, null=True)
-    time_start = models.CharField(max_length=15)
-    time_end = models.CharField(max_length=15)
-    size = models.IntegerField(default=-1)
-    enrolment = models.IntegerField(default=-1)
-    waitlist = models.IntegerField(default=-1)

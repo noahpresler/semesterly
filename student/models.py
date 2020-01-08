@@ -20,8 +20,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from hashids import Hashids
 from oauth2client.client import GoogleCredentials
-
-from timetable import models as timetable_models
+import timetable.models as timetable_models
 from semesterly.settings import get_secret
 
 hashids = Hashids(salt=get_secret('HASHING_SALT'))
@@ -149,3 +148,21 @@ class RegistrationToken(models.Model):
     p256dh = models.TextField(default='')
     endpoint = models.TextField(default='')
     student = models.ForeignKey(Student, null=True, default=None)
+
+class PilotOffering(models.Model):
+    sections = models.ManyToManyField(timetable_models.Section)
+    day = models.CharField(max_length=1)
+    date_start = models.CharField(max_length=15, null=True)
+    date_end = models.CharField(max_length=15, null=True)
+    time_start = models.CharField(max_length=15)
+    time_end = models.CharField(max_length=15)
+    size = models.IntegerField(default=-1)
+    enrolment = models.IntegerField(default=-1)
+    waitlist = models.IntegerField(default=-1)
+    students = models.ManyToManyField(Student)
+
+    def __str__(self):
+        return "Day: {0}, Time: {0} - {0}".format(self.day, self.time_start, self.time_end)
+
+    def __unicode__(self):
+        return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)

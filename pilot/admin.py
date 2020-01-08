@@ -1,6 +1,6 @@
 from django.contrib import admin
-from timetable.models import PilotOffering, Course, Semester, Section, CourseIntegration
-from student.models import Student
+from timetable.models import Course, Semester, Section, CourseIntegration
+from student.models import PilotOffering, Student
 
 # Register your models here.
 admin.site.register(CourseIntegration)
