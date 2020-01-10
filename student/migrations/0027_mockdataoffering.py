@@ -35,6 +35,7 @@ def add_mock(apps, schema_editor):
 		for code in pilot_codes:
 			if Course.objects.filter(school="jhu", code=code).exists():
 				course = Course.objects.get(school="jhu", code=code)
+				course.integrations.add(integration)
 				if Section.objects.filter(course_id=course.id, semester=s20, section_type='L').exists():
 					sections = list(Section.objects.filter(course_id=course.id, semester=s20, section_type='L'))
 					for section in sections:

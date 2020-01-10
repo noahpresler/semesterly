@@ -43,31 +43,21 @@ def student_info(request, id):
 		}
 		return render(request, 'pilot/student_info.html/', context=context)
 
-course_decoded_list = []
 
 def courses(request, id):
 	student = Student.objects.filter(id=id).first()
-	semester = Semester.objects.filter(name='Spring', year='2020')
 	if request.method == 'POST':
+		print("COURSES: POST")
 		course_list = request.POST.getlist('course_list')
-		decoded_list = {}
+		courses_selected = ""
 		for course in course_list:
-			course_decode = Course.objects.get(id=course.encode("ascii"))
-			course_decoded_list.append(course_decode)
-			sections = list(Section.objects.filter(course=course_decode, semester=semester))
-			sections_offerings = {}
-			for section in sections:
-				offerings = list(PilotOffering.objects.filter(sections=section))
-				sections_offerings[section] = offerings
-			decoded_list[course_decode] = sections_offerings
+			courses_selected += str(course) + "_"
+		courses_selected = courses_selected[0:-1]
+		print(courses_selected)
 
-		#meetings
-		context = {
-			'courses': decoded_list,
-			'student': student
-		}
-		return render(request, 'pilot/meetings.html', context=context)
+		return redirect('pilot:meetings', id=id, courseList=courses_selected)
 	else:
+		print("COURSES: GET")
 		COURSE_LIST = []
 		for course in Course.objects.all():
 			if CourseIntegration.objects.filter(course_id=course.id, integration_id=3).exists():
@@ -76,16 +66,42 @@ def courses(request, id):
 			'courses': COURSE_LIST,
 			'student': student
 		}
-		return render(request, 'pilot/courses.html', context=context)
+		return render(request, 'pilot/courses.html/', context=context)
 
-def offerings(request, id):
-	print('HERE')
+
+def meetings(request, id, courseList):
 	student = Student.objects.filter(id=id).first()
 	semester = Semester.objects.filter(name='Spring', year='2020')
+	course_list = courseList.split("_")
 	if request.method == 'POST':
-		sections = []
-		for course in course_decoded_list:
-			section_list = request.POST.getlist(course.id)
-			print("LIST:" + section_list)
-			sections.append(section_list)
+		print("MEETINGS: POST")
+		sections = ""
+		for course in course_list:
+			section = request.POST.getlist(course)
+			sections += str(section[0]) + "_"
+		sections = sections[0:-1]
+		return redirect('pilot:offerings', id=id, sectionList=sections)
+	else:
+		print("MEETINGS: GET")
+		decoded_list = {}
+		print(course_list)
+		for course in course_list:
+			course_decode = Course.objects.get(id=int(course))
+			print(course_decode)
+			sections = list(Section.objects.filter(course=course_decode, semester=semester))
+			sections_offerings = {}
+			for section in sections:
+				offerings = list(PilotOffering.objects.filter(sections=section))
+				sections_offerings[section] = offerings
+			decoded_list[course_decode] = sections_offerings
+		context = {
+			'courses': decoded_list,
+			'courseList': courseList,
+			'student': student,
+			'id': id
+		}
+		return render(request, 'pilot/meetings.html/', context=context)
+
+
+def offerings(request, id, sectionList):
 	return redirect('pilot:home', id=id)

@@ -1,21 +1,25 @@
 {% extends "pilot/base.html" %}
 {% block content %}
 <div class="content-section">
-	<h3>Select your currently enrolled courses </h3>
-	<p class="text-muted">Take a look at the PILOT-supported courses below and select the courses you are registered for. <b>Some courses are distinguished by professor.</b></p>
+	<h3>Select a PILOT section below </h3>
+	<p class="text-muted">Take a look at the Course and PILOT sections below and select the PILOT section you would like to register for. <b> Note that some sections are specific to the course section you are enrolled in.</b></p>
 
-	<form action="offerings/" method="get">
+	<form method="post">
 		{% csrf_token %}
 		<div class="form-group">
 			{%for course, sections in courses.items%}
-				{{ course.name }} <br>
+			<b>{{ course.name }}</b>
+				<br>
 				{%for section, offerings in sections.items%}
-					{{ section.instructors }}, {{section.meeting_section}}
+					<p class="text-muted"><b>{{ section.instructors }}, {{section.meeting_section}}</b></p>
 					{%for offering in offerings%}
 						<input type="radio" class="form-control" name="{{course.id}}" value="{{section.id}}" id="sect_id">
-						<label for="sect_id">{{offering.day}}, {{offering.time_start}}-{{offering.time_end}}</label><br>
+						<label for="sect_id">{{offering.day}}, {{offering.time_start}}-{{offering.time_end}}</label>
+						<br>
 					{%endfor%}
+					<br>
 				{%endfor%}
+				<br>
 			{%endfor%}
 		</div>
 		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">
