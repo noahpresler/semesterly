@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-from timetable.models import Integration, Course, Semester, Section
+from timetable.models import Integration, Course, Semester, Section, CourseIntegration
 
 
 def add_mock(apps, schema_editor):
@@ -24,7 +24,8 @@ def add_mock(apps, schema_editor):
 		"AS.171.101",
 		"AS.171.102",
 		"AS.171.104",
-		"AS.171.108"
+		"AS.171.108",
+		"EN.625.109"
 	]
 
 	integration, created = Integration.objects.get_or_create(name="Pilot")
@@ -35,7 +36,8 @@ def add_mock(apps, schema_editor):
 		for code in pilot_codes:
 			if Course.objects.filter(school="jhu", code=code).exists():
 				course = Course.objects.get(school="jhu", code=code)
-				course.integrations.add(integration)
+				courseint, created = CourseIntegration.objects.get_or_create(course=course, integration=integration)
+				courseint.save()
 				if Section.objects.filter(course_id=course.id, semester=s20, section_type='L').exists():
 					sections = list(Section.objects.filter(course_id=course.id, semester=s20, section_type='L'))
 					for section in sections:
@@ -48,6 +50,8 @@ def add_mock(apps, schema_editor):
 						offering3, created = PilotOffering.objects.get_or_create(day='W', time_start="5:00pm", time_end="7:00pm", size=10)
 						offering3.sections.add(section.id)
 						offering3.save()
+
+
 
 class Migration(migrations.Migration):
 
