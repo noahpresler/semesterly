@@ -13,7 +13,7 @@
 				{%for section, offerings in sections.items%}
 					<p class="text-muted"><b>{{ section.instructors }}, {{section.meeting_section}}</b></p>
 					{%for offering in offerings%}
-						<input type="radio" class="form-control" name="{{course.id}}" value="{{section.id}}" id="sect_id">
+						<input type="radio" class="form-control" name="{{course.id}}" value="{{offering.id}}" id="sect_id">
 						<label for="sect_id">{{offering.day}}, {{offering.time_start}}-{{offering.time_end}}</label>
 						<br>
 					{%endfor%}

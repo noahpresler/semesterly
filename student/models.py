@@ -160,6 +160,7 @@ class PilotOffering(models.Model):
     enrolment = models.IntegerField(default=-1)
     waitlist = models.IntegerField(default=-1)
     students = models.ManyToManyField(Student)
+    course_name = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return "Day: {0}, Time: {0} - {0}".format(self.day, self.time_start, self.time_end)

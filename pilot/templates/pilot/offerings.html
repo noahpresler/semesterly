@@ -1,30 +1,50 @@
 {% extends "pilot/base.html" %}
 {% block content %}
 <div class="content-section">
-	<h3>Select your currently enrolled courses </h3>
-	<p class="text-muted">Take a look at the PILOT-supported courses below and select the courses you are registered for. <b>Some courses are distinguished by professor.</b></p>
-
+	<h3>Done!</h3>
+	<p class="text-muted"> Click above to keep adding and dropping PILOT sessions until Sunday, September 1st at 9pm. </p>
+	<div class="article-metadata">
+		<h5>You were <b>successfully</b> enrolled in the following PILOT sections: </h5>
+	</div><br>
+	{% if enrolled|length > 0 %}
+	<div class="card-container">
+		{% for meeting in enrolled %}
+		<div class="course-card {%  cycle 'semesterly-red' 'semesterly-blue' 'semesterly-green' 'semesterly-yellow' %}">
+			<div class="slot-bar
+                                    {%  cycle 'semesterly-dark-red' 'semesterly-dark-blue' 'semesterly-dark-green' 'semesterly-dark-yellow' %}"></div>
+			<p class="stat-course">{{ meeting }}</p>
+			<p>{{ meeting.time_start}} - {{meeting.time_end}} {{ meeting.day }}</p>
+		</div>
+		{% endfor %}
+	</div>
+	{% else %}
+	<h6 class="stat-course">You are not enrolled in any sections..</h6>
+	{% endif %}
+	<br>
+	<div class="article-metadata">
+		<h5>You were <b>waitlisted</b> for the following PILOT sections: </h5>
+	</div><br>
+	{% if waitlisted|length > 0 %}
+	<div class="card-container">
+		{% for meeting in waitlisted %}
+		<div class="course-card {%  cycle 'semesterly-red' 'semesterly-blue' 'semesterly-green' 'semesterly-yellow' %}">
+			<div class="slot-bar
+										{%  cycle 'semesterly-dark-red' 'semesterly-dark-blue' 'semesterly-dark-green' 'semesterly-dark-yellow' %}"></div>
+			<p class="stat-course">{{ meeting }}</p>
+			<p>{{ meeting.time_start}} - {{meeting.time_end}} {{ meeting.day }}</p>
+		</div>
+		{% endfor %}
+	</div>
+	{% else %}
+	<h6 class="stat-course">You are not waitlisted for any sections.</h6>
+	{% endif %}
+	<br>
 	<form method="post">
 		{% csrf_token %}
-		<div class="form-group">
-			{%for section, meeting in sections.items%}
-
-			{%endfor%}
-		</div>
-		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">
-		<p id="select_text" class="errorlist">
-
-		</p>
-	</form>
-	<script>
-		function validateAndSend() {
-			if ($('input[type=checkbox]').is(":checked")) {
-				return true;
-			} else {
-				$("#select_text").text("Select a course");
-				return false;
-			}
-		}
-	</script>
+		<input class="green-button" type="submit" value="Ok">
+	</form><br>
+	<!--<h7>You will receive an email confirmation to <b>{{student.jhed}}@jhu.edu</b> with your registration results.</h7><br>-->
+	<!--<small>If you have concerns, please reach out to Ariane Kelly at <b>example@jhu.edu</b></small><br>-->
 </div>
+
 {% endblock content %}

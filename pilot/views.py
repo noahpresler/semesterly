@@ -3,6 +3,7 @@ from student.models import Student, PilotOffering
 from timetable.models import CourseIntegration, Course, Section, Semester
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import StudentForm
+from django.db import transaction
 
 
 def index(request, id):
@@ -47,14 +48,12 @@ def student_info(request, id):
 def courses(request, id):
 	student = Student.objects.filter(id=id).first()
 	if request.method == 'POST':
-		print("COURSES: POST")
 		course_list = request.POST.getlist('course_list')
 		courses_selected = ""
 		for course in course_list:
 			courses_selected += str(course) + "_"
 		courses_selected = courses_selected[0:-1]
 		print(courses_selected)
-
 		return redirect('pilot:meetings', id=id, courseList=courses_selected)
 	else:
 		print("COURSES: GET")
@@ -74,7 +73,6 @@ def meetings(request, id, courseList):
 	semester = Semester.objects.filter(name='Spring', year='2020')
 	course_list = courseList.split("_")
 	if request.method == 'POST':
-		print("MEETINGS: POST")
 		sections = ""
 		for course in course_list:
 			section = request.POST.getlist(course)
@@ -82,12 +80,9 @@ def meetings(request, id, courseList):
 		sections = sections[0:-1]
 		return redirect('pilot:offerings', id=id, sectionList=sections)
 	else:
-		print("MEETINGS: GET")
 		decoded_list = {}
-		print(course_list)
 		for course in course_list:
 			course_decode = Course.objects.get(id=int(course))
-			print(course_decode)
 			sections = list(Section.objects.filter(course=course_decode, semester=semester))
 			sections_offerings = {}
 			for section in sections:
@@ -104,4 +99,28 @@ def meetings(request, id, courseList):
 
 
 def offerings(request, id, sectionList):
-	return redirect('pilot:home', id=id)
+	student = Student.objects.filter(id=id).first()
+	section_list = sectionList.split("_")
+	if request.method == 'POST':
+		return redirect('pilot:home', id=id)
+	else:
+		vacant = []
+		full= []
+
+		for section in section_list:
+			with transaction.atomic():
+				pilot_offering = PilotOffering.objects.get(id=int(section))
+				if pilot_offering.enrolment < pilot_offering.size:
+					vacant.append(pilot_offering)
+					pilot_offering.students.add(student)
+				else:
+					full.append(pilot_offering)
+					pilot_offering.waitlist.add(student)
+				pilot_offering.save()
+		context = {
+			'student': student,
+			'enrolled': vacant,
+			'waitlisted': full,
+			'sections': section_list
+		}
+		return render(request, 'pilot/offerings.html/', context=context)
