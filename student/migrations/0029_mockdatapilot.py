@@ -37,17 +37,18 @@ def add_mock(apps, schema_editor):
 			if Course.objects.filter(school="jhu", code=code).exists():
 				course = Course.objects.get(school="jhu", code=code)
 				courseint, created = CourseIntegration.objects.get_or_create(course=course, integration=integration)
+				courseint.semester.add(s20)
 				courseint.save()
 				if Section.objects.filter(course_id=course.id, semester=s20, section_type='L').exists():
 					sections = list(Section.objects.filter(course_id=course.id, semester=s20, section_type='L'))
 					for section in sections:
-						offering1, created = PilotOffering.objects.get_or_create(day='M', time_start="5:00pm", time_end="7:00pm", size=10)
+						offering1, created = PilotOffering.objects.get_or_create(day='M', time_start="5:00pm", time_end="7:00pm", size=10, course_name=course.name)
 						offering1.sections.add(section.id)
 						offering1.save()
-						offering2, created = PilotOffering.objects.get_or_create(day='T', time_start="5:00pm", time_end="7:00pm", size=10)
+						offering2, created = PilotOffering.objects.get_or_create(day='T', time_start="5:00pm", time_end="7:00pm", size=10,course_name=course.name)
 						offering2.sections.add(section.id)
 						offering2.save()
-						offering3, created = PilotOffering.objects.get_or_create(day='W', time_start="5:00pm", time_end="7:00pm", size=10)
+						offering3, created = PilotOffering.objects.get_or_create(day='W', time_start="5:00pm", time_end="7:00pm", size=10,course_name=course.name)
 						offering3.sections.add(section.id)
 						offering3.save()
 
@@ -56,7 +57,7 @@ def add_mock(apps, schema_editor):
 class Migration(migrations.Migration):
 
 	dependencies = [
-		('student', '0026_pilotoffering'),
+		('student', '0028_pilotoffering_course_name'),
 	]
 
 	operations = [

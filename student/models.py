@@ -163,7 +163,7 @@ class PilotOffering(models.Model):
     course_name = models.CharField(max_length=100, null=True)
 
     def __str__(self):
-        return "Day: {0}, Time: {0} - {0}".format(self.day, self.time_start, self.time_end)
+        return "Course: {0}, Day: {0}, Time: {0} - {0}".format(self.course_name, self.day, self.time_start, self.time_end)
 
     def __unicode__(self):
-        return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
+        return "Course: %s, Day: %s, Time: %s - %s" % (self.course_name, self.day, self.time_start, self.time_end)
