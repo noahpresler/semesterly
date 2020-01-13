@@ -8,7 +8,6 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0033_auto_20200108_1756'),
         ('student', '0025_student_pre_health'),
     ]
 
