@@ -114,17 +114,28 @@ def offerings(request, id, sectionList):
 		for section in section_list:
 			with transaction.atomic():
 				pilot_offering = PilotOffering.objects.get(id=int(section))
-				if pilot_offering.enrolment < pilot_offering.size:
-					vacant.append(pilot_offering)
-					pilot_offering.students.add(student)
-				else:
-					full.append(pilot_offering)
-					pilot_offering.waitlist.add(student)
+				signedup = False
+				for person in pilot_offering.students.all():
+					if person == student:
+						signedup = True
+						message = 'You are already enrolled in this course'
+				for person in pilot_offering.waitstudents.all():
+					if person == student:
+						signedup = True
+						message = 'You are already on the waitlist for this course'
+				if not signedup:
+					if pilot_offering.enrolment < pilot_offering.size:
+						vacant.append(pilot_offering)
+						pilot_offering.students.add(student)
+					else:
+						full.append(pilot_offering)
+						pilot_offering.waitlist.add(student)
 				pilot_offering.save()
 		context = {
 			'student': student,
 			'enrolled': vacant,
 			'waitlisted': full,
-			'sections': section_list
+			'sections': section_list,
+			'message': message
 		}
 		return render(request, 'pilot/offerings.html/', context=context)

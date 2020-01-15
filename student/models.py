@@ -164,7 +164,8 @@ class PilotOffering(models.Model):
     size = models.IntegerField(default=10)
     enrolment = models.IntegerField(default=0)
     waitlist = models.IntegerField(default=0)
-    students = models.ManyToManyField(Student)
+    students = models.ManyToManyField(Student, related_name="enrolled_students")
+    wait_students = models.ManyToManyField(Student, related_name="waitlisted_students")
     course_name = models.CharField(max_length=100, null=True)
 
     def __str__(self):
