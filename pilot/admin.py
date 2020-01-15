@@ -9,3 +9,5 @@ admin.site.register(Student)
 admin.site.register(Section)
 admin.site.register(Semester)
 admin.site.register(PilotOffering)
+
+

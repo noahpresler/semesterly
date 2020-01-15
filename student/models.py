@@ -57,6 +57,11 @@ class Student(models.Model):
     jhed = models.CharField(max_length=10, null=True, default='')
     pre_health = models.NullBooleanField(null=True, default=False)
 
+    def __str__(self):
+        return "{0}".format(self.jhed)
+
+    def __unicode__(self):
+        return "%s" % (self.jhed)
 
     def get_token(self):
         return TimestampSigner().sign(self.id).split(':', 1)[1]
@@ -151,14 +156,14 @@ class RegistrationToken(models.Model):
 
 class PilotOffering(models.Model):
     sections = models.ManyToManyField(timetable_models.Section)
-    day = models.CharField(max_length=1)
+    day = models.CharField(max_length=2)
     date_start = models.CharField(max_length=15, null=True)
     date_end = models.CharField(max_length=15, null=True)
     time_start = models.CharField(max_length=15)
     time_end = models.CharField(max_length=15)
-    size = models.IntegerField(default=-1)
-    enrolment = models.IntegerField(default=-1)
-    waitlist = models.IntegerField(default=-1)
+    size = models.IntegerField(default=10)
+    enrolment = models.IntegerField(default=0)
+    waitlist = models.IntegerField(default=0)
     students = models.ManyToManyField(Student)
     course_name = models.CharField(max_length=100, null=True)
 

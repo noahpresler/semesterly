@@ -22,13 +22,18 @@ def info(request, id):
 	if request.method == 'POST':
 		form = StudentForm(request.POST)
 		student_object, created = Student.objects.get_or_create(id=id)
-		print form.errors
 		if form.is_valid():
 			student_object.hopid = form.cleaned_data['hopid']
+			student_object.save()
 			student_object.jhed = form.cleaned_data['jhed']
+			student_object.save()
 			student_object.class_year = form.cleaned_data['class_year']
+			student_object.save()
 			student_object.major = form.cleaned_data['major']
-			student_object.pre_health = form.cleaned_data['pre_health']
+			student_object.save()
+			pre_h = form.cleaned_data['pre_health']
+			pre_h = {'True': True, 'False': False, 'None': None}[pre_h]
+			student_object.pre_health = pre_h
 			student_object.save()
 		return redirect('pilot:studentinfo', id=student_object.id)
 	else:
@@ -39,7 +44,7 @@ def student_info(request, id):
 	if request.method == 'POST':
 		return redirect('pilot:courses', id=id)
 	else:
-		student, created = Student.objects.get_or_create(id=id)
+		student = Student.objects.filter(id=id).first()
 		context = {
 			'student': student
 		}
@@ -54,10 +59,8 @@ def courses(request, id):
 		for course in course_list:
 			courses_selected += str(course) + "_"
 		courses_selected = courses_selected[0:-1]
-		print(courses_selected)
 		return redirect('pilot:meetings', id=id, courseList=courses_selected)
 	else:
-		print("COURSES: GET")
 		COURSE_LIST = []
 		for course in Course.objects.all():
 			if CourseIntegration.objects.filter(course_id=course.id, integration_id=3).exists():

@@ -12,7 +12,7 @@
 		<div class="course-card {%  cycle 'semesterly-red' 'semesterly-blue' 'semesterly-green' 'semesterly-yellow' %}">
 			<div class="slot-bar
                                     {%  cycle 'semesterly-dark-red' 'semesterly-dark-blue' 'semesterly-dark-green' 'semesterly-dark-yellow' %}"></div>
-			<p class="stat-course">{{ meeting }}</p>
+			<p class="stat-course">{{ meeting.course_name }}</p>
 			<p>{{ meeting.time_start}} - {{meeting.time_end}} {{ meeting.day }}</p>
 		</div>
 		{% endfor %}
@@ -30,7 +30,7 @@
 		<div class="course-card {%  cycle 'semesterly-red' 'semesterly-blue' 'semesterly-green' 'semesterly-yellow' %}">
 			<div class="slot-bar
 										{%  cycle 'semesterly-dark-red' 'semesterly-dark-blue' 'semesterly-dark-green' 'semesterly-dark-yellow' %}"></div>
-			<p class="stat-course">{{ meeting }}</p>
+			<p class="stat-course">{{ meeting.course_name }}</p>
 			<p>{{ meeting.time_start}} - {{meeting.time_end}} {{ meeting.day }}</p>
 		</div>
 		{% endfor %}
