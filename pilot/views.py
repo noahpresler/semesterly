@@ -110,7 +110,7 @@ def offerings(request, id, sectionList):
 	else:
 		vacant = []
 		full= []
-
+		message = ""
 		for section in section_list:
 			with transaction.atomic():
 				pilot_offering = PilotOffering.objects.get(id=int(section))
@@ -119,7 +119,7 @@ def offerings(request, id, sectionList):
 					if person == student:
 						signedup = True
 						message = 'You are already enrolled in this course'
-				for person in pilot_offering.waitstudents.all():
+				for person in pilot_offering.wait_students.all():
 					if person == student:
 						signedup = True
 						message = 'You are already on the waitlist for this course'
