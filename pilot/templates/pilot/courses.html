@@ -7,18 +7,13 @@
 	<form method="post">
 		<fieldset>
 		{% csrf_token %}
-			{%for course in courses%}
 			<div class="form-group">
-				<div style="float: left; margin-top: 7px">
-					<input type="checkbox" class="form-control" name="course_list" value="{{course.id}}" id="course_id" style="float:left">
-				</div>
-				<div style="float: left; margin-left: 20px">
-					<label for="course_id" style="float:left">{{ course.name }}</label>
-				</div>
-				<br>
-			</div>
+			{%for course in courses%}
+				<input type="checkbox" class="form-control" name="course_list" value="{{course.id}}" id="course_id" style="width: 25px; float:left">
+				<label for="course_id" >{{ course.name }}</label>
+			<br>
 			{%endfor%}
-
+			</div>
 
 
 		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">
