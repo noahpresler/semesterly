@@ -5,16 +5,25 @@
 	<p class="text-muted">Take a look at the PILOT-supported courses below and select the courses you are registered for.
 		<b>Some courses are distinguished by professor.</b></p>
 	<form method="post">
+		<fieldset>
 		{% csrf_token %}
-		<div class="form-group">
 			{%for course in courses%}
-				<input type="checkbox" class="form-control" name="course_list" value="{{course.id}}" id="course_id">
-				<label for="course_id">{{ course.name }}</label>
+			<div class="form-group">
+				<div style="float: left; margin-top: 7px">
+					<input type="checkbox" class="form-control" name="course_list" value="{{course.id}}" id="course_id" style="float:left">
+				</div>
+				<div style="float: left; margin-left: 20px">
+					<label for="course_id" style="float:left">{{ course.name }}</label>
+				</div>
 				<br>
+			</div>
 			{%endfor%}
-		</div>
+
+
+
 		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">
 		<p id="select_text" class="errorlist"></p>
+		</fieldset>
 	</form>
 	<script>
 		function validateAndSend() {
