@@ -62,9 +62,9 @@ def courses(request, id):
 		return redirect('pilot:meetings', id=id, courseList=courses_selected)
 	else:
 		COURSE_LIST = []
-		for course in Course.objects.all():
-			if CourseIntegration.objects.filter(course_id=course.id, integration_id=3).exists():
-				COURSE_LIST.append(course)
+		for courseint in CourseIntegration.objects.filter(integration_id=3):
+			if Course.objects.filter(id=courseint.course_id).exists():
+				COURSE_LIST.append(Course.objects.get(id=courseint.course_id))
 		context = {
 			'courses': COURSE_LIST,
 			'student': student
@@ -127,9 +127,11 @@ def offerings(request, id, sectionList):
 					if pilot_offering.enrolment < pilot_offering.size:
 						vacant.append(pilot_offering)
 						pilot_offering.students.add(student)
+						pilot_offering.enrolment = pilot_offering.students.size()
 					else:
 						full.append(pilot_offering)
-						pilot_offering.waitlist.add(student)
+						pilot_offering.wait_students.add(student)
+						pilot_offering.waitlist = pilot_offering.wait_students.size()
 				pilot_offering.save()
 		context = {
 			'student': student,
