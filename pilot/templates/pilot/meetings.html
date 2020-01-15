@@ -2,8 +2,8 @@
 {% block content %}
 <div class="content-section">
 	<h3>Select a PILOT section below </h3>
-	<p class="text-muted">Take a look at the Course and PILOT sections below and select the PILOT section you would like to register for. <b> Note that some sections are specific to the course section you are enrolled in.</b></p>
-
+	<p class="text-muted">Take a look at the Course and PILOT sections below and select the PILOT section you would like to register for.
+		<b> Note that some sections are specific to the course section you are enrolled in.</b></p>
 	<form method="post">
 		{% csrf_token %}
 		<div class="form-group">
@@ -23,9 +23,7 @@
 			{%endfor%}
 		</div>
 		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">
-		<p id="select_text" class="errorlist">
-
-		</p>
+		<p id="select_text" class="errorlist"></p>
 	</form>
 	<script>
 		function validateAndSend() {

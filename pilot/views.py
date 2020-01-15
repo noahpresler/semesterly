@@ -4,6 +4,7 @@ from timetable.models import CourseIntegration, Course, Section, Semester
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import StudentForm
 from django.db import transaction
+import semesterly.views
 
 
 def index(request, id):
@@ -102,7 +103,7 @@ def offerings(request, id, sectionList):
 	student = Student.objects.filter(id=id).first()
 	section_list = sectionList.split("_")
 	if request.method == 'POST':
-		return redirect('pilot:home', id=id)
+		return redirect('pilot:semlyhome')
 	else:
 		vacant = []
 		full= []

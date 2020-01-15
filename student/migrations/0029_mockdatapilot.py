@@ -28,7 +28,7 @@ def add_mock(apps, schema_editor):
 		"EN.625.109"
 	]
 
-	integration, created = Integration.objects.get_or_create(name="Pilot")
+	integration, created = Integration.objects.get_or_create(name="PILOT")
 	integration.save()
 	PilotOffering = apps.get_model('student', 'PilotOffering')
 	if Semester.objects.filter(year="2020", name="Spring").exists():
@@ -36,11 +36,11 @@ def add_mock(apps, schema_editor):
 		for code in pilot_codes:
 			if Course.objects.filter(school="jhu", code=code).exists():
 				course = Course.objects.get(school="jhu", code=code)
-				courseint, created = CourseIntegration.objects.get_or_create(course=course, integration=integration)
+				courseint, created = CourseIntegration.objects.get_or_create(course_id=course.id, integration_id=integration.id)
 				courseint.semester.add(s20)
 				courseint.save()
-				if Section.objects.filter(course_id=course.id, semester=s20, section_type='L').exists():
-					sections = list(Section.objects.filter(course_id=course.id, semester=s20, section_type='L'))
+				if Section.objects.filter(course_id=course.id, semester=s20).exists():
+					sections = list(Section.objects.filter(course_id=course.id, semester=s20))
 					for section in sections:
 						offering1, created = PilotOffering.objects.get_or_create(day='M', time_start="5:00pm", time_end="7:00pm", size=10, course_name=course.name)
 						offering1.sections.add(section.id)

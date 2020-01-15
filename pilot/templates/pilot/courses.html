@@ -2,8 +2,8 @@
 {% block content %}
 <div class="content-section">
 	<h3>Select your currently enrolled courses </h3>
-	<p class="text-muted">Take a look at the PILOT-supported courses below and select the courses you are registered for. <b>Some courses are distinguished by professor.</b></p>
-
+	<p class="text-muted">Take a look at the PILOT-supported courses below and select the courses you are registered for.
+		<b>Some courses are distinguished by professor.</b></p>
 	<form method="post">
 		{% csrf_token %}
 		<div class="form-group">
@@ -14,9 +14,7 @@
 			{%endfor%}
 		</div>
 		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">
-		<p id="select_text" class="errorlist">
-
-		</p>
+		<p id="select_text" class="errorlist"></p>
 	</form>
 	<script>
 		function validateAndSend() {
