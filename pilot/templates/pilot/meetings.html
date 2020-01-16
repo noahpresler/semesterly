@@ -8,19 +8,25 @@
 		{% csrf_token %}
 		<div class="form-group">
 			{%for course, sections in courses.items%}
-			<b>{{ course.name }}</b>
-				<br>
-				{%for section, offerings in sections.items%}
-					<p class="text-muted"><b>{{ section.instructors }}, {{section.meeting_section}}</b></p>
-					{%for offering in offerings%}
-						<input type="radio" class="form-control" name="{{course.id}}" value="{{offering.id}}" id="sect_id">
-						<label for="sect_id">{{offering.day}}, {{offering.time_start}}-{{offering.time_end}}</label>
-						<br>
+
+					<b>{{ course.name }}</b><br>
+			<div style="width: 100%; height: auto; display: flex; flex-direction: row; flex-wrap: wrap">
+					{%for section, offerings in sections.items%}
+						<div style="float: left; margin: 10px; width: 200px; display: inline-block">
+							<p class="text-muted"><b>{{ section.instructors }}, {{section.meeting_section}}</b></p>
+								{%for offering in offerings%}
+									<input type="radio" class="form-control" name="{{course.id}}" value="{{offering.id}}" id="sect_id" style="
+									width: 25px; float:left">
+									<label for="sect_id">{{offering.day}}, {{offering.time_start}}-{{offering.time_end}}</label>
+									<br>
+								{%endfor%}
+							<br>
+						</div>
 					{%endfor%}
-					<br>
-				{%endfor%}
-				<br>
+				</div>
 			{%endfor%}
+
+
 		</div>
 		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">
 		<p id="select_text" class="errorlist"></p>
