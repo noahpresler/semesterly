@@ -127,11 +127,11 @@ def offerings(request, id, sectionList):
 					if pilot_offering.enrolment < pilot_offering.size:
 						vacant.append(pilot_offering)
 						pilot_offering.students.add(student)
-						pilot_offering.enrolment = pilot_offering.students.size()
+						pilot_offering.enrolment = len(pilot_offering.students.all())
 					else:
 						full.append(pilot_offering)
 						pilot_offering.wait_students.add(student)
-						pilot_offering.waitlist = pilot_offering.wait_students.size()
+						pilot_offering.waitlist = len(pilot_offering.wait_students.all())
 				pilot_offering.save()
 		context = {
 			'student': student,
