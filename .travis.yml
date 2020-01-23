@@ -20,7 +20,7 @@ cache:
   - $HOME/.cache/pip
 install:
 - wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-- sudo -E apt-get -yq install google-chrome-stable
+- sudo -E apt-get -yq --allow-unauthenticated install google-chrome-stable
 - nvm install $NODE_VERSION
 - npm -g install chromedriver
 - npm -g install jest@20
