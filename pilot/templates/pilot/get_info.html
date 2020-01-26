@@ -6,6 +6,14 @@
 	<form method="post">
 		{% csrf_token %}
 		<div class="form-group">
+			<label for="id_first">First Name:</label>
+			<input value="{{student.first_name}}" type="text" class="form-control" name="first_name" required id="id_first">
+		</div>
+		<div class="form-group">
+			<label for="id_last">Last Name:</label>
+			<input value="{{student.last_name}}" type="text" class="form-control" name="last_name" required id="id_last">
+		</div>
+		<div class="form-group">
 			<label for="id_hopid">HopID:</label>
 			<input value="{{student.hopid}}" type="text" class="form-control" placeholder="Tip: Your HopID can be found in the top right of SIS." name="hopid" required id="id_hopid">
 		</div>
@@ -81,6 +89,13 @@
 		<div class="form-group">
 			<label for="id_pre_health">Pre Health:</label>
 			<select class="form-control" name="pre_health" required id="id_pre_health">
+				<option value="True">Yes</option>
+				<option value="False">No</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="id_dis">Do you require disability accommodations?</label>
+			<select class="form-control" name="diss" required id="id_dis">
 				<option value="True">Yes</option>
 				<option value="False">No</option>
 			</select>

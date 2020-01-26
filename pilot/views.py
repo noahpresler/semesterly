@@ -23,6 +23,10 @@ def info(request, id):
 		form = StudentForm(request.POST)
 		student_object, created = Student.objects.get_or_create(id=id)
 		if form.is_valid():
+			student_object.first_name = form.cleaned_data['first_name']
+			student_object.save()
+			student_object.last_name = form.cleaned_data['last_name']
+			student_object.save()
 			student_object.hopid = form.cleaned_data['hopid']
 			student_object.save()
 			student_object.jhed = form.cleaned_data['jhed']
@@ -34,6 +38,10 @@ def info(request, id):
 			pre_h = form.cleaned_data['pre_health']
 			pre_h = {'True': True, 'False': False, 'None': None}[pre_h]
 			student_object.pre_health = pre_h
+			student_object.save()
+			diss = form.cleaned_data['diss']
+			diss = {'True': True, 'False': False, 'None': None}[diss]
+			student_object.disabilities = diss
 			student_object.save()
 		return redirect('pilot:studentinfo', id=student_object.id)
 	else:

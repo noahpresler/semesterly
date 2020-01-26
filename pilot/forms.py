@@ -20,9 +20,12 @@ CHOICES = [
 
 
 class StudentForm(forms.Form):
+    first_name = forms.CharField(required=True, widget=forms.TextInput)
+    last_name= forms.CharField(required=True, widget=forms.TextInput)
     hopid = forms.CharField(required=True, widget=forms.TextInput)
     jhed = forms.CharField(required=True, widget=forms.TextInput)
     major = forms.ChoiceField(required=True, widget=forms.Select, choices=MAJOR_CHOICES)
     class_year = forms.ChoiceField(required=True, widget=forms.Select, choices=GRAD_YEAR_CHOICES)
     pre_health = forms.ChoiceField(required=True, widget=forms.Select, choices=CHOICES)
+    diss = forms.ChoiceField(required=True, widget=forms.Select, choices=CHOICES)
 
