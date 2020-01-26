@@ -56,6 +56,9 @@ class Student(models.Model):
     hopid = models.CharField(max_length=10, null=True, default='')
     jhed = models.CharField(max_length=10, null=True, default='')
     pre_health = models.NullBooleanField(null=True, default=False)
+    first_name = models.CharField(max_length=255, default='', null=True)
+    last_name = models.CharField(max_length=255, default='', null=True)
+    disabilities = models.NullBooleanField(null=True, default=False)
 
     def __str__(self):
         return "{0}".format(self.jhed)
