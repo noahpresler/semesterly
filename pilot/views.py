@@ -11,11 +11,25 @@ def index(request, id):
 	if request.method == 'POST':
 		return redirect('pilot:info', id=id)
 	else:
-		student,created = Student.objects.get_or_create(id=id)
-		context = {
-			'student': student
-		}
-		return render(request, 'pilot/welcome.html/', context=context)
+		student, created = Student.objects.get_or_create(id=id)
+		if student.pilot_registration:
+			enrolled = list(PilotOffering.objects.filter(students=student))
+			waitlist = list(PilotOffering.objects.filter(wait_students=student))
+			section_list = enrolled + waitlist
+			message = ""
+			context = {
+				'student': student,
+				'enrolled': enrolled,
+				'waitlisted': waitlist,
+				'sections': section_list,
+				'message': message
+			}
+			return render(request, 'pilot/offerings.html/', context=context)
+		else:
+			context = {
+				'student': student
+			}
+			return render(request, 'pilot/welcome.html/', context=context)
 
 
 def info(request, id):
@@ -119,6 +133,8 @@ def offerings(request, id, sectionList):
 		vacant = []
 		full= []
 		message = ""
+		student.pilot_registration = True
+		student.save()
 		for section in section_list:
 			with transaction.atomic():
 				pilot_offering = PilotOffering.objects.get(id=int(section))

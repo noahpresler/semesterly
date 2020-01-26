@@ -8,7 +8,6 @@
 		{% csrf_token %}
 		<div class="form-group">
 			{%for course, sections in courses.items%}
-
 					<b>{{ course.name }}</b><br>
 			<div style="width: 100%; height: auto; display: flex; flex-direction: row; flex-wrap: wrap">
 					{%for section, offerings in sections.items%}
