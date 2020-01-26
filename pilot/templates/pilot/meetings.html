@@ -15,17 +15,24 @@
 						<div style="float: left; margin: 10px; width: 200px; display: inline-block">
 							<p class="text-muted"><b>{{ section.instructors }}, {{section.meeting_section}}</b></p>
 								{%for offering in offerings%}
-									<input type="radio" class="form-control" name="{{course.id}}" value="{{offering.id}}" id="sect_id" style="
+									{% if offering.enrolment >= offering.size %}
+										<input type="radio" class="form-control" name="{{course.id}}" value="{{offering.id}}" id="sect_id_full" style="
+									width: 25px; float:left; color: red">
+										<label for="sect_id_full" style="color: red">{{offering.day}}, {{offering.time_start}}-{{offering.time_end}}</label>
+										<br>
+									{% else %}
+										<input type="radio" class="form-control" name="{{course.id}}" value="{{offering.id}}" id="sect_id" style="
 									width: 25px; float:left">
-									<label for="sect_id">{{offering.day}}, {{offering.time_start}}-{{offering.time_end}}</label>
-									<br>
+										<label for="sect_id">{{offering.day}}, {{offering.time_start}}-{{offering.time_end}}</label>
+										<br>
+									{% endif %}
 								{%endfor%}
 							<br>
 						</div>
 					{%endfor%}
 				</div>
 			{%endfor%}
-
+		<p style="color: red"><b>*Sections in RED are FULL. Selecting these sections automatically puts you on the waitlist.*</b></p>
 
 		</div>
 		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">
