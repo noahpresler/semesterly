@@ -83,32 +83,11 @@ class SocialProfile extends React.Component {
       </a>
         );
 
-    const pilotButton = (
-      <a href={"/pilot"+this.props.userInfo.id} className="pilot-link">
-        <img
-          alt="logo"
-          className="pilot-logo"
-          src="/static/img/pilot-logo.png"
-        /> <p className="pilot-login-desc"> Register for PILOT </p>
-      </a>
-    )
-
-    const pilotLogIn = (
-      <a className="social-login-pilot" onClick={() => this.props.triggerAcquisitionModal()}>
-        <img
-          alt="logo"
-          className="pilot-logo"
-          src="/static/img/pilot-logo.png"
-        /> <p className="pilot-login-desc">  Log in before registering for PILOT </p>
-      </a>
-    )
-    const pilot = this.props.userInfo.isLoggedIn ? pilotButton : pilotLogIn;
     const social = this.props.userInfo.isLoggedIn ? loggedIn : loggedOut;
     return (
       <div
         className={classNames('social', { 'logged-in': this.props.userInfo.isLoggedIn }, 'no-print')}
       >
-        {pilot}
         {social}
       </div>
     );
