@@ -22,6 +22,7 @@ import SlotManagerContainer from './containers/slot_manager_container';
 import CellContainer from './containers/cell_container';
 import { DAYS } from '../constants/constants';
 import { ShareLink } from './master_slot';
+import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
 const Row = (props) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
@@ -306,6 +307,29 @@ class Calendar extends React.Component {
         </ReactTooltip>
       </div>
         );
+
+
+    const pilotButton = (
+      <a href={"/pilot"+this.props.userInfo.id} className="pilot-link">
+        <img
+          alt="logo"
+          className="pilot-logo"
+          src="/static/img/pilot-logo.png"
+        /> <p className="pilot-login-desc"> Register for PILOT </p>
+      </a>
+    )
+
+    const pilotLogIn = (
+      <a className="social-login-pilot">
+        <img
+          alt="logo"
+          className="pilot-logo"
+          src="/static/img/pilot-logo.png"
+        /> <p className="pilot-login-desc">  Log in to Semester.ly first to register for PILOT </p>
+      </a>
+    )
+    const pilot = this.props.userInfo.isLoggedIn ? pilotButton : pilotLogIn;
+
     return (
       <div className={classnames('calendar fc fc-ltr fc-unthemed week-calendar',
         { hoverCustomSlot: this.state.hoverCustomSlot })}
@@ -314,6 +338,7 @@ class Calendar extends React.Component {
           <div className="fc-left">
             { !this.state.hoverCustomSlot ? <PaginationContainer /> : null }
             { description }
+            { pilot }
           </div>
           <div className="fc-right">
             { addSISButton }
@@ -437,6 +462,7 @@ Calendar.propTypes = {
   shareLink: PropTypes.string,
   uses12HrTime: PropTypes.bool.isRequired,
   registrarSupported: PropTypes.bool.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
 };
 
 export default Calendar;
