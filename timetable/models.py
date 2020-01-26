@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (C) 2017 Semester.ly Technologies, LLC
 #
 # Semester.ly is free software: you can redistribute it and/or modify
@@ -165,6 +166,9 @@ class Course(models.Model):
         ratings = Evaluation.objects.only('course', 'score').filter(course=self)
         return sum([rating.score for rating in ratings]), len(ratings)
 
+    def __unicode__(self):
+        return u'%s' % (self.name)
+
 
 class Section(models.Model):
     """
@@ -217,8 +221,10 @@ class Section(models.Model):
         return self.enrolment >= 0 and self.size >= 0 and self.enrolment >= self.size
 
     def __str__(self):
-        return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section,
-                                                                 self.semester)
+        return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section, self.semester)
+
+    def __unicode__(self):
+        return "Course: %s; Section: %s; Semester: %s" % (self.course, self.meeting_section, self.semester)
 
 
 class Offering(models.Model):
