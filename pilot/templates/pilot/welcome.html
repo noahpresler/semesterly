@@ -5,12 +5,16 @@
 		{% csrf_token %}
 		<fieldset>
 			<h3>
-				Welcome to PILOT Registration! {{ student.pilot_registration }}
+				Welcome to PILOT Registration!
 			</h3>
-			<p class="text-muted">Login with SIS in order to register for sections, keep up with the status of your enrollments, and more!</p>
+			<p class="text-muted">As you know, the PILOT program is very popular. Please be patient during this registration process as sections fill up. <br> With this in mind, we recommend you have the following information handy: </p>
+				<p class="text-muted"> --> Your JHED and HOPID<br>
+				--> The courses you are interested in registering for <br>
+				--> The section number you are enrolled in <br>
+			    --> Your weekly schedule </p>
 		</fieldset>
 		<div>
-			<button type="submit">Begin Registration!</button>
+			<button type="submit" class="green-button">Begin Registration!</button>
 		</div>
 	</form>
 </div>

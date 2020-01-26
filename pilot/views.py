@@ -8,10 +8,13 @@ import semesterly.views
 
 
 def index(request, id):
+	student = get_object_or_404(Student, id=id)
 	if request.method == 'POST':
-		return redirect('pilot:info', id=id)
+		if student.pilot_registration:
+			return redirect('pilot:semlyhome')
+		else:
+			return redirect('pilot:info', id=id)
 	else:
-		student, created = Student.objects.get_or_create(id=id)
 		if student.pilot_registration:
 			enrolled = list(PilotOffering.objects.filter(students=student))
 			waitlist = list(PilotOffering.objects.filter(wait_students=student))
@@ -35,7 +38,7 @@ def index(request, id):
 def info(request, id):
 	if request.method == 'POST':
 		form = StudentForm(request.POST)
-		student_object, created = Student.objects.get_or_create(id=id)
+		student_object = get_object_or_404(Student, id=id)
 		if form.is_valid():
 			student_object.first_name = form.cleaned_data['first_name']
 			student_object.save()
@@ -64,9 +67,9 @@ def info(request, id):
 
 def student_info(request, id):
 	if request.method == 'POST':
-		return redirect('pilot:courses', id=id)
+		return redirect('pilot:courses', id=id, permanent=True)
 	else:
-		student = Student.objects.filter(id=id).first()
+		student = get_object_or_404(Student, id=id)
 		context = {
 			'student': student
 		}
@@ -74,7 +77,7 @@ def student_info(request, id):
 
 
 def courses(request, id):
-	student = Student.objects.filter(id=id).first()
+	student = get_object_or_404(Student, id=id)
 	if request.method == 'POST':
 		course_list = request.POST.getlist('course_list')
 		courses_selected = ""
@@ -104,7 +107,7 @@ def meetings(request, id, courseList):
 			section = request.POST.getlist(course)
 			sections += str(section[0]) + "_"
 		sections = sections[0:-1]
-		return redirect('pilot:offerings', id=id, sectionList=sections)
+		return redirect('pilot:offerings', id=id, sectionList=sections, permanent=True)
 	else:
 		decoded_list = {}
 		for course in course_list:
@@ -125,10 +128,10 @@ def meetings(request, id, courseList):
 
 
 def offerings(request, id, sectionList):
-	student = Student.objects.filter(id=id).first()
+	student = get_object_or_404(Student, id=id)
 	section_list = sectionList.split("_")
 	if request.method == 'POST':
-		return redirect('pilot:semlyhome')
+		return redirect('pilot:semlyhome', permanent=True)
 	else:
 		vacant = []
 		full= []
