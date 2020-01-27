@@ -13,10 +13,23 @@ def index(request):
 		return redirect('pilot:info')
 	else:
 		student = Student.objects.get(user=request.user)
-		context = {
-			'student': student
-		}
-		return render(request, 'pilot/welcome.html/', context=context)
+		if student.disabilities is None:
+			context = {
+				'student': student
+			}
+			return render(request, 'pilot/welcome.html/', context=context)
+		else:
+			vacant = PilotOffering.objects.filter(students=student)
+			full = PilotOffering.objects.filter(wait_students=student)
+			section_list= list(vacant) + list(full)
+			context = {
+				'student': student,
+				'enrolled': vacant,
+				'waitlisted': full,
+				'sections': section_list,
+				'message': ""
+			}
+			return render(request, 'pilot/offerings.html/', context=context)
 
 
 def info(request):
@@ -44,7 +57,7 @@ def info(request):
 
 def student_info(request):
 	if request.method == 'POST':
-		return redirect('pilot:courses')
+		return redirect('pilot:pilotcourses')
 	else:
 		student = get_student(request)
 		context = {
@@ -53,7 +66,7 @@ def student_info(request):
 		return render(request, 'pilot/student_info.html/', context=context)
 
 
-def courses(request, id):
+def pilotcourses(request):
 	student = get_student(request)
 	if request.method == 'POST':
 		course_list = request.POST.getlist('course_list')
@@ -84,7 +97,7 @@ def meetings(request, courseList):
 			section = request.POST.getlist(course)
 			sections += str(section[0]) + "_"
 		sections = sections[0:-1]
-		return redirect('pilot:offerings', id=id, sectionList=sections)
+		return redirect('pilot:offerings', sectionList=sections)
 	else:
 		decoded_list = {}
 		for course in course_list:

@@ -13,11 +13,11 @@ import semesterly.views
 app_name = 'pilot'
 urlpatterns = patterns('',
                        url(r'studentinfo/$', view.student_info, name='studentinfo'),
-                       url(r'courses/$', view.courses, name='courses'),
+                       url(r'pilotcourses/$', view.pilotcourses, name='pilotcourses'),
                        url(r'pilot/$', view.index, name='home'),
                        url(r'info/$', view.info, name='info'),
-                       url(r'courses/meetings/(?P<courseList>[\w\-]+)/$', view.meetings, name='meetings'),
-                       url(r'courses/offerings/(?P<sectionList>[\w\-]+)/$', view.offerings,
+                       url(r'pilotcourses/meetings/(?P<courseList>[\w\-]+)/$', view.meetings, name='meetings'),
+                       url(r'pilotcourses/offerings/(?P<sectionList>[\w\-]+)/$', view.offerings,
                            name='offerings'),
                        url(r'^$', helpers.mixins.FeatureFlowView.as_view(), name='semlyhome'),
                        )
