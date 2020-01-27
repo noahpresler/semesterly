@@ -310,7 +310,7 @@ class Calendar extends React.Component {
 
 
     const pilotButton = (
-      <a href={"/pilot"+this.props.userInfo.id} className="pilot-link">
+      <a href={'/pilot/'} className="pilot-link">
         <img
           alt="logo"
           className="pilot-logo"
