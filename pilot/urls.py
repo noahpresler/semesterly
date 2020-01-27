@@ -21,5 +21,3 @@ urlpatterns = patterns('',
                            name='offerings'),
                        url(r'^$', helpers.mixins.FeatureFlowView.as_view(), name='semlyhome'),
                        )
-
-
