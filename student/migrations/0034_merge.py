@@ -9,7 +9,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('student', '0031_auto_20200126_1700'),
-        ('student', '0033_chemistry_data'),
     ]
 
     operations = [
