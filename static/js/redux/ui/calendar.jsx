@@ -22,7 +22,7 @@ import SlotManagerContainer from './containers/slot_manager_container';
 import CellContainer from './containers/cell_container';
 import { DAYS } from '../constants/constants';
 import { ShareLink } from './master_slot';
-import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 const Row = (props) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
@@ -317,7 +317,7 @@ class Calendar extends React.Component {
           src="/static/img/pilot-logo.png"
         /> <p className="pilot-login-desc"> Register for PILOT </p>
       </a>
-    )
+    );
 
     const pilotLogIn = (
       <a className="social-login-pilot">
@@ -327,7 +327,8 @@ class Calendar extends React.Component {
           src="/static/img/pilot-logo.png"
         /> <p className="pilot-login-desc">  Log in to Semester.ly first to register for PILOT </p>
       </a>
-    )
+    );
+
     const pilot = this.props.userInfo.isLoggedIn ? pilotButton : pilotLogIn;
 
     return (
