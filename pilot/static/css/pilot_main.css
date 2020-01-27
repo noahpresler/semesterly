@@ -1,7 +1,7 @@
 @font-face {
 	font-family: 'panquin';
 	src: local('panquin'),
-	url('fonts/panquin.woff2') format("truetype");
+	url('../fonts/panquin.woff2') format("truetype");
 }
 
 p {
