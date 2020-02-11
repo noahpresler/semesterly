@@ -8,7 +8,7 @@ configobj==4.7.2
 coreapi==2.3.0
 coverage==4.3.4
 dateparser==0.6.0
-Django==1.9.2
+Django==1.11.28
 django-cachalot==1.4.1
 django-celery==3.1.17
 django-celery-beat==1.0.1
