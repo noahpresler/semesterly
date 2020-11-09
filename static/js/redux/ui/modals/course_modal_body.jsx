@@ -117,9 +117,9 @@ class CourseModalBody extends React.Component {
 
     let shortCourseSection = '';
     const sectionType = Object.keys(this.props.sectionTypeToSections)[0];
-    if (sectionType != null){
+    if (sectionType != null) {
       const offeringSample = this.props.sectionTypeToSections[sectionType][0].offering_set[0];
-      if (offeringSample != null){
+      if (offeringSample != null) {
         if (offeringSample.is_short_course) {
           shortCourseSection = (
             <div>
