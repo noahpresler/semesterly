@@ -24,7 +24,7 @@ install:
 - sudo apt-get install dpkg
 - sudo -E apt-get -yq --allow-unauthenticated install google-chrome-stable
 - nvm install $NODE_VERSION
-- npm -g install chromedriver@79.0.0
+- npm -g install chromedriver
 - npm -g install jest@20
 - npm install
 - pip install --upgrade pip
