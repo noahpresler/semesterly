@@ -1,6 +1,6 @@
 os: linux
 sudo: required
-dist: bionic
+dist: xenial
 services:
   - xvfb
 language: python
