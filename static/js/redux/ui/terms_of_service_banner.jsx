@@ -37,7 +37,7 @@ class TermsOfServiceBanner extends React.Component {
         })}
       >
         <p>
-          By using Semester.ly you agree to our
+          By using HorarioTEC you agree to our
           <a href="/termsofservice" target="_blank" rel="noopener noreferrer">
             Terms of Service
           </a>
