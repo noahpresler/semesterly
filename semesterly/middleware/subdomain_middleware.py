@@ -22,3 +22,4 @@ class SubdomainMiddleware(object):
 			request.subdomain = subdomain
 		else:
 			request.subdomain = None
+		request.subdomain = 'itcr'
