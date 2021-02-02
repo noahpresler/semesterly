@@ -21,6 +21,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 import djcelery
+import dj_database_url
 import os
 import yaml
 
@@ -354,3 +355,6 @@ CELERYD_CHDIR = BASE_DIR
 # CELERYBEAT_SCHEDULE = {}
 
 # End Celery stuff.
+
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
