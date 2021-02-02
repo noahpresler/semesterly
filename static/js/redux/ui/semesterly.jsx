@@ -169,6 +169,9 @@ class Semesterly extends React.Component {
               <p className="data-last-updated no-print">Data last
                 updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
               <ul className="nav nav-pills no-print">
+              <li className="footer-button" role="presentation">
+                  <a href="https://semester.ly">Powered by Semester.ly</a>
+                </li>
                 <li className="footer-button" role="presentation">
                   <a href="/termsofservice">Terms</a>
                 </li>
@@ -176,34 +179,11 @@ class Semesterly extends React.Component {
                   <a href="/privacypolicy">Privacy</a>
                 </li>
                 <li className="footer-button" role="presentation">
-                  <a href="mailto:contact@semester.ly?Subject=Semesterly">
-                    Contact us
-                  </a>
-                </li>
-                <li className="footer-button" role="presentation">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="http://goo.gl/forms/YSltU2YI54PC9sXw1"
-                  >
-                    Feedback
-                  </a>
-                </li>
-                <li className="footer-button" role="presentation">
-                  <a
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    href="https://www.facebook.com/semesterly/"
-                  >
-                    Facebook
-                  </a>
-                </li>
-                <li className="footer-button" role="presentation">
                   <a
                     className="footer-button--github"
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="https://github.com/noahpresler/semesterly/"
+                    href="https://github.com/sgerli/semesterly/"
                   >
                     <i className="fa fa-github" />
                     Follow

@@ -194,14 +194,14 @@ class SideBar extends React.Component {
         { optionalSlotsHeader }
         { optionalSlots }
         <div id="sb-optional-slots" />
-        <a onClick={this.props.launchTextbookModal}>
+        {/*<a onClick={this.props.launchTextbookModal}>
           <h4 className="sb-header"> Textbooks
             <div className="sb-header-link"><i className="fa fa-external-link" />&nbsp;See all</div>
           </h4>
         </a>
         <div className="side-bar-section">
           <TextbookList courses={this.props.coursesInTimetable} />
-        </div>
+    </div> */}
       </div>
     );
   }

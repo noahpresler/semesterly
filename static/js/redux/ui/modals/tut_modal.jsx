@@ -91,7 +91,7 @@ class TutModal extends React.Component {
         <div className="tut-modal__wrapper">
           <div className="tut-modal__nav">
             { left }
-            <p>Welcome to Semester.ly</p>
+            <p>Bienvenido a HorarioTEC</p>
             { right }
           </div>
           <img

@@ -86,12 +86,12 @@ class TopBar extends React.Component {
           className="semesterly-logo no-print"
           src="/static/img/logo2.0-32x32.png"
         />
-        <div className="semesterly-name no-print">Semester.ly</div>
+        <div className="semesterly-name no-print">HorarioTEC</div>
         <div className="print-content print">
           {this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ?
             this.renderUserForPrint() : null}
           <div className="name-logo print">
-            <div className="semesterly-name-print print">Semester.ly</div>
+            <div className="semesterly-name-print print">HorarioTEC</div>
             <img
               alt="print logo"
               className="semesterly-logo-print print"
