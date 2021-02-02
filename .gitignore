@@ -57,3 +57,4 @@ webpack-stats.json
 workfile.html
 cache
 stunnel/
+staticfiles
