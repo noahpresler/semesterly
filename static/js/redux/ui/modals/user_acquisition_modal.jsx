@@ -74,7 +74,7 @@ class UserAcquisitionModal extends React.Component {
           <p className="method-details">Allows the option to friends in your classes.</p>
 
 
-          <div className="or-separator">
+          { /*<div className="or-separator">
             <span className="h6 or-separator--text">or</span>
             <hr />
           </div>
@@ -108,7 +108,7 @@ class UserAcquisitionModal extends React.Component {
               <i className="fa fa-envelope-o" />
             </span>
             <span>Email Coming Soon</span>
-          </button>
+          </button> */ }
         </div>
       </Modal>
     );

@@ -189,16 +189,6 @@ class Semesterly extends React.Component {
                     Follow
                   </a>
                 </li>
-                <li className="footer-button">
-                  <div
-                    className="fb-like"
-                    data-href="https://www.facebook.com/semesterly/"
-                    data-layout="button_count"
-                    data-action="like"
-                    data-show-faces="true"
-                    data-share="false"
-                  />
-                </li>
               </ul>
             </footer>
           </div>

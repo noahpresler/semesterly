@@ -102,11 +102,14 @@ class SignupModal extends React.Component {
               will not be shared with
               any other user without your permission.
             </div>
-            <a href="/login/facebook/">
+            {/*<a href="/login/facebook/">
               <div className="signup-button">
                 Signup!
               </div>
-            </a>
+    </a>*/}
+              <div className="signup-button">
+                Coming soon
+              </div>
           </div>
         </div>
       </Modal>
