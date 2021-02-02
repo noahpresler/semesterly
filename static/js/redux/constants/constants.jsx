@@ -15,7 +15,7 @@ GNU General Public License for more details.
 export const HALF_HOUR_HEIGHT = 25;
 export const MAX_TIMETABLE_NAME_LENGTH = 30; // Length of "This is my fucking timetable!!"
 
-export const DAYS = ['M', 'T', 'W', 'R', 'F'];
+export const DAYS = ['M', 'T', 'W', 'R', 'F', 'S', 'U'];
 
 export const FULL_WEEK_LIST = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
 

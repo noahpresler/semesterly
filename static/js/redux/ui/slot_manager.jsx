@@ -111,7 +111,7 @@ class SlotManager extends React.Component {
 
   getSlotsByDay() {
     const slotsByDay = {
-      M: [], T: [], W: [], R: [], F: [],
+      M: [], T: [], W: [], R: [], F: [], S: [], U: []
     };
 
     const hoveredSlot = this.props.hoveredSlot ||

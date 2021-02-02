@@ -154,11 +154,11 @@ class Slot extends React.Component {
     const bottom = ((((endHour - 8) * ((HALF_HOUR_HEIGHT * 2) + 2))) +
       ((endMinute) * (HALF_HOUR_HEIGHT / 30))) - 1;
     // the cumulative width of this slot and all of the slots it is conflicting with
-    const totalSlotWidth = 100 - (5 * this.props.depth_level);
+    const totalSlotWidth = 100 - (7 * this.props.depth_level);
     // the width of this particular slot
     const slotWidthPercentage = totalSlotWidth / this.props.num_conflicts;
     // the amount of left margin of this particular slot, in percentage
-    let pushLeft = (this.props.shift_index * slotWidthPercentage) + (5 * this.props.depth_level);
+    let pushLeft = (this.props.shift_index * slotWidthPercentage) + (7* this.props.depth_level);
     if (pushLeft === 50) {
       pushLeft += 0.5;
     }
