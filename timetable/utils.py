@@ -212,7 +212,7 @@ def get_day_to_usage(custom_events, school):
     """Initialize day_to_usage dictionary, which has custom events blocked out."""
     day_to_usage = {
         day: [set() for _ in range(14 * 60 / SCHOOLS_MAP[school].granularity)]
-        for day in ['M', 'T', 'W', 'R', 'F']
+        for day in ['M', 'T', 'W', 'R', 'F', 'S', 'U']
     }
 
     for event in custom_events:
