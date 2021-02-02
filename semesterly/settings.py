@@ -23,7 +23,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import djcelery
 import os
 import yaml
-import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -355,4 +354,3 @@ CELERYD_CHDIR = BASE_DIR
 # CELERYBEAT_SCHEDULE = {}
 
 # End Celery stuff.
-django_heroku.settings(locals())
