@@ -94,6 +94,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'umich': r'([A-Z]{2,8}\s\d{3})',
             'chapman': r'([A-Z]{2,4}\s\d{3})',
             'salisbury': r'([A-Z]{3,4} \d{2,3})',
+            'itcr': r'([A-Z]{2}\d{4})'
         }
         course_code_to_name = {}
         if self.context['school'] in school_to_course_regex:

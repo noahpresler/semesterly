@@ -103,7 +103,8 @@ def view_analytics_dashboard(request):
                 "calendar_exports_by_type": json.dumps({"ics": ics_calendar_exports, "google": google_calendar_exports}),
                 "jhu_most_popular_courses": [], # needs to be refactored; was causing timeout on server because too slow
                 "uoft_most_popular_courses": [], # needs to be refactored; was causing timeout on server because too slow
-                "umd_most_popular_courses": [] # needs to be refactored; was causing timeout on server because too slow
+                "umd_most_popular_courses": [], # needs to be refactored; was causing timeout on server because too slow
+                "itcr_most_popular_courses": []
             },
             context_instance=RequestContext(request))
     else:
