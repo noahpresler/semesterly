@@ -27,9 +27,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
                        url(r'^$', helpers.mixins.FeatureFlowView.as_view(), name='home'),
-                       url(r'about/*', TemplateView.as_view(template_name='about.html')),
-                       url(r'press/*', TemplateView.as_view(template_name='press.html')),
-                       url(r'notice', TemplateView.as_view(template_name='notice.html')),
                        url('', include('authpipe.urls')),
                        url('', include('timetable.urls')),
                        url('', include('courses.urls')),
