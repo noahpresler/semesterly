@@ -76,7 +76,7 @@ class SaveCalendarModal extends React.Component {
       >
         {modalHeader}
         <div className="save-calendar-modal__container">
-          <button
+          { /*<button
             className="btn abnb-btn" onClick={() => {
               if (!this.props.userInfo.isLoggedIn || !this.props.userInfo.GoogleSignedUp ||
                 !this.props.userInfo.GoogleLoggedIn) {
@@ -102,7 +102,7 @@ class SaveCalendarModal extends React.Component {
           <div className="or-separator">
             <span className="h6 or-separator--text">or</span>
             <hr />
-          </div>
+          </div>*/}
           <button
             className="btn abnb-btn secondary" onClick={() => {
               this.props.createICalFromTimetable();
