@@ -202,7 +202,6 @@ MIDDLEWARE_CLASSES = (
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
-    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -324,16 +323,6 @@ try:
     from local_settings import *
 except:
     pass
-
-if not DEBUG:
-    ROLLBAR = {
-        'access_token': '23c5a378cd1943cfb40d5217dfb7f766',
-        'environment': 'development' if DEBUG else 'production',
-        'root': BASE_DIR,
-    }
-    import rollbar
-    rollbar.init(**ROLLBAR)
-
 
 # Begin Celery stuff.
 djcelery.setup_loader()
