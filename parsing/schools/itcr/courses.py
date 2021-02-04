@@ -143,7 +143,10 @@ class Parser(BaseParser):
             self.ingestor['time_start'] = meeting['HINICIO'].encode('ascii', 'ignore')
             self.ingestor['time_end'] = meeting['HFIN'].encode('ascii', 'ignore')
             self.ingestor['days'] = [Parser.DAY_MAP.get(meeting['NOM_DIA'].encode('ascii', 'ignore'), '')]
-            self.ingestor['location'] = meeting['DSC_SEDE'].encode('ascii', 'ignore')
+            self.ingestor['location'] = {
+                        'building': meeting['DSC_SEDE'].encode('ascii', 'ignore'),
+                        'room': ''
+                    }
             self.ingestor.ingest_meeting(created_section)
 
     def start(self,
