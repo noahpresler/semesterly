@@ -18,7 +18,7 @@ import classnames from 'classnames';
 
 const CourseModalSection = ({ secName, instr, enrolment, waitlist, size, hoverSection,
                                unHoverSection, locked, lockOrUnlock,
-                               isOnActiveTimetable }) => {
+                               isOnActiveTimetable, location }) => {
   const seats = size - enrolment;
   let seatStatus = waitlist > 0 ? (`${waitlist} waitlist`) : (`${seats} open`);
   if (seats === -1 || size === -1) {
@@ -49,10 +49,14 @@ const CourseModalSection = ({ secName, instr, enrolment, waitlist, size, hoverSe
       </h4>
       <h5>{instr}</h5>
       <h6>
+        <span className="location">{location}</span>
+        { /*
         <span className={benchmark}>{seatStatus}</span>
         <span> / </span>
         <span className="total-seats">{sizeDisplay} seats</span>
+        */}
       </h6>
+      
       <i className="fa fa-lock" />
     </div>
   );

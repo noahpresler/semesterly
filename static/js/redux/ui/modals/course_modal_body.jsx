@@ -83,6 +83,7 @@ class CourseModalBody extends React.Component {
         enrolment={section.enrolment === -1 ? 0 : section.enrolment}
         waitlist={section.waitlist === -1 ? 0 : section.waitlist}
         size={section.size === -1 ? 0 : section.size}
+        location={section.offering_set[0].location ? section.offering_set[0].location : 'N/A'}
         locked={this.props.isSectionLocked(this.props.data.id, section.meeting_section)}
         isOnActiveTimetable={
           this.props.isSectionOnActiveTimetable(this.props.data.id, section.id)
