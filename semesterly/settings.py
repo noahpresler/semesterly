@@ -266,6 +266,8 @@ EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'semesterly.logging@gmail.com'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
+SECURE_SSL_REDIRECT = True
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
