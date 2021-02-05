@@ -60,3 +60,4 @@ stunnel/
 staticfiles
 
 *.env
+.devcontainer/

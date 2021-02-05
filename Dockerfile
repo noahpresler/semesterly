@@ -1,4 +1,4 @@
-FROM jhuopensource/semesterly-base:latest
+FROM  python:3.5
 
 RUN mkdir /code
 WORKDIR /code
@@ -6,6 +6,20 @@ WORKDIR /code
 # Just adding basics
 # ADD ./requirements.txt /code/
 # ADD ./package.json /code/
+
+RUN apt-get update
+
+
+RUN apt-get install -y \
+	libpq-dev \
+	libxml2-dev \
+	libxslt-dev \
+	git \
+	curl
+
+# Install node 10.x
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get install -y nodejs
 
 # Add everything
 ADD . /code/

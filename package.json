@@ -44,7 +44,7 @@
     "loose-envify": "^1.1.0",
     "moment": "^2.11.2",
     "nock": "^9.0.13",
-    "node-sass": "^4.5.2",
+    "node-sass": "^5.0.0",
     "normalizr": "^3.2.3",
     "phantom": "^4.0.0",
     "phantomjs": "^2.1.7",
