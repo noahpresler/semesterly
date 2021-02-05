@@ -1,9 +1,21 @@
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
 from amazonproduct import API
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from django.db.models import Q
 from django.utils.encoding import smart_str
-import cookielib, django, os, re, requests, sys, time
+import http.cookiejar, django, os, re, requests, sys, time
 
 api = API(locale='us')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
@@ -18,7 +30,7 @@ def randomize_ua():
     return UserAgent().random
 
 def get_request(url):
-    cookies = cookielib.CookieJar()
+    cookies = http.cookiejar.CookieJar()
     headers = {
         'User-Agent': randomize_ua(),
         'Accept' : '*/*',
@@ -50,9 +62,9 @@ def parse_results(source):
             continue
         matches = re.search("- (.+)[YFS], section (.+?) ", section_header.text)
         all_textbooks_info = sibling.find_all('td', class_="book-desc")
-        print "\t\t\tFor {} section {}, found {} textbook(s). These are:".format(
+        print("\t\t\tFor {} section {}, found {} textbook(s). These are:".format(
             matches.group(1), matches.group(2), len(all_textbooks_info)
-        )
+        ))
         course = Course.objects.get(school="uoft", code=matches.group(1))
         course_sections = Section.objects.filter(course=course, meeting_section=matches.group(2))
         for textbook_info in all_textbooks_info:
@@ -83,14 +95,14 @@ def parse_results(source):
                                 is_required=(req.strip().lower() == "required"))
                 new_link.save()
 
-            print "\t\t\t %s by: %s." % (title, author)
-            print "\t\t\t ISBN: %s, Book is %s. Saved!" % (isbn, req)
+            print("\t\t\t %s by: %s." % (title, author))
+            print("\t\t\t ISBN: %s, Book is %s. Saved!" % (isbn, req))
 
     return textbooks_found_count
 
 
 def process_campus(campus_info, semester="F"):
-    print "Now processing textbooks for %s." % (campus_info['name'])
+    print("Now processing textbooks for %s." % (campus_info['name']))
 
     rest = "control=campus&campus=%s&term=%s" % (campus_info['campus_id'], campus_info['term'])
     response = get_request(rest)
@@ -106,7 +118,7 @@ def process_campus(campus_info, semester="F"):
         available_sections = get_all_sections(course, semester)
         if available_sections == []:
             continue
-        print "%d. On Course: %s" % (i + 1, course.code)
+        print("%d. On Course: %s" % (i + 1, course.code))
         # new dept, get course info for this dept and store it in course_to_course_id
         if course.department != current_dept:
             if course.department not in department_to_dept_id:
@@ -122,7 +134,7 @@ def process_campus(campus_info, semester="F"):
             for soup_course in soup_courses:
                 code = soup_course['name']
                 if code[-1].upper() not in [semester, 'Y']:
-                    print "Skipping", code, "because this entry was for different semester"
+                    print("Skipping", code, "because this entry was for different semester")
                     continue
                 course_to_course_id[code[:-1]] = soup_course['id']
 
@@ -143,13 +155,13 @@ def process_campus(campus_info, semester="F"):
             # make section request, get textbook info and store it in DB
             if section not in section_to_section_id:
                 continue
-            print "\tSection:", section
+            print("\tSection:", section)
             rest = "control=section&section=%s&t=%s" % (section_to_section_id[section],
                                                         int(time.time()))
             response = get_request(rest)
             parse_results('<div id="course-bookdisplay">' + response.text + '</div>')
 
-    print "Finished processing textbooks for %s." % (campus_info['name'])
+    print("Finished processing textbooks for %s." % (campus_info['name']))
 
 def parse_uoft_textbooks():
     # campus_id and term for each campus are retrieved from the requests sent at
@@ -178,7 +190,7 @@ def parse_uoft_textbooks():
     for campus in ["St. George", "Mississauga", "Scarborough"]:
         process_campus(campus_to_info_map[campus])
 
-    print "Hooray! I'm done!"
+    print("Hooray! I'm done!")
 
 
 if __name__ == "__main__":

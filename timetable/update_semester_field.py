@@ -62,9 +62,9 @@ def update_sem_fields(table, get_school, sem_table):
 
   # TODO: log instead of print to stdout
   if table.objects.count():
-    print "Updated {0}/{1} rows from table {2}".format(num_updated, table.objects.count(), str(table))
+    print("Updated {0}/{1} rows from table {2}".format(num_updated, table.objects.count(), str(table)))
   if bad_inputs:
-    print "Ignored the following unknown semester codes:"
+    print("Ignored the following unknown semester codes:")
     pprint(bad_inputs)
     print
 

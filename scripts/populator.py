@@ -70,16 +70,16 @@ def get_meeting_sections(course, semester, school):
 
 if __name__  == "__main__":
     if len(sys.argv) != 3:
-        print "Must specify school semester. e.g: python " + sys.argv[0] + " jhu F/f/S/s"
+        print("Must specify school semester. e.g: python " + sys.argv[0] + " jhu F/f/S/s")
         exit(1)
     school = sys.argv[1].lower()
     sem = sys.argv[2].upper()
     if (school not in school_to_models) or (sem not in ["F", "S"]):
-        print "Invalid school or semester provided"
+        print("Invalid school or semester provided")
         exit(1)
-    print "Starting populator for " + school + " " + sem
+    print("Starting populator for " + school + " " + sem)
     start_JSON_populator(school, sem)
-    print "Done!"
+    print("Done!")
 
 
 

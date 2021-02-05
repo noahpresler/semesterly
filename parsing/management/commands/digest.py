@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import logging
 import simplejson as json
 
@@ -124,5 +122,3 @@ class Command(BaseCommand):
             logging.exception('Failed digestion with uncaught exception')
 
         logging.info('Digestion overview for ' + school + ': ' + str(self.stat_view.report()))
-
-        # TODO - move to periodic tasks

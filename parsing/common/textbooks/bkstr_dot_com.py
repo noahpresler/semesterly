@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import re
 import simplejson as json
 
@@ -51,7 +49,7 @@ class BkstrDotComParser(BaseParser):
         # TODO - fix requester issues by refreshing cookies on timeout
 
         programs = self._extract_json(query)
-        for program, program_code in programs.items():
+        for program, program_code in list(programs.items()):
             self._parse_program(program,
                                 program_code,
                                 query,
@@ -65,9 +63,9 @@ class BkstrDotComParser(BaseParser):
         years_and_terms = self._parse_terms_and_years(terms_and_years)
         years_and_terms = dict_filter_by_dict(years_and_terms,
                                               years_and_terms_filter)
-        for year, terms in years_and_terms.items():
+        for year, terms in list(years_and_terms.items()):
             self.ingestor['year'] = year
-            for term, term_code in terms.items():
+            for term, term_code in list(terms.items()):
                 self._parse_term(term, term_code, query)
 
     def _parse_term(self, term, term_code, query):
@@ -76,7 +74,7 @@ class BkstrDotComParser(BaseParser):
         query['requestType'] = 'DEPARTMENTS'
         depts = dict_filter_by_list(self._extract_json(query),
                                     self.departments_filter)
-        for dept, dept_code in depts.items():
+        for dept, dept_code in list(depts.items()):
             self._parse_dept(dept, dept_code, query)
 
     def _parse_dept(self, dept, dept_code, query):
@@ -86,7 +84,7 @@ class BkstrDotComParser(BaseParser):
         query['departmentName'] = dept_code
         query['requestType'] = 'COURSES'
         courses = self._extract_json(query)
-        for course, course_code in courses.items():
+        for course, course_code in list(courses.items()):
             self.ingestor['course_code'] = '{} {}'.format(dept, course)
             self._parse_course(course, course_code, query)
 
@@ -94,7 +92,7 @@ class BkstrDotComParser(BaseParser):
         query['courseName'] = course_code
         query['requestType'] = 'SECTIONS'
         sections = self._extract_json(query)
-        for section, section_code in sections.items():
+        for section, section_code in list(sections.items()):
             self._parse_section(section, section_code, query)
 
     def _parse_section(self, section, section_code, query):
@@ -160,13 +158,13 @@ class BkstrDotComParser(BaseParser):
     def _parse_terms_and_years(term_and_years):
             years = {
                 term_and_year.split()[1]: {}
-                for term_and_year, code in term_and_years.items()
+                for term_and_year, code in list(term_and_years.items())
             }
             # Create nesting based on year.
             for year in years:
                 years[year].update({
                     term_and_year.split()[0].title(): code
-                    for term_and_year, code in term_and_years.items()
+                    for term_and_year, code in list(term_and_years.items())
                     if term_and_year.split()[1] == year
                 })
             return years

@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 import requests
 from django.conf import settings
@@ -102,22 +102,22 @@ def create_student(strategy, details, response, user, *args, **kwargs):
 
         if social_user:
             new_student.img_url = 'https://graph.facebook.com/v9.0/' + social_user.uid + '/picture?type=normal'
-            url = u'https://graph.facebook.com/v9.0/{0}/' \
-                  u'&access_token={1}'.format(
+            url = 'https://graph.facebook.com/v9.0/{0}/' \
+                  '&access_token={1}'.format(
                       social_user.uid,
                       access_token,
                   )
-            request = urllib2.Request(url)
+            request = urllib.request.Request(url)
             new_student.fbook_uid = social_user.uid
             new_student.save()
-            url = u'https://graph.facebook.com/{0}/' \
-                  u'friends?fields=id' \
-                  u'&access_token={1}'.format(
+            url = 'https://graph.facebook.com/{0}/' \
+                  'friends?fields=id' \
+                  '&access_token={1}'.format(
                       social_user.uid,
                       access_token,
                   )
-            request = urllib2.Request(url)
-            friends = json.loads(urllib2.urlopen(request).read()).get('data')
+            request = urllib.request.Request(url)
+            friends = json.loads(urllib.request.urlopen(request).read().decode('utf-8')).get('data')
 
             for friend in friends:
                 if Student.objects.filter(fbook_uid=friend['id']).exists():

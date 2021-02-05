@@ -30,5 +30,5 @@ def validate_subdomain(view_func):
             return view_func(request, *args, **kwargs)
 
     # mark function for testing
-    wrapper.func_dict['requires_subdomain'] = True
+    wrapper.__dict__['requires_subdomain'] = True
     return wrapper

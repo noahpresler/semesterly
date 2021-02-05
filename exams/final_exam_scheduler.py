@@ -95,7 +95,7 @@ class Rule:
             if course['code'] in self.list_of_codes:
                 return self.result
         else:
-            filtered_slots = filter(lambda slot: slot['section_type'] == 'L', course['slots'])
+            filtered_slots = [slot for slot in course['slots'] if slot['section_type'] == 'L']
             for slot in filtered_slots:
                 if slot['day'] in self.list_of_days and self.check_times(slot):
                     return self.result

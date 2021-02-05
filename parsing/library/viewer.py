@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import dateparser
 import progressbar
 
@@ -24,10 +22,8 @@ class ViewerError(PipelineError):
     """Viewer error class."""
 
 
-class Viewer(object):
+class Viewer(metaclass=ABCMeta):
     """A view that is updated via a tracker object broadcast or report."""
-
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def receive(self, tracker, broadcast_type):
@@ -110,7 +106,7 @@ class StatProgressBar(Viewer):
                         )
                     continue
                 formatted_string += ' | {}'.format(getattr(tracker, attr))
-        for data_type, counter in counters.items():
+        for data_type, counter in list(counters.items()):
             if counter['total'] == 0:
                 continue
             formatted_string += ' | {label}: {stat}'.format(

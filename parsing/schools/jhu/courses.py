@@ -10,9 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
-import sys
 import logging
 import re
 
@@ -120,8 +117,7 @@ class Parser(BaseParser):
             num_credits = 0
 
         # Load core course fields
-        self.ingestor['areas'] = filter(lambda a: a != "None",
-                                        course['Areas'].split(','))
+        self.ingestor['areas'] = [a for a in course['Areas'].split(',') if a != "None"]
         if course['IsWritingIntensive'] == "Yes":
             self.ingestor['areas'] += ['Writing Intensive']
 
@@ -163,8 +159,7 @@ class Parser(BaseParser):
         for meeting in section_details[0]['Meetings']:
             # Load core section fields
             self.ingestor['section'] = "(" + section[0]['SectionName'] + ")"
-            self.ingestor['instrs'] = map(lambda i: i.strip(),
-                                          course['Instructors'].split(','))
+            self.ingestor['instrs'] = [i.strip() for i in course['Instructors'].split(',')]
 
             size, enrollment, waitlist = self._compute_size_enrollment(course)
             self.ingestor['size'] = size
@@ -175,7 +170,7 @@ class Parser(BaseParser):
 
             # Load offering fields.
             times = meeting['Times']
-            for time in filter(lambda t: len(t) > 0, times.split(',')):
+            for time in [t for t in times.split(',') if len(t) > 0]:
                 time_pieces = re.search(
                     r'(\d{2}:\d{2} [AP]M) - (\d{2}:\d{2} [AP]M)',
                     time
@@ -188,10 +183,7 @@ class Parser(BaseParser):
                 if (len(meeting['DOW'].strip()) > 0 and
                         meeting['DOW'] != "TBA" and
                         meeting['DOW'] != "None"):
-                    self.ingestor['days'] = map(
-                        lambda d: Parser.DAY_MAP.get(d.lower()),
-                        re.findall(r'(?:T[hH])|(?:S[aA])|[SMTWF]', meeting['DOW'])
-                    )
+                    self.ingestor['days'] = [Parser.DAY_MAP.get(d.lower()) for d in re.findall(r'(?:T[hH])|(?:S[aA])|[SMTWF]', meeting['DOW'])]
                     if self.ingestor['days'] is None:
                         continue
                     self.ingestor['location'] = {

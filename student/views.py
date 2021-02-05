@@ -360,7 +360,7 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         if request.query_params.get('count'):
             school = request.subdomain
             student = Student.objects.get(user=request.user)
-            course_ids = map(int, request.query_params.getlist('course_ids[]'))
+            course_ids = list(map(int, request.query_params.getlist('course_ids[]')))
             semester, _ = Semester.objects.get_or_create(
                 name=sem_name, year=year)
             total_count = 0
@@ -381,7 +381,7 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         elif request.query_params.getlist('course_ids[]'):
             school = request.subdomain
             student = Student.objects.get(user=request.user)
-            course_ids = map(int, request.query_params.getlist('course_ids[]'))
+            course_ids = list(map(int, request.query_params.getlist('course_ids[]')))
             semester, _ = Semester.objects.get_or_create(
                 name=sem_name, year=year)
             # user opted in to sharing courses

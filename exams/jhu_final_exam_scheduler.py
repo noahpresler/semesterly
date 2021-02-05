@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from final_exam_scheduler import FinalExamScheduler, Rule
+from .final_exam_scheduler import FinalExamScheduler, Rule
 
 
 class JHUFinalExamScheduler(FinalExamScheduler):

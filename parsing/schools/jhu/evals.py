@@ -10,11 +10,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import os
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from bs4 import BeautifulSoup
 from django.conf import settings
@@ -57,7 +55,7 @@ class Parser(BaseParser):
         for fn in os.listdir(directory):
             term, year = os.path.splitext(fn)[0].split(':')
             eval_file_path = '{}/{}'.format(directory, fn)
-            soup = BeautifulSoup(urllib.urlopen(eval_file_path).read(),
+            soup = BeautifulSoup(urllib.request.urlopen(eval_file_path).read(),
                                  'html.parser')
             self._process_soup(soup, term, year)
 

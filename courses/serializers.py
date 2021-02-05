@@ -17,7 +17,7 @@ from django.db import models
 from rest_framework import serializers
 
 from timetable.models import Course, Section, Evaluation,  CourseIntegration, Integration, Semester
-import utils
+from . import utils
 
 
 class EvaluationSerializer(serializers.ModelSerializer):
@@ -52,7 +52,7 @@ class CourseSerializer(serializers.ModelSerializer):
         Return:
           List of modified evaluation dictionaries (added flag 'unique_term_year')
         """
-        evals = map(model_to_dict, Evaluation.objects.filter(course=course).order_by('year'))
+        evals = list(map(model_to_dict, Evaluation.objects.filter(course=course).order_by('year')))
         years = Evaluation.objects.filter(course=course).values('year').annotate(models.Count('id')) \
             .filter(id__count__gt=1).values_list('year')
         years = {e[0] for e in years}
