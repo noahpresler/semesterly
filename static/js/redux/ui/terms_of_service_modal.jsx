@@ -37,23 +37,22 @@ class TermsOfServiceModal extends React.Component {
     if (isNewUser) {
       return (
         <h3>
-          Welcome to Semester.ly! Please take a look at our Terms of Service and
+          Welcome to HorarioTEC! Please take a look at our Terms of Service and
           Privacy Policy before getting started:
         </h3>
       );
     } else if (description && url) {
       return (
         <h3>
-          <strong>{description}</strong> - you can read our announcement about it{' '}
-          {link}, and review our updated Terms of Service and Privacy Policy here:
+          Welcome to HorarioTEC! Please take a look at our Terms of Service and
+          Privacy Policy before getting started:
         </h3>
       );
     } else if (url) {
       return (
         <h3>
-          We have made some changes that we think you should know about - you can
-          read our announcement about it {link},
-          and review our updated Terms of Service and Privacy Policy here:
+          Welcome to HorarioTEC! Please take a look at our Terms of Service and
+          Privacy Policy before getting started:
         </h3>
       );
     } else if (description) {
@@ -118,7 +117,7 @@ class TermsOfServiceModal extends React.Component {
             <span>I accept the Terms of Service</span>
           </button>
           <p className="method-details">
-            You must accept the new Terms of Service to continue using Semester.ly.
+            You must accept the new Terms of Service to continue using HorarioTEC.
           </p>
         </div>
       </Modal>
