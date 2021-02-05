@@ -5,8 +5,12 @@ services:
     image: postgres
     ports:
       - "5432:5432"
+    env_file:
+      - db.env
   web:
     image: semesterly
+    env_file:
+      - web.env
     environment:
       - NODE_ENV=development
       - PYTHONUNBUFFERED=0

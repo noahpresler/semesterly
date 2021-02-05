@@ -101,7 +101,7 @@ class TopBar extends React.Component {
         </div>
         <SearchBarContainer />
         <CourseModalContainer />
-        {/*<SocialProfileContainer />*/}
+        <SocialProfileContainer />
         <TimetableLoaderContainer />
         <div className="navicon" onClick={this.toggleSideBar}>
           <span />

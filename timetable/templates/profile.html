@@ -36,7 +36,7 @@
 				<h1>HorarioTEC</h1>
 				<nav>
 					<div class="desktop-nav">
-						<a href="https://jhu.semester.ly">JHU</a>
+						<a href="https://horario-tec.sger.li">TEC</a>
 					</div>
 					<div id="schools-dropdown" class="mobile-nav">
 						<div class="mobile-nav-label">
@@ -47,7 +47,7 @@
 							<div class="tip-border"></div>
 							<div class="tip"></div>
 							<div class="nav-dropdown-list">
-								<a href="https://jhu.semester.ly">JHU</a>
+								<a href="https://horario-tec.sger.li">TEC</a>
 							</div>
 						</div>
 					</div>
@@ -55,7 +55,7 @@
 			</div>
 		</header>
 		<div id="profile-page">
-			<div id="profile-banner" style="background-image: url({% static 'img/school_bgs/jhu_bg.jpg'%});">
+			<div id="profile-banner" style="background-image: url({% static 'img/school_bgs/tec_bg.jpg'%});">
 				<div id="filter"></div>
 				<div id="profile-banner-content">
 					<h1>{{ name.first_name }} {{ name.last_name }}</h1>
@@ -176,7 +176,7 @@
 				<!-- Linked Accounts -->
 				<div id="linked-accounts">
 					<h3>Linked Accounts</h3>
-					{% if hasGoogle %}
+					<!-- {% if hasGoogle %}
 						<div class="list-item">
 							<img class="google-logo" src="https://a0.muscache.com/airbnb/static/signinup/google_icon_2x-745c2280e5004d4c90e3ca4e60e3f677.png">
 							<p>Google</p>
@@ -186,7 +186,7 @@
 							<img class="google-logo" src="https://a0.muscache.com/airbnb/static/signinup/google_icon_2x-745c2280e5004d4c90e3ca4e60e3f677.png">
 							<a href="signup">Signup with Google</a>
 						</div>
-					{% endif %}
+					{% endif %} -->
 					{% if hasFacebook %}
 						<div class="list-item">
 							<i class="fa fa-facebook-official" aria-hidden="true" style="color:#3b5998;"></i><p>Facebook</p>
@@ -220,7 +220,6 @@
 				<!-- Date Joined -->
 				<div id="join-date">
 					<p>Joined {{ student.time_created }}</p>
-					<div class="fb-like" data-href="https://www.facebook.com/semesterly/" data-width="40px" data-layout="button" data-action="like" data-size="large" data-show-faces="false" data-share="false"></div>
 				</div>
 			</div>
 		</div>
@@ -228,17 +227,13 @@
 			<div class="grid cf">
 				<div class="col-1-1">
 					<ul>
-						<li><a href="https://www.facebook.com/semesterly/" target="_blank">
-							<i class="fa fa-facebook"></i>
-							<span>Like us on Facebook</span>
-						</a></li>
-						<li><a href="mailto:contact@semester.ly">
+						<li><a href="mailto:support@igerli.com">
 							<i class="fa fa-at"></i>
-							<span>Email us at contact@semester.ly</span>
+							<span>Email us at support@igerli.com</span>
 						</a></li>
 					</ul>
 				</div>
-				<h6>COPYRIGHT © 2016 SEMESTERLY TECHNOLOGIES, LLC.</h6>
+				<h6>COPYRIGHT © 2021 HORARIOTEC</h6>
 			</div>
 		</footer>
 

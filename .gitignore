@@ -58,3 +58,5 @@ workfile.html
 cache
 stunnel/
 staticfiles
+
+*.env

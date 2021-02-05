@@ -98,18 +98,15 @@ class SignupModal extends React.Component {
           </div>
           <div className="call-to-action">
             <div className="disclaimer">
-              Semester.ly will NEVER post to your timeline. Your course selections
+              HorarioTEC will NEVER post to your timeline. Your course selections
               will not be shared with
               any other user without your permission.
             </div>
-            {/*<a href="/login/facebook/">
+            <a href="/login/facebook/">
               <div className="signup-button">
                 Signup!
               </div>
-    </a>*/}
-              <div className="signup-button">
-                Coming soon
-              </div>
+            </a>
           </div>
         </div>
       </Modal>

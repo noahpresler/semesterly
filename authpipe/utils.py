@@ -101,8 +101,8 @@ def create_student(strategy, details, response, user, *args, **kwargs):
             access_token = json.loads(social_user.extra_data)["access_token"]
 
         if social_user:
-            new_student.img_url = 'https://graph.facebook.com/' + social_user.uid + '/picture?type=normal'
-            url = u'https://graph.facebook.com/{0}/' \
+            new_student.img_url = 'https://graph.facebook.com/v9.0/' + social_user.uid + '/picture?type=normal'
+            url = u'https://graph.facebook.com/v9.0/{0}/' \
                   u'&access_token={1}'.format(
                       social_user.uid,
                       access_token,
