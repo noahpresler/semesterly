@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
+
 
 import sys
 import logging
@@ -53,7 +53,7 @@ class Parser(BaseParser):
         Returns:
             Parser
         """
-        new_instance = object.__new__(cls, *args, **kwargs)
+        new_instance = object.__new__(cls)
         return new_instance
 
     def __init__(self, **kwargs):
@@ -88,7 +88,7 @@ class Parser(BaseParser):
 
     def _parse_school(self, school):
         courses = self._get_courses(school)
-        courses = filter(lambda course: (course['IDE_MODALIDAD'] == "S" and course["IDE_PER_MOD"] == int(self.term)), courses)
+        courses = [course for course in courses if (course['IDE_MODALIDAD'] == "S" and course["IDE_PER_MOD"] == int(self.term))]
         sections = self._parse_sections(courses)
         for courseCode in sections:
             course = sections[courseCode]
@@ -112,27 +112,27 @@ class Parser(BaseParser):
 
         # Load core course fields
         #self.ingestor['level'] = course[]
-        self.ingestor['name'] = course['DSC_MATERIA'].encode('ascii', 'ignore')
+        self.ingestor['name'] = course['DSC_MATERIA']
         self.ingestor['description'] = ''
-        self.ingestor['code'] = course['IDE_MATERIA'].encode('ascii', 'ignore')
+        self.ingestor['code'] = course['IDE_MATERIA']
         self.ingestor['num_credits'] = num_credits
-        self.ingestor['department_name'] = course['DSC_DEPTO'].encode('ascii', 'ignore')
-        self.ingestor['campus'] = course['DSC_SEDE'].encode('ascii', 'ignore')
+        self.ingestor['department_name'] = course['DSC_DEPTO']
+        self.ingestor['campus'] = course['DSC_SEDE']
         
         created_course = self.ingestor.ingest_course()
             
         if self.last_course \
-           and created_course['code'] == course['IDE_MATERIA'].encode('ascii', 'ignore') \
-           and created_course['name'] != course['DSC_MATERIA'].encode('ascii', 'ignore'):
-            self.ingestor['section_name'] = course['IDE_MATERIA'].encode('ascii', 'ignore') # TODO: Averiguar que es esto
+           and created_course['code'] == course['IDE_MATERIA'] \
+           and created_course['name'] != course['DSC_MATERIA']:
+            self.ingestor['section_name'] = course['IDE_MATERIA'] # TODO: Averiguar que es esto
         self.last_course = created_course
 
         for meeting in section:
             # Load core section fields
             self.ingestor['section'] = str(meeting["IDE_GRUPO"])
-            self.ingestor['instrs'] = meeting["NOM_PROFESOR"].encode('ascii', 'ignore')
+            self.ingestor['instrs'] = meeting["NOM_PROFESOR"]
 
-            self.ingestor['type'] = meeting["TIPO_CURSO"].encode('ascii', 'ignore')
+            self.ingestor['type'] = meeting["TIPO_CURSO"]
 
             self.ingestor['size'] = 1
             self.ingestor['enrollment'] = 0
@@ -140,11 +140,11 @@ class Parser(BaseParser):
 
             created_section = self.ingestor.ingest_section(created_course)
 
-            self.ingestor['time_start'] = meeting['HINICIO'].encode('ascii', 'ignore')
-            self.ingestor['time_end'] = meeting['HFIN'].encode('ascii', 'ignore')
-            self.ingestor['days'] = [Parser.DAY_MAP.get(meeting['NOM_DIA'].encode('ascii', 'ignore'), '')]
+            self.ingestor['time_start'] = meeting['HINICIO']
+            self.ingestor['time_end'] = meeting['HFIN']
+            self.ingestor['days'] = [Parser.DAY_MAP.get(meeting['NOM_DIA'], '')]
             self.ingestor['location'] = {
-                        'building': meeting['DSC_SEDE'].encode('ascii', 'ignore'),
+                        'building': meeting['DSC_SEDE'],
                         'room': ''
                     }
             self.ingestor.ingest_meeting(created_section)
@@ -166,7 +166,7 @@ class Parser(BaseParser):
             years_and_terms_filter
         )
 
-        for year, terms in years_and_terms.items():
+        for year, terms in list(years_and_terms.items()):
             self.ingestor['year'] = year
             self.year = year
             for term in terms:

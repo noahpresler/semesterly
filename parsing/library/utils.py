@@ -167,7 +167,7 @@ def update(d, u):
         >>> update({0: {1: 2, 3: 4}}, {1: 2, 0: {5: 6, 3: 7}})
         {0: {1: 2}}
     """
-    for k, v in u.items():
+    for k, v in list(u.items()):
         if isinstance(v, collections.Mapping):
             r = update(d.get(k, {}), v)
             d[k] = r
