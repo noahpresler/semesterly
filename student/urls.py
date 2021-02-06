@@ -21,7 +21,7 @@ admin.autodiscover()
 
 urlpatterns = [
   # profile management
-  re_path(r'^user/logout/$', LogoutView.as_view(), {'next_page': '/'}),
+  re_path(r'^user/logout/$', LogoutView.as_view(next_page='/')),
   re_path(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', student.views.unsubscribe),
   re_path(r'^user/settings/$', student.views.UserView.as_view()),
   re_path(
