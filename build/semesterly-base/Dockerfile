@@ -1,18 +1,16 @@
-FROM ubuntu:bionic
+FROM python:3.5
 RUN apt-get update
 
 
 RUN apt-get install -y \
-	python-pip \
 	libpq-dev \
 	libxml2-dev \
 	libxslt-dev \
 	git \
-	curl \
-	nginx
+	curl
 
-# Install node 8.x
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+# Install node 10.x
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
 
 # This saves some build time by installing base requirements
