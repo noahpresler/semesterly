@@ -69,10 +69,10 @@ def get_classmates_in_course(request, school, sem_name, year, course_id):
     json_data = {'current': [], 'past': []}
     course = Course.objects.get(school=school, id=course_id)
     student = None
-    is_logged_in = request.user.is_authenticated()
+    is_logged_in = request.user.is_authenticated
     if is_logged_in and Student.objects.filter(user=request.user).exists():
         student = Student.objects.get(user=request.user)
-    if student and student.user.is_authenticated() and student.social_courses:
+    if student and student.user.is_authenticated and student.social_courses:
         json_data = get_classmates_from_course_id(
             school, student, course.id, sem)
     return HttpResponse(json.dumps(json_data), content_type="application/json")
@@ -139,7 +139,7 @@ class CourseDetail(ValidateSubdomainMixin, APIView):
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         course = get_object_or_404(Course, school=school, id=course_id)
         student = None
-        is_logged_in = request.user.is_authenticated()
+        is_logged_in = request.user.is_authenticated
         if is_logged_in and Student.objects.filter(user=request.user).exists():
             student = Student.objects.get(user=request.user)
         json_data = CourseSerializer(course,

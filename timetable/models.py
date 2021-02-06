@@ -114,7 +114,7 @@ class Course(models.Model):
     cores = models.CharField(max_length=50, null=True, blank=True)
     geneds = models.CharField(max_length=300, null=True, blank=True)
     related_courses = models.ManyToManyField('self', blank=True)
-    same_as = models.ForeignKey('self', null=True)
+    same_as = models.ForeignKey('self', null=True, on_delete=models.deletion.CASCADE)
     vector = PickledObjectField(default=None, null=True)
 
     def __str__(self):
@@ -191,7 +191,7 @@ class Section(models.Model):
             textbooks for this section via the :obj:`TextbookLink` model
         was_full (:obj:`BooleanField`): whether the course was full during the last parse
     """
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(Course, on_delete=models.deletion.CASCADE)
     meeting_section = models.CharField(max_length=50)
     size = models.IntegerField(default=-1)
     enrolment = models.IntegerField(default=-1)
@@ -199,7 +199,7 @@ class Section(models.Model):
     waitlist_size = models.IntegerField(default=-1)
     section_type = models.CharField(max_length=50, default='L')
     instructors = models.CharField(max_length=500, default='TBA')
-    semester = models.ForeignKey(Semester)
+    semester = models.ForeignKey(Semester, on_delete=models.deletion.CASCADE)
     textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
     was_full = models.BooleanField(default=False)
 
@@ -233,7 +233,7 @@ class Offering(models.Model):
         location (:obj:`CharField`, optional):
             the location the course takes place, defaulting to TBA if not provided
     """
-    section = models.ForeignKey(Section)
+    section = models.ForeignKey(Section, on_delete=models.deletion.CASCADE)
     day = models.CharField(max_length=1)
     time_start = models.CharField(max_length=15)
     time_end = models.CharField(max_length=15)
@@ -257,7 +257,7 @@ class Evaluation(models.Model):
     year (:obj:`CharField`): the year of the review
     course_code (:obj:`Charfield`): a string of the course code, along with section indicator
     """
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(Course, on_delete=models.deletion.CASCADE)
     score = models.FloatField(default=5.0)
     summary = models.TextField()
     professor = models.CharField(max_length=250)
@@ -278,9 +278,9 @@ class TextbookLink(models.Model):
         is_required (:obj:`BooleanField`): whether or not the textbook is required
         section (:obj:`Section`): the section the textbook is linked to
     """
-    textbook = models.ForeignKey(Textbook)
+    textbook = models.ForeignKey(Textbook, on_delete=models.deletion.CASCADE)
     is_required = models.BooleanField(default=False)
-    section = models.ForeignKey(Section)
+    section = models.ForeignKey(Section, on_delete=models.deletion.CASCADE)
 
 
 class Integration(models.Model):
@@ -288,15 +288,15 @@ class Integration(models.Model):
 
 
 class CourseIntegration(models.Model):
-    course = models.ForeignKey(Course)
-    integration = models.ForeignKey(Integration)
+    course = models.ForeignKey(Course, on_delete=models.deletion.CASCADE)
+    integration = models.ForeignKey(Integration, on_delete=models.deletion.CASCADE)
     json = models.TextField()
 
 
 class Timetable(models.Model):
     courses = models.ManyToManyField(Course)
     sections = models.ManyToManyField(Section)
-    semester = models.ForeignKey(Semester)
+    semester = models.ForeignKey(Semester, on_delete=models.deletion.CASCADE)
     school = models.CharField(max_length=50)
 
     class Meta:

@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 from django.test import SimpleTestCase
-from django.core.urlresolvers import resolve
+from django.urls import resolve
 
 
 class UrlTestCase(SimpleTestCase):

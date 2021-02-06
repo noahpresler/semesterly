@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from django.conf.urls import patterns, url
+from django.conf.urls import re_path
 from django.contrib import admin
 
 import searches.views
@@ -19,7 +19,7 @@ import searches.views
 admin.autodiscover()
 
 
-urlpatterns = patterns('',
-                       url(r'^search/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/(?P<query>.*?)/?$',
+urlpatterns = [
+                       re_path(r'^search/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/(?P<query>.*?)/?$',
                            searches.views.CourseSearchList.as_view()),
-                       )
+                ]

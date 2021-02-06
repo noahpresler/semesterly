@@ -105,7 +105,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                                      get_student(request),
                                      advanced=True)
         student = None
-        logged = request.user.is_authenticated()
+        logged = request.user.is_authenticated
         if logged and Student.objects.filter(user=request.user).exists():
             student = Student.objects.get(user=request.user)
         serializer_context = {'semester': sem, 'student': student, 'school': request.subdomain}

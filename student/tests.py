@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 from django.contrib.auth.models import User
-from django.core.urlresolvers import resolve
+from django.urls import resolve
 from django.forms.models import model_to_dict
 from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
