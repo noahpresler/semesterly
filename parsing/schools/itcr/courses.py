@@ -12,15 +12,15 @@
 
 
 
-import sys
-import logging
-import re
 import json
 
 
 from parsing.library.base_parser import BaseParser
 from parsing.library.utils import dict_filter_by_dict
-from semesterly.settings import get_secret
+
+
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class Parser(BaseParser):
