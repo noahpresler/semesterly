@@ -64,7 +64,7 @@ ALLOWED_HOSTS = ['*']
 
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
-    'user_friends',
+#    'user_friends',
 ]
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email'
