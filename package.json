@@ -142,7 +142,7 @@
   },
   "sasslintConfig": "sass-lint",
   "engines": {
-    "node": "8.x",
+    "node": "12.x",
     "npm": "6.x"
   }
 }
