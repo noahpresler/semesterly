@@ -10,7 +10,7 @@ Fork/Clone The Repository
 Forking Semester.ly will create your own version of Semester.ly listed on your GitHub!
 Cloning your Semester.ly fork will create a directory with all of the code required to run your own local development server. Navigate to the directory you wish to work from, then execute:
 
-1. **Fork** navigate to our `GitHub repository <https://github.com/noahpresler/semesterly>`_ then, in the top-right corner of the page, click Fork.
+1. **Fork** navigate to our `GitHub repository <https://github.com/jhuopensource/semesterly/>`_ then, in the top-right corner of the page, click Fork.
 
 2. **Clone** by executing this line on the command line:
 
