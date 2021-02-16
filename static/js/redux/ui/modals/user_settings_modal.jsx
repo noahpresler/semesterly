@@ -92,6 +92,8 @@ class UserSettingsModal extends React.Component {
     this.changeForm({ class_year: val.value });
   }
 
+  
+
   shouldShow(props) {
     return props.userInfo.isLoggedIn && (!props.hideOverrided && (
         props.showOverrided ||
@@ -173,6 +175,9 @@ class UserSettingsModal extends React.Component {
             <span className="switch-label" data-on="Yes" data-off="No" />
             <span className="switch-handle" />
           </label>
+          <div className="favorite-number">
+              <h3>This is your favorite number: 100</h3>
+          </div>
           <div className="preference-wrapper">
             <h3>Would you like to find classes with friends?</h3>
             <p className="disclaimer">See which Facebook friends will be your
