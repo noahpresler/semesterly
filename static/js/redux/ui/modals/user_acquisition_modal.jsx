@@ -54,7 +54,7 @@ class UserAcquisitionModal extends React.Component {
 
         {modalHeader}
 
-
+        
         <div className="user-acquisition-modal__container">
           <h3>Recommended:</h3>
           <button
@@ -108,6 +108,21 @@ class UserAcquisitionModal extends React.Component {
               <i className="fa fa-envelope-o" />
             </span>
             <span>Email Coming Soon</span>
+          </button>
+
+
+          <button
+            className="btn abnb-btn secondary" onClick={() => {
+                const link = document.createElement('a');
+                link.href = `/press=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
+                document.body.appendChild(link);
+                link.click();
+              }}
+          >
+            <span className="img-icon">
+              <i className="fa fa-envelope-o" />
+            </span>
+            <span>Jeanie's Mock Button</span>
           </button>
         </div>
       </Modal>
