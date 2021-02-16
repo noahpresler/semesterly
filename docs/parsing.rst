@@ -37,7 +37,7 @@ There are advanced methods for using these tools. Detailed options can be viewed
 
 	python manage.py [command] --help
 
-For example, you can use the term and year flags to parse only a specific term::
+For example, you can use the term and year flags to parse only a specific term:
 
 .. code-block:: bash
 
