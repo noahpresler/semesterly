@@ -10,6 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+
 from __future__ import absolute_import
 import collections
 import json
@@ -105,9 +106,9 @@ def course_page(request, code):
         evals = course_dict['evals']
         clean_evals = evals
         for i, v in enumerate(evals):
-            for k, e in v.items():
+            for k, e in list(v.items()):
                 if isinstance(evals[i][k], six.string_types):
-                    clean_evals[i][k] = evals[i][k].replace(u'\xa0', u' ')
+                    clean_evals[i][k] = evals[i][k].replace('\xa0', ' ')
                 if k == "year":
                     clean_evals[i][k] = evals[i][k].replace(":", " ")
         if school == "jhu":

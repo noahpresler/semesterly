@@ -10,6 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+
 from __future__ import absolute_import
 import json
 import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
@@ -103,17 +104,17 @@ def create_student(strategy, details, response, user, *args, **kwargs):
 
         if social_user:
             new_student.img_url = 'https://graph.facebook.com/' + social_user.uid + '/picture?type=normal'
-            url = u'https://graph.facebook.com/{0}/' \
-                  u'&access_token={1}'.format(
+            url = 'https://graph.facebook.com/{0}/' \
+                  '&access_token={1}'.format(
                       social_user.uid,
                       access_token,
                   )
             request = six.moves.urllib.request.Request(url)
             new_student.fbook_uid = social_user.uid
             new_student.save()
-            url = u'https://graph.facebook.com/{0}/' \
-                  u'friends?fields=id' \
-                  u'&access_token={1}'.format(
+            url = 'https://graph.facebook.com/{0}/' \
+                  'friends?fields=id' \
+                  '&access_token={1}'.format(
                       social_user.uid,
                       access_token,
                   )
