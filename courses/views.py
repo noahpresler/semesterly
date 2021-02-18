@@ -10,6 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from __future__ import absolute_import
 import collections
 import json
 from datetime import datetime
@@ -31,6 +32,7 @@ from timetable.school_mappers import SCHOOLS_MAP
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView
 from helpers.decorators import validate_subdomain
 from parsing.models import DataUpdate
+import six
 
 
 # TODO: use CBV
@@ -96,15 +98,15 @@ def course_page(request, code):
             name='Fall', year=current_year)
         course_dict = CourseSerializer(course_obj,
                                        context={'semester': semester, 'school': school}).data
-        l = course_dict['sections'].get('L', {}).values()
-        t = course_dict['sections'].get('T', {}).values()
-        p = course_dict['sections'].get('P', {}).values()
+        l = list(course_dict['sections'].get('L', {}).values())
+        t = list(course_dict['sections'].get('T', {}).values())
+        p = list(course_dict['sections'].get('P', {}).values())
         avg = round(course_obj.get_avg_rating(), 2)
         evals = course_dict['evals']
         clean_evals = evals
         for i, v in enumerate(evals):
             for k, e in v.items():
-                if isinstance(evals[i][k], basestring):
+                if isinstance(evals[i][k], six.string_types):
                     clean_evals[i][k] = evals[i][k].replace(u'\xa0', u' ')
                 if k == "year":
                     clean_evals[i][k] = evals[i][k].replace(":", " ")

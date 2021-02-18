@@ -10,8 +10,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from __future__ import absolute_import
 import json
-import urllib2
+import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
 
 import requests
 from django.conf import settings
@@ -107,7 +108,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                       social_user.uid,
                       access_token,
                   )
-            request = urllib2.Request(url)
+            request = six.moves.urllib.request.Request(url)
             new_student.fbook_uid = social_user.uid
             new_student.save()
             url = u'https://graph.facebook.com/{0}/' \
@@ -116,8 +117,8 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                       social_user.uid,
                       access_token,
                   )
-            request = urllib2.Request(url)
-            friends = json.loads(urllib2.urlopen(request).read()).get('data')
+            request = six.moves.urllib.request.Request(url)
+            friends = json.loads(six.moves.urllib.request.urlopen(request).read()).get('data')
 
             for friend in friends:
                 if Student.objects.filter(fbook_uid=friend['id']).exists():

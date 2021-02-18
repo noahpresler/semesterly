@@ -10,13 +10,15 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from __future__ import absolute_import
 import itertools
 from operator import attrgetter
+import six
 
 
 def is_waitlist_only(course, semester):
     return any(sections_are_filled(sections)
-               for _, sections in get_sections_by_section_type(course, semester).iteritems())
+               for _, sections in six.iteritems(get_sections_by_section_type(course, semester)))
 
 def get_sections_by_section_type(course, semester):
     """ Return a map from section type to Sections for a given course and semester. """

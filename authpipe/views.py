@@ -10,6 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from __future__ import absolute_import
 from django.forms import model_to_dict
 from rest_framework.views import APIView
 from rest_framework.response import Response

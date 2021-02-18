@@ -78,6 +78,7 @@
     "sass-lint": "^1.10.2",
     "sass-loader": "^6.0.3",
     "searchneu": "^1.0.6",
+    "six": "^1.15.0",
     "static-interval-tree": "^1.3.0",
     "streamify": "^0.2.5",
     "style-loader": "^0.17.0",

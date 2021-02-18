@@ -10,8 +10,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from __future__ import absolute_import
 import json
-import urllib2
+import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
 import heapq
 from dateutil import tz
 from datetime import timedelta, datetime
@@ -29,6 +30,7 @@ from student.models import *
 from analytics.models import *
 from timetable.models import Semester
 from parsing.schools.active import ACTIVE_SCHOOLS
+import six
 
 
 to_zone = tz.gettz('America/New_York')
@@ -147,7 +149,7 @@ def number_timetables(**parameters):
     if "distinct" in parameters:
         timetables = timetables.distinct(parameters.pop("distinct"))
     timetables = timetables.filter(
-        **{param: val for (param, val) in parameters.iteritems() if val is not None})
+        **{param: val for (param, val) in six.iteritems(parameters) if val is not None})
     return timetables.count()
 
 def number_timetables_per_hour(Timetable=AnalyticsTimetable, school=None,
@@ -192,7 +194,7 @@ def number_of_reactions(max_only=False):
         reactions = Reaction.objects.filter(title=title)
         num_reactions[title] = len(reactions)
     if max_only:
-        return max(num_reactions.iterkeys(), key=num_reactions.get)
+        return max(six.iterkeys(num_reactions), key=num_reactions.get)
     else:
         return num_reactions
 
