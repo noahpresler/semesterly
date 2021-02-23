@@ -248,6 +248,14 @@ footer ul li a i.fa-at {
 	line-height: 24px;
 	background-color: #409036;
 }
+footer ul li a i.fa-bookmark {
+	line-height: 24px;
+	background-color: #808080;
+}
+footer ul li a i.fa-lock {
+	line-height: 24px;
+	background-color: #808080;
+}
 footer h6 {
 	text-align: center;
 	font-size: 10px;
