@@ -160,11 +160,12 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    #'django.contrib.sites',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
     'django_extensions',
+    'microsoft_auth',
     'authpipe',
     'timetable',
     'exams',
@@ -183,6 +184,8 @@ INSTALLED_APPS = (
     'parsing',
     'pilot',
 )
+
+SITE_ID = 1
 
 REST_FRAMEWORK ={
     'UNICODE_JSON': False
@@ -214,12 +217,36 @@ TEMPLATE_CONTEXT_PROCESSORS = (
    'social.apps.django_app.context_processors.login_redirect',
 )
 
+TEMPLATES = [
+    {
+        'OPTIONS': {
+            'context_processors': [
+                'microsoft_auth.context_processors.microsoft',
+            ],
+        },
+    },
+]
+
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.google.GoogleOAuth2',
     'social.backends.twitter.TwitterOAuth',
     'django.contrib.auth.backends.ModelBackend',
+    'microsoft_auth.backends.MicrosoftAuthenticationBackend',
 )
+
+MICROSOFT_AUTH_CLIENT_ID = 'your-client-id-from-apps.dev.microsoft.com'
+MICROSOFT_AUTH_CLIENT_SECRET = 'your-client-secret-from-apps.dev.microsoft.com'
+# Tenant ID is also needed for single tenant applications
+# MICROSOFT_AUTH_TENANT_ID = 'your-tenant-id-from-apps.dev.microsoft.com'
+
+# pick one MICROSOFT_AUTH_LOGIN_TYPE value
+# Microsoft authentication
+# include Microsoft Accounts, Office 365 Enterpirse and Azure AD accounts
+MICROSOFT_AUTH_LOGIN_TYPE = 'ma'
+
+# Xbox Live authentication
+MICROSOFT_AUTH_LOGIN_TYPE = 'xbl'  # Xbox Live authentication
 
 ROOT_URLCONF = 'semesterly.urls'
 
