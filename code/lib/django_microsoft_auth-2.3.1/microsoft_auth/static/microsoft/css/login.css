@@ -1,0 +1,17 @@
+#login-container.hide {
+    display: none;
+}
+
+.center {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.container p {
+    margin: 0 10px;
+    padding: 5px;
+}

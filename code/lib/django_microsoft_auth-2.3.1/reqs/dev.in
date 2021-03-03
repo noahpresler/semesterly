@@ -1,0 +1,8 @@
+-r lint.in
+-r test.in
+-r ql.in
+
+pip-tools
+sphinx
+sphinx-rtd-theme
+twine
