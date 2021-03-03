@@ -17,7 +17,7 @@ import integrations.views
 
 admin.autodiscover()
 
-urlpatterns = ['',
-               url(r'^integrations/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/$',
-                   integrations.views.IntegrationsView.as_view())
-               ]
+urlpatterns = [
+    url(r'^integrations/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/$',
+        integrations.views.IntegrationsView.as_view())
+]

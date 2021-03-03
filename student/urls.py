@@ -19,30 +19,30 @@ import student.views
 
 admin.autodiscover()
 
-urlpatterns = ['',
-               # profile management
-               url(r'^user/logout/$', logout,
-                   {'next_page': '/'}),
-               url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$',
-                   student.views.unsubscribe),
-               url(r'^user/settings/$', student.views.UserView.as_view()),
-               url(
-                   r'^delete_account/$',
-                   FeatureFlowView.as_view(
-                       feature_name='DELETE_ACCOUNT', allow_unauthenticated=False)),
+urlpatterns = [
+    # profile management
+    url(r'^user/logout/$', logout,
+        {'next_page': '/'}),
+    url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$',
+        student.views.unsubscribe),
+    url(r'^user/settings/$', student.views.UserView.as_view()),
+    url(
+        r'^delete_account/$',
+        FeatureFlowView.as_view(
+            feature_name='DELETE_ACCOUNT', allow_unauthenticated=False)),
 
-               # timetable management
-               url(r'^user/timetables/$', student.views.UserTimetableView.as_view()),
-               url(r'^user/timetables/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/$',
-                   student.views.UserTimetableView.as_view()),
-               url(r'^user/timetables/(?P<sem_name>.+)/(?P<year>[0-9]{4})/(?P<tt_name>.+)/$',
-                   student.views.UserTimetableView.as_view()),
-               # social
-               url(r'^user/classmates/(?P<sem_name>.+)/(?P<year>[0-9]{4})',
-                   student.views.ClassmateView.as_view()),
-               url(r'^user/gcal/?$', student.views.GCalView.as_view()),
-               url(r'^user/reactions/?$', student.views.ReactionView.as_view()),
+    # timetable management
+    url(r'^user/timetables/$', student.views.UserTimetableView.as_view()),
+    url(r'^user/timetables/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/$',
+        student.views.UserTimetableView.as_view()),
+    url(r'^user/timetables/(?P<sem_name>.+)/(?P<year>[0-9]{4})/(?P<tt_name>.+)/$',
+        student.views.UserTimetableView.as_view()),
+    # social
+    url(r'^user/classmates/(?P<sem_name>.+)/(?P<year>[0-9]{4})',
+        student.views.ClassmateView.as_view()),
+    url(r'^user/gcal/?$', student.views.GCalView.as_view()),
+    url(r'^user/reactions/?$', student.views.ReactionView.as_view()),
 
-               # for accepting TOS.
-               url(r'^tos/accept/', 'student.views.accept_tos'),
-               ]
+    # for accepting TOS.
+    url(r'^tos/accept/', student.views.accept_tos),
+]
