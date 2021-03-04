@@ -71,7 +71,7 @@ class MicrosoftClient(OAuth2Session):
 
         scheme = get_scheme(request, self.config)
 
-        super().__init__(
+        super(MicrosoftClient, self).__init__(
             self.config.MICROSOFT_AUTH_CLIENT_ID,
             scope=scope,
             state=state,
@@ -161,12 +161,12 @@ class MicrosoftClient(OAuth2Session):
         if self.config.MICROSOFT_AUTH_LOGIN_TYPE == LOGIN_TYPE_XBL:
             auth_url = self._xbox_authorization_url
 
-        return super().authorization_url(auth_url, response_mode="form_post")
+        return super(MicrosoftClient, self).authorization_url(auth_url, response_mode="form_post")
 
     def fetch_token(self, **kwargs):
         """ Fetchs OAuth2 Token with given kwargs"""
 
-        return super().fetch_token(  # pragma: no cover
+        return super(MicrosoftClient, self).fetch_token(  # pragma: no cover
             self.openid_config["token_endpoint"],
             client_secret=self.config.MICROSOFT_AUTH_CLIENT_SECRET,
             **kwargs
