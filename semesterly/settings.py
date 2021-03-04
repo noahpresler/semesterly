@@ -240,18 +240,10 @@ AUTHENTICATION_BACKENDS = (
     'microsoft_auth.backends.MicrosoftAuthenticationBackend',
 )
 
-MICROSOFT_AUTH_CLIENT_ID = 'your-client-id-from-apps.dev.microsoft.com'
-MICROSOFT_AUTH_CLIENT_SECRET = 'your-client-secret-from-apps.dev.microsoft.com'
-# Tenant ID is also needed for single tenant applications
-# MICROSOFT_AUTH_TENANT_ID = 'your-tenant-id-from-apps.dev.microsoft.com'
-
-# pick one MICROSOFT_AUTH_LOGIN_TYPE value
-# Microsoft authentication
-# include Microsoft Accounts, Office 365 Enterpirse and Azure AD accounts
+MICROSOFT_AUTH_CLIENT_ID = '529bad73-004a-4ebf-8e46-98fe8ff05d82'
+MICROSOFT_AUTH_CLIENT_SECRET = get_secret('MICROSOFT_AUTH_CLIENT_SECRET')
+MICROSOFT_AUTH_TENANT_ID = '9fa4f438-b1e6-473b-803f-86f8aedf0dec'
 MICROSOFT_AUTH_LOGIN_TYPE = 'ma'
-
-# Xbox Live authentication
-MICROSOFT_AUTH_LOGIN_TYPE = 'xbl'  # Xbox Live authentication
 
 ROOT_URLCONF = 'semesterly.urls'
 

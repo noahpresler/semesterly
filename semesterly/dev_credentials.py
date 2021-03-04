@@ -29,6 +29,7 @@ SECRETS = {
     'SOCIAL_AUTH_FACEBOOK_SECRET': '75f855457ff18db012e57ccaaf3470eb',
     'FB_TEST_EMAIL': 'open_ejvbpxf_user@tfbnw.net',
     'FB_TEST_PASS': 'asdfasdfdsfdsfadfdsflsdflglfg',
+    'MICROSOFT_AUTH_CLIENT_SECRET': 'shh',
 
     #Not essential for testing, but can be filled in for advanced usage
     'GW_PASS': None,
