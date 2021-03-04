@@ -62,12 +62,12 @@ class MicrosoftClient(OAuth2Session):
 
         domain = current_site.domain
         path = reverse("microsoft_auth:auth-callback")
-        scope = " ".join(self.SCOPE_MICROSOFT)
+        scope = self.SCOPE_MICROSOFT
 
         if self.config.MICROSOFT_AUTH_LOGIN_TYPE == LOGIN_TYPE_XBL:
-            scope = " ".join(self.SCOPE_XBL)
+            scope += self.SCOPE_XBL
 
-        scope = "{} {}".format(scope, extra_scopes).strip()
+        scope += extra_scopes
 
         scheme = get_scheme(request, self.config)
 
