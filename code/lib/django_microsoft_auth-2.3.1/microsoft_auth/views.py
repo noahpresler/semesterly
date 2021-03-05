@@ -44,7 +44,7 @@ class AuthenticateCallbackView(View):
     # manually mark methods csrf_exempt to handle CSRF processing ourselves
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
+        return super(AuthenticateCallbackView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         domain = Site.objects.get_current(self.request).domain
