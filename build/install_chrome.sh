@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install chrome on local docker environment
-# You can run this from your web container:
-# docker-compose run web /code/build/install_chrome.sh
+# You can run this from your web container shell:
+# /code/build/install_chrome.sh
 
 export DEBIAN_FRONTEND=noninteractive
 apt update
