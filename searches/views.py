@@ -77,7 +77,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                           section__semester=sem,
                           section__section_type="L") for min_max in filters.get('times'))
                        )
-            )
+            ).order_by('id')
         try:
             paginator = Paginator(course_match_objs.distinct(), 20)
             course_match_objs = paginator.page(page)
