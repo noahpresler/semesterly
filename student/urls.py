@@ -12,7 +12,7 @@
 
 from django.conf.urls import url
 from django.contrib import admin
-from django.contrib.auth.views import logout
+from django.contrib.auth.views import LogoutView
 
 from helpers.mixins import FeatureFlowView
 import student.views
@@ -21,7 +21,7 @@ admin.autodiscover()
 
 urlpatterns = [
     # profile management
-    url(r'^user/logout/$', logout,
+    url(r'^user/logout/$', LogoutView.as_view(),
         {'next_page': '/'}),
     url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$',
         student.views.unsubscribe),
