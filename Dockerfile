@@ -27,7 +27,7 @@ RUN pip install -r /code/requirements.txt
 # This is needed on newer ubuntu
 RUN pip install psycopg2-binary
 
-RUN pip install /code/code/lib/django_microsoft_auth-2.3.1/
+RUN pip install /code/lib/django_microsoft_auth-2.3.1/
 
 RUN npm install
 RUN npm run build
