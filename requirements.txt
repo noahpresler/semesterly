@@ -7,6 +7,7 @@ colorama==0.2.5
 configobj==4.7.2
 coreapi==2.3.0
 coverage==4.3.4
+cryptography==3.3.2
 dateparser==0.6.0
 Django==1.11.29
 django-cachalot==1.4.1
@@ -40,7 +41,7 @@ pep8==1.7.0
 prettytable==0.7.2
 progressbar2==3.32.1
 psycopg2==2.7.1
-PyJWT==1.4.0
+PyJWT==1.7.1
 pyserial==2.6
 python-amazon-simple-product-api==2.2.11
 python-dateutil==2.5.3
