@@ -185,6 +185,10 @@ INSTALLED_APPS = (
 
 SITE_ID = 1
 
+MIGRATION_MODULES = {
+    'sites': 'semesterly.fixtures.sites_migrations',
+}
+
 REST_FRAMEWORK ={
     'UNICODE_JSON': False
 }
