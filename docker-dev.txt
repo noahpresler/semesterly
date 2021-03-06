@@ -42,4 +42,8 @@ python manage.py digest jhu
 
 
 To install google chrome for running test inside docker:
-docker-compose run web /code/build/install_chrome.sh
+First get a shell (same as above docker exec -it...)
+Then first run (one time only)
+/code/build/install_chrome.sh
+To run tests, run:
+python manage.py test
