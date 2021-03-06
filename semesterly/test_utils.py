@@ -78,7 +78,8 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             {"profile.default_content_setting_values.notifications" : 2}
         )
         cls.chrome_options.add_argument("--no-sandbox") # Allow running chrome as root in Docker
-        cls.chrome_options.add_argument("--headless") # Do not require a display
+        cls.chrome_options.add_argument("--headless")  # Do not require a display
+        cls.chrome_options.add_argument("--disable-dev-shm-usage") # for docker
 
     def setUp(self):
         self.img_dir = os.path.dirname(os.path.realpath(__file__)) + '/test_failures'
