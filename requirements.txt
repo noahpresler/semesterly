@@ -31,7 +31,6 @@ jsonpatch==1.3
 jsonpointer==1.0
 jsonschema==2.5.1
 lxml==3.6.0
-./lib/django_microsoft_auth-2.3.1
 Markdown==2.6.6
 mock==2.0.0
 nltk==3.2.1
