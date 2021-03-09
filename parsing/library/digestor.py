@@ -716,9 +716,9 @@ class Vommit(DigestionStrategy):
         defaults = {}
         for model_name, model in models.items():
             defaults[model_name] = {}
-            for field in model._meta.get_all_field_names():
+            for field in [f.name for f in model._meta.get_fields()]:
                 try:
-                    default = model._meta.get_field_by_name(field)[0].default
+                    default = model._meta.get_field(field).default
                 except AttributeError:
                     continue
                 if default is django.db.models.fields.NOT_PROVIDED:

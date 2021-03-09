@@ -39,3 +39,11 @@ This will put you inside of the shell. Now you can get courses by running these 
 python manage.py ingest jhu --term Spring --years 2018
 python manage.py digest jhu
 * Open a browser and visit http://jhu.sem.ly:8000 and hack away
+
+
+To install google chrome for running test inside docker:
+First get a shell (same as above docker exec -it...)
+Then first run (one time only)
+/code/build/install_chrome.sh
+To run tests, run:
+python manage.py test

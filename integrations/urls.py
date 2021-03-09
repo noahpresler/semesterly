@@ -10,14 +10,14 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib import admin
 
 import integrations.views
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
-                       url(r'^integrations/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/$',
-                           integrations.views.IntegrationsView.as_view())
-                       )
+urlpatterns = [
+    url(r'^integrations/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/$',
+        integrations.views.IntegrationsView.as_view())
+]
