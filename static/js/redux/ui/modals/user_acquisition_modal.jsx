@@ -32,11 +32,11 @@ class UserAcquisitionModal extends React.Component {
 
   render() {
     const modalHeader =
-            (<div className="modal-content">
-              <div className="modal-header">
-                <h1>Login/Signup</h1>
-              </div>
-            </div>);
+      (<div className="modal-content">
+        <div className="modal-header">
+          <h1>Login/Signup</h1>
+        </div>
+      </div>);
     const modalStyle = {
       width: '100%',
     };
@@ -73,6 +73,16 @@ class UserAcquisitionModal extends React.Component {
           </button>
           <p className="method-details">Allows the option to friends in your classes.</p>
 
+          <button
+            className="btn abnb-btn fb-btn" onClick={() => {
+              const link = document.createElement('a');
+              link.href = `/login/azuread-tenant-oauth2/?student_token=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
+              document.body.appendChild(link);
+              link.click();
+            }}
+            satisfy the heap property>
+            <span>Continue with JHU</span>
+          </button>
 
           <div className="or-separator">
             <span className="h6 or-separator--text">or</span>
@@ -101,7 +111,7 @@ class UserAcquisitionModal extends React.Component {
 
           <button
             className="btn abnb-btn secondary eight-px-top" onClick={() => {
-                        // this.props.createiCalfromTimetable();
+              // this.props.createiCalfromTimetable();
             }} disabled
           >
             <span className="img-icon">

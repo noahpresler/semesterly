@@ -128,5 +128,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                         new_student.friends.add(friend_student)
                         new_student.save()
                         friend_student.save()
+    if backend_name == 'azuread-tenant-oauth2':
+        print('hi')
 
     return kwargs

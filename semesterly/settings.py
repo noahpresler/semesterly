@@ -87,11 +87,15 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 SOCIAL_AUTH_FACEBOOK_KEY = get_secret('SOCIAL_AUTH_FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = get_secret('SOCIAL_AUTH_FACEBOOK_SECRET')
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY = '529bad73-004a-4ebf-8e46-98fe8ff05d82'
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET = get_secret('MICROSOFT_AUTH_CLIENT_SECRET')
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID = '9fa4f438-b1e6-473b-803f-86f8aedf0dec'
 
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.google.GooglePlusAuth',
     'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.azuread_tenant.AzureADTenantOAuth2',
 )
 FIELDS_STORED_IN_SESSION = ['student_token','login_hash']
 
@@ -240,6 +244,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.azuread_tenant.AzureADTenantOAuth2',
     'django.contrib.auth.backends.ModelBackend',
     'microsoft_auth.backends.MicrosoftAuthenticationBackend',
 )
