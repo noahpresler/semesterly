@@ -43,7 +43,6 @@ urlpatterns = [
     url('', include('agreement.urls')),
     url('', include('pilot.urls')),
     url(r'admin/*', include(admin.site.urls)),
-    url(r'microsoft/*', include('microsoft_auth.urls', namespace='microsoft')),
 
     # Automatic deployment endpoint
     url(r'deploy_staging/', semesterly.views.deploy_staging),
