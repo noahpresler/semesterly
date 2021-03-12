@@ -46,7 +46,7 @@ python-amazon-simple-product-api==2.2.11
 python-dateutil==2.5.3
 python-memcached==1.58
 python-openid==2.2.5
-python-social-auth==0.2.19
+python-social-auth==0.2.21
 python-utils==2.0.0
 pytz==2016.4
 pywebpush==1.7.0
