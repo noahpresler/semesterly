@@ -62,7 +62,7 @@ scipy==0.19.1
 selenium==2.53.2
 simplejson==3.10.0
 six==1.10.0
-social-auth-core==3.4.0
+social-auth-core==4.0.2
 social-auth-app-django==4.0.0
 South==0.7.5
 Sphinx==1.5.1
