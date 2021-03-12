@@ -88,7 +88,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'
 SOCIAL_AUTH_FACEBOOK_KEY = get_secret('SOCIAL_AUTH_FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = get_secret('SOCIAL_AUTH_FACEBOOK_SECRET')
 SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY = '529bad73-004a-4ebf-8e46-98fe8ff05d82'
-SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET = get_secret('MICROSOFT_AUTH_CLIENT_SECRET')
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET = get_secret('SOCIAL_AUTH_AZURE_SECRET')
 SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID = '9fa4f438-b1e6-473b-803f-86f8aedf0dec'
 
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
@@ -167,7 +167,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'social_django',
     'django_extensions',
-    'microsoft_auth',
     'authpipe',
     'timetable',
     'exams',
@@ -186,12 +185,6 @@ INSTALLED_APPS = (
     'parsing',
     'pilot',
 )
-
-SITE_ID = 1
-
-MIGRATION_MODULES = {
-    'sites': 'semesterly.fixtures.sites_migrations',
-}
 
 REST_FRAMEWORK ={
     'UNICODE_JSON': False
@@ -230,7 +223,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
-                'microsoft_auth.context_processors.microsoft',
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
@@ -246,13 +238,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.twitter.TwitterOAuth',
     'social_core.backends.azuread_tenant.AzureADTenantOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    'microsoft_auth.backends.MicrosoftAuthenticationBackend',
 )
-
-MICROSOFT_AUTH_CLIENT_ID = '529bad73-004a-4ebf-8e46-98fe8ff05d82'
-MICROSOFT_AUTH_CLIENT_SECRET = get_secret('MICROSOFT_AUTH_CLIENT_SECRET')
-MICROSOFT_AUTH_TENANT_ID = '9fa4f438-b1e6-473b-803f-86f8aedf0dec'
-MICROSOFT_AUTH_LOGIN_TYPE = 'ma'
 
 ROOT_URLCONF = 'semesterly.urls'
 

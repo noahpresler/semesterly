@@ -30,7 +30,6 @@ install:
 - npm install
 - pip install --upgrade pip
 - pip install -r requirements.txt
-- pip install lib/django_microsoft_auth-2.3.1/
 addons:
 #  chrome: stable
 #  apt:
