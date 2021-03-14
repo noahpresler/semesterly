@@ -15,7 +15,7 @@ import urllib2
 import heapq
 from dateutil import tz
 from datetime import timedelta, datetime
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
@@ -74,7 +74,7 @@ def view_analytics_dashboard(request):
         fb_alert_clicks = number_timetables(Timetable=FacebookAlertClick)
         unique_users_fb_alert_clicks = number_timetables(Timetable=FacebookAlertClick, distinct="student")
 
-        return render_to_response('analytics_dashboard.html', {
+        return render(request, 'analytics_dashboard.html', {
                 "signups_per_hour": number_timetables_per_hour(
                     Timetable=Student,start_delta_days=7, interval_delta_hours=24),
                 "total_timetables_by_school": json.dumps(total_timetables_by_school),
@@ -104,8 +104,7 @@ def view_analytics_dashboard(request):
                 "jhu_most_popular_courses": [], # needs to be refactored; was causing timeout on server because too slow
                 "uoft_most_popular_courses": [], # needs to be refactored; was causing timeout on server because too slow
                 "umd_most_popular_courses": [] # needs to be refactored; was causing timeout on server because too slow
-            },
-            context_instance=RequestContext(request))
+            })
     else:
         raise Http404
 
