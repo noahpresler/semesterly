@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: semesterly 
-          image: uisacr.azurecr.io/semesterly
+          image: uisacr.azurecr.io/semesterlydev
           ports:
           - containerPort: 8000
