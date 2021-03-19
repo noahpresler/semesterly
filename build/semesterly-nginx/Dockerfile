@@ -1,4 +1,4 @@
-ARG SOURCEBUILD
+ARG DJANGOTAG
 FROM nginx:latest
 
 # Need curl for health checks
@@ -10,4 +10,4 @@ COPY ./50x.html /usr/share/nginx/html/50x.html
 # Get assets
 RUN mkdir /code
 
-COPY --from=semesterly.azurecr.io/semesterly:${SOURCEBUILD} /code/static /code/static
+COPY --from=semesterly.azurecr.io/semesterly:${DJANGOTAG} /code/static /code/static
