@@ -1,6 +1,9 @@
 ARG djangoTag=0
 ARG djangoImage=semesterly:$djangoTag
 
+RUN echo $djangoTag
+RUN echo $djangoTag
+
 # This is just to create an alias
 FROM $djangoImage as latestDjango
 
