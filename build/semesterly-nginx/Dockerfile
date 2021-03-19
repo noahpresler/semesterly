@@ -1,3 +1,4 @@
+ARG SOURCEBUILD
 FROM nginx:latest
 
 # Need curl for health checks
@@ -8,5 +9,5 @@ COPY ./50x.html /usr/share/nginx/html/50x.html
 
 # Get assets
 RUN mkdir /code
-#TODO this is for testing ACR w/hardcoded build
-COPY --from=semesterly.azurecr.io/semesterly:4 /code/static /code/static
+
+COPY --from=semesterly.azurecr.io/semesterly:$SOURCEBUILD /code/static /code/static
