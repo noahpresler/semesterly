@@ -33,7 +33,7 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: Docker@2
-      displayName: Build Django Container
+      displayName: Build and push Django Container
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
@@ -44,15 +44,25 @@ stages:
     - task: Docker@2
       displayName: Build nginx Container
       inputs:
-        command: 'buildAndPush'
+        command: 'build'
         repository: 'semesterly-nginx'
+        arguments: '--build-arg SOURCEBUILD=$(tag)'
         Dockerfile: './build/semesterly-nginx/Dockerfile'
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)          
+    - task: Docker@2
+      displayName: Push nginx Container
+      inputs:
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: 'semesterly-nginx'
+        command: 'push'
+        tags: |
+          '$(tag)'
 
     - upload: manifests
       artifact: manifests
+      
 
 - stage: Deploy
   displayName: Deploy stage
