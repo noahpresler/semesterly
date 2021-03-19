@@ -46,7 +46,7 @@ stages:
       inputs:
         command: 'build'
         repository: 'semesterly-nginx'
-        arguments: '--build-arg djangoImage=$(containerRegistry)/$(imageRepository):11'
+        arguments: '--build-arg djangoImage=$(containerRegistry)/$(imageRepository):$(tag)'
         Dockerfile: './build/semesterly-nginx/Dockerfile'
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
