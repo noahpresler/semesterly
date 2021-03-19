@@ -2,6 +2,7 @@ ARG djangoTag=0
 ARG djangoImage=semesterly:$djangoTag
 
 
+FROM nginx:latest
 
 # This is just to create an alias
 #FROM $djangoImage as latestDjango
@@ -9,7 +10,6 @@ RUN echo $djangoTag
 RUN echo $djangoImage
 
 
-FROM nginx:latest
 
 # Need curl for health checks
 RUN apt-get update && apt-get install -y curl && apt-get clean
