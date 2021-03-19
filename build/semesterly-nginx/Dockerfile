@@ -1,4 +1,9 @@
-ARG DJANGOTAG
+ARG djangoTag=0
+ARG djangoImage=semesterly.azurecr.io/semesterly:$djangoTag
+
+# This is just to create an alias
+FROM $djangoImage as djangoImage
+
 FROM nginx:latest
 
 # Need curl for health checks
@@ -11,4 +16,4 @@ COPY ./50x.html /usr/share/nginx/html/50x.html
 RUN mkdir /code
 
 RUN echo ${DJANGOTAG}
-COPY --from=semesterly.azurecr.io/semesterly:4 /code/static /code/static
+COPY --from=djangoImage /code/static /code/static
