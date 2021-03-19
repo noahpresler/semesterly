@@ -58,7 +58,7 @@ stages:
         repository: 'semesterly-nginx'
         command: 'push'
         tags: |
-          '$(tag)'
+          $(tag)
 
     - upload: manifests
       artifact: manifests
