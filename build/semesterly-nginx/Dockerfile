@@ -8,4 +8,5 @@ COPY ./50x.html /usr/share/nginx/html/50x.html
 
 # Get assets
 RUN mkdir /code
-COPY --from=896112238827.dkr.ecr.us-east-1.amazonaws.com/semesterly:latest /code/static /code/static
+#TODO this is for testing ACR w/hardcoded build
+COPY --from=semesterly.azurecr.io/semesterly:4 /code/static /code/static
