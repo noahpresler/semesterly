@@ -1,14 +1,10 @@
 ARG djangoTag=0
-ARG djangoImage=semesterly:$djangoTag
-
-
-FROM nginx:latest
+ARG djangoImage=semesterly.azurecr.io/semesterly:$djangoTag
 
 # This is just to create an alias
-#FROM $djangoImage as latestDjango
-RUN echo $djangoTag
-RUN echo $djangoImage
+FROM $djangoImage as latestDjango
 
+FROM nginx:latest
 
 
 # Need curl for health checks
