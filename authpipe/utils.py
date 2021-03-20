@@ -50,18 +50,18 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
     except BaseException:
         pass
     try:
+        email = kwargs['details']['email']
+        jhed = email.split('@')[0]
+        student = Student.objects.get(jhed=jhed).user
+        kwargs['user'] = student.user
+    except BaseException:
+        pass
+    try:
         token = strategy.session_get('student_token')
         ref = strategy.session_get('login_hash')
         student = Student.objects.get(id=hashids.decrypt(ref)[0])
         if check_student_token(student, token):
             kwargs['user'] = student.user
-    except BaseException:
-        pass
-    try:
-        email = details['email']
-        jhed = email.split('@')[0]
-        student = Student.objects.get(jhed=jhed).user
-        kwargs['user'] = student.user
     except BaseException:
         pass
     return kwargs
