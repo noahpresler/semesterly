@@ -80,7 +80,7 @@ class UserAcquisitionModal extends React.Component {
               document.body.appendChild(link);
               link.click();
             }}
-            satisfy the heap property>
+          >
             <span>Continue with JHU</span>
           </button>
 
