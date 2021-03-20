@@ -146,6 +146,20 @@ class SideBar extends React.Component {
                 See Finals Schedule
             </div>)
             : null;
+    const advisingDashboardButton = (
+      <button
+        className="btn abnb-btn fb-btn" onClick={() => {
+          const link = document.createElement('a');
+          //link.href = `/login/azuread-tenant-oauth2/?student_token=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
+          link.href = `/login/azuread-tenant-oauth2/`;
+          document.body.appendChild(link);
+          link.click();
+        }}
+      >
+        <span>Advising Dashboard</span>
+      </button>
+    );
+
     return (
       <div className="side-bar no-print">
         <div className="sb-name">
@@ -193,7 +207,11 @@ class SideBar extends React.Component {
         { optionalSlotsHeader }
         { optionalSlots }
         <div id="sb-optional-slots" />
-      </div>
+          <h4 className="sb-header">
+            Try out or new Beta feature!
+          </h4>
+        {advisingDashboardButton}
+        </div>
     );
   }
 }
