@@ -10,6 +10,6 @@ class Comment(models.Model):
     transcript_id = models.ForeignKey('forum.Transcript')
 
 class Transcript(models.Model):
-    owner = models.ForeignKey('student.Student')
-    advisors = models.ManyToManyField('student.Student')
+    owner = models.ForeignKey('student.Student', related_name='owner')
+    advisors = models.ManyToManyField('student.Student', related_name='advisors')
     semester_id = models.ForeignKey('timetable.Semester')

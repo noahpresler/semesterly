@@ -184,6 +184,7 @@ INSTALLED_APPS = (
     'agreement',
     'parsing',
     'pilot',
+    'forum',
 )
 
 REST_FRAMEWORK ={
