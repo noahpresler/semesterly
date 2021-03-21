@@ -96,6 +96,8 @@ export const toggleSaveCalendarModal = () => ({ type: ActionTypes.TOGGLE_SAVE_CA
 
 export const openSignUpModal = () => ({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
 
+export const openJHUSignupModal = () => ({ type: ActionTypes.TOGGLE_JHU_SIGNUP_MODAL });
+
 export const changeUserInfo = info => ({
   type: ActionTypes.CHANGE_USER_INFO,
   data: info,

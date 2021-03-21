@@ -32,6 +32,7 @@ import optionalCourses from './optional_courses_reducer';
 import explorationModal, * as fromExplorationModal from './exploration_modal_reducer';
 import customSlots from './custom_slots_reducer';
 import signupModal from './signup_modal_reducer';
+import jhuSignupModal from './jhu_signup_modal_reducer';
 import peerModal from './peer_modal_reducer';
 import preferenceModal from './preference_modal_reducer';
 import friends from './friends_reducer';
@@ -72,6 +73,7 @@ const rootReducer = combineReducers({
   searchResults,
   semester,
   signupModal,
+  jhuSignupModal,
   termsOfServiceBanner,
   termsOfServiceModal,
   textbookModal,

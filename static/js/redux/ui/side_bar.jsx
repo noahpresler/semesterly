@@ -148,13 +148,7 @@ class SideBar extends React.Component {
             : null;
     const advisingDashboardButton = (
       <button
-        className="btn abnb-btn fb-btn" onClick={() => {
-          const link = document.createElement('a');
-          //link.href = `/login/azuread-tenant-oauth2/?student_token=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
-          link.href = `/login/azuread-tenant-oauth2/`;
-          document.body.appendChild(link);
-          link.click();
-        }}
+        className="btn abnb-btn fb-btn" onClick={this.props.openJHUSignupModal}
       >
         <span>Advising Dashboard</span>
       </button>
@@ -251,6 +245,7 @@ SideBar.propTypes = {
   examSupportedSemesters: PropTypes.arrayOf(PropTypes.number).isRequired,
   hasLoaded: PropTypes.bool.isRequired,
   getShareLink: PropTypes.func.isRequired,
+  openJHUSignupModal: PropTypes.func.isRequired,
 };
 
 export default SideBar;

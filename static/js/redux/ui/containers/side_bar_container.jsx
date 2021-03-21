@@ -24,6 +24,7 @@ import {
     showFinalExamsModal,
     togglePeerModal,
     triggerTextbookModal,
+    openJHUSignupModal,
 } from '../../actions/modal_actions';
 import {
     addOrRemoveCourse,
@@ -68,6 +69,7 @@ const SideBarContainer = connect(
     deleteTimetable,
     launchFinalExamsModal: showFinalExamsModal,
     loadTimetable,
+    openJHUSignupModal,
   },
 )(SideBar);
 
