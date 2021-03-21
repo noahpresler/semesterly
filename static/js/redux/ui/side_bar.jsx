@@ -202,7 +202,7 @@ class SideBar extends React.Component {
         { optionalSlots }
         <div id="sb-optional-slots" />
         <h4 className="sb-header">
-          Try out or new Beta feature!
+          Try out our new Beta feature!
           </h4>
         {advisingDashboardButton}
       </div>
