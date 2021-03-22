@@ -87,15 +87,16 @@ class UserAcquisitionModal extends React.Component {
             }}
           >
             <span className="img-icon">
-              <img alt="JHU"
+              <img
+                alt="JHU"
                 className="jhu-square"
-                src='/static/img/school_logos/jhu-square.png'
+                src="/static/img/school_logos/jhu-square.png"
               />
             </span>
             <span>Continue with JHU</span>
           </button>
 
-          
+
           <button
             className="btn abnb-btn secondary eight-px-top" onClick={() => {
               const link = document.createElement('a');
