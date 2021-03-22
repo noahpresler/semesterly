@@ -148,7 +148,7 @@ class SideBar extends React.Component {
             : null;
     const advisingDashboardButton = (
       <button
-        className="btn abnb-btn fb-btn" onClick={this.props.openJHUSignupModal}
+        className="btn advising-btn eight-px-top" onClick={this.props.openJHUSignupModal}
       >
         <span>Advising Dashboard</span>
       </button>
