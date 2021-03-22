@@ -79,7 +79,7 @@ class UserAcquisitionModal extends React.Component {
           </div>
 
           <button
-            className="btn abnb-btn jhu-btn" onClick={() => {
+            className="btn abnb-btn secondary" onClick={() => {
               const link = document.createElement('a');
               link.href = `/login/azuread-tenant-oauth2/?student_token=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
               document.body.appendChild(link);
