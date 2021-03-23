@@ -18,10 +18,9 @@ import { DragDropContext } from 'react-dnd';
 import Advising from '../advising';
 import { saveTimetable } from '../../actions/user_actions';
 import { setActiveTimetable } from '../../actions/timetable_actions';
-import { getTimetables, getActiveTimetableCourses } from '../../reducers/root_reducer';
+import { getActiveTimetableCourses } from '../../reducers/root_reducer';
 
 const mapStateToProps = (state) => {
-    const timetables = getTimetables(state);
     const active = state.timetables.active;
     const activeTTLength = getActiveTimetableCourses(state).length;
     return {
@@ -40,8 +39,6 @@ const mapStateToProps = (state) => {
             && activeTTLength >= 1),
         explorationModalIsVisible: state.explorationModal.isVisible,
         dataLastUpdated: state.school.dataLastUpdated,
-        PgCount: timetables.length,
-        PgActive: active,
     };
 };
 

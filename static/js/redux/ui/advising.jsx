@@ -14,6 +14,8 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import DayCalendarContainer from './containers/day_calendar_container';
+import CalendarContainer from './containers/calendar_container';
 import AlertBox from './alert_box';
 import ConflictAlertContainer from './alerts/conflict_alert_container';
 import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_container';
@@ -30,9 +32,12 @@ import PreferenceModalContainer from './containers/modals/preference_modal_conta
 import TutModalContainer from './containers/modals/tut_modal_container';
 import PeerModalContainer from './containers/modals/peer_modal_container';
 import IntegrationModalContainer from './containers/modals/integration_modal_container';
+import SaveCalendarModalContainer from './containers/modals/save_calendar_modal_container';
+import FinalExamsModalContainer from './containers/modals/final_exams_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
 import TermsOfServiceModalContainer from './containers/terms_of_service_modal_container';
 import TermsOfServiceBannerContainer from './containers/terms_of_service_banner_container';
+import TextbookModalContainer from './containers/modals/textbook_modal_container';
 
 
 class Advising extends React.Component {
@@ -136,20 +141,14 @@ class Advising extends React.Component {
     }
 
     render() {
-        const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        //const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        //const cal = mobile && $(window).width() < 767 && this.state.orientation === 'portrait' ?
+
         return (
             <div className="page-wrapper">
                 <TopBarContainer />
-                <UserSettingsModalContainer />
-                <ExplorationModalContainer />
-                <SignupModalContainer />
-                <PreferenceModalContainer />
-                <IntegrationModalContainer />
-                <TutModalContainer />
-                <PeerModalContainer />
-                <UserAcquisitionModalContainer />
-                <TermsOfServiceModalContainer />
-                <TermsOfServiceBannerContainer />
+                <SideBarContainer />
+
                 <AlertBox ref={(a) => { this.msg = a; }} {...this.alertOptions} />
                 <div className="all-cols">
                     <div className="main-bar">
@@ -210,7 +209,6 @@ class Advising extends React.Component {
                             </ul>
                         </footer>
                     </div>
-                    <SideBarContainer />
                 </div>
             </div>);
     }
