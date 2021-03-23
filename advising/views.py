@@ -7,21 +7,8 @@ from django.db import transaction
 
 import semesterly.views
 
-# Create your views here.
+# currently unused. TODO: add get_feature_flow()
 
-def index(request):
-	return render(request, 'advising.html')
+#feature_name = 'ADVISING'
 
-def ind(request):
-	if request.method == 'POST':
-		return redirect('advising')
-	else:
-		student = Student.objects.get(user=request.user)
-		context = {
-			'student': student,
-			'enrolled': vacant,
-			'waitlisted': full,
-			'sections': section_list,
-			'message': ""
-		}
-		return render(request, 'advising.html', context=context)
+

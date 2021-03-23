@@ -22,5 +22,5 @@ app_name = 'advising'
 urlpatterns = [
         #url(r'advising/$', advising.views.index),
 
-        url(r'advising/$',FeatureFlowView.as_view(feature_name='ADVISING')),
+        url('advising/$',FeatureFlowView.as_view(feature_name='ADVISING')),
     ]
