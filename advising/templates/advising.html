@@ -1,0 +1,17 @@
+{% extends "header.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="post">
+        {% csrf_token %}
+        <fieldset>
+            <h3>
+                Advising Dashboard
+            </h3>
+            <p class="text-muted">Login with SIS in order to start commenting</p>
+        </fieldset>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

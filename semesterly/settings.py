@@ -210,6 +210,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(PROJECT_DIRECTORY, 'templates/'),
             os.path.join(PROJECT_DIRECTORY, 'semesterly/templates/'),
+            os.path.join(PROJECT_DIRECTORY, 'advising/templates'),
         ],
         'OPTIONS': {
             'debug': DEBUG,
