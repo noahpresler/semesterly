@@ -20,6 +20,7 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
+import AdvisingContainer from './ui/containers/advising_container';
 import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
 import {
   handleCreateNewTimetable, loadCachedTimetable, loadTimetable,
@@ -37,7 +38,6 @@ import {
 } from './util';
 import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
-import AdvisingContainer from "./ui/containers/advising_container";
 
 const store = createStore(rootReducer,
     window.devToolsExtension && window.devToolsExtension(),
@@ -156,12 +156,6 @@ const handleFlows = featureFlow => (dispatch) => {
     case 'DELETE_ACCOUNT':
       dispatch(overrideSettingsShow(true));
       break;
-    case 'ADVISING':
-      render(
-          <Provider store={store}>
-          <AdvisingContainer />
-        </Provider>, document.getElementsByClassName('page')[0]);
-      break;
     default:
       // unexpected feature name
       break;
@@ -196,7 +190,16 @@ store.dispatch(
     setup(),
 );
 
-render(
-  <Provider store={store}>
-    <SemesterlyContainer />
-  </Provider>, document.getElementsByClassName('page')[0]);
+//advising = false;
+//const dashboard = advising  ? <AdvisingContainer /> : <SemesterlyContainer />;
+
+//const dashboard = <SemesterlyContainer />;
+//Uncomment below to access Advising Dashboard
+const dashboard = <AdvisingContainer />;
+
+    render(
+        <Provider store={store}>
+          {dashboard}
+        </Provider>, document.getElementsByClassName('page')[0]);
+   
+
