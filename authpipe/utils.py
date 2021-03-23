@@ -50,8 +50,7 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
     except BaseException:
         pass
     try:
-        email = kwargs['details']['email']
-        jhed = email.split('@')[0]
+        jhed = response['unique_name']
         student = Student.objects.get(jhed=jhed).user
         kwargs['user'] = student.user
     except BaseException:
@@ -136,7 +135,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                         new_student.save()
                         friend_student.save()
     if backend_name == 'azuread-tenant-oauth2':
-        new_student.jhed = details['email'].split('@')[0]
+        new_student.jhed = response['unique_name']
         new_student.save()
 
     return kwargs
