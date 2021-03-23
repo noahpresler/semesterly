@@ -37,6 +37,7 @@ import {
 } from './util';
 import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
+import AdvisingContainer from "./ui/containers/advising_container";
 
 const store = createStore(rootReducer,
     window.devToolsExtension && window.devToolsExtension(),
@@ -154,6 +155,12 @@ const handleFlows = featureFlow => (dispatch) => {
       break;
     case 'DELETE_ACCOUNT':
       dispatch(overrideSettingsShow(true));
+      break;
+    case 'ADVISING':
+      render(
+          <Provider store={store}>
+          <AdvisingContainer />
+        </Provider>, document.getElementsByClassName('page')[0]);
       break;
     default:
       // unexpected feature name
