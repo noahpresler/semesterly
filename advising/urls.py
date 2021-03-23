@@ -20,9 +20,7 @@ from helpers.mixins import FeatureFlowView
 app_name = 'advising'
 
 urlpatterns = [
-        url(r'advising/$', advising.views.index),
-        #url(r'^advising/.*$', RedirectView.as_view(url="/")),
+        #url(r'advising/$', advising.views.index),
 
-        #url(r'advising',Template.as_view(template_name='advising.html')),
-
+        url(r'advising/$',FeatureFlowView.as_view(feature_name='ADVISING')),
     ]
