@@ -151,7 +151,7 @@ class SideBar extends React.Component {
         className="btn advising-btn eight-px-top"
         onClick={this.props.jhuSignedUp ? () => {
           const link = document.createElement('a');
-          link.href = "/advising"
+          link.href = '/advising';
           document.body.appendChild(link);
           link.click();
         } : this.props.openJHUSignupModal}
