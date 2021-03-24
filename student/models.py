@@ -78,6 +78,9 @@ class Student(models.Model):
     def is_signed_up_through_google(self):
         return self.provider_exists('google-oauth2')
 
+    def is_signed_up_through_jhu(self):
+        return self.provider_exists('azuread-tenant-oauth2')
+
     def provider_exists(self, provider):
         return self.user.social_auth.filter(provider=provider).exists()
 
