@@ -148,7 +148,13 @@ class SideBar extends React.Component {
             : null;
     const advisingDashboardButton = (
       <button
-        className="btn advising-btn eight-px-top" onClick={this.props.openJHUSignupModal}
+        className="btn advising-btn eight-px-top"
+        onClick={this.props.jhuSignedUp ? () => {
+          const link = document.createElement('a');
+          link.href = "/advising"
+          document.body.appendChild(link);
+          link.click();
+        } : this.props.openJHUSignupModal}
       >
         <span>Advising Dashboard</span>
       </button>
@@ -246,6 +252,7 @@ SideBar.propTypes = {
   hasLoaded: PropTypes.bool.isRequired,
   getShareLink: PropTypes.func.isRequired,
   openJHUSignupModal: PropTypes.func.isRequired,
+  jhuSignedUp: PropTypes.bool.isRequired,
 };
 
 export default SideBar;
