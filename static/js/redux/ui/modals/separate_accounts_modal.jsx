@@ -43,25 +43,46 @@ class SeparateAccountsModal extends React.Component {
     const modalHeader =
       (<div className="modal-content">
         <div className="modal-header">
-          <h1>You are trying to connect two separate accounts.</h1>
+          <h1>Separate Accounts Detected!</h1>
         </div>
       </div>);
+    const modalBody =
+      (
+        <div className="modal-body">
+          <p>
+            Your attempt to connect with another account has failed.
+            This most likely occurred if you logged into one account
+            without being logged into another. If you wish to connect your
+            accounts, you must delete one of the accounts by following these
+            three steps:
+          </p>
+          <ol>
+            <li>Log into Semester.ly with the account you want to <span className="delete-text">delete</span>.</li>
+            <li>Go to account settings by clicking the button below or by the dropdown in the top right.</li>
+            <img className="center-aligned" src="/static/img/account_settings.PNG" />
+            <li>Delete your account and all related information.</li>
+          </ol>
+          <a href="/delete_account">
+            <div className="button-wrapper">
+              <div className="signup-button center-aligned">
+                Settings
+            </div>
+            </div>
+          </a>
+        </div>
+      );
     const modalStyle = {
       width: '100%',
     };
     return (
       <Modal
         ref={(c) => { this.modal = c; }}
-        className="signup-modal max-modal"
+        className="separate-accounts-modal max-modal"
         modalStyle={modalStyle}
         onHide={this.hide}
       >
         {modalHeader}
-        <a href="/delete_account">
-          <div className="signup-button">
-            Settings
-          </div>
-        </a>
+        {modalBody}
       </Modal>
     );
   }
