@@ -15,14 +15,14 @@ GNU General Public License for more details.
 import * as ActionTypes from '../constants/actionTypes';
 
 const separateAccountsModal = (state = { isVisible: false }, action) => {
-    switch (action.type) {
-        case ActionTypes.TOGGLE_SEPARATE_ACCOUNTS_MODAL:
-            return { isVisible: !state.isVisible };
-        case ActionTypes.TRIGGER_SEPARATE_ACCOUNTS_MODAL:
-            return { isVisible: true };
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case ActionTypes.TOGGLE_SEPARATE_ACCOUNTS_MODAL:
+      return { isVisible: !state.isVisible };
+    case ActionTypes.TRIGGER_SEPARATE_ACCOUNTS_MODAL:
+      return { isVisible: true };
+    default:
+      return state;
+  }
 };
 
 export default separateAccountsModal;

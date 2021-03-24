@@ -150,8 +150,8 @@ export const setUserSettingsModalHidden = () => ({
 
 export const triggerSeparateAccountsModal = () => ({
   type: ActionTypes.TRIGGER_SEPARATE_ACCOUNTS_MODAL,
-})
+});
 
 export const toggleSeparateAccountsModal = () => ({
   type: ActionTypes.TOGGLE_SEPARATE_ACCOUNTS_MODAL,
-})
+});

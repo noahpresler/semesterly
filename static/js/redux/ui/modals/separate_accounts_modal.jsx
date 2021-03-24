@@ -57,9 +57,15 @@ class SeparateAccountsModal extends React.Component {
             three steps:
           </p>
           <ol>
-            <li>Log into Semester.ly with the account you want to <span className="delete-text">delete</span>.</li>
-            <li>Go to account settings by clicking the button below or by the dropdown in the top right.</li>
-            <img className="center-aligned" src="/static/img/account_settings.PNG" />
+            <li>Log into Semester.ly with the account you want to
+              <span className="delete-text">delete</span>.</li>
+            <li>Go to account settings by clicking the button below or
+              by the dropdown in the top right.</li>
+            <img
+              className="center-aligned"
+              alt="Account settings"
+              src="/static/img/account_settings.PNG"
+            />
             <li>Delete your account and all related information.</li>
           </ol>
           <a href="/delete_account">

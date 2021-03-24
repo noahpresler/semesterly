@@ -15,21 +15,21 @@ GNU General Public License for more details.
 import { connect } from 'react-redux';
 import SeparateAccountsModal from '../../modals/separate_accounts_modal';
 import {
-    triggerSeparateAccountsModal,
-    toggleSeparateAccountsModal,
+  triggerSeparateAccountsModal,
+  toggleSeparateAccountsModal,
 } from '../../../actions/modal_actions';
 
 
 const mapStateToProps = state => ({
-    isVisible: state.separateAccountsModal.isVisible,
+  isVisible: state.separateAccountsModal.isVisible,
 });
 
 const SeparateAccountsModalContainer = connect(
-    mapStateToProps,
-    {
-        triggerSeparateAccountsModal,
-        toggleSeparateAccountsModal,
-    },
+  mapStateToProps,
+  {
+    triggerSeparateAccountsModal,
+    toggleSeparateAccountsModal,
+  },
 )(SeparateAccountsModal);
 
 export default SeparateAccountsModalContainer;
