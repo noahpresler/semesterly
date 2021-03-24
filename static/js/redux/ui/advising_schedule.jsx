@@ -131,6 +131,22 @@ class AdvisingSchedule extends React.Component {
                     { img }
                 </div>);
         }
+        //TODO: edit wailisted
+        const waitlistedlSlotsHeader = (optionalSlots.length === 0 && masterSlots.length > 3) ? null :
+            <h4 className="as-header">Wailisted Courses</h4>;
+        if (optionalSlots.length === 0 && masterSlots.length > 3) {
+            optionalSlots = null;
+        } else if (optionalSlots.length === 0) {
+            const img = (
+                <img
+                    src="/static/img/emptystates/optionalslots.png"
+                    alt="No optional courses added."
+                />);
+            optionalSlots = (
+                <div className="empty-state">
+                    { img }
+                </div>);
+        }
         const finalScheduleLink = (masterSlots.length > 0 &&
             this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0
             && this.props.hasLoaded) ?
@@ -171,6 +187,8 @@ class AdvisingSchedule extends React.Component {
                     { finalScheduleLink }
                 </div>
                 { optionalSlotsHeader }
+                { optionalSlots }
+                { waitlistedlSlotsHeader }
                 { optionalSlots }
                 <div id="as-optional-slots" />
             </div>
