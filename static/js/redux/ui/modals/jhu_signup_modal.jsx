@@ -50,7 +50,7 @@ class JHUSignupModal extends React.Component {
             className="pro-pic"
             style={{ backgroundImage: 'url(/static/img/blank.jpg)' }}
           />
-          <h1>That feature requires an account...</h1>
+          <h1>This feature requires a JHU account...</h1>
         </div>
       </div>);
     const modalStyle = {
@@ -69,19 +69,19 @@ class JHUSignupModal extends React.Component {
             <div className="row">
               <div className="col-1-2">
                 <div className="emoji"><i className="fa fa-check" /></div>
-                Find classes with friends
+                Share schedules
                 <img className="sample-slot" alt="" src="/static/img/sample_slot.png" />
               </div>
               <div className="col-1-2">
                 <div className="emoji"><i className="fa fa-check" /></div>
-                Save & name multiple timetables
+                Chat with advisors
                 <img className="sample-slot" alt="" src="/static/img/multi_tt_sample.png" />
               </div>
             </div>
             <div className="row">
               <div className="col-1-2">
                 <div className="emoji"><i className="fa fa-check" /></div>
-                Create custom events
+                Plan courses
                 <img
                   alt=""
                   className="sample-slot"
@@ -105,7 +105,7 @@ class JHUSignupModal extends React.Component {
             </div>
             <a href="/login/azuread-tenant-oauth2?next=/advising">
               <div className="signup-button">
-                Signup!
+                Link JHED
               </div>
             </a>
           </div>
