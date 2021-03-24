@@ -82,28 +82,7 @@ class Advising extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps !== this.props) {
-            if (nextProps.alertConflict && !this.props.alertConflict) {
-                this.showAlert(<ConflictAlertContainer />, 'info', 10000);
-            } else if (nextProps.alertTimetableExists && !this.props.alertTimetableExists) {
-                this.showAlert(<TimetableExistsAlertContainer />, 'info', 10000);
-            } else if (nextProps.alertChangeSemester && !this.props.alertChangeSemester) {
-                this.showAlert(<ChangeSemesterAlertContainer />, 'info', 15000);
-            } else if (nextProps.alertNewTimetable && !this.props.alertNewTimetable) {
-                this.showAlert(<NewTimetableAlertContainer />, 'info', 12000);
-            } else if (nextProps.alertEnableNotifications && !this.props.alertEnableNotifications) {
-                this.showAlert(<EnableNotificationsAlertContainer />, 'info', 12000);
-            } else if (nextProps.alertFacebookFriends && !this.props.alertFacebookFriends) {
-                this.msg.show(<FriendsInClassAlertContainer />, {
-                    type: 'info',
-                    time: 25000,
-                    additionalClass: 'friends-in-class-alert-container',
-                    icon: <div className="friends-in-class-alert-icon" />,
-                });
-            } else {
-                this.msg.removeAll();
-            }
-        }
+
     }
 
     updateOrientation() {
@@ -205,8 +184,8 @@ class Advising extends React.Component {
 
 Advising.propTypes = {
     dataLastUpdated: PropTypes.string.isRequired,
-    PgActive: PropTypes.number.isRequired,
-    PgCount: PropTypes.number.isRequired,
+    //PgActive: PropTypes.number.isRequired,
+    //PgCount: PropTypes.number.isRequired,
     alertChangeSemester: PropTypes.bool.isRequired,
     alertConflict: PropTypes.bool.isRequired,
     alertEnableNotifications: PropTypes.bool.isRequired,
