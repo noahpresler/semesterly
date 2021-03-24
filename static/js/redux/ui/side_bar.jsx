@@ -154,7 +154,7 @@ class SideBar extends React.Component {
             : null;
     const betaFeature = (<div>
         <h4 className="sb-header"> Try our new Beta feature! </h4>
-        <a href="/user/advising">
+        <a href="/advising">
             <button className="semesterly-blue"
                     //onClick={() => this.toggleAdvising()}
                     >
