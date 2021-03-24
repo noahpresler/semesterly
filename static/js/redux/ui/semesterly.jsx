@@ -39,6 +39,7 @@ import UserAcquisitionModalContainer from './containers/modals/user_acquisition_
 import TermsOfServiceModalContainer from './containers/terms_of_service_modal_container';
 import TermsOfServiceBannerContainer from './containers/terms_of_service_banner_container';
 import TextbookModalContainer from './containers/modals/textbook_modal_container';
+import SeparateAccountsModalContainer from './containers/modals/separate_accounts_modal_container';
 
 
 class Semesterly extends React.Component {
@@ -153,6 +154,7 @@ class Semesterly extends React.Component {
         <ExplorationModalContainer />
         <SignupModalContainer />
         <JHUSignupModalContainer />
+        <SeparateAccountsModalContainer />
         <PreferenceModalContainer />
         <IntegrationModalContainer />
         <TutModalContainer />
