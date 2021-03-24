@@ -62,7 +62,7 @@ class StudentSerializer(serializers.ModelSerializer):
             'userLastName',
             'FacebookSignedUp',
             'GoogleSignedUp',
-            'jhuSignedUp'
+            'jhuSignedUp',
             'GoogleLoggedIn',
             'LoginToken',
             'LoginHash',
