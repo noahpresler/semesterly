@@ -14,8 +14,6 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import DayCalendarContainer from './containers/day_calendar_container';
-import CalendarContainer from './containers/calendar_container';
 import AlertBox from './alert_box';
 import ConflictAlertContainer from './alerts/conflict_alert_container';
 import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_container';
@@ -24,20 +22,8 @@ import NewTimetableAlertContainer from './alerts/new_timetable_alert_container';
 import EnableNotificationsAlertContainer from './alerts/enable_notifications_alert_container';
 import FriendsInClassAlertContainer from './alerts/friends_in_class_alert_container';
 import TopBarContainer from './containers/top_bar_container';
-import SideBarContainer from './containers/side_bar_container';
-import UserSettingsModalContainer from './containers/modals/user_settings_modal_container';
-import ExplorationModalContainer from './containers/modals/exploration_modal_container';
-import SignupModalContainer from './containers/modals/signup_modal_container';
-import PreferenceModalContainer from './containers/modals/preference_modal_container';
-import TutModalContainer from './containers/modals/tut_modal_container';
-import PeerModalContainer from './containers/modals/peer_modal_container';
-import IntegrationModalContainer from './containers/modals/integration_modal_container';
-import SaveCalendarModalContainer from './containers/modals/save_calendar_modal_container';
-import FinalExamsModalContainer from './containers/modals/final_exams_modal_container';
-import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
-import TermsOfServiceModalContainer from './containers/terms_of_service_modal_container';
-import TermsOfServiceBannerContainer from './containers/terms_of_service_banner_container';
-import TextbookModalContainer from './containers/modals/textbook_modal_container';
+import CommentForumContainer from "./containers/comment_forum_container";
+import AdvisingScheduleContainer from "./containers/advising_schedule_container";
 
 
 class Advising extends React.Component {
@@ -147,8 +133,8 @@ class Advising extends React.Component {
         return (
             <div className="page-wrapper">
                 <TopBarContainer />
-                <SideBarContainer />
-
+                <AdvisingScheduleContainer />
+                <CommentForumContainer />
                 <AlertBox ref={(a) => { this.msg = a; }} {...this.alertOptions} />
                 <div className="all-cols">
                     <div className="main-bar">
