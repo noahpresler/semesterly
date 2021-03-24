@@ -21,10 +21,8 @@ import flatMap from 'lodash/flatMap';
 import MasterSlot from './master_slot';
 import TimetableNameInputContainer from './containers/timetable_name_input_container';
 import CreditTickerContainer from './containers/credit_ticker_container';
-import Textbook from './textbook';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import { getNextAvailableColour } from '../util';
-import { getTextbooksFromCourse } from '../reducers/entities_reducer';
 
 class AdvisingSchedule extends React.Component {
     constructor(props) {

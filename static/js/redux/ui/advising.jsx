@@ -24,6 +24,9 @@ import FriendsInClassAlertContainer from './alerts/friends_in_class_alert_contai
 import TopBarContainer from './containers/top_bar_container';
 import CommentForumContainer from "./containers/comment_forum_container";
 import AdvisingScheduleContainer from "./containers/advising_schedule_container";
+import UserSettingsModalContainer from "./containers/modals/user_settings_modal_container";
+import SignupModalContainer from "./containers/modals/signup_modal_container";
+import UserAcquisitionModalContainer from "./containers/modals/user_acquisition_modal_container";
 
 
 class Advising extends React.Component {
@@ -171,9 +174,13 @@ class Advising extends React.Component {
         return (
             <div className="page-wrapper">
                 <TopBarContainer />
+                <UserSettingsModalContainer />
+                <UserAcquisitionModalContainer />
+                <SignupModalContainer />
                 <CommentForumContainer />
+                <AlertBox ref={(a) => { this.msg = a; }} {...this.alertOptions} />
                 <div className="all-cols">
-                    <div className="main-bar">
+                    <div className="advising-schedule">
                         <AdvisingScheduleContainer />
                         {footer}
                     </div>
