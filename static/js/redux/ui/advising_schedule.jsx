@@ -48,12 +48,6 @@ class AdvisingSchedule extends React.Component {
         callback();
     }
 
-    /*
-    toggleAdvising() {
-        setAdvising()
-    }
-    */
-
     render() {
         const savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => (
             <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>
@@ -151,6 +145,7 @@ class AdvisingSchedule extends React.Component {
         return (
             <div className="advising-schedule">
                 <div className="as-name">
+                    <h3><b>Advising Dashboard</b></h3>
                     <TimetableNameInputContainer />
                     <ClickOutHandler onClickOut={this.hideDropdown}>
                         {dropItDown}
@@ -169,7 +164,6 @@ class AdvisingSchedule extends React.Component {
                 <a onClick={this.props.launchPeerModal}>
                     <h4 className="as-header">
                         Current Courses
-
                     </h4>
                 </a>
                 <div className="as-master-slots">

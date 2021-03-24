@@ -25,8 +25,8 @@ class CommentForum extends React.Component {
 
     render() {
         return (
-            <div className="comment-forum no-print">
-                Comments Forum
+            <div className="comment-forum">
+                <h1>Comments Forum</h1>
             </div>)
 
     }

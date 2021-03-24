@@ -79,25 +79,6 @@ textarea {
   }
 }
 
-.advising-schedule {
-  float: left;
-  height: 100%;
-  opacity: 1;
-  overflow-y: auto;
-  padding: 0 20px;
-  transition: width .3s, opacity .3s, visibility .3s;
-  visibility: visible;
-  width: calc(100% - 300px);
-
-  &.full-cal {
-    width: 100%;
-  }
-
-  &.less-cal {
-    width: calc(100% - 300px);
-  }
-}
-
 .main-bar {
   float: left;
   height: 100%;
@@ -201,21 +182,6 @@ textarea {
     &.less-cal {
       transform: translateX(-100%);
       width: 100%;
-    }
-  }
-}
-@media (max-width: 999px) {
-  .advising-schedule {
-    width: 100%;
-
-    &.full-cal {
-      width: 100%;
-    }
-
-    &.less-cal {
-      opacity: 0;
-      visibility: visible;
-      width: 0%;
     }
   }
 

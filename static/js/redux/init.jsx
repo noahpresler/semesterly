@@ -193,9 +193,9 @@ store.dispatch(
 //advising = false;
 //const dashboard = advising  ? <AdvisingContainer /> : <SemesterlyContainer />;
 
-//const dashboard = <SemesterlyContainer />;
+const dashboard = <SemesterlyContainer />;
 //Uncomment below to access Advising Dashboard
-const dashboard = <AdvisingContainer />;
+//const dashboard = <AdvisingContainer />;
 
     render(
         <Provider store={store}>
