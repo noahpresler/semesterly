@@ -58,7 +58,7 @@ class SeparateAccountsModal extends React.Component {
           </p>
           <ol>
             <li>Log into Semester.ly with the account you want to
-              <span className="delete-text">delete</span>.</li>
+              <span className="delete-text"> delete</span>.</li>
             <li>Go to account settings by clicking the button below or
               by the dropdown in the top right.</li>
             <img
