@@ -50,7 +50,7 @@ python-social-auth==0.2.19
 python-utils==2.0.0
 pytz==2016.4
 pywebpush==1.7.0
-PyYAML==3.10
+PyYAML==5.4
 recommonmark==0.4.0
 redis==2.10.5
 requests==2.20.0
