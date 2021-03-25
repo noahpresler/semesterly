@@ -155,6 +155,9 @@ const handleFlows = featureFlow => (dispatch) => {
     case 'DELETE_ACCOUNT':
       dispatch(overrideSettingsShow(true));
       break;
+    case 'SEPARATE_ACCOUNTS':
+      dispatch({ type: ActionTypes.TRIGGER_SEPARATE_ACCOUNTS_MODAL });
+      break;
     default:
       // unexpected feature name
       break;

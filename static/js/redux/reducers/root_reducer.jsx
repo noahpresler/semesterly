@@ -33,6 +33,7 @@ import explorationModal, * as fromExplorationModal from './exploration_modal_red
 import customSlots from './custom_slots_reducer';
 import signupModal from './signup_modal_reducer';
 import jhuSignupModal from './jhu_signup_modal_reducer';
+import separateAccountsModal from './separate_accounts_reducer';
 import peerModal from './peer_modal_reducer';
 import preferenceModal from './preference_modal_reducer';
 import friends from './friends_reducer';
@@ -61,6 +62,7 @@ const rootReducer = combineReducers({
   friends,
   integrationModal,
   integrations,
+  jhuSignupModal,
   notificationToken,
   optionalCourses,
   peerModal,
@@ -72,8 +74,8 @@ const rootReducer = combineReducers({
   school,
   searchResults,
   semester,
+  separateAccountsModal,
   signupModal,
-  jhuSignupModal,
   termsOfServiceBanner,
   termsOfServiceModal,
   textbookModal,
