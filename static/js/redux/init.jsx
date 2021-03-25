@@ -194,11 +194,6 @@ store.dispatch(
     setup(),
 );
 
-//advising = false;
-//const dashboard = advising  ? <AdvisingContainer /> : <SemesterlyContainer />;
-
-//const dashboard = <SemesterlyContainer />;
-//Uncomment below to access Advising Dashboard
 const dashboard = advising ? <AdvisingContainer/> : <SemesterlyContainer/>;
 
     render(
