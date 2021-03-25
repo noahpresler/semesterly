@@ -389,8 +389,7 @@ li {
 
 .footer {
   background-color: transparent;
-  position: fixed;
-  bottom: 0;
+  position: relative;
   max-height: 2.5px;
 
   .nav {
