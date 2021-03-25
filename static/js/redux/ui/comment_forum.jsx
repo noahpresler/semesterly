@@ -22,19 +22,24 @@ class CommentForum extends React.Component {
         super(props);
     }
 
-
     render() {
         return (
-            <div className="comment-forum">
+            <div className="side-bar no-print">
+                <div className="sb-name">
                 <h1>Comments Forum</h1>
+                </div>
+                <button className="semesterly-blue">
+                Submit
+                </button>
             </div>)
+
 
     }
 }
 
 CommentForum.propTypes = {
-    userInfo: SemesterlyPropTypes.userInfo.isRequired,
-    currentSemester: SemesterlyPropTypes.semester.isRequired,
+    //userInfo: SemesterlyPropTypes.userInfo.isRequired,
+    //urrentSemester: SemesterlyPropTypes.semester.isRequired,
 };
 
 
