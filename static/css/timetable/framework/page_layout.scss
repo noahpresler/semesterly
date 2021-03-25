@@ -56,7 +56,7 @@ textarea {
   }
 }
 
-.comment-forum {
+.comments-forum {
   background-color: $gfff;
   bottom: auto;
   height: 100%;
@@ -98,7 +98,7 @@ textarea {
   }
 }
 
-.advising-schedule {
+.main-advising{
   float: left;
   height: 100%;
   opacity: 1;
@@ -205,7 +205,7 @@ textarea {
   }
 
 }@media (max-width: 999px) {
-  .advising-schedule {
+  .main-advising {
     width: 100%;
 
     &.full-cal {
@@ -387,8 +387,11 @@ li {
   }
 }
 
-footer {
+.footer {
   background-color: transparent;
+  position: fixed;
+  bottom: 0;
+  max-height: 2.5px;
 
   .nav {
     margin: 5px 0;

@@ -177,13 +177,13 @@ class Advising extends React.Component {
                 <UserSettingsModalContainer />
                 <UserAcquisitionModalContainer />
                 <SignupModalContainer />
-                <CommentForumContainer />
                 <AlertBox ref={(a) => { this.msg = a; }} {...this.alertOptions} />
                 <div className="all-cols">
-                    <div className="advising-schedule">
+                    <div className="main-advising">
                         <AdvisingScheduleContainer />
                         {footer}
                     </div>
+                    <CommentForumContainer />
                 </div>
             </div>);
     }
