@@ -43,6 +43,7 @@ const store = createStore(rootReducer,
     window.devToolsExtension && window.devToolsExtension(),
     applyMiddleware(thunkMiddleware),
 );
+let advising = false;
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
@@ -156,6 +157,9 @@ const handleFlows = featureFlow => (dispatch) => {
     case 'DELETE_ACCOUNT':
       dispatch(overrideSettingsShow(true));
       break;
+    case 'ADVISING':
+      advising = true;
+      break;
     default:
       // unexpected feature name
       break;
@@ -195,7 +199,7 @@ store.dispatch(
 
 //const dashboard = <SemesterlyContainer />;
 //Uncomment below to access Advising Dashboard
-const dashboard = <AdvisingContainer />;
+const dashboard = advising ? <AdvisingContainer/> : <SemesterlyContainer/>;
 
     render(
         <Provider store={store}>
