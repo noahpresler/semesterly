@@ -177,7 +177,7 @@ class SideBar extends React.Component {
           </ClickOutHandler>
         </div>
         <CreditTickerContainer />
-        <div className="col-2-3 sb-rating">
+        <div className="sb-rating">
           <h3>Average Course Rating</h3>
           <div className="sub-rating-wrapper">
             <div className="star-ratings-sprite">
