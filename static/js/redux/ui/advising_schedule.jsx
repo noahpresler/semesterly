@@ -158,8 +158,8 @@ class AdvisingSchedule extends React.Component {
             : null;
         return (
             <div className="advising-schedule">
+                <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>Advising Dashboard</p>
                 <div className="as-name">
-                    <h3><b>Advising Dashboard</b></h3>
                     <TimetableNameInputContainer />
                     <ClickOutHandler onClickOut={this.hideDropdown}>
                         {dropItDown}
@@ -177,7 +177,7 @@ class AdvisingSchedule extends React.Component {
 
                 <a onClick={this.props.launchPeerModal}>
                     <h4 className="as-header">
-                        Current Courses
+                        Planned Courses
                     </h4>
                 </a>
                 <div className="as-master-slots">
