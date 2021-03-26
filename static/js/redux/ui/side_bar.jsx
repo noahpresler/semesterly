@@ -48,6 +48,12 @@ class SideBar extends React.Component {
     callback();
   }
 
+  /*
+  toggleAdvising() {
+      setAdvising()
+  }
+  */
+
   render() {
     const savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => (
       <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>
@@ -146,6 +152,16 @@ class SideBar extends React.Component {
                 See Finals Schedule
             </div>)
             : null;
+    const betaFeature = (<div>
+        <h4 className="sb-header"> Try our new Beta feature! </h4>
+        <a href="/advising">
+            <button className="semesterly-blue"
+                    //onClick={() => this.toggleAdvising()}
+                    >
+                Advising Dashboard
+            </button>
+        </a>
+    </div>)
     return (
       <div className="side-bar no-print">
         <div className="sb-name">
@@ -193,6 +209,8 @@ class SideBar extends React.Component {
         { optionalSlotsHeader }
         { optionalSlots }
         <div id="sb-optional-slots" />
+        { betaFeature}
+        <div id="sb-beta-buttons"/>
       </div>
     );
   }

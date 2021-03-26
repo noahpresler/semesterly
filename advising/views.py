@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from student.models import Student
+from timetable.models import CourseIntegration, Course, Section, Semester
+from django.shortcuts import get_object_or_404, render, redirect
+from student.utils import get_student
+from django.db import transaction
 
-from django.shortcuts import render
+import semesterly.views
 
-# Create your views here.
+# currently unused. TODO: add get_feature_flow()
+
+#feature_name = 'ADVISING'
+
+

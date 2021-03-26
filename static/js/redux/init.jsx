@@ -20,6 +20,7 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
+import AdvisingContainer from './ui/containers/advising_container';
 import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
 import {
   handleCreateNewTimetable, loadCachedTimetable, loadTimetable,
@@ -42,6 +43,7 @@ const store = createStore(rootReducer,
     window.devToolsExtension && window.devToolsExtension(),
     applyMiddleware(thunkMiddleware),
 );
+let advising = false;
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
@@ -155,6 +157,9 @@ const handleFlows = featureFlow => (dispatch) => {
     case 'DELETE_ACCOUNT':
       dispatch(overrideSettingsShow(true));
       break;
+    case 'ADVISING':
+      advising = true;
+      break;
     default:
       // unexpected feature name
       break;
@@ -189,7 +194,11 @@ store.dispatch(
     setup(),
 );
 
-render(
-  <Provider store={store}>
-    <SemesterlyContainer />
-  </Provider>, document.getElementsByClassName('page')[0]);
+const dashboard = advising ? <AdvisingContainer/> : <SemesterlyContainer/>;
+
+    render(
+        <Provider store={store}>
+          {dashboard}
+        </Provider>, document.getElementsByClassName('page')[0]);
+   
+
