@@ -9,12 +9,11 @@ import timetable.models as timetable_models
 class Transcript(models.Model):
     owner = models.ForeignKey(student_models.Student, related_name='plan_forum_transcript')
     advisors = models.ManyToManyField(student_models.Student, related_name='student_forum_transcript')
-    semester_id = models.ForeignKey(timetable_models.Semester, related_name='my_forum_transcript')
+    semester = models.ForeignKey(timetable_models.Semester, related_name='my_forum_transcript')
 
 
 class Comment(models.Model):
     author = models.ForeignKey(student_models.Student, related_name='comment')
-    author_name = models.TextField(null=True)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    transcript_id = models.ForeignKey(Transcript, related_name='comments')
+    transcript = models.ForeignKey(Transcript, related_name='comments')

@@ -19,9 +19,10 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = (
+            'author',
             'content',
             'timestamp',
-            'author_name',
+            #'transcript',
         )
 
 
@@ -31,5 +32,8 @@ class TranscriptSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transcript
         fields = (
+            'owner',
+            'advisors',
+            'semester',
             'comments',
         )
