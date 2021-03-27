@@ -48,6 +48,12 @@ class SideBar extends React.Component {
     callback();
   }
 
+  /*
+  toggleAdvising() {
+      setAdvising()
+  }
+  */
+
   render() {
     const savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => (
       <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>
@@ -159,7 +165,6 @@ class SideBar extends React.Component {
         <span>Advising Dashboard</span>
       </button>
     );
-
     return (
       <div className="side-bar no-print">
         <div className="sb-name">
