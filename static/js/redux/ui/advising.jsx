@@ -22,6 +22,7 @@ import NewTimetableAlertContainer from './alerts/new_timetable_alert_container';
 import EnableNotificationsAlertContainer from './alerts/enable_notifications_alert_container';
 import FriendsInClassAlertContainer from './alerts/friends_in_class_alert_container';
 import TopBarContainer from './containers/top_bar_container';
+import TopBarV2Container from './containers/top_bar_v2_container';
 import CommentForumContainer from "./containers/comment_forum_container";
 import AdvisingScheduleContainer from "./containers/advising_schedule_container";
 import UserSettingsModalContainer from "./containers/modals/user_settings_modal_container";
@@ -173,11 +174,10 @@ class Advising extends React.Component {
 
         return (
             <div className="page-wrapper">
-                <TopBarContainer />
+                <TopBarV2Container />
                 <UserSettingsModalContainer />
                 <UserAcquisitionModalContainer />
                 <SignupModalContainer />
-                <AlertBox ref={(a) => { this.msg = a; }} {...this.alertOptions} />
                 <div className="all-cols">
                     <div className="main-advising">
                         <AdvisingScheduleContainer />
