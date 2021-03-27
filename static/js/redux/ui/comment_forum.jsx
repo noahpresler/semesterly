@@ -24,11 +24,11 @@ class CommentForum extends React.Component {
 
     render() {
         return (
-            <div className="side-bar no-print">
-                <div className="sb-name">
-                <h1>Comments Forum</h1>
+            <div className="comment-forum no-print">
+                <div className="as-name">
+                <p style={{fontSize: "1.25em", fontWeight: "bold", marginTop: "70px" }}>Comments Forum</p>
                 </div>
-                <button className="semesterly-blue">
+                <button className="accept-tos-btn">
                 Submit
                 </button>
             </div>)
