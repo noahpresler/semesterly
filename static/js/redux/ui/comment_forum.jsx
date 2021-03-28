@@ -14,6 +14,8 @@ GNU General Public License for more details.
 
 import React from 'react';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import CommentSlot from './comment_slot';
+import {getNextAvailableColour} from '../util';
 
 
 
@@ -23,18 +25,41 @@ class CommentForum extends React.Component {
     }
 
     render() {
+        let commentSlots = this.props.ownedComments ?
+            this.props.ownedComments.map((content) => {
+                const colourIndex = (course.id in this.props.courseToColourIndex) ?
+                    this.props.courseToColourIndex[course.id] :
+                    getNextAvailableColour(this.props.courseToColourIndex);
+                //TODO: Add info from backend
+                //const author = course.comment.map(comment => comment.author);
+                return(<CommentSlot
+                    // key={course.id}
+                    // author={author}
+                    // colourIndex={colourIndex}
+                    // fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+                />);
+            }) : <div> <p> No messages yet! </p> </div>;
         return (
             <div className="comment-forum no-print">
                 <div className="as-name">
-                    <p style={{ fontSize: "1.25em", fontWeight: "bold", marginTop: "70px" }}>Comments Forum</p>
+                    <p style={{fontSize: "1.25em", fontWeight: "bold", marginTop: "70px" }}>
+                        Comments Forum</p>
                 </div>
-                {/* need to use similar css to search bar for forum input box */}
-                <div className="search-bar__input-wrapper" > 
-                    <input
-                        // placeholder
-                    />
-                </div>
-                <button className="accept-tos-btn">
+                { commentSlots }
+                <CommentSlot
+                    // key={course.id}
+                    // author={author}
+                    //colourIndex={colourIndex}
+                    // fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+                />
+            {/* need to use similar css to search bar for forum input box */}
+            <div className="search-bar__input-wrapper" >
+                <input
+                    // placeholder
+                />
+            </div>
+                <button className="accept-tos-btn"
+                        style={{position: "fixed", right: "20", bottom: "10"}}>
                     Submit
                 </button>
             </div>)
@@ -43,9 +68,15 @@ class CommentForum extends React.Component {
     }
 }
 
+CommentForum.defaultProps = {
+    invitedComments: null,
+    ownedComments: null,
+}
+
+
 CommentForum.propTypes = {
-    //userInfo: SemesterlyPropTypes.userInfo.isRequired,
-    //urrentSemester: SemesterlyPropTypes.semester.isRequired,
+    //invitedComments: PropTypes.arrayOf(SemesterlyPropTypes.userInfo.invited_transcripts).isRequired,
+    //ownedComments: PropTypes.arrayOf(SemesterlyPropTypes.userInfo.owned_transcripts).isRequired,
 };
 
 
