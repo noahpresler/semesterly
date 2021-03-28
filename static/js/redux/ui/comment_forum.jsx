@@ -53,13 +53,14 @@ class CommentForum extends React.Component {
                     // fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
                 />
             {/* need to use similar css to search bar for forum input box */}
-            <div className="search-bar__input-wrapper" >
+            <div className="search-bar__input-wrapper"
+                 style={{position: "fixed", width: "500px", left: "20px", bottom: "40px"}}>
                 <input
                     // placeholder
                 />
             </div>
                 <button className="accept-tos-btn"
-                        style={{position: "fixed", right: "20", bottom: "10"}}>
+                        style={{position: "fixed", right: "20px", bottom: "20px"}}>
                     Submit
                 </button>
             </div>)
