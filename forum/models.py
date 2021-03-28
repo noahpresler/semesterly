@@ -7,13 +7,13 @@ import timetable.models as timetable_models
 
 
 class Transcript(models.Model):
-    owner = models.ForeignKey(student_models.Student, related_name='plan_forum_transcript')
-    advisors = models.ManyToManyField(student_models.Student, related_name='student_forum_transcript')
-    semester = models.ForeignKey(timetable_models.Semester, related_name='my_forum_transcript')
+    owner = models.ForeignKey(student_models.Student, related_name='owned_transcripts')
+    advisors = models.ManyToManyField(student_models.Student, related_name='invited_transcripts')
+    semester = models.ForeignKey(timetable_models.Semester)
 
 
 class Comment(models.Model):
-    author = models.ForeignKey(student_models.Student, related_name='comment')
+    author = models.ForeignKey(student_models.Student)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     transcript = models.ForeignKey(Transcript, related_name='comments')
