@@ -78,7 +78,7 @@ class TopBarV2 extends React.Component {
     render() {
         return (
             <div className="top-bar">
-                <a href="/">
+                <a href="/" className="semesterly-name">
                 <img
                     alt="logo"
                     className="semesterly-logo no-print"
