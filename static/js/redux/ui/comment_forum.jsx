@@ -26,10 +26,16 @@ class CommentForum extends React.Component {
         return (
             <div className="comment-forum no-print">
                 <div className="as-name">
-                <p style={{fontSize: "1.25em", fontWeight: "bold", marginTop: "70px" }}>Comments Forum</p>
+                    <p style={{ fontSize: "1.25em", fontWeight: "bold", marginTop: "70px" }}>Comments Forum</p>
+                </div>
+                {/* need to use similar css to search bar for forum input box */}
+                <div className="search-bar__input-wrapper" > 
+                    <input
+                        // placeholder
+                    />
                 </div>
                 <button className="accept-tos-btn">
-                Submit
+                    Submit
                 </button>
             </div>)
 
