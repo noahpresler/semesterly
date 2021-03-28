@@ -17,3 +17,6 @@ class Comment(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     transcript = models.ForeignKey(Transcript, related_name='comments')
+
+    def get_author_name(self):
+        return self.author.user.first_name + ' ' + self.author.user.last_name

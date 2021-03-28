@@ -16,10 +16,12 @@ from forum.models import Transcript, Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    author_name = serializers.CharField(source='get_author_name')
+
     class Meta:
         model = Comment
         fields = (
-            'author',
+            'author_name',
             'content',
             'timestamp',
             #'transcript',
@@ -32,8 +34,6 @@ class TranscriptSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transcript
         fields = (
-            'owner',
-            'advisors',
             'semester',
             'comments',
         )
