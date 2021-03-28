@@ -146,6 +146,14 @@ class SideBar extends React.Component {
                 See Finals Schedule
             </div>)
             : null;
+      const betaFeature = (<div>
+          <h4 className="sb-header"> Try our new Beta feature! </h4>
+          <a href="/advising" >
+              <button className="sb-btn" style={{ marginLeft: "10px", width: "90%", fontSize: "1em"}}>
+                  Advising Dashboard
+              </button>
+          </a>
+      </div>)
     return (
       <div className="side-bar no-print">
         <div className="sb-name">
@@ -193,6 +201,8 @@ class SideBar extends React.Component {
         { optionalSlotsHeader }
         { optionalSlots }
         <div id="sb-optional-slots" />
+          { betaFeature}
+          <div id="sb-beta-buttons"/>
       </div>
     );
   }
