@@ -37,6 +37,7 @@ def get_student_dict(school, student, semester):
 class StudentSerializer(serializers.ModelSerializer):
     userFirstName = serializers.CharField(source='user.first_name')
     userLastName = serializers.CharField(source='user.last_name')
+    userFullName = serializers.CharField(source='get_full_name')
     # TODO: switch to camelCase
     FacebookSignedUp = serializers.BooleanField(source='is_signed_up_through_fb')
     GoogleSignedUp = serializers.BooleanField(source='is_signed_up_through_google')
@@ -70,4 +71,5 @@ class StudentSerializer(serializers.ModelSerializer):
             'timeAcceptedTos',
             'owned_transcripts',
             'invited_transcripts',
+            'userFullName'
         )

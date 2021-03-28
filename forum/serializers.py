@@ -16,7 +16,7 @@ from forum.models import Transcript, Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    author_name = serializers.CharField(source='get_author_name')
+    author_name = serializers.CharField(source='author.get_full_name')
 
     class Meta:
         model = Comment
