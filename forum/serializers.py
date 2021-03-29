@@ -24,16 +24,26 @@ class CommentSerializer(serializers.ModelSerializer):
             'author_name',
             'content',
             'timestamp',
-            #'transcript',
         )
 
 
 class TranscriptSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True)
+    semester = serializers.StringRelatedField()
+    owner_name = serializers.CharField(source='owner.get_full_name')
+    advisor_names = serializers.SerializerMethodField()
+
+    def get_advisor_names(self, transcript):
+        advisor_names = []
+        for advisor in transcript.advisors.all():
+            advisor_names.append(advisor.get_full_name())
+        return advisor_names
 
     class Meta:
         model = Transcript
         fields = (
-            'semester',
             'comments',
+            'semester',
+            'owner_name',
+            'advisor_names',
         )
