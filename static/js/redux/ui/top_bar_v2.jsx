@@ -85,7 +85,7 @@ class TopBarV2 extends React.Component {
                     src="/static/img/logo2.0-32x32.png"
                 />
                 <div className="semesterly-name no-print">
-                    Semester.ly
+                    Semester.ly - Advising Dashboard
                 </div>
                 </a>
                 <div className="print-content print">

@@ -153,37 +153,40 @@ class AdvisingSchedule extends React.Component {
             : null;
         return (
             <div className="advising-schedule">
-                <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>Advising Dashboard</p>
-                <div className="as-name">
-                    <TimetableNameInputContainer />
-                    <ClickOutHandler onClickOut={this.hideDropdown}>
-                        {dropItDown}
-                        <div
-                            className={classNames('timetable-names-dropdown', { down: this.state.showDropdown })}
-                        >
-                            <div className="tip-border" />
-                            <div className="tip" />
-                            <h4>{ `${this.props.semester.name} ${this.props.semester.year}` }</h4>
-                            { savedTimetables }
-                        </div>
-                    </ClickOutHandler>
-                </div>
-                <CreditTickerContainer />
-
-                <a onClick={this.props.launchPeerModal}>
-                    <h4 className="as-header">
-                        Planned Courses
-                    </h4>
-                </a>
-                <div className="as-master-slots">
-                    { masterSlots }
-                    { finalScheduleLink }
-                </div>
-                { optionalSlotsHeader }
-                { optionalSlots }
-                <div id="as-optional-slots" />
-                <div>
-                { waitlistedlSlotsHeader }
+                <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>
+                    Course Summary
+                </p>
+                <div className="course-list-container">
+                    <div className="as-name">
+                        <TimetableNameInputContainer />
+                        <ClickOutHandler onClickOut={this.hideDropdown}>
+                            {dropItDown}
+                            <div
+                                className={classNames('timetable-names-dropdown', { down: this.state.showDropdown })}
+                            >
+                                <div className="tip-border" />
+                                <div className="tip" />
+                                <h4>{ `${this.props.semester.name} ${this.props.semester.year}` }</h4>
+                                { savedTimetables }
+                            </div>
+                        </ClickOutHandler>
+                    </div>
+                    <CreditTickerContainer />
+                    <a onClick={this.props.launchPeerModal}>
+                        <h4 className="as-header">
+                            Planned Courses
+                        </h4>
+                    </a>
+                    <div className="as-master-slots">
+                        { masterSlots }
+                        { finalScheduleLink }
+                    </div>
+                    { optionalSlotsHeader }
+                    { optionalSlots }
+                    <div id="as-optional-slots" />
+                    <div>
+                    { waitlistedlSlotsHeader }
+                    </div>
                 </div>
             </div>
         );

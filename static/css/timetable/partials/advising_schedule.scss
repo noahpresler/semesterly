@@ -11,6 +11,9 @@
 }
 
 .advising-schedule {
+  height: 80vh;
+  overflow-y: auto;
+
   input {
     border: 1px solid $gfff;
     border-radius: 25px;
