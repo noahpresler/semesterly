@@ -99,6 +99,7 @@ stages:
                 $(Pipeline.Workspace)/manifests/cronjob.yml
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
+                $(containerRegistry)/semesterly-nginx:$(tag)
                 
 
   # - deployment: DeployPullRequest
