@@ -27,30 +27,30 @@ class Serializers(TestCase):
             first_name='Rishi',
             last_name='Biswas',)
         self.advisor = Student.objects.create(user=user)
-
-    def test_comment_serialization(self):
-        self.timestamp = datetime.datetime.now()
-        self.content = 'I play Pokemon GO every day.'
-        self.author = self.student
         self.semester = Semester.objects.create(name='Fall', year='2019')
         self.transcript = Transcript.objects.create(
             owner=self.student,
             semester=self.semester,
         )
-
-        comment = Comment.objects.create(
-            author=self.author,
-            content=self.content,
-            timestamp=self.timestamp,
+    
+    def add_comment(self, author, content):
+        timestamp = datetime.datetime.now()
+        return Comment.objects.create(
+            author=author,
+            content=content,
+            timestamp=timestamp,
             transcript=self.transcript,
         )
 
+    def test_comment_serialization(self):
+        content = 'I play Pokemon GO every day.'
+        author = self.student
+        comment = self.add_comment(author, content)
+
         serialized = CommentSerializer(comment).data
-        self.assertEquals(self.author.get_full_name(),
+        self.assertEquals(author.get_full_name(),
                           serialized['author_name'])
-        self.assertEquals(self.content, serialized['content'])
-        # self.assertEquals(self.timestamp, serialized['timestamp'])
-        # timestamp works, just not formatted correctly - 3/29/2021
+        self.assertEquals(content, serialized['content'])
 
     def test_transcript_serialization(self):
         pass
@@ -60,7 +60,7 @@ class UrlsTest(UrlTestCase):
     """ Test forum/urls.py """
 
     def test_urls_call_correct_views(self):
-        self.assertUrlResolvesToView('/forum/', 'forum.views.ForumView')
+        self.assertUrlResolvesToView('/forum/all/', 'forum.views.ForumView')
         self.assertUrlResolvesToView(
             '/forum/Fall/2016/',
             'forum.views.ForumTranscriptView',
