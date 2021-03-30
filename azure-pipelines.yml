@@ -76,7 +76,7 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'uis-dev2.semesterly-dev'
+    environment: 'uis-prod.semesterly-dev'
     strategy:
       runOnce:
         deploy:
