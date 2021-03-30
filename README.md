@@ -1,3 +1,4 @@
+[![Build Status](https://dev.azure.com/jhuis/semesterly/_apis/build/status/jhuopensource.semesterly?branchName=cs310-spring21)](https://dev.azure.com/jhuis/semesterly/_build/latest?definitionId=1&branchName=cs310-spring21)
 <p align="center"><a href="https://semester.ly" target="_blank"><img width="100"src="https://semester.ly/static/img/logo2.0-32x32.png"></a></p>
 <p align="center"><a href="https://semester.ly" target="_blank"><img width="200" src="http://i.imgur.com/9mMP9bY.png"/></a></p>
 
