@@ -131,7 +131,7 @@ class AdvisingSchedule extends React.Component {
         }
         //TODO: edit wailisted
         const waitlistedlSlotsHeader = (<div>
-            <h4 className="as-header">Wailisted Courses</h4>
+            <h4 className="as-header">Waitlisted Courses</h4>
                 <div className="empty-state">
                     <img
                         src="/static/img/emptystates/optionalslots.png"
