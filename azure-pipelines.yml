@@ -98,9 +98,7 @@ stages:
                 $(Pipeline.Workspace)/manifests/ingress.yml
                 $(Pipeline.Workspace)/manifests/cronjob.yml
               containers: |
-                semesterly.azurecr.io/semesterly:55
-                semesterly.azurecr.io/semesterly-nginx:55
-              # - $(containerRegistry)/$(imageRepository):$(tag)
+                $(containerRegistry)/$(imageRepository):$(tag)
                 
 
   # - deployment: DeployPullRequest
