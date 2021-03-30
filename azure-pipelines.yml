@@ -26,6 +26,7 @@ variables:
 stages:
 - stage: Build
   displayName: Build stage
+  condition: not(startsWith(variables['Build.SourceBranch'], 'refs/pull/'))
   jobs:
   - job: Build
     displayName: Build

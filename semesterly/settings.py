@@ -184,6 +184,7 @@ INSTALLED_APPS = (
     'agreement',
     'parsing',
     'pilot',
+    'forum',
 )
 
 REST_FRAMEWORK ={
@@ -202,6 +203,7 @@ MIDDLEWARE_CLASSES = (
     'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
+    'semesterly.middleware.separate_accounts_middleware.SeparateAccountsSocialAuthExceptionMiddleware',
 )
 
 TEMPLATES = [

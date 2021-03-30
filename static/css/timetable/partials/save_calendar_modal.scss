@@ -35,6 +35,9 @@
     float: left;
     height: 22px;
     width: 22px;
+    &.jhu-square {
+      transform: scale(1.3);
+    }
   }
 
   > i {

@@ -12,13 +12,19 @@
 
 from parsing.schools.active import ACTIVE_SCHOOLS
 
+
 class SubdomainMiddleware(object):
-	def process_request(self, request):
-		subdomain = request.META.get('HTTP_HOST', '')\
-					.split('.')[0]\
-					.strip()\
-					.lower()
-		if subdomain in ACTIVE_SCHOOLS:
-			request.subdomain = subdomain
-		else:
-			request.subdomain = None
+    def process_request(self, request):
+        subdomain = request.META.get('HTTP_HOST', '')\
+                                .split('.')[0]\
+                                .strip()\
+                                .lower()
+        # Define domain suffixes for non-prod environments
+        nonprod_suffixes = ("-dev", "-test", "-stage")
+        if subdomain in ACTIVE_SCHOOLS:
+            request.subdomain = subdomain
+        elif subdomain.endswith(nonprod_suffixes):
+            # Default to JHU for non-prod URLs for ease of setup/testing
+            request.subdomain = "jhu"
+        else:
+            request.subdomain = None

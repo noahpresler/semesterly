@@ -1,0 +1,35 @@
+.separate-accounts-modal {
+  height: 725px;
+  max-width: 600px;
+  top: 20px;
+
+  > div {
+    outline: none;
+  }
+
+  .delete-text {
+    color: red;
+  }
+
+  .modal-header {
+    background-color: $geee;
+    border-bottom: 1px solid $gddd;
+    padding: 25px;
+    position: relative;
+  }
+
+  .modal-body {
+    padding: 25px;
+    > p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .center-aligned {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+}

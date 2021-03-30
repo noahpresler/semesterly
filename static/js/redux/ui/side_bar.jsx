@@ -146,14 +146,19 @@ class SideBar extends React.Component {
                 See Finals Schedule
             </div>)
             : null;
-      const betaFeature = (<div>
-          <h4 className="sb-header"> Try our new Beta feature! </h4>
-          <a href="/advising" >
-              <button className="sb-btn" style={{ marginLeft: "10px", width: "90%", fontSize: "1em"}}>
-                  Advising Dashboard
-              </button>
-          </a>
-      </div>)
+    const advisingDashboardButton = (
+      <button
+        className="btn advising-btn eight-px-top"
+        onClick={this.props.jhuSignedUp ? () => {
+          const link = document.createElement('a');
+          link.href = '/advising';
+          document.body.appendChild(link);
+          link.click();
+        } : this.props.openJHUSignupModal}
+      >
+        <span>Advising Dashboard</span>
+      </button>
+    );
     return (
       <div className="side-bar no-print">
         <div className="sb-name">
@@ -201,8 +206,10 @@ class SideBar extends React.Component {
         { optionalSlotsHeader }
         { optionalSlots }
         <div id="sb-optional-slots" />
-          { betaFeature}
-          <div id="sb-beta-buttons"/>
+        <h4 className="sb-header">
+          Try out our new Beta feature!
+          </h4>
+        {advisingDashboardButton}
       </div>
     );
   }
@@ -243,6 +250,8 @@ SideBar.propTypes = {
   examSupportedSemesters: PropTypes.arrayOf(PropTypes.number).isRequired,
   hasLoaded: PropTypes.bool.isRequired,
   getShareLink: PropTypes.func.isRequired,
+  openJHUSignupModal: PropTypes.func.isRequired,
+  jhuSignedUp: PropTypes.bool.isRequired,
 };
 
 export default SideBar;
