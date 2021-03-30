@@ -72,11 +72,11 @@ stages:
 # Deploy is false for now
   jobs:
   - deployment: Deploy
-    condition: and(false,and(succeeded(), not(startsWith(variables['Build.SourceBranch'], 'refs/pull/')))) 
+    condition: and(succeeded(), not(startsWith(variables['Build.SourceBranch'], 'refs/pull/'))) 
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'jhuopensourcesemesterly.semesterly'
+    environment: 'uis-dev2.semesterly-dev'
     strategy:
       runOnce:
         deploy:
@@ -95,10 +95,13 @@ stages:
               manifests: |
                 $(Pipeline.Workspace)/manifests/deployment.yml
                 $(Pipeline.Workspace)/manifests/service.yml
-              imagePullSecrets: |
-                $(imagePullSecret)
+                $(Pipeline.Workspace)/manifests/ingress.yml
+                $(Pipeline.Workspace)/manifests/cronjob.yml
               containers: |
-                $(containerRegistry)/$(imageRepository):$(tag)
+                semesterly.azurecr.io/semesterly:55
+                semesterly.azurecr.io/semesterly-nginx:55
+              # - $(containerRegistry)/$(imageRepository):$(tag)
+                
 
   # - deployment: DeployPullRequest
   #   displayName: Deploy Pull request
