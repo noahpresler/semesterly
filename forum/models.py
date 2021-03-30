@@ -7,7 +7,6 @@ import timetable.models as timetable_models
 
 
 class Transcript(models.Model):
-    # todo: remove related_name
     owner = models.ForeignKey(student_models.Student,
                               related_name='owned_transcripts')
     advisors = models.ManyToManyField(
