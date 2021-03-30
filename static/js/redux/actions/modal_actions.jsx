@@ -96,6 +96,8 @@ export const toggleSaveCalendarModal = () => ({ type: ActionTypes.TOGGLE_SAVE_CA
 
 export const openSignUpModal = () => ({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
 
+export const openJHUSignupModal = () => ({ type: ActionTypes.TOGGLE_JHU_SIGNUP_MODAL });
+
 export const changeUserInfo = info => ({
   type: ActionTypes.CHANGE_USER_INFO,
   data: info,
@@ -144,4 +146,12 @@ export const setUserSettingsModalVisible = () => ({
 
 export const setUserSettingsModalHidden = () => ({
   type: ActionTypes.SET_SETTINGS_MODAL_HIDDEN,
+});
+
+export const triggerSeparateAccountsModal = () => ({
+  type: ActionTypes.TRIGGER_SEPARATE_ACCOUNTS_MODAL,
+});
+
+export const toggleSeparateAccountsModal = () => ({
+  type: ActionTypes.TOGGLE_SEPARATE_ACCOUNTS_MODAL,
 });

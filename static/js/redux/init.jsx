@@ -157,6 +157,9 @@ const handleFlows = featureFlow => (dispatch) => {
     case 'DELETE_ACCOUNT':
       dispatch(overrideSettingsShow(true));
       break;
+    case 'SEPARATE_ACCOUNTS':
+      dispatch({ type: ActionTypes.TRIGGER_SEPARATE_ACCOUNTS_MODAL });
+      break;
     case 'ADVISING':
       advising = true;
       break;
@@ -200,5 +203,3 @@ const dashboard = advising ? <AdvisingContainer/> : <SemesterlyContainer/>;
         <Provider store={store}>
           {dashboard}
         </Provider>, document.getElementsByClassName('page')[0]);
-   
-
