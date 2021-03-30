@@ -60,7 +60,7 @@ class UrlsTest(UrlTestCase):
     """ Test forum/urls.py """
 
     def test_urls_call_correct_views(self):
-        self.assertUrlResolvesToView('/forum/', 'forum.views.ForumView')
+        self.assertUrlResolvesToView('/forum/all/', 'forum.views.ForumView')
         self.assertUrlResolvesToView(
             '/forum/Fall/2016/',
             'forum.views.ForumTranscriptView',
