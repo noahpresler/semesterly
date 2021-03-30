@@ -13,7 +13,7 @@ GNU General Public License for more details.
 */
 
 import { connect } from 'react-redux';
-import TopBarV2 from '../top_bar_v2';
+import TopBarAdvising from '../top_bar_advising';
 import { getCurrentSemester } from '../../reducers/root_reducer';
 
 
@@ -23,8 +23,8 @@ const mapStateToProps = state => ({
         getCurrentSemester(state),
 });
 
-const TopBarV2Container = connect(
+const TopBarAdvisingContainer = connect(
     mapStateToProps,
-)(TopBarV2);
+)(TopBarAdvising);
 
-export default TopBarV2Container;
+export default TopBarAdvisingContainer;

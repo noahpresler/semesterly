@@ -24,7 +24,7 @@ export const collapseComments = () => {
     $('.main-advising, .comment-forum').removeClass('less-bar').addClass('full-bar');
 };
 
-class TopBarV2 extends React.Component {
+class TopBarAdvising extends React.Component {
     constructor(props) {
         super(props);
         this.comments_collapsed = 'neutral';
@@ -110,10 +110,10 @@ class TopBarV2 extends React.Component {
     }
 }
 
-TopBarV2.propTypes = {
+TopBarAdvising.propTypes = {
     userInfo: SemesterlyPropTypes.userInfo.isRequired,
     currentSemester: SemesterlyPropTypes.semester.isRequired,
 };
 
 
-export default TopBarV2;
+export default TopBarAdvising;

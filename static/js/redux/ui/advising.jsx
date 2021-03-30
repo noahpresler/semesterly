@@ -14,20 +14,13 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import AlertBox from './alert_box';
-import ConflictAlertContainer from './alerts/conflict_alert_container';
-import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_container';
-import ChangeSemesterAlertContainer from './alerts/change_semester_alert_container';
-import NewTimetableAlertContainer from './alerts/new_timetable_alert_container';
 import EnableNotificationsAlertContainer from './alerts/enable_notifications_alert_container';
-import FriendsInClassAlertContainer from './alerts/friends_in_class_alert_container';
-import TopBarContainer from './containers/top_bar_container';
-import TopBarV2Container from './containers/top_bar_v2_container';
-import CommentForumContainer from "./containers/comment_forum_container";
-import AdvisingScheduleContainer from "./containers/advising_schedule_container";
-import UserSettingsModalContainer from "./containers/modals/user_settings_modal_container";
-import SignupModalContainer from "./containers/modals/signup_modal_container";
-import UserAcquisitionModalContainer from "./containers/modals/user_acquisition_modal_container";
+import TopBarAdvisingContainer from './containers/top_bar_advising_container';
+import CommentForumContainer from './containers/comment_forum_container';
+import AdvisingScheduleContainer from './containers/advising_schedule_container';
+import UserSettingsModalContainer from './containers/modals/user_settings_modal_container';
+import SignupModalContainer from './containers/modals/signup_modal_container';
+import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
 
 
 class Advising extends React.Component {
@@ -174,7 +167,7 @@ class Advising extends React.Component {
 
         return (
             <div className="page-wrapper">
-                <TopBarV2Container />
+                <TopBarAdvisingContainer />
                 <UserSettingsModalContainer />
                 <UserAcquisitionModalContainer />
                 <SignupModalContainer />
@@ -191,8 +184,6 @@ class Advising extends React.Component {
 
 Advising.propTypes = {
     dataLastUpdated: PropTypes.string.isRequired,
-    //PgActive: PropTypes.number.isRequired,
-    //PgCount: PropTypes.number.isRequired,
     alertChangeSemester: PropTypes.bool.isRequired,
     alertConflict: PropTypes.bool.isRequired,
     alertEnableNotifications: PropTypes.bool.isRequired,
