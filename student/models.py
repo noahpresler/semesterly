@@ -100,6 +100,9 @@ class Student(models.Model):
                                  expires_at,
                                  "https://accounts.google.com/o/oauth2/token", 'my-user-agent/1.0')
 
+    def get_full_name(self):
+        return self.user.first_name + ' ' + self.user.last_name
+
 
 class Reaction(models.Model):
     """ Database object representing a reaction to a course.

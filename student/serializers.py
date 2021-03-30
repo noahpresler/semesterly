@@ -14,6 +14,7 @@ from rest_framework import serializers
 
 from courses.serializers import CourseSerializer
 from timetable.serializers import DisplayTimetableSerializer
+from forum.serializers import TranscriptSerializer
 from student.models import Student
 
 
@@ -36,6 +37,7 @@ def get_student_dict(school, student, semester):
 class StudentSerializer(serializers.ModelSerializer):
     userFirstName = serializers.CharField(source='user.first_name')
     userLastName = serializers.CharField(source='user.last_name')
+    userFullName = serializers.CharField(source='get_full_name')
     # TODO: switch to camelCase
     FacebookSignedUp = serializers.BooleanField(source='is_signed_up_through_fb')
     GoogleSignedUp = serializers.BooleanField(source='is_signed_up_through_google')
@@ -44,6 +46,8 @@ class StudentSerializer(serializers.ModelSerializer):
     LoginToken = serializers.CharField(source='get_token')
     LoginHash = serializers.CharField(source='get_hash')
     timeAcceptedTos = serializers.DateTimeField(source='time_accepted_tos', format='iso-8601')
+    owned_transcripts = TranscriptSerializer(many=True)
+    invited_transcripts = TranscriptSerializer(many=True)
 
     class Meta:
         model = Student
@@ -67,4 +71,7 @@ class StudentSerializer(serializers.ModelSerializer):
             'LoginToken',
             'LoginHash',
             'timeAcceptedTos',
+            'owned_transcripts',
+            'invited_transcripts',
+            'userFullName'
         )
