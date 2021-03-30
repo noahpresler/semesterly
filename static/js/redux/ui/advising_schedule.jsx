@@ -160,30 +160,21 @@ class AdvisingSchedule extends React.Component {
               </div>
         </div>);
 
-        const scheduleNameOpen = <div className="as-semester-name-container">
+        const scheduleName = prop => (<div className="as-semester-name-container">
           <div className="as-semester-name">
           {this.props.semester.name} {this.props.semester.year}
           </div>
           <div className="as-tip-container">
-            <span className="as-tip up"></span>
+            { prop ? <span className="as-tip up"></span> : <span className="as-tip"></span> }
           </div>
-        </div>;
-
-        const scheduleNameClosed = <div className="as-semester-name-container">
-          <div className="as-semester-name">
-            {this.props.semester.name} {this.props.semester.year}
-          </div>
-          <div className="as-tip-container">
-            <span className="as-tip down"></span>
-          </div>
-        </div>;
+        </div>);
 
         return (
             <div className="advising-schedule">
                 <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>
                     Course Summary
                 </p>
-                <Collapsible open='true' trigger={scheduleNameOpen} triggerWhenOpen={scheduleNameClosed}>
+                <Collapsible open='true' trigger={scheduleName(true)} triggerWhenOpen={scheduleName(false)}>
                     <div>
                       { courseList }
                     </div>
