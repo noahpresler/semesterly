@@ -24,6 +24,7 @@ import {
     showFinalExamsModal,
     togglePeerModal,
     triggerTextbookModal,
+    openJHUSignupModal,
 } from '../../actions/modal_actions';
 import {
     addOrRemoveCourse,
@@ -53,6 +54,7 @@ const mapStateToProps = (state) => {
     isCourseInRoster: courseId => timetable.slots.some(s => s.course === courseId),
     hasLoaded: !state.timetables.isFetching,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
+    jhuSignedUp: state.userInfo.data.jhuSignedUp,
   };
 };
 
@@ -68,6 +70,7 @@ const SideBarContainer = connect(
     deleteTimetable,
     launchFinalExamsModal: showFinalExamsModal,
     loadTimetable,
+    openJHUSignupModal,
   },
 )(SideBar);
 

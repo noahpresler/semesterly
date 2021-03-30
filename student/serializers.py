@@ -39,6 +39,7 @@ class StudentSerializer(serializers.ModelSerializer):
     # TODO: switch to camelCase
     FacebookSignedUp = serializers.BooleanField(source='is_signed_up_through_fb')
     GoogleSignedUp = serializers.BooleanField(source='is_signed_up_through_google')
+    jhuSignedUp = serializers.BooleanField(source='is_signed_up_through_jhu')
     GoogleLoggedIn = serializers.BooleanField(source='is_logged_in_google')
     LoginToken = serializers.CharField(source='get_token')
     LoginHash = serializers.CharField(source='get_hash')
@@ -61,6 +62,7 @@ class StudentSerializer(serializers.ModelSerializer):
             'userLastName',
             'FacebookSignedUp',
             'GoogleSignedUp',
+            'jhuSignedUp',
             'GoogleLoggedIn',
             'LoginToken',
             'LoginHash',

@@ -14,6 +14,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 import authpipe.views
+from helpers.mixins import FeatureFlowView
 
 
 admin.autodiscover()
@@ -27,5 +28,8 @@ urlpatterns = [
     url(r'^registration-token/$',
         authpipe.views.RegistrationTokenView.as_view()),
     url(r'^registration-token/(?P<endpoint>.+?)/',
-        authpipe.views.RegistrationTokenView.as_view())
+        authpipe.views.RegistrationTokenView.as_view()),
+    
+    # for separate accounts error
+    url(r'^separate_accounts/$', FeatureFlowView.as_view(feature_name="SEPARATE_ACCOUNTS")),
 ]
