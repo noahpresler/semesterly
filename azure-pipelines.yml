@@ -3,7 +3,11 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- cs310-spring21
+    branches:
+        include:
+        - cs310-spring21
+
+pr: none # will disable PR builds 
 
 resources:
 - repo: self
