@@ -131,7 +131,7 @@ class AdvisingSchedule extends React.Component {
         }
         //TODO: edit wailisted
         const waitlistedlSlotsHeader = (<div>
-            <h4 className="as-header">Wailisted Courses</h4>
+            <h4 className="as-header">Waitlisted Courses</h4>
                 <div className="empty-state">
                     <img
                         src="/static/img/emptystates/optionalslots.png"
@@ -153,13 +153,17 @@ class AdvisingSchedule extends React.Component {
             : null;
         return (
             <div className="advising-schedule">
-                <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>Advising Dashboard</p>
+                <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>
+                    Course Summary
+                </p>
                 <div className="as-name">
-                    <TimetableNameInputContainer />
+                    <p className="as-schedule-name">
+                        {this.props.semester.name} {this.props.semester.year}
+                    </p>
                     <ClickOutHandler onClickOut={this.hideDropdown}>
                         {dropItDown}
                         <div
-                            className={classNames('timetable-names-dropdown', { down: this.state.showDropdown })}
+                          className={classNames('timetable-names-dropdown', { down: this.state.showDropdown })}
                         >
                             <div className="tip-border" />
                             <div className="tip" />
@@ -168,22 +172,23 @@ class AdvisingSchedule extends React.Component {
                         </div>
                     </ClickOutHandler>
                 </div>
-                <CreditTickerContainer />
-
-                <a onClick={this.props.launchPeerModal}>
-                    <h4 className="as-header">
-                        Planned Courses
-                    </h4>
-                </a>
-                <div className="as-master-slots">
-                    { masterSlots }
-                    { finalScheduleLink }
-                </div>
-                { optionalSlotsHeader }
-                { optionalSlots }
-                <div id="as-optional-slots" />
-                <div>
-                { waitlistedlSlotsHeader }
+                <div className="course-list-container">
+                    <CreditTickerContainer />
+                    <a onClick={this.props.launchPeerModal}>
+                        <h4 className="as-header">
+                            Planned Courses
+                        </h4>
+                    </a>
+                    <div className="as-master-slots">
+                        { masterSlots }
+                        { finalScheduleLink }
+                    </div>
+                    { optionalSlotsHeader }
+                    { optionalSlots }
+                    <div id="as-optional-slots" />
+                    <div>
+                    { waitlistedlSlotsHeader }
+                    </div>
                 </div>
             </div>
         );
@@ -218,7 +223,7 @@ AdvisingSchedule.propTypes = {
     launchPeerModal: PropTypes.func.isRequired,
     semester: PropTypes.shape({
         name: PropTypes.string.isRequired,
-        year: PropTypes.numberisRequired,
+        year: PropTypes.number.isRequired,
     }).isRequired,
     semesterIndex: PropTypes.number.isRequired,
     avgRating: PropTypes.number,

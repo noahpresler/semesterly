@@ -41,7 +41,7 @@ class CommentForum extends React.Component {
             }) : <div> <p> No messages yet! </p> </div>;
         return (
             <div className="comment-forum no-print">
-                <div className="as-name">
+                <div className="cf-name">
                     <p style={{fontSize: "1.25em", fontWeight: "bold", marginTop: "70px" }}>
                         Comments Forum</p>
                 </div>
