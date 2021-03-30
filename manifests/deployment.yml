@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: semesterly.azurecr.io/semesterly-nginx:55
+        image: semesterly.azurecr.io/semesterly-nginx:Version
         ports:
         - containerPort: 80
         resources:
@@ -30,7 +30,7 @@ spec:
             cpu: 750m   
             memory: 2048M
       - name: gunicorn
-        image: semesterly.azurecr.io/semesterly:55 #latest using a var
+        image: semesterly.azurecr.io/semesterly:Version
         command: ["bash"]
         args: ["-c","python manage.py migrate; gunicorn wsgi:application --bind=0.0.0.0:8000 --workers=3 --access-logfile - --error-logfile - --log-level info"]        
         workingDir: /code

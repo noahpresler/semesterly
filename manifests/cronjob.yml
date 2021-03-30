@@ -12,7 +12,7 @@ spec:
       template:
         spec:
           containers:
-            - image: semesterly.azurecr.io/semesterly:55
+            - image: semesterly.azurecr.io/semesterly:Version
               name: gunicorn-cron
               command: ["/bin/bash","/code/run_parser.sh"]
               workingDir: /code
