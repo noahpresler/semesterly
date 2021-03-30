@@ -23,7 +23,7 @@ from rest_framework.views import APIView
 from serializers import TranscriptSerializer, CommentSerializer
 
 
-class ForumView(RedirectToSignupMixin, ValidateSubdomainMixin, APIView):
+class ForumView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
     """ Returns all forums for the user making the request. """
 
     def get(self, request):
@@ -36,7 +36,7 @@ class ForumView(RedirectToSignupMixin, ValidateSubdomainMixin, APIView):
             status=status.HTTP_200_OK)
 
 
-class ForumTranscriptView(RedirectToSignupMixin, ValidateSubdomainMixin, APIView):
+class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
     def get(self, request, sem_name, year):
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
@@ -60,7 +60,8 @@ class ForumTranscriptView(RedirectToSignupMixin, ValidateSubdomainMixin, APIView
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
 
-        transcript = Transcript.objects.create(owner=student, semester=semester)
+        transcript = Transcript.objects.create(
+            owner=student, semester=semester)
         transcript.save()
 
         return Response({'transcript': TranscriptSerializer(transcript).data},
