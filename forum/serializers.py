@@ -29,7 +29,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class TranscriptSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True)
-    semester = serializers.StringRelatedField()
+    semester_name = serializers.CharField(source='semester.name')
+    semester_year = serializers.CharField(source='semester.year')
     owner_name = serializers.CharField(source='owner.get_full_name')
     advisor_names = serializers.SerializerMethodField()
 
@@ -43,7 +44,8 @@ class TranscriptSerializer(serializers.ModelSerializer):
         model = Transcript
         fields = (
             'comments',
-            'semester',
+            'semester_name',
+            'semester_year',
             'owner_name',
             'advisor_names',
         )
