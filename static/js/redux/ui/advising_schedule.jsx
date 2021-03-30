@@ -160,10 +160,13 @@ class AdvisingSchedule extends React.Component {
               </div>
         </div>);
 
-        const scheduleName = <div className="as-name">
-          <p className="as-schedule-name">
+        const scheduleName = <div className="as-semester-name-container">
+          <div className="as-semester-name">
           {this.props.semester.name} {this.props.semester.year}
-          </p>
+          </div>
+          <div className="as-tip-container">
+            <span className="as-tip"></span>
+          </div>
         </div>;
 
         return (
@@ -171,19 +174,11 @@ class AdvisingSchedule extends React.Component {
                 <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>
                     Course Summary
                 </p>
-                <Collapsible trigger={scheduleName}>
+                <Collapsible trigger={scheduleName} icon>
                     <div>
                       { courseList }
                     </div>
                 </Collapsible>
-                {/*<div className="as-name">*/}
-                {/*    <p className="as-schedule-name">*/}
-                {/*        {this.props.semester.name} {this.props.semester.year}*/}
-                {/*    </p>*/}
-                {/*</div>*/}
-                {/*<div>*/}
-                {/*    { courseList }*/}
-                {/*</div>*/}
             </div>
         );
     }

@@ -4,17 +4,30 @@
   }
 }
 
-.as-name {
-  margin-bottom: 0px;
-  padding: 10px 35px 0px 10px;
+.as-semester-name-container {
+  margin: 0px;
+  padding: 10px 0px 30px 30px;
   border: 2px solid rgba(128, 128, 128, 0.32);
   position: relative;
 }
 
-.as-schedule-name {
-  margin-bottom: 10px;
-  padding-right: 35px;
-  position: relative;
+.as-tip {
+  float: right;
+  margin: 10px 30px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #777777;
+  cursor: pointer;
+}
+
+.as-semester-name {
+  width: 50%;
+  float: left;
+}
+
+.as-tip-container {
+  width: 50%;
+  float: left;
 }
 
 .course-list-container {
@@ -73,60 +86,6 @@
       margin-bottom: 0;
       margin-top: 5px;
     }
-  }
-}
-
-.timetable-drop-it-down {
-  cursor: pointer;
-  height: 37px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 37px;
-
-  .tip-down {
-    left: 50%;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-
-    &.down {
-      transform: translate(-50%, -50%) rotate(180deg);
-    }
-  }
-}
-
-.timetable-names-dropdown {
-  background-color: $gfff;
-  border: 1px solid $ge6e6e6;
-  box-shadow: 0 2px 10px $black-transparent-2;
-  display: none;
-  left: 0;
-  position: absolute;
-  top: 35px;
-  width: 100%;
-  z-index: 100;
-
-  &.down {
-    display: block;
-  }
-
-  .tip {
-    right: 9px;
-    top: -7px;
-  }
-
-  .tip-border {
-    right: 9px;
-    top: -8px;
-  }
-
-  h4 {
-    color: $g777;
-    font-size: 12px;
-    margin: 0;
-    padding: 10px 5px 5px 10px;
   }
 }
 
