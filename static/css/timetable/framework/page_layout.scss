@@ -56,25 +56,25 @@ textarea {
   }
 }
 
-.comments-forum {
+.comment-forum {
   background-color: $gfff;
   bottom: auto;
   height: 100%;
-  left: calc(100% - 3000px);
+  left: calc(100% - 700px);
   overflow-y: auto;
   padding: 20px 10px 70px 0;
   position: absolute;
   top: 0;
   transform: translateX(0);
   transition: transform .3s;
-  width: 300px;
+  width: 700px;
   z-index: 99;
 
-  &.full-cal {
+  &.full-bar {
     transform: translateX(100%);
   }
 
-  &.less-cal {
+  &.less-bar {
     transform: translateX(0%);
   }
 }
@@ -108,11 +108,11 @@ textarea {
   visibility: visible;
   width: calc(100% - 700px);
 
-  &.full-cal {
+  &.full-bar {
     width: 100%;
   }
 
-  &.less-cal {
+  &.less-bar {
     width: calc(100% - 700px);
   }
 }
@@ -204,15 +204,17 @@ textarea {
     }
   }
 
-}@media (max-width: 999px) {
+}
+
+@media (max-width: 999px) {
   .main-advising {
     width: 100%;
 
-    &.full-cal {
+    &.full-bar {
       width: 100%;
     }
 
-    &.less-cal {
+    &.less-bar {
       opacity: 0;
       visibility: visible;
       width: 0%;
@@ -229,11 +231,11 @@ textarea {
     transform: translateX(0%);
     width: 100%;
 
-    &.full-cal {
+    &.full-bar {
       transform: translateX(0%);
     }
 
-    &.less-cal {
+    &.less-bar {
       transform: translateX(-100%);
       width: 100%;
     }

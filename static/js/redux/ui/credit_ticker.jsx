@@ -58,7 +58,7 @@ class CreditTicker extends React.Component {
 
   render() {
     return (
-      <div className="col-1-3 sb-credits">
+      <div className="sb-credits">
         <h3>{Math.abs(this.state.displayedCredits).toFixed(2)}</h3>
         <h4>credits</h4>
       </div>

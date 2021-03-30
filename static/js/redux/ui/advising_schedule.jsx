@@ -130,21 +130,16 @@ class AdvisingSchedule extends React.Component {
                 </div>);
         }
         //TODO: edit wailisted
-        const waitlistedlSlotsHeader = (optionalSlots.length === 0 && masterSlots.length > 3) ? null :
-            <h4 className="as-header">Wailisted Courses</h4>;
-        if (optionalSlots.length === 0 && masterSlots.length > 3) {
-            optionalSlots = null;
-        } else if (optionalSlots.length === 0) {
-            const img = (
-                <img
-                    src="/static/img/emptystates/optionalslots.png"
-                    alt="No optional courses added."
-                />);
-            optionalSlots = (
+        const waitlistedlSlotsHeader = (<div>
+            <h4 className="as-header">Wailisted Courses</h4>
                 <div className="empty-state">
-                    { img }
-                </div>);
-        }
+                    <img
+                        src="/static/img/emptystates/optionalslots.png"
+                        alt="No optional courses added."
+                    />
+                </div>
+        </div>);
+
         const finalScheduleLink = (masterSlots.length > 0 &&
             this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0
             && this.props.hasLoaded) ?
@@ -158,8 +153,8 @@ class AdvisingSchedule extends React.Component {
             : null;
         return (
             <div className="advising-schedule">
+                <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>Advising Dashboard</p>
                 <div className="as-name">
-                    <h3><b>Advising Dashboard</b></h3>
                     <TimetableNameInputContainer />
                     <ClickOutHandler onClickOut={this.hideDropdown}>
                         {dropItDown}
@@ -177,7 +172,7 @@ class AdvisingSchedule extends React.Component {
 
                 <a onClick={this.props.launchPeerModal}>
                     <h4 className="as-header">
-                        Current Courses
+                        Planned Courses
                     </h4>
                 </a>
                 <div className="as-master-slots">
@@ -186,9 +181,10 @@ class AdvisingSchedule extends React.Component {
                 </div>
                 { optionalSlotsHeader }
                 { optionalSlots }
-                { waitlistedlSlotsHeader }
-                { optionalSlots }
                 <div id="as-optional-slots" />
+                <div>
+                { waitlistedlSlotsHeader }
+                </div>
             </div>
         );
     }

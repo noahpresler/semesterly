@@ -118,7 +118,6 @@
 
 .star-ratings-sprite {
   background: url("../../img/star.png") repeat-x;
-  float: left;
   font-size: 0;
   height: 18px;
   line-height: 0;
@@ -138,7 +137,7 @@
 .rating {
   background: url("../../img/rating.png") 0 100% repeat-x;
   display: block;
-  float: left;
+  float: center;
   height: 18px;
 }
 
