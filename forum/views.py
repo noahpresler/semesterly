@@ -30,11 +30,11 @@ class ForumView(RedirectToSignupMixin, ValidateSubdomainMixin, APIView):
             {'invited_transcripts': TranscriptSerializer(
                 student.invited_transcripts, many=True).data,
              'owned_transcripts': TranscriptSerializer(
-                 student.owned_transcripts, many=True)},
+                 student.owned_transcripts, many=True).data},
             status=status.HTTP_200_OK)
 
 
-class ForumTranscriptView(RedirectToSignMixin, ValidateSubdomainMixin, APIView):
+class ForumTranscriptView(RedirectToSignupMixin, ValidateSubdomainMixin, APIView):
     def get(self, request):
         pass
 

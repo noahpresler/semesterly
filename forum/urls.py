@@ -17,12 +17,12 @@ import forum.views
 
 
 urlpatterns = [
-    url(r'^GET/forum/', forum.views.get),
-    url(r'^GET/forum/(?P<sem_name>.+?)/(?P<year>[0-9]{4})', forum.views.getTerm),
-    url(r'^DELETE/forum/(?P<sem_name>.+?)/(?P<year>[0-9]{4})', forum.views.deleteTerm),
-    url(r'^PUT/forum/(?P<sem_name>.+?)/(?P<year>[0-9]{4})', forum.views.putTerm),
-    url(r'^POST/forum/(?P<sem_name>.+?)/(?P<year>[0-9]{4})', forum.views.postTerm),
-    url(r'^PATCH/forum/(?P<sem_name>.+?)/(?P<year>[0-9]{4})', forum.views.patchTerm),
+    url(r'^forum/$', forum.views.ForumView.as_view()),
+    # url(r'^GET/forum/(?P<sem_name>.+?)/(?P<year>[0-9]{4})', forum.views.getTerm),
+    # url(r'^DELETE/forum/(?P<sem_name>.+?)/(?P<year>[0-9]{4})', forum.views.deleteTerm),
+    # url(r'^PUT/forum/(?P<sem_name>.+?)/(?P<year>[0-9]{4})', forum.views.putTerm),
+    # url(r'^POST/forum/(?P<sem_name>.+?)/(?P<year>[0-9]{4})', forum.views.postTerm),
+    # url(r'^PATCH/forum/(?P<sem_name>.+?)/(?P<year>[0-9]{4})', forum.views.patchTerm),
 ]
 
 
