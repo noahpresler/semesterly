@@ -16,11 +16,11 @@ from django.shortcuts import render
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from student.models import Student
 from timetable.models import Semester
-from forum.models import Transcript
+from forum.models import Transcript, Comment
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from serializers import TranscriptSerializer
+from serializers import TranscriptSerializer, CommentSerializer
 
 
 class ForumView(RedirectToSignupMixin, ValidateSubdomainMixin, APIView):
@@ -41,17 +41,48 @@ class ForumTranscriptView(RedirectToSignupMixin, ValidateSubdomainMixin, APIView
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
         transcript = Transcript.objects.get(owner=student, semester=semester)
-        return Response('transcript', TranscriptSerializer(transcript).data)
-
+        return Response({'transcript': TranscriptSerializer(transcript).data},
+                        status=status.HTTP_200_OK)
 
     def post(self, request, sem_name, year):
-        pass
+        student = Student.objects.get(user=request.user)
+        semester = Semester.objects.get(name=sem_name, year=year)
+        transcript = Transcript.objects.get(owner=student, semester=semester)
+        comment = Comment.objects.create(author=student,
+                                         content=request.data['content'],
+                                         timestamp=request.data['timestamp'],
+                                         transcript=transcript)
+
+        return Response({'comment': CommentSerializer(comment).data},
+                        status=status.HTTP_200_OK)
 
     def put(self, request, sem_name, year):
-        pass
+        student = Student.objects.get(user=request.user)
+        semester = Semester.objects.get(name=sem_name, year=year)
+
+        transcript = Transcript.objects.create(owner=student, semester=semester)
+        transcript.save()
+
+        return Response({'transcript': TranscriptSerializer(transcript).data},
+                        status=status.HTTP_200_OK)
 
     def patch(self, request, sem_name, year):
-        pass
+        student = Student.objects.get(user=request.user)
+        semester = Semester.objects.get(name=sem_name, year=year)
+
+        transcript = Transcript.objects.get(owner=student, semester=semester)
+        if request.data['action'] == 'add':
+            transcript.advisors.add(Student.get(jhed=request.data['jhed']))
+        else:
+            transcript.advisors.remove(Student.get(jhed=request.data['jhed']))
+        transcript.save()
+
+        return Response({'transcript': TranscriptSerializer(transcript).data},
+                        status=status.HTTP_200_OK)
 
     def delete(self, request, sem_name, year):
-        pass
+        student = Student.objects.get(user=request.user)
+        semester = Semester.objects.get(name=sem_name, year=year)
+        transcript = Transcript.objects.get(owner=student, semester=semester)
+        return Response({'transcript': TranscriptSerializer(transcript).data},
+                        status=status.HTTP_204_NO_CONTENT)
