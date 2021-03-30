@@ -156,21 +156,23 @@ class AdvisingSchedule extends React.Component {
                 <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>
                     Course Summary
                 </p>
+                <div className="as-name">
+                    <p className="as-schedule-name">
+                        {this.props.semester.name} {this.props.semester.year}
+                    </p>
+                    <ClickOutHandler onClickOut={this.hideDropdown}>
+                        {dropItDown}
+                        <div
+                          className={classNames('timetable-names-dropdown', { down: this.state.showDropdown })}
+                        >
+                            <div className="tip-border" />
+                            <div className="tip" />
+                            <h4>{ `${this.props.semester.name} ${this.props.semester.year}` }</h4>
+                            { savedTimetables }
+                        </div>
+                    </ClickOutHandler>
+                </div>
                 <div className="course-list-container">
-                    <div className="as-name">
-                        <TimetableNameInputContainer />
-                        <ClickOutHandler onClickOut={this.hideDropdown}>
-                            {dropItDown}
-                            <div
-                                className={classNames('timetable-names-dropdown', { down: this.state.showDropdown })}
-                            >
-                                <div className="tip-border" />
-                                <div className="tip" />
-                                <h4>{ `${this.props.semester.name} ${this.props.semester.year}` }</h4>
-                                { savedTimetables }
-                            </div>
-                        </ClickOutHandler>
-                    </div>
                     <CreditTickerContainer />
                     <a onClick={this.props.launchPeerModal}>
                         <h4 className="as-header">
@@ -221,7 +223,7 @@ AdvisingSchedule.propTypes = {
     launchPeerModal: PropTypes.func.isRequired,
     semester: PropTypes.shape({
         name: PropTypes.string.isRequired,
-        year: PropTypes.numberisRequired,
+        year: PropTypes.number.isRequired,
     }).isRequired,
     semesterIndex: PropTypes.number.isRequired,
     avgRating: PropTypes.number,
