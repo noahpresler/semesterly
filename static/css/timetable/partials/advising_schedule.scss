@@ -20,6 +20,10 @@
   cursor: pointer;
 }
 
+.as-tip.up {
+  transform: rotate(180deg);
+}
+
 .as-semester-name {
   width: 50%;
   float: left;
