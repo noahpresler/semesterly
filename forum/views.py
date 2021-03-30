@@ -15,6 +15,8 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from student.models import Student
+from timetable.models import Semester
+from forum.models import Transcript
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -35,17 +37,21 @@ class ForumView(RedirectToSignupMixin, ValidateSubdomainMixin, APIView):
 
 
 class ForumTranscriptView(RedirectToSignupMixin, ValidateSubdomainMixin, APIView):
-    def get(self, request):
+    def get(self, request, sem_name, year):
+        student = Student.objects.get(user=request.user)
+        semester = Semester.objects.get(name=sem_name, year=year)
+        transcript = Transcript.objects.get(owner=student, semester=semester)
+        return Response('transcript', TranscriptSerializer(transcript).data)
+
+
+    def post(self, request, sem_name, year):
         pass
 
-    def post(self, request):
+    def put(self, request, sem_name, year):
         pass
 
-    def put(self, request):
+    def patch(self, request, sem_name, year):
         pass
 
-    def patch(self, request):
-        pass
-
-    def delete(self, request):
+    def delete(self, request, sem_name, year):
         pass
