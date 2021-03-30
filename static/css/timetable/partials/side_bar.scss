@@ -211,6 +211,19 @@
   }
 }
 
+.sb-btn {
+  background-color: $blue-dark;
+  border: 0;
+  border-radius: 3px;
+  color: $gfff;
+  margin: 5px;
+  padding: 10px 20px;
+
+  i {
+    margin-right: 10px;
+  }
+}
+
 .sb-master-slots {
   clear: both;
   padding: 5px;
@@ -361,4 +374,11 @@
   i {
     margin-right: 3px;
   }
+}
+
+.advising-btn {
+  background-color: $jhu-dark;
+  border-color: $jhu-dark;
+  color: $gfff;
+  width: 100%;
 }

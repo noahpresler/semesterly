@@ -54,7 +54,7 @@ class Student(models.Model):
     school = models.CharField(max_length=100, null=True)
     time_accepted_tos = models.DateTimeField(null=True)
     hopid = models.CharField(max_length=10, null=True, default='')
-    jhed = models.CharField(max_length=10, null=True, default='')
+    jhed = models.CharField(max_length=255, null=True, default='')
     pre_health = models.NullBooleanField(null=True, default=False)
     first_name = models.CharField(max_length=255, default='', null=True)
     last_name = models.CharField(max_length=255, default='', null=True)
@@ -77,6 +77,9 @@ class Student(models.Model):
 
     def is_signed_up_through_google(self):
         return self.provider_exists('google-oauth2')
+
+    def is_signed_up_through_jhu(self):
+        return self.provider_exists('azuread-tenant-oauth2')
 
     def provider_exists(self, provider):
         return self.user.social_auth.filter(provider=provider).exists()

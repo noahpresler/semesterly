@@ -48,12 +48,6 @@ class SideBar extends React.Component {
     callback();
   }
 
-  /*
-  toggleAdvising() {
-      setAdvising()
-  }
-  */
-
   render() {
     const savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => (
       <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>
@@ -152,16 +146,19 @@ class SideBar extends React.Component {
                 See Finals Schedule
             </div>)
             : null;
-    const betaFeature = (<div>
-        <h4 className="sb-header"> Try our new Beta feature! </h4>
-        <a href="/advising">
-            <button className="semesterly-blue"
-                    //onClick={() => this.toggleAdvising()}
-                    >
-                Advising Dashboard
-            </button>
-        </a>
-    </div>)
+    const advisingDashboardButton = (
+      <button
+        className="btn advising-btn eight-px-top"
+        onClick={this.props.jhuSignedUp ? () => {
+          const link = document.createElement('a');
+          link.href = '/advising';
+          document.body.appendChild(link);
+          link.click();
+        } : this.props.openJHUSignupModal}
+      >
+        <span>Advising Dashboard</span>
+      </button>
+    );
     return (
       <div className="side-bar no-print">
         <div className="sb-name">
@@ -209,8 +206,10 @@ class SideBar extends React.Component {
         { optionalSlotsHeader }
         { optionalSlots }
         <div id="sb-optional-slots" />
-        { betaFeature}
-        <div id="sb-beta-buttons"/>
+        <h4 className="sb-header">
+          Try out our new Beta feature!
+          </h4>
+        {advisingDashboardButton}
       </div>
     );
   }
@@ -251,6 +250,8 @@ SideBar.propTypes = {
   examSupportedSemesters: PropTypes.arrayOf(PropTypes.number).isRequired,
   hasLoaded: PropTypes.bool.isRequired,
   getShareLink: PropTypes.func.isRequired,
+  openJHUSignupModal: PropTypes.func.isRequired,
+  jhuSignedUp: PropTypes.bool.isRequired,
 };
 
 export default SideBar;

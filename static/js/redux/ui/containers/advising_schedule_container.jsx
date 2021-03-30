@@ -23,7 +23,6 @@ import {
     fetchCourseInfo,
     showFinalExamsModal,
     togglePeerModal,
-    triggerTextbookModal,
 } from '../../actions/modal_actions';
 import {
     addOrRemoveCourse,
@@ -63,7 +62,6 @@ const AdvisingScheduleContainer = connect(
         removeCourse: addOrRemoveCourse,
         removeOptionalCourse: addOrRemoveOptionalCourse,
         launchPeerModal: togglePeerModal,
-        launchTextbookModal: triggerTextbookModal,
         duplicateTimetable,
         deleteTimetable,
         launchFinalExamsModal: showFinalExamsModal,
