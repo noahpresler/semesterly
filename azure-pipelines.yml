@@ -3,7 +3,11 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- cs310-spring21
+    branches:
+        include:
+        - cs310-spring21
+
+pr: none # will disable PR builds 
 
 resources:
 - repo: self
@@ -26,6 +30,7 @@ variables:
 stages:
 - stage: Build
   displayName: Build stage
+  condition: not(startsWith(variables['Build.SourceBranch'], 'refs/pull/'))
   jobs:
   - job: Build
     displayName: Build
@@ -33,7 +38,7 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: Docker@2
-      displayName: Build Django Container
+      displayName: Build and push Django Container
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
@@ -44,15 +49,25 @@ stages:
     - task: Docker@2
       displayName: Build nginx Container
       inputs:
-        command: 'buildAndPush'
+        command: 'build'
         repository: 'semesterly-nginx'
+        arguments: '--build-arg djangoImage=$(containerRegistry)/$(imageRepository):$(tag)'
         Dockerfile: './build/semesterly-nginx/Dockerfile'
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)          
+    - task: Docker@2
+      displayName: Push nginx Container
+      inputs:
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: 'semesterly-nginx'
+        command: 'push'
+        tags: |
+          $(tag)
 
     - upload: manifests
       artifact: manifests
+      
 
 - stage: Deploy
   displayName: Deploy stage
@@ -61,11 +76,11 @@ stages:
 # Deploy is false for now
   jobs:
   - deployment: Deploy
-    condition: and(false,and(succeeded(), not(startsWith(variables['Build.SourceBranch'], 'refs/pull/')))) 
+    condition: and(succeeded(), not(startsWith(variables['Build.SourceBranch'], 'refs/pull/'))) 
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'jhuopensourcesemesterly.semesterly'
+    environment: 'uis-prod.semesterly-dev'
     strategy:
       runOnce:
         deploy:
@@ -84,10 +99,12 @@ stages:
               manifests: |
                 $(Pipeline.Workspace)/manifests/deployment.yml
                 $(Pipeline.Workspace)/manifests/service.yml
-              imagePullSecrets: |
-                $(imagePullSecret)
+                $(Pipeline.Workspace)/manifests/ingress.yml
+                $(Pipeline.Workspace)/manifests/cronjob.yml
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
+                $(containerRegistry)/semesterly-nginx:$(tag)
+                
 
   # - deployment: DeployPullRequest
   #   displayName: Deploy Pull request
