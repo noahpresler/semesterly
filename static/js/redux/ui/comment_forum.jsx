@@ -38,7 +38,7 @@ class CommentForum extends React.Component {
                     // colourIndex={colourIndex}
                     // fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
                 />);
-            }) : <div> <p> No messages yet! </p> </div>;
+            }) : <div className="empty-state"><h4> <p> No comments yet! </p> </h4></div>;
         return (
             <div className="comment-forum no-print">
                 <div className="cf-name">
@@ -46,15 +46,9 @@ class CommentForum extends React.Component {
                         Comments Forum</p>
                 </div>
                 <div className="as-header"></div>
-                { commentSlots }
-                <CommentSlot
-                    // key={course.id}
-                    // author={author}
-                    //colourIndex={colourIndex}
-                    // fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
-                />
-            {/* need to use similar css to search bar for forum input box */}
-
+                <div className="comment-forum-container">
+                  { commentSlots }
+                </div>
                 <CommentInputContainer />
             </div>)
 
