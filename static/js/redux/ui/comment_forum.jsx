@@ -16,7 +16,7 @@ import React from 'react';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import CommentSlot from './comment_slot';
 import {getNextAvailableColour} from '../util';
-import TextInputContainer from './containers/text_input_container';
+import CommentInputContainer from './containers/comment_input_container';
 
 
 class CommentForum extends React.Component {
@@ -54,11 +54,8 @@ class CommentForum extends React.Component {
                     // fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
                 />
             {/* need to use similar css to search bar for forum input box */}
-                <TextInputContainer />
-                <button className="accept-tos-btn"
-                        style={{position: "fixed", right: "20px", bottom: "20px"}}>
-                    Submit
-                </button>
+
+                <CommentInputContainer />
             </div>)
 
 
