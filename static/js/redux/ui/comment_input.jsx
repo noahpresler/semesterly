@@ -46,10 +46,10 @@ class CommentInput extends React.Component {
 
 	render() {
 		return (<div className="cf-text-input">
-			<input></input>
-			<button className="send-btn" style={{position: "fixed", right: "20px", bottom: "20px"}}>
-				Submit
-			</button>
+				<form action="#0">
+					<textarea className="cf-input" rows="1" placeholder="Type your comment here..."/>
+					<input className="send-btn" type="submit" value="+" />
+				</form>
 			</div>
 		);
 	}
