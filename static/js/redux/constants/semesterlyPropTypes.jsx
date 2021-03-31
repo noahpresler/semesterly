@@ -170,6 +170,7 @@ export const userInfo = PropTypes.shape({
   FacebookSignedUp: PropTypes.bool,
   GoogleSignedUp: PropTypes.bool,
   GoogleLoggedIn: PropTypes.bool,
+  jhuSignedUp: PropTypes.bool,
   LoginToken: PropTypes.string,
   LoginHash: PropTypes.string,
   timeAcceptedTos: PropTypes.string,
