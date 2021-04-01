@@ -5,22 +5,39 @@
   }
 }
 
-.as-name {
-  margin-bottom: 0px;
-  padding: 10px 35px 0px 10px;
+.as-semester-name-container {
+  margin: 0px;
+  padding: 10px 0px 30px 30px;
   border: 2px solid rgba(128, 128, 128, 0.32);
   position: relative;
+}
+
+.as-tip {
+  float: right;
+  margin: 10px 30px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #777777;
+  cursor: pointer;
+}
+
+.as-tip.up {
+  transform: rotate(180deg);
+}
+
+.as-semester-name {
+  width: 50%;
+  float: left;
+}
+
+.as-tip-container {
+  width: 50%;
+  float: left;
 }
 
 .course-list-container {
   border: 2px solid rgba(128, 128, 128, 0.32);
   padding: 10px;
-}
-
-.as-schedule-name {
-  margin-bottom: 10px;
-  padding-right: 35px;
-  position: relative;
 }
 
 .advising-schedule {
