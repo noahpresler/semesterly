@@ -47,7 +47,8 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
     def post(self, request, sem_name, year):
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
-        transcript = Transcript.objects.get(owner=request.data['owner'], semester=semester)
+        transcript = Transcript.objects.get(owner=Student.get(jhed=request.data['owner_jhed']),
+                                            semester=semester)
         comment = Comment.objects.create(author=student,
                                          content=request.data['content'],
                                          timestamp=request.data['timestamp'],
