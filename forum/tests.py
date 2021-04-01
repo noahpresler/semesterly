@@ -23,12 +23,14 @@ def setUpTranscriptDependencies(self):
         first_name='James',
         last_name='Wang',)
     self.student = Student.objects.create(user=user)
+    self.student.jhed = 'jwang380'
     user = User.objects.create_user(
         username='rbiz',
         password='k',
         first_name='Rishi',
         last_name='Biswas',)
     self.advisor = Student.objects.create(user=user)
+    self.advisor.jhed = 'rbiswas4'
     self.semester = Semester.objects.create(name='Fall', year='2019')
 
 
@@ -149,6 +151,7 @@ class ForumTranscriptViewTest(APITestCase):
         request = self.factory.get('/forum/Fall/2019/', format='json')
         response = get_response_for_semester(self, request, self.student.user)
 
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
         expected = TranscriptSerializer(self.transcript).data
         actual = response.data['transcript']
         self.assertEquals(expected, actual)
@@ -157,6 +160,7 @@ class ForumTranscriptViewTest(APITestCase):
         setUpTranscriptDependencies(self)
         request = self.factory.put('/forum/Fall/2019/', format='json')
         response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
         transcript = Transcript.objects.get(
             semester=self.semester, owner=self.student)
 
@@ -164,14 +168,42 @@ class ForumTranscriptViewTest(APITestCase):
         setUpTranscript(self)
         request = self.factory.delete('/forum/Fall/2019/', format='json')
         response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(Transcript.DoesNotExist):
             Transcript.objects.get(semester=self.semester, owner=self.student)
 
     def test_create_comments(self):
-        setUpTranscriptDependencies(self)
+        setUpTranscript(self)
+        content = 'Stan Oh My Girl, fromis_9, f(x), LOONA'
+        data = {
+            'content': content,
+            'timestamp': datetime.datetime.now(),
+            'jhed': self.student.jhed,
+        }
+        request = self.factory.post(
+            '/forum/Fall/2019/', data=data, format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        comment = Comment.objects.get(
+            transcript=self.transcript, author=self.student)
+        self.assertEquals(content, comment.content)
+
+        content = 'Stan YUKIKA - literally Simon'
+        data = {
+            'content': content,
+            'timestamp': datetime.datetime.now(),
+            'jhed': self.advisor.jhed,
+        }
+        request = self.factory.post(
+            '/forum/Fall/2019/', data=data, format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        comment = Comment.objects.get(
+            transcript=self.transcript, author=self.advisor)
+        self.assertEquals(content, comment.content)
 
     def test_add_advisor(self):
         setUpTranscriptDependencies(self)
 
     def test_remove_advisor(self):
-        setUpTranscriptDependencies(self)
+        setUpTranscript(self)
