@@ -1,3 +1,4 @@
+
 .side-bar-section {
   &:last-child {
     padding-bottom: 20px;
@@ -43,30 +44,34 @@
   height: 80vh;
   overflow-y: auto;
 
-  input {
-    border: 1px solid $gfff;
-    border-radius: 25px;
-    font-family: $font-body;
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 25px;
-    outline: 0;
-    padding: 5px 5px 5px 15px;
-    transition: border .3s;
-    width: 100%;
+  .empty-state {
+    margin: 0 auto;
+    text-align: center;
+    width: 280px;
 
-    &:focus {
-      border: 1px solid $blue-alt;
+    img {
+      width: 280px;
     }
 
-    &:hover {
-      border: 1px solid $gddd;
+    h3 {
+      color: $ga1a1a1;
+      font-size: 12px;
+      font-weight: 400;
+      margin-top: 8px;
+    }
+
+    h4 {
+      color: $gbbb;
+      font-size: 14px;
+      margin-bottom: 0;
+      margin-top: 5px;
     }
   }
+}
 
-  .unsaved {
-    font-style: italic;
-  }
+.comment-forum-container {
+  height: 50vh;
+  overflow-y: auto;
 
   .empty-state {
     margin: 0 auto;
@@ -295,17 +300,57 @@
   }
 }
 
-.final-schedule-link {
-  clear: both;
-  color: $g777;
-  font-size: 14px;
-  font-weight: 200;
-  margin: 0;
-  padding: 10px 5px;
+.cf-text-input {
   position: relative;
-  text-align: center;
+  width: 100%;
+}
+
+.cf-input {
+  float: left;
+  width: 85%;
+  resize: none;
+  overflow: visible;
+  margin: 2px 1% 2px 3%;
+  padding: 0px 10px 0px 10px;
+  border-color: rgba(128, 128, 128, 0.32);
+  border-radius: 25px 25px 25px 25px;
+  line-height: 25px;
+  background-color: #f2f3f5;
+  font-size: 14px;
+  outline: 0;
+
+  &::-webkit-input-placeholder {
+    font-size: 14px;
+    line-height: 25px;
+  }
+
+  &::-moz-placeholder {
+    font-size: 14px;
+    line-height: 25px;
+  }
+
+  &:-ms-input-placeholder {
+    font-size: 14px;
+    line-height: 25px;
+  }
+
+  &:-moz-placeholder {
+    font-size: 14px;
+    line-height: 25px;
+  }
+}
+
+.send-btn {
+  float: left;
+  width: 25px;
+  background-color: $green;
+  border: 0;
+  outline: 0;
+  border-radius: 25px;
+  color: $gfff;
+  margin: 2px 3% 2px 1%;
 
   i {
-    margin-right: 3px;
+    margin-right: 10px;
   }
 }
