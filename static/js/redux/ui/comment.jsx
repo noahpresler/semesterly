@@ -24,10 +24,10 @@ class Comment extends React.Component {
 
 	render() {
 		return (
-			<div className="empty-state">
-				<h3>{this.props.author_name}</h3>
-				<h3>{this.props.content}</h3>
-				<h3>{this.props.timestamp}</h3>
+			<div className="comment-bubble">
+				<h6>{this.props.author}</h6>
+				<h5>{this.props.content}</h5>
+				<h6>{this.props.timestamp}</h6>
 			</div>
 		);
 	}
