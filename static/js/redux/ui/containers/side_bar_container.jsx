@@ -54,7 +54,7 @@ const mapStateToProps = (state) => {
     isCourseInRoster: courseId => timetable.slots.some(s => s.course === courseId),
     hasLoaded: !state.timetables.isFetching,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
-    jhuSignedUp: state.userInfo.data.jhuSignedUp,
+    jhuSignedUp: state.userInfo.data.isLoggedIn && state.userInfo.data.jhuSignedUp,
   };
 };
 
