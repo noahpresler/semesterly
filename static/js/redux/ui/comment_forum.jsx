@@ -18,6 +18,7 @@ import CommentSlot from './comment_slot';
 import {getNextAvailableColour} from '../util';
 import CommentInputContainer from './containers/comment_input_container';
 import Transcript from './transcript';
+import {getTranscriptCommentsBySemester} from '../constants/endpoints';
 
 
 class CommentForum extends React.Component {
@@ -33,7 +34,7 @@ class CommentForum extends React.Component {
       // TODO: Change to real endpoint - this mock endpoint returns all comment in given semester (id=1)
       // We want to eventually pass in a prop for the semester currently being displayed and do something like
       // fetch('https://606510e5f091970017786f0a.mockapi.io/owned_transcripts/' + {this.state.curr_semester.toString()})
-      fetch('https://606510e5f091970017786f0a.mockapi.io/owned_transcripts/1')
+      fetch(getTranscriptCommentsBySemester(this.state.semester))
         .then(response => response.json())
         .then(data => {
           this.setState({comments: data});

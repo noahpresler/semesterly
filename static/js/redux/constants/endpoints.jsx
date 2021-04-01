@@ -38,10 +38,14 @@ export const getIntegrationEndpoint = (integrationId, courseId) => `/integration
 export const getFinalExamSchedulerEndpoint = () => '/exams/';
 export const getRequestShareExamLinkEndpoint = () => '/exams/links/';
 export const acceptTOSEndpoint = () => '/tos/accept/';
+
+//Advising Dashboard Endpoints
+//TODO: Replace with real endpoint
+export const getTranscriptCommentsBySemester = (semester_name) => 'https://606510e5f091970017786f0a.mockapi.io/owned_transcripts/1';
+
 export function getCourseShareLinkFromModal(code, semester) {
   return `/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;
 }
-
 export function getCourseShareLink(code, semester) {
   return `${window.location.href.split('/')[2]}/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;
 }
