@@ -49,6 +49,11 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
         semester = Semester.objects.get(name=sem_name, year=year)
         transcript = Transcript.objects.get(owner=Student.objects.get(jhed=request.data['jhed']),
                                             semester=semester)
+
+        if ((not student in transcript.advisors.all()) and
+                (student.jhed != transcript.objects.owner.jhed)):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
         comment = Comment.objects.create(author=student,
                                          content=request.data['content'],
                                          timestamp=request.data['timestamp'],
