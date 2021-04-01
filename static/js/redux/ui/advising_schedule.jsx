@@ -14,12 +14,8 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
-import ClickOutHandler from 'react-onclickout';
-import uniqBy from 'lodash/uniqBy';
-import flatMap from 'lodash/flatMap';
+import Collapsible from 'react-collapsible';
 import MasterSlot from './master_slot';
-import TimetableNameInputContainer from './containers/timetable_name_input_container';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import { getNextAvailableColour } from '../util';
@@ -98,13 +94,6 @@ class AdvisingSchedule extends React.Component {
                 getShareLink={this.props.getShareLink}
             />);
         }) : null;
-        const dropItDown = savedTimetables && savedTimetables.length !== 0 ?
-            (<div
-                className="timetable-drop-it-down"
-                onMouseDown={this.toggleDropdown}
-            >
-                <span className={classNames('tip-down', { down: this.state.showDropdown })} />
-            </div>) : null;
         if (masterSlots.length === 0) {
             masterSlots = (
                 <div className="empty-state">
@@ -151,45 +140,45 @@ class AdvisingSchedule extends React.Component {
                 See Finals Schedule
             </div>)
             : null;
+
+        const courseList = (<div className="course-list-container">
+              <CreditTickerContainer />
+              <a onClick={this.props.launchPeerModal}>
+                  <h4 className="as-header">
+                      Planned Courses
+                  </h4>
+              </a>
+              <div className="as-master-slots">
+                  { masterSlots }
+                  { finalScheduleLink }
+              </div>
+              { optionalSlotsHeader }
+              { optionalSlots }
+              <div id="as-optional-slots" />
+              <div>
+                  { waitlistedlSlotsHeader }
+              </div>
+        </div>);
+
+        const scheduleName = prop => (<div className="as-semester-name-container">
+          <div className="as-semester-name">
+          {this.props.semester.name} {this.props.semester.year}
+          </div>
+          <div className="as-tip-container">
+            { prop ? <span className="as-tip up"></span> : <span className="as-tip"></span> }
+          </div>
+        </div>);
+
         return (
             <div className="advising-schedule">
                 <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>
                     Course Summary
                 </p>
-                <div className="as-name">
-                    <p className="as-schedule-name">
-                        {this.props.semester.name} {this.props.semester.year}
-                    </p>
-                    <ClickOutHandler onClickOut={this.hideDropdown}>
-                        {dropItDown}
-                        <div
-                          className={classNames('timetable-names-dropdown', { down: this.state.showDropdown })}
-                        >
-                            <div className="tip-border" />
-                            <div className="tip" />
-                            <h4>{ `${this.props.semester.name} ${this.props.semester.year}` }</h4>
-                            { savedTimetables }
-                        </div>
-                    </ClickOutHandler>
-                </div>
-                <div className="course-list-container">
-                    <CreditTickerContainer />
-                    <a onClick={this.props.launchPeerModal}>
-                        <h4 className="as-header">
-                            Planned Courses
-                        </h4>
-                    </a>
-                    <div className="as-master-slots">
-                        { masterSlots }
-                        { finalScheduleLink }
-                    </div>
-                    { optionalSlotsHeader }
-                    { optionalSlots }
-                    <div id="as-optional-slots" />
+                <Collapsible open='true' trigger={scheduleName(true)} triggerWhenOpen={scheduleName(false)}>
                     <div>
-                    { waitlistedlSlotsHeader }
+                      { courseList }
                     </div>
-                </div>
+                </Collapsible>
             </div>
         );
     }
