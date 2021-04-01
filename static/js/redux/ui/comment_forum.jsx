@@ -64,6 +64,7 @@ class CommentForum extends React.Component {
                 <div className="comment-forum-container">
                   { transcript }
                 </div>
+                <div className="as-header"></div>
                 <CommentInputContainer />
             </div>
         );

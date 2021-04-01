@@ -14,7 +14,6 @@ GNU General Public License for more details.
 
 import React from "react";
 import PropTypes from 'prop-types';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class Comment extends React.Component {
 
@@ -23,13 +22,14 @@ class Comment extends React.Component {
 	}
 
 	render() {
+		var timestamp = new Date(this.props.timestamp);
 		return (
 			<span className="comment-row">
 				<div className="comment-bubble">
 					<div className="author">{this.props.author}</div>
 					<div>{this.props.content}</div>
 				</div>
-				<div className="comment-timestamp">{this.props.timestamp}</div>
+				<div className="comment-timestamp">{timestamp.toDateString()}, {timestamp.toLocaleTimeString()}</div>
 			</span>
 		);
 	}
