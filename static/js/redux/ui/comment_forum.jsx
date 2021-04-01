@@ -47,7 +47,7 @@ class CommentForum extends React.Component {
         if (this.state.comments != null) {
             transcript = <Transcript
                 semester={this.state.semester}
-                comments={this.state.comments.comments}
+                comments={this.state.comments}
             />;
         } else {
             transcript = <div className="empty-state"><h4> <p> No comments yet! </p> </h4></div>;
