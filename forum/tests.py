@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.core.urlresolvers import resolve
+from django.db.models import Model
 from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
 from helpers.test.test_cases import UrlTestCase
@@ -15,7 +16,7 @@ from serializers import TranscriptSerializer, CommentSerializer
 import datetime
 
 
-def setUpTranscript(self):
+def setUpTranscriptDependencies(self):
     user = User.objects.create_user(
         username='JJam',
         password='XD',
@@ -29,6 +30,10 @@ def setUpTranscript(self):
         last_name='Biswas',)
     self.advisor = Student.objects.create(user=user)
     self.semester = Semester.objects.create(name='Fall', year='2019')
+
+
+def setUpTranscript(self):
+    setUpTranscriptDependencies(self)
     self.transcript = Transcript.objects.create(
         owner=self.student,
         semester=self.semester,
@@ -136,10 +141,10 @@ class ForumViewTest(APITestCase):
 
 class ForumTranscriptViewTest(APITestCase):
     def setUp(self):
-        setUpTranscript(self)
         self.factory = APIRequestFactory()
 
     def test_get_transcript(self):
+        setUpTranscript(self)
         add_comment(self, self.advisor, 'Jihyun is cool')
         request = self.factory.get('/forum/Fall/2019/', format='json')
         response = get_response_for_semester(self, request, self.student.user)
@@ -147,3 +152,26 @@ class ForumTranscriptViewTest(APITestCase):
         expected = TranscriptSerializer(self.transcript).data
         actual = response.data['transcript']
         self.assertEquals(expected, actual)
+
+    def test_create_transcript(self):
+        setUpTranscriptDependencies(self)
+        request = self.factory.put('/forum/Fall/2019/', format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        transcript = Transcript.objects.get(
+            semester=self.semester, owner=self.student)
+
+    def test_delete_transcript(self):
+        setUpTranscript(self)
+        request = self.factory.delete('/forum/Fall/2019/', format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        with self.assertRaises(Transcript.DoesNotExist):
+            Transcript.objects.get(semester=self.semester, owner=self.student)
+
+    def test_create_comments(self):
+        setUpTranscriptDependencies(self)
+
+    def test_add_advisor(self):
+        setUpTranscriptDependencies(self)
+
+    def test_remove_advisor(self):
+        setUpTranscriptDependencies(self)
