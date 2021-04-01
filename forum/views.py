@@ -51,7 +51,7 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
                                             semester=semester)
 
         if ((not student in transcript.advisors.all()) and
-                (student.jhed != transcript.objects.owner.jhed)):
+                (student.jhed != transcript.owner.jhed)):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         comment = Comment.objects.create(author=student,
