@@ -54,6 +54,14 @@ def get_response(self, request, user):
     return view(request)
 
 
+def get_response_for_semester(self, request, user):
+    force_authenticate(request, user=user)
+    request.user = user
+    request.subdomain = 'uoft'
+    view = resolve('/forum/all/Fall/2019/').func
+    return view(request, 'Fall', '2019')
+
+
 class Serializers(TestCase):
     def setUp(self):
         setUpTranscript(self)
@@ -127,4 +135,15 @@ class ForumViewTest(APITestCase):
 
 
 class ForumTranscriptViewTest(APITestCase):
-    pass
+    def setUp(self):
+        setUpTranscript(self)
+        self.factory = APIRequestFactory()
+
+    def test_get_transcript(self):
+        add_comment(self, self.advisor, 'Jihyun is cool')
+        request = self.factory.get('/forum/Fall/2019/', format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+
+        expected = TranscriptSerializer(self.transcript).data
+        actual = response.data['transcript']
+        self.assertEquals(expected, actual)
