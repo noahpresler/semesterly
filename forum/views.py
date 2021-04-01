@@ -24,9 +24,12 @@ from serializers import TranscriptSerializer, CommentSerializer
 
 
 class ForumView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
-    """ Returns all forums for the user making the request. """
+    """ Handles the accessing of all user forum transcripts collectively. """
 
     def get(self, request):
+        """
+        Returns all forum transcripts for the user making the request.
+        """
         student = Student.objects.get(user=request.user)
         return Response(
             {'invited_transcripts': TranscriptSerializer(
@@ -37,7 +40,14 @@ class ForumView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
 
 class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
+    """ Handles the accessing of individual user forum transcripts. """
+
     def get(self, request, sem_name, year):
+        """
+        Returns the forum transcript associated with a
+        particular semester for the user making the request.
+        """
+
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
         transcript = Transcript.objects.get(owner=student, semester=semester)
@@ -45,6 +55,15 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
                         status=status.HTTP_200_OK)
 
     def post(self, request, sem_name, year):
+        """
+        Saves a comment in the backend.
+
+        Requests:
+        The content and timestamp of the comment.
+        The jhed id of the owner of the forum transcript the comment
+        is written in.
+        """
+
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
         transcript = Transcript.objects.get(owner=Student.objects.get(jhed=request.data['jhed']),
@@ -63,6 +82,10 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
         return Response(status=status.HTTP_200_OK)
 
     def put(self, request, sem_name, year):
+        """
+        Creates a forum transcript associated with a certain semester.
+        """
+
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
 
@@ -74,6 +97,14 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
                         status=status.HTTP_200_OK)
 
     def patch(self, request, sem_name, year):
+        """
+        Adds or removes one advisor from a forum transcript.
+
+        Requests:
+        The jhed id of the advisor being added or removed.
+        Whether the advisor is being added or removed.
+        """
+
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
 
@@ -88,6 +119,11 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
                         status=status.HTTP_200_OK)
 
     def delete(self, request, sem_name, year):
+        """
+        Deletes one forum transcript associated with a particular
+        semester.
+        """
+
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
         transcript = Transcript.objects.get(owner=student, semester=semester)
