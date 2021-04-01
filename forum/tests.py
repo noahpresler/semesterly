@@ -1,4 +1,14 @@
-# -*- coding: utf-8 -*-
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
@@ -24,6 +34,7 @@ def setUpTranscriptDependencies(self):
         last_name='Wang',)
     self.student = Student.objects.create(user=user)
     self.student.jhed = 'jwang380'
+    self.student.save()
     user = User.objects.create_user(
         username='rbiz',
         password='k',
@@ -31,7 +42,9 @@ def setUpTranscriptDependencies(self):
         last_name='Biswas',)
     self.advisor = Student.objects.create(user=user)
     self.advisor.jhed = 'rbiswas4'
+    self.advisor.save()
     self.semester = Semester.objects.create(name='Fall', year='2019')
+    self.semester.save()
 
 
 def setUpTranscript(self):
@@ -192,11 +205,11 @@ class ForumTranscriptViewTest(APITestCase):
         data = {
             'content': content,
             'timestamp': datetime.datetime.now(),
-            'jhed': self.advisor.jhed,
+            'jhed': self.student.jhed,
         }
         request = self.factory.post(
             '/forum/Fall/2019/', data=data, format='json')
-        response = get_response_for_semester(self, request, self.student.user)
+        response = get_response_for_semester(self, request, self.advisor.user)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         comment = Comment.objects.get(
             transcript=self.transcript, author=self.advisor)
