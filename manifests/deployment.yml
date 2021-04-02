@@ -1,19 +1,112 @@
-apiVersion : apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: semesterly 
+  name: semesterly
+  namespace: semesterly-dev
 spec:
-  replicas: 1
   selector:
-    matchLabels:
+    matchLabels: 
       app: semesterly
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
   template:
     metadata:
       labels:
-        app: semesterly 
+        app: semesterly
     spec:
       containers:
-        - name: semesterly 
-          image: semesterly.azurecr.io/semesterly
-          ports:
-          - containerPort: 8000
+      - name: nginx
+        image: semesterly.azurecr.io/semesterly-nginx:Version
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 750m   
+            memory: 2048M
+      - name: gunicorn
+        image: semesterly.azurecr.io/semesterly:Version
+        command: ["bash"]
+        args: ["-c","python manage.py migrate; gunicorn wsgi:application --bind=0.0.0.0:8000 --workers=3 --access-logfile - --error-logfile - --log-level info"]        
+        workingDir: /code
+        ports:
+        - containerPort: 8000
+        env:
+            - name: NODE_ENV
+              value: stage
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: DB_HOST
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: DB_NAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: DB_PASSWORD
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: DB_PORT
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: DB_USER
+            - name: JHU_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: JHU_API_KEY
+            - name: SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
+            - name: SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
+            - name: SOCIAL_AUTH_FACEBOOK_OAUTH2_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: SOCIAL_AUTH_FACEBOOK_OAUTH2_KEY
+            - name: SOCIAL_AUTH_FACEBOOK_OAUTH2_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: SOCIAL_AUTH_FACEBOOK_OAUTH2_SECRET
+            - name: SOCIAL_AUTH_AZURE_TENANT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: SOCIAL_AUTH_AZURE_TENANT_ID
+            - name: SOCIAL_AUTH_AZURE_TENANT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: SOCIAL_AUTH_AZURE_TENANT_KEY
+            - name: SOCIAL_AUTH_AZURE_TENANT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: SOCIAL_AUTH_AZURE_TENANT_SECRET                  
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 750m
+            memory: 2048M

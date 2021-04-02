@@ -16,7 +16,7 @@ import React from 'react';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import CommentSlot from './comment_slot';
 import {getNextAvailableColour} from '../util';
-import TextInputContainer from './containers/text_input_container';
+import CommentInputContainer from './containers/comment_input_container';
 
 
 class CommentForum extends React.Component {
@@ -38,28 +38,18 @@ class CommentForum extends React.Component {
                     // colourIndex={colourIndex}
                     // fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
                 />);
-            }) : <div> <p> No messages yet! </p> </div>;
+            }) : <div className="empty-state"><h4> <p> No comments yet! </p> </h4></div>;
         return (
             <div className="comment-forum no-print">
-                <div className="as-name">
+                <div className="cf-name">
                     <p style={{fontSize: "1.25em", fontWeight: "bold", marginTop: "70px" }}>
                         Comments Forum</p>
                 </div>
-                { commentSlots }
-                <CommentSlot
-                    // key={course.id}
-                    // author={author}
-                    //colourIndex={colourIndex}
-                    // fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
-                />
-            {/* need to use similar css to search bar for forum input box */}
-                <div className="as-header">
-                <TextInputContainer />
+                <div className="as-header"></div>
+                <div className="comment-forum-container">
+                  { commentSlots }
                 </div>
-                <button className="accept-tos-btn"
-                        style={{position: "fixed", right: "20px", bottom: "20px"}}>
-                    Submit
-                </button>
+                <CommentInputContainer />
             </div>)
 
 

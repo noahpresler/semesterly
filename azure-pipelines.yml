@@ -3,7 +3,11 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- cs310-spring21
+    branches:
+        include:
+        - cs310-spring21
+
+pr: none # will disable PR builds 
 
 resources:
 - repo: self
@@ -72,11 +76,11 @@ stages:
 # Deploy is false for now
   jobs:
   - deployment: Deploy
-    condition: and(false,and(succeeded(), not(startsWith(variables['Build.SourceBranch'], 'refs/pull/')))) 
+    condition: and(succeeded(), not(startsWith(variables['Build.SourceBranch'], 'refs/pull/'))) 
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'jhuopensourcesemesterly.semesterly'
+    environment: 'uis-prod.semesterly-dev'
     strategy:
       runOnce:
         deploy:
@@ -95,10 +99,12 @@ stages:
               manifests: |
                 $(Pipeline.Workspace)/manifests/deployment.yml
                 $(Pipeline.Workspace)/manifests/service.yml
-              imagePullSecrets: |
-                $(imagePullSecret)
+                $(Pipeline.Workspace)/manifests/ingress.yml
+                $(Pipeline.Workspace)/manifests/cronjob.yml
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
+                $(containerRegistry)/semesterly-nginx:$(tag)
+                
 
   # - deployment: DeployPullRequest
   #   displayName: Deploy Pull request
