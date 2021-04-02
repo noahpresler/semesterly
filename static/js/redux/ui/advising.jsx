@@ -14,7 +14,6 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import EnableNotificationsAlertContainer from './alerts/enable_notifications_alert_container';
 import TopBarAdvisingContainer from './containers/top_bar_advising_container';
 import CommentForumContainer from './containers/comment_forum_container';
 import AdvisingScheduleContainer from './containers/advising_schedule_container';
@@ -68,17 +67,6 @@ class Advising extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.alertEnableNotifications) {
-            this.msg.show(<EnableNotificationsAlertContainer />, {
-                type: 'info',
-                time: 12000,
-                additionalClass: 'notification-alert',
-                icon: <div className="enable-notifications-alert-icon" />,
-            });
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
 
     }
 
@@ -93,13 +81,6 @@ class Advising extends React.Component {
         if (orientation !== this.state.orientation) {
             this.setState({ orientation });
         }
-    }
-
-    showAlert(alert, type, delay = 5000) {
-        this.msg.show(alert, {
-            type,
-            time: delay,
-        });
     }
 
 
