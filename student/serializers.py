@@ -46,8 +46,6 @@ class StudentSerializer(serializers.ModelSerializer):
     LoginToken = serializers.CharField(source='get_token')
     LoginHash = serializers.CharField(source='get_hash')
     timeAcceptedTos = serializers.DateTimeField(source='time_accepted_tos', format='iso-8601')
-    owned_transcripts = TranscriptSerializer(many=True)
-    invited_transcripts = TranscriptSerializer(many=True)
 
     class Meta:
         model = Student
@@ -64,6 +62,7 @@ class StudentSerializer(serializers.ModelSerializer):
             'integrations',
             'userFirstName',
             'userLastName',
+            'userFullName',
             'FacebookSignedUp',
             'GoogleSignedUp',
             'jhuSignedUp',
@@ -71,7 +70,4 @@ class StudentSerializer(serializers.ModelSerializer):
             'LoginToken',
             'LoginHash',
             'timeAcceptedTos',
-            'owned_transcripts',
-            'invited_transcripts',
-            'userFullName'
         )
