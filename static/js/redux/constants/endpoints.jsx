@@ -41,7 +41,7 @@ export const acceptTOSEndpoint = () => '/tos/accept/';
 
 //Advising Dashboard Endpoints
 //TODO: Replace with real endpoint
-export const getTranscriptCommentsBySemester = (semester_name) => 'https://606510e5f091970017786f0a.mockapi.io/owned_transcripts/1';
+export const getTranscriptCommentsBySemester = (semester_name, semester_year) => `/advising/forum/${semester_name}/${semester_year}/`;
 
 export function getCourseShareLinkFromModal(code, semester) {
   return `/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;

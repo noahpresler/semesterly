@@ -25,19 +25,20 @@ class CommentForum extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-           semester: 'Spring 2021',
-           comments: null
+          //TODO: Set this to the semester that is selected on the LHS
+          semester_name: 'Spring',
+          semester_year: 2021,
+          transcript: null,
+          comments: null
         };
     }
 
     componentDidMount() {
-      // TODO: Change to real endpoint - this mock endpoint returns all comment in given semester (id=1)
-      // We want to eventually pass in a prop for the semester currently being displayed and do something like
-      // fetch('https://606510e5f091970017786f0a.mockapi.io/owned_transcripts/' + {this.state.curr_semester.toString()})
-      fetch(getTranscriptCommentsBySemester(this.state.semester))
+      fetch(getTranscriptCommentsBySemester(this.state.semester_name, this.state.semester_year))
         .then(response => response.json())
         .then(data => {
-          this.setState({comments: data});
+          this.setState({transcript: data.transcript});
+          this.setState({comments: this.state.transcript.comments});
         });
       // TODO: Check for error response
     }
@@ -47,7 +48,6 @@ class CommentForum extends React.Component {
         let transcript;
         if (this.state.comments != null) {
             transcript = <Transcript
-                semester={this.state.semester}
                 comments={this.state.comments}
             />;
         } else {
