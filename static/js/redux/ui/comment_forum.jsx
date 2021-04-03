@@ -17,42 +17,58 @@ import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import CommentSlot from './comment_slot';
 import {getNextAvailableColour} from '../util';
 import CommentInputContainer from './containers/comment_input_container';
+import Transcript from './transcript';
+import {getTranscriptCommentsBySemester} from '../constants/endpoints';
 
 
 class CommentForum extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+          //TODO: Set this to the semester that is selected on the LHS
+          semester_name: 'Spring',
+          semester_year: 2021,
+          transcript: null,
+          comments: null
+        };
     }
 
-    render() {
-        let commentSlots = this.props.ownedComments ?
-            this.props.ownedComments.map((content) => {
-                const colourIndex = (course.id in this.props.courseToColourIndex) ?
-                    this.props.courseToColourIndex[course.id] :
-                    getNextAvailableColour(this.props.courseToColourIndex);
-                //TODO: Add info from backend
-                //const author = course.comment.map(comment => comment.author);
-                return(<CommentSlot
-                    // key={course.id}
-                    // author={author}
-                    // colourIndex={colourIndex}
-                    // fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
-                />);
-            }) : <div className="empty-state"><h4> <p> No comments yet! </p> </h4></div>;
+    componentDidMount() {
+      fetch(getTranscriptCommentsBySemester(this.state.semester_name, this.state.semester_year))
+        .then(response => response.json())
+        .then(data => {
+          this.setState({transcript: data.transcript});
+          this.setState({comments: this.state.transcript.comments});
+        });
+      // TODO: Check for error response
+    }
+
+  render() {
+
+        let transcript;
+        if (this.state.comments != null) {
+            transcript = <Transcript
+                comments={this.state.comments}
+            />;
+        } else {
+            transcript = <div className="empty-state"><h4> <p> No comments yet! </p> </h4></div>;
+        }
+
         return (
             <div className="comment-forum no-print">
                 <div className="cf-name">
                     <p style={{fontSize: "1.25em", fontWeight: "bold", marginTop: "70px" }}>
-                        Comments Forum</p>
+                        Comments Forum
+                    </p>
                 </div>
                 <div className="as-header"></div>
                 <div className="comment-forum-container">
-                  { commentSlots }
+                  { transcript }
                 </div>
+                <div className="as-header"></div>
                 <CommentInputContainer />
-            </div>)
-
-
+            </div>
+        );
     }
 }
 
