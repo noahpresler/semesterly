@@ -89,6 +89,21 @@ spec:
                 secretKeyRef:
                   name: semesterly-secrets
                   key: SOCIAL_AUTH_FACEBOOK_OAUTH2_SECRET
+            - name: SOCIAL_AUTH_AZURE_TENANT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: SOCIAL_AUTH_AZURE_TENANT_ID
+            - name: SOCIAL_AUTH_AZURE_TENANT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: SOCIAL_AUTH_AZURE_TENANT_KEY
+            - name: SOCIAL_AUTH_AZURE_TENANT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: semesterly-secrets
+                  key: SOCIAL_AUTH_AZURE_TENANT_SECRET                  
         resources:
           requests:
             cpu: 250m
