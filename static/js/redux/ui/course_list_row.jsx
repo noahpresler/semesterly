@@ -27,8 +27,9 @@ class CourseListRow extends React.Component{
 	sendData() {
 		console.log("Triggered");
 		if (this.props.displayed_semester !== this.props.selected_semester) {
-			//this.setState({selected_semester: this.props.displayed_semester})
 			this.props.parentParentCallback(this.props.displayed_semester);
+		} else {
+			this.props.parentParentCallback(null);
 		}
 	}
 
@@ -69,40 +70,40 @@ class CourseListRow extends React.Component{
 		// of registration data from SIS. The courses that are both on the list of planned courses and on the list of courses
 		// the student is registered for should NOT be put in a seperate 'Registered Courses' list - but maybe we want to
 		// give them a verified check mark instead?
-		let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
-			const colourIndex = (course.id in this.props.courseToColourIndex) ?
-				this.props.courseToColourIndex[course.id] :
-				getNextAvailableColour(this.props.courseToColourIndex);
-			return (<MasterSlot
-				key={course.id}
-				onTimetable={this.props.isCourseInRoster(course.id)}
-				colourIndex={colourIndex}
-				classmates={this.props.courseToClassmates[course.id]}
-				course={course}
-				fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
-				removeCourse={() => this.props.removeOptionalCourse(course)}
-				getShareLink={this.props.getShareLink}
-			/>);
-		}) : null;
+		// let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
+		// 	const colourIndex = (course.id in this.props.courseToColourIndex) ?
+		// 		this.props.courseToColourIndex[course.id] :
+		// 		getNextAvailableColour(this.props.courseToColourIndex);
+		// 	return (<MasterSlot
+		// 		key={course.id}
+		// 		onTimetable={this.props.isCourseInRoster(course.id)}
+		// 		colourIndex={colourIndex}
+		// 		classmates={this.props.courseToClassmates[course.id]}
+		// 		course={course}
+		// 		fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+		// 		removeCourse={() => this.props.removeOptionalCourse(course)}
+		// 		getShareLink={this.props.getShareLink}
+		// 	/>);
+		// }) : null;
 
-		const optionalSlotsHeader =
-				<div className="empty-state">
-					<img
-						src="/static/img/emptystates/optionalslots.png"
-						alt="No optional courses added."
-					/>
-				</div>;
+		// const optionalSlotsHeader =
+		// 		<div className="empty-state">
+		// 			<img
+		// 				src="/static/img/emptystates/optionalslots.png"
+		// 				alt="No optional courses added."
+		// 			/>
+		// 		</div>;
 
-		//TODO: Grab data from SIS API on what courses the student is waitlisted for
-		const waitlistedlSlotsHeader = (<div>
-			<h4 className="as-header">Waitlisted Courses</h4>
-			<div className="empty-state">
-				<img
-					src="/static/img/emptystates/optionalslots.png"
-					alt="No optional courses added."
-				/>
-			</div>
-		</div>);
+		// //TODO: Grab data from SIS API on what courses the student is waitlisted for
+		// const waitlistedlSlotsHeader = (<div>
+		// 	<h4 className="as-header">Waitlisted Courses</h4>
+		// 	<div className="empty-state">
+		// 		<img
+		// 			src="/static/img/emptystates/optionalslots.png"
+		// 			alt="No optional courses added."
+		// 		/>
+		// 	</div>
+		// </div>);
 
 		const courseList = (<div className="course-list-container">
 			<CreditTickerContainer/>
@@ -114,11 +115,11 @@ class CourseListRow extends React.Component{
 			<div className="as-master-slots">
 				{plannedCourseList}
 			</div>
-			{optionalSlotsHeader}
-			{optionalSlots}
+			{/*{optionalSlotsHeader}*/}
+			{/*{optionalSlots}*/}
 			<div id="as-optional-slots"/>
 			<div>
-				{waitlistedlSlotsHeader}
+				{/*{waitlistedlSlotsHeader}*/}
 			</div>
 		</div>);
 
@@ -130,12 +131,6 @@ class CourseListRow extends React.Component{
 				{prop ? <span className="as-tip up"></span> : <span className="as-tip"></span>}
 			</div>
 		</div>);
-
-		console.log("--------------------------");
-		console.log("isOpen: " + this.props.isOpen);
-		console.log("displayed: " + this.props.displayed_semester);
-		console.log("selected: " + this.props.selected_semester);
-		console.log("--------------------------");
 
 		return (
 				<Collapsible open={(this.props.displayed_semester === this.props.selected_semester)}
