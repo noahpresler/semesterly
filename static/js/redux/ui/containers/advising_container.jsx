@@ -18,12 +18,16 @@ import { DragDropContext } from 'react-dnd';
 import Advising from '../advising';
 import { saveTimetable } from '../../actions/user_actions';
 import { setActiveTimetable } from '../../actions/timetable_actions';
-import { getActiveTimetableCourses } from '../../reducers/root_reducer';
+import {
+    getActiveTimetableCourses,
+    getCurrentSemester
+} from '../../reducers/root_reducer';
 
 const mapStateToProps = (state) => {
     const active = state.timetables.active;
     const activeTTLength = getActiveTimetableCourses(state).length;
     return {
+        semester: getCurrentSemester(state),
         alertConflict: state.alerts.alertConflict,
         alertEnableNotifications: state.alerts.alertEnableNotifications,
         alertTimetableExists: state.alerts.alertTimetableExists,

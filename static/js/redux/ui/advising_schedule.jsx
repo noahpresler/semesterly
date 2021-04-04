@@ -39,8 +39,10 @@ class AdvisingSchedule extends React.Component {
         let courseListRows = (this.state.displayed_semesters.length > 0) ?
           this.state.displayed_semesters.map((semester) => {
             return(<CourseListRow
-              displayed_semester={semester}
-              current_semester={this.props.semester.name + ' ' + this.props.semester.year}
+              parentParentCallback = {this.props.parentCallback.bind(this)}
+              displayed_semester = {semester}
+              current_semester = {this.props.semester.name + ' ' + this.props.semester.year.toString()}
+              selected_semester = {this.props.selected_semester}
             />);
           }) : <div className="empty-state"><h4> <p> No semesters yet! </p> </h4></div>;
 

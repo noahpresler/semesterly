@@ -18,10 +18,18 @@ import CreditTickerContainer from "./containers/credit_ticker_container";
 import Collapsible from "react-collapsible";
 import React from 'react';
 
-class CourseListRow extends React.Component {
+class CourseListRow extends React.Component{
 
 	constructor(props) {
 		super(props);
+	}
+
+	sendData() {
+		console.log("Triggered");
+		if (this.props.displayed_semester !== this.props.selected_semester) {
+			//this.setState({selected_semester: this.props.displayed_semester})
+			this.props.parentParentCallback(this.props.displayed_semester);
+		}
 	}
 
 	render () {
@@ -82,7 +90,7 @@ class CourseListRow extends React.Component {
 					<img
 						src="/static/img/emptystates/optionalslots.png"
 						alt="No optional courses added."
-					/>)
+					/>
 				</div>;
 
 		//TODO: Grab data from SIS API on what courses the student is waitlisted for
@@ -123,13 +131,17 @@ class CourseListRow extends React.Component {
 			</div>
 		</div>);
 
-		const defaultOpen = (this.props.displayed_semester === this.props.current_semester);
-		console.log(this.props.displayed_semester);
-		console.log(this.props.current_semester);
-		console.log(defaultOpen);
+		console.log("--------------------------");
+		console.log("isOpen: " + this.props.isOpen);
+		console.log("displayed: " + this.props.displayed_semester);
+		console.log("selected: " + this.props.selected_semester);
+		console.log("--------------------------");
 
 		return (
-				<Collapsible open={defaultOpen} trigger={scheduleName(true)} triggerWhenOpen={scheduleName(false)}>
+				<Collapsible open={(this.props.displayed_semester === this.props.selected_semester)}
+				             trigger={scheduleName(true)}
+				             triggerWhenOpen={scheduleName(false)}
+				             handleTriggerClick={() => {this.sendData();}}>
 					<div>
 						{ courseList }
 					</div>

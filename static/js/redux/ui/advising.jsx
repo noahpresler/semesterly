@@ -28,6 +28,7 @@ class Advising extends React.Component {
         const mql = window.matchMedia('(orientation: portrait)');
         this.state = {
             orientation: !mql.matches ? 'landscape' : 'portrait',
+            selected_semester: this.props.semester.name + ' ' + this.props.semester.year.toString(),
         };
         this.updateOrientation = this.updateOrientation.bind(this);
     }
@@ -80,6 +81,14 @@ class Advising extends React.Component {
         }
         if (orientation !== this.state.orientation) {
             this.setState({ orientation });
+        }
+    }
+
+    callbackFunction(childSemesterData) {
+        console.log("CALLBACK: " + childSemesterData);
+        // console.log(childSemesterData);
+        if (childSemesterData !== this.state.selected_semester) {
+             this.setState({selected_semester: childSemesterData});
         }
     }
 
@@ -154,7 +163,10 @@ class Advising extends React.Component {
                 <SignupModalContainer />
                 <div className="all-cols">
                     <div className="main-advising">
-                        <AdvisingScheduleContainer />
+                        <AdvisingScheduleContainer
+                          parentCallback = {this.callbackFunction.bind(this)}
+                          selected_semester = {this.state.selected_semester}
+                        />
                         {footer}
                     </div>
                     <CommentForumContainer />
@@ -162,6 +174,10 @@ class Advising extends React.Component {
             </div>);
     }
 }
+
+// Advising.defaultProps = {
+//     selected_semester: ,
+// };
 
 Advising.propTypes = {
     dataLastUpdated: PropTypes.string.isRequired,
@@ -173,6 +189,10 @@ Advising.propTypes = {
     alertTimetableExists: PropTypes.bool.isRequired,
     saveTimetable: PropTypes.func.isRequired,
     setPgActive: PropTypes.func.isRequired,
+    semester: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        year: PropTypes.number.isRequired,
+    }).isRequired,
 };
 
 export default Advising;
