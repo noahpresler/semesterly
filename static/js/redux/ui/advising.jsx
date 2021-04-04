@@ -28,7 +28,7 @@ class Advising extends React.Component {
         const mql = window.matchMedia('(orientation: portrait)');
         this.state = {
             orientation: !mql.matches ? 'landscape' : 'portrait',
-            selected_semester: this.props.semester.name + ' ' + this.props.semester.year.toString(),
+            selected_semester: this.props.semester.name + ' ' + this.props.semester.year,
         };
         this.updateOrientation = this.updateOrientation.bind(this);
     }
@@ -172,10 +172,6 @@ class Advising extends React.Component {
             </div>);
     }
 }
-
-// Advising.defaultProps = {
-//     selected_semester: ,
-// };
 
 Advising.propTypes = {
     dataLastUpdated: PropTypes.string.isRequired,

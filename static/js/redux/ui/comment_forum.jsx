@@ -30,7 +30,6 @@ class CommentForum extends React.Component {
     }
 
     fetchTranscript() {
-      console.log("Selected Semester: " + this.props.selected_semester);
       if (this.props.selected_semester != null) {
         let semester_name = this.props.selected_semester.toString().split(' ')[0];
         let semester_year = this.props.selected_semester.toString().split(' ')[1];
@@ -38,7 +37,6 @@ class CommentForum extends React.Component {
         fetch(getTranscriptCommentsBySemester(semester_name, semester_year))
           .then(response => response.json())
           .then(data => {
-            console.log(data);
             this.setState({transcript: data.transcript});
             this.setState({comments: this.state.transcript.comments});
           });

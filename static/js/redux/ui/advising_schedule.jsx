@@ -14,18 +14,13 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Collapsible from 'react-collapsible';
-import MasterSlot from './master_slot';
 import CourseListRow from './course_list_row';
-import CreditTickerContainer from './containers/credit_ticker_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
-import { getNextAvailableColour } from '../util';
 
 class AdvisingSchedule extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showDropdown: false,
             // TODO: Change this to list of semesters given by SIS API
             displayed_semesters: [
               'Spring 2021',
@@ -41,7 +36,7 @@ class AdvisingSchedule extends React.Component {
             return(<CourseListRow
               parentParentCallback = {this.props.parentCallback.bind(this)}
               displayed_semester = {semester}
-              current_semester = {this.props.semester.name + ' ' + this.props.semester.year.toString()}
+              current_semester = {this.props.semester.name + ' ' + this.props.semester.year}
               selected_semester = {this.props.selected_semester}
             />);
           }) : <div className="empty-state"><h4> <p> No semesters yet! </p> </h4></div>;
