@@ -12,17 +12,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import {getNextAvailableColour} from "../util";
+import { getNextAvailableColour } from "../util";
 import MasterSlot from "./master_slot";
 import CreditTickerContainer from "./containers/credit_ticker_container";
 import Collapsible from "react-collapsible";
 import React from 'react';
 
 class CourseListRow extends React.Component{
-
-	constructor(props) {
-		super(props);
-	}
 
 	sendSelectedSemester() {
 		if (this.props.displayed_semester !== this.props.selected_semester) {
@@ -33,8 +29,7 @@ class CourseListRow extends React.Component{
 	}
 
 	render () {
-		//TODO:
-		// We want to grab the courses on the student's timetable
+		//TODO: We want to grab the courses on the student's timetable
 		// Check what is in this variable: console.log(this.props.coursesInTimetable);
 		let plannedCourseList = this.props.mandatoryCourses ?
 			this.props.mandatoryCourses.map((course) => {
@@ -95,7 +90,6 @@ class CourseListRow extends React.Component{
 						{ courseList }
 					</div>
 				</Collapsible>
-
 		);
 	}
 }

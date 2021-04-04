@@ -13,9 +13,6 @@ GNU General Public License for more details.
 */
 
 import React from 'react';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
-import CommentSlot from './comment_slot';
-import {getNextAvailableColour} from '../util';
 import CommentInputContainer from './containers/comment_input_container';
 import Transcript from './transcript';
 import {getTranscriptCommentsBySemester} from '../constants/endpoints';
@@ -25,7 +22,6 @@ class CommentForum extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          //TODO: Set this to the semester that is selected on the LHS
           semester_name: '',
           semester_year: '',
           transcript: null,
@@ -46,7 +42,6 @@ class CommentForum extends React.Component {
             this.setState({transcript: data.transcript});
             this.setState({comments: this.state.transcript.comments});
           });
-        // TODO: Check for error response
       }
     }
 
@@ -59,10 +54,6 @@ class CommentForum extends React.Component {
         this.fetchTranscript();
       }
     }
-
-    // componentDidUpdate() {
-    //   this.fetchTranscript();
-    // }
 
     render() {
 
