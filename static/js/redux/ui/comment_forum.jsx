@@ -40,6 +40,9 @@ class CommentForum extends React.Component {
             this.setState({transcript: data.transcript});
             this.setState({comments: this.state.transcript.comments});
           });
+      } else {
+        this.setState({transcript: null});
+        this.setState({comments: null});
       }
     }
 
@@ -56,12 +59,14 @@ class CommentForum extends React.Component {
     render() {
 
         let transcript;
-        if (this.state.comments != null) {
+        if (this.state.transcript != null && this.state.comments != null) {
             transcript = <Transcript
                 comments={this.state.comments}
             />;
+        } else if (this.state.transcript === null) {
+          transcript = <div className="empty-state"><h4> <p> No semester selected! </p> </h4></div>;
         } else {
-            transcript = <div className="empty-state"><h4> <p> No comments yet! </p> </h4></div>;
+          transcript = <div className="empty-state"><h4> <p> No comments yet! </p> </h4></div>;
         }
 
         return (
