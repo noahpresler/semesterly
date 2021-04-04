@@ -15,8 +15,8 @@ GNU General Public License for more details.
 import { connect } from 'react-redux';
 import SaveCalendarModal from '../../modals/save_calendar_modal';
 import {
-  //addTTtoGCal,
-  createICalFromTimetable
+  // addTTtoGCal,
+  createICalFromTimetable,
 } from '../../../actions/calendar_actions';
 import { toggleSaveCalendarModal } from '../../../actions/modal_actions';
 
@@ -33,7 +33,7 @@ const SaveCalendarModalContainer = connect(
     mapStateToProps,
   {
     toggleSaveCalendarModal,
-    //addTTtoGCal,
+    // addTTtoGCal,
     createICalFromTimetable,
   },
 )(SaveCalendarModal);

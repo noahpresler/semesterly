@@ -13,7 +13,7 @@ GNU General Public License for more details.
 */
 
 /* server endpoints */
-//export const getAddTTtoGCalEndpoint = () => '/user/gcal/';
+// export const getAddTTtoGCalEndpoint = () => '/user/gcal/';
 export const getLogiCalEndpoint = () => '/user/log_ical/';
 export const getLogFinalExamViewEndpoint = () => '/user/log_final_exam/';
 export const getLogFacebookAlertViewEndpoint = () => '/user/log_fb_alert_view/';

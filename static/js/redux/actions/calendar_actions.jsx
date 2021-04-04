@@ -16,7 +16,7 @@ import ical from 'ical-generator';
 import Cookie from 'js-cookie';
 import FileSaver from 'browser-filesaver';
 import {
-    //getAddTTtoGCalEndpoint,
+    // getAddTTtoGCalEndpoint,
     getLogiCalEndpoint,
     getRequestShareTimetableLinkEndpoint,
     getCourseShareLink,

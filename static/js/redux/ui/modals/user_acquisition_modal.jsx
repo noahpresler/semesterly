@@ -79,8 +79,10 @@ class UserAcquisitionModal extends React.Component {
               link.href = `/login/azuread-tenant-oauth2/?student_token=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
               document.body.appendChild(link);
               link.click();
-            }}
-            satisfy the heap property>
+            }
+            }
+            satisfy the heap property
+          >
             <span>Continue with JHU</span>
           </button>
 
