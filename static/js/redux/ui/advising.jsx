@@ -167,7 +167,7 @@ class Advising extends React.Component {
                         />
                         {footer}
                     </div>
-                    <CommentForumContainer />
+                    <CommentForumContainer selected_semester = {this.state.selected_semester} />
                 </div>
             </div>);
     }
@@ -189,7 +189,7 @@ Advising.propTypes = {
     setPgActive: PropTypes.func.isRequired,
     semester: PropTypes.shape({
         name: PropTypes.string.isRequired,
-        year: PropTypes.number.isRequired,
+        year: PropTypes.string.isRequired,
     }).isRequired,
 };
 

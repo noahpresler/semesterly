@@ -85,7 +85,7 @@ AdvisingSchedule.propTypes = {
     launchPeerModal: PropTypes.func.isRequired,
     semester: PropTypes.shape({
         name: PropTypes.string.isRequired,
-        year: PropTypes.number.isRequired,
+        year: PropTypes.string.isRequired,
     }).isRequired,
     semesterIndex: PropTypes.number.isRequired,
     avgRating: PropTypes.number,

@@ -26,24 +26,45 @@ class CommentForum extends React.Component {
         super(props);
         this.state = {
           //TODO: Set this to the semester that is selected on the LHS
-          semester_name: 'Spring',
-          semester_year: 2021,
+          semester_name: '',
+          semester_year: '',
           transcript: null,
           comments: null
         };
     }
 
-    componentDidMount() {
-      fetch(getTranscriptCommentsBySemester(this.state.semester_name, this.state.semester_year))
-        .then(response => response.json())
-        .then(data => {
-          this.setState({transcript: data.transcript});
-          this.setState({comments: this.state.transcript.comments});
-        });
-      // TODO: Check for error response
+    fetchTranscript() {
+      console.log("Selected Semester: " + this.props.selected_semester);
+      if (this.props.selected_semester != null) {
+        let semester_name = this.props.selected_semester.toString().split(' ')[0];
+        let semester_year = this.props.selected_semester.toString().split(' ')[1];
+
+        fetch(getTranscriptCommentsBySemester(semester_name, semester_year))
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            this.setState({transcript: data.transcript});
+            this.setState({comments: this.state.transcript.comments});
+          });
+        // TODO: Check for error response
+      }
     }
 
-  render() {
+    componentDidMount() {
+      this.fetchTranscript();
+    }
+
+    componentDidUpdate(prevProps) {
+      if(this.props.selected_semester !== prevProps.selected_semester) {
+        this.fetchTranscript();
+      }
+    }
+
+    // componentDidUpdate() {
+    //   this.fetchTranscript();
+    // }
+
+    render() {
 
         let transcript;
         if (this.state.comments != null) {
@@ -71,17 +92,5 @@ class CommentForum extends React.Component {
         );
     }
 }
-
-// CommentForum.defaultProps = {
-//     invitedComments: null,
-//     ownedComments: null,
-// }
-//
-//
-// CommentForum.propTypes = {
-//     //invitedComments: PropTypes.arrayOf(SemesterlyPropTypes.userInfo.invited_transcripts).isRequired,
-//     //ownedComments: PropTypes.arrayOf(SemesterlyPropTypes.userInfo.owned_transcripts).isRequired,
-// };
-
 
 export default CommentForum;
