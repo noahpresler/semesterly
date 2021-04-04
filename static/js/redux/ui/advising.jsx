@@ -85,8 +85,6 @@ class Advising extends React.Component {
     }
 
     callbackFunction(childSemesterData) {
-        console.log("CALLBACK: " + childSemesterData);
-        // console.log(childSemesterData);
         if (childSemesterData !== this.state.selected_semester) {
              this.setState({selected_semester: childSemesterData});
         }

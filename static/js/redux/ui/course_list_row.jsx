@@ -24,8 +24,7 @@ class CourseListRow extends React.Component{
 		super(props);
 	}
 
-	sendData() {
-		console.log("Triggered");
+	sendSelectedSemester() {
 		if (this.props.displayed_semester !== this.props.selected_semester) {
 			this.props.parentParentCallback(this.props.displayed_semester);
 		} else {
@@ -34,7 +33,7 @@ class CourseListRow extends React.Component{
 	}
 
 	render () {
-		//TODO: code duplication between masterslots/optionalslots
+		//TODO:
 		// We want to grab the courses on the student's timetable
 		// Check what is in this variable: console.log(this.props.coursesInTimetable);
 		let plannedCourseList = this.props.mandatoryCourses ?
@@ -66,45 +65,6 @@ class CourseListRow extends React.Component{
 				</div>);
 		}
 
-		//TODO: Remove optional courses & instead check if each course inside plannedCourses against what we get in terms
-		// of registration data from SIS. The courses that are both on the list of planned courses and on the list of courses
-		// the student is registered for should NOT be put in a seperate 'Registered Courses' list - but maybe we want to
-		// give them a verified check mark instead?
-		// let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
-		// 	const colourIndex = (course.id in this.props.courseToColourIndex) ?
-		// 		this.props.courseToColourIndex[course.id] :
-		// 		getNextAvailableColour(this.props.courseToColourIndex);
-		// 	return (<MasterSlot
-		// 		key={course.id}
-		// 		onTimetable={this.props.isCourseInRoster(course.id)}
-		// 		colourIndex={colourIndex}
-		// 		classmates={this.props.courseToClassmates[course.id]}
-		// 		course={course}
-		// 		fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
-		// 		removeCourse={() => this.props.removeOptionalCourse(course)}
-		// 		getShareLink={this.props.getShareLink}
-		// 	/>);
-		// }) : null;
-
-		// const optionalSlotsHeader =
-		// 		<div className="empty-state">
-		// 			<img
-		// 				src="/static/img/emptystates/optionalslots.png"
-		// 				alt="No optional courses added."
-		// 			/>
-		// 		</div>;
-
-		// //TODO: Grab data from SIS API on what courses the student is waitlisted for
-		// const waitlistedlSlotsHeader = (<div>
-		// 	<h4 className="as-header">Waitlisted Courses</h4>
-		// 	<div className="empty-state">
-		// 		<img
-		// 			src="/static/img/emptystates/optionalslots.png"
-		// 			alt="No optional courses added."
-		// 		/>
-		// 	</div>
-		// </div>);
-
 		const courseList = (<div className="course-list-container">
 			<CreditTickerContainer/>
 			<a>
@@ -114,12 +74,6 @@ class CourseListRow extends React.Component{
 			</a>
 			<div className="as-master-slots">
 				{plannedCourseList}
-			</div>
-			{/*{optionalSlotsHeader}*/}
-			{/*{optionalSlots}*/}
-			<div id="as-optional-slots"/>
-			<div>
-				{/*{waitlistedlSlotsHeader}*/}
 			</div>
 		</div>);
 
@@ -136,7 +90,7 @@ class CourseListRow extends React.Component{
 				<Collapsible open={(this.props.displayed_semester === this.props.selected_semester)}
 				             trigger={scheduleName(true)}
 				             triggerWhenOpen={scheduleName(false)}
-				             handleTriggerClick={() => {this.sendData();}}>
+				             handleTriggerClick={() => {this.sendSelectedSemester();}}>
 					<div>
 						{ courseList }
 					</div>

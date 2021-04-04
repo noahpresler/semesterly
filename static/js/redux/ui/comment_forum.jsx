@@ -56,16 +56,16 @@ class CommentForum extends React.Component {
     }
 }
 
-CommentForum.defaultProps = {
-    invitedComments: null,
-    ownedComments: null,
-}
-
-
-CommentForum.propTypes = {
-    //invitedComments: PropTypes.arrayOf(SemesterlyPropTypes.userInfo.invited_transcripts).isRequired,
-    //ownedComments: PropTypes.arrayOf(SemesterlyPropTypes.userInfo.owned_transcripts).isRequired,
-};
+// CommentForum.defaultProps = {
+//     invitedComments: null,
+//     ownedComments: null,
+// }
+//
+//
+// CommentForum.propTypes = {
+//     //invitedComments: PropTypes.arrayOf(SemesterlyPropTypes.userInfo.invited_transcripts).isRequired,
+//     //ownedComments: PropTypes.arrayOf(SemesterlyPropTypes.userInfo.owned_transcripts).isRequired,
+// };
 
 
 export default CommentForum;
