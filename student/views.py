@@ -443,128 +443,128 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             return Response(friends, status=status.HTTP_200_OK)
 
 
-class GCalView(RedirectToSignupMixin, APIView):
-    """
-    Handles interactions with the Google Calendar API V3 for pulling
-    and/or sending calendars and calendar events.
-    """
-
-    def post(self, request):
-        """
-        Takes the timetable in request.body and creates a weekly
-        recurring event on Google calendar for each slot in a given week.
-        Names the Google Calendar "Semester.ly Schedule" if unnamed, otherwise
-        "[Timetable Name] - Semester.ly".
-        """
-        student = Student.objects.get(user=request.user)
-        tt = request.data['timetable']
-        credentials = student.get_google_credentials() # assumes is not None
-        http = credentials.authorize(httplib2.Http(timeout=100000000))
-        service = discovery.build('calendar', 'v3', http=http)
-        school = request.subdomain
-
-        tt_name = tt.get('name')
-        if not tt_name or "Untitled Schedule" in tt_name or len(tt_name) == 0:
-            tt_name = "Semester.ly Schedule"
-        else:
-            tt_name += " - Semester.ly"
-
-        # create calendar
-        calendar = {'summary': tt_name, 'timeZone': 'America/New_York'}
-        created_calendar = service.calendars().insert(body=calendar).execute()
-        extra_day = datetime(1, 1, 1)
-        semester_name = request.data['semester']['name']
-        semester_year = int(request.data['semester']['year'])
-        if semester_name == 'Spring' and semester_year == 2018:
-            sem_start = datetime(semester_year, 1, 29)
-            sem_end = datetime(semester_year, 5, 4)
-        elif semester_name == 'Fall' and semester_year == 2018:
-            sem_start = datetime(semester_year, 8, 31)
-            sem_end = datetime(semester_year, 12, 7)
-            extra_day = datetime(semester_year, 8, 30)
-        elif semester_name == 'Spring' and semester_year == 2019:
-            sem_start = datetime(semester_year, 1, 28)
-            sem_end = datetime(semester_year, 5, 3)
-        elif semester_name == 'Fall' and semester_year == 2019:
-            sem_start = datetime(semester_year, 8, 30)
-            sem_end = datetime(semester_year, 12, 6)
-            extra_day = datetime(semester_year, 8, 29)
-        elif semester_name == 'Spring' and semester_year == 2020:
-            sem_start = datetime(semester_year, 1, 27)
-            sem_end = datetime(semester_year, 5, 1)
-        else:
-            #default to Spring 2020
-            sem_start = datetime(semester_year, 1, 27)
-            sem_end = datetime(semester_year, 5, 1)
-
-        # add events
-        for slot in tt['slots']:
-            course = slot['course']
-            section = slot['section']
-            for offering in slot['offerings']:
-                start = next_weekday(sem_start, offering['day'])
-                start = start.replace(hour=int(offering['time_start'].split(':')[0]),
-                                      minute=int(offering['time_start'].split(':')[1]))
-                end = next_weekday(sem_start, offering['day'])
-                end = end.replace(hour=int(offering['time_end'].split(':')[0]),
-                                  minute=int(offering['time_end'].split(':')[1]))
-                until = next_weekday(sem_end, offering['day'])
-
-                description = course.get('description', '')
-                instructors = 'Taught by: ' + section['instructors'] + '\n' if len(
-                    section.get('instructors', '')) > 0 else ''
-
-                if start.date() == extra_day.date() + timedelta(days=4):
-                    #If you're on the first Monday, you want to put it in Thursday
-                    res = {
-                        'summary': course['name'] + " " + course['code'] + section['meeting_section'],
-                        'location': offering['location'],
-                        'description': course['code'] + section['meeting_section'] + '\n' + instructors +
-                                       description + '\n\n' + 'Created by Semester.ly',
-                        'start': {
-                            'dateTime': extra_day.replace(hour=int(offering['time_start'].split(':')[0]),
-                                                          minute=int(offering['time_start'].split(':')[1]))
-                                                            .strftime("%Y-%m-%dT%H:%M:%S"),
-                                'timeZone': 'America/New_York',
-                        },
-                        'end': {
-                            'dateTime': extra_day.replace(hour=int(offering['time_end'].split(':')[0]),
-                                                          minute=int(offering['time_end'].split(':')[1]))
-                                                            .strftime("%Y-%m-%dT%H:%M:%S"),
-                            'timeZone': 'America/New_York',
-                        }
-                    }
-                else:
-                    res = {
-                        'summary': course['name'] + " " + course['code'] + section['meeting_section'],
-                        'location': offering['location'],
-                        'description': course['code'] + section['meeting_section'] + '\n' + instructors +
-                        description + '\n\n' + 'Created by Semester.ly',
-                        'start': {
-                          'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
-                            'timeZone': 'America/New_York',
-                     },
-                        'end': {
-                            'dateTime': end.strftime("%Y-%m-%dT%H:%M:%S"),
-                            'timeZone': 'America/New_York',
-                        },
-                        'recurrence': [
-                            'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' +
-                            DAY_MAP[offering['day']]
-                        ],
-                    }
-                service.events().insert(
-                 calendarId=created_calendar['id'],
-                 body=res).execute()
-
-        analytic = CalendarExport.objects.create(
-            student=student,
-            school=school,
-            is_google_calendar=True
-        )
-        analytic.save()
-
-        return HttpResponse(json.dumps({}), content_type="application/json")
+# class GCalView(RedirectToSignupMixin, APIView):
+#     """
+#     Handles interactions with the Google Calendar API V3 for pulling
+#     and/or sending calendars and calendar events.
+#     """
+#
+#     def post(self, request):
+#         """
+#         Takes the timetable in request.body and creates a weekly
+#         recurring event on Google calendar for each slot in a given week.
+#         Names the Google Calendar "Semester.ly Schedule" if unnamed, otherwise
+#         "[Timetable Name] - Semester.ly".
+#         """
+#         student = Student.objects.get(user=request.user)
+#         tt = request.data['timetable']
+#         credentials = student.get_google_credentials() # assumes is not None
+#         http = credentials.authorize(httplib2.Http(timeout=100000000))
+#         service = discovery.build('calendar', 'v3', http=http)
+#         school = request.subdomain
+#
+#         tt_name = tt.get('name')
+#         if not tt_name or "Untitled Schedule" in tt_name or len(tt_name) == 0:
+#             tt_name = "Semester.ly Schedule"
+#         else:
+#             tt_name += " - Semester.ly"
+#
+#         # create calendar
+#         calendar = {'summary': tt_name, 'timeZone': 'America/New_York'}
+#         created_calendar = service.calendars().insert(body=calendar).execute()
+#         extra_day = datetime(1, 1, 1)
+#         semester_name = request.data['semester']['name']
+#         semester_year = int(request.data['semester']['year'])
+#         if semester_name == 'Spring' and semester_year == 2018:
+#             sem_start = datetime(semester_year, 1, 29)
+#             sem_end = datetime(semester_year, 5, 4)
+#         elif semester_name == 'Fall' and semester_year == 2018:
+#             sem_start = datetime(semester_year, 8, 31)
+#             sem_end = datetime(semester_year, 12, 7)
+#             extra_day = datetime(semester_year, 8, 30)
+#         elif semester_name == 'Spring' and semester_year == 2019:
+#             sem_start = datetime(semester_year, 1, 28)
+#             sem_end = datetime(semester_year, 5, 3)
+#         elif semester_name == 'Fall' and semester_year == 2019:
+#             sem_start = datetime(semester_year, 8, 30)
+#             sem_end = datetime(semester_year, 12, 6)
+#             extra_day = datetime(semester_year, 8, 29)
+#         elif semester_name == 'Spring' and semester_year == 2020:
+#             sem_start = datetime(semester_year, 1, 27)
+#             sem_end = datetime(semester_year, 5, 1)
+#         else:
+#             #default to Spring 2020
+#             sem_start = datetime(semester_year, 1, 27)
+#             sem_end = datetime(semester_year, 5, 1)
+#
+#         # add events
+#         for slot in tt['slots']:
+#             course = slot['course']
+#             section = slot['section']
+#             for offering in slot['offerings']:
+#                 start = next_weekday(sem_start, offering['day'])
+#                 start = start.replace(hour=int(offering['time_start'].split(':')[0]),
+#                                       minute=int(offering['time_start'].split(':')[1]))
+#                 end = next_weekday(sem_start, offering['day'])
+#                 end = end.replace(hour=int(offering['time_end'].split(':')[0]),
+#                                   minute=int(offering['time_end'].split(':')[1]))
+#                 until = next_weekday(sem_end, offering['day'])
+#
+#                 description = course.get('description', '')
+#                 instructors = 'Taught by: ' + section['instructors'] + '\n' if len(
+#                     section.get('instructors', '')) > 0 else ''
+#
+#                 if start.date() == extra_day.date() + timedelta(days=4):
+#                     #If you're on the first Monday, you want to put it in Thursday
+#                     res = {
+#                         'summary': course['name'] + " " + course['code'] + section['meeting_section'],
+#                         'location': offering['location'],
+#                         'description': course['code'] + section['meeting_section'] + '\n' + instructors +
+#                                        description + '\n\n' + 'Created by Semester.ly',
+#                         'start': {
+#                             'dateTime': extra_day.replace(hour=int(offering['time_start'].split(':')[0]),
+#                                                           minute=int(offering['time_start'].split(':')[1]))
+#                                                             .strftime("%Y-%m-%dT%H:%M:%S"),
+#                                 'timeZone': 'America/New_York',
+#                         },
+#                         'end': {
+#                             'dateTime': extra_day.replace(hour=int(offering['time_end'].split(':')[0]),
+#                                                           minute=int(offering['time_end'].split(':')[1]))
+#                                                             .strftime("%Y-%m-%dT%H:%M:%S"),
+#                             'timeZone': 'America/New_York',
+#                         }
+#                     }
+#                 else:
+#                     res = {
+#                         'summary': course['name'] + " " + course['code'] + section['meeting_section'],
+#                         'location': offering['location'],
+#                         'description': course['code'] + section['meeting_section'] + '\n' + instructors +
+#                         description + '\n\n' + 'Created by Semester.ly',
+#                         'start': {
+#                           'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
+#                             'timeZone': 'America/New_York',
+#                      },
+#                         'end': {
+#                             'dateTime': end.strftime("%Y-%m-%dT%H:%M:%S"),
+#                             'timeZone': 'America/New_York',
+#                         },
+#                         'recurrence': [
+#                             'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' +
+#                             DAY_MAP[offering['day']]
+#                         ],
+#                     }
+#                 service.events().insert(
+#                  calendarId=created_calendar['id'],
+#                  body=res).execute()
+#
+#         analytic = CalendarExport.objects.create(
+#             student=student,
+#             school=school,
+#             is_google_calendar=True
+#         )
+#         analytic.save()
+#
+#         return HttpResponse(json.dumps({}), content_type="application/json")
 
 
 class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):

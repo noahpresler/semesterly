@@ -33,8 +33,7 @@ urlpatterns = [
         FeatureFlowView.as_view(feature_name='ENABLE_NOTIFS')),
     url(r'^find_friends/$',
         FeatureFlowView.as_view(feature_name='FIND_FRIENDS')),
-    url(r'^callback/google_calendar/*$',
-        FeatureFlowView.as_view(feature_name='GCAL_CALLBACK')),
+    # url(r'^callback/google_calendar/*$', FeatureFlowView.as_view(feature_name='GCAL_CALLBACK')),
 
     url(r'^timetable/.*$', RedirectView.as_view(url="/")),
 

@@ -104,8 +104,7 @@ class UrlsTest(UrlTestCase):
                                      'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/find_friends/',
                                      'helpers.mixins.FeatureFlowView')
-        self.assertUrlResolvesToView('/callback/google_calendar/',
-                                     'helpers.mixins.FeatureFlowView')
+        # self.assertUrlResolvesToView('/callback/google_calendar/','helpers.mixins.FeatureFlowView')
 
         # redirects
         self.assertUrlResolvesToView('/timetable/random_stuff',

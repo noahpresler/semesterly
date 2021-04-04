@@ -49,7 +49,7 @@ class UrlsTest(UrlTestCase):
             '/user/classmates/Fall/2016?courseids=1&courseids=2',
             'student.views.ClassmateView',
             kwargs={'sem_name': 'Fall', 'year': '2016'})
-        self.assertUrlResolvesToView('/user/gcal/', 'student.views.GCalView')
+        #self.assertUrlResolvesToView('/user/gcal/', 'student.views.GCalView')
         self.assertUrlResolvesToView(
             '/user/reactions/',
             'student.views.ReactionView')
