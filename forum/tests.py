@@ -27,6 +27,7 @@ import datetime
 
 
 def setUpTranscriptDependencies(self):
+    """Creates a student and advisor Student model and semester Fall 2019"""
     user = User.objects.create_user(
         username='JJam',
         password='XD',
@@ -48,6 +49,7 @@ def setUpTranscriptDependencies(self):
 
 
 def setUpTranscriptDependenciesNoAdvisor(self):
+    """Creates a student and semester Fall 2019"""
     user = User.objects.create_user(
         username='JJam',
         password='XD',
@@ -61,6 +63,7 @@ def setUpTranscriptDependenciesNoAdvisor(self):
 
 
 def setUpTranscript(self):
+    """Creates a transcript for the student and adds the advisor to it."""
     setUpTranscriptDependencies(self)
     self.transcript = Transcript.objects.create(
         owner=self.student,
@@ -70,6 +73,7 @@ def setUpTranscript(self):
 
 
 def setUpTranscriptNoAdvisor(self):
+    """Creates a transcript for the student without an advisor"""
     setUpTranscriptDependenciesNoAdvisor(self)
     self.transcript = Transcript.objects.create(
         owner=self.student,
@@ -78,6 +82,7 @@ def setUpTranscriptNoAdvisor(self):
 
 
 def add_comment(self, author, content):
+    """Returns a comment with the author, content, and time set to now"""
     timestamp = datetime.datetime.now()
     return Comment.objects.create(
         author=author,
@@ -104,6 +109,11 @@ def get_response_for_semester(self, request, user):
 
 
 class Serializers(TestCase):
+    """Tests the TranscriptSerializer and CommentSerializer
+    Note: Does not check the comment's timestamp due to formatting issues
+    (Feel free to write it in)
+    """
+
     def setUp(self):
         setUpTranscript(self)
 
@@ -140,12 +150,14 @@ class Serializers(TestCase):
 
 class UrlsTest(TestCase, UrlTestCase):
     """ Test forum/urls.py """
+
     def setUp(self):
         semester = Semester.objects.create(name='Fall', year='2016')
         semester.save()
 
     def test_urls_call_correct_views(self):
-        self.assertUrlResolvesToView('/advising/forum/all/', 'forum.views.ForumView')
+        self.assertUrlResolvesToView(
+            '/advising/forum/all/', 'forum.views.ForumView')
         self.assertUrlResolvesToView(
             '/advising/forum/Fall/2016/',
             'forum.views.ForumTranscriptView',
@@ -179,6 +191,11 @@ class ForumViewTest(APITestCase):
 
 
 class ForumTranscriptViewTest(APITestCase):
+    """Notes:
+        "existent" means in the database with an associated user/Student.
+        "added/removed" means added/removed to/from the testing Transcript.
+    """
+
     def setUp(self):
         self.factory = APIRequestFactory()
 
@@ -203,7 +220,8 @@ class ForumTranscriptViewTest(APITestCase):
 
     def test_delete_transcript(self):
         setUpTranscript(self)
-        request = self.factory.delete('/advising/forum/Fall/2019/', format='json')
+        request = self.factory.delete(
+            '/advising/forum/Fall/2019/', format='json')
         response = get_response_for_semester(self, request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(Transcript.DoesNotExist):
@@ -260,7 +278,7 @@ class ForumTranscriptViewTest(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(self.transcript.advisors.count(), 1)
 
-    def test_add_advisor_not_in_db(self):
+    def test_add_nonexistent_advisor(self):
         setUpTranscriptNoAdvisor(self)
         self.assertEquals(self.transcript.advisors.count(), 0)
         data = {
@@ -273,7 +291,7 @@ class ForumTranscriptViewTest(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEquals(self.transcript.advisors.count(), 0)
 
-    def test_add_advisor_already_exists(self):
+    def test_add_added_advisor(self):
         setUpTranscript(self)
         self.assertEquals(self.transcript.advisors.count(), 1)
         data = {
@@ -299,32 +317,27 @@ class ForumTranscriptViewTest(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(self.transcript.advisors.count(), 0)
 
-    def test_remove_advisor_invalid(self):
+    def test_remove_nonexistent_advisor(self):
         setUpTranscript(self)
-        self.assertEquals(self.transcript.advisors.count(), 1)
-        user = User.objects.create_user(
-            username='seb',
-            password='y',
-            first_name='Sebastian',
-            last_name='Cabrejos',)
-        advisor = Student.objects.create(user=user)
-        advisor.jhed = 'scabrej1'
-        advisor.save()
         data = {
             'action': 'remove',
-            'jhed': 'scabrej1',
-        }
-        request = self.factory.patch(
-            '/advising/forum/Fall/2019/', data=data, format='json')
-        response = get_response_for_semester(self, request, self.student.user)
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(self.transcript.advisors.count(), 1)
-        data = {
-            'action': 'remove',
-            'jhed': 'jfung4',
+            'jhed': 'scabrej1jfung4',
         }
         request = self.factory.patch(
             '/advising/forum/Fall/2019/', data=data, format='json')
         response = get_response_for_semester(self, request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEquals(self.transcript.advisors.count(), 1)
+
+    def test_remove_removed_advisor(self):
+        self.test_remove_advisor()
+        self.assertEquals(self.transcript.advisors.count(), 0)
+        data = {
+            'action': 'remove',
+            'jhed': self.advisor.jhed,
+        }
+        request = self.factory.patch(
+            '/advising/forum/Fall/2019/', data=data, format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(self.transcript.advisors.count(), 0)
