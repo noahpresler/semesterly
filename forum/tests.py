@@ -273,6 +273,19 @@ class ForumTranscriptViewTest(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEquals(self.transcript.advisors.count(), 0)
 
+    def test_add_advisor_already_exists(self):
+        setUpTranscript(self)
+        self.assertEquals(self.transcript.advisors.count(), 1)
+        data = {
+            'action': 'add',
+            'jhed': 'rbiswas4',
+        }
+        request = self.factory.patch(
+            '/advising/forum/Fall/2019/', data=data, format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(self.transcript.advisors.count(), 1)
+
     def test_remove_advisor(self):
         setUpTranscript(self)
         self.assertEquals(self.transcript.advisors.count(), 1)
@@ -287,14 +300,31 @@ class ForumTranscriptViewTest(APITestCase):
         self.assertEquals(self.transcript.advisors.count(), 0)
 
     def test_remove_advisor_invalid(self):
-        setUpTranscriptNoAdvisor(self)
-        self.assertEquals(self.transcript.advisors.count(), 0)
+        setUpTranscript(self)
+        self.assertEquals(self.transcript.advisors.count(), 1)
+        user = User.objects.create_user(
+            username='seb',
+            password='y',
+            first_name='Sebastian',
+            last_name='Cabrejos',)
+        advisor = Student.objects.create(user=user)
+        advisor.jhed = 'scabrej1'
+        advisor.save()
         data = {
             'action': 'remove',
-            'jhed': 'rbiswas4',
+            'jhed': 'scabrej1',
+        }
+        request = self.factory.patch(
+            '/advising/forum/Fall/2019/', data=data, format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(self.transcript.advisors.count(), 1)
+        data = {
+            'action': 'remove',
+            'jhed': 'jfung4',
         }
         request = self.factory.patch(
             '/advising/forum/Fall/2019/', data=data, format='json')
         response = get_response_for_semester(self, request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEquals(self.transcript.advisors.count(), 0)
+        self.assertEquals(self.transcript.advisors.count(), 1)
