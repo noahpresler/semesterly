@@ -75,7 +75,7 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
             return Response(status=status.HTTP_409_CONFLICT)
         else:
             transcript = Transcript.objects.create(
-                owner=student, semseter=semester)
+                owner=student, semester=semester)
             transcript.save()
 
         return Response({'transcript': TranscriptSerializer(transcript).data},
