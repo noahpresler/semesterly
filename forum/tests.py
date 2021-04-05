@@ -138,7 +138,7 @@ class Serializers(TestCase):
                           serialized['advisor_names'][0])
 
 
-class UrlsTest(UrlTestCase):
+class UrlsTest(TestCase, UrlTestCase):
     """ Test forum/urls.py """
     def setUp(self):
         semester = Semester.objects.create(name='Fall', year='2016')
@@ -147,7 +147,7 @@ class UrlsTest(UrlTestCase):
     def test_urls_call_correct_views(self):
         self.assertUrlResolvesToView('/advising/forum/all/', 'forum.views.ForumView')
         self.assertUrlResolvesToView(
-            '/forum/Fall/2016/',
+            '/advising/forum/Fall/2016/',
             'forum.views.ForumTranscriptView',
             kwargs={'sem_name': 'Fall', 'year': '2016'})
 
