@@ -87,10 +87,10 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
             Transcript, owner=student, semester=semester)
         advisor = get_object_or_404(Student, jhed=request.data['jhed'])
         if request.data['action'] == 'add':
-            if advisor not in transcript.advisors:
+            if advisor not in transcript.advisors.all():
                 transcript.advisors.add(advisor)
         elif request.data['action'] == 'remove':
-            if advisor in transcript.advisors:
+            if advisor in transcript.advisors.all():
                 transcript.advisors.remove(advisor)
         transcript.save()
 
