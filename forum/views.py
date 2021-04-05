@@ -71,9 +71,7 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
 
         transcript = Transcript.objects.filter(
             owner=student, semester=semester)
-        if transcript.exists():
-            return Response(status=status.HTTP_409_CONFLICT)
-        else:
+        if not transcript.exists():
             transcript = Transcript.objects.create(
                 owner=student, semester=semester)
             transcript.save()
