@@ -99,7 +99,7 @@ def get_response_for_semester(self, request, user):
     force_authenticate(request, user=user)
     request.user = user
     request.subdomain = 'uoft'
-    view = resolve('/forum/all/Fall/2019/').func
+    view = resolve('/forum/Fall/2019/').func
     return view(request, 'Fall', '2019')
 
 
