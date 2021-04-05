@@ -71,9 +71,7 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
 
         transcript = Transcript.objects.filter(
             owner=student, semester=semester)
-        if transcript.exists():
-            return Response(status=status.HTTP_409_CONFLICT)
-        else:
+        if not transcript.exists():
             transcript = Transcript.objects.create(
                 owner=student, semester=semester)
             transcript.save()
@@ -89,11 +87,11 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
             Transcript, owner=student, semester=semester)
         advisor = get_object_or_404(Student, jhed=request.data['jhed'])
         if request.data['action'] == 'add':
-            transcript.advisors.add(
-                Student.objects.get(jhed=request.data['jhed']))
+            if advisor not in transcript.advisors:
+                transcript.advisors.add(advisor)
         elif request.data['action'] == 'remove':
-            transcript.advisors.remove(
-                Student.objects.get(jhed=request.data['jhed']))
+            if advisor in transcript.advisors:
+                transcript.advisors.remove(advisor)
         transcript.save()
 
         return Response({'transcript': TranscriptSerializer(transcript).data},
@@ -102,7 +100,8 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
     def delete(self, request, sem_name, year):
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
-        transcript = Transcript.objects.filter(owner=student, semester=semester)
+        transcript = Transcript.objects.filter(
+            owner=student, semester=semester)
         if transcript.exists():
             transcript.delete()
 
