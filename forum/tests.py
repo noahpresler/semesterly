@@ -241,6 +241,7 @@ class ForumTranscriptViewTest(APITestCase):
 
     def test_add_advisor(self):
         setUpTranscriptNoAdvisor(self)
+        self.assertEquals(self.transcript.advisors.count(), 0)
         user = User.objects.create_user(
             username='rbiz',
             password='k',
@@ -257,9 +258,24 @@ class ForumTranscriptViewTest(APITestCase):
             '/advising/forum/Fall/2019/', data=data, format='json')
         response = get_response_for_semester(self, request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(self.transcript.advisors.count(), 1)
+
+    def test_add_advisor_not_in_db(self):
+        setUpTranscriptNoAdvisor(self)
+        self.assertEquals(self.transcript.advisors.count(), 0)
+        data = {
+            'action': 'add',
+            'jhed': 'rbiswas4',
+        }
+        request = self.factory.patch(
+            '/advising/forum/Fall/2019/', data=data, format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEquals(self.transcript.advisors.count(), 0)
 
     def test_remove_advisor(self):
         setUpTranscript(self)
+        self.assertEquals(self.transcript.advisors.count(), 1)
         data = {
             'action': 'remove',
             'jhed': self.advisor.jhed,
@@ -268,3 +284,17 @@ class ForumTranscriptViewTest(APITestCase):
             '/advising/forum/Fall/2019/', data=data, format='json')
         response = get_response_for_semester(self, request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(self.transcript.advisors.count(), 0)
+
+    def test_remove_advisor_invalid(self):
+        setUpTranscriptNoAdvisor(self)
+        self.assertEquals(self.transcript.advisors.count(), 0)
+        data = {
+            'action': 'remove',
+            'jhed': 'rbiswas4',
+        }
+        request = self.factory.patch(
+            '/advising/forum/Fall/2019/', data=data, format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEquals(self.transcript.advisors.count(), 0)
