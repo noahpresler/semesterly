@@ -47,6 +47,19 @@ def setUpTranscriptDependencies(self):
     self.semester.save()
 
 
+def setUpTranscriptDependenciesNoAdvisor(self):
+    user = User.objects.create_user(
+        username='JJam',
+        password='XD',
+        first_name='James',
+        last_name='Wang',)
+    self.student = Student.objects.create(user=user)
+    self.student.jhed = 'jwang380'
+    self.student.save()
+    self.semester = Semester.objects.create(name='Fall', year='2019')
+    self.semester.save()
+
+
 def setUpTranscript(self):
     setUpTranscriptDependencies(self)
     self.transcript = Transcript.objects.create(
@@ -54,6 +67,14 @@ def setUpTranscript(self):
         semester=self.semester,
     )
     self.transcript.advisors.add(self.advisor)
+
+
+def setUpTranscriptNoAdvisor(self):
+    setUpTranscriptDependenciesNoAdvisor(self)
+    self.transcript = Transcript.objects.create(
+        owner=self.student,
+        semester=self.semester,
+    )
 
 
 def add_comment(self, author, content):
@@ -216,7 +237,31 @@ class ForumTranscriptViewTest(APITestCase):
         self.assertEquals(content, comment.content)
 
     def test_add_advisor(self):
-        setUpTranscriptDependencies(self)
+        setUpTranscriptNoAdvisor(self)
+        user = User.objects.create_user(
+            username='rbiz',
+            password='k',
+            first_name='Rishi',
+            last_name='Biswas',)
+        advisor = Student.objects.create(user=user)
+        advisor.jhed = 'rbiswas4'
+        advisor.save()
+        data = {
+            'action': 'add',
+            'jhed': advisor.jhed,
+        }
+        request = self.factory.patch(
+            '/forum/Fall/2019/', data=data, format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
 
     def test_remove_advisor(self):
         setUpTranscript(self)
+        data = {
+            'action': 'remove',
+            'jhed': self.advisor.jhed,
+        }
+        request = self.factory.patch(
+            '/forum/Fall/2019/', data=data, format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
