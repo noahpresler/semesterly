@@ -14,7 +14,6 @@ GNU General Public License for more details.
 
 import React from 'react';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
-import CommentSlot from './comment_slot';
 import {getNextAvailableColour} from '../util';
 import CommentInputContainer from './containers/comment_input_container';
 import Transcript from './transcript';

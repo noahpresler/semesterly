@@ -14,41 +14,60 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import {getTranscriptCommentsBySemester} from "../constants/endpoints";
 
 class CommentInput extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = { comment: ''};
 	}
 
-	componentWillMount() {
-		$(document.body).on('keydown', (e) => {
-			if (e.key === 'Enter') {
-				//TODO: this.sendComment();
-			}
-		});
-	}
+	// componentWillMount() {
+	// 	$(document.body).on('keydown', (e) => {
+	// 		if (e.key === 'Enter') {
+	// 			//TODO: this.sendComment();
+	// 			$('input.transcript.comments').blur();
+	// 		}
+	// 	});
+	// }
 
 	componentWillReceiveProps(nextProps) {
-		this.setState({ name: nextProps.activeLoadedTimetableName });
+		this.setState({ comment: nextProps.activeLoadedTimetableName });
 	}
 
-	showSignupModal() {
-		if (!this.props.isLoggedIn) {
-			this.props.openSignUpModal();
-		}
-	}
-
-	//TODO:
 	sendContent(event) {
-		this.setState({ name: event.target.value });
+		this.setState({ comment: event.target.value });
+	}
+
+	submitContent() {
+		fetch(getTranscriptCommentsBySemester("Spring", "2021"), {
+			method: 'POST',
+			body: JSON.stringify({ user: null, data: { jhed: null, timestamp: null, content: null } }),
+		}).then((res) => {
+			return res.json();
+		}).then((data) => {
+			console.log(data)
+			// const content = JSON.stringify(data)
+			// console.log(content)
+		}).catch((error) => {
+			console.log(error)
+		})
 	}
 
 	render() {
+		const { comment } = this.state;
+
 		return (<div className="cf-text-input">
 				<form action="#0">
-					<textarea className="cf-input" rows="1" placeholder="Type your comment here..."/>
-					<input className="send-btn" type="submit" value="+" />
+					<textarea
+						className="cf-input"
+						rows="1" placeholder="Type your comment here..."
+						value={comment}
+						onChange={(event) => this.sendContent(event)}
+						style={{ resize: "none", whiteSpace: "nowrap", }}
+					/>
+					<input className="send-btn" type="submit" value="+" onClick={() => this.submitContent()} />
 				</form>
 			</div>
 		);
