@@ -14,7 +14,6 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import EnableNotificationsAlertContainer from './alerts/enable_notifications_alert_container';
 import TopBarAdvisingContainer from './containers/top_bar_advising_container';
 import CommentForumContainer from './containers/comment_forum_container';
 import AdvisingScheduleContainer from './containers/advising_schedule_container';
@@ -29,6 +28,7 @@ class Advising extends React.Component {
         const mql = window.matchMedia('(orientation: portrait)');
         this.state = {
             orientation: !mql.matches ? 'landscape' : 'portrait',
+            selected_semester: this.props.semester.name + ' ' + this.props.semester.year,
         };
         this.updateOrientation = this.updateOrientation.bind(this);
     }
@@ -68,17 +68,6 @@ class Advising extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.alertEnableNotifications) {
-            this.msg.show(<EnableNotificationsAlertContainer />, {
-                type: 'info',
-                time: 12000,
-                additionalClass: 'notification-alert',
-                icon: <div className="enable-notifications-alert-icon" />,
-            });
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
 
     }
 
@@ -95,11 +84,10 @@ class Advising extends React.Component {
         }
     }
 
-    showAlert(alert, type, delay = 5000) {
-        this.msg.show(alert, {
-            type,
-            time: delay,
-        });
+    callbackFunction(childSemesterData) {
+        if (childSemesterData !== this.state.selected_semester) {
+             this.setState({selected_semester: childSemesterData});
+        }
     }
 
 
@@ -173,10 +161,13 @@ class Advising extends React.Component {
                 <SignupModalContainer />
                 <div className="all-cols">
                     <div className="main-advising">
-                        <AdvisingScheduleContainer />
+                        <AdvisingScheduleContainer
+                          parentCallback = {this.callbackFunction.bind(this)}
+                          selected_semester = {this.state.selected_semester}
+                        />
                         {footer}
                     </div>
-                    <CommentForumContainer />
+                    <CommentForumContainer selected_semester = {this.state.selected_semester} />
                 </div>
             </div>);
     }
@@ -192,6 +183,10 @@ Advising.propTypes = {
     alertTimetableExists: PropTypes.bool.isRequired,
     saveTimetable: PropTypes.func.isRequired,
     setPgActive: PropTypes.func.isRequired,
+    semester: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        year: PropTypes.string.isRequired,
+    }).isRequired,
 };
 
 export default Advising;

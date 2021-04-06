@@ -13,9 +13,6 @@ GNU General Public License for more details.
 */
 
 import React from 'react';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
-import CommentSlot from './comment_slot';
-import {getNextAvailableColour} from '../util';
 import CommentInputContainer from './containers/comment_input_container';
 import Transcript from './transcript';
 import {getTranscriptCommentsBySemester} from '../constants/endpoints';
@@ -25,33 +22,51 @@ class CommentForum extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          //TODO: Set this to the semester that is selected on the LHS
-          semester_name: 'Spring',
-          semester_year: 2021,
+          semester_name: '',
+          semester_year: '',
           transcript: null,
           comments: null
         };
     }
 
-    componentDidMount() {
-      fetch(getTranscriptCommentsBySemester(this.state.semester_name, this.state.semester_year))
-        .then(response => response.json())
-        .then(data => {
-          this.setState({transcript: data.transcript});
-          this.setState({comments: this.state.transcript.comments});
-        });
-      // TODO: Check for error response
+    fetchTranscript() {
+      if (this.props.selected_semester != null) {
+        let semester_name = this.props.selected_semester.toString().split(' ')[0];
+        let semester_year = this.props.selected_semester.toString().split(' ')[1];
+
+        fetch(getTranscriptCommentsBySemester(semester_name, semester_year))
+          .then(response => response.json())
+          .then(data => {
+            this.setState({transcript: data.transcript});
+            this.setState({comments: this.state.transcript.comments});
+          });
+      } else {
+        this.setState({transcript: null});
+        this.setState({comments: null});
+      }
     }
 
-  render() {
+    componentDidMount() {
+      this.fetchTranscript();
+    }
+
+    componentDidUpdate(prevProps) {
+      if(this.props.selected_semester !== prevProps.selected_semester) {
+        this.fetchTranscript();
+      }
+    }
+
+    render() {
 
         let transcript;
-        if (this.state.comments != null) {
+        if (this.state.transcript != null && this.state.comments != null) {
             transcript = <Transcript
                 comments={this.state.comments}
             />;
+        } else if (this.state.transcript === null) {
+          transcript = <div className="empty-state"><h4> <p> No semester selected! </p> </h4></div>;
         } else {
-            transcript = <div className="empty-state"><h4> <p> No comments yet! </p> </h4></div>;
+          transcript = <div className="empty-state"><h4> <p> No comments yet! </p> </h4></div>;
         }
 
         return (
@@ -71,17 +86,5 @@ class CommentForum extends React.Component {
         );
     }
 }
-
-CommentForum.defaultProps = {
-    invitedComments: null,
-    ownedComments: null,
-}
-
-
-CommentForum.propTypes = {
-    //invitedComments: PropTypes.arrayOf(SemesterlyPropTypes.userInfo.invited_transcripts).isRequired,
-    //ownedComments: PropTypes.arrayOf(SemesterlyPropTypes.userInfo.owned_transcripts).isRequired,
-};
-
 
 export default CommentForum;

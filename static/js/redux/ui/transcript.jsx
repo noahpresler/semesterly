@@ -12,17 +12,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import Comment from './comment';
-import PropTypes from 'prop-types';
 import React from 'react';
+import Comment from './comment';
 
 class Transcript extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
-        let comments = this.props.comments.map(comment => (
+        const comments = this.props.comments.map(comment => (
             <Comment
                 author={comment.author_name}
                 content={comment.content}

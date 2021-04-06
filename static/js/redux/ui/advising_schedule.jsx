@@ -14,171 +14,39 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Collapsible from 'react-collapsible';
-import MasterSlot from './master_slot';
-import CreditTickerContainer from './containers/credit_ticker_container';
+import CourseListRow from './course_list_row';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
-import { getNextAvailableColour } from '../util';
 
 class AdvisingSchedule extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { showDropdown: false };
-        this.toggleDropdown = this.toggleDropdown.bind(this);
-        this.hideDropdown = this.hideDropdown.bind(this);
-    }
-
-    hideDropdown() {
-        this.setState({ showDropdown: false });
-    }
-
-    toggleDropdown() {
-        this.setState({ showDropdown: !this.state.showDropdown });
-    }
-
-    stopPropagation(callback, event) {
-        event.stopPropagation();
-        this.hideDropdown();
-        callback();
+        this.state = {
+            // TODO: Change this to list of semesters given by SIS API
+            displayed_semesters: [
+              'Spring 2021',
+              'Fall 2020',
+              'Spring 2019'
+            ]
+        };
     }
 
     render() {
-        const savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => (
-            <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>
-                {t.name}
-                <button
-                    onClick={event => this.stopPropagation(() => this.props.deleteTimetable(t), event)}
-                    className="row-button"
-                >
-                    <i className="fa fa-trash-o" />
-                </button>
-                <button
-                    onClick={event => this.stopPropagation(() => this.props.duplicateTimetable(t), event)}
-                    className="row-button"
-                >
-                    <i className="fa fa-clone" />
-                </button>
-            </div>
-        )) : null;
-        // TOOD: code duplication between masterslots/optionalslots
-        let masterSlots = this.props.mandatoryCourses ?
-            this.props.mandatoryCourses.map((course) => {
-                const colourIndex = (course.id in this.props.courseToColourIndex) ?
-                    this.props.courseToColourIndex[course.id] :
-                    getNextAvailableColour(this.props.courseToColourIndex);
-                const professors = course.sections.map(section => section.instructors);
-                return (<MasterSlot
-                    key={course.id}
-                    professors={professors}
-                    colourIndex={colourIndex}
-                    classmates={this.props.courseToClassmates[course.id]}
-                    onTimetable={this.props.isCourseInRoster(course.id)}
-                    course={course}
-                    fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
-                    removeCourse={() => this.props.removeCourse(course.id)}
-                    getShareLink={this.props.getShareLink}
-                />);
-            }) : null;
-        let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
-            const colourIndex = (course.id in this.props.courseToColourIndex) ?
-                this.props.courseToColourIndex[course.id] :
-                getNextAvailableColour(this.props.courseToColourIndex);
-            return (<MasterSlot
-                key={course.id}
-                onTimetable={this.props.isCourseInRoster(course.id)}
-                colourIndex={colourIndex}
-                classmates={this.props.courseToClassmates[course.id]}
-                course={course}
-                fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
-                removeCourse={() => this.props.removeOptionalCourse(course)}
-                getShareLink={this.props.getShareLink}
+        let courseListRows = (this.state.displayed_semesters.length > 0) ?
+          this.state.displayed_semesters.map((semester) => {
+            return(<CourseListRow
+              parentParentCallback = {this.props.parentCallback.bind(this)}
+              displayed_semester = {semester}
+              current_semester = {this.props.semester.name + ' ' + this.props.semester.year}
+              selected_semester = {this.props.selected_semester}
             />);
-        }) : null;
-        if (masterSlots.length === 0) {
-            masterSlots = (
-                <div className="empty-state">
-                    <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
-                    <h4>Looks like you don&#39;t have any courses yet!</h4>
-                    <h3>Your selections will appear here along with credits, professors and friends
-                        in the class</h3>
-                </div>);
-        }
-        const optionalSlotsHeader = (optionalSlots.length === 0 && masterSlots.length > 3) ? null :
-            <h4 className="as-header">Registered Courses</h4>;
-        if (optionalSlots.length === 0 && masterSlots.length > 3) {
-            optionalSlots = null;
-        } else if (optionalSlots.length === 0) {
-            const img = (
-                <img
-                    src="/static/img/emptystates/optionalslots.png"
-                    alt="No optional courses added."
-                />);
-            optionalSlots = (
-                <div className="empty-state">
-                    { img }
-                </div>);
-        }
-        //TODO: edit wailisted
-        const waitlistedlSlotsHeader = (<div>
-            <h4 className="as-header">Waitlisted Courses</h4>
-                <div className="empty-state">
-                    <img
-                        src="/static/img/emptystates/optionalslots.png"
-                        alt="No optional courses added."
-                    />
-                </div>
-        </div>);
-
-        const finalScheduleLink = (masterSlots.length > 0 &&
-            this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0
-            && this.props.hasLoaded) ?
-            (<div
-                className="final-schedule-link"
-                onClick={this.props.launchFinalExamsModal}
-            >
-                <i className="fa fa-calendar" aria-hidden="true" />
-                See Finals Schedule
-            </div>)
-            : null;
-
-        const courseList = (<div className="course-list-container">
-              <CreditTickerContainer />
-              <a onClick={this.props.launchPeerModal}>
-                  <h4 className="as-header">
-                      Planned Courses
-                  </h4>
-              </a>
-              <div className="as-master-slots">
-                  { masterSlots }
-                  { finalScheduleLink }
-              </div>
-              { optionalSlotsHeader }
-              { optionalSlots }
-              <div id="as-optional-slots" />
-              <div>
-                  { waitlistedlSlotsHeader }
-              </div>
-        </div>);
-
-        const scheduleName = prop => (<div className="as-semester-name-container">
-          <div className="as-semester-name">
-          {this.props.semester.name} {this.props.semester.year}
-          </div>
-          <div className="as-tip-container">
-            { prop ? <span className="as-tip up"></span> : <span className="as-tip"></span> }
-          </div>
-        </div>);
+          }) : <div className="empty-state"><h4> <p> No semesters yet! </p> </h4></div>;
 
         return (
             <div className="advising-schedule">
                 <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>
                     Course Summary
                 </p>
-                <Collapsible open='true' trigger={scheduleName(true)} triggerWhenOpen={scheduleName(false)}>
-                    <div>
-                      { courseList }
-                    </div>
-                </Collapsible>
+                {courseListRows}
             </div>
         );
     }
@@ -212,7 +80,7 @@ AdvisingSchedule.propTypes = {
     launchPeerModal: PropTypes.func.isRequired,
     semester: PropTypes.shape({
         name: PropTypes.string.isRequired,
-        year: PropTypes.number.isRequired,
+        year: PropTypes.string.isRequired,
     }).isRequired,
     semesterIndex: PropTypes.number.isRequired,
     avgRating: PropTypes.number,
