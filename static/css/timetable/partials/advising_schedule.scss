@@ -98,6 +98,29 @@
   }
 }
 
+.comment-row {
+  margin: 10px;
+}
+
+.comment-bubble {
+  outline-color: #00A1FF;
+  background: #00A1FF;
+  color: white;
+  border-radius: 25px;
+  font-size: 12px;
+  padding: 10px;
+  margin: 5px;
+
+  .author {
+    font-weight: bold;
+  }
+}
+
+.comment-timestamp {
+  font-size: 10px;
+  float: right;
+}
+
 .tt-name {
   background-color: $gfff;
   cursor: pointer;
