@@ -57,6 +57,8 @@ class CommentForum extends React.Component {
     }
 
     render() {
+        let semester_name = (this.props.selected_semester != null ? this.props.selected_semester.toString().split(' ')[0] : '');
+        let semester_year = (this.props.selected_semester != null ? this.props.selected_semester.toString().split(' ')[1] : '');
 
         let transcript;
         if (this.state.transcript != null && this.state.comments != null) {
@@ -81,7 +83,10 @@ class CommentForum extends React.Component {
                   { transcript }
                 </div>
                 <div className="as-header"></div>
-                <CommentInputContainer />
+                <CommentInputContainer
+                    semester_name={semester_name}
+                    semester_year={semester_year}
+                />
             </div>
         );
     }

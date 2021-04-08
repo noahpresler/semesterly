@@ -20,7 +20,9 @@ class CommentInput extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { comment: ''};
+		this.state = {
+			comments: ''
+		};
 	}
 
 	// componentWillMount() {
@@ -32,18 +34,19 @@ class CommentInput extends React.Component {
 	// 	});
 	// }
 
-	componentWillReceiveProps(nextProps) {
-		this.setState({ comment: nextProps.activeLoadedTimetableName });
-	}
-
 	sendContent(event) {
 		this.setState({ comment: event.target.value });
 	}
 
-	submitContent() {
-		fetch(getTranscriptCommentsBySemester("Spring", "2021"), {
+	submitContent(semester_name, semester_year) {
+		fetch(getTranscriptCommentsBySemester(semester_name, semester_year), {
 			method: 'POST',
-			body: JSON.stringify({ user: null, data: { jhed: null, timestamp: null, content: null } }),
+			body: JSON.stringify({
+				user: this.state.userInfo,
+				data: { jhed: null,
+						timestamp: new Date(Date.now()),
+						content: this.state.comment }
+			}),
 		}).then((res) => {
 			return res.json();
 		}).then((data) => {
@@ -57,6 +60,7 @@ class CommentInput extends React.Component {
 
 	render() {
 		const { comment } = this.state;
+		const { semester_name, semester_year } = this.props;
 
 		return (<div className="cf-text-input">
 				<form action="#0">
@@ -65,9 +69,10 @@ class CommentInput extends React.Component {
 						rows="1" placeholder="Type your comment here..."
 						value={comment}
 						onChange={(event) => this.sendContent(event)}
-						style={{ resize: "none", whiteSpace: "nowrap", }}
+						style={{ resize: "auto", whiteSpace: "wrap", }}
+						onKeyPress="if (event.keyCode==13){submitContent(semester_name, semester_year);return false;}"
 					/>
-					<input className="send-btn" type="submit" value="+" onClick={() => this.submitContent()} />
+					<input className="send-btn" type="submit" value="+" onClick={() => this.submitContent(semester_name, semester_year)} />
 				</form>
 			</div>
 		);
@@ -76,6 +81,8 @@ class CommentInput extends React.Component {
 
 CommentInput.propTypes = {
 	isLoggedIn: PropTypes.bool.isRequired,
+	semester_name: PropTypes.string.isRequired,
+	semester_year: PropTypes.string.isRequired,
 };
 
 export default CommentInput;
