@@ -9,12 +9,11 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
+
 from django.conf.urls import url
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.views.generic.base import RedirectView
-
-# from rest_framework_simplejwt import views as jwt_views
 
 import advising.views
 from helpers.mixins import FeatureFlowView
@@ -22,7 +21,7 @@ from helpers.mixins import FeatureFlowView
 app_name = 'advising'
 
 urlpatterns = [
-        #url(r'advising/$', advising.views.index),
+        #url(r'^advising/$', advising.views.index),
         url('advising/$',FeatureFlowView.as_view(feature_name='ADVISING')),
         url(r'^advising/data/$', advising.views.AdvisingView.as_view()), 
     ]
