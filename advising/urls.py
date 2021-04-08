@@ -14,6 +14,8 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.views.generic.base import RedirectView
 
+# from rest_framework_simplejwt import views as jwt_views
+
 import advising.views
 from helpers.mixins import FeatureFlowView
 
@@ -23,4 +25,7 @@ urlpatterns = [
         #url(r'advising/$', advising.views.index),
 
         url('advising/$',FeatureFlowView.as_view(feature_name='ADVISING')),
+        # NEED TO MODIFY THIS BELOW
+        # path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+        # path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     ]
