@@ -92,8 +92,6 @@ class Advising extends React.Component {
 
 
     render() {
-        //const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        //const cal = mobile && $(window).width() < 767 && this.state.orientation === 'portrait' ?
         const footer = (
             <footer className="footer navbar no-print">
                 <p className="data-last-updated no-print">Data last

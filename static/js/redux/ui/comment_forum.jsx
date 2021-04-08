@@ -48,7 +48,6 @@ class CommentForum extends React.Component {
 
     componentDidMount() {
       this.fetchTranscript();
-      console.log(this.props.selected_semester);
     }
 
     componentDidUpdate(prevProps) {
@@ -72,6 +71,11 @@ class CommentForum extends React.Component {
           transcript = <div className="empty-state"><h4> <p> No comments yet! </p> </h4></div>;
         }
 
+        const displayInput = (this.props.selected_semester === null) ? null : (<CommentInputContainer
+          semester_name={semester_name}
+          semester_year={semester_year}
+        />);
+
         return (
             <div className="comment-forum no-print">
                 <div className="cf-name">
@@ -84,10 +88,7 @@ class CommentForum extends React.Component {
                   { transcript }
                 </div>
                 <div className="as-header"></div>
-                <CommentInputContainer
-                    semester_name={semester_name}
-                    semester_year={semester_year}
-                />
+              {displayInput}
             </div>
         );
     }

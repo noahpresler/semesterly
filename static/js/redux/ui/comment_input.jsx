@@ -75,10 +75,14 @@ class CommentInput extends React.Component {
 						rows="1" placeholder="Type your comment here..."
 						value={comment}
 						onChange={(event) => this.sendContent(event)}
-						style={{ resize: "auto", whiteSpace: "wrap", }}
 						onKeyPress="if (event.keyCode==13){submitContent(semester_name, semester_year);return false;}"
 					/>
-					<input className="send-btn" type="submit" value="+" onClick={() => this.submitContent(semester_name, semester_year)} />
+
+					<input
+						className="send-btn"
+						type="submit"
+						value="+"
+						onClick={() => this.submitContent(semester_name, semester_year)} />
 				</form>
 			</div>
 		);
