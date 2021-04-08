@@ -14,7 +14,7 @@
 
 from django.db import models
 import timetable.models as timetable_models
-from models import User
+# from models import User
 
 # Create your models here.
 # Sebastian Notes to self ->
@@ -33,8 +33,8 @@ class Student(models.Model):
         max_length=255, null=True, default='Undecided')
     email_address = models.CharField(
         max_length=255, null=True, default='Undecided')
-    majors = models.ManyToOneField(Major)
-    minors = models.ManyToOneField(Minor)
+    # majors = models.ManyToOneField(Major) #TODO: foreign key or onetoone? or neither
+    # minors = models.ManyToOneField(Minor)
 
 
 class Advisor(models.Model):

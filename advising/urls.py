@@ -23,9 +23,6 @@ app_name = 'advising'
 
 urlpatterns = [
         #url(r'advising/$', advising.views.index),
-
         url('advising/$',FeatureFlowView.as_view(feature_name='ADVISING')),
-        # NEED TO MODIFY THIS BELOW
-        # path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
-        # path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+        url(r'^advising/data/$', advising.views.AdvisingView.as_view()), 
     ]
