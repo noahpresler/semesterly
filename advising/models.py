@@ -39,11 +39,11 @@ class Advisor(models.Model):
 
 
 class Major(model.Model):
-    majors_name = models.CharField(max_length=255, default='', null=True)
+    name = models.CharField(max_length=255, default='', null=True)
     student = models.ForeignKey(student_models.Student)
 
 class Minor(model.Model):
-    minors_name = models.CharField(max_length=255, default='', null=True)
+    name = models.CharField(max_length=255, default='', null=True)
     student = models.ForeignKey(student_models.Student)
 
 class Section(model.Model):
