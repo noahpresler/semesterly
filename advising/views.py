@@ -33,7 +33,7 @@ import json
 
 # Will be updated to follow valid advising view
 
-class AdvisingView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
+class AdvisingView(ValidateSubdomainMixin, APIView):
     """ Handles advising interactions. """
     def post(self, request):
         """Creates a new comment.
@@ -41,8 +41,10 @@ class AdvisingView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             ex. -> content: The comment's message.
 
         """
+        # need to allow JSFIddle in this app
         try:
-            payload = jwt.decode(get_secret("JWT_AUTH_JHED_TOKEN"), "This is our signing key!", algorithms=['HS256'])
+            print(request.body)
+            payload = jwt.decode(request.body, "This is our signing key!", algorithms=['HS256'])
             if payload == "null":
                 msg = 'Null token not allowed'
                 raise exceptions.AuthenticationFailed(msg)
