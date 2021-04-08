@@ -24,29 +24,16 @@ import timetable.models as timetable_models
 # function to create many-to-many property (enrollments from list of sections)
 # two tables for each majors and minors
 
-
-class Student(models.Model):
-    first_name = models.CharField(max_length=255, default='', null=True)
-    last_name = models.CharField(max_length=255, default='', null=True)
-    jhed_id = models.CharField(max_length=255, null=True, default='')
-    primary_major = models.CharField(
-        max_length=255, null=True, default='Undecided')
-    email_address = models.CharField(
-        max_length=255, null=True, default='Undecided')
-    # majors = models.ManyToOneField(Major) #TODO: foreign key or onetoone? or neither
-    # minors = models.ManyToOneField(Minor)
-
-
 class Advisor(models.Model):
-    students = models.ManyToManyField(models.Student)
-
+    student = models.ManyToManyField(student_models.Student)
 
 class Major(model.Model):
     majors_name = models.CharField(max_length=255, default='', null=True)
-
+    student = models.ManyToManyField(student_models.Student)
 
 class Minor(model.Model):
     minors_name = models.CharField(max_length=255, default='', null=True)
+    student = models.ManyToManyField(student_models.Student)
 
 class Section(model.Model):
     # match to appropriate offering name
