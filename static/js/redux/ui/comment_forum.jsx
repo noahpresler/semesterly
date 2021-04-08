@@ -48,6 +48,7 @@ class CommentForum extends React.Component {
 
     componentDidMount() {
       this.fetchTranscript();
+      console.log(this.props.selected_semester);
     }
 
     componentDidUpdate(prevProps) {

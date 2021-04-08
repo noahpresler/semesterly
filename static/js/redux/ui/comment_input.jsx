@@ -15,13 +15,14 @@ GNU General Public License for more details.
 import PropTypes from 'prop-types';
 import React from 'react';
 import {getTranscriptCommentsBySemester} from "../constants/endpoints";
+import Cookie from "js-cookie";
 
 class CommentInput extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			comments: ''
+			comment: ''
 		};
 	}
 
@@ -41,21 +42,26 @@ class CommentInput extends React.Component {
 	submitContent(semester_name, semester_year) {
 		fetch(getTranscriptCommentsBySemester(semester_name, semester_year), {
 			method: 'POST',
+			headers: {
+				'X-CSRFToken': Cookie.get('csrftoken'),
+				accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
 			body: JSON.stringify({
-				user: this.state.userInfo,
-				data: { jhed: null,
-						timestamp: new Date(Date.now()),
-						content: this.state.comment }
+				jhed: this.props.userInfo.jhed,
+				timestamp: new Date(Date.now()),
+				content: this.state.comment
 			}),
-		}).then((res) => {
-			return res.json();
-		}).then((data) => {
-			console.log(data)
-			// const content = JSON.stringify(data)
-			// console.log(content)
-		}).catch((error) => {
-			console.log(error)
-		})
+		});
+		//.then((res) => {
+		// 	return res.json();
+		// }).then((data) => {
+		// 	console.log("DATA = " + JSON.stringify(data));
+		// 	// const content = JSON.stringify(data)
+		// 	// console.log(content)
+		// }).catch((error) => {
+		// 	console.log(error);
+		// })
 	}
 
 	render() {
