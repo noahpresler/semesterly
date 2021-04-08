@@ -20,6 +20,7 @@ import AdvisingScheduleContainer from './containers/advising_schedule_container'
 import UserSettingsModalContainer from './containers/modals/user_settings_modal_container';
 import SignupModalContainer from './containers/modals/signup_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
+import {getTranscriptCommentsBySemester} from "../constants/endpoints";
 
 
 class Advising extends React.Component {
@@ -29,8 +30,29 @@ class Advising extends React.Component {
         this.state = {
             orientation: !mql.matches ? 'landscape' : 'portrait',
             selected_semester: null,
+            transcript: null
         };
         this.updateOrientation = this.updateOrientation.bind(this);
+    }
+
+    fetchTranscript(new_selected_semester) {
+
+        if (new_selected_semester !== null) {
+            let semester_name = new_selected_semester.toString().split(' ')[0];
+            let semester_year = new_selected_semester.toString().split(' ')[1];
+
+            fetch(getTranscriptCommentsBySemester(semester_name, semester_year))
+              .then(response => response.json())
+              .then(data => {
+                  this.setState({transcript: data.transcript});
+                  console.log("Performed Fetch");
+                  console.log(this.state);
+              });
+            this.setState({selected_semester: new_selected_semester});
+        } else {
+            this.setState({selected_semester: null});
+            this.setState({transcript: null});
+        }
     }
 
     componentWillMount() {
@@ -68,7 +90,6 @@ class Advising extends React.Component {
     }
 
     componentDidMount() {
-
     }
 
     updateOrientation() {
@@ -85,9 +106,7 @@ class Advising extends React.Component {
     }
 
     callbackFunction(childSemesterData) {
-        if (childSemesterData !== this.state.selected_semester) {
-             this.setState({selected_semester: childSemesterData});
-        }
+        this.fetchTranscript(childSemesterData);
     }
 
 
@@ -165,7 +184,10 @@ class Advising extends React.Component {
                         />
                         {footer}
                     </div>
-                    <CommentForumContainer selected_semester = {this.state.selected_semester} />
+                    <CommentForumContainer
+                      selected_semester = {this.state.selected_semester}
+                      transcript = {this.state.transcript}
+                    />
                 </div>
             </div>);
     }
