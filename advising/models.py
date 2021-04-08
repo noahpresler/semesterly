@@ -13,6 +13,7 @@
 """ Models pertaining to Students. """
 
 from django.db import models
+import student.models as student_models
 import timetable.models as timetable_models
 # from models import User
 
