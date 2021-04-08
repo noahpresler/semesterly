@@ -27,9 +27,15 @@ import timetable.models as timetable_models
 
 class Advisor(models.Model):
     student = models.ManyToManyField(student_models.Student)
-
+    first_name = models.CharField(max_length=255, default='', null=True)
+    last_name = models.CharField(max_length=255, default='', null=True)
+    jhed_id = models.CharField(max_length=255, null=True, default='')
+    email_address = models.CharField(
+        max_length=255, null=True, default='')
+    
+    # Probably unnecessary
     # validate that student user has existing JHED id in db
-    def validate_student_jhed:
+    # def validate_student_jhed:
 
 
 class Major(model.Model):
