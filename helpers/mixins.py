@@ -130,3 +130,8 @@ class CsrfExemptMixin:
 class RedirectToSignupMixin(LoginRequiredMixin):
     login_url = '/signup/'
     redirect_field_name = None
+
+
+class RedirectToJHUSignupMixin(LoginRequiredMixin):
+    login_url = '/advising/jhu_signup/'
+    redirect_field_name = None
