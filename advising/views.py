@@ -6,10 +6,10 @@ from student.utils import get_student
 from django.db import transaction
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from helpers.mixins import FeatureFlowView, ValidateSubdomainMixin, RedirectToJHUSignupMixin
+from helpers.mixins import FeatureFlowView, RedirectToJHUSignupMixin
 
 
-class AdvisingView(FeatureFlowView, ValidateSubdomainMixin, RedirectToJHUSignupMixin):
+class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
     is_advising = True
 
     def get_feature_flow(self, request, *args, **kwargs):

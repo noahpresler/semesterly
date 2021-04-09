@@ -38,7 +38,7 @@ class JHUSignupModal extends React.Component {
   }
 
   hide() {
-    history.replaceState({}, 'Semester.ly', '/');
+    history.replaceState({}, 'Semester.ly', '/advising');
     this.props.toggleJHUSignupModal();
   }
 
