@@ -103,13 +103,15 @@ class JHUSignupModal extends React.Component {
               will not be shared with
               any other user without your permission.
             </div>
-            <div className="signup-button"
+            <div
+              className="signup-button"
               onClick={() => {
                 const link = document.createElement('a');
-                link.href = `/login/azuread-tenant-oauth2/?next=/advising`;
+                link.href = '/login/azuread-tenant-oauth2/?next=/advising';
                 document.body.appendChild(link);
                 link.click();
-              }}>
+              }}
+            >
               Link JHED
             </div>
           </div>
