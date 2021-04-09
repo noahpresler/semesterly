@@ -22,5 +22,5 @@ app_name = 'advising'
 urlpatterns = [
     url(r'^advising/*$', advising.views.AdvisingView.as_view()),
     url(r'^advising/jhu_signup/*$',
-        FeatureFlowView.as_view(feature_name='JHU_SIGNUP')),
+        FeatureFlowView.as_view(feature_name='JHU_SIGNUP', is_advising=True)),
 ]

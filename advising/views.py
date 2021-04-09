@@ -10,7 +10,7 @@ from helpers.mixins import FeatureFlowView, ValidateSubdomainMixin, RedirectToJH
 
 
 class AdvisingView(FeatureFlowView, ValidateSubdomainMixin, RedirectToJHUSignupMixin):
-    feature_name = 'ADVISING'
+    is_advising = True
 
     def get_feature_flow(self, request, *args, **kwargs):
         """
@@ -19,4 +19,4 @@ class AdvisingView(FeatureFlowView, ValidateSubdomainMixin, RedirectToJHUSignupM
         A semester value can also be provided, which will change the initial semester state of
         the home page.
         """
-        return {}    # TODO: Add required data
+        return {}
