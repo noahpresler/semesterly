@@ -46,8 +46,8 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
 
     def get(self, request, sem_name, year):
         """
-        Returns the forum transcript associated with a particular semester 
-        for the user making the request:
+        Returns the forum transcript associated with a particular semester or
+        creates a new one if it doesn't exist for the user making the request:
             transcript: The retrieved transcript
         """
 
