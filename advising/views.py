@@ -7,10 +7,17 @@ from django.db import transaction
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from helpers.mixins import FeatureFlowView, RedirectToJHUSignupMixin
+from django.http import HttpResponseRedirect
 
 
 class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
     is_advising = True
+
+    def get(self, request, *args, **kwargs):
+        student = Student.objects.get(user=request.user)
+        if not student.jhed:
+            return HttpResponseRedirect('/advising/jhu_signup/')
+        return FeatureFlowView.get(self, request, *args, **kwargs)
 
     def get_feature_flow(self, request, *args, **kwargs):
         """
