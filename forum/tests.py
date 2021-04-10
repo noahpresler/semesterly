@@ -212,7 +212,10 @@ class ForumTranscriptViewTest(APITestCase):
 
     def test_create_transcript(self):
         setUpTranscriptDependencies(self)
-        request = self.factory.put('/advising/forum/Fall/2019/', format='json')
+        with self.assertRaises(Transcript.DoesNotExist):
+            transcript = Transcript.objects.get(
+                semester=self.semester, owner=self.student)
+        request = self.factory.get('/advising/forum/Fall/2019/', format='json')
         response = get_response_for_semester(self, request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         transcript = Transcript.objects.get(
