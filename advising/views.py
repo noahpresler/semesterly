@@ -27,6 +27,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.authentication import get_authorization_header, BaseAuthentication
 from semesterly.settings import get_secret
 from django.contrib.auth.mixins import LoginRequiredMixin
+from advising.models import Advisor
 import jwt
 import json
 
@@ -71,20 +72,38 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             msg = 'Invalid token header. Token string should not contain invalid characters.'
             raise exceptions.AuthenticationFailed(msg)
 
-        self.add_advisors(payload)
-        self.add_majors(payload)
-        self.add_minors(payload)
-        self.add_courses(payload)
+        student = get_object_or_404(jhed=data['StudentInfo']['JhedId'])
+        self.add_advisors(payload, student)
+        self.add_majors(payload, student)
+        self.add_minors(payload, student)
+        self.add_courses(payload, student)
+        student.save()
         return Response(status=status.HTTP_201_CREATED)
 
-    def add_advisors(self, data):
-        pass
+    def add_advisors(self, data, student):
+        advisors = data['Advisors']
+        for advisor_data in advisors:
+            advisor = Advisor.objects.get_or_create(
+                jhed=advisor_data['JhedId'], email_address=['EmailAddress'])
+            student.advisors.add(advisor)
+            advisor.save()
 
-    def add_majors(self, data):
-        pass
+    def add_majors(self, data, student):
+        student.primary_major = data['StudentInfo']['PrimaryMajor']
+        student.other_majors.add(*[major_data['Major']
+                                   for major_data in data['NonPrimaryMajors']])
 
-    def add_minors(self, data):
-        pass
+    def add_minors(self, data, student):
+        student.minors.add(*[minor_data['Minor']
+                             for minor_data in data['Minors']])
 
-    def add_courses(self, data):
-        pass
+    def add_courses(self, data, student):
+        for course_data in data['Courses']:
+            course = get_object_or_404(
+                Course, code=course_data['OfferingName'])
+            name, year = data['Term'].split(' ')
+            semester = get_object_or_404(Semester, name=name, year=year)
+            section = get_object_or_404(
+                Section, course=course, semester=semester,
+                meeting_section=course_data['SectionNumber'])
+            student.sections.add(section)
