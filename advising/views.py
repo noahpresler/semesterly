@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 from __future__ import unicode_literals
-import semesterly.views 
+import semesterly.views
 
 from django.shortcuts import get_object_or_404
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin, FeatureFlowView, RedirectToJHUSignupMixin
@@ -25,32 +25,11 @@ from django.db import transaction
 from rest_framework import status, exceptions
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.authentication import get_authorization_header, BaseAuthentication
-from semesterly.settings import get_secret 
+from semesterly.settings import get_secret
 from django.contrib.auth.mixins import LoginRequiredMixin
 import jwt
 import json
 
-class StudentSISView(ValidateSubdomainMixin, APIView):
-    """ Handles advising interactions. """
-    def post(self, request):
-        """Creates a new comment.
-        Required data:
-            ex. -> content: The comment's message.
-
-        """
-        try:
-            print(request.body)
-            payload = jwt.decode(request.body, get_secret('JWT_AUTH_SECRET'), algorithms=['HS256'])
-            if payload == "null":
-                msg = 'Null token not allowed'
-                raise exceptions.AuthenticationFailed(msg)
-        except jwt.ExpiredSignature or jwt.DecodeError or jwt.InvalidTokenError:
-            return HttpResponse({'Error': "Token is invalid"}, status="403")
-        except UnicodeError:
-            msg = 'Invalid token header. Token string should not contain invalid characters.'
-            raise exceptions.AuthenticationFailed(msg)
-        print(payload)
-        return Response(status=status.HTTP_201_CREATED)
 
 class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
     is_advising = True
@@ -69,3 +48,43 @@ class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
         the home page.
         """
         return {}
+
+
+class StudentSISView(ValidateSubdomainMixin, APIView):
+    """ Handles advising interactions. """
+
+    def post(self, request):
+        """Creates a new comment.
+        Required data:
+            ex. -> content: The comment's message.
+
+        """
+        try:
+            payload = jwt.decode(request.body, get_secret(
+                'JWT_AUTH_SECRET'), algorithms=['HS256'])
+            if payload == "null":
+                msg = 'Null token not allowed'
+                raise exceptions.AuthenticationFailed(msg)
+        except jwt.ExpiredSignature or jwt.DecodeError or jwt.InvalidTokenError:
+            return HttpResponse({'Error': "Token is invalid"}, status="403")
+        except UnicodeError:
+            msg = 'Invalid token header. Token string should not contain invalid characters.'
+            raise exceptions.AuthenticationFailed(msg)
+
+        self.add_advisors(payload)
+        self.add_majors(payload)
+        self.add_minors(payload)
+        self.add_courses(payload)
+        return Response(status=status.HTTP_201_CREATED)
+
+    def add_advisors(self, data):
+        pass
+
+    def add_majors(self, data):
+        pass
+
+    def add_minors(self, data):
+        pass
+
+    def add_courses(self, data):
+        pass

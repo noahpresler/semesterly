@@ -17,7 +17,7 @@ import student.models as student_models
 import timetable.models as timetable_models
 
 class Advisor(models.Model):
-    students = models.ManyToManyField(student_models.Student)
+    students = models.ManyToManyField(student_models.Student, related_name='advisors')
     jhed = models.CharField(max_length=255, null=True, default='')
     email_address = models.CharField(
         max_length=255, null=True, default='')

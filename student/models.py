@@ -109,7 +109,6 @@ class Student(models.Model):
         return self.user.first_name + ' ' + self.user.last_name
 
     def is_advisor(self):
-        from advising.models import Advisor
         return Advisor.objects.filter(jhed=self.jhed).exists()
 
 
