@@ -15,15 +15,6 @@
 from django.db import models
 import student.models as student_models
 import timetable.models as timetable_models
-# from models import User
-
-# Create your models here.
-# Sebastian Notes to self ->
-# map section object (timetable) in object
-# course object to map to offering
-# courseobjects.filter(id)
-# function to create many-to-many property (enrollments from list of sections)
-# two tables for each majors and minors
 
 class Advisor(models.Model):
     students = models.ManyToManyField(student_models.Student)
