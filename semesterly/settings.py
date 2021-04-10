@@ -250,7 +250,7 @@ ROOT_URLCONF = 'semesterly.urls'
 WSGI_APPLICATION = 'semesterly.wsgi.application'
 
 CORS_ORIGIN_WHITELIST = (
-    'https://sis.jhu.edu/',
+    'https://sis.jhu.edu',
 )
 CSRF_TRUSTED_ORIGINS = (
     'sis.jhu.edu',
