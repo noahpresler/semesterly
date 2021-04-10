@@ -72,7 +72,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             msg = 'Invalid token header. Token string should not contain invalid characters.'
             raise exceptions.AuthenticationFailed(msg)
 
-        student = get_object_or_404(jhed=data['StudentInfo']['JhedId'])
+        student = get_object_or_404(Student, jhed=payload['StudentInfo']['JhedId'])
         self.add_advisors(payload, student)
         self.add_majors(payload, student)
         self.add_minors(payload, student)
