@@ -23,6 +23,7 @@ from hashids import Hashids
 from oauth2client.client import GoogleCredentials
 import timetable.models as timetable_models
 from semesterly.settings import get_secret
+from advising.models import Advisor
 
 hashids = Hashids(salt=get_secret('HASHING_SALT'))
 
@@ -60,10 +61,11 @@ class Student(models.Model):
     first_name = models.CharField(max_length=255, default='', null=True)
     last_name = models.CharField(max_length=255, default='', null=True)
     disabilities = models.NullBooleanField(null=True, default=False)
-    primary_major = models.CharField(max_length=255, null=True, default='')
-    other_majors = ArrayField(models.CharField(max_length=255, null=True, default=''), default=list)
-    minors = ArrayField(models.CharField(max_length=255, null=True, default=''), default=list)
-    sections = models.ForeignKey(timetable_models.Course, null=True)
+    advisors = models.ManyToManyField(Advisor, related_name='students')
+    primary_major = models.CharField(max_length=255, default='')
+    other_majors = ArrayField(models.CharField(max_length=255, default=''), default=list)
+    minors = ArrayField(models.CharField(max_length=255, default=''), default=list)
+    sections = models.ForeignKey(timetable_models.Section, null=True)
 
     def __str__(self):
         return "{0}".format(self.jhed)
@@ -109,7 +111,6 @@ class Student(models.Model):
         return self.user.first_name + ' ' + self.user.last_name
 
     def is_advisor(self):
-        from advising.models import Advisor
         return Advisor.objects.filter(jhed=self.jhed).exists()
 
 

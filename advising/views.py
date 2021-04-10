@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 from __future__ import unicode_literals
-import semesterly.views 
+import semesterly.views
 
 from django.shortcuts import get_object_or_404
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin, FeatureFlowView, RedirectToJHUSignupMixin
@@ -25,32 +25,12 @@ from django.db import transaction
 from rest_framework import status, exceptions
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.authentication import get_authorization_header, BaseAuthentication
-from semesterly.settings import get_secret 
+from semesterly.settings import get_secret
 from django.contrib.auth.mixins import LoginRequiredMixin
+from advising.models import Advisor
 import jwt
 import json
 
-class StudentSISView(ValidateSubdomainMixin, APIView):
-    """ Handles advising interactions. """
-    def post(self, request):
-        """Creates a new comment.
-        Required data:
-            ex. -> content: The comment's message.
-
-        """
-        try:
-            print(request.body)
-            payload = jwt.decode(request.body, get_secret('JWT_AUTH_SECRET'), algorithms=['HS256'])
-            if payload == "null":
-                msg = 'Null token not allowed'
-                raise exceptions.AuthenticationFailed(msg)
-        except jwt.ExpiredSignature or jwt.DecodeError or jwt.InvalidTokenError:
-            return HttpResponse({'Error': "Token is invalid"}, status="403")
-        except UnicodeError:
-            msg = 'Invalid token header. Token string should not contain invalid characters.'
-            raise exceptions.AuthenticationFailed(msg)
-        print(payload)
-        return Response(status=status.HTTP_201_CREATED)
 
 class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
     is_advising = True
@@ -69,3 +49,61 @@ class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
         the home page.
         """
         return {}
+
+
+class StudentSISView(ValidateSubdomainMixin, APIView):
+    """ Handles advising interactions. """
+
+    def post(self, request):
+        """Creates a new comment.
+        Required data:
+            ex. -> content: The comment's message.
+
+        """
+        try:
+            payload = jwt.decode(request.body, get_secret(
+                'JWT_AUTH_SECRET'), algorithms=['HS256'])
+            if payload == "null":
+                msg = 'Null token not allowed'
+                raise exceptions.AuthenticationFailed(msg)
+        except jwt.ExpiredSignature or jwt.DecodeError or jwt.InvalidTokenError:
+            return HttpResponse({'Error': "Token is invalid"}, status="403")
+        except UnicodeError:
+            msg = 'Invalid token header. Token string should not contain invalid characters.'
+            raise exceptions.AuthenticationFailed(msg)
+
+        student = get_object_or_404(jhed=data['StudentInfo']['JhedId'])
+        self.add_advisors(payload, student)
+        self.add_majors(payload, student)
+        self.add_minors(payload, student)
+        self.add_courses(payload, student)
+        student.save()
+        return Response(status=status.HTTP_201_CREATED)
+
+    def add_advisors(self, data, student):
+        advisors = data['Advisors']
+        for advisor_data in advisors:
+            advisor = Advisor.objects.get_or_create(
+                jhed=advisor_data['JhedId'], email_address=['EmailAddress'])
+            student.advisors.add(advisor)
+            advisor.save()
+
+    def add_majors(self, data, student):
+        student.primary_major = data['StudentInfo']['PrimaryMajor']
+        student.other_majors.add(*[major_data['Major']
+                                   for major_data in data['NonPrimaryMajors']])
+
+    def add_minors(self, data, student):
+        student.minors.add(*[minor_data['Minor']
+                             for minor_data in data['Minors']])
+
+    def add_courses(self, data, student):
+        for course_data in data['Courses']:
+            course = get_object_or_404(
+                Course, code=course_data['OfferingName'])
+            name, year = data['Term'].split(' ')
+            semester = get_object_or_404(Semester, name=name, year=year)
+            section = get_object_or_404(
+                Section, course=course, semester=semester,
+                meeting_section=course_data['SectionNumber'])
+            student.sections.add(section)
