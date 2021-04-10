@@ -129,8 +129,7 @@ class MasterSlot extends React.Component {
 
     const showShareLink = (this.props.getShareLink !== null) ? (<i className="fa fa-share-alt"
           onClick={event => this.stopPropagation(this.showShareLink, event)}
-      />,
-      {shareLink}) : null;
+      />) : null;
 
 
     return (<div
@@ -155,6 +154,7 @@ class MasterSlot extends React.Component {
       </div>
       <div className="master-slot-actions">
         { showShareLink }
+        { (this.props.getShareLink !== null) ? shareLink : null}
         {
           !this.props.hideCloseButton ?
             <i
