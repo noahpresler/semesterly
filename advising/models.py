@@ -26,32 +26,7 @@ import timetable.models as timetable_models
 # two tables for each majors and minors
 
 class Advisor(models.Model):
-    student = models.ManyToManyField(student_models.Student)
-    first_name = models.CharField(max_length=255, default='', null=True)
-    last_name = models.CharField(max_length=255, default='', null=True)
-    jhed_id = models.CharField(max_length=255, null=True, default='')
+    students = models.ManyToManyField(student_models.Student)
+    jhed = models.CharField(max_length=255, null=True, default='')
     email_address = models.CharField(
         max_length=255, null=True, default='')
-    
-    # Probably unnecessary
-    # validate that student user has existing JHED id in db
-    # def validate_student_jhed:
-
-
-class Major(model.Model):
-    name = models.CharField(max_length=255, default='', null=True)
-    student = models.ForeignKey(student_models.Student)
-
-class Minor(model.Model):
-    name = models.CharField(max_length=255, default='', null=True)
-    student = models.ForeignKey(student_models.Student)
-
-class Section(model.Model):
-    # match to appropriate offering name
-    # TODO: Match course to correct existing course in course model
-    sections = ManyToManyField(timetable_models.Course.code)
-    section_id = ManyToManyField(timetable_models.Section.course_section_id)
-
-    # filter timetable_courses for course on student schedule
-    # def filter_courses:
-        

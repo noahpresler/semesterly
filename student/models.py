@@ -18,6 +18,7 @@ from django.conf import settings
 from django.core.signing import TimestampSigner
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 from hashids import Hashids
 from oauth2client.client import GoogleCredentials
 import timetable.models as timetable_models
@@ -59,6 +60,9 @@ class Student(models.Model):
     first_name = models.CharField(max_length=255, default='', null=True)
     last_name = models.CharField(max_length=255, default='', null=True)
     disabilities = models.NullBooleanField(null=True, default=False)
+    primary_major = models.CharField(max_length=255, null=True, default='')
+    other_majors = models.ArrayField(models.CharField(max_length=255, null=True, default=''))
+    courses = models.ForeignKey(timetable_models.Course)
 
     def __str__(self):
         return "{0}".format(self.jhed)
@@ -102,6 +106,9 @@ class Student(models.Model):
 
     def get_full_name(self):
         return self.user.first_name + ' ' + self.user.last_name
+
+    def is_advisor(self):
+        return Advisor.objects.filter(jhed=self.jhed).exists()
 
 
 class Reaction(models.Model):
