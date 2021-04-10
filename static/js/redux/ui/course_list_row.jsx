@@ -53,18 +53,17 @@ class CourseListRow extends React.Component{
 					in the class</h4>
 			</div>);
 
-		// if (plannedCourseList === null) {
-		// 	plannedCourseList = (
-		// 		<div className="empty-state">
-		// 			<img src="/static/img/emptystates/masterslots.png" alt="No courses added."/>
-		// 			<p>Looks like you don&#39;t have any courses yet!</p>
-		// 			<p>Your selections will appear here along with credits, professors and friends
-		// 				in the class</p>
-		// 		</div>);
-		// }
+		const creditTicker = (this.props.displayed_semester === this.props.current_semester) ? <CreditTickerContainer/> : null;
+		// TODO: Replace null above with:
+		// (<div className="sb-credits">
+		// 	<h3>{Math.abs(this.state.num_credits).toFixed(2)}</h3>
+		// 	<h4>credits</h4>
+		// </div>);
+		// TODO: Where this.state.num_credits is the number of credits from courses on SIS
 
 		const courseList = (<div className="course-list-container">
-			<CreditTickerContainer/>
+			{/*TODO: Get credit ticker to display correct num credits for non-current semesters*/}
+			{ creditTicker }
 			<a>
 				<h4 className="as-header">
 					Planned Courses
