@@ -44,7 +44,7 @@ class AdvisingView(ValidateSubdomainMixin, APIView):
         # need to allow JSFIddle in this app
         try:
             print(request.body)
-            payload = jwt.decode(request.body, "This is our signing key!", algorithms=['HS256'])
+            payload = jwt.decode(request.body, get_secret('JWT_AUTH_SECRET'), algorithms=['HS256'])
             if payload == "null":
                 msg = 'Null token not allowed'
                 raise exceptions.AuthenticationFailed(msg)

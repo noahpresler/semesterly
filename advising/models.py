@@ -53,5 +53,5 @@ class Section(model.Model):
     section_id = ManyToManyField(timetable_models.Section.course_section_id)
 
     # filter timetable_courses for course on student schedule
-    def filter_courses:
+    # def filter_courses:
         
