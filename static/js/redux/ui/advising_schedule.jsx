@@ -34,15 +34,22 @@ class AdvisingSchedule extends React.Component {
         let courseListRows = (this.state.displayed_semesters.length > 0) ?
           this.state.displayed_semesters.map((semester) => {
             return(<CourseListRow
+              key={semester}
               parentParentCallback = {this.props.parentCallback.bind(this)}
               displayed_semester = {semester}
               current_semester = {this.props.semester.name + ' ' + this.props.semester.year}
               selected_semester = {this.props.selected_semester}
+              coursesInTimetable = {this.props.coursesInTimetable}
+              courseToClassmates = {this.props.courseToClassmates}
+              courseToColourIndex = {this.props.courseToColourIndex}
+              isCourseInRoster = {this.props.isCourseInRoster}
+              fetchCourseInfo = {this.props.fetchCourseInfo}
             />);
           }) : <div className="empty-state"><h4> <p> No semesters yet! </p> </h4></div>;
 
+
         return (
-            <div className="advising-schedule">
+            <div className="advising-schedule-inner">
                 <p style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "25px" }}>
                     Course Summary
                 </p>
@@ -74,7 +81,6 @@ AdvisingSchedule.propTypes = {
     isCourseInRoster: PropTypes.func.isRequired,
     duplicateTimetable: PropTypes.func.isRequired,
     fetchCourseInfo: PropTypes.func.isRequired,
-    removeCourse: PropTypes.func.isRequired,
     launchFinalExamsModal: PropTypes.func.isRequired,
     removeOptionalCourse: PropTypes.func.isRequired,
     launchPeerModal: PropTypes.func.isRequired,
@@ -86,7 +92,6 @@ AdvisingSchedule.propTypes = {
     avgRating: PropTypes.number,
     examSupportedSemesters: PropTypes.arrayOf(PropTypes.number).isRequired,
     hasLoaded: PropTypes.bool.isRequired,
-    getShareLink: PropTypes.func.isRequired,
 };
 
 export default AdvisingSchedule;

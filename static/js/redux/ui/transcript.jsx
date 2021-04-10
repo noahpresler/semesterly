@@ -20,9 +20,10 @@ class Transcript extends React.Component {
     render() {
         const comments = this.props.comments.map(comment => (
             <Comment
-                author={comment.author_name}
-                content={comment.content}
-                timestamp={comment.timestamp}
+              key={comment.timestamp}
+              author={comment.author_name}
+              content={comment.content}
+              timestamp={comment.timestamp}
             />
         ));
         return (

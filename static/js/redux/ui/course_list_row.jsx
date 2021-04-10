@@ -13,7 +13,7 @@ GNU General Public License for more details.
 */
 
 import { getNextAvailableColour } from "../util";
-import MasterSlot from "./master_slot";
+import AdvisingMasterSlot from "./advising_master_slot";
 import CreditTickerContainer from "./containers/credit_ticker_container";
 import Collapsible from "react-collapsible";
 import React from 'react';
@@ -31,13 +31,13 @@ class CourseListRow extends React.Component{
 	render () {
 		//TODO: We want to grab the courses on the student's timetable
 		// Check what is in this variable: console.log(this.props.coursesInTimetable);
-		let plannedCourseList = this.props.mandatoryCourses ?
-			this.props.mandatoryCourses.map((course) => {
+		let plannedCourseList = (this.props.coursesInTimetable && this.props.displayed_semester === this.props.current_semester) ?
+			this.props.coursesInTimetable.map((course) => {
 				const colourIndex = (course.id in this.props.courseToColourIndex) ?
 					this.props.courseToColourIndex[course.id] :
 					getNextAvailableColour(this.props.courseToColourIndex);
 				const professors = course.sections.map(section => section.instructors);
-				return (<MasterSlot
+				return (<AdvisingMasterSlot
 					key={course.id}
 					professors={professors}
 					colourIndex={colourIndex}
@@ -45,20 +45,23 @@ class CourseListRow extends React.Component{
 					onTimetable={this.props.isCourseInRoster(course.id)}
 					course={course}
 					fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
-					removeCourse={() => this.props.removeCourse(course.id)}
-					getShareLink={this.props.getShareLink}
 				/>);
-			}) : null;
+			}) : (<div className="empty-state">
+				<img src="/static/img/emptystates/masterslots.png" alt="No courses added."/>
+				<h3>Looks like you don&#39;t have any courses yet!</h3>
+				<h4>Your selections will appear here along with credits, professors and friends
+					in the class</h4>
+			</div>);
 
-		if (plannedCourseList === null) {
-			plannedCourseList = (
-				<div className="empty-state">
-					<img src="/static/img/emptystates/masterslots.png" alt="No courses added."/>
-					<h4>Looks like you don&#39;t have any courses yet!</h4>
-					<h3>Your selections will appear here along with credits, professors and friends
-						in the class</h3>
-				</div>);
-		}
+		// if (plannedCourseList === null) {
+		// 	plannedCourseList = (
+		// 		<div className="empty-state">
+		// 			<img src="/static/img/emptystates/masterslots.png" alt="No courses added."/>
+		// 			<p>Looks like you don&#39;t have any courses yet!</p>
+		// 			<p>Your selections will appear here along with credits, professors and friends
+		// 				in the class</p>
+		// 		</div>);
+		// }
 
 		const courseList = (<div className="course-list-container">
 			<CreditTickerContainer/>

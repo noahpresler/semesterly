@@ -178,11 +178,13 @@ class Advising extends React.Component {
                 <JHUSignupModalContainer />
                 <div className="all-cols">
                     <div className="main-advising">
+                        <div className="advising-schedule">
                         <AdvisingScheduleContainer
                           parentCallback = {this.callbackFunction.bind(this)}
                           selected_semester = {this.state.selected_semester}
                         />
                         {footer}
+                        </div>
                     </div>
                     <div className="advising-schedule">
                     <CommentForumContainer
