@@ -22,6 +22,9 @@ import UserSettingsModalContainer from './containers/modals/user_settings_modal_
 import SignupModalContainer from './containers/modals/signup_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
 import {getTranscriptCommentsBySemester} from "../constants/endpoints";
+import PeerModalContainer from "./containers/modals/peer_modal_container";
+import SaveCalendarModalContainer from "./containers/modals/save_calendar_modal_container";
+import SISImportDataModalContainer from "./containers/modals/SIS_import_data_modal_container";
 
 
 class Advising extends React.Component {
@@ -112,27 +115,6 @@ class Advising extends React.Component {
 
 
     render() {
-        const SISImportDataModalButton = (
-            <div className="cal-btn-wrapper">
-                <button
-                    onClick={() => this.props.triggerSISImportDataModal()}
-                    className="save-timetable add-button"
-                    data-tip
-                    data-for="mock-btn-tooltip"
-                >
-                    <img src="/static/img/star.png" alt="STAR" style={{ marginTop: '2px' }} />
-                </button>
-                <ReactTooltip
-                    id="mock-btn-tooltip"
-                    class="tooltip"
-                    type="dark"
-                    place="bottom"
-                    effect="solid"
-                >
-                    <span>SIS Import Data Modal</span>
-                </ReactTooltip>
-            </div>
-        );
         const footer = (
             <footer className="footer navbar no-print">
                 <p className="data-last-updated no-print">Data last
@@ -194,13 +176,11 @@ class Advising extends React.Component {
 
         return (
             <div className="page-wrapper">
-                <div className="fc-right">
-                    { SISImportDataModalButton }
-                </div>
                 <TopBarAdvisingContainer />
                 <UserSettingsModalContainer />
                 <UserAcquisitionModalContainer />
                 <SignupModalContainer />
+                <SISImportDataModalContainer />
                 <div className="all-cols">
                     <div className="main-advising">
                         <AdvisingScheduleContainer
@@ -219,7 +199,6 @@ class Advising extends React.Component {
 }
 
 Advising.propTypes = {
-    triggerSISImportDataModal: PropTypes.func.isRequired,
     dataLastUpdated: PropTypes.string.isRequired,
     alertChangeSemester: PropTypes.bool.isRequired,
     alertConflict: PropTypes.bool.isRequired,

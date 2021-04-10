@@ -58,11 +58,19 @@ class SISImportDataModal extends React.Component {
                 modalStyle={modalStyle}
                 onHide={() => {
                     this.props.toggleSISImportDataModal();
-                    history.replaceState({}, 'Semester.ly', '/');
                 }}
             >
                 {modalHeader}
                 {modalBody}
+                <div className="go-to-sis__container">
+                    <button
+                        className="btn abnb-btn secondary" onClick={() => {
+
+                        }}
+                    >
+                    <span>Go to SIS</span>
+                    </button>
+                </div>
             </Modal>
         );
     }

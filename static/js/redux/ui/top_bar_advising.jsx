@@ -15,6 +15,8 @@ GNU General Public License for more details.
 import React from 'react';
 import SocialProfileContainer from './containers/social_profile_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import ReactTooltip from "react-tooltip";
+import PropTypes from "prop-types";
 
 export const expandComments = () => {
     $('.main-advising, .comment-forum').removeClass('full-bar').addClass('less-bar');
@@ -30,6 +32,7 @@ class TopBarAdvising extends React.Component {
         this.comments_collapsed = 'neutral';
         this.toggleComments = this.toggleComments.bind(this);
         this.renderUserForPrint = this.renderUserForPrint.bind(this);
+        this.props.triggerSISImportDataModal()
     }
 
     toggleComments() {
@@ -76,6 +79,27 @@ class TopBarAdvising extends React.Component {
     }
 
     render() {
+        const SISImportDataModalButton = (
+            <div className="cal-btn-wrapper">
+                <button
+                    onClick={() => this.props.triggerSISImportDataModal()}
+                    className="save-timetable add-button"
+                    data-tip
+                    data-for="mock-btn-tooltip"
+                >
+                    <img src="/static/img/star.png" alt="STAR" style={{ marginTop: '2px' }} />
+                </button>
+                <ReactTooltip
+                    id="mock-btn-tooltip"
+                    class="tooltip"
+                    type="dark"
+                    place="bottom"
+                    effect="solid"
+                >
+                    <span>SIS Import Data Modal</span>
+                </ReactTooltip>
+            </div>
+        );
         return (
             <div className="top-bar">
                 <a href="/" className="semesterly-name">
@@ -101,6 +125,9 @@ class TopBarAdvising extends React.Component {
                     </div>
                 </div>
                 <SocialProfileContainer />
+                <div className="fc-right">
+                    { SISImportDataModalButton }
+                </div>
                 <div className="navicon" onClick={this.toggleComments}>
                     <span />
                     <span />
@@ -111,6 +138,7 @@ class TopBarAdvising extends React.Component {
 }
 
 TopBarAdvising.propTypes = {
+    triggerSISImportDataModal: PropTypes.func.isRequired,
     userInfo: SemesterlyPropTypes.userInfo.isRequired,
     currentSemester: SemesterlyPropTypes.semester.isRequired,
 };

@@ -18,7 +18,6 @@ import { DragDropContext } from 'react-dnd';
 import Advising from '../advising';
 import { saveTimetable } from '../../actions/user_actions';
 import { setActiveTimetable } from '../../actions/timetable_actions';
-import { triggerSISImportDataModal } from '../../actions/modal_actions';
 import {
     getActiveTimetableCourses,
     getCurrentSemester
@@ -50,7 +49,6 @@ const mapStateToProps = (state) => {
 const AdvisingContainer = connect(
     mapStateToProps,
     {
-        triggerSISImportDataModal,
         saveTimetable,
         setPgActive: setActiveTimetable,
     },
