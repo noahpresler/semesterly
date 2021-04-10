@@ -59,6 +59,7 @@ class StudentSerializer(serializers.ModelSerializer):
             'social_all',
             'emails_enabled',
             'school',
+            'jhed',
             'integrations',
             'userFirstName',
             'userLastName',

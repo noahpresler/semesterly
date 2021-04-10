@@ -14,21 +14,14 @@ GNU General Public License for more details.
 
 import { connect } from 'react-redux';
 import CommentInput from '../comment_input';
-import { openSignUpModal } from '../../actions/modal_actions';
-import { changeTimetableName } from '../../actions/user_actions';
 
-
-const mapStateToProps = (state) => {
-	return {
-		isLoggedIn: state.userInfo.data.isLoggedIn,
-	};
-};
+const mapStateToProps = (state) => ({
+	userInfo: state.userInfo.data,
+});
 
 const CommentInputContainer = connect(
 	mapStateToProps,
 	{
-		openSignUpModal,
-		changeTimetableName,
 	},
 )(CommentInput);
 

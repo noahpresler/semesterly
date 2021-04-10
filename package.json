@@ -126,7 +126,7 @@
   ],
   "devDependencies": {
     "jest": "^20.0.1",
-    "lint-staged": "^3.4.0",
+    "lint-staged": "^3.6.1",
     "nock": "^9.0.13",
     "node-sass": "^4.5.2",
     "precommit-hook": "^3.0.0",
