@@ -13,7 +13,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import get_object_or_404
-from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
+from helpers.mixins import ValidateSubdomainMixin, RedirectToJHUSignupMixin
 from student.models import Student
 from timetable.models import Semester
 from forum.models import Transcript, Comment
@@ -23,7 +23,7 @@ from rest_framework.views import APIView
 from serializers import TranscriptSerializer, CommentSerializer
 
 
-class ForumView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
+class ForumView(ValidateSubdomainMixin, RedirectToJHUSignupMixin, APIView):
     """ Handles the accessing of all user forum transcripts. """
 
     def get(self, request):
@@ -41,7 +41,7 @@ class ForumView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             status=status.HTTP_200_OK)
 
 
-class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
+class ForumTranscriptView(ValidateSubdomainMixin, RedirectToJHUSignupMixin, APIView):
     """ Handles the accessing of individual user forum transcripts. """
 
     def get(self, request, sem_name, year):

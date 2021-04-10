@@ -38,7 +38,7 @@ class JHUSignupModal extends React.Component {
   }
 
   hide() {
-    history.replaceState({}, 'Semester.ly', '/');
+    history.replaceState({}, 'Semester.ly', '/advising');
     this.props.toggleJHUSignupModal();
   }
 
@@ -103,14 +103,20 @@ class JHUSignupModal extends React.Component {
               will not be shared with
               any other user without your permission.
             </div>
-            <a href="/login/azuread-tenant-oauth2?next=/advising">
-              <div className="signup-button">
-                Link JHED
-              </div>
-            </a>
+            <div
+              className="signup-button"
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = '/login/azuread-tenant-oauth2/?next=/advising';
+                document.body.appendChild(link);
+                link.click();
+              }}
+            >
+              Link JHED
+            </div>
           </div>
-        </div>
-      </Modal>
+        </div >
+      </Modal >
     );
   }
 }
