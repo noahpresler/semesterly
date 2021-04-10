@@ -10,10 +10,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 from __future__ import unicode_literals
-import semesterly.views # currently unused. TODO: add get_feature_flow()
+import semesterly.views 
 
 from django.shortcuts import get_object_or_404
-from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
+from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin, FeatureFlowView, RedirectToJHUSignupMixin
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -22,18 +22,15 @@ from timetable.models import CourseIntegration, Course, Section, Semester
 from django.shortcuts import get_object_or_404, render, redirect
 from student.utils import get_student
 from django.db import transaction
-
 from rest_framework import status, exceptions
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.authentication import get_authorization_header, BaseAuthentication
 from semesterly.settings import get_secret 
+from django.contrib.auth.mixins import LoginRequiredMixin
 import jwt
 import json
-# from serializers import TODO: Add serializers
 
-# Will be updated to follow valid advising view
-
-class AdvisingView(ValidateSubdomainMixin, APIView):
+class StudentSISView(ValidateSubdomainMixin, APIView):
     """ Handles advising interactions. """
     def post(self, request):
         """Creates a new comment.
@@ -41,7 +38,6 @@ class AdvisingView(ValidateSubdomainMixin, APIView):
             ex. -> content: The comment's message.
 
         """
-        # need to allow JSFIddle in this app
         try:
             print(request.body)
             payload = jwt.decode(request.body, get_secret('JWT_AUTH_SECRET'), algorithms=['HS256'])
@@ -55,17 +51,21 @@ class AdvisingView(ValidateSubdomainMixin, APIView):
             raise exceptions.AuthenticationFailed(msg)
         print(payload)
         return Response(status=status.HTTP_201_CREATED)
-    # def get(self, request):
-    #     """
-    #     Returns all 
-    #     """
-    #     student = Student.objects.get(user=request.user)
-    #     return Response(
-    #         {'invited_transcripts': TranscriptSerializer(
-    #             student.invited_transcripts, many=True).data,
-    #          'owned_transcripts': TranscriptSerializer(
-    #              student.owned_transcripts, many=True).data},
-    #         status=status.HTTP_200_OK)
 
-    # return Response(status=status.HTTP_204_NO_CONTENT)
+class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
+    is_advising = True
 
+    def get(self, request, *args, **kwargs):
+        student = Student.objects.get(user=request.user)
+        if not student.jhed:
+            return HttpResponseRedirect('/advising/jhu_signup/')
+        return FeatureFlowView.get(self, request, *args, **kwargs)
+
+    def get_feature_flow(self, request, *args, **kwargs):
+        """
+        Return data needed for the feature flow for this HomeView.
+        A name value is automatically added in .get() using the feature_name class variable.
+        A semester value can also be provided, which will change the initial semester state of
+        the home page.
+        """
+        return {}

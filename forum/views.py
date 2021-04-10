@@ -13,7 +13,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import get_object_or_404
-from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
+from helpers.mixins import ValidateSubdomainMixin, RedirectToJHUSignupMixin
 from student.models import Student
 from timetable.models import Semester
 from forum.models import Transcript, Comment
@@ -23,7 +23,7 @@ from rest_framework.views import APIView
 from serializers import TranscriptSerializer, CommentSerializer
 
 
-class ForumView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
+class ForumView(ValidateSubdomainMixin, RedirectToJHUSignupMixin, APIView):
     """ Handles the accessing of all user forum transcripts. """
 
     def get(self, request):
@@ -41,22 +41,28 @@ class ForumView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             status=status.HTTP_200_OK)
 
 
-class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
+class ForumTranscriptView(ValidateSubdomainMixin, RedirectToJHUSignupMixin, APIView):
     """ Handles the accessing of individual user forum transcripts. """
 
     def get(self, request, sem_name, year):
         """
-        Returns the forum transcript associated with a particular semester 
-        for the user making the request:
+        Returns the forum transcript associated with a particular semester or
+        creates a new one if it doesn't exist for the user making the request:
             transcript: The retrieved transcript
         """
 
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
-        transcript = get_object_or_404(
-            Transcript, owner=student, semester=semester)
-        return Response({'transcript': TranscriptSerializer(transcript).data},
-                        status=status.HTTP_200_OK)
+        transcript, created = Transcript.objects.get_or_create(
+            owner=student, semester=semester)
+        if created:
+            return Response(
+                {'transcript': TranscriptSerializer(transcript).data},
+                status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                {'transcript': TranscriptSerializer(transcript).data},
+                status=status.HTTP_200_OK)
 
     def post(self, request, sem_name, year):
         """Creates a new comment.
@@ -84,25 +90,6 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView
         comment.save()
 
         return Response(status=status.HTTP_201_CREATED)
-
-    def put(self, request, sem_name, year):
-        """Creates a forum transcript associated with a certain semester.
-        Returns:
-            transcript: The new transcript.
-        """
-
-        student = Student.objects.get(user=request.user)
-        semester = Semester.objects.get(name=sem_name, year=year)
-
-        transcript = Transcript.objects.filter(
-            owner=student, semester=semester)
-        if not transcript.exists():
-            transcript = Transcript.objects.create(
-                owner=student, semester=semester)
-            transcript.save()
-
-        return Response({'transcript': TranscriptSerializer(transcript).data},
-                        status=status.HTTP_201_CREATED)
 
     def patch(self, request, sem_name, year):
         """Adds or removes one advisor from a forum transcript.

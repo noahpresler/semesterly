@@ -15,12 +15,9 @@ GNU General Public License for more details.
 import { connect } from 'react-redux';
 import CommentForum from '../comment_forum';
 
-
-
 const mapStateToProps = state => ({
     userInfo: state.userInfo.data,
 });
-
 
 const CommentForumContainer = connect(
     mapStateToProps,

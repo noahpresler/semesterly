@@ -97,6 +97,9 @@ const handleFlows = featureFlow => (dispatch) => {
     case 'SIGNUP':
       dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
       break;
+    case 'JHU_SIGNUP':
+      dispatch({ type: ActionTypes.TRIGGER_JHU_SIGNUP_MODAL });
+      break;
     case 'USER_ACQ':
       dispatch({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
       break;
@@ -160,9 +163,6 @@ const handleFlows = featureFlow => (dispatch) => {
     case 'SEPARATE_ACCOUNTS':
       dispatch({ type: ActionTypes.TRIGGER_SEPARATE_ACCOUNTS_MODAL });
       break;
-    case 'ADVISING':
-      advising = true;
-      break;
     default:
       // unexpected feature name
       break;
@@ -171,6 +171,7 @@ const handleFlows = featureFlow => (dispatch) => {
 
 const setup = () => (dispatch) => {
   initData = JSON.parse(initData);
+  advising = initData['isAdvising']
 
   dispatch({ type: ActionTypes.INIT_STATE, data: initData });
 
