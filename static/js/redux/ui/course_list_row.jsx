@@ -13,7 +13,7 @@ GNU General Public License for more details.
 */
 
 import { getNextAvailableColour } from "../util";
-import AdvisingMasterSlot from "./advising_master_slot";
+import MasterSlot from "./master_slot";
 import CreditTickerContainer from "./containers/credit_ticker_container";
 import Collapsible from "react-collapsible";
 import React from 'react';
@@ -37,7 +37,7 @@ class CourseListRow extends React.Component{
 					this.props.courseToColourIndex[course.id] :
 					getNextAvailableColour(this.props.courseToColourIndex);
 				const professors = course.sections.map(section => section.instructors);
-				return (<AdvisingMasterSlot
+				return (<MasterSlot
 					key={course.id}
 					professors={professors}
 					colourIndex={colourIndex}
@@ -45,6 +45,7 @@ class CourseListRow extends React.Component{
 					onTimetable={this.props.isCourseInRoster(course.id)}
 					course={course}
 					fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+					hideCloseButton={true}
 				/>);
 			}) : (<div className="empty-state">
 				<img src="/static/img/emptystates/masterslots.png" alt="No courses added."/>
