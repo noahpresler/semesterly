@@ -63,7 +63,7 @@ class Student(models.Model):
     primary_major = models.CharField(max_length=255, null=True, default='')
     other_majors = ArrayField(models.CharField(max_length=255, null=True, default=''), default=list)
     minors = ArrayField(models.CharField(max_length=255, null=True, default=''), default=list)
-    courses = models.ForeignKey(timetable_models.Course, null=True)
+    sections = models.ForeignKey(timetable_models.Course, null=True)
 
     def __str__(self):
         return "{0}".format(self.jhed)
