@@ -51,6 +51,7 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
     """
     feature_name = None
     allow_unauthenticated = True
+    is_advising = False
 
     def get_feature_flow(self, request, *args, **kwargs):
         """
@@ -112,7 +113,8 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             'latestAgreement': AgreementSerializer(Agreement.objects.latest()).data,
             'registrar': SCHOOLS_MAP[self.school].registrar,
 
-            'featureFlow': dict(feature_flow, name=self.feature_name)
+            'featureFlow': dict(feature_flow, name=self.feature_name),
+            'isAdvising': self.is_advising
         }
 
         return render(request, 'timetable.html', {'init_data': json.dumps(init_data)})
@@ -129,4 +131,9 @@ class CsrfExemptMixin:
 
 class RedirectToSignupMixin(LoginRequiredMixin):
     login_url = '/signup/'
+    redirect_field_name = None
+
+
+class RedirectToJHUSignupMixin(LoginRequiredMixin):
+    login_url = '/advising/jhu_signup/'
     redirect_field_name = None

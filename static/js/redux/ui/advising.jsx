@@ -19,6 +19,7 @@ import CommentForumContainer from './containers/comment_forum_container';
 import AdvisingScheduleContainer from './containers/advising_schedule_container';
 import UserSettingsModalContainer from './containers/modals/user_settings_modal_container';
 import SignupModalContainer from './containers/modals/signup_modal_container';
+import JHUSignupModalContainer from './containers/modals/jhu_signup_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
 import {getTranscriptCommentsBySemester} from "../constants/endpoints";
 
@@ -176,6 +177,7 @@ class Advising extends React.Component {
                 <UserSettingsModalContainer />
                 <UserAcquisitionModalContainer />
                 <SignupModalContainer />
+                <JHUSignupModalContainer />
                 <div className="all-cols">
                     <div className="main-advising">
                         <AdvisingScheduleContainer
