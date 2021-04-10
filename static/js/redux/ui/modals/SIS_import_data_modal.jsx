@@ -14,19 +14,64 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
-import Clipboard from 'clipboard';
 import Modal from 'boron/WaveModal';
-import { AreaBubble, WritingIntensive } from '../search_result';
-import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
-import { ShareLink } from '../master_slot';
-import { normalizedCourse } from '../../constants/semesterlyPropTypes';
 
-class CourseModal extends React.Component {
+class SISImportDataModal extends React.Component {
+    componentDidMount() {
+        if (this.props.isVisible) {
+            this.modal.show();
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.props.isVisible) {
+            this.modal.show();
+        }
+    }
+
+    render () {
+        const modalHeader =
+            (<div className="modal-content">
+                <div className="modal-header">
+                    <h1>Import Data from SIS</h1>
+                    <div className="modal-close" onClick={() => this.modal.hide()}>
+                        <i className="fa fa-times" />
+                    </div>
+                </div>
+            </div>);
+        const modalBody =
+            (<div className="modal-body">
+                <h3>In order to share and connect to your
+                    official courses from SIS to Advisors,
+                    you must agree to import data from SIS
+                    (or something like this). Click the
+                    button below to be taken to the Consent
+                    Page on SIS.</h3>
+            </div>);
+        const modalStyle = {
+            width: '100%',
+        };
+        return (
+            <Modal
+                ref={(c) => { this.modal = c; }}
+                className="SIS-import-data-modal abnb-modal max-modal"
+                modalStyle={modalStyle}
+                onHide={() => {
+                    this.props.toggleSISImportDataModal();
+                    history.replaceState({}, 'Semester.ly', '/');
+                }}
+            >
+                {modalHeader}
+                {modalBody}
+            </Modal>
+        );
+    }
 }
 
-CourseModal.propTypes = {
+SISImportDataModal.propTypes = {
+    toggleSISImportDataModal: PropTypes.func.isRequired,
+    isVisible: PropTypes.bool.isRequired,
 };
 
-export default CourseModal;
+export default SISImportDataModal;
 

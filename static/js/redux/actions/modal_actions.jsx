@@ -155,3 +155,7 @@ export const triggerSeparateAccountsModal = () => ({
 export const toggleSeparateAccountsModal = () => ({
   type: ActionTypes.TOGGLE_SEPARATE_ACCOUNTS_MODAL,
 });
+
+// MOCK MODAL
+export const triggerSISImportDataModal = () => ({ type: ActionTypes.TRIGGER_SIS_IMPORT_DATA_MODAL });
+export const toggleSISImportDataModal = () => ({ type: ActionTypes.TOGGLE_SIS_IMPORT_DATA_MODAL });

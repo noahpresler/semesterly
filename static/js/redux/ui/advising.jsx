@@ -14,6 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 import TopBarAdvisingContainer from './containers/top_bar_advising_container';
 import CommentForumContainer from './containers/comment_forum_container';
 import AdvisingScheduleContainer from './containers/advising_schedule_container';
@@ -111,6 +112,27 @@ class Advising extends React.Component {
 
 
     render() {
+        const SISImportDataModalButton = (
+            <div className="cal-btn-wrapper">
+                <button
+                    onClick={() => this.props.triggerSISImportDataModal()}
+                    className="save-timetable add-button"
+                    data-tip
+                    data-for="mock-btn-tooltip"
+                >
+                    <img src="/static/img/star.png" alt="STAR" style={{ marginTop: '2px' }} />
+                </button>
+                <ReactTooltip
+                    id="mock-btn-tooltip"
+                    class="tooltip"
+                    type="dark"
+                    place="bottom"
+                    effect="solid"
+                >
+                    <span>SIS Import Data Modal</span>
+                </ReactTooltip>
+            </div>
+        );
         const footer = (
             <footer className="footer navbar no-print">
                 <p className="data-last-updated no-print">Data last
@@ -172,6 +194,9 @@ class Advising extends React.Component {
 
         return (
             <div className="page-wrapper">
+                <div className="fc-right">
+                    { SISImportDataModalButton }
+                </div>
                 <TopBarAdvisingContainer />
                 <UserSettingsModalContainer />
                 <UserAcquisitionModalContainer />
@@ -194,6 +219,7 @@ class Advising extends React.Component {
 }
 
 Advising.propTypes = {
+    triggerSISImportDataModal: PropTypes.func.isRequired,
     dataLastUpdated: PropTypes.string.isRequired,
     alertChangeSemester: PropTypes.bool.isRequired,
     alertConflict: PropTypes.bool.isRequired,
