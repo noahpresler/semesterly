@@ -127,8 +127,10 @@ class MasterSlot extends React.Component {
       }
     }
 
-    const showShareLink = (this.props.getShareLink !== null) ? (<i className="fa fa-share-alt"
-          onClick={event => this.stopPropagation(this.showShareLink, event)}
+    const showShareLink = (this.props.getShareLink !== null) ?
+      (<i
+        className="fa fa-share-alt"
+        onClick={event => this.stopPropagation(this.showShareLink, event)}
       />) : null;
 
 
@@ -181,7 +183,7 @@ MasterSlot.defaultProps = {
   slots: null,
   removeCourse: null,
   classmates: { current: [], past: [] },
-  getShareLink: null
+  getShareLink: null,
 };
 
 MasterSlot.propTypes = {
