@@ -21,7 +21,7 @@ import json
 class TokenAuthentication(BaseAuthentication):
     def authenticate_credentials(self):
         try:
-            payload = jwt.decode(get_secret("JWT_AUTH_JHED_TOKEN"), get_secret('JWT_AUTH_SECRET'), algorithms=[‘HS256’])
+            payload = jwt.decode(get_secret('STUDENT_SIS_AUTH_SECRET'), get_secret('STUDENT_SIS_AUTH_SECRET'), algorithms=[‘HS256’])
             if payload == "null":
                 msg = 'Null token not allowed'
                 raise exceptions.AuthenticationFailed(msg)

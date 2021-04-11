@@ -60,10 +60,10 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             
         """
         try:
-            print(request.body) # REMOVE THIS LATER!
+            print(request.body) # REMOVE THIS LATER! ONLY FOR TESTING
             payload = jwt.decode(request.body, get_secret(
-                'JWT_AUTH_SECRET'), algorithms=['HS256'])
-            print(payload) # REMOVE THIS LATER!
+                'STUDENT_SIS_AUTH_SECRET'), algorithms=['HS256'])
+            print(payload) # REMOVE THIS LATER! ONLY FOR TESTING
             if payload == "null":
                 msg = 'Null token not allowed'
                 raise exceptions.AuthenticationFailed(msg)
