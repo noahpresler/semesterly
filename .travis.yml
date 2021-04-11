@@ -12,6 +12,7 @@ branches:
   only:
   - master
   - staging
+  - cs310-spring21
 cache:
   apt: true
   directories:
