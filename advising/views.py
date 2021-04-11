@@ -55,14 +55,15 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
     """ Handles advising interactions. """
 
     def post(self, request):
-        """Creates a new comment.
+        """Creates a new 
         Required data:
-            ex. -> content: The comment's message.
-
+            
         """
         try:
+            print(request.body) # REMOVE THIS LATER!
             payload = jwt.decode(request.body, get_secret(
                 'JWT_AUTH_SECRET'), algorithms=['HS256'])
+            print(payload) # REMOVE THIS LATER!
             if payload == "null":
                 msg = 'Null token not allowed'
                 raise exceptions.AuthenticationFailed(msg)
@@ -71,7 +72,6 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         except UnicodeError:
             msg = 'Invalid token header. Token string should not contain invalid characters.'
             raise exceptions.AuthenticationFailed(msg)
-
         student = get_object_or_404(Student, jhed=payload['StudentInfo']['JhedId'])
         self.add_advisors(payload, student)
         self.add_majors(payload, student)
