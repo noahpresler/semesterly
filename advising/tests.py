@@ -11,12 +11,12 @@
 # GNU General Public License for more details.
 
 # from django.test import TestCase
-from rest_framework import status, exceptions
-from django.http import HttpResponse
-from rest_framework.authentication import get_authorization_header, BaseAuthentication
-from users.models import User
-import jwt
-import json
+# from rest_framework import status, exceptions
+# from django.http import HttpResponse
+# from rest_framework.authentication import get_authorization_header, BaseAuthentication
+# from users.models import User
+# import jwt
+# import json
 
 # TODO: Write tests for advising app.
 # class TokenAuthentication(BaseAuthentication):
