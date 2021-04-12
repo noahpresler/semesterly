@@ -108,7 +108,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: semesterly-secrets
-                  key: STUDENT_SIS_AUTH_SECRET                 
+                  key: STUDENT_SIS_AUTH_SECRET    
         resources:
           requests:
             cpu: 250m
