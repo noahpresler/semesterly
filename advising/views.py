@@ -31,7 +31,7 @@ from advising.models import Advisor
 import jwt
 import json
 
-
+# TODO: Add comments for advising backend
 class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
     is_advising = True
 
