@@ -28,7 +28,7 @@ install:
 - npm -g install chromedriver
 - npm -g install jest@20
 - npm install
-- pip install --upgrade pip
+- pip install --upgrade pip==20.3.4
 - pip install -r requirements.txt
 addons:
 #  chrome: stable
