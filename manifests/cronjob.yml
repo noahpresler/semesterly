@@ -5,7 +5,7 @@ metadata:
   namespace: semesterly-dev
 spec:
   schedule: "40 19 * * *"
-  successfulJobsHistoryLimit: 0
+  successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
@@ -52,4 +52,9 @@ spec:
                     secretKeyRef:
                       name: semesterly-secrets
                       key: JHU_API_KEY
+                - name: STUDENT_SIS_AUTH_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: semesterly-secrets
+                      key: STUDENT_SIS_AUTH_SECRET
           restartPolicy: OnFailure
