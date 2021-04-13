@@ -17,21 +17,19 @@ from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin, Featur
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from student.models import Student
 from timetable.models import CourseIntegration, Course, Section, Semester
 from django.shortcuts import get_object_or_404, render, redirect
 from student.utils import get_student
-from django.db import transaction
 from rest_framework import status, exceptions
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.authentication import get_authorization_header, BaseAuthentication
 from semesterly.settings import get_secret
 from django.contrib.auth.mixins import LoginRequiredMixin
+from student.models import Student
 from advising.models import Advisor
 import jwt
 import json
 
-# TODO: Add comments for advising backend
 class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
     is_advising = True
 
@@ -55,9 +53,10 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
     """ Handles advising interactions. """
 
     def post(self, request):
-        """Creates a new 
+        """Pulls student data from SIS, including advisors, SIS course info,
+                                    student's major(s), and student's minor(s)
         Required data:
-            
+            STUDENT_SIS_AUTH_SECRET: validate valid user can access SIS data
         """
         try:
             # print(request.body) # REMOVE THIS LATER! ONLY FOR TESTING
@@ -81,6 +80,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         return Response(status=status.HTTP_201_CREATED)
 
     def add_advisors(self, data, student):
+        student.advisors.clear()
         for advisor_data in data['Advisors']:
             advisor, created = Advisor.objects.get_or_create(
                 jhed=advisor_data['JhedId'], email_address=advisor_data['EmailAddress'])
@@ -90,14 +90,17 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
 
     def add_majors(self, data, student):
         student.primary_major = data['StudentInfo']['PrimaryMajor']
+        del student.other_majors[:]
         for major_data in data['NonPrimaryMajors']:
             student.other_majors.append(major_data['Major'])
 
     def add_minors(self, data, student):
+        del student.minors[:]
         for minor_data in data['Minors']:
             student.minors.append(minor_data['Minor'])
 
-    def add_courses(self, data, student):
+    def add_courses(self, data, student): # TODO: test with ingested data
+        student.sis_registered_courses.all().delete()
         for course_data in data['Courses']:
             course = get_object_or_404(
                 Course, code=course_data['OfferingName'])
