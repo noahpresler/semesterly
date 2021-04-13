@@ -16,13 +16,13 @@ import { connect } from 'react-redux';
 import CommentForum from '../comment_forum';
 
 const mapStateToProps = state => ({
-    userInfo: state.userInfo.data,
+  userInfo: state.userInfo.data,
 });
 
 const CommentForumContainer = connect(
-    mapStateToProps,
-    {
-    },
+  mapStateToProps,
+  {
+  },
 )(CommentForum);
 
 export default CommentForumContainer;
