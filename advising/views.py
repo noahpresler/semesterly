@@ -60,10 +60,10 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             
         """
         try:
-            print(request.body) # REMOVE THIS LATER! ONLY FOR TESTING
+            # print(request.body) # REMOVE THIS LATER! ONLY FOR TESTING
             payload = jwt.decode(request.body, get_secret(
                 'STUDENT_SIS_AUTH_SECRET'), algorithms=['HS256'])
-            print(payload) # REMOVE THIS LATER! ONLY FOR TESTING
+            # print(payload) # REMOVE THIS LATER! ONLY FOR TESTING
             if payload == "null":
                 msg = 'Null token not allowed'
                 raise exceptions.AuthenticationFailed(msg)
@@ -76,26 +76,26 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         self.add_advisors(payload, student)
         self.add_majors(payload, student)
         self.add_minors(payload, student)
-        self.add_courses(payload, student)
+        # self.add_courses(payload, student)
         student.save()
         return Response(status=status.HTTP_201_CREATED)
 
     def add_advisors(self, data, student):
-        advisors = data['Advisors']
-        for advisor_data in advisors:
-            advisor = Advisor.objects.get_or_create(
-                jhed=advisor_data['JhedId'], email_address=['EmailAddress'])
-            student.advisors.add(advisor)
-            advisor.save()
+        for advisor_data in data['Advisors']:
+            advisor, created = Advisor.objects.get_or_create(
+                jhed=advisor_data['JhedId'], email_address=advisor_data['EmailAddress'])
+            if not created:
+                student.advisors.add(advisor)
+                advisor.save()
 
     def add_majors(self, data, student):
         student.primary_major = data['StudentInfo']['PrimaryMajor']
-        student.other_majors.add(*[major_data['Major']
-                                   for major_data in data['NonPrimaryMajors']])
+        for major_data in data['NonPrimaryMajors']:
+            student.other_majors.append(major_data['Major'])
 
     def add_minors(self, data, student):
-        student.minors.add(*[minor_data['Minor']
-                             for minor_data in data['Minors']])
+        for minor_data in data['Minors']:
+            student.minors.append(minor_data['Minor'])
 
     def add_courses(self, data, student):
         for course_data in data['Courses']:
