@@ -126,6 +126,14 @@ class MasterSlot extends React.Component {
         }
       }
     }
+
+    const showShareLink = (this.props.getShareLink !== null) ?
+      (<i
+        className="fa fa-share-alt"
+        onClick={event => this.stopPropagation(this.showShareLink, event)}
+      />) : null;
+
+
     return (<div
       className={masterSlotClass}
       onMouseEnter={this.onMasterSlotHover}
@@ -147,11 +155,8 @@ class MasterSlot extends React.Component {
         <h3>{ creditsDisplay }</h3>
       </div>
       <div className="master-slot-actions">
-        <i
-          className="fa fa-share-alt"
-          onClick={event => this.stopPropagation(this.showShareLink, event)}
-        />
-        {shareLink}
+        { showShareLink }
+        { (this.props.getShareLink !== null) ? shareLink : null}
         {
           !this.props.hideCloseButton ?
             <i
@@ -178,6 +183,7 @@ MasterSlot.defaultProps = {
   slots: null,
   removeCourse: null,
   classmates: { current: [], past: [] },
+  getShareLink: null,
 };
 
 MasterSlot.propTypes = {
@@ -200,7 +206,7 @@ MasterSlot.propTypes = {
   onTimetable: PropTypes.bool.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   removeCourse: PropTypes.func,
-  getShareLink: PropTypes.func.isRequired,
+  getShareLink: PropTypes.func,
 };
 
 export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (
