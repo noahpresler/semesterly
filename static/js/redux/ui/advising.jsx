@@ -21,7 +21,7 @@ import UserSettingsModalContainer from './containers/modals/user_settings_modal_
 import SignupModalContainer from './containers/modals/signup_modal_container';
 import JHUSignupModalContainer from './containers/modals/jhu_signup_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
-import {getTranscriptCommentsBySemester} from '../constants/endpoints';
+import { getTranscriptCommentsBySemester } from '../constants/endpoints';
 
 
 class Advising extends React.Component {
@@ -31,53 +31,35 @@ class Advising extends React.Component {
     this.state = {
       orientation: !mql.matches ? 'landscape' : 'portrait',
       selected_semester: null,
-      transcript: null
+      transcript: null,
     };
     this.updateOrientation = this.updateOrientation.bind(this);
   }
 
-  fetchTranscript(new_selected_semester) {
-
-    if (new_selected_semester !== null) {
-      let semester_name = new_selected_semester.toString().split(' ')[0];
-      let semester_year = new_selected_semester.toString().split(' ')[1];
-
-      fetch(getTranscriptCommentsBySemester(semester_name, semester_year))
-        .then(response => response.json())
-        .then(data => {
-          this.setState({transcript: data.transcript});
-        });
-      this.setState({selected_semester: new_selected_semester});
-    } else {
-      this.setState({selected_semester: null});
-      this.setState({transcript: null});
-    }
-  }
-
   componentWillMount() {
-    $(document.body).on('keydown', (e) => {
-      if (parseInt(e.keyCode, 10) === 39) {
-        if (this.props.PgActive + 1 < this.props.PgCount) {
-          this.props.setPgActive(this.props.PgActive + 1);
-        }
-      } else if (parseInt(e.keyCode, 10) === 37) {
-        if (this.props.PgActive > 0) {
-          this.props.setPgActive(this.props.PgActive - 1);
-        }
-      }
-    });
-    $(document.body).bind('keydown', (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        switch (String.fromCharCode(e.which).toLowerCase()) {
-          case 's':
-            e.preventDefault();
-            this.props.saveTimetable();
-            break;
-          default:
-            break;
-        }
-      }
-    });
+    // $(document.body).on('keydown', (e) => {
+    //   if (parseInt(e.keyCode, 10) === 39) {
+    //     if (this.props.PgActive + 1 < this.props.PgCount) {
+    //       this.props.setPgActive(this.props.PgActive + 1);
+    //     }
+    //   } else if (parseInt(e.keyCode, 10) === 37) {
+    //     if (this.props.PgActive > 0) {
+    //       this.props.setPgActive(this.props.PgActive - 1);
+    //     }
+    //   }
+    // });
+    // $(document.body).bind('keydown', (e) => {
+    //   if (e.ctrlKey || e.metaKey) {
+    //     switch (String.fromCharCode(e.which).toLowerCase()) {
+    //       case 's':
+    //         e.preventDefault();
+    //         this.props.saveTimetable();
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //   }
+    // });
     window.addEventListener('orientationchange', () => {
       this.updateOrientation();
     });
@@ -89,6 +71,23 @@ class Advising extends React.Component {
   }
 
   componentDidMount() {
+  }
+
+  fetchTranscript(newSelectedSemester) {
+    if (newSelectedSemester !== null) {
+      const semesterName = newSelectedSemester.toString().split(' ')[0];
+      const semesterYear = newSelectedSemester.toString().split(' ')[1];
+
+      fetch(getTranscriptCommentsBySemester(semesterName, semesterYear))
+        .then(response => response.json())
+        .then((data) => {
+          this.setState({ transcript: data.transcript });
+        });
+      this.setState({ selected_semester: newSelectedSemester });
+    } else {
+      this.setState({ selected_semester: null });
+      this.setState({ transcript: null });
+    }
   }
 
   updateOrientation() {
@@ -167,7 +166,7 @@ class Advising extends React.Component {
           </li>
         </ul>
       </footer>
-    )
+    );
 
     return (
       <div className="page-wrapper">
@@ -180,16 +179,16 @@ class Advising extends React.Component {
           <div className="main-advising">
             <div className="advising-schedule">
               <AdvisingScheduleContainer
-                parentCallback = {this.callbackFunction.bind(this)}
-                selected_semester = {this.state.selected_semester}
+                parentCallback={this.callbackFunction.bind(this)}
+                selected_semester={this.state.selected_semester}
               />
               {footer}
             </div>
           </div>
           <div className="advising-schedule">
             <CommentForumContainer
-              selected_semester = {this.state.selected_semester}
-              transcript = {this.state.transcript}
+              selected_semester={this.state.selected_semester}
+              transcript={this.state.transcript}
             />
           </div>
         </div>
@@ -199,18 +198,11 @@ class Advising extends React.Component {
 
 Advising.propTypes = {
   dataLastUpdated: PropTypes.string.isRequired,
-  alertChangeSemester: PropTypes.bool.isRequired,
-  alertConflict: PropTypes.bool.isRequired,
-  alertEnableNotifications: PropTypes.bool.isRequired,
-  alertFacebookFriends: PropTypes.bool.isRequired,
-  alertNewTimetable: PropTypes.bool.isRequired,
-  alertTimetableExists: PropTypes.bool.isRequired,
-  saveTimetable: PropTypes.func.isRequired,
-  setPgActive: PropTypes.func.isRequired,
-  semester: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    year: PropTypes.string.isRequired,
-  }).isRequired,
+  // alertChangeSemester: PropTypes.bool.isRequired,
+  // semester: PropTypes.shape({
+  //   name: PropTypes.string.isRequired,
+  //   year: PropTypes.string.isRequired,
+  // }).isRequired,
 };
 
 export default Advising;

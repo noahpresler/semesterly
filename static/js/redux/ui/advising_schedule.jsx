@@ -69,7 +69,7 @@ AdvisingSchedule.propTypes = {
     id: PropTypes.string,
   }).isRequired,
   courseToClassmates: PropTypes.shape({ '*': SemesterlyPropTypes.classmates }).isRequired,
-  // parentCallback: PropTypes.func.isRequired,
+  parentCallback: PropTypes.func.isRequired,
   isCourseInRoster: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   semester: PropTypes.shape({
