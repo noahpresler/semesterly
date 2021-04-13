@@ -106,4 +106,4 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             section = get_object_or_404(
                 Section, course=course, semester=semester,
                 meeting_section=course_data['SectionNumber'])
-            student.sections.add(section)
+            student.sis_registered_courses.add(section)
