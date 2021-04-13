@@ -41,12 +41,8 @@ class SISImportDataModal extends React.Component {
             </div>);
         const modalBody =
             (<div className="modal-body">
-                <h3>In order to share and connect to your
-                    official courses from SIS to Advisors,
-                    you must agree to import data from SIS
-                    (or something like this). Click the
-                    button below to be taken to the Consent
-                    Page on SIS.</h3>
+                <h3>In order to connect with your advisors through Semester.ly,
+                    you must agree to Semester.ly importing your data from SIS.</h3>
             </div>);
         const modalStyle = {
             width: '100%',
@@ -68,7 +64,7 @@ class SISImportDataModal extends React.Component {
 
                         }}
                     >
-                    <span>Go to SIS</span>
+                    <span>Import from SIS</span>
                     </button>
                 </div>
             </Modal>

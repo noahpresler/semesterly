@@ -79,6 +79,7 @@ class TopBarAdvising extends React.Component {
     }
 
     render() {
+
         const SISImportDataModalButton = (
             <div className="cal-btn-wrapper">
                 <button
@@ -87,7 +88,11 @@ class TopBarAdvising extends React.Component {
                     data-tip
                     data-for="mock-btn-tooltip"
                 >
-                    <img src="/static/img/star.png" alt="STAR" style={{ marginTop: '2px' }} />
+                    <div
+                        className="import-data no-print"
+                    >
+                        <p>Import&nbsp;Data</p>
+                    </div>
                 </button>
                 <ReactTooltip
                     id="mock-btn-tooltip"
@@ -125,7 +130,7 @@ class TopBarAdvising extends React.Component {
                     </div>
                 </div>
                 <SocialProfileContainer />
-                <div className="fc-right">
+                <div className="import-data-button">
                     { SISImportDataModalButton }
                 </div>
                 <div className="navicon" onClick={this.toggleComments}>
