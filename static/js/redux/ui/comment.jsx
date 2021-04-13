@@ -12,28 +12,28 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
 
 class Comment extends React.Component {
 
-	constructor(props) {
-		super(props);
-	}
-
-	render() {
-		var timestamp = new Date(this.props.timestamp);
-		return (
-			<span className="comment-row">
+  render() {
+    const timestamp = new Date(this.props.timestamp);
+    return (
+      <span className="comment-row">
 				<div className="comment-bubble">
 					<div className="author">{this.props.author}</div>
 					<div>{this.props.content}</div>
 				</div>
 				<div className="comment-timestamp">{timestamp.toDateString()}, {timestamp.toLocaleTimeString()}</div>
-			</span>
-		);
-	}
-
+      </span>
+    );
+  }
 }
+
+Comment.propTypes = {
+  timestamp: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+};
 
 export default Comment;

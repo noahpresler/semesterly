@@ -20,7 +20,7 @@ import { saveTimetable } from '../../actions/user_actions';
 import { setActiveTimetable } from '../../actions/timetable_actions';
 import {
   getActiveTimetableCourses,
-  getCurrentSemester
+  getCurrentSemester,
 } from '../../reducers/root_reducer';
 
 const mapStateToProps = (state) => {
