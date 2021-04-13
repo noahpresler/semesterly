@@ -185,7 +185,9 @@ INSTALLED_APPS = (
     'agreement',
     'parsing',
     'pilot',
+    'advising',
     'forum',
+    'corsheaders',
 )
 
 REST_FRAMEWORK ={
@@ -195,6 +197,7 @@ REST_FRAMEWORK ={
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 MIDDLEWARE_CLASSES = (
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -248,6 +251,12 @@ ROOT_URLCONF = 'semesterly.urls'
 
 WSGI_APPLICATION = 'semesterly.wsgi.application'
 
+CORS_ORIGIN_WHITELIST = (
+    'https://sis.jhu.edu',
+)
+CSRF_TRUSTED_ORIGINS = (
+    'sis.jhu.edu',
+)
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases

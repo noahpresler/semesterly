@@ -167,6 +167,7 @@ export const userInfo = PropTypes.shape({
   integrations: PropTypes.arrayOf(PropTypes.shape({})),
   userFirstName: PropTypes.string,
   userLastName: PropTypes.string,
+  isAdvisor: PropTypes.bool,
   FacebookSignedUp: PropTypes.bool,
   GoogleSignedUp: PropTypes.bool,
   GoogleLoggedIn: PropTypes.bool,

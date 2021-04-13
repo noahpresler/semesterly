@@ -18,10 +18,12 @@ from django.conf import settings
 from django.core.signing import TimestampSigner
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 from hashids import Hashids
 from oauth2client.client import GoogleCredentials
 import timetable.models as timetable_models
 from semesterly.settings import get_secret
+from advising.models import Advisor
 
 hashids = Hashids(salt=get_secret('HASHING_SALT'))
 
@@ -59,6 +61,11 @@ class Student(models.Model):
     first_name = models.CharField(max_length=255, default='', null=True)
     last_name = models.CharField(max_length=255, default='', null=True)
     disabilities = models.NullBooleanField(null=True, default=False)
+    advisors = models.ManyToManyField(Advisor, related_name='students')
+    primary_major = models.CharField(max_length=255, default='')
+    other_majors = ArrayField(models.CharField(max_length=255, default=''), default=list)
+    minors = ArrayField(models.CharField(max_length=255, default=''), default=list)
+    sis_registered_courses = models.ForeignKey(timetable_models.Section, null=True)
 
     def __str__(self):
         return "{0}".format(self.jhed)
@@ -102,6 +109,9 @@ class Student(models.Model):
 
     def get_full_name(self):
         return self.user.first_name + ' ' + self.user.last_name
+
+    def is_advisor(self):
+        return Advisor.objects.filter(jhed=self.jhed).exists()
 
 
 class Reaction(models.Model):
