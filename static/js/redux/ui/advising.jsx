@@ -21,7 +21,7 @@ import UserSettingsModalContainer from './containers/modals/user_settings_modal_
 import SignupModalContainer from './containers/modals/signup_modal_container';
 import JHUSignupModalContainer from './containers/modals/jhu_signup_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
-import {getTranscriptCommentsBySemester} from "../constants/endpoints";
+import {getTranscriptCommentsBySemester} from '../constants/endpoints';
 
 
 class Advising extends React.Component {
@@ -46,8 +46,6 @@ class Advising extends React.Component {
               .then(response => response.json())
               .then(data => {
                   this.setState({transcript: data.transcript});
-                  console.log("Performed Fetch");
-                  console.log(this.state);
               });
             this.setState({selected_semester: new_selected_semester});
         } else {
@@ -180,16 +178,20 @@ class Advising extends React.Component {
                 <JHUSignupModalContainer />
                 <div className="all-cols">
                     <div className="main-advising">
+                        <div className="advising-schedule">
                         <AdvisingScheduleContainer
                           parentCallback = {this.callbackFunction.bind(this)}
                           selected_semester = {this.state.selected_semester}
                         />
                         {footer}
+                        </div>
                     </div>
+                    <div className="advising-schedule">
                     <CommentForumContainer
                       selected_semester = {this.state.selected_semester}
                       transcript = {this.state.transcript}
                     />
+                    </div>
                 </div>
             </div>);
     }
