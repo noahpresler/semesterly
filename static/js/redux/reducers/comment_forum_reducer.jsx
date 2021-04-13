@@ -15,12 +15,12 @@ GNU General Public License for more details.
 import * as ActionTypes from '../constants/actionTypes';
 
 const commentForum = (state = { isVisible: false }, action) => {
-    switch (action.type) {
-        case ActionTypes.SUBMIT_COMMENT:
-            return { isVisible: !state.isVisible };
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case ActionTypes.SUBMIT_COMMENT:
+      return { isVisible: !state.isVisible };
+    default:
+      return state;
+  }
 };
 
 export default commentForum;

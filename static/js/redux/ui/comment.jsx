@@ -21,11 +21,18 @@ class Comment extends React.Component {
     const timestamp = new Date(this.props.timestamp);
     return (
       <span className="comment-row">
-				<div className="comment-bubble">
-					<div className="author">{this.props.author}</div>
-					<div>{this.props.content}</div>
-				</div>
-				<div className="comment-timestamp">{timestamp.toDateString()}, {timestamp.toLocaleTimeString()}</div>
+        <div className="comment-bubble">
+          <div className="author">
+            {this.props.author}
+          </div>
+          <div>
+            {this.props.content}
+          </div>
+        </div>
+        <div className="comment-timestamp">
+          {timestamp.toDateString()},
+          {timestamp.toLocaleTimeString()}
+        </div>
       </span>
     );
   }
@@ -33,6 +40,7 @@ class Comment extends React.Component {
 
 Comment.propTypes = {
   timestamp: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
 };
 
