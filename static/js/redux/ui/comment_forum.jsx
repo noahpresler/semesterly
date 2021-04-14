@@ -14,19 +14,41 @@ GNU General Public License for more details.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import CommentInputContainer from './containers/comment_input_container';
+import AdvisorMenu from "./advisor_menu";
+import {getTranscriptCommentsBySemester} from "../constants/endpoints";
+import Cookie from "js-cookie";
 
+let semester_name;
+let semester_year;
 
 class CommentForum extends React.Component {
     constructor(props) {
-        super(props);
-        this.state = {
-          semester_name: '',
-          semester_year: '',
-          transcript: null,
-          comments: null,
-
-        };
+      super(props);
+      this.state = {
+        semester_name: '',
+        semester_year: '',
+        transcript: null,
+        comments: null,
+        addedAdvisors: [
+          'yamir',
+          'lmoulton'
+        ],
+        //TODO: Set this to list of student's advisors from SIS
+        advisors: [
+          {
+            name: 'Yair Amir',
+            jhed: 'yamir'
+          },
+          {
+            name: 'Linda Moulton',
+            jhed: 'lmoulton'
+          },
+          {
+            name: 'Steven Marra',
+            jhed: 'smarra'
+          },
+        ]
+      };
     }
 
     fetchTranscript() {
@@ -39,6 +61,7 @@ class CommentForum extends React.Component {
           .then(data => {
             this.setState({transcript: data.transcript});
             this.setState({comments: this.state.transcript.comments});
+            //this.setState({ addedAdvisors: this.state.transcript.advisors });
           });
       } else {
         this.setState({transcript: null});
@@ -46,43 +69,44 @@ class CommentForum extends React.Component {
       }
     }
 
-    componentDidMount() {
-      fetch(getTranscriptCommentsBySemester(this.state.semester_name, this.state.semester_year))
-        .then(response => response.json())
-        .then(data => {
-          this.setState({transcript: data.transcript});
-          this.setState({comments: this.state.transcript.comments});
-        });
-      // TODO: Check for error response
-      // TODO: Add function for fetching list of advisors from SIS data and saving their names in this.state.advisors
+  addRemoveAdvisor(advisor, added) {
+    fetch(getTranscriptCommentsBySemester(semester_name, semester_year, advisor), {
+      method:  'PATCH',
+      headers: {
+        'X-CSRFToken': Cookie.get('csrftoken'),
+        accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        jhed: advisor,
+        action: !added ? 'add' : 'remove'
+      })
+    });
+
+    // just for frontend testing
+    const { addedAdvisors } = this.state;
+    if (added) {
+      const indexToRemove = addedAdvisors.indexOf(advisor);
+      if (indexToRemove !== -1) {
+        addedAdvisors.splice(indexToRemove, 1);
+      }
+    } else {
+      addedAdvisors.push(advisor);
     }
+    this.setState({ addedAdvisors });
+  }
 
+
+  componentDidMount() {
+    this.fetchTranscript();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.selected_semester !== prevProps.selected_semester) {
+      this.fetchTranscript();
+    }
+  }
     render() {
-
-        const addAdvisorsButton = (
-          <div className="cal-btn-wrapper">
-            <button
-              onClick={this.props.toggleAddAdvisorsModal}
-              className="save-timetable add-button"
-              data-tip
-              data-for="add-btn-tooltip"
-            >
-              <i className="fa fa-plus" />
-            </button>
-
-              <ReactTooltip
-              id="add-btn-tooltip"
-              class="tooltip"
-              type="dark"
-              place="bottom"
-              effect="solid"
-            >
-              <span>Invite Advisors</span>
-            </ReactTooltip>
-
-          </div>
-        );
-
     let transcript;
     if (this.props.transcript != null && this.props.transcript.comments != null) {
       transcript = this.props.transcript.comments.map((comment) => {
@@ -131,6 +155,15 @@ class CommentForum extends React.Component {
       semester_year={this.props.selected_semester.toString().split(' ')[1]}
     />);
 
+      const displayAdvisorNames = () => {
+        const names = []
+        const { advisors, addedAdvisors } = this.state
+        advisors.forEach(({ jhed, name }) => {
+          if (addedAdvisors.includes(jhed)) names.push(name)
+        })
+        return names.join(", ")
+      }
+
     return (
       <div className="comment-forum no-print">
         <div className="cf-name">
@@ -138,7 +171,17 @@ class CommentForum extends React.Component {
               Comments Forum
           </p>
         </div>
-        <div className="as-header" />
+        {this.props.transcript &&
+        <AdvisorMenu
+            semester_name={semester_name}
+            semester_year={semester_year}
+            advisors={this.state.advisors}
+            addedAdvisors={this.state.addedAdvisors}
+            addAdvisor={this.state.addAdvisor}
+            addRemoveAdvisor={this.addRemoveAdvisor.bind(this)}
+        />
+        }
+        <div className="as-header">{displayAdvisorNames()}</div>
         <div className="comment-forum-container">
           { transcript }
         </div>
