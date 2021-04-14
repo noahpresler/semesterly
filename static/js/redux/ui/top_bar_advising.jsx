@@ -84,13 +84,13 @@ class TopBarAdvising extends React.Component {
       <div className="cal-btn-wrapper">
         <button
           onClick={() => this.props.triggerSISImportDataModal()}
-          className="save-timetable add-button"
+          className="import-data"
           data-tip
           data-for="mock-btn-tooltip"
         >
           {/* TODO: Move import data button (below) to optimal position */}
-          <div className="import-data no-print">
-            <p>Import&nbsp;Data</p>
+          <div className="import-data">
+            <p>Import Data</p>
           </div>
         </button>
         <ReactTooltip
@@ -129,9 +129,9 @@ class TopBarAdvising extends React.Component {
           </div>
         </div>
         <SocialProfileContainer />
-        <div className="import-data-button">
+        <span>
           {SISImportDataModalButton}
-        </div>
+        </span>
         <div className="navicon" onClick={this.toggleComments}>
           <span />
           <span />
