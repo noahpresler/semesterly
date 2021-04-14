@@ -10,3 +10,18 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from rest_framework import serializers
+
+from advising.models import Advisor
+
+
+class AdvisorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Advisor
+        fields = (
+            'jhed',
+            'email_address',
+            'first_name',
+            'last_name',
+        )

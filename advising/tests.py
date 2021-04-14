@@ -10,30 +10,29 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-# from django.test import TestCase
-# from rest_framework import status, exceptions
-# from django.http import HttpResponse
-# from rest_framework.authentication import get_authorization_header, BaseAuthentication
-# from users.models import User
-# import jwt
-# import json
+from django.test import TestCase
+from helpers.test.test_cases import UrlTestCase
+from timetable.models import Semester
+from helpers.mixins import FeatureFlowView
+# from advising.models import Advisor
+# from student.models import Student
 
-# TODO: Write tests for advising app.
-# class TokenAuthentication(BaseAuthentication):
-#     def authenticate_credentials(self):
-#         try:
-#             payload = jwt.decode(get_secret('STUDENT_SIS_AUTH_SECRET'), get_secret('STUDENT_SIS_AUTH_SECRET'), algorithms=['HS256'])
-#             if payload == "null":
-#                 msg = 'Null token not allowed'
-#                 raise exceptions.AuthenticationFailed(msg)
-#         except jwt.ExpiredSignature or jwt.DecodeError or jwt.InvalidTokenError:
-#             return HttpResponse({'Error': "Token is invalid"}, status="403")
-#         except UnicodeError:
-#             msg = 'Invalid token header. Token string should not contain invalid characters.'
-#             raise exceptions.AuthenticationFailed(msg)
-#         print(payload)
-#         return payload
+class UrlsTest(TestCase, UrlTestCase):
+    """ Test advising/urls.py """
+    def setUp(self):
+        semester = Semester.objects.create(name='Fall', year='2016')
+        semester.save()
 
-#     # ensure json data returned is correct format
-#     def validate_payload(self): 
+    def test_urls_call_correct_views(self):
+        self.assertUrlResolvesToView(
+            '/advising/jhu_signup/','helpers.mixins.FeatureFlowView')
+        self.assertUrlResolvesToView(
+            '/advising/', 'advising.views.AdvisingView')
+        self.assertUrlResolvesToView(
+            '/advising/sis_post/', 'advising.views.StudentSISView')
+        self.assertUrlResolvesToView(
+            '/advising/sis_semesters/', 'advising.views.StudentSISView')    
+        self.assertUrlResolvesToView(
+            '/advising/sis_courses/Fall/2016/', 'advising.views.RegisteredCoursesView')    
 
+# TODO: Write more tests for advising app.
