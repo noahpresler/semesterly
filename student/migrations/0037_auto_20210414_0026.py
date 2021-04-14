@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='student',
-            name='sis_registered_courses',
+            name='sis_registered_sections',
             field=models.ManyToManyField(to='timetable.Section'),
         ),
     ]
