@@ -12,23 +12,23 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import TopBarAdvising from '../top_bar_advising';
-import { getCurrentSemester } from '../../reducers/root_reducer';
+import {getCurrentSemester} from '../../reducers/root_reducer';
 import {triggerSISImportDataModal} from "../../actions/modal_actions";
 
 
 const mapStateToProps = state => ({
-    userInfo: state.userInfo.data,
-    currentSemester:
-        getCurrentSemester(state),
+  userInfo: state.userInfo.data,
+  currentSemester:
+    getCurrentSemester(state),
 });
 
 const TopBarAdvisingContainer = connect(
-    mapStateToProps,
-    {
-        triggerSISImportDataModal,
-    }
+  mapStateToProps,
+  {
+    triggerSISImportDataModal,
+  }
 )(TopBarAdvising);
 
 export default TopBarAdvisingContainer;
