@@ -18,7 +18,7 @@ from django.views.generic.base import RedirectView
 import advising.views
 from helpers.mixins import FeatureFlowView
 
-app_name = 'advising'
+admin.autodiscover()
 
 urlpatterns = [
     url(r'^advising/*$', advising.views.AdvisingView.as_view()),
@@ -28,5 +28,5 @@ urlpatterns = [
     url(r'^advising/sis_semesters/$',
         advising.views.StudentSISView.as_view()),
     url(r'^advising/sis_courses/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/$',
-        advising.views.RegisteredCoursesview.as_view()),
+        advising.views.RegisteredCoursesView.as_view()),
 ]

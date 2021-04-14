@@ -12,18 +12,27 @@
 
 from django.test import TestCase
 from helpers.test.test_cases import UrlTestCase
+from timetable.models import Semester
+from helpers.mixins import FeatureFlowView
 # from advising.models import Advisor
 # from student.models import Student
 
 class UrlsTest(TestCase, UrlTestCase):
     """ Test advising/urls.py """
+    def setUp(self):
+        semester = Semester.objects.create(name='Fall', year='2016')
+        semester.save()
 
     def test_urls_call_correct_views(self):
         self.assertUrlResolvesToView(
             '/advising/jhu_signup/','helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView(
-            '/advising/advising/', 'advising.views.AdvisingView')
+            '/advising/', 'advising.views.AdvisingView')
         self.assertUrlResolvesToView(
-            '/advising/advising/', 'advising.views.StudentSISView')
+            '/advising/sis_post/', 'advising.views.StudentSISView')
+        self.assertUrlResolvesToView(
+            '/advising/sis_semesters/', 'advising.views.StudentSISView')    
+        self.assertUrlResolvesToView(
+            '/advising/sis_courses/Fall/2016/', 'advising.views.RegisteredCoursesView')    
 
 # TODO: Write more tests for advising app.

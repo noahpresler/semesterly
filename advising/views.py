@@ -127,7 +127,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             student.sis_registered_courses.add(section)
 
 
-class RegisteredCoursesview(ValidateSubdomainMixin, APIView):
+class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
     """Handles retrieving SIS courses from a specific semester"""
 
     def get(self, request, sem_name, year):
