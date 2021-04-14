@@ -170,7 +170,7 @@ class CommentForum extends React.Component {
         <div className="cf-name">
           <h3 className="title"> Comments Forum</h3>
         </div>
-        {this.props.transcript &&
+        {this.props.selected_semester &&
         <AdvisorMenu
             semester_name={semester_name}
             semester_year={semester_year}
@@ -180,7 +180,7 @@ class CommentForum extends React.Component {
             addRemoveAdvisor={this.addRemoveAdvisor.bind(this)}
         />
         }
-        <div className="cf-header">{displayAdvisorNames()}</div>
+        <div className="cf-header">{this.props.selected_semester && displayAdvisorNames()}</div>
         <div className="comment-forum-container">
           { transcript }
         </div>
