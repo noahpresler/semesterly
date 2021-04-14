@@ -32,8 +32,8 @@ class AdvisingSchedule extends React.Component {
 
   render() {
     const courseListRows = (this.state.displayed_semesters.length > 0) ?
-      this.state.displayed_semesters.map((semester) => {
-        return (<CourseListRow
+      this.state.displayed_semesters.map(semester =>
+        (<CourseListRow
           key={semester}
           parentParentCallback={this.props.parentCallback}
           displayed_semester={semester}
@@ -44,8 +44,8 @@ class AdvisingSchedule extends React.Component {
           courseToColourIndex={this.props.courseToColourIndex}
           isCourseInRoster={this.props.isCourseInRoster}
           fetchCourseInfo={this.props.fetchCourseInfo}
-        />);
-      }) : <div className="empty-state"><h4><p> No semesters yet! </p></h4></div>;
+        />),
+      ) : <div className="empty-state"><h4><p> No semesters yet! </p></h4></div>;
 
     return (
       <div className="advising-schedule-inner">
@@ -58,8 +58,12 @@ class AdvisingSchedule extends React.Component {
   }
 }
 
+AdvisingSchedule.defaultProps = {
+  selected_semester: null,
+};
+
 AdvisingSchedule.propTypes = {
-  selected_semester: PropTypes.string.isRequired,
+  selected_semester: PropTypes.string,
   coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,

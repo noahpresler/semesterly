@@ -19,21 +19,21 @@ import { changeTimetableName } from '../../actions/user_actions';
 
 
 const mapStateToProps = (state) => {
-    const savingTimetable = state.savingTimetable;
-    return {
-        // the name of the user's "being-edited" saved timetable
-        activeLoadedTimetableName: savingTimetable.activeTimetable.name,
-        saving: savingTimetable.saving,
-        upToDate: savingTimetable.upToDate,
-        isLoggedIn: state.userInfo.data.isLoggedIn,
-    };
+  const savingTimetable = state.savingTimetable;
+  return {
+    // the name of the user's "being-edited" saved timetable
+    activeLoadedTimetableName: savingTimetable.activeTimetable.name,
+    saving: savingTimetable.saving,
+    upToDate: savingTimetable.upToDate,
+    isLoggedIn: state.userInfo.data.isLoggedIn,
+  };
 };
 const TextInputContainer = connect(
-    mapStateToProps,
-    {
-        openSignUpModal,
-        changeTimetableName,
-    },
+  mapStateToProps,
+  {
+    openSignUpModal,
+    changeTimetableName,
+  },
 )(TextInput);
 
 export default TextInputContainer;

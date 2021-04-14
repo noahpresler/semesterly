@@ -15,14 +15,14 @@ GNU General Public License for more details.
 import { connect } from 'react-redux';
 import CommentInput from '../comment_input';
 
-const mapStateToProps = (state) => ({
-	userInfo: state.userInfo.data,
+const mapStateToProps = state => ({
+  userInfo: state.userInfo.data,
 });
 
 const CommentInputContainer = connect(
-	mapStateToProps,
-	{
-	},
+  mapStateToProps,
+  {
+  },
 )(CommentInput);
 
 export default CommentInputContainer;

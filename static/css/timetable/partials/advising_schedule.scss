@@ -95,13 +95,21 @@
 
   .comment-row {
     margin: 10px;
+
+    .owner {
+      outline-color: #00A1FF;
+      background: #00A1FF;
+    }
+
+    .guest {
+      outline-color: lightslategray;
+      background: lightslategray;
+    }
   }
 
   .comment-bubble {
-    outline-color: #00A1FF;
-    background: #00A1FF;
     color: white;
-    border-radius: 25px;
+    border-radius: 20px;
     font-size: 12px;
     padding: 10px;
     margin: 5px;
@@ -109,6 +117,7 @@
     .author {
       font-weight: bold;
     }
+
   }
 
   .comment-timestamp {

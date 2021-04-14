@@ -171,7 +171,7 @@ const handleFlows = featureFlow => (dispatch) => {
 
 const setup = () => (dispatch) => {
   initData = JSON.parse(initData);
-  advising = initData['isAdvising']
+  advising = initData.isAdvising;
 
   dispatch({ type: ActionTypes.INIT_STATE, data: initData });
 
@@ -198,9 +198,10 @@ store.dispatch(
     setup(),
 );
 
-const dashboard = advising ? <AdvisingContainer/> : <SemesterlyContainer/>;
+const dashboard = advising ? <AdvisingContainer /> : <SemesterlyContainer />;
 
-    render(
-        <Provider store={store}>
-          {dashboard}
-        </Provider>, document.getElementsByClassName('page')[0]);
+render(
+  <Provider store={store}>
+    {dashboard}
+  </Provider>, document.getElementsByClassName('page')[0],
+);

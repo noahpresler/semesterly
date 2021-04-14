@@ -17,102 +17,102 @@ import SocialProfileContainer from './containers/social_profile_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 export const expandComments = () => {
-    $('.main-advising, .comment-forum').removeClass('full-bar').addClass('less-bar');
+  $('.main-advising, .comment-forum').removeClass('full-bar').addClass('less-bar');
 };
 
 export const collapseComments = () => {
-    $('.main-advising, .comment-forum').removeClass('less-bar').addClass('full-bar');
+  $('.main-advising, .comment-forum').removeClass('less-bar').addClass('full-bar');
 };
 
 class TopBarAdvising extends React.Component {
-    constructor(props) {
-        super(props);
-        this.comments_collapsed = 'neutral';
-        this.toggleComments = this.toggleComments.bind(this);
-        this.renderUserForPrint = this.renderUserForPrint.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.comments_collapsed = 'neutral';
+    this.toggleComments = this.toggleComments.bind(this);
+    this.renderUserForPrint = this.renderUserForPrint.bind(this);
+  }
 
-    toggleComments() {
-        if (this.comments_collapsed === 'neutral') {
-            const bodyw = $(window).width();
-            if (bodyw > 999) {
-                collapseComments();
-                this.comments_collapsed = 'open';
-            } else {
-                expandComments();
-                this.comments_collapsed= 'closed';
-            }
-        }
-        if (this.comments_collapsed === 'closed') {
-            expandComments();
-            this.comments_collapsed = 'open';
-        } else {
-            collapseComments();
-            this.comments_collapsed = 'closed';
-        }
+  toggleComments() {
+    if (this.comments_collapsed === 'neutral') {
+      const bodyw = $(window).width();
+      if (bodyw > 999) {
+        collapseComments();
+        this.comments_collapsed = 'open';
+      } else {
+        expandComments();
+        this.comments_collapsed = 'closed';
+      }
     }
+    if (this.comments_collapsed === 'closed') {
+      expandComments();
+      this.comments_collapsed = 'open';
+    } else {
+      collapseComments();
+      this.comments_collapsed = 'closed';
+    }
+  }
 
-    renderUserForPrint() {
-        const { userInfo } = this.props;
-        return (
-            <div className="print">
-                <img
-                    alt="Profile"
-                    className="usr-pic print"
-                    src={this.props.userInfo.img_url}
-                />
-                <div className="print-name-major print">
-                <span
-                    className="print-name print"
-                >{`${userInfo.userFirstName} ${userInfo.userLastName}`}</span>
-                <span className="print-major print">
-                    {userInfo.major}
-                    {userInfo.class_year ? `| Class of ${userInfo.class_year}` : null} |
-                    {`${this.props.currentSemester.name} ${this.props.currentSemester.year}`}
-                </span>
-            </div>
+  renderUserForPrint() {
+    const { userInfo } = this.props;
+    return (
+      <div className="print">
+        <img
+          alt="Profile"
+          className="usr-pic print"
+          src={this.props.userInfo.img_url}
+        />
+        <div className="print-name-major print">
+          <span
+            className="print-name print"
+          >{`${userInfo.userFirstName} ${userInfo.userLastName}`}</span>
+          <span className="print-major print">
+            {userInfo.major}
+            {userInfo.class_year ? `| Class of ${userInfo.class_year}` : null} |
+            {`${this.props.currentSemester.name} ${this.props.currentSemester.year}`}
+          </span>
         </div>
-        );
-    }
+      </div>
+    );
+  }
 
-    render() {
-        return (
-            <div className="top-bar">
-                <a href="/" className="semesterly-name">
-                <img
-                    alt="logo"
-                    className="semesterly-logo no-print"
-                    src="/static/img/logo2.0-32x32.png"
-                />
-                <div className="semesterly-name no-print">
-                    Semester.ly - Advising Dashboard
-                </div>
-                </a>
-                <div className="print-content print">
-                    {this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ?
-                        this.renderUserForPrint() : null}
-                    <div className="name-logo print">
-                        <div className="semesterly-name-print print">Semester.ly</div>
-                        <img
-                            alt="print logo"
-                            className="semesterly-logo-print print"
-                            src="/static/img/logo2.0-32x32.png"
-                        />
-                    </div>
-                </div>
-                <SocialProfileContainer />
-                <div className="navicon" onClick={this.toggleComments}>
-                    <span />
-                    <span />
-                    <span />
-                </div>
-            </div>);
-    }
+  render() {
+    return (
+      <div className="top-bar">
+        <a href="/" className="semesterly-name">
+          <img
+            alt="logo"
+            className="semesterly-logo no-print"
+            src="/static/img/logo2.0-32x32.png"
+          />
+          <div className="semesterly-name no-print">
+            Semester.ly - Advising Dashboard
+          </div>
+        </a>
+        <div className="print-content print">
+          {this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ?
+            this.renderUserForPrint() : null}
+          <div className="name-logo print">
+            <div className="semesterly-name-print print">Semester.ly</div>
+            <img
+              alt="print logo"
+              className="semesterly-logo-print print"
+              src="/static/img/logo2.0-32x32.png"
+            />
+          </div>
+        </div>
+        <SocialProfileContainer />
+        <div className="navicon" onClick={this.toggleComments}>
+          <span />
+          <span />
+          <span />
+        </div>
+      </div>);
+  }
 }
 
 TopBarAdvising.propTypes = {
-    userInfo: SemesterlyPropTypes.userInfo.isRequired,
-    currentSemester: SemesterlyPropTypes.semester.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
+  currentSemester: SemesterlyPropTypes.semester.isRequired,
 };
 
 

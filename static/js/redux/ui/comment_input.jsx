@@ -14,84 +14,69 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {getTranscriptCommentsBySemester} from "../constants/endpoints";
-import Cookie from "js-cookie";
+import Cookie from 'js-cookie';
+import { getTranscriptCommentsBySemester } from '../constants/endpoints';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class CommentInput extends React.Component {
 
-	constructor(props) {
-		super(props);
-		this.state = {
-			comment: ''
-		};
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      comment: '',
+    };
+  }
 
-	// componentWillMount() {
-	// 	$(document.body).on('keydown', (e) => {
-	// 		if (e.key === 'Enter') {
-	// 			//TODO: this.sendComment();
-	// 			$('input.transcript.comments').blur();
-	// 		}
-	// 	});
-	// }
+  sendContent(event) {
+    this.setState({ comment: event.target.value });
+  }
 
-	sendContent(event) {
-		this.setState({ comment: event.target.value });
-	}
+  submitContent(semesterName, semesterYear) {
+    fetch(getTranscriptCommentsBySemester(semesterName, semesterYear), {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': Cookie.get('csrftoken'),
+        accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        jhed: this.props.userInfo.jhed,
+        timestamp: new Date(Date.now()),
+        content: this.state.comment,
+      }),
+    });
+  }
 
-	submitContent(semester_name, semester_year) {
-		fetch(getTranscriptCommentsBySemester(semester_name, semester_year), {
-			method: 'POST',
-			headers: {
-				'X-CSRFToken': Cookie.get('csrftoken'),
-				accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				jhed: this.props.userInfo.jhed,
-				timestamp: new Date(Date.now()),
-				content: this.state.comment
-			}),
-		});
-		//.then((res) => {
-		// 	return res.json();
-		// }).then((data) => {
-		// 	console.log("DATA = " + JSON.stringify(data));
-		// 	// const content = JSON.stringify(data)
-		// 	// console.log(content)
-		// }).catch((error) => {
-		// 	console.log(error);
-		// })
-	}
+  render() {
+    const { comment } = this.state;
+    const { semester_name, semester_year } = this.props;
 
-	render() {
-		const { comment } = this.state;
-		const { semester_name, semester_year } = this.props;
-
-		return (<div className="cf-text-input">
-				<form action="#0">
-					<textarea
-						className="cf-input"
-						rows="1" placeholder="Type your comment here..."
-						value={comment}
-						onChange={(event) => this.sendContent(event)}
-						onKeyPress="if (event.keyCode==13){submitContent(semester_name, semester_year);return false;}"
-					/>
-
-					<input
-						className="send-btn"
-						type="submit"
-						value="+"
-						onClick={() => this.submitContent(semester_name, semester_year)} />
-				</form>
-			</div>
-		);
-	}
+    return (<div className="cf-text-input">
+      <form action="#0">
+        <textarea
+          className="cf-input"
+          rows="1" placeholder="Type your comment here..."
+          value={comment}
+          onChange={event => this.sendContent(event)}
+          onKeyPress="if (event.keyCode==13){submitContent(semester_name, \
+          semester_year);return false;}"
+        />
+        <input
+          className="send-btn"
+          type="submit"
+          value="+"
+          onClick={() => this.submitContent(semester_name, semester_year)}
+        />
+      </form>
+    </div>
+    );
+  }
 }
 
 CommentInput.propTypes = {
-	semester_name: PropTypes.string.isRequired,
-	semester_year: PropTypes.string.isRequired,
+  semester_name: PropTypes.string.isRequired,
+  semester_year: PropTypes.string.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
 };
 
 export default CommentInput;
