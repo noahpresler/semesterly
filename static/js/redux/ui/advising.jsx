@@ -14,7 +14,6 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
 import TopBarAdvisingContainer from './containers/top_bar_advising_container';
 import CommentForumContainer from './containers/comment_forum_container';
 import AdvisingScheduleContainer from './containers/advising_schedule_container';
@@ -22,9 +21,7 @@ import UserSettingsModalContainer from './containers/modals/user_settings_modal_
 import SignupModalContainer from './containers/modals/signup_modal_container';
 import JHUSignupModalContainer from './containers/modals/jhu_signup_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
-import {getTranscriptCommentsBySemester} from "../constants/endpoints";
-import PeerModalContainer from "./containers/modals/peer_modal_container";
-import SaveCalendarModalContainer from "./containers/modals/save_calendar_modal_container";
+import { getTranscriptCommentsBySemester } from '../constants/endpoints';
 import SISImportDataModalContainer from "./containers/modals/SIS_import_data_modal_container";
 
 
@@ -35,55 +32,36 @@ class Advising extends React.Component {
     this.state = {
       orientation: !mql.matches ? 'landscape' : 'portrait',
       selected_semester: null,
-      transcript: null
+      transcript: null,
     };
     this.updateOrientation = this.updateOrientation.bind(this);
-  }
-
-  fetchTranscript(new_selected_semester) {
-
-    if (new_selected_semester !== null) {
-      let semester_name = new_selected_semester.toString().split(' ')[0];
-      let semester_year = new_selected_semester.toString().split(' ')[1];
-
-      fetch(getTranscriptCommentsBySemester(semester_name, semester_year))
-        .then(response => response.json())
-        .then(data => {
-          this.setState({transcript: data.transcript});
-          console.log("Performed Fetch");
-          console.log(this.state);
-        });
-      this.setState({selected_semester: new_selected_semester});
-    } else {
-      this.setState({selected_semester: null});
-      this.setState({transcript: null});
-    }
+    this.callbackFunction = this.callbackFunction.bind(this);
   }
 
   componentWillMount() {
-    $(document.body).on('keydown', (e) => {
-      if (parseInt(e.keyCode, 10) === 39) {
-        if (this.props.PgActive + 1 < this.props.PgCount) {
-          this.props.setPgActive(this.props.PgActive + 1);
-        }
-      } else if (parseInt(e.keyCode, 10) === 37) {
-        if (this.props.PgActive > 0) {
-          this.props.setPgActive(this.props.PgActive - 1);
-        }
-      }
-    });
-    $(document.body).bind('keydown', (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        switch (String.fromCharCode(e.which).toLowerCase()) {
-          case 's':
-            e.preventDefault();
-            this.props.saveTimetable();
-            break;
-          default:
-            break;
-        }
-      }
-    });
+    // $(document.body).on('keydown', (e) => {
+    //   if (parseInt(e.keyCode, 10) === 39) {
+    //     if (this.props.PgActive + 1 < this.props.PgCount) {
+    //       this.props.setPgActive(this.props.PgActive + 1);
+    //     }
+    //   } else if (parseInt(e.keyCode, 10) === 37) {
+    //     if (this.props.PgActive > 0) {
+    //       this.props.setPgActive(this.props.PgActive - 1);
+    //     }
+    //   }
+    // });
+    // $(document.body).bind('keydown', (e) => {
+    //   if (e.ctrlKey || e.metaKey) {
+    //     switch (String.fromCharCode(e.which).toLowerCase()) {
+    //       case 's':
+    //         e.preventDefault();
+    //         this.props.saveTimetable();
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //   }
+    // });
     window.addEventListener('orientationchange', () => {
       this.updateOrientation();
     });
@@ -97,6 +75,23 @@ class Advising extends React.Component {
   componentDidMount() {
   }
 
+  fetchTranscript(newSelectedSemester) {
+    if (newSelectedSemester !== null) {
+      const semesterName = newSelectedSemester.toString().split(' ')[0];
+      const semesterYear = newSelectedSemester.toString().split(' ')[1];
+
+      fetch(getTranscriptCommentsBySemester(semesterName, semesterYear))
+        .then(response => response.json())
+        .then((data) => {
+          this.setState({ transcript: data.transcript });
+        });
+      this.setState({ selected_semester: newSelectedSemester });
+    } else {
+      this.setState({ selected_semester: null });
+      this.setState({ transcript: null });
+    }
+  }
+
   updateOrientation() {
     let orientation = 'portrait';
     if (window.matchMedia('(orientation: portrait)').matches) {
@@ -106,7 +101,7 @@ class Advising extends React.Component {
       orientation = 'landscape';
     }
     if (orientation !== this.state.orientation) {
-      this.setState({orientation});
+      this.setState({ orientation });
     }
   }
 
@@ -119,7 +114,7 @@ class Advising extends React.Component {
     const footer = (
       <footer className="footer navbar no-print">
         <p className="data-last-updated no-print">Data last
-          updated: {this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null}</p>
+          updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
         <ul className="nav nav-pills no-print">
           <li className="footer-button" role="presentation">
             <a href="/termsofservice">Terms</a>
@@ -157,7 +152,7 @@ class Advising extends React.Component {
               rel="noopener noreferrer"
               href="https://github.com/jhuopensource/semesterly"
             >
-              <i className="fa fa-github"/>
+              <i className="fa fa-github" />
               Follow
             </a>
           </li>
@@ -173,28 +168,32 @@ class Advising extends React.Component {
           </li>
         </ul>
       </footer>
-    )
+    );
 
     return (
       <div className="page-wrapper">
-        <TopBarAdvisingContainer/>
-        <UserSettingsModalContainer/>
-        <UserAcquisitionModalContainer/>
-        <SignupModalContainer/>
-        <SISImportDataModalContainer/>
-        <JHUSignupModalContainer/>
+        <TopBarAdvisingContainer />
+        <UserSettingsModalContainer />
+        <UserAcquisitionModalContainer />
+        <SignupModalContainer />
+        <JHUSignupModalContainer />
+        <SISImportDataModalContainer />
         <div className="all-cols">
           <div className="main-advising">
-            <AdvisingScheduleContainer
-              parentCallback={this.callbackFunction.bind(this)}
-              selected_semester={this.state.selected_semester}
-            />
-            {footer}
+            <div className="advising-schedule">
+              <AdvisingScheduleContainer
+                parentCallback={this.callbackFunction}
+                selected_semester={this.state.selected_semester}
+              />
+              {footer}
+            </div>
           </div>
-          <CommentForumContainer
-            selected_semester={this.state.selected_semester}
-            transcript={this.state.transcript}
-          />
+          <div className="advising-schedule">
+            <CommentForumContainer
+              selected_semester={this.state.selected_semester}
+              transcript={this.state.transcript}
+            />
+          </div>
         </div>
       </div>);
   }
@@ -202,19 +201,11 @@ class Advising extends React.Component {
 
 Advising.propTypes = {
   dataLastUpdated: PropTypes.string.isRequired,
-  alertChangeSemester: PropTypes.bool.isRequired,
-  alertConflict: PropTypes.bool.isRequired,
-  alertEnableNotifications: PropTypes.bool.isRequired,
-  alertFacebookFriends: PropTypes.bool.isRequired,
-  alertNewTimetable: PropTypes.bool.isRequired,
-  alertTimetableExists: PropTypes.bool.isRequired,
-  saveTimetable: PropTypes.func.isRequired,
-  setPgActive: PropTypes.func.isRequired,
-  semester: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    year: PropTypes.string.isRequired,
-  }).isRequired,
+  // alertChangeSemester: PropTypes.bool.isRequired,
+  // semester: PropTypes.shape({
+  //   name: PropTypes.string.isRequired,
+  //   year: PropTypes.string.isRequired,
+  // }).isRequired,
 };
 
 export default Advising;
-
