@@ -125,15 +125,38 @@
     float: right;
   }
 
-  .tt-name {
-    background-color: $gfff;
-    cursor: pointer;
-    font-size: 12px;
-    padding: 5px 5px 5px 20px;
-    transition: background-color .3s;
+  row {
+    display: flex;
+    flex-direction: row;
 
-    :hover {
-      background-color: $geee;
+    .add-button {
+      flex: 1;
+      order: 1;
+    }
+    .advisor {
+      flex: 2;
+      order: 2;
+    }
+  }
+
+  .cf-header {
+    clear: both;
+    color: $primary-navy;
+    font-size: 14pt;
+    font-weight: bold;
+    margin: 0;
+    padding: 10px 5px;
+    position: relative;
+
+    &::after {
+      background-color: $gddd;
+      bottom: 5px;
+      content: "";
+      display: block;
+      height: 1px;
+      left: 0;
+      position: absolute;
+      width: 100%;
     }
   }
 
@@ -187,6 +210,33 @@
       line-height: 14px;
       margin: 0;
     }
+  }
+
+  .title {
+    font-size: 1.25em;
+    font-weight: bold;
+    font-family: "Roboto", Arial, sans-serif;
+    margin-top: 15px;
+    width: 95%;
+    float: left;
+  }
+
+  .advisor-dropdown {
+    background-color: $gfff;
+    border: 1px solid $ge6e6e6;
+    box-shadow: 0 2px 10px $black-transparent-2;
+    display: none;
+    min-width: 105px;
+    position: absolute;
+    right: 10px;
+    top: 100px;
+    width: 200px;
+    z-index: 100;
+
+    &.down {
+      display: block;
+    }
+
   }
 
   .sb-master-slots {

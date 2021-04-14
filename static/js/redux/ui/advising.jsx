@@ -14,6 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import Cookie from 'js-cookie';
 import TopBarAdvisingContainer from './containers/top_bar_advising_container';
 import CommentForumContainer from './containers/comment_forum_container';
 import AdvisingScheduleContainer from './containers/advising_schedule_container';
@@ -36,6 +37,7 @@ class Advising extends React.Component {
     };
     this.updateOrientation = this.updateOrientation.bind(this);
     this.callbackFunction = this.callbackFunction.bind(this);
+    this.addRemoveAdvisor = this.addRemoveAdvisor.bind(this);
   }
 
   componentWillMount() {
@@ -91,6 +93,29 @@ class Advising extends React.Component {
     } else {
       this.setState({ selected_semester: null });
       this.setState({ transcript: null });
+    }
+  }
+
+  addRemoveAdvisor(advisor, added) {
+    if (this.state.selected_semester !== null) {
+      const semesterName = this.state.selected_semester.toString().split(' ')[0];
+      const semesterYear = this.state.selected_semester.toString().split(' ')[1];
+
+      fetch(getTranscriptCommentsBySemester(semesterName, semesterYear, advisor), {
+        method: 'PATCH',
+        headers: {
+          'X-CSRFToken': Cookie.get('csrftoken'),
+          accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jhed: advisor,
+          action: !added ? 'add' : 'remove',
+        }),
+      }).then(response => response.json())
+      .then((data) => {
+        this.setState({ transcript: data.transcript });
+      });
     }
   }
 
@@ -192,6 +217,7 @@ class Advising extends React.Component {
           </div>
           <div className="advising-schedule">
             <CommentForumContainer
+              addRemoveAdvisor={this.addRemoveAdvisor}
               selected_semester={this.state.selected_semester}
               transcript={this.state.transcript}
             />
@@ -203,11 +229,6 @@ class Advising extends React.Component {
 
 Advising.propTypes = {
   dataLastUpdated: PropTypes.string.isRequired,
-  // alertChangeSemester: PropTypes.bool.isRequired,
-  // semester: PropTypes.shape({
-  //   name: PropTypes.string.isRequired,
-  //   year: PropTypes.string.isRequired,
-  // }).isRequired,
 };
 
 export default Advising;

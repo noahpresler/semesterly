@@ -14,15 +14,29 @@ GNU General Public License for more details.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import AdvisorMenu from './advisor_menu';
 import CommentInputContainer from './containers/comment_input_container';
 
-
 class CommentForum extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      studentName: '',
+      studentName: 'Mia Boloix',
+      // TODO: Set this to list of ALL OF student's advisors from SIS
+      advisors: [
+        {
+          name: 'Yair Amir',
+          jhed: 'yamir',
+        },
+        {
+          name: 'Linda Moulton',
+          jhed: 'lmoulton',
+        },
+        {
+          name: 'Steven Marra',
+          jhed: 'smarra',
+        },
+      ],
     };
   }
 
@@ -75,14 +89,28 @@ class CommentForum extends React.Component {
       semester_year={this.props.selected_semester.toString().split(' ')[1]}
     />);
 
+    const displayAdvisorNames = () => {
+      const names = [];
+      const advisorList = (this.props.transcript) ? this.props.transcript.advisor_names : [];
+      advisorList.forEach(name => names.push(name));
+      return names.join(', ');
+    };
+
     return (
       <div className="comment-forum no-print">
         <div className="cf-name">
-          <p style={{ fontSize: '1.25em', fontWeight: 'bold', marginTop: '70px' }}>
-              Comments Forum
-          </p>
+          <h3 className="title"> Comments Forum</h3>
         </div>
-        <div className="as-header" />
+        {this.props.selected_semester &&
+        <AdvisorMenu
+          semester={this.props.selected_semester}
+          advisors={this.state.advisors}
+          transcript={this.props.transcript}
+          addAdvisor={this.state.addAdvisor}
+          addRemoveAdvisor={this.props.addRemoveAdvisor}
+        />
+        }
+        <div className="cf-header">{this.props.selected_semester && displayAdvisorNames()}</div>
         <div className="comment-forum-container">
           { transcript }
         </div>
@@ -99,12 +127,13 @@ CommentForum.defaultProps = {
 };
 
 CommentForum.propTypes = {
-  // displayed_semester: PropTypes.string.isRequired,
+  addRemoveAdvisor: PropTypes.func.isRequired,
   selected_semester: PropTypes.string,
   transcript: PropTypes.shape({
     semester_name: PropTypes.string,
     semester_year: PropTypes.string,
     owner: PropTypes.string,
+    advisor_names: PropTypes.arrayOf(PropTypes.string),
     comments: PropTypes.arrayOf(PropTypes.shape({
       author_name: PropTypes.string,
       content: PropTypes.string,
