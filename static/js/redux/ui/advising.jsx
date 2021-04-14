@@ -34,6 +34,7 @@ class Advising extends React.Component {
       transcript: null,
     };
     this.updateOrientation = this.updateOrientation.bind(this);
+    this.callbackFunction = this.callbackFunction.bind(this);
   }
 
   componentWillMount() {
@@ -179,7 +180,7 @@ class Advising extends React.Component {
           <div className="main-advising">
             <div className="advising-schedule">
               <AdvisingScheduleContainer
-                parentCallback={this.callbackFunction.bind(this)}
+                parentCallback={this.callbackFunction}
                 selected_semester={this.state.selected_semester}
               />
               {footer}
