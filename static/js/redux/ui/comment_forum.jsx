@@ -18,15 +18,71 @@ import CommentInputContainer from './containers/comment_input_container';
 
 
 class CommentForum extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          semester_name: '',
+          semester_year: '',
+          transcript: null,
+          comments: null,
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      studentName: '',
-    };
-  }
+        };
+    }
 
-  render() {
+    fetchTranscript() {
+      if (this.props.selected_semester != null) {
+        let semester_name = this.props.selected_semester.toString().split(' ')[0];
+        let semester_year = this.props.selected_semester.toString().split(' ')[1];
+
+        fetch(getTranscriptCommentsBySemester(semester_name, semester_year))
+          .then(response => response.json())
+          .then(data => {
+            this.setState({transcript: data.transcript});
+            this.setState({comments: this.state.transcript.comments});
+          });
+      } else {
+        this.setState({transcript: null});
+        this.setState({comments: null});
+      }
+    }
+
+    componentDidMount() {
+      fetch(getTranscriptCommentsBySemester(this.state.semester_name, this.state.semester_year))
+        .then(response => response.json())
+        .then(data => {
+          this.setState({transcript: data.transcript});
+          this.setState({comments: this.state.transcript.comments});
+        });
+      // TODO: Check for error response
+      // TODO: Add function for fetching list of advisors from SIS data and saving their names in this.state.advisors
+    }
+
+    render() {
+
+        const addAdvisorsButton = (
+          <div className="cal-btn-wrapper">
+            <button
+              onClick={this.props.toggleAddAdvisorsModal}
+              className="save-timetable add-button"
+              data-tip
+              data-for="add-btn-tooltip"
+            >
+              <i className="fa fa-plus" />
+            </button>
+
+              <ReactTooltip
+              id="add-btn-tooltip"
+              class="tooltip"
+              type="dark"
+              place="bottom"
+              effect="solid"
+            >
+              <span>Invite Advisors</span>
+            </ReactTooltip>
+
+          </div>
+        );
+
     let transcript;
     if (this.props.transcript != null && this.props.transcript.comments != null) {
       transcript = this.props.transcript.comments.map((comment) => {
