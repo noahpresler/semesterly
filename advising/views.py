@@ -75,7 +75,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         self.add_advisors(payload, student)
         self.add_majors(payload, student)
         self.add_minors(payload, student)
-        # self.add_courses(payload, student)
+        self.add_courses(payload, student)
         student.save()
         return Response(status=status.HTTP_201_CREATED)
 
@@ -84,6 +84,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         for advisor_data in data['Advisors']:
             advisor, created = Advisor.objects.get_or_create(
                 jhed=advisor_data['JhedId'], email_address=advisor_data['EmailAddress'])
+                # last_name, first_name=advisor_data['FullName'].split(',')
             if not created:
                 student.advisors.add(advisor)
                 advisor.save()
@@ -99,12 +100,12 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         for minor_data in data['Minors']:
             student.minors.append(minor_data['Minor'])
 
-    def add_courses(self, data, student): # TODO: test with ingested data
-        student.sis_registered_courses.all().delete()
+    def add_courses(self, data, student): 
+        student.sis_registered_courses.clear()
         for course_data in data['Courses']:
             course = get_object_or_404(
                 Course, code=course_data['OfferingName'])
-            name, year = data['Term'].split(' ')
+            name, year = course_data['Term'].split(' ')
             semester = get_object_or_404(Semester, name=name, year=year)
             section = get_object_or_404(
                 Section, course=course, semester=semester,
