@@ -56,7 +56,7 @@ class TopBarAdvising extends React.Component {
   }
 
   renderUserForPrint() {
-    const {userInfo} = this.props;
+    const { userInfo } = this.props;
     return (
       <div className="print">
         <img
@@ -65,14 +65,14 @@ class TopBarAdvising extends React.Component {
           src={this.props.userInfo.img_url}
         />
         <div className="print-name-major print">
-                <span
-                  className="print-name print"
-                >{`${userInfo.userFirstName} ${userInfo.userLastName}`}</span>
+          <span
+            className="print-name print"
+          >{`${userInfo.userFirstName} ${userInfo.userLastName}`}</span>
           <span className="print-major print">
-                    {userInfo.major}
+            {userInfo.major}
             {userInfo.class_year ? `| Class of ${userInfo.class_year}` : null} |
             {`${this.props.currentSemester.name} ${this.props.currentSemester.year}`}
-                </span>
+          </span>
         </div>
       </div>
     );
@@ -129,14 +129,14 @@ class TopBarAdvising extends React.Component {
             />
           </div>
         </div>
-        <SocialProfileContainer/>
+        <SocialProfileContainer />
         <div className="import-data-button">
           {SISImportDataModalButton}
         </div>
         <div className="navicon" onClick={this.toggleComments}>
-          <span/>
-          <span/>
-          <span/>
+          <span />
+          <span />
+          <span />
         </div>
       </div>);
   }
