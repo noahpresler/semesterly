@@ -74,6 +74,8 @@ class Advising extends React.Component {
 
   componentDidMount() {
   }
+  
+  // TODO: add fetch for each semester!
 
   fetchTranscript(newSelectedSemester) {
     if (newSelectedSemester !== null) {
