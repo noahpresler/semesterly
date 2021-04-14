@@ -32,7 +32,8 @@ class TopBarAdvising extends React.Component {
     this.comments_collapsed = 'neutral';
     this.toggleComments = this.toggleComments.bind(this);
     this.renderUserForPrint = this.renderUserForPrint.bind(this);
-    this.props.triggerSISImportDataModal()
+    //TODO: Make this modal pop up when there is no user data
+    //this.props.triggerSISImportDataModal()
   }
 
   toggleComments() {
@@ -87,9 +88,8 @@ class TopBarAdvising extends React.Component {
           data-tip
           data-for="mock-btn-tooltip"
         >
-          <div
-            className="import-data no-print"
-          >
+          {/* TODO: Move import data button (below) to optimal position */}
+          <div className="import-data no-print">
             <p>Import&nbsp;Data</p>
           </div>
         </button>
