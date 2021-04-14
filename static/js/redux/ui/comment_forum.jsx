@@ -15,22 +15,55 @@ GNU General Public License for more details.
 import React from 'react';
 import PropTypes from 'prop-types';
 import CommentInputContainer from './containers/comment_input_container';
-import Comment from './comment';
 
 
 class CommentForum extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      studentName: '',
+    };
+  }
+
   render() {
     let transcript;
     if (this.props.transcript != null && this.props.transcript.comments != null) {
-      transcript = this.props.transcript.comments.map(comment => (
-        <Comment
-          key={comment.timestamp}
-          author={comment.author_name}
-          content={comment.content}
-          timestamp={comment.timestamp}
-        />
-    ));
+      transcript = this.props.transcript.comments.map((comment) => {
+        const timestamp = new Date(comment.timestamp);
+        const ownerView = (this.state.studentName === comment.author_name) ?
+          (<span className="comment-row">
+            <div className="comment-bubble owner">
+              <div className="author">
+                {comment.author_name}
+              </div>
+              <div>
+                {comment.content}
+              </div>
+            </div>
+            <div className="comment-timestamp">
+              {timestamp.toDateString()},
+              {timestamp.toLocaleTimeString()}
+            </div>
+          </span>) :
+        (<span className="comment-row">
+          <div className="comment-bubble guest">
+            <div className="author">
+              {comment.author_name}
+            </div>
+            <div>
+              {comment.content}
+            </div>
+          </div>
+          <div className="comment-timestamp" style={{ float: 'left' }}>
+            {timestamp.toDateString()},
+            {timestamp.toLocaleTimeString()}
+          </div>
+        </span>);
+        return (<span key={timestamp}>
+          {ownerView}
+        </span>);
+      });
     } else if (this.props.transcript === null) {
       transcript = <div className="empty-state"><h4> <p> No semester selected! </p> </h4></div>;
     } else if (this.props.transcript.comments === null) {

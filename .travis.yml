@@ -3,11 +3,12 @@ sudo: required
 dist: xenial
 services:
   - xvfb
+  - postgresql
 language: python
 python:
 - "2.7"
 env:
-  - NODE_ENV=production NODE_VERSION="10.23.0"
+  - NODE_ENV=production NODE_VERSION="10.23.0" DATABASE_URL="postgresql://localhost/travis_test"
 branches:
   only:
   - master
@@ -20,11 +21,11 @@ cache:
   - $HOME/.npm
   - $HOME/.cache/pip
 install:
-- wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-- sudo apt-get clean
-- sudo apt-get update
-- sudo apt-get install dpkg
-- sudo -E apt-get -yq --allow-unauthenticated install google-chrome-stable
+#- wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+#- sudo apt-get clean
+#- sudo apt-get update
+#- sudo apt-get install dpkg
+#- sudo -E apt-get -yq --allow-unauthenticated install google-chrome-stable
 - nvm install $NODE_VERSION
 - npm -g install chromedriver
 - npm -g install jest@20
@@ -32,7 +33,7 @@ install:
 - pip install --upgrade pip
 - pip install -r requirements.txt
 addons:
-#  chrome: stable
+  chrome: stable
 #  apt:
 #    sources:
 #    - google-chrome

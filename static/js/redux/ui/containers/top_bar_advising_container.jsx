@@ -18,13 +18,12 @@ import { getCurrentSemester } from '../../reducers/root_reducer';
 
 
 const mapStateToProps = state => ({
-    userInfo: state.userInfo.data,
-    currentSemester:
-        getCurrentSemester(state),
+  userInfo: state.userInfo.data,
+  currentSemester: getCurrentSemester(state),
 });
 
 const TopBarAdvisingContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
 )(TopBarAdvising);
 
 export default TopBarAdvisingContainer;
