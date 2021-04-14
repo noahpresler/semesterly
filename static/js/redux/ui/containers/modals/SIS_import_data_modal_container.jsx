@@ -15,15 +15,15 @@ import SISImportDataModal from '../../modals/SIS_import_data_modal';
 import { toggleSISImportDataModal, triggerSISImportDataModal } from '../../../actions/modal_actions';
 
 const mapStateToProps = state => ({
-    isVisible: state.SISImportDataModal.isVisible,
+  isVisible: state.SISImportDataModal.isVisible,
 });
 
 const SISImportDataModalContainer = connect(
-    mapStateToProps,
-    {
-        toggleSISImportDataModal,
-        triggerSISImportDataModal,
-    },
+  mapStateToProps,
+  {
+    toggleSISImportDataModal,
+    triggerSISImportDataModal,
+  },
 )(SISImportDataModal);
 
 export default SISImportDataModalContainer;

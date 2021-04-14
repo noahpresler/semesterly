@@ -22,7 +22,7 @@ import SignupModalContainer from './containers/modals/signup_modal_container';
 import JHUSignupModalContainer from './containers/modals/jhu_signup_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
 import { getTranscriptCommentsBySemester } from '../constants/endpoints';
-import SISImportDataModalContainer from "./containers/modals/SIS_import_data_modal_container";
+import SISImportDataModalContainer from './containers/modals/SIS_import_data_modal_container';
 
 
 class Advising extends React.Component {

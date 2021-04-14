@@ -13,18 +13,18 @@ GNU General Public License for more details.
 import * as ActionTypes from '../constants/actionTypes';
 
 const SISImportDataModal = (state = {
-    isVisible: false,
+  isVisible: false,
 }, action) => {
-    switch (action.type) {
-        case ActionTypes.TOGGLE_SIS_IMPORT_DATA_MODAL:
-            return { isVisible: !state.isVisible };
-        case ActionTypes.TRIGGER_SIS_IMPORT_DATA_MODAL:
-            return {
-                isVisible: true,
-            };
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case ActionTypes.TOGGLE_SIS_IMPORT_DATA_MODAL:
+      return { isVisible: !state.isVisible };
+    case ActionTypes.TRIGGER_SIS_IMPORT_DATA_MODAL:
+      return {
+        isVisible: true,
+      };
+    default:
+      return state;
+  }
 };
 
 export default SISImportDataModal;

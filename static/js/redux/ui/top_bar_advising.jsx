@@ -13,10 +13,10 @@ GNU General Public License for more details.
 */
 
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
+import PropTypes from 'prop-types';
 import SocialProfileContainer from './containers/social_profile_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
-import ReactTooltip from "react-tooltip";
-import PropTypes from "prop-types";
 
 export const expandComments = () => {
   $('.main-advising, .comment-forum').removeClass('full-bar').addClass('less-bar');
@@ -32,8 +32,8 @@ class TopBarAdvising extends React.Component {
     this.comments_collapsed = 'neutral';
     this.toggleComments = this.toggleComments.bind(this);
     this.renderUserForPrint = this.renderUserForPrint.bind(this);
-    //TODO: Make this modal pop up when there is no user data
-    //this.props.triggerSISImportDataModal()
+    // TODO: Make this modal pop up when there is no user data
+    // this.props.triggerSISImportDataModal()
   }
 
   toggleComments() {

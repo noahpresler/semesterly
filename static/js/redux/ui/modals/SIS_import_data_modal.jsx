@@ -17,64 +17,66 @@ import React from 'react';
 import Modal from 'boron/WaveModal';
 
 class SISImportDataModal extends React.Component {
-    componentDidMount() {
-        if (this.props.isVisible) {
-            this.modal.show();
-        }
+  componentDidMount() {
+    if (this.props.isVisible) {
+      this.modal.show();
     }
+  }
 
-    componentDidUpdate() {
-        if (this.props.isVisible) {
-            this.modal.show();
-        }
+  componentDidUpdate() {
+    if (this.props.isVisible) {
+      this.modal.show();
     }
+  }
 
-    render () {
-        const modalHeader =
-            (<div className="modal-content">
-                <div className="modal-header">
-                    <h1>Import Data from SIS</h1>
-                    <div className="modal-close" onClick={() => this.modal.hide()}>
-                        <i className="fa fa-times" />
-                    </div>
-                </div>
-            </div>);
-        const modalBody =
-            (<div className="modal-body">
-                <h3>In order to connect with your advisors through Semester.ly,
-                    you must agree to Semester.ly importing your data from SIS.</h3>
-            </div>);
-        const modalStyle = {
-            width: '100%',
-        };
-        return (
-            <Modal
-                ref={(c) => { this.modal = c; }}
-                className="SIS-import-data-modal abnb-modal max-modal"
-                modalStyle={modalStyle}
-                onHide={() => {
-                    this.props.toggleSISImportDataModal();
-                }}
-            >
-                {modalHeader}
-                {modalBody}
-                <div className="go-to-sis__container">
-                    <button
-                        className="btn abnb-btn secondary" onClick={() => {
+  render() {
+    const modalHeader =
+      (<div className="modal-content">
+        <div className="modal-header">
+          <h1>Import Data from SIS</h1>
+          <div className="modal-close" onClick={() => this.modal.hide()}>
+            <i className="fa fa-times" />
+          </div>
+        </div>
+      </div>);
+    const modalBody =
+      (<div className="modal-body">
+        <h3>In order to connect with your advisors through Semester.ly,
+          you must agree to Semester.ly importing your data from SIS.</h3>
+      </div>);
+    const modalStyle = {
+      width: '100%',
+    };
+    return (
+      <Modal
+        ref={(c) => {
+          this.modal = c;
+        }}
+        className="SIS-import-data-modal abnb-modal max-modal"
+        modalStyle={modalStyle}
+        onHide={() => {
+          this.props.toggleSISImportDataModal();
+        }}
+      >
+        {modalHeader}
+        {modalBody}
+        <div className="go-to-sis__container">
+          <button
+            className="btn abnb-btn secondary" onClick={() => {
 
-                        }}
-                    >
-                    <span>Import from SIS</span>
-                    </button>
-                </div>
-            </Modal>
-        );
-    }
+            }}
+          >
+            <span>Import from SIS</span>
+          </button>
+        </div>
+      </Modal>
+    );
+  }
 }
 
 SISImportDataModal.propTypes = {
-    toggleSISImportDataModal: PropTypes.func.isRequired,
-    isVisible: PropTypes.bool.isRequired,
+  toggleSISImportDataModal: PropTypes.func.isRequired,
+  isVisible: PropTypes.bool.isRequired,
 };
 
 export default SISImportDataModal;
