@@ -10,13 +10,3 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-""" Models pertaining to Students. """
-
-from django.db import models
-import timetable.models as timetable_models
-
-
-class Advisor(models.Model):
-    jhed = models.CharField(max_length=255, null=True, default='')
-    email_address = models.CharField(
-        max_length=255, null=True, default='')

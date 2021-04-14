@@ -103,25 +103,6 @@ textarea {
   }
 }
 
-.main-advising{
-  float: left;
-  height: 100%;
-  opacity: 1;
-  overflow-y: auto;
-  padding: 0 20px;
-  transition: width .3s, opacity .3s, visibility .3s;
-  visibility: visible;
-  width: calc(100% - 500px);
-
-  &.full-bar {
-    width: 100%;
-  }
-
-  &.less-bar {
-    width: calc(100% - 500px);
-  }
-}
-
 .all-cols {
   bottom: 0;
   overflow-x: hidden;
@@ -458,5 +439,24 @@ li {
 @media (max-width: 450px) {
   footer {
     margin-top: 5px;
+  }
+}
+
+.main-advising{
+  float: left;
+  height: 100%;
+  opacity: 1;
+  overflow-y: auto;
+  padding: 0 20px;
+  transition: width .3s, opacity .3s, visibility .3s;
+  visibility: visible;
+  width: calc(100% - 500px);
+
+  &.full-bar {
+    width: 100%;
+  }
+
+  &.less-bar {
+    width: calc(100% - 500px);
   }
 }

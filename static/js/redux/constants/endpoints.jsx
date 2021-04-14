@@ -39,9 +39,9 @@ export const getFinalExamSchedulerEndpoint = () => '/exams/';
 export const getRequestShareExamLinkEndpoint = () => '/exams/links/';
 export const acceptTOSEndpoint = () => '/tos/accept/';
 
-//Advising Dashboard Endpoints
-//TODO: Replace with real endpoint
-export const getTranscriptCommentsBySemester = (semester_name, semester_year) => `/advising/forum/${semester_name}/${semester_year}/`;
+// Advising Dashboard Endpoints
+// TODO: Replace with real endpoint
+export const getTranscriptCommentsBySemester = (semesterName, semesterYear) => `/advising/forum/${semesterName}/${semesterYear}/`;
 
 export function getCourseShareLinkFromModal(code, semester) {
   return `/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;

@@ -79,7 +79,6 @@ class TopBarAdvising extends React.Component {
   }
 
   render() {
-
     const SISImportDataModalButton = (
       <div className="cal-btn-wrapper">
         <button
