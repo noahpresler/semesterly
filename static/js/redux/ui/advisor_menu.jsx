@@ -34,7 +34,7 @@ class AdvisorMenu extends React.Component {
   }
 
   render() {
-    const { addRemoveAdvisor, advisors, addedAdvisors } = this.props;
+    const { addRemoveAdvisor } = this.props;
 
     const toggleAdvisorMenuBtn = (
         <div style={{margin: "right", marginTop: "5px"}}>
@@ -73,12 +73,12 @@ class AdvisorMenu extends React.Component {
       );
     }
 
-    const advisorList = (advisors.length > 0) ?
-        advisors.map((advisor, i) => {
+    const advisorList = (this.props.advisors.length > 0) ?
+        this.props.advisors.map((advisor, i) => {
           return (
               <row key={i} style={{padding: "5px"}}>
                 {/* if name in addedAdvisors, removeBtn, else addBtn */}
-                {addRemoveBtn(advisor.jhed, addedAdvisors.includes(advisor.jhed))}
+                {addRemoveBtn(advisor.jhed, this.props.addedAdvisors.includes(advisor.jhed))}
                 <p className="advisor"> {advisor.name} </p>
               </row>
           );
