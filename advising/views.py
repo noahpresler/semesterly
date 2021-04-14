@@ -155,5 +155,5 @@ class RegisteredCoursesview(ValidateSubdomainMixin, APIView):
     def is_section_verified(self, section, student, semester):
         timetable = student.personaltimetable_set.filter(
             semester=semester).order_by('last_updated').last()
-        # TODO: This is not necessarily the 'current' timetable
+        # TODO: This is not necessarily the 'current' or 'selected' timetable
         return section in timetable.sections.all()
