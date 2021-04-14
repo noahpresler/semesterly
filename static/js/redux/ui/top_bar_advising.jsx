@@ -13,6 +13,8 @@ GNU General Public License for more details.
 */
 
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
+import PropTypes from 'prop-types';
 import SocialProfileContainer from './containers/social_profile_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
@@ -30,6 +32,8 @@ class TopBarAdvising extends React.Component {
     this.comments_collapsed = 'neutral';
     this.toggleComments = this.toggleComments.bind(this);
     this.renderUserForPrint = this.renderUserForPrint.bind(this);
+    // TODO: Make this modal pop up when there is no user data
+    // this.props.triggerSISImportDataModal()
   }
 
   toggleComments() {
@@ -76,6 +80,30 @@ class TopBarAdvising extends React.Component {
   }
 
   render() {
+    const SISImportDataModalButton = (
+      <div className="cal-btn-wrapper">
+        <button
+          onClick={() => this.props.triggerSISImportDataModal()}
+          className="import-data"
+          data-tip
+          data-for="mock-btn-tooltip"
+        >
+          {/* TODO: Move import data button (below) to optimal position */}
+          <div className="import-data">
+            <p>Import Data</p>
+          </div>
+        </button>
+        <ReactTooltip
+          id="mock-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
+          effect="solid"
+        >
+          <span>SIS Import Data Modal</span>
+        </ReactTooltip>
+      </div>
+    );
     return (
       <div className="top-bar">
         <a href="/" className="semesterly-name">
@@ -101,6 +129,9 @@ class TopBarAdvising extends React.Component {
           </div>
         </div>
         <SocialProfileContainer />
+        <span>
+          {SISImportDataModalButton}
+        </span>
         <div className="navicon" onClick={this.toggleComments}>
           <span />
           <span />
@@ -111,6 +142,7 @@ class TopBarAdvising extends React.Component {
 }
 
 TopBarAdvising.propTypes = {
+  triggerSISImportDataModal: PropTypes.func.isRequired,
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
   currentSemester: SemesterlyPropTypes.semester.isRequired,
 };
