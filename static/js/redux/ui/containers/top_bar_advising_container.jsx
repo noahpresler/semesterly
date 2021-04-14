@@ -20,8 +20,7 @@ import {triggerSISImportDataModal} from "../../actions/modal_actions";
 
 const mapStateToProps = state => ({
   userInfo: state.userInfo.data,
-  currentSemester:
-    getCurrentSemester(state),
+  currentSemester: getCurrentSemester(state),
 });
 
 const TopBarAdvisingContainer = connect(
