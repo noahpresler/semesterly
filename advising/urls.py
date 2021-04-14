@@ -24,5 +24,9 @@ urlpatterns = [
     url(r'^advising/*$', advising.views.AdvisingView.as_view()),
     url(r'^advising/jhu_signup/*$',
         FeatureFlowView.as_view(feature_name='JHU_SIGNUP', is_advising=True)),
-    url(r'^advising/sis_post/$', advising.views.StudentSISView.as_view()), 
+    url(r'^advising/sis_post/$', advising.views.StudentSISView.as_view()),
+    url(r'^advising/sis_semesters/$',
+        advising.views.StudentSISView.as_view()),
+    url(r'^advising/sis_courses/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/$',
+        advising.views.RegisteredCoursesview.as_view()),
 ]
