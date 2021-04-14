@@ -17,21 +17,21 @@ from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin, Featur
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from student.models import Student
 from timetable.models import CourseIntegration, Course, Section, Semester
 from django.shortcuts import get_object_or_404, render, redirect
 from student.utils import get_student
-from django.db import transaction
 from rest_framework import status, exceptions
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.authentication import get_authorization_header, BaseAuthentication
 from semesterly.settings import get_secret
 from django.contrib.auth.mixins import LoginRequiredMixin
+from student.models import Student
 from advising.models import Advisor
 import jwt
 import json
+from courses.serializers import CourseSerializer
 
-# TODO: Add comments for advising backend
+
 class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
     is_advising = True
 
@@ -52,18 +52,29 @@ class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
 
 
 class StudentSISView(ValidateSubdomainMixin, APIView):
-    """ Handles advising interactions. """
+    """ Handles SIS data retrieval and digesting. """
+
+    def get(self, request):
+        """Gets all of the semesters that SIS has retrieved from
+        Assumes student has already received a POST request from SIS
+        Returns:
+            retrievedSemesters: [<sem_name> <year>, ...]
+            Ex: ["Fall 2019", "Spring 2020", "Fall 2020"]
+        """
+        student = Student.objects.get(user=request.user)
+        semesters = set()
+        for section in student.sis_registered_courses.all():
+            semesters.add(str(section.semester))
+        return Response({'retrievedSemesters': list(semesters)},
+                        status=status.HTTP_200_OK)
 
     def post(self, request):
-        """Creates a new 
-        Required data:
-            
+        """Populates the database according to the SIS data.
+        Fills students' advisors, majors, minors, and courses fields.
         """
         try:
-            print(request.body) # REMOVE THIS LATER! ONLY FOR TESTING
             payload = jwt.decode(request.body, get_secret(
                 'STUDENT_SIS_AUTH_SECRET'), algorithms=['HS256'])
-            print(payload) # REMOVE THIS LATER! ONLY FOR TESTING
             if payload == "null":
                 msg = 'Null token not allowed'
                 raise exceptions.AuthenticationFailed(msg)
@@ -72,7 +83,8 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         except UnicodeError:
             msg = 'Invalid token header. Token string should not contain invalid characters.'
             raise exceptions.AuthenticationFailed(msg)
-        student = get_object_or_404(Student, jhed=payload['StudentInfo']['JhedId'])
+        student = get_object_or_404(
+            Student, jhed=payload['StudentInfo']['JhedId'])
         self.add_advisors(payload, student)
         self.add_majors(payload, student)
         self.add_minors(payload, student)
@@ -81,29 +93,67 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         return Response(status=status.HTTP_201_CREATED)
 
     def add_advisors(self, data, student):
-        advisors = data['Advisors']
-        for advisor_data in advisors:
-            advisor = Advisor.objects.get_or_create(
-                jhed=advisor_data['JhedId'], email_address=['EmailAddress'])
-            student.advisors.add(advisor)
-            advisor.save()
+        student.advisors.clear()
+        for advisor_data in data['Advisors']:
+            last_name, first_name = advisor_data['FullName'].split(',')
+            advisor, created = Advisor.objects.get_or_create(
+                jhed=advisor_data['JhedId'], email_address=advisor_data['EmailAddress'],
+                last_name=last_name, first_name=first_name)
+            if not created:
+                student.advisors.add(advisor)
+                advisor.save()
 
     def add_majors(self, data, student):
         student.primary_major = data['StudentInfo']['PrimaryMajor']
-        student.other_majors.add(*[major_data['Major']
-                                   for major_data in data['NonPrimaryMajors']])
+        del student.other_majors[:]
+        for major_data in data['NonPrimaryMajors']:
+            student.other_majors.append(major_data['Major'])
 
     def add_minors(self, data, student):
-        student.minors.add(*[minor_data['Minor']
-                             for minor_data in data['Minors']])
+        del student.minors[:]
+        for minor_data in data['Minors']:
+            student.minors.append(minor_data['Minor'])
 
     def add_courses(self, data, student):
+        student.sis_registered_courses.clear()
         for course_data in data['Courses']:
             course = get_object_or_404(
                 Course, code=course_data['OfferingName'])
-            name, year = data['Term'].split(' ')
+            name, year = course_data['Term'].split(' ')
             semester = get_object_or_404(Semester, name=name, year=year)
             section = get_object_or_404(
                 Section, course=course, semester=semester,
                 meeting_section=course_data['SectionNumber'])
             student.sis_registered_courses.add(section)
+
+
+class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
+    """Handles retrieving SIS courses from a specific semester"""
+
+    def get(self, request, sem_name, year):
+        """
+        Returns:
+            registeredCourses: {
+                {**CourseSerializer(course1), is_verified: bool},
+                {...},
+            }
+        """
+        school = request.subdomain
+        semester = Semester.objects.get(name=sem_name, year=year)
+        student = Student.objects.get(user=request.user)
+        context = {'school': school, 'semester': semester, 'student': student}
+        courses = {'registeredCourses': []}
+        for section in student.sis_registered_courses.all():
+            course_data = {'isVerified': self.is_section_verified(
+                section, student, semester)}
+
+            courses['registeredCourses'].append(
+                dict(course_data, **CourseSerializer(
+                    section.course, context=context).data))
+        return Response(courses, status=status.HTTP_200_OK)
+
+    def is_section_verified(self, section, student, semester):
+        timetable = student.personaltimetable_set.filter(
+            semester=semester).order_by('last_updated').last()
+        # TODO: This is not necessarily the 'current' or 'selected' timetable
+        return section in timetable.sections.all()
