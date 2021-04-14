@@ -17,8 +17,8 @@ import timetable.models as timetable_models
 
 
 class Advisor(models.Model):
-    # first_name = models.CharField(max_length=255, null=True, default='')
-    # last_name = models.CharField(max_length=255, null=True, default='')
+    first_name = models.CharField(max_length=255, null=True, default='')
+    last_name = models.CharField(max_length=255, null=True, default='')
     jhed = models.CharField(max_length=255, null=True, default='')
     email_address = models.CharField(
         max_length=255, null=True, default='')

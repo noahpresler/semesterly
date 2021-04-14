@@ -14,11 +14,6 @@ from rest_framework import serializers
 
 from advising.models import Advisor
 
-def get_advisor_dict(advisor):
-    """ Return serialized representation of an advisor. """
-    if student is not None:
-        advisor_dict = dict(user_dict, **AdvisorSerializer(advisor).data)
-    return advisor_dict
 
 class AdvisorSerializer(serializers.ModelSerializer):
 

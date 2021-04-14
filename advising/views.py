@@ -56,13 +56,11 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         """Pulls student data from SIS, including advisors, SIS course info,
                                     student's major(s), and student's minor(s)
         Required data:
-            STUDENT_SIS_AUTH_SECRET: validate valid user can access SIS data
+            STUDENT_SIS_AUTH_SECRET: ensure only valid user can access SIS data
         """
         try:
-            # print(request.body) # REMOVE THIS LATER! ONLY FOR TESTING
             payload = jwt.decode(request.body, get_secret(
                 'STUDENT_SIS_AUTH_SECRET'), algorithms=['HS256'])
-            # print(payload) # REMOVE THIS LATER! ONLY FOR TESTING
             if payload == "null":
                 msg = 'Null token not allowed'
                 raise exceptions.AuthenticationFailed(msg)
@@ -82,9 +80,10 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
     def add_advisors(self, data, student):
         student.advisors.clear()
         for advisor_data in data['Advisors']:
+            last_name, first_name=advisor_data['FullName'].split(',')
             advisor, created = Advisor.objects.get_or_create(
-                jhed=advisor_data['JhedId'], email_address=advisor_data['EmailAddress'])
-                # last_name, first_name=advisor_data['FullName'].split(',')
+                jhed=advisor_data['JhedId'], email_address=advisor_data['EmailAddress'],
+                last_name=last_name, first_name=first_name)
             if not created:
                 student.advisors.add(advisor)
                 advisor.save()
