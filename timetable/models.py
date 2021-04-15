@@ -31,14 +31,31 @@ class Semester(models.Model):
         year (CharField): the year (e.g. 2017, 2018)
     """
     name = models.CharField(max_length=50)
-    year = models.CharField(max_length=4)
+    year = models.CharField(max_length = 4)
 
     def __unicode__(self):
         return '{} {}'.format(self.name, self.year)
 
     def __str__(self):
         return '{} {}'.format(self.name, self.year)
+    
+    def __le__(self, other):
+        if int(self.year) <= int(other):
+            if self._name_to_int() <= other._name_to_int():
+                return True
+        return False
 
+    def _name_to_int(self):
+        if str(self.name) == "Intersession":
+            return 0
+        elif str(self.name) == "Spring":
+            return 1
+        elif str(self.name) == "Summer":
+            return 2
+        elif str(self.name) == "Fall":
+            return 3
+        return 4
+    
 
 class Textbook(models.Model):
     """
