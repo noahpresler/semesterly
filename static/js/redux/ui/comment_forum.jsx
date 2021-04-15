@@ -23,6 +23,7 @@ class CommentForum extends React.Component {
     this.state = {
       studentName: 'Mia Boloix',
       // TODO: Set this to list of ALL OF student's advisors from SIS
+      // should be able to get this through userInfo since advisors are serialized
       advisors: [
         {
           name: 'Yair Amir',

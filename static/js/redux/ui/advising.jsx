@@ -77,7 +77,8 @@ class Advising extends React.Component {
 
   componentDidMount() {
   }
-  
+
+  // TODO: Fix bugs with retrieving semesters (make it append rather than start new)
   fetchSemesters() {
     fetch(getRetrievedSemesters())
       .then(response => response.json())
