@@ -74,8 +74,8 @@ class AdvisorMenu extends React.Component {
       this.props.advisors.map(advisor => (
         <row key={advisor.jhed} style={{ padding: '5px' }}>
           {/* if name in addedAdvisors, removeBtn, else addBtn */}
-          {addRemoveBtn(advisor.jhed, this.props.transcript.advisor_names.includes(advisor.name))}
-          <p className="advisor"> {advisor.name} </p>
+          {addRemoveBtn(advisor.jhed, this.props.transcript.advisor_names.includes(advisor.first_name + " " + advisor.last_name))}
+          <p className="advisor"> {advisor.first_name + " " + advisor.last_name} </p>
         </row>
       )) : <p style={{ textAlign: 'center', fontSize: '10pt' }}> You are not connected to any advisors </p>;
 

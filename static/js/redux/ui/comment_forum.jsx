@@ -22,22 +22,6 @@ class CommentForum extends React.Component {
     super(props);
     this.state = {
       studentName: 'Mia Boloix',
-      // TODO: Set this to list of ALL OF student's advisors from SIS
-      // should be able to get this through userInfo since advisors are serialized
-      advisors: [
-        {
-          name: 'Yair Amir',
-          jhed: 'yamir',
-        },
-        {
-          name: 'Linda Moulton',
-          jhed: 'lmoulton',
-        },
-        {
-          name: 'Steven Marra',
-          jhed: 'smarra',
-        },
-      ],
     };
   }
 
