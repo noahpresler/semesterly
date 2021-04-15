@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Cookie, { get } from 'js-cookie';
+import Cookie from 'js-cookie';
 import TopBarAdvisingContainer from './containers/top_bar_advising_container';
 import CommentForumContainer from './containers/comment_forum_container';
 import AdvisingScheduleContainer from './containers/advising_schedule_container';
@@ -34,6 +34,7 @@ class Advising extends React.Component {
       orientation: !mql.matches ? 'landscape' : 'portrait',
       selected_semester: null,
       transcript: null,
+      displayed_semesters: [ 'Fall 2021' ], // TODO: default to latest semester dynamically
     };
     this.updateOrientation = this.updateOrientation.bind(this);
     this.callbackFunction = this.callbackFunction.bind(this);
@@ -77,15 +78,12 @@ class Advising extends React.Component {
   componentDidMount() {
   }
   
-  // TODO: add fetch for each semester!
   fetchSemesters() {
     fetch(getRetrievedSemesters())
       .then(response => response.json())
-      .then((data) => { // if data is null, then keep it null? maybe just default null anyway
-        // keep note that will be a list of data, not a single value
+      .then((data) => {
         this.setState({ displayed_semesters: data.retrievedSemesters })
       });
-    // this.setState({relevantSemesters: null})
   }
 
   fetchTranscript(newSelectedSemester) {
@@ -143,6 +141,7 @@ class Advising extends React.Component {
 
   callbackFunction(childSemesterData) {
     this.fetchTranscript(childSemesterData);
+    this.fetchSemesters();
   }
 
 
@@ -220,7 +219,7 @@ class Advising extends React.Component {
               <AdvisingScheduleContainer
                 parentCallback={this.callbackFunction}
                 selected_semester={this.state.selected_semester}
-                // displayed_semesters={this.state.displayed_semesters}
+                displayed_semesters={this.state.displayed_semesters}
               />
               {footer}
             </div>
