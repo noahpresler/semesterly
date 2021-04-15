@@ -63,7 +63,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         """
         student = Student.objects.get(user=request.user)
         semesters = set()
-        for section in student.sis_registered_courses.all():
+        for section in student.sis_registered_sections.all():
             semesters.add(str(section.semester))
         return Response({'retrievedSemesters': list(semesters)},
                         status=status.HTTP_200_OK)
@@ -115,7 +115,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             student.minors.append(minor_data['Minor'])
 
     def add_courses(self, data, student):
-        student.sis_registered_courses.clear()
+        student.sis_registered_sections.clear()
         for course_data in data['Courses']:
             course = get_object_or_404(
                 Course, code=course_data['OfferingName'])
@@ -124,7 +124,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             section = get_object_or_404(
                 Section, course=course, semester=semester,
                 meeting_section=course_data['SectionNumber'])
-            student.sis_registered_courses.add(section)
+            student.sis_registered_sections.add(section)
 
 
 class RegisteredCoursesView(ValidateSubdomainMixin, APIView):

@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Cookie from 'js-cookie';
+import Cookie, { get } from 'js-cookie';
 import TopBarAdvisingContainer from './containers/top_bar_advising_container';
 import CommentForumContainer from './containers/comment_forum_container';
 import AdvisingScheduleContainer from './containers/advising_schedule_container';
@@ -22,7 +22,7 @@ import UserSettingsModalContainer from './containers/modals/user_settings_modal_
 import SignupModalContainer from './containers/modals/signup_modal_container';
 import JHUSignupModalContainer from './containers/modals/jhu_signup_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
-import { getTranscriptCommentsBySemester } from '../constants/endpoints';
+import { getTranscriptCommentsBySemester, getRetrievedSemesters } from '../constants/endpoints';
 import SISImportDataModalContainer from './containers/modals/SIS_import_data_modal_container';
 
 
@@ -78,6 +78,15 @@ class Advising extends React.Component {
   }
   
   // TODO: add fetch for each semester!
+  fetchSemesters() {
+    fetch(getRetrievedSemesters())
+      .then(response => response.json())
+      .then((data) => { // if data is null, then keep it null? maybe just default null anyway
+        // keep note that will be a list of data, not a single value
+        this.setState({ displayed_semesters: data.retrievedSemesters })
+      });
+    // this.setState({relevantSemesters: null})
+  }
 
   fetchTranscript(newSelectedSemester) {
     if (newSelectedSemester !== null) {
@@ -211,6 +220,7 @@ class Advising extends React.Component {
               <AdvisingScheduleContainer
                 parentCallback={this.callbackFunction}
                 selected_semester={this.state.selected_semester}
+                // displayed_semesters={this.state.displayed_semesters}
               />
               {footer}
             </div>
