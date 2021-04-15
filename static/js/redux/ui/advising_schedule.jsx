@@ -23,7 +23,7 @@ class AdvisingSchedule extends React.Component {
   }
 
   render() {
-    const courseListRows = (this.props.displayed_semesters.length > 0) ?
+    const courseListRows = (this.props.displayed_semesters !== null) ?
       this.props.displayed_semesters.map(semester =>
         (<CourseListRow
           key={semester}
