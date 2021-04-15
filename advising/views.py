@@ -57,6 +57,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
     def get(self, request):
         """Gets all of the semesters that SIS has retrieved from
         Assumes student has already received a POST request from SIS
+        Only includes Fall and Spring semesters
         Returns:
             retrievedSemesters: [<sem_name> <year>, ...]
             Ex: ["Fall 2019", "Spring 2020", "Fall 2020"]
@@ -64,8 +65,12 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         student = Student.objects.get(user=request.user)
         semesters = set()
         for section in student.sis_registered_sections.all():
-            semesters.add(str(section.semester))
-        return Response({'retrievedSemesters': list(semesters)},
+            if str(section.semester.name) == "Fall" or \
+                    str(section.semester.name) == "Spring":
+                semesters.add(section.semester)
+        semesters = sorted(
+            list(map(lambda s: str(s), semesters)), reverse=True)
+        return Response({'retrievedSemesters': semesters},
                         status=status.HTTP_200_OK)
 
     def post(self, request):
