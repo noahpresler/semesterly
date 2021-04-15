@@ -14,6 +14,7 @@ GNU General Public License for more details.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import AdvisorMenu from './advisor_menu';
 import CommentInputContainer from './containers/comment_input_container';
 
@@ -22,25 +23,11 @@ class CommentForum extends React.Component {
     super(props);
     this.state = {
       studentName: 'Mia Boloix',
-      // TODO: Set this to list of ALL OF student's advisors from SIS
-      advisors: [
-        {
-          name: 'Yair Amir',
-          jhed: 'yamir',
-        },
-        {
-          name: 'Linda Moulton',
-          jhed: 'lmoulton',
-        },
-        {
-          name: 'Steven Marra',
-          jhed: 'smarra',
-        },
-      ],
     };
   }
 
   render() {
+    const { userInfo } = this.props;
     let transcript;
     if (this.props.transcript != null && this.props.transcript.comments != null) {
       transcript = this.props.transcript.comments.map((comment) => {
@@ -104,7 +91,7 @@ class CommentForum extends React.Component {
         {this.props.selected_semester &&
         <AdvisorMenu
           semester={this.props.selected_semester}
-          advisors={this.state.advisors}
+          advisors={userInfo.advisors}
           transcript={this.props.transcript}
           addAdvisor={this.state.addAdvisor}
           addRemoveAdvisor={this.props.addRemoveAdvisor}
@@ -127,6 +114,7 @@ CommentForum.defaultProps = {
 };
 
 CommentForum.propTypes = {
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   addRemoveAdvisor: PropTypes.func.isRequired,
   selected_semester: PropTypes.string,
   transcript: PropTypes.shape({
