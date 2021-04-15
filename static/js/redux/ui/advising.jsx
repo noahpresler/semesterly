@@ -81,8 +81,8 @@ class Advising extends React.Component {
 
   
   fetchSemesters() {
-    let semesters = [ this.props.semester.current ]; //the current semester 
-    console.log(semesters); // TODO: figure out why this currently undefined?
+    let semesters = [ this.props.semester.name + " " + this.props.semester.year ]; //the current semester 
+    console.log(semesters)
     fetch(getRetrievedSemesters())
       .then(response => response.json())
       .then((data) => {
