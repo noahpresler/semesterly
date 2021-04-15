@@ -117,8 +117,10 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
     def add_courses(self, data, student):
         student.sis_registered_sections.clear()
         for course_data in data['Courses']:
-            course = get_object_or_404(
-                Course, code=course_data['OfferingName'])
+            try:
+                course = Course.objects.get(code=course_data['OfferingName'])
+            except Course.DoesNotExist:
+                continue
             name, year = course_data['Term'].split(' ')
             semester = get_object_or_404(Semester, name=name, year=year)
             section = get_object_or_404(
