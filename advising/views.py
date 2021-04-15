@@ -57,15 +57,19 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
     def get(self, request):
         """Gets all of the semesters that SIS has retrieved from
         Assumes student has already received a POST request from SIS
+        Only includes Fall and Spring semesters
         Returns:
             retrievedSemesters: [<sem_name> <year>, ...]
             Ex: ["Fall 2019", "Spring 2020", "Fall 2020"]
         """
         student = Student.objects.get(user=request.user)
         semesters = set()
-        for section in student.sis_registered_courses.all():
-            semesters.add(str(section.semester))
-        return Response({'retrievedSemesters': list(semesters)},
+        for section in student.sis_registered_sections.all():
+            if str(section.semester.name) == "Fall" or \
+                    str(section.semester.name) == "Spring":
+                semesters.add(section.semester)
+        semesters = list(map(lambda s: str(s), sorted(semesters, reverse=True)))
+        return Response({'retrievedSemesters': semesters},
                         status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -115,16 +119,19 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             student.minors.append(minor_data['Minor'])
 
     def add_courses(self, data, student):
-        student.sis_registered_courses.clear()
+        student.sis_registered_sections.clear()
         for course_data in data['Courses']:
-            course = get_object_or_404(
-                Course, code=course_data['OfferingName'])
+            try:
+                # TODO: Provide info to user for when course doesn't exist
+                course = Course.objects.get(code=course_data['OfferingName'])
+            except Course.DoesNotExist:
+                continue
             name, year = course_data['Term'].split(' ')
             semester = get_object_or_404(Semester, name=name, year=year)
             section = get_object_or_404(
                 Section, course=course, semester=semester,
-                meeting_section=course_data['SectionNumber'])
-            student.sis_registered_courses.add(section)
+                meeting_section="({})".format(course_data['SectionNumber']))
+            student.sis_registered_sections.add(section)
 
 
 class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
