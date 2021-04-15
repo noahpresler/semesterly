@@ -130,7 +130,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             semester = get_object_or_404(Semester, name=name, year=year)
             section = get_object_or_404(
                 Section, course=course, semester=semester,
-                meeting_section=course_data['SectionNumber'])
+                meeting_section="({})".format(course_data['SectionNumber']))
             student.sis_registered_sections.add(section)
 
 
