@@ -145,12 +145,19 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         """
         school = request.subdomain
         semester = Semester.objects.get(name=sem_name, year=year)
+        if student not in transcript.advisors.all() and \
+                student.jhed != transcript.owner.jhed:
         if 'jhed' in request.data:
+            student = get_object_or_404(jhed=request.data['jhed'])
             advisor = Student.objects.get(user=request.user)
-            if advisor.is_advisor():
-                student = get_object_or_404(Student, jhed=request.data['jhed'])
-            else:
+            transcript = get_object_or_404(
+                Transcript, owner=student, semester=semester)
+
+            if student.jhed != transcript.owner.jhed \
+                    or not advisor.is_advisor() \
+                    or advisor not in transcript.advisors.all():
                 return Response(status=status.HTTP_403_FORBIDDEN)
+
         else:
             student = Student.objects.get(user=request.user)
         context = {'school': school, 'semester': semester, 'student': student}
