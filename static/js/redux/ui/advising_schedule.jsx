@@ -18,6 +18,13 @@ import CourseListRow from './course_list_row';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class AdvisingSchedule extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      mock: null,
+    };
+  }
+
   render() {
     const courseListRows = (this.props.displayed_semesters !== null) ?
       this.props.displayed_semesters.map(semester =>
