@@ -30,6 +30,8 @@ class AdvisingSchedule extends React.Component {
     };
   }
 
+  //
+
   render() {
     const courseListRows = (this.state.displayed_semesters.length > 0) ?
       this.state.displayed_semesters.map(semester =>
