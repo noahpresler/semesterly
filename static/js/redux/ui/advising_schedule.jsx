@@ -18,10 +18,7 @@ import CourseListRow from './course_list_row';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class AdvisingSchedule extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+  
   render() {
     const courseListRows = (this.props.displayed_semesters !== null) ?
       this.props.displayed_semesters.map(semester =>
@@ -56,6 +53,7 @@ AdvisingSchedule.defaultProps = {
 
 AdvisingSchedule.propTypes = {
   selected_semester: PropTypes.string,
+  displayed_semesters: PropTypes.array,
   coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,

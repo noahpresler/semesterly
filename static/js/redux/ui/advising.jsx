@@ -79,10 +79,8 @@ class Advising extends React.Component {
     this.fetchSemesters();
   }
 
-  
   fetchSemesters() {
-    let semesters = [ this.props.semester.name + " " + this.props.semester.year ];
-    console.log(semesters)
+    const semesters = [this.props.semester.name + ' ' + this.props.semester.year];
     fetch(getRetrievedSemesters())
       .then(response => response.json())
       .then((data) => {
@@ -241,6 +239,10 @@ class Advising extends React.Component {
 
 Advising.propTypes = {
   dataLastUpdated: PropTypes.string.isRequired,
+  semester: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    year: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Advising;
