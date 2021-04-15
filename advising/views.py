@@ -68,8 +68,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             if str(section.semester.name) == "Fall" or \
                     str(section.semester.name) == "Spring":
                 semesters.add(section.semester)
-        semesters = sorted(
-            list(map(lambda s: str(s), semesters)), reverse=True)
+        semesters = list(map(lambda s: str(s), sorted(semesters, reverse=True)))
         return Response({'retrievedSemesters': semesters},
                         status=status.HTTP_200_OK)
 
