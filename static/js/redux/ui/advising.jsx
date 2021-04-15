@@ -80,11 +80,11 @@ class Advising extends React.Component {
   }
 
   fetchSemesters() {
-    const semesters = [this.props.semester.name + ' ' + this.props.semester.year];
+    const semesters = [`${this.props.semester.name} ${this.props.semester.year}`];
     fetch(getRetrievedSemesters())
       .then(response => response.json())
       .then((data) => {
-        this.setState({ displayed_semesters: semesters.concat(data.retrievedSemesters) })
+        this.setState({ displayed_semesters: semesters.concat(data.retrievedSemesters) });
       });
   }
 
