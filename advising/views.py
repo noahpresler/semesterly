@@ -118,6 +118,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         student.sis_registered_sections.clear()
         for course_data in data['Courses']:
             try:
+                # TODO: Provide info to user for when course doesn't exist
                 course = Course.objects.get(code=course_data['OfferingName'])
             except Course.DoesNotExist:
                 continue
