@@ -14,6 +14,7 @@ GNU General Public License for more details.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import AdvisorMenu from './advisor_menu';
 import CommentInputContainer from './containers/comment_input_container';
 
@@ -27,7 +28,6 @@ class CommentForum extends React.Component {
 
   render() {
     const { userInfo } = this.props;
-    // console.log(userInfo.advisors);
     let transcript;
     if (this.props.transcript != null && this.props.transcript.comments != null) {
       transcript = this.props.transcript.comments.map((comment) => {
@@ -114,6 +114,7 @@ CommentForum.defaultProps = {
 };
 
 CommentForum.propTypes = {
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   addRemoveAdvisor: PropTypes.func.isRequired,
   selected_semester: PropTypes.string,
   transcript: PropTypes.shape({
