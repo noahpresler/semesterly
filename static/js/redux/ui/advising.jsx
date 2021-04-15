@@ -34,7 +34,7 @@ class Advising extends React.Component {
       orientation: !mql.matches ? 'landscape' : 'portrait',
       selected_semester: null,
       transcript: null,
-      displayed_semesters: null, // TODO: default to latest semester dynamically
+      displayed_semesters: null,
     };
     this.updateOrientation = this.updateOrientation.bind(this);
     this.callbackFunction = this.callbackFunction.bind(this);
@@ -81,7 +81,7 @@ class Advising extends React.Component {
 
   
   fetchSemesters() {
-    let semesters = [ this.props.semester.name + " " + this.props.semester.year ]; //the current semester 
+    let semesters = [ this.props.semester.name + " " + this.props.semester.year ];
     console.log(semesters)
     fetch(getRetrievedSemesters())
       .then(response => response.json())
