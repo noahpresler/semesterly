@@ -76,14 +76,14 @@ class Advising extends React.Component {
   }
 
   componentDidMount() {
+    this.fetchSemesters();
   }
 
-  // TODO: Fix bugs with retrieving semesters (make it append rather than start new)
   fetchSemesters() {
     fetch(getRetrievedSemesters())
       .then(response => response.json())
       .then((data) => {
-        this.setState({ displayed_semesters: data.retrievedSemesters })
+        this.setState({ displayed_semesters: this.state.displayed_semesters.concat(data.retrievedSemesters) })
       });
   }
 
@@ -142,7 +142,6 @@ class Advising extends React.Component {
 
   callbackFunction(childSemesterData) {
     this.fetchTranscript(childSemesterData);
-    this.fetchSemesters();
   }
 
 

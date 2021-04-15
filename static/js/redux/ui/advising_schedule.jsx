@@ -20,12 +20,7 @@ import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 class AdvisingSchedule extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // using display_semesters props 
-    };
   }
-
-  //
 
   render() {
     const courseListRows = (this.props.displayed_semesters.length > 0) ?

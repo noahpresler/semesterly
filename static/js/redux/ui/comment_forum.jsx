@@ -42,6 +42,8 @@ class CommentForum extends React.Component {
   }
 
   render() {
+    const { userInfo } = this.props;
+    // console.log(userInfo.advisors);
     let transcript;
     if (this.props.transcript != null && this.props.transcript.comments != null) {
       transcript = this.props.transcript.comments.map((comment) => {
@@ -105,7 +107,7 @@ class CommentForum extends React.Component {
         {this.props.selected_semester &&
         <AdvisorMenu
           semester={this.props.selected_semester}
-          advisors={this.state.advisors}
+          advisors={userInfo.advisors}
           transcript={this.props.transcript}
           addAdvisor={this.state.addAdvisor}
           addRemoveAdvisor={this.props.addRemoveAdvisor}
