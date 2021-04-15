@@ -40,7 +40,9 @@ class Semester(models.Model):
         return '{} {}'.format(self.name, self.year)
     
     def __le__(self, other):
-        if int(self.year) <= int(other):
+        if int(self.year) < int(other.year):
+            return True
+        elif int(self.year) == int(other.year):
             if self._name_to_int() <= other._name_to_int():
                 return True
         return False
