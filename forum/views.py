@@ -102,20 +102,39 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToJHUSignupMixin, APIV
 
         student = Student.objects.get(user=request.user)
         semester = Semester.objects.get(name=sem_name, year=year)
-
         transcript = get_object_or_404(
             Transcript, owner=student, semester=semester)
-        advisor = get_object_or_404(Student, jhed=request.data['jhed'])
+        status = status.HTTP_200_OK
         if request.data['action'] == 'add':
+            status = self.add_advisor(transcript, jhed)
+        elif request.data['action'] == 'remove':
+            status = self.remove_advisor(transcript, jhed)
+        return Response({'transcript': TranscriptSerializer(transcript).data},
+                        status=status)
+
+    def add_advisor(self, transcript, jhed):
+        try:    # add Advisor by their Semester.ly account
+            advisor = Student.objects.get(jhed=request.data['jhed'])
             if advisor not in transcript.advisors.all():
                 transcript.advisors.add(advisor)
-        elif request.data['action'] == 'remove':
-            if advisor in transcript.advisors.all():
-                transcript.advisors.remove(advisor)
-        transcript.save()
+            return status.HTTP_200_OK
+        except Student.DoesNotExist:
+            pass
 
-        return Response({'transcript': TranscriptSerializer(transcript).data},
-                        status=status.HTTP_200_OK)
+        try:    # add advisor to pending advisors for this transcript 
+            advisor = Advisor.objects.get(jhed=request.data['jhed'])
+            if advisor not in transcript.pending_advisors.all():
+                transcript.pending_advisors.add(advisor)
+            return status.HTTP_200_OK
+        except Advisor.DoesNotExist:
+            return status.HTTP_404_NOT_FOUND
+
+    def remove_advisor(self, transcript, jhed):
+        advisor = get_object_or_404(Student, jhed=request.data['jhed'])
+        if advisor in transcript.advisors.all():
+            transcript.advisors.remove(advisor)
+        transcript.save()
+        return status.HTTP_200_OK
 
     def delete(self, request, sem_name, year):
         """Deletes the forum transcript associated with a particular semester.
