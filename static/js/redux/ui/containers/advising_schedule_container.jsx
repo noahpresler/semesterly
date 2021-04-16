@@ -23,6 +23,7 @@ import {
   fetchCourseInfo,
   showFinalExamsModal,
   togglePeerModal,
+  triggerSISImportDataModal,
 } from '../../actions/modal_actions';
 import {
   addOrRemoveCourse,
@@ -66,6 +67,7 @@ const AdvisingScheduleContainer = connect(
     deleteTimetable,
     launchFinalExamsModal: showFinalExamsModal,
     loadTimetable,
+    triggerSISImportDataModal,
   },
 )(AdvisingSchedule);
 
