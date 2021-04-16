@@ -145,6 +145,7 @@ SOCIAL_AUTH_PIPELINE = (
     # Update the user record with any changed info from the auth service.
     'social_core.pipeline.user.user_details',
     'authpipe.utils.create_student',
+    'authpipe.utils.connect_advisors',
 )
 
 # Webpack
