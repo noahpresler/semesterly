@@ -85,7 +85,7 @@ class TopBarAdvising extends React.Component {
             className="return-to-schedule"
             data-tip
           >
-            <p style={{ color: 'gray' }}>Return&nbsp;to&nbsp;Schedule</p>
+            <p style={{ color: 'gray' }}>Return to Schedule</p>
           </button>
         </a>
       </div>
