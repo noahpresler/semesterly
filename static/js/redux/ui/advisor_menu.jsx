@@ -80,7 +80,6 @@ class AdvisorMenu extends React.Component {
           effect="solid"
         >
           {this.getAddRemoveTooltip(is_adding, is_pending)}
-          {console.log("\n")}
         </ReactTooltip>
       </div>
     );
