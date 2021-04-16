@@ -138,7 +138,12 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
     """Handles retrieving SIS courses from a specific semester"""
 
     def get(self, request, sem_name, year):
-        """
+        """If the 'jhed' key is provided, get the courses for the student with
+        the corresponding JHED. The request user must be an Advisor. Otherwise,
+        get the courses for the requesting student for this semester.
+
+        Optional data:
+            jhed: The jhed of the student whose data is requested
         Returns:
             registeredCourses: {
                 {**CourseSerializer(course1), is_verified: bool},
@@ -147,7 +152,18 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         """
         school = request.subdomain
         semester = Semester.objects.get(name=sem_name, year=year)
-        student = Student.objects.get(user=request.user)
+        if 'jhed' in request.data:
+            student = get_object_or_404(jhed=request.data['jhed'])
+            advisor = Student.objects.get(user=request.user)
+            transcript = get_object_or_404(
+                Transcript, owner=student, semester=semester)
+
+            if student.jhed != transcript.owner.jhed \
+                    or not advisor.is_advisor() \
+                    or advisor not in transcript.advisors.all():
+                return Response(status=status.HTTP_403_FORBIDDEN)
+        else:
+            student = Student.objects.get(user=request.user)
         context = {'school': school, 'semester': semester, 'student': student}
         courses = {'registeredCourses': []}
         for section in student.sis_registered_courses.all():
