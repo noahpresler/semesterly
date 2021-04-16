@@ -103,9 +103,8 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             advisor, created = Advisor.objects.get_or_create(
                 jhed=advisor_data['JhedId'], email_address=advisor_data['EmailAddress'],
                 last_name=last_name, first_name=first_name)
-            if not created:
-                student.advisors.add(advisor)
-                advisor.save()
+            advisor.save()
+            student.advisors.add(advisor)
 
     def add_majors(self, data, student):
         student.primary_major = data['StudentInfo']['PrimaryMajor']
