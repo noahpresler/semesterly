@@ -102,7 +102,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             last_name, first_name = advisor_data['FullName'].split(',')
             advisor, created = Advisor.objects.get_or_create(
                 jhed=advisor_data['JhedId'], email_address=advisor_data['EmailAddress'],
-                last_name=last_name, first_name=first_name)
+                last_name=last_name.strip(), first_name=first_name.strip())
             advisor.save()
             student.advisors.add(advisor)
 
