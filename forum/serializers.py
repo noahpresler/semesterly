@@ -13,6 +13,8 @@
 from rest_framework import serializers
 
 from forum.models import Transcript, Comment
+from advising.models import Advisor
+from advising.serializers import AdvisorSerializer
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -32,13 +34,18 @@ class TranscriptSerializer(serializers.ModelSerializer):
     semester_name = serializers.CharField(source='semester.name')
     semester_year = serializers.CharField(source='semester.year')
     owner_name = serializers.CharField(source='owner.get_full_name')
-    advisor_names = serializers.SerializerMethodField()
+    advisors = serializers.SerializerMethodField()
 
-    def get_advisor_names(self, transcript):
-        advisor_names = []
+    def get_advisors(self, transcript):
+        advisors = []
         for advisor in transcript.advisors.all():
-            advisor_names.append(advisor.get_full_name())
-        return advisor_names
+            advisor_data = {
+                'is_pending': advisor in transcript.pending_advisors.all()}
+            advisor_data = dict(
+                advisor_data,
+                **AdvisorSerializer(Advisor.objects.get(jhed=advisor.jhed)).data)
+            advisors.append(advisor_data)
+        return advisors
 
     class Meta:
         model = Transcript
@@ -47,5 +54,5 @@ class TranscriptSerializer(serializers.ModelSerializer):
             'semester_name',
             'semester_year',
             'owner_name',
-            'advisor_names',
+            'advisors',
         )
