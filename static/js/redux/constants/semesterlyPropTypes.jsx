@@ -182,6 +182,25 @@ export const userInfo = PropTypes.shape({
   timeAcceptedTos: PropTypes.string,
 });
 
+export const transcript = PropTypes.shape({
+  semester_name: PropTypes.string,
+  semester_year: PropTypes.string,
+  owner: PropTypes.string,
+  advisors: PropTypes.arrayOf(PropTypes.shape({
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
+    full_name: PropTypes.string,
+    jhed: PropTypes.string,
+    email_address: PropTypes.string,
+    is_pending: PropTypes.bool,
+  })),
+  comments: PropTypes.arrayOf(PropTypes.shape({
+    author_name: PropTypes.string,
+    content: PropTypes.string,
+    timestamp: PropTypes.date,
+  })),
+});
+
 export const schoolSpecificInfo = PropTypes.shape({
   areasName: PropTypes.string.isRequired,
   campuses: PropTypes.shape({}),

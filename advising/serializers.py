@@ -16,6 +16,7 @@ from advising.models import Advisor
 
 
 class AdvisorSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source='get_full_name')
 
     class Meta:
         model = Advisor
@@ -24,4 +25,5 @@ class AdvisorSerializer(serializers.ModelSerializer):
             'email_address',
             'first_name',
             'last_name',
+            'full_name',
         )

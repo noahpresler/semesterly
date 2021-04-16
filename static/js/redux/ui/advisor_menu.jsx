@@ -15,6 +15,7 @@ import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
 import ReactTooltip from 'react-tooltip';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class AdvisorMenu extends React.Component {
   constructor(props) {
@@ -47,25 +48,39 @@ class AdvisorMenu extends React.Component {
       </div>
     );
 
-    const addRemoveBtn = (advisor, added) => (
+    const getAddRemoveTooltip = (isAdding, isPending) => {
+      if (isAdding) {
+        return <span>Add advisor</span>;
+      } else if (isPending) {
+        return <span>Cancel invitation</span>;
+      }
+      return <span>Remove advisor</span>;
+    };
+
+    const addRemoveBtn = (advisor, isAdding, isPending) => (
       <div className="add-button">
         <button
-          onClick={() => addRemoveAdvisor(advisor, added)}
+          onClick={() => addRemoveAdvisor(advisor, isAdding)}
           className="save-timetable add-button"
           data-tip
-          data-for="add-btn-tooltip"
+          data-for={advisor}
         >
-          <i className={classNames('fa', { 'fa-plus': !added, 'fa-check': added })} />
+          <i className={classNames('fa', {
+            'fa-plus': isAdding,
+            'fa-clock-o': isPending && !isAdding,
+            'fa-check': !isPending && !isAdding,
+          })}
+          />
         </button>
 
         <ReactTooltip
-          id="add-btn-tooltip"
+          id={advisor}
           class="tooltip"
           type="dark"
           place="bottom"
           effect="solid"
         >
-          <span>Add or Remove Advisor</span>
+          {getAddRemoveTooltip(isAdding, isPending)}
         </ReactTooltip>
       </div>
     );
@@ -73,23 +88,28 @@ class AdvisorMenu extends React.Component {
     const advisorList = (this.props.advisors.length > 0 && this.props.transcript != null) ?
       this.props.advisors.map(advisor => (
         <row key={advisor.jhed} style={{ padding: '5px' }}>
-          {/* if name in addedAdvisors, removeBtn, else addBtn */}
-          {addRemoveBtn(advisor.jhed, this.props.transcript.advisor_names.includes(`${advisor.first_name} ${advisor.last_name}`))}
-          <p className="advisor"> {`${advisor.first_name} ${advisor.last_name}`} </p>
+          { /* !!!This code is so bad but I don't know how to fix it help!!! */
+            this.props.transcript.advisors.some(invitedAdvisor =>
+              advisor.jhed === invitedAdvisor.jhed) ?
+              addRemoveBtn(advisor.jhed, false,
+                this.props.transcript.advisors.filter(
+                  invitedAdvisor => advisor.jhed === invitedAdvisor.jhed)[0].is_pending) :
+              addRemoveBtn(advisor.jhed, true, false)}
+          <p className="advisor"> {`${advisor.full_name}`} </p>
         </row>
       )) : <p style={{ textAlign: 'center', fontSize: '10pt' }}> You are not connected to any advisors </p>;
 
     return (
       <ClickOutHandler onClickOut={this.hideDropDown}>
         <div onMouseDown={this.toggleDropdown}>
-          { toggleAdvisorMenuBtn }
+          {toggleAdvisorMenuBtn}
         </div>
         <div className={classNames('advisor-dropdown', { down: this.state.showDropdown })}>
           <p style={{ maxWidth: '70%', fontWeight: 'bold', margin: 'auto', textAlign: 'center', marginTop: '10px' }}>
             Invite Advisors to Comment Forum
           </p>
           <div className="ad-modal-wrapper">
-            { advisorList }
+            {advisorList}
           </div>
         </div>
       </ClickOutHandler>
@@ -104,21 +124,14 @@ AdvisorMenu.defaultProps = {
 
 AdvisorMenu.propTypes = {
   advisors: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
+    full_name: PropTypes.string,
     jhed: PropTypes.string,
+    email_address: PropTypes.string,
   })).isRequired,
   addRemoveAdvisor: PropTypes.func.isRequired,
-  transcript: PropTypes.shape({
-    semester_name: PropTypes.string,
-    semester_year: PropTypes.string,
-    owner: PropTypes.string,
-    advisor_names: PropTypes.arrayOf(PropTypes.string),
-    comments: PropTypes.arrayOf(PropTypes.shape({
-      author_name: PropTypes.string,
-      content: PropTypes.string,
-      timestamp: PropTypes.date,
-    })),
-  }),
+  transcript: SemesterlyPropTypes.transcript,
 };
 
 export default AdvisorMenu;

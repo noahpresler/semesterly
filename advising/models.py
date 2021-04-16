@@ -22,3 +22,6 @@ class Advisor(models.Model):
     jhed = models.CharField(max_length=255, null=True, default='')
     email_address = models.CharField(
         max_length=255, null=True, default='')
+
+    def get_full_name(self):
+        return "{} {}".format(self.first_name, self.last_name)

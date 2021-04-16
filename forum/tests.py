@@ -22,6 +22,7 @@ from helpers.test.test_cases import UrlTestCase
 from forum.models import Comment, Transcript
 from student.models import Student
 from timetable.models import Semester
+from advising.models import Advisor
 from serializers import TranscriptSerializer, CommentSerializer
 import datetime
 
@@ -41,6 +42,9 @@ def setUpTranscriptDependencies(self):
         password='k',
         first_name='Rishi',
         last_name='Biswas',)
+    Advisor.objects.create(
+        first_name='Rishi', last_name='Biswas',
+        jhed='rbiswas4', email_address='rbiswas4@jhu.edu').save()
     self.advisor = Student.objects.create(user=user)
     self.advisor.jhed = 'rbiswas4'
     self.advisor.save()
@@ -144,8 +148,7 @@ class Serializers(TestCase):
         self.assertEquals(self.semester.year, serialized['semester_year'])
         self.assertEquals(self.student.get_full_name(),
                           serialized['owner_name'])
-        self.assertEquals(self.advisor.get_full_name(),
-                          serialized['advisor_names'][0])
+        self.assertEquals(self.advisor.jhed, serialized['advisors'][0]['jhed'])
 
 
 class UrlsTest(TestCase, UrlTestCase):
@@ -271,6 +274,9 @@ class ForumTranscriptViewTest(APITestCase):
         advisor = Student.objects.create(user=user)
         advisor.jhed = 'rbiswas4'
         advisor.save()
+        Advisor.objects.create(
+            first_name='Rishi', last_name='Biswas',
+            jhed='rbiswas4', email_address='rbiswas4@jhu.edu')
         data = {
             'action': 'add',
             'jhed': advisor.jhed,
