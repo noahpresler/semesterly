@@ -19,8 +19,10 @@ from django.forms.models import model_to_dict
 from django.db import models
 from picklefield.fields import PickledObjectField
 from django.contrib.postgres.fields import ArrayField
+import functools
 
 
+@functools.total_ordering
 class Semester(models.Model):
     """
     Represents a semester which is composed of a name (e.g. Spring, Fall)
@@ -39,6 +41,27 @@ class Semester(models.Model):
     def __str__(self):
         return '{} {}'.format(self.name, self.year)
 
+    def __lt__(self, other):
+        if int(self.year) < int(other.year):
+            return True
+        if int(self.year) == int(other.year):
+            return self._name_to_int() < other._name_to_int()
+        return False
+    
+    def __eq__(self, other):
+        return self.year == other.year and self.name == other.name
+
+    def _name_to_int(self):
+        if str(self.name) == "Intersession":
+            return 0
+        elif str(self.name) == "Spring":
+            return 1
+        elif str(self.name) == "Summer":
+            return 2
+        elif str(self.name) == "Fall":
+            return 3
+        return 4
+    
 
 class Textbook(models.Model):
     """

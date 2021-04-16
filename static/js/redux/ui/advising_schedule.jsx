@@ -22,12 +22,7 @@ class AdvisingSchedule extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // TODO: Change this to list of semesters given by SIS API
-      displayed_semesters: [
-        'Spring 2021',
-        'Fall 2020',
-        'Spring 2019',
-      ],
+      mock: null,
     };
   }
 
@@ -54,8 +49,8 @@ class AdvisingSchedule extends React.Component {
         </ReactTooltip>
       </div>
     );
-    const courseListRows = (this.state.displayed_semesters.length > 0) ?
-      this.state.displayed_semesters.map(semester =>
+    const courseListRows = (this.props.displayed_semesters !== null) ?
+      this.props.displayed_semesters.map(semester =>
         (<CourseListRow
           key={semester}
           parentParentCallback={this.props.parentCallback}
@@ -90,6 +85,7 @@ AdvisingSchedule.defaultProps = {
 AdvisingSchedule.propTypes = {
   triggerSISImportDataModal: PropTypes.func.isRequired,
   selected_semester: PropTypes.string,
+  displayed_semesters: PropTypes.arrayOf(PropTypes.string).isRequired,
   coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,
