@@ -34,6 +34,15 @@ class AdvisorMenu extends React.Component {
     this.setState({ showDropdown: false });
   }
 
+  getAddRemoveTooltip(is_adding, is_pending) {
+    if (is_adding) {
+      return <span>Add advisor</span>
+    } else if (is_pending) {
+      return <span>Cancel invitation</span>
+    }
+    return <span>Remove advisor</span>
+  }
+
   render() {
     const { addRemoveAdvisor } = this.props;
 
@@ -48,25 +57,30 @@ class AdvisorMenu extends React.Component {
       </div>
     );
 
-    const addRemoveBtn = (advisor, added) => (
+    const addRemoveBtn = (advisor, is_adding, is_pending) => (
       <div className="add-button">
         <button
-          onClick={() => addRemoveAdvisor(advisor, added)}
+          onClick={() => addRemoveAdvisor(advisor, is_adding)}
           className="save-timetable add-button"
           data-tip
-          data-for="add-btn-tooltip"
+          data-for={advisor}
         >
-          <i className={classNames('fa', { 'fa-plus': !added, 'fa-check': added })} />
+          <i className={classNames('fa', {
+            'fa-plus': is_adding,
+            'fa-clock-o': is_pending && !is_adding,
+            'fa-check': !is_pending && !is_adding,
+          })} />
         </button>
 
         <ReactTooltip
-          id="add-btn-tooltip"
+          id={advisor}
           class="tooltip"
           type="dark"
           place="bottom"
           effect="solid"
         >
-          <span>Add or Remove Advisor</span>
+          {this.getAddRemoveTooltip(is_adding, is_pending)}
+          {console.log("\n")}
         </ReactTooltip>
       </div>
     );
@@ -75,7 +89,9 @@ class AdvisorMenu extends React.Component {
       this.props.advisors.map(advisor => (
         <row key={advisor.jhed} style={{ padding: '5px' }}>
           {/* if name in addedAdvisors, removeBtn, else addBtn */}
-          {addRemoveBtn(advisor.jhed, this.props.transcript.advisors.some((invited_advisor) => { advisor.jhed === invited_advisor.jhed }))}
+          { /* ======= !!!This code is so bad but I don't know how to fix it help!!! ======= */
+            this.props.transcript.advisors.some(invited_advisor => { return advisor.jhed === invited_advisor.jhed }) ?
+              addRemoveBtn(advisor.jhed, false, this.props.transcript.advisors.filter(invited_advisor => advisor.jhed === invited_advisor.jhed)[0].is_pending) : addRemoveBtn(advisor.jhed, true, false)}
           <p className="advisor"> {`${advisor.full_name}`} </p>
         </row>
       )) : <p style={{ textAlign: 'center', fontSize: '10pt' }}> You are not connected to any advisors </p>;
