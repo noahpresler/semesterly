@@ -79,7 +79,7 @@ class CommentForum extends React.Component {
     const displayAdvisorNames = () => {
       const names = [];
       const advisorList = (this.props.transcript) ? this.props.transcript.advisors : [];
-      advisorList.forEach(advisor => names.push(advisor.first_name + " " + advisor.last_name));
+      advisorList.forEach(advisor => names.push(advisor.full_name));
       return names.join(', ');
     };
 

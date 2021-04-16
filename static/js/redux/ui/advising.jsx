@@ -105,7 +105,7 @@ class Advising extends React.Component {
     }
   }
 
-  addRemoveAdvisor(advisor, is_adding) {
+  addRemoveAdvisor(advisor, isAdding) {
     if (this.state.selected_semester !== null) {
       const semesterName = this.state.selected_semester.toString().split(' ')[0];
       const semesterYear = this.state.selected_semester.toString().split(' ')[1];
@@ -119,7 +119,7 @@ class Advising extends React.Component {
         },
         body: JSON.stringify({
           jhed: advisor,
-          action: is_adding ? 'add' : 'remove',
+          action: isAdding ? 'add' : 'remove',
         }),
       }).then(response => response.json())
       .then((data) => {

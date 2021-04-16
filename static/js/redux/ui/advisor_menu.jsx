@@ -10,12 +10,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes, { any } from 'prop-types';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
 import ReactTooltip from 'react-tooltip';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class AdvisorMenu extends React.Component {
   constructor(props) {
@@ -34,15 +34,6 @@ class AdvisorMenu extends React.Component {
     this.setState({ showDropdown: false });
   }
 
-  getAddRemoveTooltip(is_adding, is_pending) {
-    if (is_adding) {
-      return <span>Add advisor</span>
-    } else if (is_pending) {
-      return <span>Cancel invitation</span>
-    }
-    return <span>Remove advisor</span>
-  }
-
   render() {
     const { addRemoveAdvisor } = this.props;
 
@@ -57,19 +48,29 @@ class AdvisorMenu extends React.Component {
       </div>
     );
 
-    const addRemoveBtn = (advisor, is_adding, is_pending) => (
+    const getAddRemoveTooltip = (isAdding, isPending) => {
+      if (isAdding) {
+        return <span>Add advisor</span>;
+      } else if (isPending) {
+        return <span>Cancel invitation</span>;
+      }
+      return <span>Remove advisor</span>;
+    };
+
+    const addRemoveBtn = (advisor, isAdding, isPending) => (
       <div className="add-button">
         <button
-          onClick={() => addRemoveAdvisor(advisor, is_adding)}
+          onClick={() => addRemoveAdvisor(advisor, isAdding)}
           className="save-timetable add-button"
           data-tip
           data-for={advisor}
         >
           <i className={classNames('fa', {
-            'fa-plus': is_adding,
-            'fa-clock-o': is_pending && !is_adding,
-            'fa-check': !is_pending && !is_adding,
-          })} />
+            'fa-plus': isAdding,
+            'fa-clock-o': isPending && !isAdding,
+            'fa-check': !isPending && !isAdding,
+          })}
+          />
         </button>
 
         <ReactTooltip
@@ -79,7 +80,7 @@ class AdvisorMenu extends React.Component {
           place="bottom"
           effect="solid"
         >
-          {this.getAddRemoveTooltip(is_adding, is_pending)}
+          {getAddRemoveTooltip(isAdding, isPending)}
         </ReactTooltip>
       </div>
     );
@@ -87,10 +88,13 @@ class AdvisorMenu extends React.Component {
     const advisorList = (this.props.advisors.length > 0 && this.props.transcript != null) ?
       this.props.advisors.map(advisor => (
         <row key={advisor.jhed} style={{ padding: '5px' }}>
-          {/* if name in addedAdvisors, removeBtn, else addBtn */}
-          { /* ======= !!!This code is so bad but I don't know how to fix it help!!! ======= */
-            this.props.transcript.advisors.some(invited_advisor => { return advisor.jhed === invited_advisor.jhed }) ?
-              addRemoveBtn(advisor.jhed, false, this.props.transcript.advisors.filter(invited_advisor => advisor.jhed === invited_advisor.jhed)[0].is_pending) : addRemoveBtn(advisor.jhed, true, false)}
+          { /* !!!This code is so bad but I don't know how to fix it help!!! */
+            this.props.transcript.advisors.some(invitedAdvisor =>
+              advisor.jhed === invitedAdvisor.jhed) ?
+              addRemoveBtn(advisor.jhed, false,
+                this.props.transcript.advisors.filter(
+                  invitedAdvisor => advisor.jhed === invitedAdvisor.jhed)[0].is_pending) :
+              addRemoveBtn(advisor.jhed, true, false)}
           <p className="advisor"> {`${advisor.full_name}`} </p>
         </row>
       )) : <p style={{ textAlign: 'center', fontSize: '10pt' }}> You are not connected to any advisors </p>;
