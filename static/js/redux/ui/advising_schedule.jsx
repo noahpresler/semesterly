@@ -41,7 +41,7 @@ class AdvisingSchedule extends React.Component {
           id="import-data-btn-tooltip"
           class="tooltip"
           type="dark"
-          place="bottom"
+          place="right"
           effect="solid"
         >
           <span>Import SIS Data</span>

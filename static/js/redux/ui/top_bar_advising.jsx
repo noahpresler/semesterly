@@ -13,7 +13,6 @@ GNU General Public License for more details.
 */
 
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
 import SocialProfileContainer from './containers/social_profile_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
@@ -85,20 +84,10 @@ class TopBarAdvising extends React.Component {
           <button
             className="return-to-schedule"
             data-tip
-            data-for="return-to-schedule-btn-tooltip"
           >
             <p style={{ color: 'gray' }}>Return&nbsp;to&nbsp;Schedule</p>
           </button>
         </a>
-        <ReactTooltip
-          id="return-to-schedule-btn-tooltip"
-          class="tooltip"
-          type="dark"
-          place="bottom"
-          effect="solid"
-        >
-          <span>Return to Schedule</span>
-        </ReactTooltip>
       </div>
     );
     return (
