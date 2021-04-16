@@ -42,7 +42,7 @@ class TranscriptSerializer(serializers.ModelSerializer):
         for advisor in chain(
                 transcript.advisors.all(), transcript.pending_advisors.all()):
             advisor_data = dict(
-                {'is_pending': advisor in transcript.advisors.all()},
+                {'is_pending': advisor in transcript.pending_advisors.all()},
                 **AdvisorSerializer(Advisor.objects.get(jhed=advisor.jhed)).data)
             advisors.append(advisor_data)
         return advisors
