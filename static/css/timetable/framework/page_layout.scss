@@ -176,6 +176,14 @@ textarea {
   }
 }
 
+.advising-schedule-header {
+  font-family: $font-body;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
 @media (max-width: 999px) {
   .main-bar {
     width: 100%;
