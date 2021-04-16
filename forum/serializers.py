@@ -15,6 +15,7 @@ from rest_framework import serializers
 from forum.models import Transcript, Comment
 from advising.models import Advisor
 from advising.serializers import AdvisorSerializer
+from itertools import chain
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -38,11 +39,10 @@ class TranscriptSerializer(serializers.ModelSerializer):
 
     def get_advisors(self, transcript):
         advisors = []
-        for advisor in transcript.advisors.all():
-            advisor_data = {
-                'is_pending': advisor in transcript.pending_advisors.all()}
+        for advisor in chain(
+                transcript.advisors.all(), transcript.pending_advisors.all()):
             advisor_data = dict(
-                advisor_data,
+                {'is_pending': advisor in transcript.advisors.all()},
                 **AdvisorSerializer(Advisor.objects.get(jhed=advisor.jhed)).data)
             advisors.append(advisor_data)
         return advisors
