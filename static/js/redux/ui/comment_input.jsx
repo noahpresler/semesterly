@@ -28,23 +28,28 @@ class CommentInput extends React.Component {
   }
 
   sendContent(event) {
-    this.setState({ comment: event.target.value });
+    this.setState({comment: event.target.value});
   }
 
   submitContent(semesterName, semesterYear) {
-    fetch(getTranscriptCommentsBySemester(semesterName, semesterYear), {
-      method: 'POST',
-      headers: {
-        'X-CSRFToken': Cookie.get('csrftoken'),
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        jhed: this.props.userInfo.jhed,
-        timestamp: new Date(Date.now()),
-        content: this.state.comment,
-      }),
-    });
+    if (this.state.comment !== '') {
+      fetch(getTranscriptCommentsBySemester(semesterName, semesterYear), {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': Cookie.get('csrftoken'),
+          accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jhed: this.props.userInfo.jhed,
+          timestamp: new Date(Date.now()),
+          content: this.state.comment,
+        }),
+      });
+      window.location.reload(false); //this is supposed to work :(
+    }
+    // this.props.history.push('/advising');
+    this.setState({comment: this.state.comment = ''});
   }
 
   render() {
@@ -58,8 +63,7 @@ class CommentInput extends React.Component {
           rows="1" placeholder="Type your comment here..."
           value={comment}
           onChange={event => this.sendContent(event)}
-          onKeyPress="if (event.keyCode==13){submitContent(semester_name, \
-          semester_year);return false;}"
+          onKeyPress="if(event.keyCode === 13){this.submitContent(semester_name, semester_year);return false;}"
         />
         <input
           className="send-btn"
