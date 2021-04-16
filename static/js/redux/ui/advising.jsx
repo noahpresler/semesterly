@@ -22,7 +22,7 @@ import UserSettingsModalContainer from './containers/modals/user_settings_modal_
 import SignupModalContainer from './containers/modals/signup_modal_container';
 import JHUSignupModalContainer from './containers/modals/jhu_signup_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
-import { getTranscriptCommentsBySemester } from '../constants/endpoints';
+import { getTranscriptCommentsBySemester, getRetrievedSemesters } from '../constants/endpoints';
 import SISImportDataModalContainer from './containers/modals/SIS_import_data_modal_container';
 
 
@@ -34,6 +34,7 @@ class Advising extends React.Component {
       orientation: !mql.matches ? 'landscape' : 'portrait',
       selected_semester: null,
       transcript: null,
+      displayed_semesters: null,
     };
     this.updateOrientation = this.updateOrientation.bind(this);
     this.callbackFunction = this.callbackFunction.bind(this);
@@ -75,6 +76,16 @@ class Advising extends React.Component {
   }
 
   componentDidMount() {
+    this.fetchSemesters();
+  }
+
+  fetchSemesters() {
+    const semesters = [`${this.props.semester.name} ${this.props.semester.year}`];
+    fetch(getRetrievedSemesters())
+      .then(response => response.json())
+      .then((data) => {
+        this.setState({ displayed_semesters: semesters.concat(data.retrievedSemesters) });
+      });
   }
 
   fetchTranscript(newSelectedSemester) {
@@ -209,6 +220,7 @@ class Advising extends React.Component {
               <AdvisingScheduleContainer
                 parentCallback={this.callbackFunction}
                 selected_semester={this.state.selected_semester}
+                displayed_semesters={this.state.displayed_semesters}
               />
               {footer}
             </div>
@@ -227,6 +239,10 @@ class Advising extends React.Component {
 
 Advising.propTypes = {
   dataLastUpdated: PropTypes.string.isRequired,
+  semester: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    year: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Advising;
