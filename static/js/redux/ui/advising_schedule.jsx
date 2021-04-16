@@ -13,6 +13,7 @@ GNU General Public License for more details.
 */
 
 import PropTypes from 'prop-types';
+import ReactTooltip from 'react-tooltip';
 import React from 'react';
 import CourseListRow from './course_list_row';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
@@ -30,9 +31,29 @@ class AdvisingSchedule extends React.Component {
     };
   }
 
-  //
-
   render() {
+    const SISImportDataModalButton = (
+      <div className="cal-btn-wrapper" style={{ display: 'inline', verticalAlign: 'middle' }}>
+        <button
+          onClick={() => this.props.triggerSISImportDataModal()}
+          data-tip
+          className="save-timetable add-button"
+          data-for="import-data-btn-tooltip"
+        >
+          {/* TODO: Move import data button (below) to optimal position */}
+          <i className="fa fa-upload" />
+        </button>
+        <ReactTooltip
+          id="import-data-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
+          effect="solid"
+        >
+          <span>Import SIS Data</span>
+        </ReactTooltip>
+      </div>
+    );
     const courseListRows = (this.state.displayed_semesters.length > 0) ?
       this.state.displayed_semesters.map(semester =>
         (<CourseListRow
@@ -53,8 +74,10 @@ class AdvisingSchedule extends React.Component {
       <div className="advising-schedule-inner">
         <p style={{ fontSize: '1.5em', fontWeight: 'bold', marginTop: '25px' }}>
           Course Summary
+          &nbsp;&nbsp;&nbsp;
+          { SISImportDataModalButton }
         </p>
-        {courseListRows}
+        { courseListRows }
       </div>
     );
   }
@@ -65,6 +88,7 @@ AdvisingSchedule.defaultProps = {
 };
 
 AdvisingSchedule.propTypes = {
+  triggerSISImportDataModal: PropTypes.func.isRequired,
   selected_semester: PropTypes.string,
   coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
