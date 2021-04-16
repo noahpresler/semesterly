@@ -83,7 +83,7 @@ class TopBarAdvising extends React.Component {
       <div className="cal-btn-wrapper">
         <a href="/">
           <button
-            className="import-data"
+            className="return-to-schedule"
             data-tip
             data-for="return-to-schedule-btn-tooltip"
           >
@@ -103,16 +103,14 @@ class TopBarAdvising extends React.Component {
     );
     return (
       <div className="top-bar">
-        <a href="/" className="semesterly-name">
-          <img
-            alt="logo"
-            className="semesterly-logo no-print"
-            src="/static/img/logo2.0-32x32.png"
-          />
-          <div className="semesterly-name no-print">
-            Semester.ly - Advising Dashboard
-          </div>
-        </a>
+        <img
+          alt="logo"
+          className="semesterly-logo no-print"
+          src="/static/img/logo2.0-32x32.png"
+        />
+        <div className="semesterly-name no-print">
+          Semester.ly - Advising Dashboard
+        </div>
         <div className="print-content print">
           {this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ?
             this.renderUserForPrint() : null}
