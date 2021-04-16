@@ -24,7 +24,15 @@ class CommentInput extends React.Component {
     super(props);
     this.state = {
       comment: '',
+      submitted: false
     };
+  }
+
+  componentDidUpdate() {
+    if (this.state.submitted === true ) {
+      window.location.reload();
+      this.setState({submitted: !this.state.submitted});
+    }
   }
 
   sendContent(event) {
@@ -44,12 +52,10 @@ class CommentInput extends React.Component {
           jhed: this.props.userInfo.jhed,
           timestamp: new Date(Date.now()),
           content: this.state.comment,
-        }),
-      });
-      window.location.reload(false); //this is supposed to work :(
+        })
+      })
+          .then(() => this.setState({comment: this.state.comment = '', submitted: !this.state.submitted}));
     }
-    // this.props.history.push('/advising');
-    this.setState({comment: this.state.comment = ''});
   }
 
   render() {
