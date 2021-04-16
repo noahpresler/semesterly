@@ -131,6 +131,10 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToJHUSignupMixin, APIV
             return status.HTTP_404_NOT_FOUND
 
     def remove_advisor(self, transcript, jhed):
+        if advisor in transcript.pending_advisors.all():
+            transcript.pending_advisors.remove(advisor)
+            transcript.save()
+            return status.HTTP_200_OK
         advisor = get_object_or_404(Student, jhed=jhed)
         if advisor in transcript.advisors.all():
             transcript.advisors.remove(advisor)
