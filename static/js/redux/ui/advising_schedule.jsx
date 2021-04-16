@@ -35,7 +35,6 @@ class AdvisingSchedule extends React.Component {
           className="save-timetable add-button"
           data-for="import-data-btn-tooltip"
         >
-          {/* TODO: Move import data button (below) to optimal position */}
           <i className="fa fa-upload" />
         </button>
         <ReactTooltip
