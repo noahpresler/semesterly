@@ -10,7 +10,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
+import PropTypes, { any } from 'prop-types';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
@@ -74,22 +75,22 @@ class AdvisorMenu extends React.Component {
       this.props.advisors.map(advisor => (
         <row key={advisor.jhed} style={{ padding: '5px' }}>
           {/* if name in addedAdvisors, removeBtn, else addBtn */}
-          {addRemoveBtn(advisor.jhed, this.props.transcript.advisor_names.includes(`${advisor.first_name} ${advisor.last_name}`))}
-          <p className="advisor"> {`${advisor.first_name} ${advisor.last_name}`} </p>
+          {addRemoveBtn(advisor.jhed, this.props.transcript.advisors.some((invited_advisor) => { advisor.jhed === invited_advisor.jhed }))}
+          <p className="advisor"> {`${advisor.full_name}`} </p>
         </row>
       )) : <p style={{ textAlign: 'center', fontSize: '10pt' }}> You are not connected to any advisors </p>;
 
     return (
       <ClickOutHandler onClickOut={this.hideDropDown}>
         <div onMouseDown={this.toggleDropdown}>
-          { toggleAdvisorMenuBtn }
+          {toggleAdvisorMenuBtn}
         </div>
         <div className={classNames('advisor-dropdown', { down: this.state.showDropdown })}>
           <p style={{ maxWidth: '70%', fontWeight: 'bold', margin: 'auto', textAlign: 'center', marginTop: '10px' }}>
             Invite Advisors to Comment Forum
           </p>
           <div className="ad-modal-wrapper">
-            { advisorList }
+            {advisorList}
           </div>
         </div>
       </ClickOutHandler>
@@ -104,21 +105,14 @@ AdvisorMenu.defaultProps = {
 
 AdvisorMenu.propTypes = {
   advisors: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
+    full_name: PropTypes.string,
     jhed: PropTypes.string,
+    email_address: PropTypes.string,
   })).isRequired,
   addRemoveAdvisor: PropTypes.func.isRequired,
-  transcript: PropTypes.shape({
-    semester_name: PropTypes.string,
-    semester_year: PropTypes.string,
-    owner: PropTypes.string,
-    advisor_names: PropTypes.arrayOf(PropTypes.string),
-    comments: PropTypes.arrayOf(PropTypes.shape({
-      author_name: PropTypes.string,
-      content: PropTypes.string,
-      timestamp: PropTypes.date,
-    })),
-  }),
+  transcript: SemesterlyPropTypes.transcript,
 };
 
 export default AdvisorMenu;
