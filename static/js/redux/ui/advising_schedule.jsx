@@ -66,11 +66,12 @@ class AdvisingSchedule extends React.Component {
 
     return (
       <div className="advising-schedule-inner">
-        <p style={{ fontSize: '1.5em', fontWeight: 'bold', marginTop: '25px' }}>
+        <div style={{ fontFamily: 'Roboto', fontSize: '1.5em', fontWeight: 'bold', marginTop: '25px' }}>
           Course Summary
           &nbsp;&nbsp;&nbsp;
           { SISImportDataModalButton }
-        </p>
+        </div>
+        <p></p>
         { courseListRows }
       </div>
     );
