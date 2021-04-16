@@ -17,6 +17,7 @@ from helpers.mixins import ValidateSubdomainMixin, RedirectToJHUSignupMixin
 from student.models import Student
 from timetable.models import Semester
 from forum.models import Transcript, Comment
+from advising.models import Advisor
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -104,25 +105,25 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToJHUSignupMixin, APIV
         semester = Semester.objects.get(name=sem_name, year=year)
         transcript = get_object_or_404(
             Transcript, owner=student, semester=semester)
-        status = status.HTTP_200_OK
+        status_code = status.HTTP_200_OK
         if request.data['action'] == 'add':
-            status = self.add_advisor(transcript, jhed)
+            status_code = self.add_advisor(transcript, request.data['jhed'])
         elif request.data['action'] == 'remove':
-            status = self.remove_advisor(transcript, jhed)
+            status_code = self.remove_advisor(transcript, request.data['jhed'])
         return Response({'transcript': TranscriptSerializer(transcript).data},
-                        status=status)
+                        status=status_code)
 
     def add_advisor(self, transcript, jhed):
         try:    # add Advisor by their Semester.ly account
-            advisor = Student.objects.get(jhed=request.data['jhed'])
+            advisor = Student.objects.get(jhed=jhed)
             if advisor not in transcript.advisors.all():
                 transcript.advisors.add(advisor)
             return status.HTTP_200_OK
         except Student.DoesNotExist:
             pass
 
-        try:    # add advisor to pending advisors for this transcript 
-            advisor = Advisor.objects.get(jhed=request.data['jhed'])
+        try:    # add advisor to pending advisors for this transcript
+            advisor = Advisor.objects.get(jhed=jhed)
             if advisor not in transcript.pending_advisors.all():
                 transcript.pending_advisors.add(advisor)
             return status.HTTP_200_OK
@@ -130,7 +131,7 @@ class ForumTranscriptView(ValidateSubdomainMixin, RedirectToJHUSignupMixin, APIV
             return status.HTTP_404_NOT_FOUND
 
     def remove_advisor(self, transcript, jhed):
-        advisor = get_object_or_404(Student, jhed=request.data['jhed'])
+        advisor = get_object_or_404(Student, jhed=jhed)
         if advisor in transcript.advisors.all():
             transcript.advisors.remove(advisor)
         transcript.save()
