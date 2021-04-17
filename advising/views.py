@@ -24,7 +24,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.authentication import get_authorization_header, BaseAuthentication
 from semesterly.settings import get_secret
 from django.contrib.auth.mixins import LoginRequiredMixin
-from student.models import Student
+from student.models import Student, PersonalTimetable
 from advising.models import Advisor
 from forum.models import Transcript
 import jwt
@@ -140,49 +140,70 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
 
 
 class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
-    """Handles retrieving SIS courses from a specific semester"""
+    """Handles retrieving timetable and SIS courses from a specific semester"""
 
     def get(self, request, sem_name, year):
         """If the 'jhed' key is provided, get the courses for the student with
         the corresponding JHED. The request user must be an Advisor. Otherwise,
         get the courses for the requesting student for this semester.
 
+        If the 'tt_name' key is provided, the courses are first pulled from the
+        personal timetable with the name 'tt_name'. These courses are then
+        compared against the SIS registered sections, and if they match,
+        isVerified is True. If no key is provided, all SIS registered courses
+        will be returned with isVerified set to True for all of them.
+
         Optional data:
             jhed: The jhed of the student whose data is requested
+            tt_name: The name of the timetable to compare against
         Returns:
             registeredCourses: {
-                {**CourseSerializer(course1), is_verified: bool},
+                {**CourseSerializer(course1), isVerified: bool},
                 {...},
             }
         """
         school = request.subdomain
         semester = Semester.objects.get(name=sem_name, year=year)
-        if 'jhed' in request.query_params:
-            student = get_object_or_404(
-                Student, jhed=request.query_params['jhed'])
-            advisor = Student.objects.get(user=request.user)
-            transcript = get_object_or_404(
-                Transcript, owner=student, semester=semester)
-
-            if student.jhed != transcript.owner.jhed \
-                    or not advisor.is_advisor() \
-                    or advisor not in transcript.advisors.all():
+        data = request.query_params
+        if 'jhed' in data:
+            student = get_object_or_404(Student, jhed=data['jhed'])
+            if not self.is_advisor_for_student(request, student, semester):
                 return Response(status=status.HTTP_403_FORBIDDEN)
         else:
             student = Student.objects.get(user=request.user)
+
         context = {'school': school, 'semester': semester, 'student': student}
-        courses = {'registeredCourses': []}
-        for section in student.sis_registered_sections.all():
-            if section.semester == semester:
-                course_data = {'isVerified': self.is_section_verified(
-                    section, student, semester)}
-                courses['registeredCourses'].append(
-                    dict(course_data, **CourseSerializer(
-                        section.course, context=context).data))
+        if 'tt_name' in data:
+            timetable = get_object_or_404(
+                PersonalTimetable,
+                student=student, name=data['tt_name'],
+                school=school, semester=semester)
+            courses = self.get_registered_courses(context, timetable)
+        else:
+            courses = self.get_registered_courses(context)
+
         return Response(courses, status=status.HTTP_200_OK)
 
-    def is_section_verified(self, section, student, semester):
-        timetable = student.personaltimetable_set.filter(
-            semester=semester).order_by('last_updated').last()
-        # TODO: This is not necessarily the 'current' or 'selected' timetable
-        return timetable and section in timetable.sections.all()
+    def is_advisor_for_student(self, request, student, semester):
+        advisor = Student.objects.get(user=request.user)
+        transcript = get_object_or_404(
+            Transcript, owner=student, semester=semester)
+        return student.jhed == transcript.owner.jhed \
+            and advisor.is_advisor() \
+            and advisor in transcript.advisors.all()
+
+    def get_registered_courses(self, context, timetable=None):
+        courses = {'registeredCourses': []}
+        student, semester = context['student'], context['semester']
+        registered_sections = student.sis_registered_sections.filter(semester=semester).all()
+        if timetable:
+            for section in timetable.sections.all():
+                course_data = {'isVerified': section in registered_sections}
+                courses['registeredCourses'].append(
+                    dict(course_data, **CourseSerializer(section.course, context=context).data))
+        else:
+            for section in registered_sections:
+                course_data = {'isVerified': True}
+                courses['registeredCourses'].append(
+                    dict(course_data, **CourseSerializer(section.course, context=context).data))
+        return courses

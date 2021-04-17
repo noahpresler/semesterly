@@ -22,6 +22,7 @@ import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import {
   getSISVerifiedCourses,
 } from '../constants/endpoints';
+import Cookie from 'js-cookie'
 
 class CourseListRow extends React.Component {
 
@@ -36,7 +37,7 @@ class CourseListRow extends React.Component {
     if (this.props.displayed_semester != null) {
       const semesterName = this.props.displayed_semester.toString().split(' ')[0];
       const semesterYear = this.props.displayed_semester.toString().split(' ')[1];
-      fetch(getSISVerifiedCourses(semesterName, semesterYear))
+      fetch(getSISVerifiedCourses(semesterName, semesterYear, this.props.timetableName))
         .then(response => response.json())
         .then((data) => {
           this.setState({ course_list: data.registeredCourses });
@@ -54,9 +55,9 @@ class CourseListRow extends React.Component {
   }
 
   render() {
-    const plannedCourseList = (this.props.coursesInTimetable &&
+    const plannedCourseList = (this.state.course_list &&
       this.props.displayed_semester === this.props.current_semester) ?
-      this.props.coursesInTimetable.map((course) => {
+      this.state.course_list.map((course) => {
         const colourIndex = (course.id in this.props.courseToColourIndex) ?
        this.props.courseToColourIndex[course.id] :
        getNextAvailableColour(this.props.courseToColourIndex);
@@ -140,6 +141,7 @@ CourseListRow.propTypes = {
   courseToClassmates: PropTypes.shape({ '*': SemesterlyPropTypes.classmates }).isRequired,
   isCourseInRoster: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
+  timetableName: PropTypes.string.isRequired,
 };
 
 export default CourseListRow;

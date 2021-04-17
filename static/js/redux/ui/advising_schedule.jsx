@@ -17,6 +17,7 @@ import ReactTooltip from 'react-tooltip';
 import React from 'react';
 import CourseListRow from './course_list_row';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import getState from 'radium';
 
 class AdvisingSchedule extends React.Component {
   constructor(props) {
@@ -62,6 +63,7 @@ class AdvisingSchedule extends React.Component {
           courseToColourIndex={this.props.courseToColourIndex}
           isCourseInRoster={this.props.isCourseInRoster}
           fetchCourseInfo={this.props.fetchCourseInfo}
+          timetableName={this.props.timetableName}
         />),
       ) : <div className="empty-state"><h4><p> No semesters yet! </p></h4></div>;
 

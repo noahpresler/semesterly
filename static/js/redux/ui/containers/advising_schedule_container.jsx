@@ -53,6 +53,7 @@ const mapStateToProps = (state) => {
     isCourseInRoster: courseId => timetable.slots.some(s => s.course === courseId),
     hasLoaded: !state.timetables.isFetching,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
+    timetableName: timetable.name,
   };
 };
 
