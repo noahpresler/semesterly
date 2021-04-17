@@ -12,7 +12,6 @@
 from __future__ import unicode_literals
 import semesterly.views
 
-from django.shortcuts import get_object_or_404
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin, FeatureFlowView, RedirectToJHUSignupMixin
 from rest_framework import status
 from rest_framework.response import Response
@@ -27,6 +26,7 @@ from semesterly.settings import get_secret
 from django.contrib.auth.mixins import LoginRequiredMixin
 from student.models import Student
 from advising.models import Advisor
+from forum.models import Transcript
 import jwt
 import json
 from courses.serializers import CourseSerializer
@@ -155,8 +155,9 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         """
         school = request.subdomain
         semester = Semester.objects.get(name=sem_name, year=year)
-        if 'jhed' in request.data:
-            student = get_object_or_404(jhed=request.data['jhed'])
+        if 'jhed' in request.query_params:
+            student = get_object_or_404(
+                Student, jhed=request.query_params['jhed'])
             advisor = Student.objects.get(user=request.user)
             transcript = get_object_or_404(
                 Transcript, owner=student, semester=semester)
@@ -170,7 +171,7 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         context = {'school': school, 'semester': semester, 'student': student}
         courses = {'registeredCourses': []}
         for section in student.sis_registered_sections.all():
-            if section.semester == semester
+            if section.semester == semester:
                 course_data = {'isVerified': self.is_section_verified(
                     section, student, semester)}
 
