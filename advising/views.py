@@ -12,7 +12,6 @@
 from __future__ import unicode_literals
 import semesterly.views
 
-from django.shortcuts import get_object_or_404
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin, FeatureFlowView, RedirectToJHUSignupMixin
 from rest_framework import status
 from rest_framework.response import Response
@@ -27,6 +26,7 @@ from semesterly.settings import get_secret
 from django.contrib.auth.mixins import LoginRequiredMixin
 from student.models import Student
 from advising.models import Advisor
+from forum.models import Transcript
 import jwt
 import json
 from courses.serializers import CourseSerializer
@@ -68,7 +68,8 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             if str(section.semester.name) == "Fall" or \
                     str(section.semester.name) == "Spring":
                 semesters.add(section.semester)
-        semesters = list(map(lambda s: str(s), sorted(semesters, reverse=True)))
+        semesters = list(
+            map(lambda s: str(s), sorted(semesters, reverse=True)))
         return Response({'retrievedSemesters': semesters},
                         status=status.HTTP_200_OK)
 
@@ -88,27 +89,29 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             msg = 'Invalid token header. Token string should not contain invalid characters.'
             raise exceptions.AuthenticationFailed(msg)
         student = get_object_or_404(
-            Student, jhed=payload['StudentInfo']['JhedId'])
+            Student, jhed='{payload}{email}'.format(payload=payload['PersonalInfo']['JhedId'], email='@jh.edu'))
         self.add_advisors(payload, student)
         self.add_majors(payload, student)
         self.add_minors(payload, student)
-        self.add_courses(payload, student)
+        nonexistent_courses = self.add_courses(payload, student)
         student.save()
-        return Response(status=status.HTTP_201_CREATED)
+        return Response({'nonexistentCourses': nonexistent_courses},
+                        status=status.HTTP_201_CREATED)
 
     def add_advisors(self, data, student):
         student.advisors.clear()
         for advisor_data in data['Advisors']:
             last_name, first_name = advisor_data['FullName'].split(',')
             advisor, created = Advisor.objects.get_or_create(
-                jhed=advisor_data['JhedId'], email_address=advisor_data['EmailAddress'],
-                last_name=last_name, first_name=first_name)
-            if not created:
-                student.advisors.add(advisor)
-                advisor.save()
+                jhed='{payload}{email}'.format(
+                    payload=advisor_data['JhedId'], email='@jh.edu'),
+                email_address=advisor_data['EmailAddress'],
+                last_name=last_name.strip(), first_name=first_name.strip())
+            advisor.save()
+            student.advisors.add(advisor)
 
     def add_majors(self, data, student):
-        student.primary_major = data['StudentInfo']['PrimaryMajor']
+        student.primary_major = data['PersonalInfo']['PrimaryMajor']
         del student.other_majors[:]
         for major_data in data['NonPrimaryMajors']:
             student.other_majors.append(major_data['Major'])
@@ -116,22 +119,24 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
     def add_minors(self, data, student):
         del student.minors[:]
         for minor_data in data['Minors']:
-            student.minors.append(minor_data['Minor'])
+            student.minors.append(minor_data['MinorName'])
 
     def add_courses(self, data, student):
+        nonexistent_courses = []
         student.sis_registered_sections.clear()
         for course_data in data['Courses']:
             try:
-                # TODO: Provide info to user for when course doesn't exist
                 course = Course.objects.get(code=course_data['OfferingName'])
             except Course.DoesNotExist:
+                nonexistent_courses.append(course_data['OfferingName'])
                 continue
             name, year = course_data['Term'].split(' ')
             semester = get_object_or_404(Semester, name=name, year=year)
             section = get_object_or_404(
                 Section, course=course, semester=semester,
-                meeting_section="({})".format(course_data['SectionNumber']))
+                meeting_section="({})".format(course_data['Section']))
             student.sis_registered_sections.add(section)
+        return nonexistent_courses
 
 
 class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
@@ -152,8 +157,9 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         """
         school = request.subdomain
         semester = Semester.objects.get(name=sem_name, year=year)
-        if 'jhed' in request.data:
-            student = get_object_or_404(jhed=request.data['jhed'])
+        if 'jhed' in request.query_params:
+            student = get_object_or_404(
+                Student, jhed=request.query_params['jhed'])
             advisor = Student.objects.get(user=request.user)
             transcript = get_object_or_404(
                 Transcript, owner=student, semester=semester)
@@ -167,16 +173,16 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         context = {'school': school, 'semester': semester, 'student': student}
         courses = {'registeredCourses': []}
         for section in student.sis_registered_sections.all():
-            course_data = {'isVerified': self.is_section_verified(
-                section, student, semester)}
-
-            courses['registeredCourses'].append(
-                dict(course_data, **CourseSerializer(
-                    section.course, context=context).data))
+            if section.semester == semester:
+                course_data = {'isVerified': self.is_section_verified(
+                    section, student, semester)}
+                courses['registeredCourses'].append(
+                    dict(course_data, **CourseSerializer(
+                        section.course, context=context).data))
         return Response(courses, status=status.HTTP_200_OK)
 
     def is_section_verified(self, section, student, semester):
         timetable = student.personaltimetable_set.filter(
             semester=semester).order_by('last_updated').last()
         # TODO: This is not necessarily the 'current' or 'selected' timetable
-        return section in timetable.sections.all()
+        return timetable and section in timetable.sections.all()

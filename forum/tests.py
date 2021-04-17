@@ -14,7 +14,6 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.core.urlresolvers import resolve
-from django.db.models import Model
 from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
 from helpers.test.test_cases import UrlTestCase
@@ -22,6 +21,7 @@ from helpers.test.test_cases import UrlTestCase
 from forum.models import Comment, Transcript
 from student.models import Student
 from timetable.models import Semester
+from advising.models import Advisor
 from serializers import TranscriptSerializer, CommentSerializer
 import datetime
 
@@ -41,6 +41,9 @@ def setUpTranscriptDependencies(self):
         password='k',
         first_name='Rishi',
         last_name='Biswas',)
+    Advisor.objects.create(
+        first_name='Rishi', last_name='Biswas',
+        jhed='rbiswas4', email_address='rbiswas4@jhu.edu').save()
     self.advisor = Student.objects.create(user=user)
     self.advisor.jhed = 'rbiswas4'
     self.advisor.save()
@@ -92,7 +95,7 @@ def add_comment(self, author, content):
     )
 
 
-def get_response(self, request, user):
+def get_response(request, user):
     force_authenticate(request, user=user)
     request.user = user
     request.subdomain = 'uoft'
@@ -100,7 +103,7 @@ def get_response(self, request, user):
     return view(request)
 
 
-def get_response_for_semester(self, request, user):
+def get_response_for_semester(request, user):
     force_authenticate(request, user=user)
     request.user = user
     request.subdomain = 'uoft'
@@ -144,8 +147,7 @@ class Serializers(TestCase):
         self.assertEquals(self.semester.year, serialized['semester_year'])
         self.assertEquals(self.student.get_full_name(),
                           serialized['owner_name'])
-        self.assertEquals(self.advisor.get_full_name(),
-                          serialized['advisor_names'][0])
+        self.assertEquals(self.advisor.jhed, serialized['advisors'][0]['jhed'])
 
 
 class UrlsTest(TestCase, UrlTestCase):
@@ -172,7 +174,7 @@ class ForumViewTest(APITestCase):
     def test_get_forums_student(self):
         add_comment(self, self.student, 'Hello good sir')
         request = self.factory.get('/advising/forum/all/', format='json')
-        response = get_response(self, request, self.student.user)
+        response = get_response(request, self.student.user)
 
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         expected = TranscriptSerializer(self.transcript).data
@@ -182,7 +184,7 @@ class ForumViewTest(APITestCase):
     def test_get_forums_advisor(self):
         add_comment(self, self.student, 'You take care')
         request = self.factory.get('/advising/forum/all/', format='json')
-        response = get_response(self, request, self.advisor.user)
+        response = get_response(request, self.advisor.user)
 
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         expected = TranscriptSerializer(self.transcript).data
@@ -203,7 +205,7 @@ class ForumTranscriptViewTest(APITestCase):
         setUpTranscript(self)
         add_comment(self, self.advisor, 'Jihyun is cool')
         request = self.factory.get('/advising/forum/Fall/2019/', format='json')
-        response = get_response_for_semester(self, request, self.student.user)
+        response = get_response_for_semester(request, self.student.user)
 
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         expected = TranscriptSerializer(self.transcript).data
@@ -216,7 +218,7 @@ class ForumTranscriptViewTest(APITestCase):
             transcript = Transcript.objects.get(
                 semester=self.semester, owner=self.student)
         request = self.factory.get('/advising/forum/Fall/2019/', format='json')
-        response = get_response_for_semester(self, request, self.student.user)
+        response = get_response_for_semester(request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         transcript = Transcript.objects.get(
             semester=self.semester, owner=self.student)
@@ -225,7 +227,7 @@ class ForumTranscriptViewTest(APITestCase):
         setUpTranscript(self)
         request = self.factory.delete(
             '/advising/forum/Fall/2019/', format='json')
-        response = get_response_for_semester(self, request, self.student.user)
+        response = get_response_for_semester(request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(Transcript.DoesNotExist):
             Transcript.objects.get(semester=self.semester, owner=self.student)
@@ -240,7 +242,7 @@ class ForumTranscriptViewTest(APITestCase):
         }
         request = self.factory.post(
             '/advising/forum/Fall/2019/', data=data, format='json')
-        response = get_response_for_semester(self, request, self.student.user)
+        response = get_response_for_semester(request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         comment = Comment.objects.get(
             transcript=self.transcript, author=self.student)
@@ -254,7 +256,7 @@ class ForumTranscriptViewTest(APITestCase):
         }
         request = self.factory.post(
             '/advising/forum/Fall/2019/', data=data, format='json')
-        response = get_response_for_semester(self, request, self.advisor.user)
+        response = get_response_for_semester(request, self.advisor.user)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         comment = Comment.objects.get(
             transcript=self.transcript, author=self.advisor)
@@ -271,13 +273,16 @@ class ForumTranscriptViewTest(APITestCase):
         advisor = Student.objects.create(user=user)
         advisor.jhed = 'rbiswas4'
         advisor.save()
+        Advisor.objects.create(
+            first_name='Rishi', last_name='Biswas',
+            jhed='rbiswas4', email_address='rbiswas4@jhu.edu')
         data = {
             'action': 'add',
             'jhed': advisor.jhed,
         }
         request = self.factory.patch(
             '/advising/forum/Fall/2019/', data=data, format='json')
-        response = get_response_for_semester(self, request, self.student.user)
+        response = get_response_for_semester(request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(self.transcript.advisors.count(), 1)
 
@@ -290,7 +295,7 @@ class ForumTranscriptViewTest(APITestCase):
         }
         request = self.factory.patch(
             '/advising/forum/Fall/2019/', data=data, format='json')
-        response = get_response_for_semester(self, request, self.student.user)
+        response = get_response_for_semester(request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEquals(self.transcript.advisors.count(), 0)
 
@@ -303,7 +308,7 @@ class ForumTranscriptViewTest(APITestCase):
         }
         request = self.factory.patch(
             '/advising/forum/Fall/2019/', data=data, format='json')
-        response = get_response_for_semester(self, request, self.student.user)
+        response = get_response_for_semester(request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(self.transcript.advisors.count(), 1)
 
@@ -316,7 +321,7 @@ class ForumTranscriptViewTest(APITestCase):
         }
         request = self.factory.patch(
             '/advising/forum/Fall/2019/', data=data, format='json')
-        response = get_response_for_semester(self, request, self.student.user)
+        response = get_response_for_semester(request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(self.transcript.advisors.count(), 0)
 
@@ -328,7 +333,7 @@ class ForumTranscriptViewTest(APITestCase):
         }
         request = self.factory.patch(
             '/advising/forum/Fall/2019/', data=data, format='json')
-        response = get_response_for_semester(self, request, self.student.user)
+        response = get_response_for_semester(request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEquals(self.transcript.advisors.count(), 1)
 
@@ -341,6 +346,6 @@ class ForumTranscriptViewTest(APITestCase):
         }
         request = self.factory.patch(
             '/advising/forum/Fall/2019/', data=data, format='json')
-        response = get_response_for_semester(self, request, self.student.user)
+        response = get_response_for_semester(request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(self.transcript.advisors.count(), 0)
