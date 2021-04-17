@@ -78,13 +78,13 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         return Response({'retrievedSemesters': semesters},
                         status=status.HTTP_200_OK)
 
-    def post(self, request, token=None):
+    def post(self, request, key=None):
         """Populates the database according to the SIS data.
         Fills students' advisors, majors, minors, and courses fields.
         """
         try:
-            if token:
-                payload = jwt.decode(request.body, token, algorithms=['HS256'])
+            if key:
+                payload = jwt.decode(request.body, key, algorithms=['HS256'])
             else:
                 payload = jwt.decode(request.body, get_secret(
                     'STUDENT_SIS_AUTH_SECRET'), algorithms=['HS256'])
