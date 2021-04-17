@@ -42,8 +42,8 @@ export const acceptTOSEndpoint = () => '/tos/accept/';
 // Advising Dashboard Endpoints
 // TODO: Replace with real endpoint
 export const getTranscriptCommentsBySemester = (semesterName, semesterYear) => `/advising/forum/${semesterName}/${semesterYear}/`;
-
 export const getRetrievedSemesters = () => '/advising/sis_semesters/';
+export const getSISVerifiedCourses = (semesterName, semesterYear) => `/advising/sis_courses/${semesterName}/${semesterYear}/`;
 
 export function getCourseShareLinkFromModal(code, semester) {
   return `/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;

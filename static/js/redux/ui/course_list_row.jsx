@@ -19,10 +19,36 @@ import { getNextAvailableColour } from '../util';
 import MasterSlot from './master_slot';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import {
+  getTranscriptCommentsBySemester,
+  getRetrievedSemesters,
+  getSISVerifiedCourses
+} from '../constants/endpoints';
 
 class CourseListRow extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      course_list: null,
+    };
+  }
+
+  fetchVerifiedCourses() {
+    if (this.props.displayed_semester != null) {
+      const semesterName = this.props.displayed_semester.toString().split(' ')[0];
+      const semesterYear = this.props.displayed_semester.toString().split(' ')[1];
+      fetch(getSISVerifiedCourses(semesterName, semesterYear))
+        .then(response => response.json())
+        .then((data) => {
+          this.setState({ course_list: data.registeredCourses });
+        });
+      console.log("INSIDE FETCH = " + this.state.course_list);
+    }
+  }
+
   sendSelectedSemester() {
+    this.fetchVerifiedCourses();
     if (this.props.displayed_semester !== this.props.selected_semester) {
       this.props.parentParentCallback(this.props.displayed_semester);
     } else {
@@ -31,11 +57,9 @@ class CourseListRow extends React.Component {
   }
 
   render() {
-  // TODO: We want to grab the courses on the student's timetable
-  // Check what is in this variable: console.log(this.props.coursesInTimetable);
-    const plannedCourseList = (this.props.coursesInTimetable &&
+    const plannedCourseList = (this.state.course_list &&
       this.props.displayed_semester === this.props.current_semester) ?
-    this.props.coursesInTimetable.map((course) => {
+      this.state.course_list.map((course) => {
       const colourIndex = (course.id in this.props.courseToColourIndex) ?
        this.props.courseToColourIndex[course.id] :
        getNextAvailableColour(this.props.courseToColourIndex);
@@ -59,12 +83,12 @@ class CourseListRow extends React.Component {
 
     const creditTicker = (this.props.displayed_semester === this.props.current_semester) ?
       <CreditTickerContainer /> : null;
-  /* TODO: Replace null above with:
-   <div className="sb-credits">
-    <h3>{Math.abs(this.state.num_credits).toFixed(2)}</h3>
-    <h4>credits</h4>
-   </div>
-    here this.state.num_credits is the number of credits from courses on SIS */
+    /* TODO: Replace null above with:
+     <div className="sb-credits">
+      <h3>{Math.abs(this.state.num_credits).toFixed(2)}</h3>
+      <h4>credits</h4>
+     </div>
+      here this.state.num_credits is the number of credits from courses on SIS */
 
     const courseList = (<div className="course-list-container">
       {/* TODO: Get credit ticker to display correct num credits for non-current semesters */}

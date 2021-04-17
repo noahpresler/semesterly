@@ -80,12 +80,13 @@ class AdvisingSchedule extends React.Component {
 
 AdvisingSchedule.defaultProps = {
   selected_semester: null,
+  displayed_semesters: null,
 };
 
 AdvisingSchedule.propTypes = {
   triggerSISImportDataModal: PropTypes.func.isRequired,
   selected_semester: PropTypes.string,
-  displayed_semesters: PropTypes.arrayOf(PropTypes.string).isRequired,
+  displayed_semesters: PropTypes.arrayOf(PropTypes.string),
   coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,
