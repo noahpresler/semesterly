@@ -117,6 +117,12 @@ class JHUSignupModal extends React.Component {
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <div
               className="advisor-signup-button"
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = '/login/azuread-tenant-oauth2/?next=/advising';
+                document.body.appendChild(link);
+                link.click();
+              }}
             >
               Advisor Login
             </div>
