@@ -24,7 +24,7 @@ import JHUSignupModalContainer from './containers/modals/jhu_signup_modal_contai
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
 import {
   getTranscriptCommentsBySemester,
-  getRetrievedSemesters
+  getRetrievedSemesters,
 } from '../constants/endpoints';
 import SISImportDataModalContainer from './containers/modals/SIS_import_data_modal_container';
 
@@ -64,7 +64,7 @@ class Advising extends React.Component {
     fetch(getRetrievedSemesters())
       .then(response => response.json())
       .then((data) => {
-        let retreivedSemesters = data.retrievedSemesters;
+        const retreivedSemesters = data.retrievedSemesters;
         if (retreivedSemesters.includes(`${this.props.semester.name} ${this.props.semester.year}`)) {
           this.setState({ displayed_semesters: retreivedSemesters });
         } else {
@@ -134,7 +134,7 @@ class Advising extends React.Component {
   render() {
     const footer = (
       <footer className="footer navbar no-print">
-          <p className="data-last-updated no-print">Data last
+        <p className="data-last-updated no-print">Data last
           updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
         <ul className="nav nav-pills no-print">
           <li className="footer-button" role="presentation">
@@ -206,7 +206,6 @@ class Advising extends React.Component {
                 parentCallback={this.callbackFunction}
                 selected_semester={this.state.selected_semester}
                 displayed_semesters={this.state.displayed_semesters}
-                //course_list={this.state.course_list}
               />
               {footer}
             </div>

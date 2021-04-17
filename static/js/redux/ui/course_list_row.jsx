@@ -20,9 +20,7 @@ import MasterSlot from './master_slot';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import {
-  getTranscriptCommentsBySemester,
-  getRetrievedSemesters,
-  getSISVerifiedCourses
+  getSISVerifiedCourses,
 } from '../constants/endpoints';
 
 class CourseListRow extends React.Component {
@@ -43,7 +41,6 @@ class CourseListRow extends React.Component {
         .then((data) => {
           this.setState({ course_list: data.registeredCourses });
         });
-      console.log("INSIDE FETCH = " + this.state.course_list);
     }
   }
 
@@ -57,29 +54,29 @@ class CourseListRow extends React.Component {
   }
 
   render() {
-    const plannedCourseList = (this.state.course_list &&
+    const plannedCourseList = (this.props.coursesInTimetable &&
       this.props.displayed_semester === this.props.current_semester) ?
-      this.state.course_list.map((course) => {
-      const colourIndex = (course.id in this.props.courseToColourIndex) ?
+      this.props.coursesInTimetable.map((course) => {
+        const colourIndex = (course.id in this.props.courseToColourIndex) ?
        this.props.courseToColourIndex[course.id] :
        getNextAvailableColour(this.props.courseToColourIndex);
-      const professors = course.sections.map(section => section.instructors);
-      return (<MasterSlot
-        key={course.id}
-        professors={professors}
-        colourIndex={colourIndex}
-        classmates={this.props.courseToClassmates[course.id]}
-        onTimetable={this.props.isCourseInRoster(course.id)}
-        course={course}
-        fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
-        hideCloseButton
-      />);
-    }) : (<div className="empty-state">
-      <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
-      <h3>Looks like you don&#39;t have any courses yet!</h3>
-      <h4>Your selections will appear here along with credits, professors and friends
-      in the class</h4>
-    </div>);
+        const professors = course.sections.map(section => section.instructors);
+        return (<MasterSlot
+          key={course.id}
+          professors={professors}
+          colourIndex={colourIndex}
+          classmates={this.props.courseToClassmates[course.id]}
+          onTimetable={this.props.isCourseInRoster(course.id)}
+          course={course}
+          fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+          hideCloseButton
+        />);
+      }) : (<div className="empty-state">
+        <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
+        <h3>Looks like you don&#39;t have any courses yet!</h3>
+        <h4>Your selections will appear here along with credits, professors and friends
+        in the class</h4>
+      </div>);
 
     const creditTicker = (this.props.displayed_semester === this.props.current_semester) ?
       <CreditTickerContainer /> : null;
