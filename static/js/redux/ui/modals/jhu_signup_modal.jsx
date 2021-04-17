@@ -114,6 +114,12 @@ class JHUSignupModal extends React.Component {
             >
               Link JHED
             </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div
+              className="advisor-signup-button"
+            >
+              Advisor Login
+            </div>
           </div>
         </div >
       </Modal >
