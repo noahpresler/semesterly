@@ -238,7 +238,8 @@ def sis_post(self):
     # in the Spring 2021 Software for Resilient Communities course for new ones
     token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgICAgICJQZXJzb25hbEluZm8iOgogICAgICAgIHsKICAgICAgICAgICAgIkZ1bGxOYW1lIjogIldhbmcsIEphbWVzIiwKICAgICAgICAgICAgIkVtYWlsQWRkcmVzcyI6ICJqd2FuZzM4MEBqaHUuZWR1IiwKICAgICAgICAgICAgIkpoZWRJZCI6ICJqd2FuZzM4MCIsCiAgICAgICAgICAgICJQcmltYXJ5TWFqb3IiOiAiQ29tcHV0ZXIgU2NpZW5jZSIKICAgICAgICB9LAogICAgICAgICJOb25QcmltYXJ5TWFqb3JzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiTWFqb3IiOiAiTWF0aGVtYXRpY3MiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJNYWpvciI6ICJXcml0aW5nIFNlbWluYXJzIgogICAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICAiTWlub3JzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiTWlub3JOYW1lIjogIk1hbmFnZW1lbnQgJiBFbnRyZXByZW5ldXJzaGlwIgogICAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICAiQWR2aXNvcnMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJGdWxsTmFtZSI6ICJNb3VsdG9uLCBMaW5kYSBIIiwKICAgICAgICAgICAgICAgICJKaGVkSWQiOiAibG1vdWx0bzIiLAogICAgICAgICAgICAgICAgIkVtYWlsQWRkcmVzcyI6ICJsbW91bHRvMkBqaHUuZWR1IgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiRnVsbE5hbWUiOiAiR2hvcmJhbmkgS2hhbGVkaSwgU291ZGVoIiwKICAgICAgICAgICAgICAgICJKaGVkSWQiOiAic2dob3JiYTEiLAogICAgICAgICAgICAgICAgIkVtYWlsQWRkcmVzcyI6ICJzb3VkZWhAamh1LmVkdSIKICAgICAgICAgICAgfQogICAgICAgIF0sCiAgICAgICAgIkNvdXJzZXMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJUZXJtIjogIkZhbGwgMjAxOSIsCiAgICAgICAgICAgICAgICAiT2ZmZXJpbmdOYW1lIjogIkFTLjExMC4yMTIiLAogICAgICAgICAgICAgICAgIlNlY3Rpb24iOiAiMDEiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJUZXJtIjogIkZhbGwgMjAxOSIsCiAgICAgICAgICAgICAgICAiT2ZmZXJpbmdOYW1lIjogIkVOLjYwMS4yMjYiLAogICAgICAgICAgICAgICAgIlNlY3Rpb24iOiAiMDIiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJUZXJtIjogIkludGVyc2Vzc2lvbiAyMDIwIiwKICAgICAgICAgICAgICAgICJPZmZlcmluZ05hbWUiOiAiQVMuMzc2LjE2OCIsCiAgICAgICAgICAgICAgICAiU2VjdGlvbiI6ICIyMiIKICAgICAgICAgICAgfSwKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgIlRlcm0iOiAiU3ByaW5nIDIwMjAiLAogICAgICAgICAgICAgICAgIk9mZmVyaW5nTmFtZSI6ICJBUy4yMjAuMTA1IiwKICAgICAgICAgICAgICAgICJTZWN0aW9uIjogIjE1IgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiVGVybSI6ICJGYWxsIDIwMjAiLAogICAgICAgICAgICAgICAgIk9mZmVyaW5nTmFtZSI6ICJNSS44NDEuMjAwIiwKICAgICAgICAgICAgICAgICJTZWN0aW9uIjogIjAxIgogICAgICAgICAgICB9CiAgICAgICAgXQogICAgfQogICAgICA.VId60zRTWb-gx9vNSZW6n8z4pZnCKKMu_RAYbELpKVI'
     url = '/advising/sis_post/TEST_KEY/'
-    request = self.factory.post(url, data=token, content_type='application/jwt')
+    request = self.factory.post(
+        url, data=token, content_type='application/jwt')
     response = get_response(
         request, self.student.user, url, 'TEST_KEY')
     self.student.refresh_from_db()
@@ -256,7 +257,8 @@ class StudentSISViewTest(APITestCase):
 
         self.assertEquals(self.student.primary_major, 'Computer Science')
         self.assertEquals(len(self.student.other_majors), 2)
-        self.assertEquals(self.student.other_majors[0], 'Mathematics')
+        self.assertTrue('Mathematics' in self.student.other_majors)
+        self.assertTrue('Writing Seminars' in self.student.other_majors)
 
         self.assertEquals(len(self.student.minors), 1)
         self.assertEquals(
@@ -270,10 +272,10 @@ class StudentSISViewTest(APITestCase):
         sections = self.student.sis_registered_sections.all()
         # Last course should fail as it doesn't exist, so 4
         self.assertEquals(len(sections), 4)
-        self.assertEquals(sections[0], self.linalg)
-        self.assertEquals(sections[1], self.madooei)
-        self.assertEquals(sections[2], self.vgm)
-        self.assertEquals(sections[3], self.ifp)
+        self.assertTrue(self.linalg in sections)
+        self.assertTrue(self.madooei in sections)
+        self.assertTrue(self.vgm in sections)
+        self.assertTrue(self.ifp in sections)
 
     # Two of the same posts should not result in a change in the DB
     def test_double_post_identical(self):
@@ -288,7 +290,8 @@ class StudentSISViewTest(APITestCase):
         # Token with hardcoded changes, show up as changes 1-7 in tested fields
         token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgICAgICJQZXJzb25hbEluZm8iOgogICAgICAgIHsKICAgICAgICAgICAgIkZ1bGxOYW1lIjogIldhbmcsIEphbWVzIiwKICAgICAgICAgICAgIkVtYWlsQWRkcmVzcyI6ICJqd2FuZzM4MEBqaHUuZWR1IiwKICAgICAgICAgICAgIkpoZWRJZCI6ICJqd2FuZzM4MCIsCiAgICAgICAgICAgICJQcmltYXJ5TWFqb3IiOiAiMSIKICAgICAgICB9LAogICAgICAgICJOb25QcmltYXJ5TWFqb3JzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiTWFqb3IiOiAiMiIKICAgICAgICAgICAgfSwKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgIk1ham9yIjogIjMiCiAgICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJNaW5vcnMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJNaW5vck5hbWUiOiAiNCIKICAgICAgICAgICAgfQogICAgICAgIF0sCiAgICAgICAgIkFkdmlzb3JzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiRnVsbE5hbWUiOiAiNSw1IiwKICAgICAgICAgICAgICAgICJKaGVkSWQiOiAiNiIsCiAgICAgICAgICAgICAgICAiRW1haWxBZGRyZXNzIjogIjciCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJGdWxsTmFtZSI6ICJHaG9yYmFuaSBLaGFsZWRpLCBTb3VkZWgiLAogICAgICAgICAgICAgICAgIkpoZWRJZCI6ICJzZ2hvcmJhMSIsCiAgICAgICAgICAgICAgICAiRW1haWxBZGRyZXNzIjogInNvdWRlaEBqaHUuZWR1IgogICAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICAiQ291cnNlcyI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICAiVGVybSI6ICJTcHJpbmcgMjAyMSIsCiAgICAgICAgICAgICAgICJPZmZlcmluZ05hbWUiOiAiRU4uNjAxLjMxMCIsCiAgICAgICAgICAgICAgICJTZWN0aW9uIjogIjAxIgogICAgICAgICAgICB9CiAgICAgICAgXQogICAgfQogICAgICAKICAgICAg.dqp3BZYY7Iiw2q2lTd8d4KeMa3j6UFGeQQYdToAxLfU'
         url = '/advising/sis_post/TEST_KEY/'
-        request = self.factory.post(url, data=token, content_type='application/jwt')
+        request = self.factory.post(
+            url, data=token, content_type='application/jwt')
         response = get_response(
             request, self.student.user, url, 'TEST_KEY')
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
@@ -296,8 +299,8 @@ class StudentSISViewTest(APITestCase):
 
         self.assertEquals(self.student.primary_major, '1')
         self.assertEquals(len(self.student.other_majors), 2)
-        self.assertEquals(self.student.other_majors[0], '2')
-        self.assertEquals(self.student.other_majors[1], '3')
+        self.assertTrue('2' in self.student.other_majors)
+        self.assertTrue('3' in self.student.other_majors)
 
         self.assertEquals(len(self.student.minors), 1)
         self.assertEquals(
@@ -363,10 +366,9 @@ class RegisteredCoursesViewTest(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         registered_courses = response.data['registeredCourses']
         self.assertEquals(len(registered_courses), 2)
-        self.assertEquals(
-            registered_courses[0]['code'], self.linalg.course.code)
-        self.assertEquals(
-            registered_courses[1]['code'], self.madooei.course.code)
+        self.assertTrue(
+            registered_courses[0]['code'] == self.linalg.course.code or
+            registered_courses[0]['code'] == self.madooei.course.code)
 
         url = '/advising/sis_courses/Spring/2020/'
         request = self.factory.get(url)
