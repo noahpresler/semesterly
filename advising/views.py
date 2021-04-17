@@ -170,16 +170,17 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         context = {'school': school, 'semester': semester, 'student': student}
         courses = {'registeredCourses': []}
         for section in student.sis_registered_sections.all():
-            course_data = {'isVerified': self.is_section_verified(
-                section, student, semester)}
+            if section.semester == semester
+                course_data = {'isVerified': self.is_section_verified(
+                    section, student, semester)}
 
-            courses['registeredCourses'].append(
-                dict(course_data, **CourseSerializer(
-                    section.course, context=context).data))
+                courses['registeredCourses'].append(
+                    dict(course_data, **CourseSerializer(
+                        section.course, context=context).data))
         return Response(courses, status=status.HTTP_200_OK)
 
     def is_section_verified(self, section, student, semester):
         timetable = student.personaltimetable_set.filter(
             semester=semester).order_by('last_updated').last()
         # TODO: This is not necessarily the 'current' or 'selected' timetable
-        return section in timetable.sections.all()
+        return timetable and section in timetable.sections.all()
