@@ -101,7 +101,8 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         for advisor_data in data['Advisors']:
             last_name, first_name = advisor_data['FullName'].split(',')
             advisor, created = Advisor.objects.get_or_create(
-                jhed=advisor_data['JhedId'], email_address=advisor_data['EmailAddress'],
+                jhed='{payload}{email}'.format(payload=advisor_data['JhedId'], email='@jh.edu'), 
+                email_address=advisor_data['EmailAddress'],
                 last_name=last_name, first_name=first_name)
             if not created:
                 student.advisors.add(advisor)
@@ -130,7 +131,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             semester = get_object_or_404(Semester, name=name, year=year)
             section = get_object_or_404(
                 Section, course=course, semester=semester,
-                meeting_section="({})".format(course_data['SectionNumber']))
+                meeting_section="({})".format(course_data['Section']))
             student.sis_registered_sections.add(section)
 
 
