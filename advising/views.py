@@ -87,7 +87,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             if payload == "null":
                 msg = 'Null token not allowed'
                 raise exceptions.AuthenticationFailed(msg)
-        except jwt.ExpiredSignature or jwt.DecodeError or jwt.InvalidTokenError:
+        except (jwt.ExpiredSignature, jwt.DecodeError, jwt.InvalidTokenError):
             return HttpResponse({'Error': "Token is invalid"}, status="403")
         except UnicodeError:
             msg = 'Invalid token header. Token string should not contain invalid characters.'
