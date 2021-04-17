@@ -78,18 +78,28 @@ class TopBarAdvising extends React.Component {
   }
 
   render() {
+    const ReturnToScheduleButton = (
+      <div className="cal-btn-wrapper">
+        <a href="/">
+          <button
+            className="return-to-schedule"
+            data-tip
+          >
+            <p style={{ color: 'gray' }}>Return to Schedule</p>
+          </button>
+        </a>
+      </div>
+    );
     return (
       <div className="top-bar">
-        <a href="/" className="semesterly-name">
-          <img
-            alt="logo"
-            className="semesterly-logo no-print"
-            src="/static/img/logo2.0-32x32.png"
-          />
-          <div className="semesterly-name no-print">
-            Semester.ly - Advising Dashboard
-          </div>
-        </a>
+        <img
+          alt="logo"
+          className="semesterly-logo no-print"
+          src="/static/img/logo2.0-32x32.png"
+        />
+        <div className="semesterly-name no-print">
+          Semester.ly - Advising Dashboard
+        </div>
         <div className="print-content print">
           {this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ?
             this.renderUserForPrint() : null}
@@ -103,6 +113,9 @@ class TopBarAdvising extends React.Component {
           </div>
         </div>
         <SocialProfileContainer />
+        <span>
+          { ReturnToScheduleButton }
+        </span>
         <div className="navicon" onClick={this.toggleComments}>
           <span />
           <span />

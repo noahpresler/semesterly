@@ -155,7 +155,7 @@ textarea {
   }
 }
 
-.import-data {
+.return-to-schedule {
   border: hidden;
   background: #fff;
   float: right;
@@ -172,8 +172,17 @@ textarea {
     line-height: 50px;
     width: 200px;
     margin: 0;
+    letter-spacing: 0px;
     background: #fff;
   }
+}
+
+.advising-schedule-header {
+  font-family: $font-body;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
 
 @media (max-width: 999px) {

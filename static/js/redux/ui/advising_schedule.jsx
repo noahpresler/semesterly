@@ -35,14 +35,13 @@ class AdvisingSchedule extends React.Component {
           className="save-timetable add-button"
           data-for="import-data-btn-tooltip"
         >
-          {/* TODO: Move import data button (below) to optimal position */}
           <i className="fa fa-upload" />
         </button>
         <ReactTooltip
           id="import-data-btn-tooltip"
           class="tooltip"
           type="dark"
-          place="bottom"
+          place="right"
           effect="solid"
         >
           <span>Import SIS Data</span>
@@ -67,11 +66,11 @@ class AdvisingSchedule extends React.Component {
 
     return (
       <div className="advising-schedule-inner">
-        <p style={{ fontSize: '1.5em', fontWeight: 'bold', marginTop: '25px' }}>
+        <div className="advising-schedule-header">
           Course Summary
           &nbsp;&nbsp;&nbsp;
           { SISImportDataModalButton }
-        </p>
+        </div>
         { courseListRows }
       </div>
     );
