@@ -169,7 +169,7 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
             student = Student.objects.get(user=request.user)
         context = {'school': school, 'semester': semester, 'student': student}
         courses = {'registeredCourses': []}
-        for section in student.sis_registered_courses.all():
+        for section in student.sis_registered_sections.all():
             course_data = {'isVerified': self.is_section_verified(
                 section, student, semester)}
 
