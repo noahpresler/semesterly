@@ -73,18 +73,6 @@ class UserAcquisitionModal extends React.Component {
           </button>
           <p className="method-details">Allows the option to friends in your classes.</p>
 
-          <button
-            className="btn abnb-btn fb-btn" onClick={() => {
-              const link = document.createElement('a');
-              link.href = `/login/azuread-tenant-oauth2/?student_token=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
-              document.body.appendChild(link);
-              link.click();
-            }
-            }
-            satisfy the heap property
-          >
-            <span>Continue with JHU</span>
-          </button>
 
           <div className="or-separator">
             <span className="h6 or-separator--text">or</span>
