@@ -88,7 +88,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             msg = 'Invalid token header. Token string should not contain invalid characters.'
             raise exceptions.AuthenticationFailed(msg)
         student = get_object_or_404(
-            Student, jhed=payload['StudentInfo']['JhedId'])
+            Student, jhed='{payload}{email}'.format(payload=payload['PersonalInfo']['JhedId'], email='@jh.edu')) 
         self.add_advisors(payload, student)
         self.add_majors(payload, student)
         self.add_minors(payload, student)
@@ -108,7 +108,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
                 advisor.save()
 
     def add_majors(self, data, student):
-        student.primary_major = data['StudentInfo']['PrimaryMajor']
+        student.primary_major = data['PersonalInfo']['PrimaryMajor']
         del student.other_majors[:]
         for major_data in data['NonPrimaryMajors']:
             student.other_majors.append(major_data['Major'])
@@ -116,7 +116,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
     def add_minors(self, data, student):
         del student.minors[:]
         for minor_data in data['Minors']:
-            student.minors.append(minor_data['Minor'])
+            student.minors.append(minor_data['MinorName'])
 
     def add_courses(self, data, student):
         student.sis_registered_sections.clear()
