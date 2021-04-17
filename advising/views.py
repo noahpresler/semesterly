@@ -24,6 +24,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.authentication import get_authorization_header, BaseAuthentication
 from semesterly.settings import get_secret
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
 from student.models import Student, PersonalTimetable
 from advising.models import Advisor
 from forum.models import Transcript
@@ -77,13 +78,16 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         return Response({'retrievedSemesters': semesters},
                         status=status.HTTP_200_OK)
 
-    def post(self, request):
+    def post(self, request, token=None):
         """Populates the database according to the SIS data.
         Fills students' advisors, majors, minors, and courses fields.
         """
         try:
-            payload = jwt.decode(request.body, get_secret(
-                'STUDENT_SIS_AUTH_SECRET'), algorithms=['HS256'])
+            if token:
+                payload = jwt.decode(request.body, token, algorithms=['HS256'])
+            else:
+                payload = jwt.decode(request.body, get_secret(
+                    'STUDENT_SIS_AUTH_SECRET'), algorithms=['HS256'])
             if payload == "null":
                 msg = 'Null token not allowed'
                 raise exceptions.AuthenticationFailed(msg)
@@ -199,7 +203,8 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
     def get_registered_courses(self, context, timetable=None):
         courses = {'registeredCourses': []}
         student, semester = context['student'], context['semester']
-        registered_sections = student.sis_registered_sections.filter(semester=semester).all()
+        registered_sections = student.sis_registered_sections.filter(
+            semester=semester).all()
         if timetable:
             for section in timetable.sections.all():
                 course_data = {'isVerified': section in registered_sections}
