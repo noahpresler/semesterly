@@ -193,20 +193,12 @@ def setUpMockData(self):
     }
 
 
-def get_response(request, user, url):
+def get_response(request, user, url, *args):
     force_authenticate(request, user=user)
     request.user = user
     request.subdomain = 'uoft'
     view = resolve(url).func
-    return view(request)
-
-
-def get_response_for_semester(request, user, url, name, year):
-    force_authenticate(request, user=user)
-    request.user = user
-    request.subdomain = 'uoft'
-    view = resolve(url).func
-    return view(request, name, year)
+    return view(request, *args)
 
 
 class Serializers(TestCase):
@@ -365,7 +357,7 @@ class RegisteredCoursesViewTest(APITestCase):
 
         url = '/advising/sis_courses/Fall/2019/'
         request = self.factory.get(url)
-        response = get_response_for_semester(
+        response = get_response(
             request, self.student.user, url, 'Fall', '2019')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         registered_courses = response.data['registeredCourses']
@@ -377,7 +369,7 @@ class RegisteredCoursesViewTest(APITestCase):
 
         url = '/advising/sis_courses/Spring/2020/'
         request = self.factory.get(url)
-        response = get_response_for_semester(
+        response = get_response(
             request, self.student.user, url, 'Spring', '2020')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         registered_courses = response.data['registeredCourses']
@@ -393,28 +385,39 @@ class RegisteredCoursesViewTest(APITestCase):
         response = sis_post(self)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
-        url = '/advising/sis_courses/Spring/2020/'
-        data = {'jhed': self.student.jhed}
-        request = self.factory.get(url, data=data, format='json')
-        response = get_response_for_semester(
-            request, self.advisor_user.user, url, 'Spring', '2020')
+        url = '/advising/sis_courses/Spring/2020/{}/'.format(self.student.jhed)
+        request = self.factory.get(url)
+        response = get_response(
+            request, self.advisor_user.user, url, 'Spring', '2020', self.student.jhed)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
         registered_courses = response.data['registeredCourses']
         self.assertEquals(len(registered_courses), 1)
         self.assertEquals(registered_courses[0]['code'], self.ifp.course.code)
 
+    # Students getting their own courses by using their JHED
+    def test_student_get_own_courses(self):
+        setUpTranscript(self)
+        response = sis_post(self)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+        url = '/advising/sis_courses/Spring/2020/{}/'.format(self.student.jhed)
+        request = self.factory.get(url)
+        response = get_response(
+            request, self.student.user, url, 'Spring', '2020', self.student.jhed)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
     def test_nonadvisor_get_courses_fails(self):
         setUpTranscript(self)
         response = sis_post(self)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
-        url = '/advising/sis_courses/Spring/2020/'
-        data = {'jhed': self.student.jhed}
-        request = self.factory.get(url, data=data, format='json')
-        response = get_response_for_semester(
-            request, self.student.user, url, 'Spring', '2020')
-        # Ironically, student can't request their own data like this haha
+        self.student2 = Student.objects.create(
+            user=User.objects.create(username='a', password='b'))
+        url = '/advising/sis_courses/Spring/2020/{}/'.format(self.student.jhed)
+        request = self.factory.get(url)
+        response = get_response(request, self.student2.user,
+                               url, 'Spring', '2020', self.student.jhed)
         self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_noninvited_advisor_get_courses_fails(self):
@@ -422,9 +425,8 @@ class RegisteredCoursesViewTest(APITestCase):
         response = sis_post(self)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
-        url = '/advising/sis_courses/Spring/2020/'
-        data = {'jhed': self.student.jhed}
-        request = self.factory.get(url, data=data, format='json')
-        response = get_response_for_semester(
-            request, self.advisor_user.user, url, 'Spring', '2020')
+        url = '/advising/sis_courses/Spring/2020/{}/'.format(self.student.jhed)
+        request = self.factory.get(url)
+        response = get_response(
+            request, self.advisor_user.user, url, 'Spring', '2020', self.student.jhed)
         self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)

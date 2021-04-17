@@ -54,10 +54,14 @@ class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
 class StudentSISView(ValidateSubdomainMixin, APIView):
     """ Handles SIS data retrieval and digesting. """
 
-    def get(self, request):
+    def get(self, request, jhed=None):
         """Gets all of the semesters that SIS has retrieved from
         Assumes student has already received a POST request from SIS
         Only includes Fall and Spring semesters
+
+        If the 'jhed' key is provided, get the semesters for the Student with
+        the JHED. Requesting user must then be an advisor. TODO
+
         Returns:
             retrievedSemesters: [<sem_name> <year>, ...]
             Ex: ["Fall 2019", "Spring 2020", "Fall 2020"]
@@ -142,7 +146,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
 class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
     """Handles retrieving timetable and SIS courses from a specific semester"""
 
-    def get(self, request, sem_name, year):
+    def get(self, request, sem_name, year, jhed=None, tt_name=None):
         """If the 'jhed' key is provided, get the courses for the student with
         the corresponding JHED. The request user must be an Advisor. Otherwise,
         get the courses for the requesting student for this semester.
@@ -164,19 +168,18 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         """
         school = request.subdomain
         semester = Semester.objects.get(name=sem_name, year=year)
-        data = request.query_params
-        if 'jhed' in data:
-            student = get_object_or_404(Student, jhed=data['jhed'])
+        if jhed:
+            student = get_object_or_404(Student, jhed=jhed)
             if not self.is_advisor_for_student(request, student, semester):
                 return Response(status=status.HTTP_403_FORBIDDEN)
         else:
             student = Student.objects.get(user=request.user)
 
         context = {'school': school, 'semester': semester, 'student': student}
-        if 'tt_name' in data:
+        if tt_name:
             timetable = get_object_or_404(
                 PersonalTimetable,
-                student=student, name=data['tt_name'],
+                student=student, name=tt_name,
                 school=school, semester=semester)
             courses = self.get_registered_courses(context, timetable)
         else:
@@ -185,6 +188,8 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
 
     def is_advisor_for_student(self, request, student, semester):
         advisor = Student.objects.get(user=request.user)
+        if student == advisor:  # Student could be requesting their own data
+            return True
         transcript = get_object_or_404(
             Transcript, owner=student, semester=semester)
         return student.jhed == transcript.owner.jhed \
