@@ -25,7 +25,6 @@ urlpatterns = [
     url(r'^advising/jhu_signup/*$',
         FeatureFlowView.as_view(feature_name='JHU_SIGNUP', is_advising=True)),
     url(r'^advising/sis_post/$', advising.views.StudentSISView.as_view()),
-    url(r'^advising/sis_post/(?P<token>.+)/$', advising.views.StudentSISView.as_view()),
 
     # Get the semesters for the requesting user
     url(r'^advising/sis_semesters/$',
