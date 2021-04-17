@@ -63,8 +63,9 @@ def setUpAdvisor(self):
     setUpAdvisorNoUser(self)
     user, _ = User.objects.get_or_create(
         username='ala42', password='TFT',
-        first_name='Alan', last_name='Zhang', jhed=self.advisor.jhed)
-    self.advisor_user, _ = Student.objects.get_or_create(user=user)
+        first_name='Alan', last_name='Zhang')
+    self.advisor_user, _ = Student.objects.get_or_create(
+        user=user, jhed=self.advisor.jhed)
     self.advisor_user.save()
 
 
@@ -72,10 +73,17 @@ def setUpTranscriptNoAdvisor(self):
     setUpStudent(self)
     setUpAdvisor(self)
     self.semester, _ = Semester.objects.get_or_create(
-        name='Spring', year='2021')
+        name='Spring', year='2020')
     self.semester.save()
     self.transcript, _ = Transcript.objects.get_or_create(
         owner=self.student, semester=self.semester)
+    self.transcript.save()
+
+
+def setUpTranscript(self):
+    setUpTranscriptNoAdvisor(self)
+    self.transcript.advisors.add(self.advisor_user)
+    self.transcript.save()
 
 
 def setUpMockSemesters(self):
@@ -180,7 +188,7 @@ def setUpMockData(self):
                 "Term": "Fall 2020",
                 "OfferingName": "MI.841.200",
                 "SectionNumber": "01"
-            },
+            }
         ]
     }
 
@@ -191,6 +199,14 @@ def get_response(request, user, url):
     request.subdomain = 'uoft'
     view = resolve(url).func
     return view(request)
+
+
+def get_response_for_semester(request, user, url, name, year):
+    force_authenticate(request, user=user)
+    request.user = user
+    request.subdomain = 'uoft'
+    view = resolve(url).func
+    return view(request, name, year)
 
 
 class Serializers(TestCase):
@@ -224,23 +240,25 @@ class AdvisingViewTest(APITestCase):
         self.assertEquals(response.url, '/advising/jhu_signup/')
 
 
+def sis_post(self):
+    setUpMockData(self)
+    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJTdHVkZW50SW5mbyI6CiAgICB7CiAgICAgICJGdWxsTmFtZSI6ICJXYW5nLCBKYW1lcyIsCiAgICAgICJFbWFpbEFkZHJlc3MiOiAiandhbmczODBAamh1LmVkdSIsCiAgICAgICJKaGVkSWQiOiAiandhbmczODBAamguZWR1IiwKICAgICAgIlByaW1hcnlNYWpvciI6ICJDb21wdXRlciBTY2llbmNlIgogICAgfSwKICAiTm9uUHJpbWFyeU1ham9ycyI6IFsKICAgIHsKICAgICAgIk1ham9yIjogIk1hdGhlbWF0aWNzIgogICAgfSwKICAgIHsKICAgICAgIk1ham9yIjogIldyaXRpbmcgU2VtaW5hcnMiCiAgICB9CiAgXSwKICAiTWlub3JzIjogWwogICAgewogICAgICAiTWlub3IiOiAiTWFuYWdlbWVudCAmIEVudHJlcHJlbmV1cnNoaXAiCiAgICB9CiAgXSwKICAiQWR2aXNvcnMiOiBbCiAgICB7CiAgICAgICJGdWxsTmFtZSI6ICJNb3VsdG9uLCBMaW5kYSBIIiwKICAgICAgIkpoZWRJZCI6ICJsbW91bHRvMkBqaC5lZHUiLAogICAgICAiRW1haWxBZGRyZXNzIjogImxtb3VsdG8yQGpodS5lZHUiCiAgICB9LAogICAgewogICAgICAiRnVsbE5hbWUiOiAiR2hvcmJhbmkgS2hhbGVkaSwgU291ZGVoIiwKICAgICAgIkpoZWRJZCI6ICJzZ2hvcmJhMUBqaC5lZHUiLAogICAgICAiRW1haWxBZGRyZXNzIjogInNvdWRlaEBqaHUuZWR1IgogICAgfQogIF0sCiAgIkNvdXJzZXMiOiBbCiAgICAgIHsKICAgICAgICAiVGVybSI6ICJGYWxsIDIwMTkiLAogICAgICAgICJPZmZlcmluZ05hbWUiOiAiQVMuMTEwLjIxMiIsCiAgICAgICAgIlNlY3Rpb25OdW1iZXIiOiAiMDEiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiVGVybSI6ICJGYWxsIDIwMTkiLAogICAgICAgICJPZmZlcmluZ05hbWUiOiAiRU4uNjAxLjIyNiIsCiAgICAgICAgIlNlY3Rpb25OdW1iZXIiOiAiMDIiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiVGVybSI6ICJJbnRlcnNlc3Npb24gMjAyMCIsCiAgICAgICAgIk9mZmVyaW5nTmFtZSI6ICJBUy4zNzYuMTY4IiwKICAgICAgICAiU2VjdGlvbk51bWJlciI6ICIyMiIKICAgICAgfSwKICAgICAgewogICAgICAgICJUZXJtIjogIlNwcmluZyAyMDIwIiwKICAgICAgICAiT2ZmZXJpbmdOYW1lIjogIkFTLjIyMC4xMDUiLAogICAgICAgICJTZWN0aW9uTnVtYmVyIjogIjE1IgogICAgICB9LAogICAgICB7CiAgICAgICAgIlRlcm0iOiAiRmFsbCAyMDIwIiwKICAgICAgICAiT2ZmZXJpbmdOYW1lIjogIk1JLjg0MS4yMDAiLAogICAgICAgICJTZWN0aW9uTnVtYmVyIjogIjAxIgogICAgICB9CiAgXQp9CiAgICAgIA.wAR0mISeWA2vK0HYI4gHx6Yex9Gl8pFu0jwmOTRgplM'
+    token2 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgICAgICJTdHVkZW50SW5mbyI6CiAgICAgICAgewogICAgICAgICAgICAiRnVsbE5hbWUiOiAiV2FuZywgSmFtZXMiLAogICAgICAgICAgICAiRW1haWxBZGRyZXNzIjogImp3YW5nMzgwQGpodS5lZHUiLAogICAgICAgICAgICAiSmhlZElkIjogImp3YW5nMzgwQGpoLmVkdSIsCiAgICAgICAgICAgICJQcmltYXJ5TWFqb3IiOiAiQ29tcHV0ZXIgU2NpZW5jZSIKICAgICAgICB9LAogICAgICAgICJOb25QcmltYXJ5TWFqb3JzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiTWFqb3IiOiAiTWF0aGVtYXRpY3MiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJNYWpvciI6ICJXcml0aW5nIFNlbWluYXJzIgogICAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICAiTWlub3JzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiTWlub3IiOiAiTWFuYWdlbWVudCAmIEVudHJlcHJlbmV1cnNoaXAiCiAgICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJBZHZpc29ycyI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgIkZ1bGxOYW1lIjogIk1vdWx0b24sIExpbmRhIEgiLAogICAgICAgICAgICAgICAgIkpoZWRJZCI6ICJsbW91bHRvMkBqaC5lZHUiLAogICAgICAgICAgICAgICAgIkVtYWlsQWRkcmVzcyI6ICJsbW91bHRvMkBqaHUuZWR1IgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiRnVsbE5hbWUiOiAiR2hvcmJhbmkgS2hhbGVkaSwgU291ZGVoIiwKICAgICAgICAgICAgICAgICJKaGVkSWQiOiAic2dob3JiYTFAamguZWR1IiwKICAgICAgICAgICAgICAgICJFbWFpbEFkZHJlc3MiOiAic291ZGVoQGpodS5lZHUiCiAgICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJDb3Vyc2VzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiVGVybSI6ICJGYWxsIDIwMTkiLAogICAgICAgICAgICAgICAgIk9mZmVyaW5nTmFtZSI6ICJBUy4xMTAuMjEyIiwKICAgICAgICAgICAgICAgICJTZWN0aW9uTnVtYmVyIjogIjAxIgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiVGVybSI6ICJGYWxsIDIwMTkiLAogICAgICAgICAgICAgICAgIk9mZmVyaW5nTmFtZSI6ICJFTi42MDEuMjI2IiwKICAgICAgICAgICAgICAgICJTZWN0aW9uTnVtYmVyIjogIjAyIgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAiVGVybSI6ICJJbnRlcnNlc3Npb24gMjAyMCIsCiAgICAgICAgICAgICAgICAiT2ZmZXJpbmdOYW1lIjogIkFTLjM3Ni4xNjgiLAogICAgICAgICAgICAgICAgIlNlY3Rpb25OdW1iZXIiOiAiMjIiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJUZXJtIjogIlNwcmluZyAyMDIwIiwKICAgICAgICAgICAgICAgICJPZmZlcmluZ05hbWUiOiAiQVMuMjIwLjEwNSIsCiAgICAgICAgICAgICAgICAiU2VjdGlvbk51bWJlciI6ICIxNSIKICAgICAgICAgICAgfSwKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgIlRlcm0iOiAiRmFsbCAyMDIwIiwKICAgICAgICAgICAgICAgICJPZmZlcmluZ05hbWUiOiAiTUkuODQxLjIwMCIsCiAgICAgICAgICAgICAgICAiU2VjdGlvbk51bWJlciI6ICIwMSIKICAgICAgICAgICAgfQogICAgICAgIF0KICAgIH0.XgyC5XnTXTrNAAC0lw68I04MEaExjRalZ71HVcWk2Nc'
+    request = self.factory.post(
+        '/advising/sis_post/', data=token2, content_type='application/jwt')
+    response = get_response(
+        request, self.student.user, '/advising/sis_post/')
+    self.student.refresh_from_db()
+    return response
+
+
 class StudentSISViewTest(APITestCase):
     def setUp(self):
         setUpStudent(self)
         self.factory = APIRequestFactory()
 
-    def sis_post(self):
-        setUpMockData(self)
-        token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJTdHVkZW50SW5mbyI6CiAgICB7CiAgICAgICJGdWxsTmFtZSI6ICJXYW5nLCBKYW1lcyIsCiAgICAgICJFbWFpbEFkZHJlc3MiOiAiandhbmczODBAamh1LmVkdSIsCiAgICAgICJKaGVkSWQiOiAiandhbmczODBAamguZWR1IiwKICAgICAgIlByaW1hcnlNYWpvciI6ICJDb21wdXRlciBTY2llbmNlIgogICAgfSwKICAiTm9uUHJpbWFyeU1ham9ycyI6IFsKICAgIHsKICAgICAgIk1ham9yIjogIk1hdGhlbWF0aWNzIgogICAgfSwKICAgIHsKICAgICAgIk1ham9yIjogIldyaXRpbmcgU2VtaW5hcnMiCiAgICB9CiAgXSwKICAiTWlub3JzIjogWwogICAgewogICAgICAiTWlub3IiOiAiTWFuYWdlbWVudCAmIEVudHJlcHJlbmV1cnNoaXAiCiAgICB9CiAgXSwKICAiQWR2aXNvcnMiOiBbCiAgICB7CiAgICAgICJGdWxsTmFtZSI6ICJNb3VsdG9uLCBMaW5kYSBIIiwKICAgICAgIkpoZWRJZCI6ICJsbW91bHRvMkBqaC5lZHUiLAogICAgICAiRW1haWxBZGRyZXNzIjogImxtb3VsdG8yQGpodS5lZHUiCiAgICB9LAogICAgewogICAgICAiRnVsbE5hbWUiOiAiR2hvcmJhbmkgS2hhbGVkaSwgU291ZGVoIiwKICAgICAgIkpoZWRJZCI6ICJzZ2hvcmJhMUBqaC5lZHUiLAogICAgICAiRW1haWxBZGRyZXNzIjogInNvdWRlaEBqaHUuZWR1IgogICAgfQogIF0sCiAgIkNvdXJzZXMiOiBbCiAgICAgIHsKICAgICAgICAiVGVybSI6ICJGYWxsIDIwMTkiLAogICAgICAgICJPZmZlcmluZ05hbWUiOiAiQVMuMTEwLjIxMiIsCiAgICAgICAgIlNlY3Rpb25OdW1iZXIiOiAiMDEiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiVGVybSI6ICJGYWxsIDIwMTkiLAogICAgICAgICJPZmZlcmluZ05hbWUiOiAiRU4uNjAxLjIyNiIsCiAgICAgICAgIlNlY3Rpb25OdW1iZXIiOiAiMDIiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiVGVybSI6ICJJbnRlcnNlc3Npb24gMjAyMCIsCiAgICAgICAgIk9mZmVyaW5nTmFtZSI6ICJBUy4zNzYuMTY4IiwKICAgICAgICAiU2VjdGlvbk51bWJlciI6ICIyMiIKICAgICAgfSwKICAgICAgewogICAgICAgICJUZXJtIjogIlNwcmluZyAyMDIwIiwKICAgICAgICAiT2ZmZXJpbmdOYW1lIjogIkFTLjIyMC4xMDUiLAogICAgICAgICJTZWN0aW9uTnVtYmVyIjogIjE1IgogICAgICB9LAogICAgICB7CiAgICAgICAgIlRlcm0iOiAiRmFsbCAyMDIwIiwKICAgICAgICAiT2ZmZXJpbmdOYW1lIjogIk1JLjg0MS4yMDAiLAogICAgICAgICJTZWN0aW9uTnVtYmVyIjogIjAxIgogICAgICB9CiAgXQp9CiAgICAgIA.wAR0mISeWA2vK0HYI4gHx6Yex9Gl8pFu0jwmOTRgplM'
-        request = self.factory.post(
-            '/advising/sis_post/', data=token, content_type='application/jwt')
-        response = get_response(
-            request, self.student.user, '/advising/sis_post/')
-        self.student.refresh_from_db()
-        return response
-
     def test_sis_posts_into_db(self):
-        response = self.sis_post()
+        response = sis_post(self)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
         self.assertEquals(self.student.primary_major, 'Computer Science')
@@ -266,12 +284,12 @@ class StudentSISViewTest(APITestCase):
 
     # Two of the same posts should not result in a change in the DB
     def test_double_post_identical(self):
-        response = self.sis_post()
+        response = sis_post(self)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         self.test_sis_posts_into_db()
 
     def test_new_post_updates(self):
-        response = self.sis_post()
+        response = sis_post(self)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
         # Token with hardcoded changes, show up as changes 1-8 in tested fields
@@ -303,7 +321,7 @@ class StudentSISViewTest(APITestCase):
         self.assertEquals(sections[0], self.sfrc)
 
     def test_get_semesters(self):
-        response = self.sis_post()
+        response = sis_post(self)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
         request = self.factory.get('/advising/sis_semesters/', format='json')
@@ -328,7 +346,7 @@ class StudentSISViewTest(APITestCase):
             pass
 
     def test_invalid_course(self):
-        response = self.sis_post()
+        response = sis_post(self)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         courses = response.data['nonexistentCourses']
         self.assertEquals(len(courses), 1)
@@ -337,19 +355,75 @@ class StudentSISViewTest(APITestCase):
 
 class RegisteredCoursesViewTest(APITestCase):
     def setUp(self):
-        pass
+        setUpStudent(self)
+        self.factory = APIRequestFactory()
 
     def test_student_get_courses(self):
-        pass
+        response = sis_post(self)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
-    def test_student_courses_verified(self):
-        pass
+        url = '/advising/sis_courses/Fall/2019/'
+        request = self.factory.get(url)
+        response = get_response_for_semester(
+            request, self.student.user, url, 'Fall', '2019')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        registered_courses = response.data['registeredCourses']
+        self.assertEquals(len(registered_courses), 2)
+        self.assertEquals(
+            registered_courses[0]['code'], self.linalg.course.code)
+        self.assertEquals(
+            registered_courses[1]['code'], self.madooei.course.code)
+
+        url = '/advising/sis_courses/Spring/2020/'
+        request = self.factory.get(url)
+        response = get_response_for_semester(
+            request, self.student.user, url, 'Spring', '2020')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        registered_courses = response.data['registeredCourses']
+        self.assertEquals(len(registered_courses), 1)
+        self.assertEquals(registered_courses[0]['code'], self.ifp.course.code)
+
+    # Write when the verification TODO is satisfied
+    # def test_student_courses_verified(self):
+    #     pass
 
     def test_advisor_get_courses(self):
-        pass
+        setUpTranscript(self)
+        response = sis_post(self)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
-    def test_nonadvisor_404s(self):
-        pass
+        url = '/advising/sis_courses/Spring/2020/'
+        data = {'jhed': self.student.jhed}
+        request = self.factory.get(url, data=data, format='json')
+        response = get_response_for_semester(
+            request, self.advisor_user.user, url, 'Spring', '2020')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
 
-    def test_noninvited_advisor_404s(self):
-        pass
+        registered_courses = response.data['registeredCourses']
+        self.assertEquals(len(registered_courses), 1)
+        self.assertEquals(registered_courses[0]['code'], self.ifp.course.code)
+
+    def test_nonadvisor_get_courses_fails(self):
+        setUpTranscript(self)
+        response = sis_post(self)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+        url = '/advising/sis_courses/Spring/2020/'
+        data = {'jhed': self.student.jhed}
+        request = self.factory.get(url, data=data, format='json')
+        response = get_response_for_semester(
+            request, self.student.user, url, 'Spring', '2020')
+        # Ironically, student can't request their own data like this haha
+        self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_noninvited_advisor_get_courses_fails(self):
+        setUpTranscriptNoAdvisor(self)
+        response = sis_post(self)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+        url = '/advising/sis_courses/Spring/2020/'
+        data = {'jhed': self.student.jhed}
+        request = self.factory.get(url, data=data, format='json')
+        response = get_response_for_semester(
+            request, self.advisor_user.user, url, 'Spring', '2020')
+        self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
