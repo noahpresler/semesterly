@@ -24,6 +24,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.authentication import get_authorization_header, BaseAuthentication
 from semesterly.settings import get_secret
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
 from student.models import Student, PersonalTimetable
 from advising.models import Advisor
 from forum.models import Transcript
@@ -54,36 +55,58 @@ class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
 class StudentSISView(ValidateSubdomainMixin, APIView):
     """ Handles SIS data retrieval and digesting. """
 
-    def get(self, request):
+    def get(self, request, jhed=None):
         """Gets all of the semesters that SIS has retrieved from
         Assumes student has already received a POST request from SIS
         Only includes Fall and Spring semesters
+
+        If the 'jhed' key is provided, get the semesters for the Student with
+        the JHED. Requesting user must then be an advisor.
+
         Returns:
             retrievedSemesters: [<sem_name> <year>, ...]
             Ex: ["Fall 2019", "Spring 2020", "Fall 2020"]
         """
-        student = Student.objects.get(user=request.user)
+        if jhed:
+            student = get_object_or_404(Student, jhed=jhed)
+            advisor = Student.objects.get(user=request.user)
+        else:
+            student = Student.objects.get(user=request.user)
         semesters = set()
         for section in student.sis_registered_sections.all():
             if str(section.semester.name) == "Fall" or \
                     str(section.semester.name) == "Spring":
                 semesters.add(section.semester)
-        semesters = list(
-            map(lambda s: str(s), sorted(semesters, reverse=True)))
+
+        if jhed and student != advisor:
+            semesters = list(
+                map(lambda s: str(s),
+                    sorted(
+                        filter(lambda s: advisor in Transcript.objects.get_or_create(
+                            owner=student, semester=s)[0].advisors.all(), semesters),
+                        reverse=True)))
+        else:
+            semesters = list(
+                map(lambda s: str(s),
+                    sorted(semesters, reverse=True)))
+
         return Response({'retrievedSemesters': semesters},
                         status=status.HTTP_200_OK)
 
-    def post(self, request):
+    def post(self, request, key=None):
         """Populates the database according to the SIS data.
         Fills students' advisors, majors, minors, and courses fields.
         """
         try:
-            payload = jwt.decode(request.body, get_secret(
-                'STUDENT_SIS_AUTH_SECRET'), algorithms=['HS256'])
+            if key:
+                payload = jwt.decode(request.body, key, algorithms=['HS256'])
+            else:
+                payload = jwt.decode(request.body, get_secret(
+                    'STUDENT_SIS_AUTH_SECRET'), algorithms=['HS256'])
             if payload == "null":
                 msg = 'Null token not allowed'
                 raise exceptions.AuthenticationFailed(msg)
-        except jwt.ExpiredSignature or jwt.DecodeError or jwt.InvalidTokenError:
+        except (jwt.ExpiredSignature, jwt.DecodeError, jwt.InvalidTokenError):
             return HttpResponse({'Error': "Token is invalid"}, status="403")
         except UnicodeError:
             msg = 'Invalid token header. Token string should not contain invalid characters.'
@@ -142,7 +165,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
 class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
     """Handles retrieving timetable and SIS courses from a specific semester"""
 
-    def get(self, request, sem_name, year):
+    def get(self, request, sem_name, year, jhed=None, tt_name=None):
         """If the 'jhed' key is provided, get the courses for the student with
         the corresponding JHED. The request user must be an Advisor. Otherwise,
         get the courses for the requesting student for this semester.
@@ -164,19 +187,18 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         """
         school = request.subdomain
         semester = Semester.objects.get(name=sem_name, year=year)
-        data = request.query_params
-        if 'jhed' in data:
-            student = get_object_or_404(Student, jhed=data['jhed'])
+        if jhed:
+            student = get_object_or_404(Student, jhed=jhed)
             if not self.is_advisor_for_student(request, student, semester):
                 return Response(status=status.HTTP_403_FORBIDDEN)
         else:
             student = Student.objects.get(user=request.user)
 
         context = {'school': school, 'semester': semester, 'student': student}
-        if 'tt_name' in data:
+        if tt_name:
             timetable = get_object_or_404(
                 PersonalTimetable,
-                student=student, name=data['tt_name'],
+                student=student, name=tt_name,
                 school=school, semester=semester)
             courses = self.get_registered_courses(context, timetable)
         else:
@@ -186,6 +208,8 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
 
     def is_advisor_for_student(self, request, student, semester):
         advisor = Student.objects.get(user=request.user)
+        if student == advisor:  # Student could be requesting their own data
+            return True
         transcript = get_object_or_404(
             Transcript, owner=student, semester=semester)
         return student.jhed == transcript.owner.jhed \
@@ -195,7 +219,8 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
     def get_registered_courses(self, context, timetable=None):
         courses = {'registeredCourses': []}
         student, semester = context['student'], context['semester']
-        registered_sections = student.sis_registered_sections.filter(semester=semester).all()
+        registered_sections = student.sis_registered_sections.filter(
+            semester=semester).all()
         if timetable:
             for section in timetable.sections.all():
                 course_data = {'isVerified': section in registered_sections}
