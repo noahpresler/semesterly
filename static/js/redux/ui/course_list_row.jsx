@@ -15,14 +15,13 @@ GNU General Public License for more details.
 import React from 'react';
 import Collapsible from 'react-collapsible';
 import PropTypes from 'prop-types';
-import { getNextAvailableColour } from '../util';
 import MasterSlot from './master_slot';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import {
   getSISVerifiedCourses,
 } from '../constants/endpoints';
-import COLOUR_DATA from '../constants/colours'
+import COLOUR_DATA from '../constants/colours';
 
 class CourseListRow extends React.Component {
 
@@ -37,7 +36,8 @@ class CourseListRow extends React.Component {
     if (this.props.displayed_semester != null) {
       const semesterName = this.props.displayed_semester.toString().split(' ')[0];
       const semesterYear = this.props.displayed_semester.toString().split(' ')[1];
-      fetch(getSISVerifiedCourses(semesterName, semesterYear, this.props.timetableName, this.props.userInfo.jhed))
+      fetch(getSISVerifiedCourses(semesterName, semesterYear, this.props.timetableName,
+        this.props.userInfo.jhed))
         .then(response => response.json())
         .then((data) => {
           this.setState({ course_list: data.registeredCourses });
@@ -65,12 +65,12 @@ class CourseListRow extends React.Component {
           professors={professors}
           colourIndex={Math.min(i, maxColourIndex)}
           classmates={this.props.courseToClassmates[course.id]}
-          onTimetable={true}
           course={course}
           fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
           hideCloseButton
           verified={course.isVerified}
           hoverable={false}
+          onTimetable
         />);
       }) : (<div className="empty-state">
         <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
@@ -88,18 +88,20 @@ class CourseListRow extends React.Component {
      </div>
       here this.state.num_credits is the number of credits from courses on SIS */
 
-    const courseKey = (this.state.course_list) ? (
-      (this.props.userInfo.isAdvisor) ? (<div className="empty-state">
+    let courseKey = null;
+    if (this.state.course_list) {
+      courseKey = (this.props.userInfo.isAdvisor) ? (<div className="empty-state">
         <h3>
           Courses this student is enrolled in on SIS contain a &nbsp;
-          <i className="fa fa-check-circle"/> .
+          <i className="fa fa-check-circle" /> .
         </h3>
       </div>) : (<div className="empty-state">
         <h3>
           Courses you are enrolled in on SIS contain a &nbsp;
-          <i className="fa fa-check-circle"/> .
+          <i className="fa fa-check-circle" /> .
         </h3>
-      </div>)): null;
+      </div>);
+    }
 
     const courseList = (<div className="course-list-container">
       {/* TODO: Get credit ticker to display correct num credits for non-current semesters */}
@@ -149,12 +151,7 @@ CourseListRow.propTypes = {
   selected_semester: PropTypes.string,
   current_semester: PropTypes.string.isRequired,
   parentParentCallback: PropTypes.func.isRequired,
-  coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
-  courseToColourIndex: PropTypes.shape({
-    id: PropTypes.string,
-  }).isRequired,
   courseToClassmates: PropTypes.shape({ '*': SemesterlyPropTypes.classmates }).isRequired,
-  isCourseInRoster: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   timetableName: PropTypes.string.isRequired,
 };

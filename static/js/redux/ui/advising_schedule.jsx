@@ -17,7 +17,6 @@ import ReactTooltip from 'react-tooltip';
 import React from 'react';
 import CourseListRow from './course_list_row';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
-import getState from 'radium';
 
 class AdvisingSchedule extends React.Component {
   constructor(props) {
@@ -103,6 +102,7 @@ AdvisingSchedule.propTypes = {
     name: PropTypes.string.isRequired,
     year: PropTypes.string.isRequired,
   }).isRequired,
+  timetableName: PropTypes.string.isRequired,
 };
 
 export default AdvisingSchedule;
