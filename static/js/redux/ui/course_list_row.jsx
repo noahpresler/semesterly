@@ -58,7 +58,6 @@ class CourseListRow extends React.Component {
     const plannedCourseList = (this.state.course_list &&
       this.props.displayed_semester === this.props.selected_semester) ?
       this.state.course_list.map((course, i) => {
-        console.log(this.state.course_list);
         const maxColourIndex = COLOUR_DATA.length - 1;
         const professors = course.sections.map(section => section.instructors);
         return (<MasterSlot
@@ -66,7 +65,7 @@ class CourseListRow extends React.Component {
           professors={professors}
           colourIndex={Math.min(i, maxColourIndex)}
           classmates={this.props.courseToClassmates[course.id]}
-          onTimetable={this.props.isCourseInRoster(course.id)}
+          onTimetable={true}
           course={course}
           fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
           hideCloseButton
