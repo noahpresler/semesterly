@@ -86,6 +86,18 @@ def setUpTranscript(self):
     self.transcript.save()
 
 
+def setUpTranscriptForMultipleSemesters(self):
+    setUpStudent(self)
+    setUpAdvisor(self)
+    setUpMockSemesters(self)
+    self.transcript_fall2019, _ = Transcript.objects.get_or_create(
+        owner=self.student, semester=self.fall2019)
+    self.transcript_spring2020, _ = Transcript.objects.get_or_create(
+        owner=self.student, semester=self.spring2020)
+    self.transcript_fall2019.save()
+    self.transcript_spring2020.save()
+
+
 def setUpMockSemesters(self):
     self.fall2019, _ = Semester.objects.get_or_create(name='Fall', year='2019')
     self.inter2020, _ = Semester.objects.get_or_create(
@@ -327,6 +339,35 @@ class StudentSISViewTest(APITestCase):
         retrieved_semesters = response.data['retrievedSemesters']
         self.assertEquals(
             retrieved_semesters, ['Spring 2020', 'Fall 2019'])
+
+    def test_get_semesters_jhed(self):
+        response = sis_post(self)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+        url = '/advising/sis_semesters/{}/'.format(self.student.jhed)
+        request = self.factory.get(url)
+        response = get_response(
+            request, self.student.user, url, self.student.jhed)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        retrieved_semesters = response.data['retrievedSemesters']
+        self.assertEquals(
+            retrieved_semesters, ['Spring 2020', 'Fall 2019'])
+
+    def test_advisor_get_semesters(self):
+        response = sis_post(self)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+        setUpTranscriptForMultipleSemesters(self)
+        self.transcript_fall2019.advisors.add(self.advisor_user)
+
+        url = '/advising/sis_semesters/{}/'.format(self.student.jhed)
+        request = self.factory.get(url)
+        response = get_response(
+            request, self.advisor_user.user, url, self.student.jhed)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        retrieved_semesters = response.data['retrievedSemesters']
+        # Only invited to Fall 2019, so should not include Spring 2020
+        self.assertEquals(retrieved_semesters, ['Fall 2019'])
 
     def test_invalid_token_fails(self):
         setUpMockData(self)
