@@ -221,13 +221,15 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         student, semester = context['student'], context['semester']
         registered_sections = student.sis_registered_sections.filter(
             semester=semester).all()
+        course_codes = []
         if timetable:
             for section in timetable.sections.all():
                 course_data = {'isVerified': section in registered_sections}
                 courses['registeredCourses'].append(
                     dict(course_data, **CourseSerializer(section.course, context=context).data))
+                course_codes.append(section.course.code)
             for section in registered_sections:
-                if section not in courses['registeredCourses']:
+                if section.course.code not in course_codes:
                     courses['registeredCourses'].append(
                     dict({'isVerified': True}, **CourseSerializer(section.course, context=context).data))
         else:
