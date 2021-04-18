@@ -22,6 +22,7 @@ import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import {
   getSISVerifiedCourses,
 } from '../constants/endpoints';
+import COLOUR_DATA from '../constants/colours'
 
 class CourseListRow extends React.Component {
 
@@ -36,7 +37,7 @@ class CourseListRow extends React.Component {
     if (this.props.displayed_semester != null) {
       const semesterName = this.props.displayed_semester.toString().split(' ')[0];
       const semesterYear = this.props.displayed_semester.toString().split(' ')[1];
-      fetch(getSISVerifiedCourses(semesterName, semesterYear, this.props.userInfo.jhed, this.props.timetableName))
+      fetch(getSISVerifiedCourses(semesterName, semesterYear, this.props.timetableName, this.props.userInfo.jhed))
         .then(response => response.json())
         .then((data) => {
           this.setState({ course_list: data.registeredCourses });
@@ -55,21 +56,21 @@ class CourseListRow extends React.Component {
 
   render() {
     const plannedCourseList = (this.state.course_list &&
-      this.props.displayed_semester === this.props.current_semester) ?
-      this.state.course_list.map((course) => {
-        const colourIndex = (course.id in this.props.courseToColourIndex) ?
-       this.props.courseToColourIndex[course.id] :
-       getNextAvailableColour(this.props.courseToColourIndex);
+      this.props.displayed_semester === this.props.selected_semester) ?
+      this.state.course_list.map((course, i) => {
+        console.log(this.state.course_list);
+        const maxColourIndex = COLOUR_DATA.length - 1;
         const professors = course.sections.map(section => section.instructors);
         return (<MasterSlot
           key={course.id}
           professors={professors}
-          colourIndex={colourIndex}
+          colourIndex={Math.min(i, maxColourIndex)}
           classmates={this.props.courseToClassmates[course.id]}
           onTimetable={this.props.isCourseInRoster(course.id)}
           course={course}
           fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
           hideCloseButton
+          verified={course.isVerified}
         />);
       }) : (<div className="empty-state">
         <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
@@ -87,16 +88,30 @@ class CourseListRow extends React.Component {
      </div>
       here this.state.num_credits is the number of credits from courses on SIS */
 
+    const courseKey = (this.state.course_list) ? (
+      (this.props.userInfo.isAdvisor) ? (<div className="empty-state">
+        <h3>
+          Courses this student is enrolled in on SIS contain a &nbsp;
+          <i className="fa fa-check-circle"/> .
+        </h3>
+      </div>) : (<div className="empty-state">
+        <h3>
+          Courses you are enrolled in on SIS contain a &nbsp;
+          <i className="fa fa-check-circle"/> .
+        </h3>
+      </div>)): null;
+
     const courseList = (<div className="course-list-container">
       {/* TODO: Get credit ticker to display correct num credits for non-current semesters */}
       { creditTicker }
       <a>
         <h4 className="as-header">
-         Planned Courses
+         Courses
         </h4>
       </a>
       <div className="as-master-slots">
         { plannedCourseList }
+        { courseKey }
       </div>
     </div>);
 

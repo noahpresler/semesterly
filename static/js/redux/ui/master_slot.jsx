@@ -164,6 +164,12 @@ class MasterSlot extends React.Component {
               onClick={event => this.stopPropagation(this.props.removeCourse, event)}
             /> : null
         }
+        {
+          this.props.verified ?
+            <i
+              className="fa fa-check-circle"
+            /> : null
+        }
       </div>
       <div className="master-slot-friends">
         {friendCircles}
@@ -184,6 +190,7 @@ MasterSlot.defaultProps = {
   removeCourse: null,
   classmates: { current: [], past: [] },
   getShareLink: null,
+  verified: false,
 };
 
 MasterSlot.propTypes = {
@@ -207,6 +214,7 @@ MasterSlot.propTypes = {
   fetchCourseInfo: PropTypes.func.isRequired,
   removeCourse: PropTypes.func,
   getShareLink: PropTypes.func,
+  verified: PropTypes.bool,
 };
 
 export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (

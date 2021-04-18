@@ -165,7 +165,7 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
 class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
     """Handles retrieving timetable and SIS courses from a specific semester"""
 
-    def get(self, request, sem_name, year, jhed=None, tt_name=None):
+    def get(self, request, sem_name, year, tt_name=None, jhed=None):
         """If the 'jhed' key is provided, get the courses for the student with
         the corresponding JHED. The request user must be an Advisor. Otherwise,
         get the courses for the requesting student for this semester.
@@ -188,8 +188,6 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         school = request.subdomain
         semester = Semester.objects.get(name=sem_name, year=year)
         if jhed:
-            print("IN HERE! = " + jhed)
-            #print("IN HERE! = " + tt_name)
             student = get_object_or_404(Student, jhed=jhed)
             if not self.is_advisor_for_student(request, student, semester):
                 return Response(status=status.HTTP_403_FORBIDDEN)
@@ -228,6 +226,10 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
                 course_data = {'isVerified': section in registered_sections}
                 courses['registeredCourses'].append(
                     dict(course_data, **CourseSerializer(section.course, context=context).data))
+            for section in registered_sections:
+                if section not in courses['registeredCourses']:
+                    courses['registeredCourses'].append(
+                    dict({'isVerified': True}, **CourseSerializer(section.course, context=context).data))
         else:
             for section in registered_sections:
                 course_data = {'isVerified': True}
