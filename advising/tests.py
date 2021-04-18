@@ -20,7 +20,7 @@ from rest_framework.test import APITestCase, APIRequestFactory, force_authentica
 from timetable.models import Course, Section, Semester
 from advising.serializers import AdvisorSerializer
 from advising.models import Advisor
-from student.models import Student
+from student.models import Student, PersonalTimetable
 from forum.models import Transcript
 
 
@@ -116,6 +116,7 @@ def setUpMockSemesters(self):
 
 
 def setUpMockSections(self):
+    setUpMockSemesters(self)
     self.linalg, _ = Section.objects.get_or_create(
         course=Course.objects.get_or_create(
             code='AS.110.212')[0], meeting_section='(01)', semester=self.fall2019)
@@ -139,7 +140,6 @@ def setUpMockSections(self):
 
 
 def setUpMockData(self):
-    setUpMockSemesters(self)
     setUpMockSections(self)
     # Not actually used, the token contains this data
     self.mock_data = {
@@ -203,6 +203,24 @@ def setUpMockData(self):
             }
         ]
     }
+
+
+def setUpPersonalTimetable(self):
+    setUpMockSections(self)
+    self.discrete, _ = Section.objects.get_or_create(
+        course=Course.objects.get_or_create(
+            code='EN.557.171')[0], meeting_section='(03)', semester=self.fall2019)
+    self.discrete.save()
+
+    self.tt, _ = PersonalTimetable.objects.get_or_create(
+        student=self.student, semester=self.fall2019, school='uoft', name='gg')
+    self.tt.courses.add(self.linalg.course)
+    self.tt.courses.add(self.madooei.course)
+    self.tt.courses.add(self.discrete.course)
+    self.tt.sections.add(self.linalg)
+    self.tt.sections.add(self.madooei)
+    self.tt.sections.add(self.discrete)
+    self.tt.save()
 
 
 def get_response(request, user, url, *args):
@@ -420,10 +438,6 @@ class RegisteredCoursesViewTest(APITestCase):
         self.assertEquals(len(registered_courses), 1)
         self.assertEquals(registered_courses[0]['code'], self.ifp.course.code)
 
-    # Write when the verification TODO is satisfied
-    # def test_student_courses_verified(self):
-    #     pass
-
     def test_advisor_get_courses(self):
         setUpTranscript(self)
         response = sis_post(self)
@@ -450,6 +464,28 @@ class RegisteredCoursesViewTest(APITestCase):
         response = get_response(
             request, self.student.user, url, 'Spring', '2020', self.student.jhed)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+    def test_student_courses_verified(self):
+        setUpPersonalTimetable(self)
+        response = sis_post(self)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+        url = '/advising/sis_courses/Fall/2019/{}/{}/'.format(
+            self.student.jhed, self.tt.name)
+        request = self.factory.get(url)
+        response = get_response(
+            request, self.student.user, url,
+            'Fall', '2019', self.student.jhed, self.tt.name)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        courses = response.data['registeredCourses']
+        self.assertEquals(len(courses), 3)
+        self.assertTrue(any([course['code'] == self.linalg.course.code for course in courses]))
+        self.assertTrue(any([course['code'] == self.madooei.course.code for course in courses]))
+        self.assertTrue(any([course['code'] == self.discrete.course.code for course in courses]))
+
+        self.assertTrue(all([course['isVerified'] if course['code'] == self.linalg.course.code else True for course in courses]))
+        self.assertTrue(all([course['isVerified'] if course['code'] == self.madooei.course.code else True for course in courses]))
+        self.assertTrue(all([not course['isVerified'] if course['code'] == self.discrete.course.code else True for course in courses]))
 
     def test_nonadvisor_get_courses_fails(self):
         setUpTranscript(self)
