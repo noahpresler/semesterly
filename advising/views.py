@@ -188,6 +188,8 @@ class RegisteredCoursesView(ValidateSubdomainMixin, APIView):
         school = request.subdomain
         semester = Semester.objects.get(name=sem_name, year=year)
         if jhed:
+            print("IN HERE! = " + jhed)
+            #print("IN HERE! = " + tt_name)
             student = get_object_or_404(Student, jhed=jhed)
             if not self.is_advisor_for_student(request, student, semester):
                 return Response(status=status.HTTP_403_FORBIDDEN)

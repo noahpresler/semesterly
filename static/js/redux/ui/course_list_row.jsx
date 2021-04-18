@@ -22,7 +22,6 @@ import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import {
   getSISVerifiedCourses,
 } from '../constants/endpoints';
-import Cookie from 'js-cookie'
 
 class CourseListRow extends React.Component {
 
@@ -37,7 +36,7 @@ class CourseListRow extends React.Component {
     if (this.props.displayed_semester != null) {
       const semesterName = this.props.displayed_semester.toString().split(' ')[0];
       const semesterYear = this.props.displayed_semester.toString().split(' ')[1];
-      fetch(getSISVerifiedCourses(semesterName, semesterYear, this.props.timetableName))
+      fetch(getSISVerifiedCourses(semesterName, semesterYear, this.props.userInfo.jhed, this.props.timetableName))
         .then(response => response.json())
         .then((data) => {
           this.setState({ course_list: data.registeredCourses });
@@ -131,6 +130,7 @@ CourseListRow.defaultProps = {
 
 CourseListRow.propTypes = {
   displayed_semester: PropTypes.string.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   selected_semester: PropTypes.string,
   current_semester: PropTypes.string.isRequired,
   parentParentCallback: PropTypes.func.isRequired,

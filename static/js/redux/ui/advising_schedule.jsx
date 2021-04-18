@@ -64,6 +64,7 @@ class AdvisingSchedule extends React.Component {
           isCourseInRoster={this.props.isCourseInRoster}
           fetchCourseInfo={this.props.fetchCourseInfo}
           timetableName={this.props.timetableName}
+          userInfo={this.props.userInfo}
         />),
       ) : <div className="empty-state"><h4><p> No semesters yet! </p></h4></div>;
 
@@ -86,6 +87,7 @@ AdvisingSchedule.defaultProps = {
 };
 
 AdvisingSchedule.propTypes = {
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   triggerSISImportDataModal: PropTypes.func.isRequired,
   selected_semester: PropTypes.string,
   displayed_semesters: PropTypes.arrayOf(PropTypes.string),

@@ -41,6 +41,7 @@ const mapStateToProps = (state) => {
   const optionalCourses = state.optionalCourses.courses.map(cid => getDenormCourseById(state, cid));
   return {
     semester: getCurrentSemester(state),
+    userInfo: state.userInfo.data,
     semesterIndex: state.semester.current,
     examSupportedSemesters: state.semester.exams,
     coursesInTimetable,
