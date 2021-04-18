@@ -61,20 +61,35 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         Only includes Fall and Spring semesters
 
         If the 'jhed' key is provided, get the semesters for the Student with
-        the JHED. Requesting user must then be an advisor. TODO
+        the JHED. Requesting user must then be an advisor.
 
         Returns:
             retrievedSemesters: [<sem_name> <year>, ...]
             Ex: ["Fall 2019", "Spring 2020", "Fall 2020"]
         """
-        student = Student.objects.get(user=request.user)
+        if jhed:
+            student = get_object_or_404(Student, jhed=jhed)
+            advisor = Student.objects.get(user=request.user)
+        else:
+            student = Student.objects.get(user=request.user)
         semesters = set()
         for section in student.sis_registered_sections.all():
             if str(section.semester.name) == "Fall" or \
                     str(section.semester.name) == "Spring":
                 semesters.add(section.semester)
-        semesters = list(
-            map(lambda s: str(s), sorted(semesters, reverse=True)))
+
+        if jhed and student != advisor:
+            semesters = list(
+                map(lambda s: str(s),
+                    sorted(
+                        filter(lambda s: advisor in Transcript.objects.get_or_create(
+                            owner=student, semester=s)[0].advisors.all(), semesters),
+                        reverse=True)))
+        else:
+            semesters = list(
+                map(lambda s: str(s),
+                    sorted(semesters, reverse=True)))
+
         return Response({'retrievedSemesters': semesters},
                         status=status.HTTP_200_OK)
 
