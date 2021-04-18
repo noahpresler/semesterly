@@ -31,12 +31,16 @@ class MasterSlot extends React.Component {
     this.state = { shareLinkShown: false };
   }
   onMasterSlotHover() {
-    this.setState({ hovered: true });
-    this.updateColours(COLOUR_DATA[this.props.colourIndex].highlight);
+    if (this.props.hoverable) {
+      this.setState({ hovered: true });
+      this.updateColours(COLOUR_DATA[this.props.colourIndex].highlight);
+    }
   }
   onMasterSlotUnhover() {
-    this.setState({ hovered: false });
-    this.updateColours(COLOUR_DATA[this.props.colourIndex].background);
+    if (this.props.hoverable) {
+      this.setState({ hovered: false });
+      this.updateColours(COLOUR_DATA[this.props.colourIndex].background);
+    }
   }
   stopPropagation(callback, event) {
     event.stopPropagation();
@@ -191,6 +195,7 @@ MasterSlot.defaultProps = {
   classmates: { current: [], past: [] },
   getShareLink: null,
   verified: false,
+  hoverable: true,
 };
 
 MasterSlot.propTypes = {
@@ -215,6 +220,7 @@ MasterSlot.propTypes = {
   removeCourse: PropTypes.func,
   getShareLink: PropTypes.func,
   verified: PropTypes.bool,
+  hoverable: PropTypes.bool,
 };
 
 export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (

@@ -70,6 +70,7 @@ class CourseListRow extends React.Component {
           fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
           hideCloseButton
           verified={course.isVerified}
+          hoverable={false}
         />);
       }) : (<div className="empty-state">
         <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
