@@ -56,7 +56,7 @@ class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
 class StudentSISView(ValidateSubdomainMixin, APIView):
     """ Handles SIS data retrieval and digesting. """
 
-    def get(self, request, jhed):
+    def get(self, request, jhed=None):
         """Gets all of the semesters that SIS has retrieved from
         Assumes student has already received a POST request from SIS
         Only includes Fall and Spring semesters
