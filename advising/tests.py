@@ -286,7 +286,14 @@ class StudentSISViewTest(APITestCase):
 
     def test_sis_posts_into_db(self):
         response = sis_post(self)
-        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        error_message = (
+            'If this test fails along with the majority of other',
+            'tests in this file, be sure to check if you have overridden the ',
+            'STUDENT_SIS_AUTH_SECRET key in either dev_credentials.py or ',
+            'sensitive.py. If you have, comment out your key or replace it ',
+            'with "TEST_KEY" and run the tests again.')
+        self.assertEquals(response.status_code,
+                          status.HTTP_201_CREATED, error_message)
 
         self.assertEquals(self.student.primary_major, 'Computer Science')
         self.assertEquals(len(self.student.other_majors), 2)
