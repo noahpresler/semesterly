@@ -61,13 +61,12 @@ class SISImportDataModal extends React.Component {
         {modalHeader}
         {modalBody}
         <div className="go-to-sis__container">
-          <button
-            className="btn abnb-btn secondary" onClick={() => {
-
-            }}
+          <a
+            className="btn abnb-btn secondary"
+            href="https://self-dev.sis.jhu.edu/sandbox/sswf/go/?semesterlyexport=1"
           >
             <span>Import from SIS</span>
-          </button>
+          </a>
         </div>
       </Modal>
     );
