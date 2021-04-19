@@ -84,6 +84,15 @@ def setUpTranscriptNoAdvisor(self):
     )
 
 
+def setUpTranscriptUnauthenticatedAdvisor(self):
+    """Creates a transcript and an Advisor that's not a Student model"""
+    setUpTranscriptNoAdvisor(self)
+    self.advisor = Advisor.objects.create(
+        first_name='Rishi', last_name='Biswas',
+        email_address='rbiswas4@jhu.edu', jhed='rbiswas@jh.edu')
+    self.advisor.save()
+
+
 def add_comment(self, author, content):
     """Returns a comment with the author, content, and time set to now"""
     timestamp = datetime.datetime.now()
@@ -349,3 +358,47 @@ class ForumTranscriptViewTest(APITestCase):
         response = get_response_for_semester(request, self.student.user)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(self.transcript.advisors.count(), 0)
+
+    def test_add_pending_advisor(self):
+        setUpTranscriptUnauthenticatedAdvisor(self)
+        data = {
+            'action': 'add',
+            'jhed': self.advisor.jhed,
+        }
+        request = self.factory.patch(
+            '/advising/forum/Fall/2019/', data=data, format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(self.transcript.pending_advisors.count(), 1)
+
+    def test_remove_pending_advisor(self):
+        self.test_add_pending_advisor()
+        self.assertEquals(self.transcript.pending_advisors.count(), 1)
+        data = {
+            'action': 'remove',
+            'jhed': self.advisor.jhed,
+        }
+        request = self.factory.patch(
+            '/advising/forum/Fall/2019/', data=data, format='json')
+        response = get_response_for_semester(self, request, self.student.user)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(self.transcript.advisors.count(), 0)
+
+    def test_pending_advisors_remove_on_authentication(self):
+        self.test_add_pending_advisor()
+        self.assertEquals(self.transcript.pending_advisors.count(), 1)
+        self.assertEquals(self.transcript.advisors.count(), 0)
+
+        advisor_user = Student.objects.create(
+            user=User.objects.create(first_name='Rishi', last_name='Biswas'),
+            jhed=self.advisor.jhed)
+        from authpipe.utils import connect_advisors
+
+        class Backend:
+            name = 'azuread-tenant-oauth2'
+        connect_advisors(
+            None, None, {'unique_name': self.advisor.jhed},
+            advisor_user.user, backend=Backend())
+
+        self.assertEquals(self.transcript.advisors.count(), 1)
+        self.assertEquals(self.transcript.pending_advisors.count(), 0)
