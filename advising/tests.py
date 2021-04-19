@@ -218,10 +218,8 @@ def setUpPersonalTimetable(self):
     self.tt, _ = PersonalTimetable.objects.get_or_create(
         student=self.student, semester=self.fall2019, school='uoft', name='gg')
     self.tt.courses.add(self.linalg.course)
-    self.tt.courses.add(self.madooei.course)
-    self.tt.courses.add(self.discrete.course)
     self.tt.sections.add(self.linalg)
-    self.tt.sections.add(self.madooei)
+    self.tt.courses.add(self.discrete.course)
     self.tt.sections.add(self.discrete)
     self.tt.save()
 
@@ -474,6 +472,7 @@ class RegisteredCoursesViewTest(APITestCase):
 
         self.assertTrue(all([course['isVerified'] if course['code'] ==
                              self.linalg.course.code else True for course in courses]))
+        # Although not in timetable, student is registered for this course
         self.assertTrue(all([course['isVerified'] if course['code'] ==
                              self.madooei.course.code else True for course in courses]))
         self.assertTrue(all([not course['isVerified'] if course['code']
