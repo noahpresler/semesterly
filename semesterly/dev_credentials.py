@@ -32,6 +32,7 @@ SECRETS = {
     'SOCIAL_AUTH_AZURE_TENANT_KEY': None,
     'SOCIAL_AUTH_AZURE_TENANT_SECRET': None,
     'SOCIAL_AUTH_AZURE_TENANT_ID': None,
+    'STUDENT_SIS_AUTH_SECRET': 'TEST_KEY',
 
     #Not essential for testing, but can be filled in for advanced usage
     'GW_PASS': None,
@@ -39,7 +40,6 @@ SECRETS = {
     'JHU_API_KEY': None,
     'VANDY_USER': None,
     'VANDY_PASS': None,
-    'STUDENT_SIS_AUTH_SECRET': None,
 
     #Not essential for testing, but can be filled in for advanced mailing usage
     'MAILER_SERVER': None,
