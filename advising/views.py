@@ -56,7 +56,7 @@ class AdvisingView(RedirectToJHUSignupMixin, FeatureFlowView):
 class StudentSISView(ValidateSubdomainMixin, APIView):
     """ Handles SIS data retrieval and digesting. """
 
-    def get(self, request, jhed=None):
+    def get(self, request, jhed):
         """Gets all of the semesters that SIS has retrieved from
         Assumes student has already received a POST request from SIS
         Only includes Fall and Spring semesters
@@ -68,11 +68,8 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
             retrievedSemesters: [<sem_name> <year>, ...]
             Ex: ["Fall 2019", "Spring 2020", "Fall 2020"]
         """
-        if jhed:
-            student = get_object_or_404(Student, jhed=jhed)
-            advisor = Student.objects.get(user=request.user)
-        else:
-            student = Student.objects.get(user=request.user)
+        student = get_object_or_404(Student, jhed=jhed)
+        advisor = Student.objects.get(user=request.user)
         semesters = set()
         for section in student.sis_registered_sections.all():
             if str(section.semester.name) == "Fall" or \
