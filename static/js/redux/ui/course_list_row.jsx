@@ -37,7 +37,7 @@ class CourseListRow extends React.Component {
     if (this.props.displayed_semester != null) {
       const semesterName = this.props.displayed_semester.toString().split(' ')[0];
       const semesterYear = this.props.displayed_semester.toString().split(' ')[1];
-      // TODO: Change to include selected stuent's JHED
+      // TODO: Change to include selected stuent's JHED vs. userInfo's jhed
       const jhed = (this.props.userInfo.isAdvisor) ? this.props.userInfo.jhed :
         this.props.userInfo.jhed;
       if (this.props.current_semester === this.props.displayed_semester) {

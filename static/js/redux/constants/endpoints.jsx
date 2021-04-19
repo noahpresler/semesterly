@@ -43,7 +43,7 @@ export const acceptTOSEndpoint = () => '/tos/accept/';
 // TODO: Replace with real endpoint
 export const getTranscriptCommentsBySemester = (semesterName, semesterYear) => `/advising/forum/${semesterName}/${semesterYear}/`;
 // TODO: Pass in JHED for this endpoint
-export const getRetrievedSemesters = () => '/advising/sis_semesters/';
+export const getRetrievedSemesters = jhed => `/advising/sis_semesters/${jhed}/`;
 export const getSISVerifiedCourses = (semesterName, semesterYear, jhed, ttName) => `/advising/sis_courses/${semesterName}/${semesterYear}/${jhed}/${ttName}/`;
 export const getSISVerifiedCoursesNoTT = (semesterName, semesterYear, jhed) => `/advising/sis_courses/${semesterName}/${semesterYear}/${jhed}/`;
 

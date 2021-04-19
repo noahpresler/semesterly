@@ -27,6 +27,7 @@ import {
   getRetrievedSemesters,
 } from '../constants/endpoints';
 import SISImportDataModalContainer from './containers/modals/SIS_import_data_modal_container';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 
 class Advising extends React.Component {
@@ -61,7 +62,10 @@ class Advising extends React.Component {
 
   fetchSemesters() {
     const semesters = [`${this.props.semester.name} ${this.props.semester.year}`];
-    fetch(getRetrievedSemesters())
+    // TODO: Change to include selected stuent's JHED vs. userInfo's jhed
+    const jhed = (this.props.userInfo.isAdvisor) ? this.props.userInfo.jhed :
+      this.props.userInfo.jhed;
+    fetch(getRetrievedSemesters(jhed))
       .then(response => response.json())
       .then((data) => {
         const retreivedSemesters = data.retrievedSemesters;
@@ -223,6 +227,7 @@ class Advising extends React.Component {
 }
 
 Advising.propTypes = {
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   dataLastUpdated: PropTypes.string.isRequired,
   semester: PropTypes.shape({
     name: PropTypes.string.isRequired,
