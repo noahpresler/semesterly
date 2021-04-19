@@ -32,14 +32,10 @@ urlpatterns = [
     # Get the semesters that the student with this JHED has imported from SIS
     url(r'^advising/sis_semesters/(?P<jhed>.+)/$',
         advising.views.StudentSISView.as_view()),
-
-    # Get the courses for the requesting user
-    url(r'^advising/sis_courses/(?P<sem_name>.+)/(?P<year>[0-9]{4})/$',
-        advising.views.RegisteredCoursesView.as_view()),
-    # Get the courses for the student with this JHED (Empty value for tt_name must be passed)
-    url(r'^advising/sis_courses/(?P<sem_name>.+)/(?P<year>[0-9]{4})//(?P<jhed>.+)/$',
-        advising.views.RegisteredCoursesView.as_view()),
     # Get the courses for the student with this JHED and verify it against this student's timetable
-    url(r'^advising/sis_courses/(?P<sem_name>.+)/(?P<year>[0-9]{4})/(?P<tt_name>.+)/(?P<jhed>.+)/$',
+    url(r'^advising/sis_courses/(?P<sem_name>.+)/(?P<year>[0-9]{4})/(?P<jhed>.+)/(?P<tt_name>.+)/$',
+        advising.views.RegisteredCoursesView.as_view()),
+    # Get the courses for the student with this JHED
+    url(r'^advising/sis_courses/(?P<sem_name>.+)/(?P<year>[0-9]{4})/(?P<jhed>.+)/$',
         advising.views.RegisteredCoursesView.as_view()),
 ]

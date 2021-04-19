@@ -20,6 +20,7 @@ import CreditTickerContainer from './containers/credit_ticker_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import {
   getSISVerifiedCourses,
+  getSISVerifiedCoursesNoTT,
 } from '../constants/endpoints';
 import COLOUR_DATA from '../constants/colours';
 
@@ -36,12 +37,22 @@ class CourseListRow extends React.Component {
     if (this.props.displayed_semester != null) {
       const semesterName = this.props.displayed_semester.toString().split(' ')[0];
       const semesterYear = this.props.displayed_semester.toString().split(' ')[1];
-      fetch(getSISVerifiedCourses(semesterName, semesterYear, this.props.timetableName,
-        this.props.userInfo.jhed))
-        .then(response => response.json())
-        .then((data) => {
-          this.setState({ course_list: data.registeredCourses });
-        });
+      // TODO: Change to include selected stuent's JHED
+      const jhed = (this.props.userInfo.isAdvisor) ? this.props.userInfo.jhed :
+        this.props.userInfo.jhed;
+      if (this.props.current_semester === this.props.displayed_semester) {
+        fetch(getSISVerifiedCourses(semesterName, semesterYear, jhed, this.props.timetableName))
+          .then(response => response.json())
+          .then((data) => {
+            this.setState({ course_list: data.registeredCourses });
+          });
+      } else {
+        fetch(getSISVerifiedCoursesNoTT(semesterName, semesterYear, jhed))
+          .then(response => response.json())
+          .then((data) => {
+            this.setState({ course_list: data.registeredCourses });
+          });
+      }
     }
   }
 

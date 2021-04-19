@@ -44,6 +44,7 @@ export const acceptTOSEndpoint = () => '/tos/accept/';
 export const getTranscriptCommentsBySemester = (semesterName, semesterYear) => `/advising/forum/${semesterName}/${semesterYear}/`;
 export const getRetrievedSemesters = () => '/advising/sis_semesters/';
 export const getSISVerifiedCourses = (semesterName, semesterYear, jhed, ttName) => `/advising/sis_courses/${semesterName}/${semesterYear}/${jhed}/${ttName}/`;
+export const getSISVerifiedCoursesNoTT = (semesterName, semesterYear, jhed) => `/advising/sis_courses/${semesterName}/${semesterYear}/${jhed}/`;
 
 export function getCourseShareLinkFromModal(code, semester) {
   return `/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;
