@@ -52,7 +52,7 @@ class CommentForum extends React.Component {
               <div className="author">
                 {comment.author_name}
               </div>
-              <div>
+              <div className="comment-content">
                 {comment.content}
               </div>
             </div>

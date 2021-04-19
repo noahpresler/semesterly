@@ -125,6 +125,10 @@
     float: right;
   }
 
+  .comment-content {
+    word-wrap: break-word;
+  }
+
   row {
     display: flex;
     flex-direction: row;
