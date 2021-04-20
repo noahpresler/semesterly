@@ -150,14 +150,15 @@ class StudentSISView(ValidateSubdomainMixin, APIView):
         for course_data in data['Courses']:
             try:
                 course = Course.objects.get(code=course_data['OfferingName'])
-            except Course.DoesNotExist:
+                name, year = course_data['Term'].split(' ')
+                semester, _ = Semester.objects.get_or_create(
+                    name=name, year=year)
+                section = Section.objects.get(
+                    course=course, semester=semester,
+                    meeting_section="({})".format(course_data['Section']))
+            except (Course.DoesNotExist, Section.DoesNotExist):
                 nonexistent_courses.append(course_data['OfferingName'])
                 continue
-            name, year = course_data['Term'].split(' ')
-            semester = get_object_or_404(Semester, name=name, year=year)
-            section = get_object_or_404(
-                Section, course=course, semester=semester,
-                meeting_section="({})".format(course_data['Section']))
             student.sis_registered_sections.add(section)
         return nonexistent_courses
 
