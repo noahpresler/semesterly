@@ -22,8 +22,12 @@ import UserSettingsModalContainer from './containers/modals/user_settings_modal_
 import SignupModalContainer from './containers/modals/signup_modal_container';
 import JHUSignupModalContainer from './containers/modals/jhu_signup_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
-import { getTranscriptCommentsBySemester, getRetrievedSemesters } from '../constants/endpoints';
+import {
+  getTranscriptCommentsBySemester,
+  getRetrievedSemesters,
+} from '../constants/endpoints';
 import SISImportDataModalContainer from './containers/modals/SIS_import_data_modal_container';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 
 class Advising extends React.Component {
@@ -42,29 +46,6 @@ class Advising extends React.Component {
   }
 
   componentWillMount() {
-    // $(document.body).on('keydown', (e) => {
-    //   if (parseInt(e.keyCode, 10) === 39) {
-    //     if (this.props.PgActive + 1 < this.props.PgCount) {
-    //       this.props.setPgActive(this.props.PgActive + 1);
-    //     }
-    //   } else if (parseInt(e.keyCode, 10) === 37) {
-    //     if (this.props.PgActive > 0) {
-    //       this.props.setPgActive(this.props.PgActive - 1);
-    //     }
-    //   }
-    // });
-    // $(document.body).bind('keydown', (e) => {
-    //   if (e.ctrlKey || e.metaKey) {
-    //     switch (String.fromCharCode(e.which).toLowerCase()) {
-    //       case 's':
-    //         e.preventDefault();
-    //         this.props.saveTimetable();
-    //         break;
-    //       default:
-    //         break;
-    //     }
-    //   }
-    // });
     window.addEventListener('orientationchange', () => {
       this.updateOrientation();
     });
@@ -81,10 +62,18 @@ class Advising extends React.Component {
 
   fetchSemesters() {
     const semesters = [`${this.props.semester.name} ${this.props.semester.year}`];
-    fetch(getRetrievedSemesters())
+    // TODO: Change to include selected stuent's JHED vs. userInfo's jhed
+    const jhed = (this.props.userInfo.isAdvisor) ? this.props.userInfo.jhed :
+      this.props.userInfo.jhed;
+    fetch(getRetrievedSemesters(jhed))
       .then(response => response.json())
       .then((data) => {
-        this.setState({ displayed_semesters: semesters.concat(data.retrievedSemesters) });
+        const retreivedSemesters = data.retrievedSemesters;
+        if (retreivedSemesters.includes(`${this.props.semester.name} ${this.props.semester.year}`)) {
+          this.setState({ displayed_semesters: retreivedSemesters });
+        } else {
+          this.setState({ displayed_semesters: semesters.concat(retreivedSemesters) });
+        }
       });
   }
 
@@ -238,6 +227,7 @@ class Advising extends React.Component {
 }
 
 Advising.propTypes = {
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   dataLastUpdated: PropTypes.string.isRequired,
   semester: PropTypes.shape({
     name: PropTypes.string.isRequired,

@@ -28,8 +28,9 @@ class UrlsTest(TestCase, UrlTestCase):
     """ Test advising/urls.py """
 
     def setUp(self):
-        semester = Semester.objects.create(name='Fall', year='2016')
-        semester.save()
+        Semester.objects.create(name='Fall', year='2016').save()
+        Student.objects.create(
+            user=User.objects.create(), jhed='jwang380@jh.edu')
 
     def test_urls_call_correct_views(self):
         self.assertUrlResolvesToView(
@@ -39,9 +40,11 @@ class UrlsTest(TestCase, UrlTestCase):
         self.assertUrlResolvesToView(
             '/advising/sis_post/', 'advising.views.StudentSISView')
         self.assertUrlResolvesToView(
-            '/advising/sis_semesters/', 'advising.views.StudentSISView')
+            '/advising/sis_semesters/jwang380@jh.edu/',
+            'advising.views.StudentSISView')
         self.assertUrlResolvesToView(
-            '/advising/sis_courses/Fall/2016/', 'advising.views.RegisteredCoursesView')
+            '/advising/sis_courses/Fall/2016/jwang380@jh.edu/',
+            'advising.views.RegisteredCoursesView')
 
 
 def setUpStudent(self):
@@ -215,10 +218,8 @@ def setUpPersonalTimetable(self):
     self.tt, _ = PersonalTimetable.objects.get_or_create(
         student=self.student, semester=self.fall2019, school='uoft', name='gg')
     self.tt.courses.add(self.linalg.course)
-    self.tt.courses.add(self.madooei.course)
-    self.tt.courses.add(self.discrete.course)
     self.tt.sections.add(self.linalg)
-    self.tt.sections.add(self.madooei)
+    self.tt.courses.add(self.discrete.course)
     self.tt.sections.add(self.discrete)
     self.tt.save()
 
@@ -271,7 +272,7 @@ def sis_post(self):
     request = self.factory.post(
         url, data=token, content_type='application/jwt')
     response = get_response(
-        request, self.student.user, url, 'TEST_KEY')
+        request, self.student.user, url)
     self.student.refresh_from_db()
     return response
 
@@ -283,7 +284,14 @@ class StudentSISViewTest(APITestCase):
 
     def test_sis_posts_into_db(self):
         response = sis_post(self)
-        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        error_message = (
+            'If this test fails along with the majority of other '
+            'tests in this file, be sure to check if you have overridden the '
+            'STUDENT_SIS_AUTH_SECRET key in either dev_credentials.py or '
+            'sensitive.py. If you have, comment out your key or replace it '
+            'with "TEST_KEY" and run the tests again.')
+        self.assertEquals(response.status_code,
+                          status.HTTP_201_CREATED, error_message)
 
         self.assertEquals(self.student.primary_major, 'Computer Science')
         self.assertEquals(len(self.student.other_majors), 2)
@@ -323,7 +331,7 @@ class StudentSISViewTest(APITestCase):
         request = self.factory.post(
             url, data=token, content_type='application/jwt')
         response = get_response(
-            request, self.student.user, url, 'TEST_KEY')
+            request, self.student.user, url)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         self.student.refresh_from_db()
 
@@ -347,18 +355,6 @@ class StudentSISViewTest(APITestCase):
         self.assertEquals(sections[0], self.sfrc)
 
     def test_get_semesters(self):
-        response = sis_post(self)
-        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
-
-        request = self.factory.get('/advising/sis_semesters/', format='json')
-        response = get_response(
-            request, self.student.user, '/advising/sis_semesters/')
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-        retrieved_semesters = response.data['retrievedSemesters']
-        self.assertEquals(
-            retrieved_semesters, ['Spring 2020', 'Fall 2019'])
-
-    def test_get_semesters_jhed(self):
         response = sis_post(self)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
@@ -395,7 +391,7 @@ class StudentSISViewTest(APITestCase):
             url, data=token, content_type='application/jwt')
         try:
             response = get_response(
-                request, self.student.user, url, 'TEST_KEY')
+                request, self.student.user, url)
             self.assertNotEquals(response.status_code, status.HTTP_201_CREATED)
             self.fail()
         except Exception:
@@ -418,10 +414,10 @@ class RegisteredCoursesViewTest(APITestCase):
         response = sis_post(self)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
-        url = '/advising/sis_courses/Fall/2019/'
+        url = '/advising/sis_courses/Fall/2019/{}/'.format(self.student.jhed)
         request = self.factory.get(url)
         response = get_response(
-            request, self.student.user, url, 'Fall', '2019')
+            request, self.student.user, url, 'Fall', '2019', self.student.jhed)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         registered_courses = response.data['registeredCourses']
         self.assertEquals(len(registered_courses), 2)
@@ -429,10 +425,10 @@ class RegisteredCoursesViewTest(APITestCase):
             registered_courses[0]['code'] == self.linalg.course.code or
             registered_courses[0]['code'] == self.madooei.course.code)
 
-        url = '/advising/sis_courses/Spring/2020/'
+        url = '/advising/sis_courses/Spring/2020/{}/'.format(self.student.jhed)
         request = self.factory.get(url)
         response = get_response(
-            request, self.student.user, url, 'Spring', '2020')
+            request, self.student.user, url, 'Spring', '2020', self.student.jhed)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         registered_courses = response.data['registeredCourses']
         self.assertEquals(len(registered_courses), 1)
@@ -453,18 +449,6 @@ class RegisteredCoursesViewTest(APITestCase):
         self.assertEquals(len(registered_courses), 1)
         self.assertEquals(registered_courses[0]['code'], self.ifp.course.code)
 
-    # Students getting their own courses by using their JHED
-    def test_student_get_own_courses(self):
-        setUpTranscript(self)
-        response = sis_post(self)
-        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
-
-        url = '/advising/sis_courses/Spring/2020/{}/'.format(self.student.jhed)
-        request = self.factory.get(url)
-        response = get_response(
-            request, self.student.user, url, 'Spring', '2020', self.student.jhed)
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-
     def test_student_courses_verified(self):
         setUpPersonalTimetable(self)
         response = sis_post(self)
@@ -479,13 +463,20 @@ class RegisteredCoursesViewTest(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         courses = response.data['registeredCourses']
         self.assertEquals(len(courses), 3)
-        self.assertTrue(any([course['code'] == self.linalg.course.code for course in courses]))
-        self.assertTrue(any([course['code'] == self.madooei.course.code for course in courses]))
-        self.assertTrue(any([course['code'] == self.discrete.course.code for course in courses]))
+        self.assertTrue(
+            any([course['code'] == self.linalg.course.code for course in courses]))
+        self.assertTrue(
+            any([course['code'] == self.madooei.course.code for course in courses]))
+        self.assertTrue(
+            any([course['code'] == self.discrete.course.code for course in courses]))
 
-        self.assertTrue(all([course['isVerified'] if course['code'] == self.linalg.course.code else True for course in courses]))
-        self.assertTrue(all([course['isVerified'] if course['code'] == self.madooei.course.code else True for course in courses]))
-        self.assertTrue(all([not course['isVerified'] if course['code'] == self.discrete.course.code else True for course in courses]))
+        self.assertTrue(all([course['isVerified'] if course['code'] ==
+                             self.linalg.course.code else True for course in courses]))
+        # Although not in timetable, student is registered for this course
+        self.assertTrue(all([course['isVerified'] if course['code'] ==
+                             self.madooei.course.code else True for course in courses]))
+        self.assertTrue(all([not course['isVerified'] if course['code']
+                             == self.discrete.course.code else True for course in courses]))
 
     def test_nonadvisor_get_courses_fails(self):
         setUpTranscript(self)

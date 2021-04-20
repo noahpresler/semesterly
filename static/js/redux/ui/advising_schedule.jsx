@@ -61,6 +61,8 @@ class AdvisingSchedule extends React.Component {
           courseToColourIndex={this.props.courseToColourIndex}
           isCourseInRoster={this.props.isCourseInRoster}
           fetchCourseInfo={this.props.fetchCourseInfo}
+          timetableName={this.props.timetableName}
+          userInfo={this.props.userInfo}
         />),
       ) : <div className="empty-state"><h4><p> No semesters yet! </p></h4></div>;
 
@@ -79,12 +81,14 @@ class AdvisingSchedule extends React.Component {
 
 AdvisingSchedule.defaultProps = {
   selected_semester: null,
+  displayed_semesters: null,
 };
 
 AdvisingSchedule.propTypes = {
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   triggerSISImportDataModal: PropTypes.func.isRequired,
   selected_semester: PropTypes.string,
-  displayed_semesters: PropTypes.arrayOf(PropTypes.string).isRequired,
+  displayed_semesters: PropTypes.arrayOf(PropTypes.string),
   coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,
@@ -97,6 +101,7 @@ AdvisingSchedule.propTypes = {
     name: PropTypes.string.isRequired,
     year: PropTypes.string.isRequired,
   }).isRequired,
+  timetableName: PropTypes.string.isRequired,
 };
 
 export default AdvisingSchedule;

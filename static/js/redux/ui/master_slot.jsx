@@ -31,12 +31,16 @@ class MasterSlot extends React.Component {
     this.state = { shareLinkShown: false };
   }
   onMasterSlotHover() {
-    this.setState({ hovered: true });
-    this.updateColours(COLOUR_DATA[this.props.colourIndex].highlight);
+    if (this.props.hoverable) {
+      this.setState({ hovered: true });
+      this.updateColours(COLOUR_DATA[this.props.colourIndex].highlight);
+    }
   }
   onMasterSlotUnhover() {
-    this.setState({ hovered: false });
-    this.updateColours(COLOUR_DATA[this.props.colourIndex].background);
+    if (this.props.hoverable) {
+      this.setState({ hovered: false });
+      this.updateColours(COLOUR_DATA[this.props.colourIndex].background);
+    }
   }
   stopPropagation(callback, event) {
     event.stopPropagation();
@@ -164,6 +168,12 @@ class MasterSlot extends React.Component {
               onClick={event => this.stopPropagation(this.props.removeCourse, event)}
             /> : null
         }
+        {
+          this.props.verified ?
+            <i
+              className="fa fa-check-circle"
+            /> : null
+        }
       </div>
       <div className="master-slot-friends">
         {friendCircles}
@@ -184,6 +194,8 @@ MasterSlot.defaultProps = {
   removeCourse: null,
   classmates: { current: [], past: [] },
   getShareLink: null,
+  verified: false,
+  hoverable: true,
 };
 
 MasterSlot.propTypes = {
@@ -207,6 +219,8 @@ MasterSlot.propTypes = {
   fetchCourseInfo: PropTypes.func.isRequired,
   removeCourse: PropTypes.func,
   getShareLink: PropTypes.func,
+  verified: PropTypes.bool,
+  hoverable: PropTypes.bool,
 };
 
 export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (
