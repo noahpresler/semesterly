@@ -48,6 +48,12 @@ class AdvisingSchedule extends React.Component {
         </ReactTooltip>
       </div>
     );
+
+    const emptyState = (this.props.loading_semesters) ? (<div className="empty-state">
+      <h4><p>Loading your semesters...</p></h4>
+    </div>) : (<div className="empty-state"><h4><p> No semesters yet! </p></h4></div>);
+
+
     const courseListRows = (this.props.displayed_semesters !== null) ?
       this.props.displayed_semesters.map(semester =>
         (<CourseListRow
@@ -64,7 +70,7 @@ class AdvisingSchedule extends React.Component {
           timetableName={this.props.timetableName}
           userInfo={this.props.userInfo}
         />),
-      ) : <div className="empty-state"><h4><p> No semesters yet! </p></h4></div>;
+      ) : emptyState;
 
     return (
       <div className="advising-schedule-inner">

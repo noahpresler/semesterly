@@ -30,30 +30,39 @@ class CourseListRow extends React.Component {
     super(props);
     this.state = {
       course_list: null,
+      loading: true,
     };
   }
 
   fetchVerifiedCourses() {
-    if (this.props.displayed_semester != null) {
-      const semesterName = this.props.displayed_semester.toString().split(' ')[0];
-      const semesterYear = this.props.displayed_semester.toString().split(' ')[1];
-      // TODO: Change to include selected stuent's JHED vs. userInfo's jhed
-      const jhed = (this.props.userInfo.isAdvisor) ? this.props.userInfo.jhed :
-        this.props.userInfo.jhed;
-      if (this.props.current_semester === this.props.displayed_semester) {
-        fetch(getSISVerifiedCourses(semesterName, semesterYear, jhed, this.props.timetableName))
-          .then(response => response.json())
-          .then((data) => {
-            this.setState({ course_list: data.registeredCourses });
-          });
-      } else {
-        fetch(getSISVerifiedCoursesNoTT(semesterName, semesterYear, jhed))
-          .then(response => response.json())
-          .then((data) => {
-            this.setState({ course_list: data.registeredCourses });
-          });
+    this.setState({ loading: true }, () => {
+      if (this.props.displayed_semester != null) {
+        const semesterName = this.props.displayed_semester.toString().split(' ')[0];
+        const semesterYear = this.props.displayed_semester.toString().split(' ')[1];
+        // TODO: Change to include selected stuent's JHED vs. userInfo's jhed
+        const jhed = (this.props.userInfo.isAdvisor) ? this.props.userInfo.jhed :
+          this.props.userInfo.jhed;
+        if (this.props.current_semester === this.props.displayed_semester) {
+          fetch(getSISVerifiedCourses(semesterName, semesterYear, jhed, this.props.timetableName))
+            .then(response => response.json())
+            .then((data) => {
+              this.setState({
+                course_list: data.registeredCourses,
+                loading: false
+              });
+            });
+        } else {
+          fetch(getSISVerifiedCoursesNoTT(semesterName, semesterYear, jhed))
+            .then(response => response.json())
+            .then((data) => {
+              this.setState({
+                course_list: data.registeredCourses,
+                loading: false,
+              });
+            });
+        }
       }
-    }
+    });
   }
 
   sendSelectedSemester() {
@@ -66,6 +75,15 @@ class CourseListRow extends React.Component {
   }
 
   render() {
+    const emptyState = (this.state.loading) ? (<div className="empty-state">
+      <h4>Loading your courses...</h4>
+    </div>) : (<div className="empty-state">
+      <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
+      <h3>Looks like you don&#39;t have any courses yet!</h3>
+      <h4>Your selections will appear here along with credits, professors and friends
+        in the class</h4>
+    </div>);
+
     const plannedCourseList = (this.state.course_list &&
       this.props.displayed_semester === this.props.selected_semester) ?
       this.state.course_list.map((course, i) => {
@@ -83,12 +101,7 @@ class CourseListRow extends React.Component {
           hoverable={false}
           onTimetable
         />);
-      }) : (<div className="empty-state">
-        <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
-        <h3>Looks like you don&#39;t have any courses yet!</h3>
-        <h4>Your selections will appear here along with credits, professors and friends
-        in the class</h4>
-      </div>);
+      }) : emptyState;
 
     const creditTicker = (this.props.displayed_semester === this.props.current_semester) ?
       <CreditTickerContainer /> : null;
