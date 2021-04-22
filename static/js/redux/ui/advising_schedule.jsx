@@ -108,6 +108,7 @@ AdvisingSchedule.propTypes = {
     year: PropTypes.string.isRequired,
   }).isRequired,
   timetableName: PropTypes.string.isRequired,
+  loading_semesters: PropTypes.bool.isRequired,
 };
 
 export default AdvisingSchedule;

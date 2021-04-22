@@ -48,7 +48,7 @@ class CourseListRow extends React.Component {
             .then((data) => {
               this.setState({
                 course_list: data.registeredCourses,
-                loading: false
+                loading: false,
               });
             });
         } else {
