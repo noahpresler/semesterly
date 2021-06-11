@@ -1,5 +1,6 @@
 <h1 align="center">AS OF JUNE 2021, THIS VERSION OF SEMESTER.LY IS DEPRECATED AND IS NO LONGER BE SUPPORTED</h1>
-<h1 align="center">To contribute to the active Semester.ly, please refer to the <a href="https://github.com/jhuopensource/semesterly" target="_blank">NEW REPOSITORY</a></h1>
+<h1 align="center">To contribute to the active Semester.ly, please refer to the </h1>
+<h1 align="center"><a href="https://github.com/jhuopensource/semesterly" target="_blank">NEW REPOSITORY</a></h1>
 
 <p align="center"><a href="https://semester.ly" target="_blank"><img width="100"src="https://semester.ly/static/img/logo2.0-32x32.png"></a></p>
 <p align="center"><a href="https://semester.ly" target="_blank"><img width="200" src="http://i.imgur.com/9mMP9bY.png"/></a></p>
