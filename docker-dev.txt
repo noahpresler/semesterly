@@ -35,4 +35,4 @@ docker ps -q --filter "expose=8000"
 (this will give you the id of your container which you will use for commands below. ex: 73f48ab997aa)
 docker exec -it id_of_container python manage.py ingest jhu --term Spring --years 2018
 docker exec -it id_of_container python manage.py digest jhu
-* Open a browser and visit http://jhu.sem.ly:8000 and hack away
+* Open a browser and visit https://jhu.sem.ly and hack away
