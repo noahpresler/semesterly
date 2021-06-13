@@ -13,7 +13,7 @@
 
 Read the docs and learn more: http://semesterly.readthedocs.io/en/latest/
 
-## Here's a Preview of the Semester.ly Timetable
+## Here's a Preview of the Semester.ly Platform
 
 <p align="center"><img src="http://i.imgur.com/G543QPJ.jpg"></p>
 
