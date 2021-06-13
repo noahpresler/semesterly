@@ -26,6 +26,15 @@
       "Spring"
     ],
     "2019": [
+      "Fall",
+      "Spring"
+    ],
+    "2020": [
+      "Fall",
+      "Spring"
+    ],
+    "2021": [
+      "Fall",
       "Spring"
     ]
   },
@@ -42,5 +51,6 @@
       "Spring"
     ]
   },
-  "registrar": true
+  "registrar": true,
+  "short_course_weeks_limit" : 8
 }

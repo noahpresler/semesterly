@@ -10,3 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')

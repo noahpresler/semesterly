@@ -18,7 +18,7 @@ from parsing.library.logger import JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.validator import Validator
 from parsing.library.viewer import Hoarder
-from parsing.library.utils import clean, make_list, safe_cast, titlize, time24
+from parsing.library.utils import clean, make_list, safe_cast, titlize, time24, short_date
 from parsing.library.exceptions import PipelineError, PipelineWarning
 from parsing.library.validator import ValidationError, ValidationWarning, \
     MultipleDefinitionsWarning
@@ -94,6 +94,8 @@ class Ingestor(dict):
         'offerings', 'meetings',
         'time_start', 'start_time',
         'time_end', 'end_time',
+        'date_start',
+        'date_end',
         'location',
         'loc', 'where',
         'days', 'day', 'dates', 'date',
@@ -105,6 +107,10 @@ class Ingestor(dict):
         'score',
         'summary',
         'same_as',
+        'pos',
+        'writing_intensive',
+        'sub_school',
+        'course_section_id',
     }
 
     def __init__(self, config, output,
@@ -219,6 +225,15 @@ class Ingestor(dict):
             )
         return instructors
 
+    def _resolve_date(self):
+        dates = self._get('date')
+        if 'dates' not in self:
+            dates = {
+                'start': short_date(self._get('date_start')),
+                'end': short_date(self._get('date_end'))
+            }
+        return dates
+
     def _resolve_time(self):
         time = self._get('time')
         if 'time' not in self:
@@ -266,6 +281,9 @@ class Ingestor(dict):
             'homepage': self._get('homepage', 'website'),
             'same_as': make_list(self._get('same_as')),
             'description': self._get('description', 'descr'),
+            'pos': make_list(self._get('pos')),
+            'writing_intensive': self._get('writing_intensive'),
+            'sub_school': self._get('sub_school'),
             # 'description': extract_info_from_text(
             #     self._get('description', 'descr'),
             #     inject=self
@@ -307,7 +325,8 @@ class Ingestor(dict):
             'fees': safe_cast(self._get('fees', 'fee', 'cost'), float),
             'final_exam': self._get('final_exam'),
             'textbooks': self._get('textbooks'),
-            'meetings': self._get('offerings', 'meetings')
+            'meetings': self._get('offerings', 'meetings'),
+            'course_section_id': safe_cast(self._get('course_section_id'), int)
         }
 
         section = clean(section)
@@ -340,7 +359,7 @@ class Ingestor(dict):
                 'term': term,
             },
             'days': make_list(self._get('days', 'day')),
-            'dates': make_list(self._get('dates', 'date')),
+            'dates': self._resolve_date(),
             'time': self._resolve_time(),
             'location': self._resolve_location()
         }
@@ -424,7 +443,8 @@ class Ingestor(dict):
             'instructors': self._resolve_instructors(),
             'course': {
                 'code': self._get('course_code')
-            }
+            },
+            'summary': self._get('summary')
         }
 
         evaluation = clean(evaluation)

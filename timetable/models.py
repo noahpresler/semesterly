@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (C) 2017 Semester.ly Technologies, LLC
 #
 # Semester.ly is free software: you can redistribute it and/or modify
@@ -17,6 +18,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 from django.forms.models import model_to_dict
 from django.db import models
 from picklefield.fields import PickledObjectField
+from django.contrib.postgres.fields import ArrayField
 
 
 class Semester(models.Model):
@@ -107,7 +109,6 @@ class Course(models.Model):
     corequisites = models.TextField(default='', null=True)
     exclusions = models.TextField(default='')
     num_credits = models.FloatField(default=-1)
-    areas = models.CharField(max_length=600, default='', null=True)
     department = models.CharField(max_length=250, default='', null=True)
     level = models.CharField(max_length=500, default='', null=True)
     # TODO generalize core/gened/breadth field
@@ -116,6 +117,11 @@ class Course(models.Model):
     related_courses = models.ManyToManyField('self', blank=True)
     same_as = models.ForeignKey('self', null=True)
     vector = PickledObjectField(default=None, null=True)
+    pos = ArrayField(models.TextField(default='', null=True), default=list)
+    areas = ArrayField(models.TextField(default='', null=True), default=list)
+    sub_school = models.TextField(default='', null=True)
+    writing_intensive = models.TextField(default='', null=True)
+
 
     def __str__(self):
         return self.code + ": " + self.name
@@ -160,6 +166,9 @@ class Course(models.Model):
         ratings = Evaluation.objects.only('course', 'score').filter(course=self)
         return sum([rating.score for rating in ratings]), len(ratings)
 
+    def __unicode__(self):
+        return u'%s' % (self.name)
+
 
 class Section(models.Model):
     """
@@ -202,6 +211,7 @@ class Section(models.Model):
     semester = models.ForeignKey(Semester)
     textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
     was_full = models.BooleanField(default=False)
+    course_section_id = models.IntegerField(default=0)
 
     def get_textbooks(self):
         """ Returns the textbook info using `tb.get_info()` for each textbook """
@@ -211,8 +221,10 @@ class Section(models.Model):
         return self.enrolment >= 0 and self.size >= 0 and self.enrolment >= self.size
 
     def __str__(self):
-        return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section,
-                                                                 self.semester)
+        return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section, self.semester)
+
+    def __unicode__(self):
+        return "Course: %s; Section: %s; Semester: %s" % (self.course, self.meeting_section, self.semester)
 
 
 class Offering(models.Model):
@@ -235,9 +247,12 @@ class Offering(models.Model):
     """
     section = models.ForeignKey(Section)
     day = models.CharField(max_length=1)
+    date_start = models.CharField(max_length=15, null=True)
+    date_end = models.CharField(max_length=15, null=True)
     time_start = models.CharField(max_length=15)
     time_end = models.CharField(max_length=15)
     location = models.CharField(max_length=200, default='TBA')
+    is_short_course = models.BooleanField(default=False)
 
     def __unicode__(self):
         return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
@@ -291,6 +306,7 @@ class CourseIntegration(models.Model):
     course = models.ForeignKey(Course)
     integration = models.ForeignKey(Integration)
     json = models.TextField()
+    semester = models.ManyToManyField(Semester)
 
 
 class Timetable(models.Model):

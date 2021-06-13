@@ -31,6 +31,7 @@
 
 .course-modal.trans .modal-content,
 .course-modal.trans .modal-header,
+.course-modal.trans .modal-header div,
 .course-modal.trans .modal-header h1,
 .course-modal.trans .modal-header h2,
 .course-modal.trans .modal-body p,
@@ -63,6 +64,49 @@
 .course-modal .master-slot .slot-bar {
   border-bottom-left-radius: 5px;
   border-top-left-radius: 5px;
+}
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  margin: 6px;
+  >.areas {
+    display: flex;
+    > div {
+      border-radius: 25%;
+    }
+  }
+}
+
+.bubble {
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  margin-left: 5px;
+  padding: 2px 4px;
+  &.H {
+    background: rgba(255, 118, 118, 0.7);
+  }
+
+  &.S {
+    background: rgba(64, 142, 169, 0.7);
+  }
+
+  &.N {
+    background: rgba(177, 119, 199, 0.7);
+  }
+
+  &.E {
+    background: rgba(37, 155, 130, 0.7);
+  }
+
+  &.Q {
+    background: rgba(255, 212, 98, 0.7);
+  }
+  &.writing {
+    background: rgba(55, 89, 148, 0.7);
+    border-radius: 7px;
+  }
 }
 
 .course-modal .img-icon {

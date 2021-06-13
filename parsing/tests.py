@@ -24,6 +24,8 @@ from parsing.library.logger import JSONStreamWriter
 from parsing.library.digestor import Digestor
 from parsing.library.validator import Validator, ValidationError, \
     MultipleDefinitionsWarning, ValidationWarning
+from collections import namedtuple
+from timetable.school_mappers import SCHOOLS_MAP
 
 
 class UtilsTest(SimpleTestCase):
@@ -372,6 +374,10 @@ class ValidationTest(SimpleTestCase):
                 'term': 'Bar'
             },
             'days': ['M', 'W', 'F'],
+            'dates': {
+                'start': '08-29-2017',
+                'end': '12-10-2017',
+            },
             'time': {
                 'start': '14:00',
                 'end': '14:50'
@@ -380,7 +386,8 @@ class ValidationTest(SimpleTestCase):
                 'campus': 'Homewood',
                 'building': 'Malone',
                 'room': 'Ugrad'
-            }
+            },
+            'is_short_course': False
         }
 
         with self.assertRaises(ValidationError):
@@ -496,6 +503,10 @@ class ValidationTest(SimpleTestCase):
                     'meetings': [
                         {
                             'days': ['M', 'F'],
+                            'dates': {
+                                'start': '08-29-2017',
+                                'end': '12-10-2017',
+                            },
                             'time': {
                                 'start': '14:00',
                                 'end': '14:50'
@@ -504,14 +515,20 @@ class ValidationTest(SimpleTestCase):
                                 'campus': 'Homewood',
                                 'building': 'Malone',
                                 'room': 'Ugrad'
-                            }
+                            },
+                            'is_short_course': False
                         },
                         {
                             'days': ['W'],
+                            'dates': {
+                                'start': '08-29-2017',
+                                'end': '12-10-2017',
+                            },
                             'time': {
                                 'start': '10:00',
                                 'end': '12:15'
-                            }
+                            },
+                            'is_short_course': False
                         }
                     ]
                 }
@@ -539,6 +556,23 @@ class ValidationTest(SimpleTestCase):
         with self.assertRaises(MultipleDefinitionsWarning):
             validator.validate(nested_course)
 
+_school_attrs = [
+    'code',
+    'name',
+    'active_semesters',
+    'granularity',
+    'ampm',
+    'full_academic_year_registration',
+    'single_access',
+    'final_exams parsers',
+    'registrar',
+    'short_course_weeks_limit'
+]
+
+School = namedtuple(
+    'School',
+    ' '.join(_school_attrs)
+)
 
 class DigestionTest(TestCase):
 
@@ -569,6 +603,22 @@ class DigestionTest(TestCase):
             ]
         },
     }
+
+    # Add "test" school config to SCHOOLS_MAP as it is used as part of digestion process
+    # going forward.
+    SCHOOLS_MAP['test'] = School(
+        code=config['school']['code'],
+        name=config['school']['name'],
+        active_semesters=config['active_semesters'],
+        granularity=config['granularity'],
+        ampm=config['ampm'],
+        full_academic_year_registration=config['full_academic_year_registration'],
+        single_access=config['single_access'],
+        final_exams=None,
+        parsers=None,
+        registrar=None,
+        short_course_weeks_limit=None
+    )
 
     def test_digest_flat(self):
         meta = {
@@ -732,6 +782,10 @@ class DigestionTest(TestCase):
                 'term': 'Bar'
             },
             'days': ['M', 'W', 'F'],
+            'dates': {
+                'start': '08-29-2017',
+                'end': '12-10-2017',
+            },
             'time': {
                 'start': '14:00',
                 'end': '14:50'
@@ -740,7 +794,8 @@ class DigestionTest(TestCase):
                 'campus': 'Homewood',
                 'building': 'Malone',
                 'room': 'Ugrad'
-            }
+            },
+            'is_short_course': False
         }
 
         output = StringIO.StringIO()
@@ -753,8 +808,11 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "M",
                     "location": "Malone Ugrad",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "14:50",
-                    "time_start": "14:00"
+                    "time_start": "14:00",
+                    "is_short_course": False
                 }
             },
             {
@@ -764,8 +822,11 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "W",
                     "location": "Malone Ugrad",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "14:50",
-                    "time_start": "14:00"
+                    "time_start": "14:00",
+                    "is_short_course": False
                 }
             },
             {
@@ -775,8 +836,11 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "F",
                     "location": "Malone Ugrad",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "14:50",
-                    "time_start": "14:00"
+                    "time_start": "14:00",
+                    "is_short_course": False
                 }
             }
         ]
@@ -860,6 +924,10 @@ class DigestionTest(TestCase):
                     'meetings': [
                         {
                             'days': ['M', 'F'],
+                            'dates': {
+                                'start': '08-29-2017',
+                                'end': '12-10-2017',
+                            },
                             'time': {
                                 'start': '14:00',
                                 'end': '14:50'
@@ -868,14 +936,20 @@ class DigestionTest(TestCase):
                                 'campus': 'Homewood',
                                 'building': 'Malone',
                                 'room': 'Ugrad'
-                            }
+                            },
+                            'is_short_course': False
                         },
                         {
                             'days': ['W'],
+                            'dates': {
+                                'start': '08-29-2017',
+                                'end': '12-10-2017',
+                            },
                             'time': {
                                 'start': '10:00',
                                 'end': '12:15'
-                            }
+                            },
+                            'is_short_course': False
                         }
                     ]
                 }
@@ -936,8 +1010,11 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "M",
                     "location": "Malone Ugrad",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "14:50",
-                    "time_start": "14:00"
+                    "time_start": "14:00",
+                    "is_short_course": False
                 }
             },
             {
@@ -947,8 +1024,11 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "F",
                     "location": "Malone Ugrad",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "14:50",
-                    "time_start": "14:00"
+                    "time_start": "14:00",
+                    "is_short_course": False
                 }
             },
             {
@@ -958,8 +1038,11 @@ class DigestionTest(TestCase):
                 "$new": {
                     "day": "W",
                     "location": " ",
+                    "date_start": "08-29-2017",
+                    "date_end": "12-10-2017",
                     "time_end": "12:15",
-                    "time_start": "10:00"
+                    "time_start": "10:00",
+                    "is_short_course": False
                 }
             }
         ]

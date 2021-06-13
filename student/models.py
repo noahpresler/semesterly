@@ -20,8 +20,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from hashids import Hashids
 from oauth2client.client import GoogleCredentials
-
-from timetable import models as timetable_models
+import timetable.models as timetable_models
 from semesterly.settings import get_secret
 
 hashids = Hashids(salt=get_secret('HASHING_SALT'))
@@ -54,6 +53,18 @@ class Student(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=100, null=True)
     time_accepted_tos = models.DateTimeField(null=True)
+    hopid = models.CharField(max_length=10, null=True, default='')
+    jhed = models.CharField(max_length=10, null=True, default='')
+    pre_health = models.NullBooleanField(null=True, default=False)
+    first_name = models.CharField(max_length=255, default='', null=True)
+    last_name = models.CharField(max_length=255, default='', null=True)
+    disabilities = models.NullBooleanField(null=True, default=False)
+
+    def __str__(self):
+        return "{0}".format(self.jhed)
+
+    def __unicode__(self):
+        return "%s" % (self.jhed)
 
     def get_token(self):
         return TimestampSigner().sign(self.id).split(':', 1)[1]
@@ -145,3 +156,23 @@ class RegistrationToken(models.Model):
     p256dh = models.TextField(default='')
     endpoint = models.TextField(default='')
     student = models.ForeignKey(Student, null=True, default=None)
+
+class PilotOffering(models.Model):
+    sections = models.ManyToManyField(timetable_models.Section)
+    day = models.CharField(max_length=2)
+    date_start = models.CharField(max_length=15, null=True)
+    date_end = models.CharField(max_length=15, null=True)
+    time_start = models.CharField(max_length=15)
+    time_end = models.CharField(max_length=15)
+    size = models.IntegerField(default=10)
+    enrolment = models.IntegerField(default=0)
+    waitlist = models.IntegerField(default=0)
+    students = models.ManyToManyField(Student, related_name="enrolled_students")
+    wait_students = models.ManyToManyField(Student, related_name="waitlisted_students")
+    course_name = models.CharField(max_length=100, null=True)
+
+    def __str__(self):
+        return "Course: {0}, Day: {0}, Time: {0} - {0}".format(self.course_name, self.day, self.time_start, self.time_end)
+
+    def __unicode__(self):
+        return "Course: %s, Day: %s, Time: %s - %s" % (self.course_name, self.day, self.time_start, self.time_end)

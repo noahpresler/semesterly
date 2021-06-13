@@ -10,16 +10,16 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib import admin
 from django.views.generic import TemplateView
 
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
-                       url(r'termsofservice/*$',
-                           TemplateView.as_view(template_name="termsofservice.html")),
-                       url(r'privacypolicy/*$',
-                           TemplateView.as_view(template_name="privacypolicy.html")),
-                       )
+urlpatterns = [
+    url(r'termsofservice/*$',
+        TemplateView.as_view(template_name="termsofservice.html")),
+    url(r'privacypolicy/*$',
+        TemplateView.as_view(template_name="privacypolicy.html")),
+]

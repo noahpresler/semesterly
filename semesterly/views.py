@@ -12,7 +12,7 @@
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 from django.template.loader import get_template
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt

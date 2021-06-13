@@ -42,7 +42,7 @@ def ingest_args(parser):
                         '--output',
                         action=WritableFileAction,
                         help='default: %(default)s',
-                        default=SCHOOLS_DIR + '/{school}/data/courses.json')
+                        default=SCHOOLS_DIR + '/{school}/data/{type}.json')
     parser.add_argument('--terms', nargs='+', type=str, default=[r'\w*'])
     parser.add_argument('--years', nargs='+', type=int, default=[r'\d{4}'])
     parser.add_argument('--years-and-terms', type=str, dest='years_and_terms',

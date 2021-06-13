@@ -36,6 +36,10 @@
   height: 100%;
   position: relative;
   width: 100%;
+
+  &.loading {
+    cursor: wait;
+  }
 }
 
 @media (max-width: 766px) {
@@ -58,6 +62,7 @@
 .trans .exp-modal .modal-header,
 .trans .exp-modal .modal-header h1,
 .trans .exp-modal .modal-header h2,
+.trans .exp-modal .modal-header div,
 .trans .exp-modal .modal-content,
 .trans .modal-body .credits h4,
 .trans .exp-modal .modal-share,
@@ -194,6 +199,9 @@
     color: $g777;
     font-size: 12px;
   }
+  .subtitle div {
+    font-size: 12px;
+  }
 }
 
 .exp-header {
@@ -326,6 +334,10 @@
     &:hover {
       background-color: $geee;
     }
+
+    &.loading {
+      cursor: wait;
+    }
   }
 
   i {
@@ -396,6 +408,12 @@
   .modal-header {
     background-color: $gfff;
     padding: 20px 10px 30px;
+
+    > .subtitle {
+      h2 {
+        padding: 0;
+      }
+    }
   }
 
   h1 {

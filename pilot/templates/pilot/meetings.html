@@ -1,0 +1,52 @@
+{% extends "pilot/base.html" %}
+{% block content %}
+<div class="content-section">
+	<h3>Select a PILOT section below </h3>
+	<p class="text-muted">Take a look at the Course and PILOT sections below and select the PILOT section you would like to register for.
+		<b> Note that some sections are specific to the course section you are enrolled in.</b></p>
+	<form method="post">
+		{% csrf_token %}
+		<div class="form-group">
+			{%for course, sections in courses.items%}
+
+					<b>{{ course.name }}</b><br>
+			<div style="width: 100%; height: auto; display: flex; flex-direction: row; flex-wrap: wrap">
+					{%for section, offerings in sections.items%}
+						<div style="float: left; margin: 10px; width: 200px; display: inline-block">
+							<p class="text-muted"><b>{{ section.instructors }}, {{section.meeting_section}}</b></p>
+								{%for offering in offerings%}
+									{% if offering.enrolment >= offering.size %}
+										<input type="radio" class="form-control" name="{{course.id}}" value="{{offering.id}}" id="sect_id_full" style="
+									width: 25px; float:left; color: red">
+										<label for="sect_id_full" style="color: red">{{offering.day}}, {{offering.time_start}}-{{offering.time_end}}</label>
+										<br>
+									{% else %}
+										<input type="radio" class="form-control" name="{{course.id}}" value="{{offering.id}}" id="sect_id" style="
+									width: 25px; float:left">
+										<label for="sect_id">{{offering.day}}, {{offering.time_start}}-{{offering.time_end}}</label>
+										<br>
+									{% endif %}
+								{%endfor%}
+							<br>
+						</div>
+					{%endfor%}
+				</div>
+			{%endfor%}
+		<p style="color: red"><b>*Sections in RED are FULL. Selecting these sections automatically puts you on the waitlist.*</b></p>
+
+		</div>
+		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">
+		<p id="select_text" class="errorlist"></p>
+	</form>
+	<script>
+		function validateAndSend() {
+			if ($('input[type=radio]').is(":checked")) {
+				return true;
+			} else {
+				$("#select_text").text("Select a Section");
+				return false;
+			}
+		}
+	</script>
+</div>
+{% endblock content %}

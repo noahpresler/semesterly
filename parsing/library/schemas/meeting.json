@@ -50,16 +50,16 @@
       ]
     },
     "dates": {
-      "type": "array",
-      "items": {
-        "allOf": [
-          {
-            "$ref": "definitions.json#/date"
-          }
-        ]
+      "allOf": [
+        {
+          "$ref": "definitions.json#/dates"
+        }
+      ],
+      "properties": {
+        "start": {},
+        "end": {}
       },
-      "uniqueItems": true,
-      "minItems": 1
+      "additionalProperties": false
     },
     "days": {
       "type": "array",

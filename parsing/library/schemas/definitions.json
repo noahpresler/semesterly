@@ -11,6 +11,19 @@
     "type": "string",
     "pattern": "\\d{1,2}\/\\d{1,2}\/20[012]\\d"
   },
+  "dates": {
+    "type": "object",
+    "properties": {
+      "start": {
+        "type": "string",
+        "format": "date"
+      },
+      "end": {
+        "type": "string",
+        "format": "date"
+      }
+    }
+  },
   "time": {
     "type": "object",
     "properties": {

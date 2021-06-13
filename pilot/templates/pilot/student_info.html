@@ -1,0 +1,23 @@
+{% extends "pilot/base.html" %}
+{% block content %}
+<div class="content-section">
+	<h3>Registration Details</h3>
+	<p class="text-muted">Please confirm or edit your personal information below.</p>
+	<ul>
+		<li><b>First Name:</b> {{student.first_name}}</li>
+		<li><b>Last Name:</b> {{student.last_name}}</li>
+		<li><b>HOPID:</b> {{student.hopid}}</li>
+		<li><b>JHED:</b> {{student.jhed}}</li>
+		<li><b>Major:</b> {{student.major}}</li>
+		<li><b>Graduation Year:</b> {{student.class_year}}</li>
+		<li><b>Pre-Health:</b> {{student.pre_health}}</li>
+		<li><b>Do you require disability accommodations?</b> {{student.disabilities}}</li>
+	</ul><br>
+	<button class="red-button">
+		<a style="text-decoration: none; color: white;" href="{% url 'pilot:info' %}">Edit</a>
+	</button>
+	<button class="green-button">
+		<a style="text-decoration: none; color: white;" href="{% url 'pilot:pilotcourses' %}">Confirm</a>
+	</button>
+</div>
+{% endblock content %}

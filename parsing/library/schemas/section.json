@@ -67,6 +67,9 @@
     "remaining_seats": {
       "type": "integer"
     },
+    "course_section_id": {
+      "type": "integer"
+    },
     "type": {
       "type": "string",
       "minLength": 1,
@@ -149,7 +152,8 @@
           "time": {},
           "location": {},
           "course": {},
-          "section": {}
+          "section": {},
+          "is_short_course": {}
         },
         "additionalProperties": false,
         "required": [

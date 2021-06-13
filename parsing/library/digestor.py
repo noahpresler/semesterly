@@ -16,6 +16,7 @@ import sys
 import django
 import jsondiff
 import simplejson as json
+from parsing.library.utils import is_short_course
 
 from abc import ABCMeta, abstractmethod
 
@@ -26,6 +27,7 @@ from parsing.library.utils import DotDict, make_list
 from parsing.library.logger import JSONStreamWriter
 from parsing.library.tracker import NullTracker
 from parsing.library.exceptions import PipelineError
+from timetable.school_mappers import SCHOOLS_MAP
 
 
 class DigestionError(PipelineError):
@@ -77,7 +79,11 @@ class Digestor(object):
         ))
 
         self.school = school
-        self.adapter = DigestionAdapter(school, self.cache)
+        self.adapter = DigestionAdapter(
+            school,
+            self.cache,
+            SCHOOLS_MAP[self.school].short_course_weeks_limit
+        )
         self.meta = meta
 
         # Setup tracker for digestion and progress bar.
@@ -107,8 +113,8 @@ class Digestor(object):
             'meeting': lambda x: self.digest_meeting(x),
             'textbook': lambda x: self.digest_textbook(x),
             'textbook_link': lambda x: self.digest_textbook_link(x),
+            'eval': lambda x: self.digest_eval(x),
         }
-
         if self.tracker.has_viewer('progressbar'):
             bar = self.tracker.get_viewer('progressbar').bar
             for obj in bar(make_list(self.data)):
@@ -217,6 +223,23 @@ class Digestor(object):
         )
         self._update_progress('textbook_link', bool(textbook_link_model))
 
+    def digest_eval(self, evaluation):
+        """Digest evaluation.
+
+        Args:
+            evaluation (dict)
+        """
+        # Skip if there's no related Course
+        try:
+            Course.objects.get(code=evaluation.course.code)
+        except Course.DoesNotExist:
+            return
+
+        evaluation_model = self.strategy.digest_evaluation(
+            self.adapter.adapt_evaluation(evaluation)
+        )
+        self._update_progress('evaluation', bool(evaluation_model))
+
     def wrap_up(self):
         self.strategy.wrap_up()
 
@@ -229,18 +252,25 @@ class DigestionAdapter(object):
         school (str): School code.
     """
 
-    def __init__(self, school, cached):
+    def __init__(self, school, cached, short_course_weeks_limit):
         """Construct DigestionAdapter instance.
 
         Args:
             school (str): School code.
             cached (dict): Cache last created course and section to avoid
                 redundant Django calls
+            short_course_weeks_limit (str): Use the following attribute to 
+                determine up to how many weeks a course can be defined as 
+                a "short term course".            
         """
         self.school = school
 
         # Cache last created course and section to avoid redundant Django calls
         self.cache = cached
+
+        # Use the following attribute to determine up to how many weeks
+        # a course can be defined as a "short term course".
+        self.short_course_weeks_limit = short_course_weeks_limit
 
     def adapt_course(self, course):
         """Adapt course for digestion.
@@ -275,13 +305,19 @@ class DigestionAdapter(object):
         if 'exclusions' in course:
             adapted['exclusions'] = ', '.join(course.exclusions)
         if 'areas' in course:
-            adapted['areas'] = ', '.join(course.areas)
+            adapted['areas'] = course.areas
         if 'cores' in course:
             adapted['cores'] = ', '.join(course.cores)
         if 'geneds' in course:
             adapted['geneds'] = ', '.join(course.geneds)
         if 'level' in course:
             adapted['level'] = course.level
+        if 'pos' in course:
+            adapted['pos'] = course.pos;
+        if 'writing_intensive' in course:
+            adapted['writing_intensive'] = course.writing_intensive
+        if 'sub_school' in course:
+            adapted['sub_school'] = course.sub_school
 
         # Combine pre and co requisites into one field
         if 'corequisites' in adapted and 'prerequisites' not in adapted:
@@ -345,6 +381,8 @@ class DigestionAdapter(object):
         if 'remaining_seats' in section:
             pass  # NOTE: possible logic conflict with other data
             # adapted['remaining_seats'] = section.remaining_seats
+        if 'course_section_id' in section:
+            adapted['course_section_id'] = section.course_section_id
         section_type_map = {
             'Lecture': 'L',
             'Laboratory': 'P',
@@ -424,14 +462,21 @@ class DigestionAdapter(object):
                         meeting.section.code
                     ), file=sys.stderr)
                     # raise DigestionError('no section object for meeting', meeting)
-
-        # NOTE: ignoring dates for now
+        
+        
         for day in meeting.get('days', []):
             offering = {
                 'section': section_model,
                 'day': day,
                 'time_start': meeting.time.start,
                 'time_end': meeting.time.end,
+                'date_start': meeting.dates.start,
+                'date_end': meeting.dates.end,
+                'is_short_course': is_short_course(
+                    meeting.dates.start,
+                    meeting.dates.end,
+                    self.short_course_weeks_limit
+                ),
                 'defaults': {
                     'location': meeting.get('location', {}).get('building', '') + ' ' + meeting.get('location', {}).get('room', '')
                 }
@@ -498,6 +543,38 @@ class DigestionAdapter(object):
             }
         # NOTE: no current usage of course linked textbooks (listified yield will always be length 1)
 
+    def adapt_evaluation(self, evaluation):
+        """Adapt evaluation to model dictionary.
+
+        Args:
+            evaluation (dict): validated evaluation.
+
+        Returns:
+            dict: Description
+        """
+        professor = ''
+        if evaluation.instructors is not None:
+            for instructor in evaluation.instructors:
+                instructor = DotDict(instructor)
+                if isinstance(instructor.name, basestring):
+                    if professor is not '':
+                        professor += ', '
+                    professor += instructor.name
+                else:
+                    raise DigestionError('get your instructors straight')
+
+        evaluation = {
+            'course': Course.objects.get(code=evaluation.course.code),
+            'score': evaluation.score,
+            'summary': evaluation.summary,
+            'professor': professor,
+            'course_code': evaluation.course.code,
+            'year': evaluation.year,
+        }
+        for key in evaluation:
+            if evaluation[key] is None:
+                evaluation[key] = 'Cannot be found'
+        return evaluation
 
 class DigestionStrategy(object):
     __metaclass__ = ABCMeta
@@ -521,7 +598,7 @@ class Vommit(DigestionStrategy):
 
         for name, model in Digestor.MODELS.items():
             # if hasattr(self, 'digest_' + name):
-            #     continue
+                # continue
             def closure(name, model):
                 def digest(self, model_params):
                     obj = model.objects.filter(
@@ -557,7 +634,7 @@ class Vommit(DigestionStrategy):
             # Transform django object to dictionary.
             dbmodel = dbmodel.__dict__
 
-        context = {'section', 'course', 'semester', 'textbook'}
+        context = {'section', 'course', 'semester', 'textbook', 'evaluation'}
 
         whats = {}
         for k, v in inmodel.iteritems():
@@ -639,9 +716,9 @@ class Vommit(DigestionStrategy):
         defaults = {}
         for model_name, model in models.items():
             defaults[model_name] = {}
-            for field in model._meta.get_all_field_names():
+            for field in [f.name for f in model._meta.get_fields()]:
                 try:
-                    default = model._meta.get_field_by_name(field)[0].default
+                    default = model._meta.get_field(field).default
                 except AttributeError:
                     continue
                 if default is django.db.models.fields.NOT_PROVIDED:

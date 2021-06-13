@@ -12,6 +12,14 @@ body {
   th {
     font-family: $font-primary;
   }
+
+  &.hoverCustomSlot {
+    cursor: crosshair;
+  }
+}
+
+.addingCustomSlot {
+  color: #16a085;
 }
 
 .cal-btn-wrapper {
@@ -113,6 +121,20 @@ button {
   border-bottom: 0;
   margin-top: 20px;
   padding: 5px;
+
+  .custom-instructions {
+    line-height: 30px;
+    margin: 0 10px;
+    font-size: 15px;
+    font-weight: 300;
+    color: #777;
+  }
+
+  @media screen and (max-width: 550px) {
+    .custom-instructions{
+      display: none;
+    }
+  }
 }
 
 .cal-cell {
@@ -130,7 +152,7 @@ button {
     top: auto;
     right: auto;
     display: block;
-    margin-left: -213px !important;
+    margin-left: -154px !important;
     margin-top: 36px;
   }
 }

@@ -1,0 +1,168 @@
+# Deploy to Azure Kubernetes Service
+# Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+    branches:
+        include:
+        - cs310-spring21
+
+pr: none # will disable PR builds 
+
+resources:
+- repo: self
+
+variables:
+
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '1c9c2c2d-f3c3-454f-9fbb-d5242dc2d0cb'
+  imageRepository: 'semesterly'
+  containerRegistry: 'semesterly.azurecr.io'
+  tag: '$(Build.BuildId)'
+  imagePullSecret: 'semesterly193122b2-auth'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+  # Name of the new namespace being created to deploy the PR changes.
+  k8sNamespaceForPR: 'review-app-$(System.PullRequest.PullRequestId)'
+
+stages:
+- stage: Build
+  displayName: Build stage
+  condition: not(startsWith(variables['Build.SourceBranch'], 'refs/pull/'))
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push Django Container
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: ./Dockerfile
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+    - task: Docker@2
+      displayName: Build nginx Container
+      inputs:
+        command: 'build'
+        repository: 'semesterly-nginx'
+        arguments: '--build-arg djangoImage=$(containerRegistry)/$(imageRepository):$(tag)'
+        Dockerfile: './build/semesterly-nginx/Dockerfile'
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)          
+    - task: Docker@2
+      displayName: Push nginx Container
+      inputs:
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: 'semesterly-nginx'
+        command: 'push'
+        tags: |
+          $(tag)
+
+    - upload: manifests
+      artifact: manifests
+      
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+
+# Deploy is false for now
+  jobs:
+  - deployment: Deploy
+    condition: and(succeeded(), not(startsWith(variables['Build.SourceBranch'], 'refs/pull/'))) 
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'uis-prod.semesterly-dev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/service.yml
+                $(Pipeline.Workspace)/manifests/ingress.yml
+                $(Pipeline.Workspace)/manifests/cronjob.yml
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+                $(containerRegistry)/semesterly-nginx:$(tag)
+                
+
+  # - deployment: DeployPullRequest
+  #   displayName: Deploy Pull request
+  #   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/pull/'))
+  #   pool:
+  #     vmImage: $(vmImageName)
+
+  #   environment: 'jhuopensourcesemesterly.$(k8sNamespaceForPR)'
+  #   strategy:
+  #     runOnce:
+  #       deploy:
+  #         steps:
+  #         - reviewApp: semesterly
+
+  #         - task: Kubernetes@1
+  #           displayName: 'Create a new namespace for the pull request'
+  #           inputs:
+  #             command: apply
+  #             useConfigurationFile: true
+  #             inline: '{ "kind": "Namespace", "apiVersion": "v1", "metadata": { "name": "$(k8sNamespaceForPR)" }}'
+
+  #         - task: KubernetesManifest@0
+  #           displayName: Create imagePullSecret
+  #           inputs:
+  #             action: createSecret
+  #             secretName: $(imagePullSecret)
+  #             namespace: $(k8sNamespaceForPR)
+  #             dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+  #         - task: KubernetesManifest@0
+  #           displayName: Deploy to the new namespace in the Kubernetes cluster
+  #           inputs:
+  #             action: deploy
+  #             namespace: $(k8sNamespaceForPR)
+  #             manifests: |
+  #               $(Pipeline.Workspace)/manifests/deployment.yml
+  #               $(Pipeline.Workspace)/manifests/service.yml
+  #             imagePullSecrets: |
+  #               $(imagePullSecret)
+  #             containers: |
+  #               $(containerRegistry)/$(imageRepository):$(tag)
+
+  #         - task: Kubernetes@1
+  #           name: get
+  #           displayName: 'Get services in the new namespace'
+  #           continueOnError: true
+  #           inputs:
+  #             command: get
+  #             namespace: $(k8sNamespaceForPR)
+  #             arguments: svc
+  #             outputFormat: jsonpath='http://{.items[0].status.loadBalancer.ingress[0].ip}:{.items[0].spec.ports[0].port}'
+
+  #         # Getting the IP of the deployed service and writing it to a variable for posing comment
+  #         - script: |
+  #             url="$(get.KubectlOutput)"
+  #             message="Your review app has been deployed"
+  #             if [ ! -z "$url" -a "$url" != "http://:" ]
+  #             then
+  #               message="${message} and is available at $url.<br><br>[Learn More](https://aka.ms/testwithreviewapps) about how to test and provide feedback for the app."
+  #             fi
+  #             echo "##vso[task.setvariable variable=GITHUB_COMMENT]$message"

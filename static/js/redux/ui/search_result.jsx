@@ -200,5 +200,19 @@ SearchResult.propTypes = {
   addRemoveOptionalCourse: PropTypes.func.isRequired,
 };
 
+export const AreaBubble = ({ areas }) => (areas.length > 0 ? (<div className="areas">
+  {areas.map(area => <div className={`bubble ${area}`} key={area}>{area}</div>)}</div>) : null);
+
+AreaBubble.propTypes = {
+  areas: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+export const WritingIntensive = ({ isWritingIntensive }) => (isWritingIntensive === 'Yes' ?
+  <div className="bubble writing">Writing Intensive</div> : null);
+
+WritingIntensive.propTypes = {
+  isWritingIntensive: PropTypes.string.isRequired,
+};
+
 export default SearchResult;
 

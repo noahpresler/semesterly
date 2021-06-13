@@ -85,11 +85,10 @@ class SideBar extends React.Component {
           getShareLink={this.props.getShareLink}
         />);
       }) : null;
-
     let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
       const colourIndex = (course.id in this.props.courseToColourIndex) ?
-          this.props.courseToColourIndex[course.id] :
-          getNextAvailableColour(this.props.courseToColourIndex);
+        this.props.courseToColourIndex[course.id] :
+        getNextAvailableColour(this.props.courseToColourIndex);
       return (<MasterSlot
         key={course.id}
         onTimetable={this.props.isCourseInRoster(course.id)}
@@ -132,8 +131,8 @@ class SideBar extends React.Component {
           { img }
           <h4>Give Optional Courses a Spin!</h4>
           <h3>Load this list with courses you aren&#39;t 100% sure you want to take - we&#39;ll
-                        fit as many as
-                        possible, automatically</h3>
+            fit as many as
+            possible, automatically</h3>
         </div>);
     }
     const finalScheduleLink = (masterSlots.length > 0 &&
@@ -194,14 +193,6 @@ class SideBar extends React.Component {
         { optionalSlotsHeader }
         { optionalSlots }
         <div id="sb-optional-slots" />
-        <a onClick={this.props.launchTextbookModal}>
-          <h4 className="sb-header"> Textbooks
-            <div className="sb-header-link"><i className="fa fa-external-link" />&nbsp;See all</div>
-          </h4>
-        </a>
-        <div className="side-bar-section">
-          <TextbookList courses={this.props.coursesInTimetable} />
-        </div>
       </div>
     );
   }
@@ -230,10 +221,9 @@ SideBar.propTypes = {
   duplicateTimetable: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   removeCourse: PropTypes.func.isRequired,
-  removeOptionalCourse: PropTypes.func.isRequired,
   launchFinalExamsModal: PropTypes.func.isRequired,
+  removeOptionalCourse: PropTypes.func.isRequired,
   launchPeerModal: PropTypes.func.isRequired,
-  launchTextbookModal: PropTypes.func.isRequired,
   semester: PropTypes.shape({
     name: PropTypes.string.isRequired,
     year: PropTypes.numberisRequired,

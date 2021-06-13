@@ -34,7 +34,12 @@ header h1 {
 	float: left;
 	font-size: 26px;
 	line-height: 30px;
-	margin: 0 10px 0;
+	margin: 0 5px 0 10px;
+}
+header p {
+	float: left;
+	margin: 5px 0 0 0;
+	line-height: 28px;
 }
 #semesterly-logo {
 	height: 32px;
@@ -103,7 +108,7 @@ header nav a .fa {
     z-index: 1;
     height: 0;
     width: 0;
-	transform: rotate(0deg);	
+	transform: rotate(0deg);
 }
 .open .tip-down {
     transform: rotate(180deg);
@@ -433,9 +438,9 @@ footer ul {
 footer ul li {
 	margin: 10px 0;
 }
-footer ul li a, 
-footer ul li a:link, 
-footer ul li a:active, 
+footer ul li a,
+footer ul li a:link,
+footer ul li a:active,
 footer ul li a:visited {
 	color: #ddd;
 	font-size: 14px;
@@ -458,6 +463,14 @@ footer ul li a i.fa-facebook {
 footer ul li a i.fa-at {
 	line-height: 24px;
 	background-color: #409036;
+}
+footer ul li a i.fa-bookmark {
+	line-height: 24px;
+	background-color: #808080;
+}
+footer ul li a i.fa-lock {
+	line-height: 24px;
+	background-color: #808080;
 }
 footer h6 {
 	text-align: center;
@@ -575,7 +588,7 @@ footer h6 {
 	#hero {
 		padding: 50px 0 0;
 	}
-	#hero h2, 
+	#hero h2,
 	#hero h4,
 	#hero ul {
 		padding: 0 20px 0 0;
@@ -584,7 +597,7 @@ footer h6 {
 
 @media(max-width: 920px) {
 	.reason h2 {
-		font-size: 36px; 
+		font-size: 36px;
 	}
 	.reason-text {
 		padding-top: 0;
@@ -596,7 +609,7 @@ footer h6 {
 		border-bottom: 1px solid #aaa;
 		text-align: center;
 	}
-	#hero h2, 
+	#hero h2,
 	#hero h4,
 	#hero ul {
 		padding: 0 40px;
@@ -631,7 +644,7 @@ footer h6 {
 	.mobile {
 		display: block;
 	}
-	.desktop, 
+	.desktop,
 	.desktop.tutorial-text {
 		display: none;
 	}
@@ -648,7 +661,7 @@ footer h6 {
 	}
 }
 @media(max-width: 445px) {
-	#hero h2, 
+	#hero h2,
 	#hero h4,
 	#hero ul {
 		padding: 0 15px;
