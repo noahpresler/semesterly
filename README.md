@@ -4,9 +4,8 @@
 <p align="center">
   <a href="https://travis-ci.com/jhuopensource/semesterly"><img src="https://api.travis-ci.com/jhuopensource/semesterly.svg?branch=master"></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg"/></a>
-   <a href="https://github.com/noahpresler/semesterly/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"/></a>
-   <a href="http://semesterly.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/docs/badge/?version=latest"/></a>
-  <a href="https://travis-ci.org/noahpresler/semesterly/"><img src="https://travis-ci.org/noahpresler/semesterly.svg?branch=master"/></a>
+  <a href="https://github.com/noahpresler/semesterly/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"/></a>
+  <a href="http://semesterly.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/docs/badge/?version=latest"/></a>
 </p>
 
 <p align="center">
