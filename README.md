@@ -8,15 +8,29 @@
   <a href="http://semesterly.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/docs/badge/?version=latest"/></a>
 </p>
 
-<p align="center">
+## Documentation
+
 Read the docs and learn more: http://semesterly.readthedocs.io/en/latest/
-</p>
+
+## Here's a Preview of the Semester.ly Timetable
 
 <p align="center"><img src="http://i.imgur.com/G543QPJ.jpg"></p>
 
+## Questions
+
+For questions and support, please contact us at [our email address](contact@semester.ly) or [community chat](https://discord.gg/txYbphsAV7). The issue list of this repository is **ONLY** for bug reports and feature requests.
+
+## Add A School
+
+Please read this section of the documentation, [Add a School](https://semesterly.readthedocs.io/en/latest/addaschool.html), before adding your school.
+
+## Contributing
+
+Please make sure to read the [Contributing Guidelines](https://github.com/jhuopensource/semesterly/blob/master/docs/contributing.rst#how-to-contribute) before making a pull request!
+
 ## License
 
-Copyright 2017, Semester.ly Technologies, LLC
+Copyright (c) 2017, Semester.ly Technologies, LLC
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
