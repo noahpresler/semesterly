@@ -47,16 +47,16 @@ Writing Tests
 Unit Tests
 ----------
 
-Contributors are encouraged to write unit tests for changed or new code.
+Contributors are encouraged to write unit tests for changed and new code.
 By separating out logic into simple pure functions, you can isolate the
-behaviour you care about in your unit tests, and not worry about testing
+behavior you care about in your unit tests and not worry about testing
 for side effects. Following the design principles outlined in the resources from
 the :ref:`learning` section helps with this. For example, extracting all code 
 that extract information from the state into selectors, which are pure functions
 that take the state (or some part of it) as input and output some data, will
-make it easy to test and change any state related behavior. 
-Sometimes you may want to test behaviour that can't be extracted into a pure
-function, or that touches external interfaces. There are a number of strategies
+make it easy to test and change state-related behavior. 
+Sometimes you may want to test behavior that can't be extracted into a pure
+function or that touches external interfaces. There are a number of strategies
 you can use in these cases.
 
 Integration Tests
@@ -67,7 +67,7 @@ create a store with desired initial state, dispatch the action, and then check t
 had the desired effect on the state. Backend requests are mocked using the nock
 library.
 
-For testing views, we use django's built in client to send requests to the backend.
+For testing views, we use django's built-in client to send requests to the backend.
 It's also possible to use django's request factory to create requests to provide
 directly as input to your views. 
 
