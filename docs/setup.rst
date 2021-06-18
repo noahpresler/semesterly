@@ -154,6 +154,18 @@ Before installing the python requirements, make sure to have PostgreSQL setup.
 
     sudo apt install postgresql python-psycopg2 libpq-dev libxslt-dev libxml2-dev
 
+**On Ubuntu 18.x.x** use apt-get:
+
+.. code-block:: bash
+
+    sudo apt-get install postgresql python-psycopg2 libpq-dev libxslt-dev libxml2-dev
+
+**On Ubuntu 20.x.x** use apt-get:
+
+.. code-block:: bash
+
+    sudo apt-get install postgresql python-psycopg2 libpq-dev libxslt-dev libxml2-dev
+
 **On CentOS / Fedora** use yum:
 
 .. code-block:: bash
@@ -197,6 +209,22 @@ Node and node package manager are the backbone of our frontend setup. To begin, 
     sudo apt-get install npm
 
 **On Ubuntu 16.x.x**:
+
+.. code-block:: bash
+
+    wget -qO- https://deb.nodesource.com/setup_6.x | sudo bash -
+    sudo apt install nodejs
+    sudo apt install npm
+
+**On Ubuntu 18.x.x**:
+
+.. code-block:: bash
+
+    wget -qO- https://deb.nodesource.com/setup_6.x | sudo bash -
+    sudo apt install nodejs
+    sudo apt install npm
+
+**On Ubuntu 20.x.x**:
 
 .. code-block:: bash
 
