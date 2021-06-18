@@ -24,7 +24,7 @@ Add the Upstream Repo
 
     .. code-block:: bash
 
-        git remote add upstream git@github.com:noahpresler/semesterly.git
+        git remote add upstream git@github.com:jhuopensource/semesterly.git
 
     This way you can push to your fork as "origin" and the main repo as "upstream". You'll only ever do this once.
 
