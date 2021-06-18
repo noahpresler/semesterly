@@ -3,16 +3,16 @@
 Setup Your Dev Environment
 ==========================
 
-Now that all of the requirements are installed, its time to get your environment up and running.
+Now that all of the requirements are installed, it's time to get your environment up and running.
 
 Setup Your Database
 ~~~~~~~~~~~~~~~~~~~
 
-Semester.ly stores objects like courses, timetables, and students in a Postgres database. Let's get one setup for you.
+Semester.ly stores objects like courses, timetables, and students in a Postgres database. Let's get a database setup for you.
 
 Let's first initialize Postgres using the default user account ``postgres``
 
-.. note:: If using Linux log into this account with
+.. note:: If using Linux, log into this account with
 
     .. code-block:: bash
 
@@ -24,7 +24,7 @@ Then, enter Postgres environment with
 
     psql postgres
 
-.. note:: If you see an error in CentOS / Fedora, it's most likely due to postgres is not running. Initialize it with ``sudo service postgresql initdb && sudo service postgresql start``.
+.. note:: If you see an error in CentOS / Fedora, it's most likely because postgres is not running. Initialize it with ``sudo service postgresql initdb && sudo service postgresql start``.
 
 Here you can enter SQL to create/manipulate/access databases. Let's create a Semester.ly database. Enter:
 
@@ -50,7 +50,7 @@ Great. You are all set. Enter the following to quit psql:
     
     \q
 
-.. note:: If using Linux exit postgres by 
+.. note:: If using Linux, exit postgres by 
 
     .. code-block:: bash
 
@@ -61,7 +61,7 @@ Great. You are all set. Enter the following to quit psql:
 Create Local Settings
 ~~~~~~~~~~~~~~~~~~~~~
 
-Now that you have a database created we need to inform Django of the configuration. Do so by creating a new file called ``local_settings.py`` and placing it in the ``semesterly/`` directory within your workspace. You should find that there is already a similar file called ``settings.py`` found in the same folder.
+Now that you have a database created, we need to inform Django of the configuration. Do so by creating a new file called ``local_settings.py`` and placing it in the ``semesterly/`` directory within your workspace. You should find that there is already a similar file called ``settings.py`` found in the same folder.
 
 The contents of this file should be:
 
@@ -124,20 +124,14 @@ And make sure the following line returns "development"
 Install & Run Webpack
 ~~~~~~~~~~~~~~~~~~~~~
 
-Webpack compiles our React componenets into one application wide javascript bundle. We use chromedriver to test them. 
+Webpack compiles our React componenets into one application-wide javascript bundle. We use ChromeDriver for automated browser testing.
 
-To install them if you are testing in chrome install:
+To install them:
 
 .. code-block:: bash
 
     npm install -g webpack chromedriver
     
-
-To install them if you are using firefox or a 32 bit operating system (like lubuntu) run:
-
-.. code-block:: bash
-    
-    npm install -g webpack
 
 Then run it with:
 
@@ -145,7 +139,7 @@ Then run it with:
 
     npm run watch
 
-.. note:: Always leave ``npm run watch`` running. It will continuously watch your javascript files and recompile automatically upon any edits/changes.
+.. note:: Always leave ``npm run watch`` running. It will continuously watch your javascript files and recompile automatically after edits/changes.
 
 
 Running the Server

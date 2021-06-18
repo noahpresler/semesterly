@@ -76,7 +76,7 @@ Steps are below on getting your local development environment running:
 
         docker-compose build
         docker-compose up
-        The **build** command creates a local Database and build of your source code.
+        The **build** command creates a local database and build of your source code.
         The **up** command runs everything. Be careful not to build when you don't need to as this will destroy your entire database and you'll need to ingest/digest again to get your course data (which takes about 30 minutes).
 
     You now have Semester.ly running. If this is the first time, you will want some data which done in the next step.
@@ -125,17 +125,17 @@ To enter your virtual environment, execute the following code from your Semester
 
 Check your OS info
 ~~~~~~~~~~~~~~~~~~
-If you're on a posix OS (Mac, Ubuntu, Fedora, CentOS, etc.) this is how you check what version of OS you're on.
+If using Linux (Ubuntu, Fedora, CentOS, etc.), you can usually find your version info with this code:
 
 .. code-block:: bash
 
-    uname -n
+    cat /etc/issue
 
 Install PostgreSQL
 ~~~~~~~~~~~~~~~~~~
-Before installing the python requirements, you must make sure to have PostgreSQL setup on your device.
+Before installing the python requirements, make sure to have PostgreSQL setup.
 
-**On mac**, `install Homebrew <http://brew.sh/>`_ and run:
+**On mac**, `install Homebrew <https://brew.sh/>`_ and run:
 
 .. code-block:: bash
 
@@ -163,7 +163,7 @@ Before installing the python requirements, you must make sure to have PostgreSQL
 Install Python Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. note:: **ATTENTION MAC USERS:** you must install the xcode command line tools via ``xcode-select --install`` before proceeding. You may also need to update openssl. If so, please `follow this guide <https://medium.com/@katopz/how-to-upgrade-openssl-8d005554401>`_.
+.. note:: **ATTENTION MAC USERS:** you must install the xcode command line tools via ``xcode-select --install`` before proceeding.
 
 All python dependencies are kept in a file called ``requirements.txt``. Anytime a dependency is added or changed, we update it in this file. To bring your virutal environment up to date with all of these requirements easily, simply execute:
 
