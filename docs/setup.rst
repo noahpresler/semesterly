@@ -186,10 +186,10 @@ Node and node package manager are the backbone of our frontend setup. To begin, 
 **On Ubuntu 18.x.x or Ubuntu 20.x.x**:
 
 .. code-block:: bash
-
+    
+    sudo apt-get install wget
     wget -qO- https://deb.nodesource.com/setup_16.x | sudo bash -
-    sudo apt install nodejs
-    sudo apt install npm
+    sudo apt-get install -y nodejs
 
 **On CentOS / Fedora**:
 
