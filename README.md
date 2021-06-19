@@ -13,6 +13,14 @@
 
 Read the docs and learn more: http://semesterly.readthedocs.io/en/latest/
 
+## Contributing
+
+Please make sure to read the [Contributing Guidelines](https://github.com/jhuopensource/semesterly/blob/master/docs/contributing.rst#how-to-contribute) before making a pull request!
+
+## Add A School
+
+Please read this section of the documentation, [Add a School](https://semesterly.readthedocs.io/en/latest/addaschool.html), to learn about how to add your school.
+
 ## Here's a Preview of the Semester.ly Platform
 
 <p align="center"><img src="http://i.imgur.com/G543QPJ.jpg" width="800" height="600" alt="Semester.ly Platform Preview"></p>
@@ -20,14 +28,6 @@ Read the docs and learn more: http://semesterly.readthedocs.io/en/latest/
 ## Questions
 
 For questions and support, please contact us at <contact@semester.ly> or ask in the [community forum](https://discord.gg/txYbphsAV7). The [Issues section](https://github.com/jhuopensource/semesterly/issues) of this repository is **ONLY** for bug reports and feature requests.
-
-## Add A School
-
-Please read this section of the documentation, [Add a School](https://semesterly.readthedocs.io/en/latest/addaschool.html), to learn about how to add your school.
-
-## Contributing
-
-Please make sure to read the [Contributing Guidelines](https://github.com/jhuopensource/semesterly/blob/master/docs/contributing.rst#how-to-contribute) before making a pull request!
 
 ## License
 
