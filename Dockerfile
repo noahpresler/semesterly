@@ -1,4 +1,4 @@
-FROM jhuopensource/semesterly-base:latest
+FROM scabrej1/semesterly-base:latest
 
 RUN mkdir /code
 WORKDIR /code
