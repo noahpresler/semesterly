@@ -62,7 +62,7 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
         return {}
 
     def get(self, request, *args, **kwargs):
-        if not self.allow_unauthenticated and not request.user.is_authenticated():
+        if not self.allow_unauthenticated and not request.user.is_authenticated:
             return HttpResponseRedirect('/')
         self.school = request.subdomain
         self.student = get_student(request)
@@ -82,7 +82,7 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             sem = Semester.objects.get(**all_semesters[curr_sem_index])
 
         integrations = []
-        if self.student and self.student.user.is_authenticated():
+        if self.student and self.student.user.is_authenticated:
             self.student.school = self.school
             self.student.save()
             for i in self.student.integrations.all():

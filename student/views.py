@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 import json
 
 import httplib2
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import Q, Count
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect
@@ -228,9 +228,9 @@ class UserTimetableView(ValidateSubdomainMixin,
             duplicate.pk = None  # creates duplicate of object
             duplicate.name = new_name
             duplicate.save()
-            duplicate.courses = courses
-            duplicate.sections = sections
-            duplicate.events = events
+            duplicate.courses.set(courses)
+            duplicate.sections.set(sections)
+            duplicate.events.set(events)
 
             response = {
                 'timetables': get_student_tts(student, school, semester),

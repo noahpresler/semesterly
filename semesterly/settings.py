@@ -195,7 +195,7 @@ REST_FRAMEWORK ={
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

@@ -10,10 +10,11 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from django.utils.deprecation import MiddlewareMixin
 from parsing.schools.active import ACTIVE_SCHOOLS
 
 
-class SubdomainMiddleware:
+class SubdomainMiddleware(MiddlewareMixin):
 	def process_request(self, request):
 		subdomain = request.META.get('HTTP_HOST', '')\
 					.split('.')[0]\
