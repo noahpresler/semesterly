@@ -30,7 +30,7 @@ from parsing.schools.active import ACTIVE_SCHOOLS
 from timetable.utils import get_current_semesters
 
 
-class ValidateSubdomainMixin(object):
+class ValidateSubdomainMixin:
     """
     Mixin which validates subdomain, redirecting user to index if the school
     is not in :obj:`ACTIVE_SCHOOLS`.
@@ -107,10 +107,9 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             # 'oldSemesters': get_old_semesters(self.school),
             'uses12HrTime': SCHOOLS_MAP[self.school].ampm,
             'studentIntegrations': integrations,
-            'examSupportedSemesters': map(all_semesters.index,
-                                          final_exams),
-            'latestAgreement': AgreementSerializer(Agreement.objects.latest()).data,
-            'registrar': SCHOOLS_MAP[self.school].registrar,
+            'examSupportedSemesters': list(map(all_semesters.index,
+                                          final_exams)),
+            'timeUpdatedTos': Agreement.objects.latest().last_updated.isoformat(),
 
             'featureFlow': dict(feature_flow, name=self.feature_name)
         }

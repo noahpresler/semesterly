@@ -30,24 +30,24 @@ parser.add_argument('--title', dest='title', help='the school to send the messag
 args = parser.parse_args()
 
 if not args.message: 
-	print "Please provide a message"
+	print("Please provide a message")
 	exit()
 else:
-	print "\nMessage: " + args.message
-	print "Title: " + args.title
+	print("\nMessage: " + args.message)
+	print("Title: " + args.title)
 
 if not args.school:
-	print "Sending to all schools"
+	print("Sending to all schools")
 	students = Student.objects.all()
 else:
 	students = Student.objects.filter(personaltimetable__courses__school=args.school).distinct() | Student.objects.filter(school=args.school).distinct()
-	print "Sending to <" + args.school + "> student(s)"
+	print("Sending to <" + args.school + "> student(s)")
 tokens = RegistrationToken.objects.filter(student__in=students)
-print "This will send to ", tokens.count(), "device(s)"
+print("This will send to ", tokens.count(), "device(s)")
 
-confirmation = raw_input("Would you like to send?  (Y/n)")
+confirmation = input("Would you like to send?  (Y/n)")
 if confirmation.lower() != "y":
-	print "Quitting...\n"
+	print("Quitting...\n")
 	exit()
 
 for token in tokens:

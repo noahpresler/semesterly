@@ -26,7 +26,7 @@ def get_num_conflicts(timetable):
   pass
 
 def get_num_days(day_to_usage):
-  got_class = [any(usage)for usage in day_to_usage.values()]
+  got_class = [any(usage)for usage in list(day_to_usage.values())]
   return sum(got_class)
 
 def get_avg_rating(timetable):
@@ -37,7 +37,7 @@ def get_avg_rating(timetable):
   return float(sum(valid_ratings)) / len(valid_ratings) if valid_ratings else 0
 
 def get_avg_day_length(day_to_usage):
-  lengths = [get_day_length(usage) for usage in day_to_usage.values()]
+  lengths = [get_day_length(usage) for usage in list(day_to_usage.values())]
   return sum(lengths)/float(len(lengths))
 
 def get_day_length(usage):

@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 from celery.decorators import periodic_task, task
 from celery.task.schedules import crontab
 from celery.utils.log import get_task_logger
@@ -23,7 +21,6 @@ from parsing.schools.active import ACTIVE_PARSING_SCHOOLS as ACTIVE_SCHOOLS
 
 logger = get_task_logger(__name__)
 
-
 @periodic_task(
     run_every=(crontab(hour=00, minute=00)),
     name="task_parse_current_registration_period",
@@ -34,12 +31,12 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
     schools = set(schools or ACTIVE_SCHOOLS)
     for school in set(SCHOOLS_MAP) & schools:
         # Grab the most recent year.
-        years = [SCHOOLS_MAP[school].active_semesters.items()[-1]]
+        years = [list(SCHOOLS_MAP[school].active_semesters.items())[-1]]
 
         # Handle case where registration is for full academic year
         if SCHOOLS_MAP[school].full_academic_year_registration:
             if len(SCHOOLS_MAP[school].active_semesters) > 2:
-                years.append(SCHOOLS_MAP[school].active_semesters.items()[-2])
+                years.append(list(SCHOOLS_MAP[school].active_semesters.items())[-2])
 
             # Group all semesters into single parsing call for schools that
             #  cannot support parallel parsing.
@@ -72,7 +69,7 @@ def task_parse_active(schools=None, textbooks=False):
             )
             continue
 
-        for year, terms in SCHOOLS_MAP[school].active_semesters.items():
+        for year, terms in list(SCHOOLS_MAP[school].active_semesters.items()):
             for term in terms:
                 task_parse_school.delay(school, {year: [term]},
                                         textbooks=textbooks)
@@ -111,7 +108,7 @@ def task_parse_school(school, years_and_terms, textbooks=False):
             '{}{}'.format(
                 year,
                 ''.join(terms)
-            ) for year, terms in years_and_terms.items()
+            ) for year, terms in list(years_and_terms.items())
         )
     )
 

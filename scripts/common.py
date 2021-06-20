@@ -23,7 +23,7 @@ def parse_tz_time(time):
 def parse_range_time(time):
   """'1-3' -> ('13:00', '15:00'), '9' -> ('9:00', '10:00')"""
   if '-' in time:
-    start, end = map(convert_to_24, time.split('-'))
+    start, end = list(map(convert_to_24, time.split('-')))
   else:
     start = convert_to_24(time)
     end = str(int(start) + 1)

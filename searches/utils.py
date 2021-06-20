@@ -10,9 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
-from __future__ import division
-import cPickle as pickle
+import pickle as pickle
 import numpy as np
 import operator
 from sklearn.feature_extraction.text import TfidfTransformer
@@ -20,6 +18,7 @@ from django.db.models import Q
 from timetable.models import Course
 from nltk.stem.porter import *
 import progressbar
+from functools import reduce
 
 
 def baseline_search(school, query, semester):
@@ -27,7 +26,7 @@ def baseline_search(school, query, semester):
     if query == "":
         return Course.objects.filter(school=school)
     query_tokens = query.strip().lower().split()
-    course_name_contains_query = reduce(operator.and_, map(course_name_contains_token, query_tokens))
+    course_name_contains_query = reduce(operator.and_, list(map(course_name_contains_token, query_tokens)))
     return Course.objects.filter(
         Q(school=school) &
         course_name_contains_query &
@@ -113,8 +112,8 @@ class Searcher:
 
     def load_count_vectorizer(self):
         """Loads english dictionary count vectorizer pickle object."""
-        with open('searches/dictionary.pickle', 'r') as handle:
-            return pickle.load(handle)
+        with open('searches/dictionary.pickle', 'rb') as handle:
+            return pickle.load(handle, encoding='latin1')
 
     def vectorize_query(self, query):
         """Vectorizes a user's query using count vectorizer."""
@@ -131,7 +130,7 @@ class Searcher:
         """Returns a score (2, 1, 0) of a query match to course name."""
         query_tokens = query.strip().lower().split(' ')
         course_name = course_name.lower()
-        title_contains_query = all(map(lambda q: q in course_name, query_tokens))
+        title_contains_query = all([q in course_name for q in query_tokens])
         if title_contains_query and len(query_tokens) is len(course_name.split()):
             return 2
         elif title_contains_query:
@@ -142,7 +141,11 @@ class Searcher:
     def get_cosine_sim(self, sparse_vec1, sparse_vec2):
         """Computes cosine similarity between two sparse vectors."""
         if sparse_vec1 is not None and sparse_vec2 is not None:
-            return np.sum(sparse_vec1.multiply(sparse_vec2))
+            try:
+                return np.sum(sparse_vec1.multiply(sparse_vec2))
+            except:
+                # FIXME -- Python3 Transition (Hugh)
+                return 0
         else:
             return 0
 
@@ -156,7 +159,7 @@ class Searcher:
         if query == "":
             return Course.objects.filter(school=school)
         query_tokens = query.strip().lower().split()
-        course_name_contains_query = reduce(operator.and_, map(course_name_contains_token, query_tokens))
+        course_name_contains_query = reduce(operator.and_, list(map(course_name_contains_token, query_tokens)))
         title_matching_courses = Course.objects.filter(
             Q(school=school) &
             course_name_contains_query &
@@ -165,11 +168,11 @@ class Searcher:
 
         base_count = title_matching_courses.count()
         if base_count < self.MAX_CAPACITY:
-            descp_contains_query = reduce(operator.or_, map(course_desc_contains_token, query.replace("and", "").split()))
+            descp_contains_query = reduce(operator.or_, list(map(course_desc_contains_token, query.replace("and", "").split())))
             descp_matching_courses = Course.objects.filter(Q(school=school) &
                                                            descp_contains_query &
                                                            Q(section__semester=semester))\
-                .exclude(reduce(operator.and_, map(course_name_contains_token, query_tokens)))
+                .exclude(reduce(operator.and_, list(map(course_name_contains_token, query_tokens))))
             courses_objs = list(title_matching_courses.all().distinct('code')[:self.MAX_CAPACITY]) + \
                            list(descp_matching_courses.all().distinct('code')[:self.MAX_CAPACITY - base_count])
         else:
@@ -188,10 +191,10 @@ class Searcher:
 
     def wordify(self, course_vector):
         """Converts a course vector back into string using count vectorizer."""
-        print(self.count_vectorizer.inverse_transform(course_vector))
+        print((self.count_vectorizer.inverse_transform(course_vector)))
 
     def print_similiarity_scores(self, courses, query):
         """Prints all course similarity scores given a query (for debugging)."""
         query_vector = self.vectorize_query(query.lower())
         for course in sorted(courses, key=lambda course: -self.get_score(course, query, query_vector))[:10]:
-            print(course.name + ":" + str(self.get_score(course, query, query_vector)) + "\n")
+            print((course.name + ":" + str(self.get_score(course, query, query_vector)) + "\n"))

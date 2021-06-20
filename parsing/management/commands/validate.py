@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import logging
 import simplejson as json
 
@@ -20,6 +18,7 @@ from parsing.library.validator import Validator
 from parsing.management.commands.arguments import validate_args
 from parsing.library.tracker import Tracker
 from parsing.library.viewer import StatProgressBar
+
 
 class Command(BaseCommand):
     """Django command to drive self-contained validation in data pipeline.

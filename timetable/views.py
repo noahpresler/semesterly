@@ -53,7 +53,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                 if params['semester'] == "F" \
                 else Semester.objects.get(name="Spring", year="2017")
 
-        course_ids = params['courseSections'].keys()
+        course_ids = list(params['courseSections'].keys())
         courses = [Course.objects.get(id=cid) for cid in course_ids]
         locked_sections = params['courseSections']
 
