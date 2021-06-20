@@ -107,6 +107,8 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             # 'oldSemesters': get_old_semesters(self.school),
             'uses12HrTime': SCHOOLS_MAP[self.school].ampm,
             'studentIntegrations': integrations,
+            'latestAgreement': AgreementSerializer(Agreement.objects.latest()).data,
+            'registrar': SCHOOLS_MAP[self.school].registrar,
             'examSupportedSemesters': list(map(all_semesters.index,
                                           final_exams)),
             'timeUpdatedTos': Agreement.objects.latest().last_updated.isoformat(),
