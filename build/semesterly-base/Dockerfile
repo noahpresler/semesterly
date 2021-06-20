@@ -1,6 +1,5 @@
-FROM ubuntu:bionic
+FROM python:3.6
 RUN apt-get update
-
 
 RUN apt-get install -y \
 	python-pip \
@@ -11,8 +10,8 @@ RUN apt-get install -y \
 	curl \
 	nginx
 
-# Install node 8.x
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+# Install node 16.x
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt-get install -y nodejs
 
 # This saves some build time by installing base requirements
