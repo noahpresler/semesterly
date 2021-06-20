@@ -140,7 +140,7 @@ class PersonalTimetable(timetable_models.Timetable):
         Courses and Sections that it represents.
     """
     name = models.CharField(max_length=100)
-    student = models.ForeignKey(Student)
+    student = models.ForeignKey(Student, on_delete=models.deletion.CASCADE)
     last_updated = models.DateTimeField(auto_now=True)
     # TODO: change to foreign key from personal event -> personal timetable
     events = models.ManyToManyField(PersonalEvent)

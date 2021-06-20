@@ -115,7 +115,7 @@ class Course(models.Model):
     cores = models.CharField(max_length=50, null=True, blank=True)
     geneds = models.CharField(max_length=300, null=True, blank=True)
     related_courses = models.ManyToManyField('self', blank=True)
-    same_as = models.ForeignKey('self', null=True)
+    same_as = models.ForeignKey('self', null=True, on_delete=models.deletion.CASCADE)
     vector = PickledObjectField(default=None, null=True)
     pos = ArrayField(models.TextField(default='', null=True), default=list)
     areas = ArrayField(models.TextField(default='', null=True), default=list)
