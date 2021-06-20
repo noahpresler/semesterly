@@ -42,7 +42,7 @@ urlpatterns = [
     url('', include('analytics.urls')),
     url('', include('agreement.urls')),
     url('', include('pilot.urls')),
-    url(r'admin/*', include(admin.site.urls)),
+    url(r'admin/*', admin.site.urls),
 
     # Automatic deployment endpoint
     url(r'deploy_staging/', semesterly.views.deploy_staging),

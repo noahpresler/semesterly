@@ -36,7 +36,9 @@ class PilotOfferingAdmin(admin.ModelAdmin):
 		StudentsInline,
 		WaitlistStudentsInline,
 	]
-	autocomplete_fields = ('sections', 'students', 'wait_students')
+	# TODO: Temporary patch, recheck -> Python 3 Migration
+	search_fields = ['sections', 'students','wait_students']
+	# autocomplete_fields = ('sections', 'students', 'wait_students')
 	exclude = ('sections', 'students', 'wait_students')
 	list_display = ('id', 'course_name', 'day', 'time_start', 'time_end')
 
