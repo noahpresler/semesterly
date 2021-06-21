@@ -226,7 +226,7 @@ class Parser(BaseParser):
             years_and_terms_filter
         )
 
-        for year, terms in years_and_terms.items():
+        for year, terms in list(years_and_terms.items()):
             self.ingestor['year'] = year
             for term in terms:
                 self.ingestor['term'] = term

@@ -23,8 +23,8 @@ SECRETS = {
     'GOOGLE_API_KEY': 'AIzaSyB4O0Z89wwSWdVFufZMmW7n05ftUaau9cs',
     'SOCIAL_AUTH_GOOGLE_OAUTH2_KEY': '207925266161-qa90rek8apc0ablkjr3565um4u9kiht1.apps.googleusercontent.com',
     'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET': 'OiVIoVFTZrWXZ87tx7r1KJoo',
-    'SOCIAL_AUTH_FACEBOOK_KEY': '580022102164877',
-    'SOCIAL_AUTH_FACEBOOK_SECRET': '0eac3d0db71f27b07f03d7fd6a760a33',
+    'SOCIAL_AUTH_FACEBOOK_KEY': '2008148216081463',
+    'SOCIAL_AUTH_FACEBOOK_SECRET': '75f855457ff18db012e57ccaaf3470eb',
     'FB_TEST_EMAIL': 'open_ejvbpxf_user@tfbnw.net',
     'FB_TEST_PASS': 'asdfasdfdsfdsfadfdsflsdflglfg',
     'SOCIAL_AUTH_AZURE_TENANT_KEY': None,
@@ -35,7 +35,7 @@ SECRETS = {
     #Not essential for testing, but can be filled in for advanced usage
     'GW_PASS': None,
     'GW_SECURITY_ANSWER': None,
-    'JHU_API_KEY': '8untJsXoUmqxY84vxpttlHmjGpxaDaHn',
+    'JHU_API_KEY': None,
     'VANDY_USER': None,
     'VANDY_PASS': None,
 
