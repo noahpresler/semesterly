@@ -155,8 +155,6 @@ class RegistrationToken(models.Model):
     auth = models.TextField(default='')
     p256dh = models.TextField(default='')
     endpoint = models.TextField(default='')
-    # student = models.ForeignKey(Student, null=True, default=None)
-    # TODO: Check the line below again for PYTHON 3 MIGRATION!
     student = models.ForeignKey(Student, null=True, default=None, on_delete=models.deletion.CASCADE)
 
 class PilotOffering(models.Model):

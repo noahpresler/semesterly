@@ -27,13 +27,13 @@ class SharedTimetable(Timetable):
 
 
 class SharedTimetableView(models.Model):
-    shared_timetable = models.ForeignKey(SharedTimetable)
+    shared_timetable = models.ForeignKey(SharedTimetable, on_delete=models.deletion.CASCADE)
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None, on_delete=models.deletion.CASCADE)
 
 
 class SharedCourseView(models.Model):
-    shared_course = models.ForeignKey(Course)
+    shared_course = models.ForeignKey(Course, on_delete=models.deletion.CASCADE)
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None, on_delete=models.deletion.CASCADE)
 
@@ -45,7 +45,7 @@ class AnalyticsTimetable(models.Model):
     when they are not saved.
     """
     courses = models.ManyToManyField(Course)
-    semester = models.ForeignKey('timetable.Semester')
+    semester = models.ForeignKey('timetable.Semester', on_delete=models.deletion.CASCADE)
     school = models.CharField(max_length=50)
     has_conflict = models.BooleanField(blank=True, default=False)
     time_created = models.DateTimeField(auto_now_add=True)
@@ -60,7 +60,7 @@ class AnalyticsCourseSearch(models.Model):
     query = models.CharField(max_length=200)
     courses = models.ManyToManyField(Course)
     is_advanced = models.BooleanField(blank=True, default=False)
-    semester = models.ForeignKey('timetable.Semester')
+    semester = models.ForeignKey('timetable.Semester', on_delete=models.deletion.CASCADE)
     school = models.CharField(max_length=50)
     student = models.ForeignKey(Student, null=True, default=None, on_delete=models.deletion.CASCADE)
 
