@@ -65,7 +65,6 @@ def create_student(strategy, details, response, user, *args, **kwargs):
     Part of the Python Social Auth pipeline which creates a student upon
     signup. If student already exists, updates information from Facebook
     or Google (depending on the backend).
-
     Saves friends and other information to fill database.
     """
     backend_name = kwargs['backend'].name
@@ -101,27 +100,13 @@ def create_student(strategy, details, response, user, *args, **kwargs):
             access_token = json.loads(social_user.extra_data)["access_token"]
 
         if social_user:
-            url = 'https://graph.facebook.com/{0}/' \
-                  '?fields=picture&type=large' \
+            new_student.img_url = 'https://graph.facebook.com/v9.0/' + social_user.uid + '/picture?type=normal'
+            url = 'https://graph.facebook.com/v9.0/{0}/' \
                   '&access_token={1}'.format(
                       social_user.uid,
                       access_token,
                   )
             request = urllib.request.Request(url)
-            data = json.loads(urllib.request.urlopen(request).read().decode('utf-8'))
-            new_student.img_url = data['picture']['data']['url']
-            url = 'https://graph.facebook.com/{0}/' \
-                  '?fields=gender' \
-                  '&access_token={1}'.format(
-                      social_user.uid,
-                      access_token,
-                  )
-            request = urllib.request.Request(url)
-            data = json.loads(urllib.request.urlopen(request).read().decode('utf-8'))
-            try:
-                new_student.gender = data.get('gender', '')
-            except BaseException:
-                pass
             new_student.fbook_uid = social_user.uid
             new_student.save()
             url = 'https://graph.facebook.com/{0}/' \
@@ -142,7 +127,6 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                         new_student.friends.add(friend_student)
                         new_student.save()
                         friend_student.save()
-    if backend_name == 'azuread-tenant-oauth2':
-        print('hi')
 
     return kwargs
+    

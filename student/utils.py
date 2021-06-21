@@ -43,7 +43,7 @@ def get_student(request):
     Returns:
         (:obj:`Student`): the student belonging to the authenticated user
     """
-    logged = request.user.is_authenticated()
+    logged = request.user.is_authenticated
     if logged and Student.objects.filter(user=request.user).exists():
         return Student.objects.get(user=request.user)
     else:
