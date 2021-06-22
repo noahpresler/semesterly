@@ -140,9 +140,5 @@
     ],
     "*.scss": "lint-scss-staged"
   },
-  "sasslintConfig": "sass-lint",
-  "engines": {
-    "node": "12.x",
-    "npm": "6.x"
-  }
+  "sasslintConfig": "sass-lint"
 }

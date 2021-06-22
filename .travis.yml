@@ -12,6 +12,8 @@ env:
     - SCIPY_VERSION=0.19.1
     - REQST_VERSION=2.18.4
     - NODE_ENV=production
+    - NODE_ENV=production 
+    - NODE_VERSION="8.15.0"
 branches:
   only:
   - master
