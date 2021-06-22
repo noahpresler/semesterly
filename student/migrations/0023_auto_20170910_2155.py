@@ -39,6 +39,11 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='student',
+            name='gender',
+            field=models.CharField(default='', max_length=255),
+        ),
+        migrations.AlterField(
+            model_name='student',
             name='major',
             field=models.CharField(default='', max_length=255),
         ),
