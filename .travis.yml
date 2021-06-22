@@ -11,9 +11,8 @@ env:
     - NUMPY_VERSION=1.13.1
     - SCIPY_VERSION=0.19.1
     - REQST_VERSION=2.18.4
-    - NODE_ENV=production
-    - NODE_ENV=production 
-    - NODE_VERSION="8.15.0"
+    - NODE_VERSION=8.15.0
+    # - NODE_ENV=development
 branches:
   only:
   - master
