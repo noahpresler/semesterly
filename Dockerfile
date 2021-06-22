@@ -1,5 +1,5 @@
-FROM scabrej1/semesterly-base:latest
-
+FROM sgerli/horariotec-base:latest
+# scabrej1/semesterly-base:latest
 RUN mkdir /code
 WORKDIR /code
 

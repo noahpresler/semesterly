@@ -10,8 +10,8 @@ RUN apt-get install -y \
 	curl \
 	nginx
 
-# Install node 16.x
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+# Install node 12.x
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
 
 # This saves some build time by installing base requirements
