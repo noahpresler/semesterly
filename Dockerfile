@@ -1,5 +1,5 @@
-FROM sgerli/horariotec-base:latest
-# scabrej1/semesterly-base:latest
+FROM scabrej1/semesterly-py3-base:latest
+# sgerli/horariotec-base:
 RUN mkdir /code
 WORKDIR /code
 
