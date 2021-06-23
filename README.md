@@ -34,7 +34,7 @@ For questions and support, please contact us at <contact@semester.ly> or ask in 
   <img src="https://contrib.rocks/image?repo=jhuopensource/semesterly" />
 </a>
 
-Made with [contributors-img](https://contrib.rocks).
+Made with [contributors-img](https://contrib.rocks/preview?repo=jhuopensource%2Fsemesterly).
 
 ## License
 
