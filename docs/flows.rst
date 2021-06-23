@@ -215,5 +215,5 @@ by simply declaring this view directly inside of the urls file:
         url(r'^signup/*$/', FeatureFlowView.as_view(feature_name='SIGNUP')
 
 
-see https://github.com/jhuopensource/semesterly/pull/838 for the 
+see https://github.com/noahpresler/semesterly/pull/838 for the 
 original pull request implementing feature flows
