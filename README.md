@@ -33,6 +33,7 @@ For questions and support, please contact us at <contact@semester.ly> or ask in 
 <a href="https://github.com/jhuopensource/semesterly/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=jhuopensource/semesterly" />
 </a>
+
 Made with [contributors-img](https://contrib.rocks).
 
 ## License
