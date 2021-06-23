@@ -30,9 +30,12 @@ Please read this section of the documentation, [Add a School](https://semesterly
 For questions and support, please contact us at <contact@semester.ly> or ask in the [community forum](https://discord.gg/txYbphsAV7). The [Issues section](https://github.com/jhuopensource/semesterly/issues) of this repository is **ONLY** for bug reports and feature requests.
 
 # Our Contributors
-<a href="https://github.com/jhuopensource/semesterly/graphs/contributors" align="center">
-  <img src="https://contrib.rocks/image?repo=jhuopensource/semesterly" />
-</a>
+<div align="center">
+  <a href="https://github.com/jhuopensource/semesterly/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=jhuopensource/semesterly" />
+  </a>
+</div>
+
 <p align="center" style="font-weight:bold">
 Made with <a href="https://contrib.rocks/preview?repo=jhuopensource%2Fsemesterly">contributors-img</a>.
 </p>
