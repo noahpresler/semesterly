@@ -29,9 +29,15 @@ Please read this section of the documentation, [Add a School](https://semesterly
 
 For questions and support, please contact us at <contact@semester.ly> or ask in the [community forum](https://discord.gg/txYbphsAV7). The [Issues section](https://github.com/jhuopensource/semesterly/issues) of this repository is **ONLY** for bug reports and feature requests.
 
+# Our Contributors
+<a href="https://github.com/jhuopensource/semesterly/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=jhuopensource/semesterly" />
+</a>
+Made with [contributors-img](https://contrib.rocks).
+
 ## License
 
-Copyright (c) 2017, Semester.ly Technologies, LLC
+Copyright © 2016, Semester.ly Technologies, LLC
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
