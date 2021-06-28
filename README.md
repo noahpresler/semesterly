@@ -35,7 +35,7 @@ Please make sure to read the [Contributing Guidelines](https://github.com/jhuope
 
 ## License
 
-Copyright © 2017, Semester.ly Technologies, LLC
+© Copyright 2017, Semester.ly Technologies, LLC
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
