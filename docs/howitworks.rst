@@ -2,7 +2,7 @@
 
 How it All Works
 ================
-*A high level description of how Semester.ly works, and what parts do what*
+*A high level description of how Semester.ly works, and which parts do what*
 
 Semester.ly pulls data about courses, exams, ratings, and more from all across the internet. It saves this data into a custom representation within a **Postgres database**. The data is retrieved using a variety of **webscraping, HTML parsing, and information retrieval** techniques which we've built into our own mini-library of utilities. This data is entered into the database via the **Django** ORM (Object-Relational Mapping). The ORM allows us to query the database and create rows using python code as if these rows were objects.
 
