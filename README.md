@@ -13,11 +13,11 @@
   <a href="https://discord.gg/txYbphsAV7"><img src="https://img.shields.io/badge/chat-on%20discord-7289da.svg?sanitize=true" alt="Chat"></a>
 </p>
 
-# Documentation
+## Documentation
 
 Read the docs and learn more: http://semesterly.readthedocs.io/en/latest/
 
-# Contributing
+## Contributing
 
 Please make sure to read the [Contributing Guidelines](https://github.com/jhuopensource/semesterly/blob/master/docs/contributing.rst#how-to-contribute) before making a pull request!
 
@@ -27,11 +27,11 @@ Read [Add a School](https://semesterly.readthedocs.io/en/latest/addaschool.html)
 
 <p align="center"><img src="http://i.imgur.com/G543QPJ.jpg" width="800" height="600" alt="Semester.ly Platform Preview"></p>
 
-# Questions
+## Questions
 
 For questions and support, please contact us at <contact@semester.ly> or ask in the [community forum](https://discord.gg/txYbphsAV7). The [Issues section](https://github.com/jhuopensource/semesterly/issues) of this repository is **ONLY** for bug reports and feature requests.
 
-# Our Contributors
+## Our Contributors
 <div align="center">
   <a href="https://github.com/jhuopensource/semesterly/graphs/contributors">
     <img src="https://contrib.rocks/image?repo=jhuopensource/semesterly" />
@@ -42,9 +42,9 @@ For questions and support, please contact us at <contact@semester.ly> or ask in 
 Made with <a href="https://contrib.rocks/preview?repo=jhuopensource%2Fsemesterly">contributors-img</a>.
 </p>
 
-# License
+## License
 
-Copyright © 2017, Semester.ly Technologies, LLC
+© Copyright 2017, Semester.ly Technologies, LLC
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
