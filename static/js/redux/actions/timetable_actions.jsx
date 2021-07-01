@@ -242,7 +242,7 @@ export const loadCachedTimetable = (allSemesters, oldSemesters) => (dispatch, ge
     !cachedSemesterNotFound;
 
   if (!isCachedTimetableDataValid) { // switch back to default semester
-    dispatch(getUserSavedTimetables(allSemesters[0]));
+    dispatch(nullifyTimetable(dispatch));
   } else {
     let personalTimetablesExist = false;
     if (getState().userInfo.data.isLoggedIn) {

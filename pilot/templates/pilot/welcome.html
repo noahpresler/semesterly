@@ -1,0 +1,17 @@
+{% extends "pilot/base.html" %}
+{% block content %}
+<div class="content-section">
+	<form method="post">
+		{% csrf_token %}
+		<fieldset>
+			<h3>
+				Welcome to PILOT Registration! {{ msg }}
+			</h3>
+			<p class="text-muted">Login with SIS in order to register for sections, keep up with the status of your enrollments, and more!</p>
+		</fieldset>
+		<div>
+			<button type="submit">Begin Registration!</button>
+		</div>
+	</form>
+</div>
+{% endblock content %}

@@ -7,8 +7,9 @@ colorama==0.2.5
 configobj==4.7.2
 coreapi==2.3.0
 coverage==4.3.4
+cryptography==3.3.2
 dateparser==0.6.0
-Django==1.9.2
+Django==1.11.29
 django-cachalot==1.4.1
 django-celery==3.1.17
 django-celery-beat==1.0.1
@@ -40,13 +41,13 @@ pep8==1.7.0
 prettytable==0.7.2
 progressbar2==3.32.1
 psycopg2==2.7.1
-PyJWT==1.4.0
+PyJWT==1.7.1
 pyserial==2.6
 python-amazon-simple-product-api==2.2.11
 python-dateutil==2.5.3
 python-memcached==1.58
 python-openid==2.2.5
-python-social-auth==0.2.19
+python-social-auth==0.2.21
 python-utils==2.0.0
 pytz==2016.4
 pywebpush==1.7.0
@@ -61,6 +62,8 @@ scipy==0.19.1
 selenium==2.53.2
 simplejson==3.10.0
 six==1.10.0
+social-auth-core==4.0.2
+social-auth-app-django==4.0.0
 South==0.7.5
 Sphinx==1.5.1
 sphinx-autobuild==0.6.0
@@ -71,3 +74,4 @@ supervisor==3.3.1
 toolz==0.7.4
 urllib3==1.24.1
 virtualenv==1.11.4
+rsa==4.0.0

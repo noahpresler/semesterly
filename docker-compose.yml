@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: postgres
+    image: postgres:12.1
     ports:
       - "5432:5432"
   web:
@@ -22,6 +22,8 @@ services:
       - db
   localssl:
     image: jhuopensource/semesterly-caddy
+    logging:
+      driver: none
     volumes:
       - ./build/caddy/Caddyfile:/etc/Caddyfile
     ports:

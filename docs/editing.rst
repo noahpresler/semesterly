@@ -4,7 +4,7 @@ Editing This Documentation
 Building the Docs
 ~~~~~~~~~~~~~~~~~
 
-From the `docs` directory, execute the following command to rebuild all editted pages::
+From the `docs` directory, execute the following command to rebuild all edited pages::
 
     make html
 

@@ -35,7 +35,7 @@ import {
     timeLapsedGreaterThan,
     timeLapsedInDays,
 } from './util';
-import { addTTtoGCal } from './actions/calendar_actions';
+// import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
 
 const store = createStore(rootReducer,
@@ -98,13 +98,13 @@ const handleFlows = featureFlow => (dispatch) => {
     case 'USER_ACQ':
       dispatch({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
       break;
-    case 'GCAL_CALLBACK':
+    // case 'GCAL_CALLBACK':
       // hide settings info modal until user is finished adding to gcal
-      dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: true });
-      dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
-      dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: false });
-      dispatch(addTTtoGCal());
-      break;
+      // dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: true });
+      // dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
+      // dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: false });
+      // dispatch(addTTtoGCal());
+      // break;
     case 'EXPORT_CALENDAR':
       dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
       break;

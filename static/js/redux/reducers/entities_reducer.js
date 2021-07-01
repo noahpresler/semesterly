@@ -3,11 +3,7 @@ import uniq from 'lodash/uniq';
 import flatMap from 'lodash/flatMap';
 import * as ActionTypes from '../constants/actionTypes';
 
-// TODO: garbage collect (e.g. clear when changing semesters)
 const entities = (state = {}, action) => {
-  if (action.response && action.response.entities) {
-    return merge(state, action.response.entities);
-  }
   switch (action.type) {
     case ActionTypes.SET_COURSE_REACTIONS:
       if (state.id === null) {
@@ -20,6 +16,9 @@ const entities = (state = {}, action) => {
           }),
         });
     default:
+      if (action.response && action.response.entities) {
+        return merge(state, action.response.entities);
+      }
       return state;
   }
 };

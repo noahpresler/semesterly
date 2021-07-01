@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (C) 2017 Semester.ly Technologies, LLC
 #
 # Semester.ly is free software: you can redistribute it and/or modify

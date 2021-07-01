@@ -15,7 +15,7 @@ import json
 from datetime import datetime
 
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from pytz import timezone
 from rest_framework import status
@@ -52,9 +52,7 @@ def all_courses(request):
         'course_map': dep_to_courses,
         'school': school,
         'school_name': school_name}
-    return render_to_response("all_courses.html",
-                              context,
-                              context_instance=RequestContext(request))
+    return render(request, "all_courses.html", context)
 
 
 # TODO: use implementation in student
@@ -123,9 +121,7 @@ def course_page(request, code):
             'evals': clean_evals,
             'avg': avg
         }
-        return render_to_response("course_page.html",
-                                  context,
-                                  context_instance=RequestContext(request))
+        return render(request, "course_page.html", context)
     except Exception as e:
         return HttpResponse(str(e))
 
@@ -148,6 +144,14 @@ class CourseDetail(ValidateSubdomainMixin, APIView):
         return Response(json_data.data, status=status.HTTP_200_OK)
 
 
+def get_distinct_areas(areas_group):
+    distinct_areas = []
+    for group in areas_group:
+        if group != list('None'):
+            for area in group:
+                    distinct_areas.append(area)
+    return set(distinct_areas)
+
 class SchoolList(APIView):
     def get(self, request, school):
         """
@@ -158,7 +162,7 @@ class SchoolList(APIView):
         last_updated = DataUpdate.objects.filter(
             school=school,
             update_type=DataUpdate.COURSES
-        ).order_by('timestamp').first()
+        ).order_by('timestamp').last()
 
         if last_updated is not None:
             last_updated = '{} {}'.format(
@@ -167,10 +171,10 @@ class SchoolList(APIView):
             )
 
         json_data = {
-            'areas': sorted(list(Course.objects.filter(school=school)
-                                 .exclude(areas__exact='')
-                                 .values_list('areas', flat=True)
-                                 .distinct())),
+            'areas': get_distinct_areas(sorted(list(Course.objects.filter(school=school)
+                                             .exclude(areas__exact=[])
+                                             .values_list('areas', flat=True)
+                                             .distinct()))),
             'departments': sorted(list(Course.objects.filter(school=school)
                                        .exclude(department__exact='')
                                        .values_list('department', flat=True)

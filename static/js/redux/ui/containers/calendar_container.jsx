@@ -36,6 +36,7 @@ const mapStateToProps = (state) => {
     active: state.timetables.active,
     uses12HrTime: state.ui.uses12HrTime,
     registrarSupported: state.registrar.supported,
+    userInfo: state.userInfo.data,
   };
 };
 

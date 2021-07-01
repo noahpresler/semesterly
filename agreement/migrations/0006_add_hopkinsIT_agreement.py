@@ -21,7 +21,7 @@ def add_hopkinsIT_agreement(apps, schema_editor):
 
     agreement, created = Agreement.objects.get_or_create(
         url="\\notice",
-        last_updated=datetime.datetime.now(),
+        last_updated='2019-03-08 05:58:01.704254',
         description="We are now partnering with the Johns Hopkins IT department"
     )
     agreement.save()

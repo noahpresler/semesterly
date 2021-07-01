@@ -82,6 +82,7 @@ class SocialProfile extends React.Component {
         </h2>
       </a>
         );
+
     const social = this.props.userInfo.isLoggedIn ? loggedIn : loggedOut;
     return (
       <div

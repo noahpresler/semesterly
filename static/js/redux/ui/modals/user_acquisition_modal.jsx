@@ -32,11 +32,11 @@ class UserAcquisitionModal extends React.Component {
 
   render() {
     const modalHeader =
-            (<div className="modal-content">
-              <div className="modal-header">
-                <h1>Login/Signup</h1>
-              </div>
-            </div>);
+      (<div className="modal-content">
+        <div className="modal-header">
+          <h1>Login/Signup</h1>
+        </div>
+      </div>);
     const modalStyle = {
       width: '100%',
     };
@@ -101,7 +101,7 @@ class UserAcquisitionModal extends React.Component {
 
           <button
             className="btn abnb-btn secondary eight-px-top" onClick={() => {
-                        // this.props.createiCalfromTimetable();
+              // this.props.createiCalfromTimetable();
             }} disabled
           >
             <span className="img-icon">

@@ -27,7 +27,7 @@ class BasicSearchTest(APITestCase):
         sem = Semester.objects.create(name='Winter', year='1995')
         course = Course.objects.create(school=self.school, code='SEA101', name='Intro', description="awesome")
         section = Section.objects.create(course=course, semester=sem, meeting_section='L1', section_type='L')
-        Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
+        Offering.objects.create(section=section, day='M', date_start='08-29-1995', date_end='12-10-1995', time_start='8:00', time_end='10:00', is_short_course=False)
 
     def test_course_exists(self):
         response =  self.client.get('/search/Winter/1995/sea/', **self.request_headers)
@@ -55,7 +55,7 @@ class AdvancedSearchTest(APITestCase):
         sem = Semester.objects.create(name='Winter', year='1995')
         course = Course.objects.create(school=self.school, code='SEA101', name='Intro')
         section = Section.objects.create(course=course, semester=sem, meeting_section='L1')
-        Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
+        Offering.objects.create(section=section, day='M', date_start='08-29-1995', date_end='12-10-1995', time_start='8:00', time_end='10:00', is_short_course=False)
 
     def test_no_filter(self):
         response =  self.client.get('/search/Winter/1995/sea/', **self.request_headers)

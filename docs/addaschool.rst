@@ -57,7 +57,7 @@ What this boils down to is the following template::
 Breaking it down
 ################
 
-    The code starts out by getting the departments. It doesn't have to, but often it is easiest to go department by department. The parser then collects the courses for that department. We will talk about how it does this later in `How To Fill The Ingestor`_.
+    The code starts out by getting the departments. It doesn't have to, but often it is easiest to go department by department. The parser then collects the courses for that department. We will talk about how it does this in `How To Fill The Ingestor`_.
 
     For each course, the parser fills the ingestor with the fields related to the course (e.g. description, the course code). Once complete, it calls `ingest_course` to execute the creation of the course.
 
@@ -81,7 +81,7 @@ or::
 
     markup = self.requester.post('www.siteorapi.com', data=form)
 
-It will automatically return a markedup version of the data returned by the request (automatically detecting JSON/XML/HTML).
+It will automatically return a marked-up version of the data returned by the request (automatically detecting JSON/XML/HTML).
 
 .. note:: The requester will maintain a `session <http://docs.python-requests.org/en/master/user/advanced/>`_ for you, making sure the proper cookies are stored and sent with all future requests. It also `randomizes the user agent <https://pypi.python.org/pypi/fake-useragent>`_. Future updates will automatically parallelize and throttle requests (*a great project to contribute to the data pipeline*).
 

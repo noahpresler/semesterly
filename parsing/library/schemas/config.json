@@ -101,6 +101,9 @@
     },
     "registrar": {
       "type": "boolean"
+    },
+    "short_course_weeks_limit": {
+      "type": "integer"
     }
   },
   "additionalProperties": false,

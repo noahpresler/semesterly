@@ -24,7 +24,7 @@ Add the Upstream Repo
 
     .. code-block:: bash
 
-        git remote add upstream git@github.com:noahpresler/semesterly.git
+        git remote add upstream git@github.com:jhuopensource/semesterly.git
 
     This way you can push to your fork as "origin" and the main repo as "upstream". You'll only ever do this once.
 
@@ -69,7 +69,7 @@ Open a Pull Request (and see your code go live!)
 
 So you've made your changes, and you've pushed them to your branch. To open a PR, simply head over to your fork at: https://github.com/YOURGITHUBUSERNAME/semesterly. Click on "Pull Request", choose the upstream repo "master" as the destination, and your forked repo's branch (the one you've been working on) as the source, and pick the merge and squash option!
 
-Awesome! You've made a PR. Once its merged, your code will be a part of the Semester.ly open source GitHub repository and will be deployed for tens of thousands of students to use/benefit from. 
+Awesome! You've made a PR. Once it's merged, your code will be a part of the Semester.ly open source GitHub repository and will be deployed for tens of thousands of students to use/benefit from. 
 
 .. note:: A PR must pass a few checks before it can be merged.
 

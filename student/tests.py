@@ -49,7 +49,7 @@ class UrlsTest(UrlTestCase):
             '/user/classmates/Fall/2016?courseids=1&courseids=2',
             'student.views.ClassmateView',
             kwargs={'sem_name': 'Fall', 'year': '2016'})
-        self.assertUrlResolvesToView('/user/gcal/', 'student.views.GCalView')
+        #self.assertUrlResolvesToView('/user/gcal/', 'student.views.GCalView')
         self.assertUrlResolvesToView(
             '/user/reactions/',
             'student.views.ReactionView')
@@ -149,7 +149,7 @@ class UserTimetableViewTest(APITestCase):
         section = Section.objects.create(
             id=1, course=course, semester=self.sem, meeting_section='L1')
         Offering.objects.create(
-            id=1, section=section, day='M', time_start='8:00', time_end='10:00')
+            id=1, section=section, day='M', date_start='08-29-1995', date_end='12-10-1995', time_start='8:00', time_end='10:00')
         tt = PersonalTimetable.objects.create(
             name='tt', school='uoft', semester=self.sem, student=self.student)
         tt.courses.add(course)
@@ -326,16 +326,22 @@ class ClassmateViewTest(APITestCase):
         Offering.objects.create(
             section=section1,
             day='M',
+            date_start='08-29-2000',
+            date_end='12-10-2000',
             time_start='8:00',
-            time_end='10:00')
+            time_end='10:00',
+            is_short_course=False)
 
         section2 = Section.objects.create(
             course=course, semester=sem, meeting_section='L2')
         Offering.objects.create(
             section=section2,
             day='W',
+            date_start='08-29-2000',
+            date_end='12-10-2000',
             time_start='8:00',
-            time_end='10:00')
+            time_end='10:00',
+            is_short_course=False)
 
         # students have a timetable in common
         tt1 = PersonalTimetable.objects.create(

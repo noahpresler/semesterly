@@ -29,7 +29,8 @@ _school_attrs = [
     'full_academic_year_registration',
     'single_access',
     'final_exams parsers',
-    'registrar'
+    'registrar',
+    'short_course_weeks_limit'
 ]
 
 School = namedtuple(
@@ -58,7 +59,8 @@ def load_school(school):
                   single_access=config.single_access,
                   final_exams=config.get('final_exams'),
                   parsers=load_parsers(school),
-                  registrar=config.get('registrar'))
+                  registrar=config.get('registrar'),
+                  short_course_weeks_limit=config.get('short_course_weeks_limit'))
 
 
 def load_parsers(school):

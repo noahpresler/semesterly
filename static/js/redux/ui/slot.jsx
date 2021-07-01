@@ -204,7 +204,23 @@ class Slot extends React.Component {
               onClick={event => Slot.stopPropagation(this.props.removeCourse, event)}
             />) : null;
 
+    const shortCourseDatesPanel = this.state.hovered && this.props.is_short_course ?
+    (
+      <div className="slot-shortCourseDates">
+        Start Date: <b>{this.props.date_start}</b><br />
+        End Date: <b>{this.props.date_end}</b>
+      </div>
+    ) : null;
+
     let lockButton = null;
+    let shortCourseIndicator = '';
+    if (this.props.is_short_course) {
+      shortCourseIndicator = (
+        <span>&nbsp;&nbsp;&nbsp;
+          <img alt="Short Course" src="/static/img/short_course_icon_15x15.png" />
+        </span>
+      );
+    }
     if (this.props.locked) {
       lockButton = (<i
         title="Unlock this section"
@@ -244,6 +260,7 @@ class Slot extends React.Component {
               onMouseLeave={this.onSlotUnhover}
               id={this.props.id}
             >
+              {shortCourseDatesPanel}
               <div
                 className="slot-bar"
                 style={{ backgroundColor: COLOUR_DATA[this.props.colourId].border }}
@@ -253,6 +270,7 @@ class Slot extends React.Component {
               <div className="fc-content">
                 <div className="fc-time">
                   <span>{ convertedStart } – { convertedEnd }</span>
+                  { shortCourseIndicator }
                 </div>
                 <div ref={(c) => { this.courseDiv = c; }} className="fc-time">
                   <span
@@ -294,6 +312,9 @@ Slot.propTypes = {
   primaryDisplayAttribute: PropTypes.string.isRequired,
   removeCourse: PropTypes.func.isRequired,
   shift_index: PropTypes.number.isRequired,
+  is_short_course: PropTypes.bool.isRequired,
+  date_end: PropTypes.string.isRequired,
+  date_start: PropTypes.string.isRequired,
   time_end: PropTypes.string.isRequired,
   time_start: PropTypes.string.isRequired,
   lockOrUnlockSection: PropTypes.func.isRequired,

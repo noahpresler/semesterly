@@ -115,6 +115,32 @@ class CourseModalBody extends React.Component {
       );
     }
 
+    let shortCourseSection = '';
+    const sectionType = Object.keys(this.props.sectionTypeToSections)[0];
+    if (sectionType != null) {
+      const offeringSample = this.props.sectionTypeToSections[sectionType][0].offering_set[0];
+      if (offeringSample != null) {
+        if (offeringSample.is_short_course) {
+          shortCourseSection = (
+            <div>
+              <p>
+                <p>
+                  <img alt="Short Course" src="/static/img/short_course_icon_25x25.png" />:
+                  This is a short term course. <br />
+                </p>
+                <p>
+                  Dates offered:&nbsp;
+                  <b>{offeringSample.date_start}</b>
+                  <span> to </span>
+                  <b>{offeringSample.date_end}</b>
+                </p>
+              </p>
+            </div>
+          );
+        }
+      }
+    }
+
     const sectionGrid = Object.keys(this.props.sectionTypeToSections).sort().map((sType, i) => {
       const sectionTitle = `${getSectionTypeDisplayName(sType)} Sections`;
       const subTitle = i === 0 ? <small>(Hover to see the section on your timetable)</small> : null;
@@ -185,7 +211,7 @@ class CourseModalBody extends React.Component {
             getShareLinkFromModal={this.props.getShareLinkFromModal}
           />);
         }
-        return <span className="textItem" key={`textItem${t}`}>{t}</span>;
+        return <span className="textItem" key={`textItem${t.id}`}>{t}</span>;
       });
     const matchedCoursesPrerequisites = prerequisites === null
       ? null : prerequisites.match(courseRegex);
@@ -209,11 +235,15 @@ class CourseModalBody extends React.Component {
               <h3 className="modal-module-header">Prerequisites</h3>
               <p>{ newPrerequisites }</p>
             </div>);
-    const areasDisplay =
-            (<div className="modal-module areas">
-              <h3 className="modal-module-header">{this.props.schoolSpecificInfo.areasName}</h3>
-              <p>{ this.props.data.areas || 'None' }</p>
-            </div>);
+    const posTags = (this.props.data.pos && this.props.data.pos.length) ?
+      (<div className="modal-module areas">
+        <h3 className="modal-module-header">Program of Study Tags</h3>
+        <p key={`${cid}-pos`}>{this.props.data.pos.join(', ')}</p>
+      </div>) :
+      (<div className="modal-module areas">
+        <h3 className="modal-module-header">Program of Study Tags</h3>
+        <p>None</p>
+      </div>);
     const pilotLogoImg = {
       backgroundImage: 'url(/static/img/integrations/pilot.png)',
     };
@@ -390,11 +420,12 @@ class CourseModalBody extends React.Component {
                         attentioncapacityTracker
                         }
             { prerequisitesDisplay }
-            { areasDisplay }
+            { posTags }
             { academicSupportDisplay }
             { friendDisplay }
             { hasTakenDisplay }
           </div>
+
           <div className="col-8-16">
             { showCapacityAttention && !this.state.mobile &&
                         attentioncapacityTracker
@@ -410,6 +441,7 @@ class CourseModalBody extends React.Component {
             <div>
               <h3 className="modal-module-header">Course Description</h3>
               <p>{description}</p>
+              { shortCourseSection}
             </div>
             <div className="modal-module">
               <h3 className="modal-module-header">Course Evaluations</h3>

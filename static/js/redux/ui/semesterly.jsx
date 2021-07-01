@@ -203,7 +203,7 @@ class Semesterly extends React.Component {
                     className="footer-button--github"
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="https://github.com/noahpresler/semesterly/"
+                    href="https://github.com/jhuopensource/semesterly"
                   >
                     <i className="fa fa-github" />
                     Follow

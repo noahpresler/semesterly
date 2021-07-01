@@ -61,8 +61,8 @@ class CourseSerializer(serializers.ModelSerializer):
         return evals
 
     def get_integrations(self, course):
-        ids = CourseIntegration.objects.filter(course__id=course.id).values_list("integration",
-                                                                                 flat=True)
+        ids = CourseIntegration.objects.filter(course__id=course.id, semester__id=self.context['semester'].id) \
+            .values_list("integration", flat=True)
         return list(Integration.objects.filter(id__in=ids).values_list("name", flat=True))
 
     # TODO: use course serializer but only recurse one level
@@ -147,7 +147,10 @@ class CourseSerializer(serializers.ModelSerializer):
             'exclusions',
             'corequisites',
             'areas',
-            'is_waitlist_only'
+            'is_waitlist_only',
+            'pos',
+            'writing_intensive',
+            'sub_school',
         )
 
 
@@ -164,7 +167,8 @@ class SectionSerializer(serializers.ModelSerializer):
             'section_type',
             'instructors',
             'semester',
-            'offering_set'
+            'offering_set',
+            'course_section_id'
         )
         depth = 1 # also serializer offerings
 

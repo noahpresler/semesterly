@@ -69,3 +69,16 @@
     margin-left: 2px;
   }
 }
+
+.slot-shortCourseDates{
+  font-size: 10px;
+  border-radius: 4px;
+  text-align: center;
+  width: 80%;
+  background-color: white;
+  z-index: 1000;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)
+}
