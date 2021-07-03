@@ -142,17 +142,12 @@ Before installing the python requirements, make sure to have PostgreSQL setup.
     brew install postgres
     pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
 
-**On Ubuntu 14.x.x** use apt-get:
+**On Ubuntu 18.x.x or Ubuntu 20.x.x** use apt-get:
 
 .. code-block:: bash
 
+    sudo apt-get update
     sudo apt-get install postgresql python-psycopg2 libpq-dev libxslt-dev libxml2-dev
-
-**On Ubuntu 16.x.x** use apt:
-
-.. code-block:: bash
-
-    sudo apt install postgresql python-psycopg2 libpq-dev libxslt-dev libxml2-dev
 
 **On CentOS / Fedora** use yum:
 
@@ -188,21 +183,13 @@ Node and node package manager are the backbone of our frontend setup. To begin, 
 
     brew install node
 
-**On Ubuntu 14.x.x**:
+**On Ubuntu 18.x.x or Ubuntu 20.x.x**:
 
 .. code-block:: bash
-
-    wget -qO- https://deb.nodesource.com/setup_6.x | sudo bash -
-    sudo apt-get install nodejs
-    sudo apt-get install npm
-
-**On Ubuntu 16.x.x**:
-
-.. code-block:: bash
-
-    wget -qO- https://deb.nodesource.com/setup_6.x | sudo bash -
-    sudo apt install nodejs
-    sudo apt install npm
+    
+    sudo apt-get install wget
+    wget -qO- https://deb.nodesource.com/setup_16.x | sudo bash -
+    sudo apt-get install -y nodejs
 
 **On CentOS / Fedora**:
 
