@@ -1,5 +1,5 @@
 os: linux
-sudo: required
+# sudo: required # deprecated as of 2021
 dist: xenial
 services:
   - xvfb
