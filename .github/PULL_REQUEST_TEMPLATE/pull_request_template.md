@@ -4,7 +4,7 @@ Please review the [guidelines for contributing](../docs/contributing.rst) to thi
 Please describe your pull request (PR).
 
 
-## If applicable, add a checklist of incremental tasks for this PR.
+### If applicable, add a checklist of incremental tasks for this PR.
 - [ ] 
 
 
