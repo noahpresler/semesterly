@@ -1,4 +1,4 @@
-Please review the [guidelines for contributing](../docs/contributing.rst) to this repository.
+Please review the [guidelines for contributing](../../docs/contributing.rst) to this repository.
 
 ### Description
 Please describe your pull request (PR).
