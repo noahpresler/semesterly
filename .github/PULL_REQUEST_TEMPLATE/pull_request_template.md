@@ -9,7 +9,7 @@ Please describe your pull request (PR).
 
 
 ### Your Checklist
-- [ ] Linked Issue AND/OR Project?
-- [ ] Added Reviewer, Assignee, AND/OR Label?
+- [ ] Linked Issue and/or Project?
+- [ ] Added Reviewer, Assignee, and/or Label?
 
 Thank you! 🚀
