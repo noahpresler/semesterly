@@ -180,15 +180,15 @@ class Semesterly extends React.Component {
                     Contact us
                   </a>
                 </li>
-                {/* <li className="footer-button" role="presentation">
+                <li className="footer-button" role="presentation">
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="http://goo.gl/forms/YSltU2YI54PC9sXw1"
+                    href="https://github.com/jhuopensource/semesterly/issues/new/choose"
                   >
                     Feedback
                   </a>
-                </li> */}
+                </li>
                 <li className="footer-button" role="presentation">
                   <a
                     target="_blank"
