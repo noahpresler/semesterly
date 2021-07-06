@@ -17,5 +17,5 @@ sphinx:
 python:
    version: "3.7"
    install:
-   - requirements: "null"
+   - requirements: ""
      
