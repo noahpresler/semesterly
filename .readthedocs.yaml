@@ -2,6 +2,9 @@
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
+# Our own readthedocs can be found here https://readthedocs.org/projects/semesterly-v2/
+# And here https://semesterly-v2.readthedocs.io/en/latest/
+
 # Required
 version: 2
 
