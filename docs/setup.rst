@@ -96,7 +96,7 @@ Steps are below on getting your local development environment running:
          python manage.py ingest jhu --term Spring --years 2018
          python manage.py digest jhu
 
-7.  Open a browser and visit http://jhu.sem.ly:8000 and hack away.
+7.  Open a browser and visit https://jhu.sem.ly and hack away.
     You can skip ahead to **Advanced Configuration** or **How it All Works** now.
 
 Option 2: Setup using a Python Virtual Environment
