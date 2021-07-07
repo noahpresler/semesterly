@@ -94,7 +94,7 @@ Steps are below on getting your local development environment running:
 
      .. code-block:: bash
 
-         python manage.py ingest jhu --term Spring --years 2018
+         python manage.py ingest jhu --term Fall --years 2021
          python manage.py digest jhu
 
 7.  Open a browser and visit https://jhu.sem.ly or http://jhu.sem.ly:8000 (timetable view) and hack away. Visit http://localhost:8000 to view the landing page.
