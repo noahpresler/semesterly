@@ -40,7 +40,7 @@ Made with <a href="https://contrib.rocks/preview?repo=jhuopensource%2Fsemesterly
 
 ## License
 
-Copyright © 2017, Semester.ly Technologies, LLC
+Copyright © 2017-2021, Semester.ly Technologies, LLC
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
