@@ -65,7 +65,7 @@ six==1.10.0
 social-auth-core==4.0.2
 social-auth-app-django==4.0.0
 South==0.7.5
-Sphinx==1.5.1
+Sphinx==1.8.5
 sphinx-autobuild==0.6.0
 sphinxcontrib-inlinesyntaxhighlight==0.2
 sphinx-rtd-theme==0.1.9
