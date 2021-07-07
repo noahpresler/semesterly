@@ -16,7 +16,7 @@ Ingest
 
 You may leave out the school code to parse all schools. This will run for a substantial amount of time and is not recommended.
 
-.. note:: To parse JHU data, you will need to acquire an API access key from `SIS <sis.jhu.edu/api>`_. Add the key to ``dev_credentials.py`` in the ``semesterly/`` directory.
+.. note:: To parse JHU data, you will need to acquire an API access key from `SIS <sis.jhu.edu/api>`_. Add the key to ``dev_credentials.py`` in the ``semesterly/`` directory. Also, note that the [SCHOOLCODE] is ``jhu``.
 
 Digest
 ######
@@ -37,10 +37,10 @@ There are advanced methods for using these tools. Detailed options can be viewed
 
 	python manage.py [command] --help
 
-For example, you can use the term and year flags to parse only a specific term::
+For example, you can use the term and year flags to parse only a specific term
 
 .. code-block:: bash
 
-    python manage.py ingest [SCHOOLCODE] --term Fall --year 2017
+    python manage.py ingest [SCHOOLCODE] --term Fall --year 2021
 
 If you are developing a parser or contributing to the pipeline design, you will more than likely need to learn more. Checkout :ref:`pipeline` or :ref:`addaschool`

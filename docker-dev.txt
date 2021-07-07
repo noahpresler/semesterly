@@ -38,7 +38,7 @@ docker exec -it $(docker ps -q -f ancestor=semesterly) shell
 This will put you inside of the shell. Now you can get courses by running these commands:
 python manage.py ingest jhu --term Spring --years 2018
 python manage.py digest jhu
-* Open a browser and visit http://jhu.sem.ly:8000 and hack away
+* Open a browser and visit https://jhu.sem.ly and hack away
 
 
 To install google chrome for running test inside docker:
