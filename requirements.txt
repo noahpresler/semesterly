@@ -40,7 +40,7 @@ oauthlib==1.1.1
 pep8==1.7.0
 prettytable==0.7.2
 progressbar2==3.32.1
-psycopg2==2.7.1
+psycopg2==2.8.6
 PyJWT==1.7.1
 pyserial==2.6
 python-amazon-simple-product-api==2.2.11
@@ -65,13 +65,14 @@ six==1.10.0
 social-auth-core==4.0.2
 social-auth-app-django==4.0.0
 South==0.7.5
-Sphinx==1.5.1
-sphinx-autobuild==0.6.0
+Sphinx==1.8.5
+sphinx-autobuild==0.7.1
 sphinxcontrib-inlinesyntaxhighlight==0.2
-sphinx-rtd-theme==0.1.9
+sphinx-rtd-theme==0.5.2
 ssh-import-id==3.21
 supervisor==3.3.1
 toolz==0.7.4
 urllib3==1.24.1
 virtualenv==1.11.4
+ruamel.yaml.clib==0.2.0
 rsa==4.0.0
