@@ -157,7 +157,7 @@ Your Final Setup
 ~~~~~~~~~~~~~~~~
 Great work. Your Semester.ly local environment is all setup.
 
-Don't forget: **whenever you are working on Semester.ly** you should have one terminal running the server (via ``python manage.py runserver``), and one running webpack (via ``npm run watch``). 
+Don't forget: **whenever you're working on Semester.ly** you should have one terminal running the server (via ``python manage.py runserver``), and one running webpack (via ``npm run watch``). 
 
 .. note:: Don't forget to always work from your virtual environment! From the root directory, just execute ``source /venv/bin/activate`` to enter it. 
 

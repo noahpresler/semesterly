@@ -3,7 +3,7 @@
 Learning The Stack
 ==================
 
-.. note:: Learning a new thing can be scary. Especially when all you have are some docs and a massive code base to learn from. That's why we are here to help you learn, build, and contribute. Ask us questions! contact@semester.ly
+.. note:: Learning a new thing can be scary. Especially when all you have are some docs and a massive code base to learn from. That's why we are here to help you learn, build, and contribute. Ask us questions at contact@semester.ly or on `Discord <https://discord.gg/txYbphsAV7>`_!
 
 Our Stack
 ~~~~~~~~~~
@@ -50,4 +50,6 @@ For development, we use the BEM methedology (`learn about BEM here!  <http://get
 
 Learning Scraping/Parsing
 #########################
-Our own tutorial, coming soon! 
+
+Here's one `insightful article <https://codeburst.io/making-a-web-scraping-application-with-python-celery-and-django-23162397c0b6>`_.
+And here's another `article <https://realpython.com/beautiful-soup-web-scraper-python/>`_!
