@@ -43,53 +43,63 @@
 		<meta name="google-site-verification" content="A-t9Ubnq-7M8FVU4ImQIXnRFQwPR98UUDey5x_suvek" />
 	</head>
 	<body>
-		<header class="down">
-			<div class="grid cf">
+		<header class="navbar navbar-light bg-light">
+			<nav class="grid cf navbar navbar-light bg-light">
 				<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
-                <h1 id="fixthiscrap">Semester.ly</h1>
-				<!-- <p class="desktop-nav"> at Johns Hopkins University</p> -->
+                <h1>Semester.ly</h1>
+				<h1 class="navbar-nav">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<a class="nav-item nav-link active" href="/"><i></i>Home&nbsp;&nbsp;</a>
+					<a class="nav-item nav-link" href="/about">About&nbsp;&nbsp;</a>
+					<a class="nav-item nav-link" href="https://discord.gg/txYbphsAV7" target="_blank">Community&nbsp;&nbsp;</a>
+					<a class="navbar-brand" href="https://semesterly-v2.readthedocs.io/en/latest" target="_blank">Docs&nbsp;&nbsp;</a>
+					<a class="nav-item nav-link" href="/press">News&nbsp;&nbsp;</a>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/" target="_blank"><i class="fa fa-github"></i>GitHub</a>
+				</h1>
+				<!-- <nav class="desktop-nav">
+				</nav> -->
 				<nav>
-					<div class="desktop-nav">
-						<!-- <a href="https://jhu.semester.ly">JHU</a>
-						<a href="https://horario-tec.sger.li">ITCR</a> -->
-                        <a href="https://github.com/jhuopensource/semesterly/"><i class="fa fa-github"></i>GitHub</a>
-					</div>
 					<div id="schools-dropdown" class="mobile-nav">
-                        <a href="https://github.com/jhuopensource/semesterly/"><i class="fa fa-github"></i>GitHub</a>
 						<div class="mobile-nav-label">
-							<span>Schools</span>
-							<span class="tip-down"></span>
+							<span></span>
+							<span class="fa fa-bars"></span>
 						</div>
-						<div class="nav-dropdown">
+						<div class="nav-dropdown center">
 							<div class="tip-border"></div>
 							<div class="tip"></div>
 							<div class="nav-dropdown-list">
-								<a href="https://jhu.semester.ly">JHU</a>
+								<a class="nav-item nav-link active" href="/"><i></i>Home</a>
+								<a class="nav-item nav-link" href="/about">About</a>
+								<a class="nav-item nav-link" href="https://discord.gg/txYbphsAV7" target="_blank">Community</a>
+								<a class="navbar-brand" href="https://semesterly-v2.readthedocs.io/en/latest" target="_blank">Docs</a>
+								<a class="nav-item nav-link" href="/press">News</a>
+								<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/" target="_blank"><i class="fa fa-github"></i>GitHub</a>
 							</div>
 						</div>
 					</div>
 				</nav>
-			</div>
+			</nav>
 		</header>
 		<div id="page">
 			<div id="hero">
 				<div class="grid cf">
 					<div class="col-1-3">
 						<h2>Your Semester, Made Simple</h2>
-                            <h4 style="font-size: 1.3em;">Semester.ly started at Johns Hopkins University, but we're expanding every semester 😎</h4>
-							<!-- <div id="post">
-								<h2>We aim to make college more collaborative and stress-free by creating simple and effective tools that speak the millennial language.</h2>
-							</div> -->
+                            <h4 style="font-size: 1.3em;">Semester.ly started at Johns Hopkins University and the University of Toronto.</h4>
                             <ul>
 							<a href="https://jhu.semester.ly">
 								<div class="square-logo" style="background-image: url(/static/img/school_logos/jhu-square.png);"></div>
 								<span>Johns Hopkins University</span>
 							</a>
-							<a href="https://horario-tec.sger.li">
+							<h4 style="font-size: 1.3em;">Why not add your school? 😎</h4>
+							<!-- <a href="https://horario-tec.sger.li">
 								<div class="square-logo" style="background-image: url(/static/img/school_logos/itcr-square.png);"></div>
 								<span>Instituto Tecnológico de Costa Rica</span>
-							</a>
-							<a href="https://semesterly.readthedocs.io/en/latest/addaschool.html#develop-the-parser">
+							</a> -->
+							<a href="https://semesterly-v2.readthedocs.io/en/latest/addaschool.html" target="_blank">
                                 <div class="square-logo"><i class="fa fa-github"></i></div>
 								<span>Add Your School</span>
 							</a>
@@ -136,15 +146,15 @@
 							<div class="tutorial-half tutorial-text center mobile">
 								<h5>Filters</h5>
 								<h2>Advanced Search to Find the Right Class</h2>
-								<h4>A myriad of filters and toggles will narrow your search results to the perfect class for you!  Only want 400 level Biology classes on Wednesday Afternoon? You got it!</h4>
+								<h4>A myriad of filters and toggles will narrow your search results to the perfect class for you!  Only want 200 or 300 level CompSci classes in the CompSci Department? You got it!</h4>
 							</div>
 							<div class="tutorial-half">
-								<img src="/static/img/splash/advancedsearch.png" alt="a sample ">
+								<img src="/static/img/splash/advancedsearch2.png" alt="a sample ">
 							</div>
 							<div class="tutorial-half tutorial-text right desktop">
 								<h5>Filters</h5>
 								<h2>Advanced Search to Find the Right Class</h2>
-								<h4>A myriad of filters and toggles will narrow your search results to the perfect class for you!  Only want 400 level Biology classes on Wednesday Afternoon? You got it!</h4>
+								<h4>A myriad of filters and toggles will narrow your search results to the perfect class for you!  Only want 200 or 300 level CompSci classes in the CompSci Department? You got it!</h4>
 							</div>
 						</div>
 					</div>
