@@ -166,6 +166,10 @@ header nav a:hover {
     filter: grayscale(100%);
 }
 
+.author:hover {
+	filter: none;
+}
+
 #hub {
 	width: 7.8%;
 }
