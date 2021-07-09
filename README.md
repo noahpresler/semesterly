@@ -2,7 +2,7 @@
 <p align="center"><a href="https://semester.ly" target="_blank"><img width="200" src="http://i.imgur.com/9mMP9bY.png"/></a></p>
 
 <p align="center">
-  <a href="https://open.vscode.dev/jhuopensource/semesterly"><img src="https://open.vscode.dev/badges/open-in-vscode.svg" alt='Open in Visual Studio Code'/></a>
+  <a href="https://open.vscode.dev/jhuopensource/semesterly" target="_blank"><img src="https://open.vscode.dev/badges/open-in-vscode.svg" alt='Open in Visual Studio Code'/></a>
 </p>
 
 <p align="center">
