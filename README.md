@@ -2,6 +2,10 @@
 <p align="center"><a href="https://semester.ly" target="_blank"><img width="200" src="http://i.imgur.com/9mMP9bY.png"/></a></p>
 
 <p align="center">
+  <a href="https://open.vscode.dev/jhuopensource/semesterly"><img src="https://open.vscode.dev/badges/open-in-vscode.svg" alt='Open in Visual Studio Code'/></a>
+</p>
+
+<p align="center">
   <a href="https://travis-ci.com/jhuopensource/semesterly"><img src="https://api.travis-ci.com/jhuopensource/semesterly.svg?branch=master"></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg"/></a>
   <a href="https://github.com/jhuopensource/semesterly/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"/></a>
