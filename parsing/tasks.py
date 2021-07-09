@@ -27,7 +27,13 @@ logger = get_task_logger(__name__)
     ignore_result=True
 )
 def task_parse_current_registration_period(schools=None, textbooks=False):
-    """Parse semesters in current registration period."""
+    """
+    Parse semesters in current registration period.
+    
+    Args:
+        school (str, optional): School to parse.
+        textbooks (bool, optional): Flag to parse textbooks.
+    """
     schools = set(schools or ACTIVE_SCHOOLS)
     for school in set(SCHOOLS_MAP) & schools:
         # Grab the most recent year.
@@ -59,7 +65,13 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
 
 @task()
 def task_parse_active(schools=None, textbooks=False):
-    """Parse all semesters displayed to users (i.e. active semesters)."""
+    """
+    Parse all semesters displayed to users (i.e. active semesters).
+
+    Args:
+        school (str, optional): School to parse.
+        textbooks (bool, optional): Flag to parse textbooks.
+    """
     schools = set(schools or ACTIVE_SCHOOLS)
     for school in set(SCHOOLS_MAP) & schools:
         if SCHOOLS_MAP[school].singe_access:
@@ -81,7 +93,8 @@ def task_parse_active(schools=None, textbooks=False):
     ignore_result=True
 )
 def task_parse_textbooks(schools=None, all=False):
-    """Parse textbooks for morst recent academic period.
+    """
+    Parse textbooks for morst recent academic period.
 
     Note that in some instances parsers parse textbooks
     and courses at the same time.
@@ -93,7 +106,8 @@ def task_parse_textbooks(schools=None, all=False):
 
 @task()
 def task_parse_school(school, years_and_terms, textbooks=False):
-    """Call the django management commands to start parse.
+    """
+    Call the django management commands to start parse.
 
     Args:
         school (str): School to parse.

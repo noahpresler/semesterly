@@ -76,8 +76,9 @@ Steps are below on getting your local development environment running:
 
         docker-compose build
         docker-compose up
-        The **build** command creates a local database and build of your source code.
-        The **up** command runs everything. Be careful not to build when you don't need to as this will destroy your entire database and you'll need to ingest/digest again to get your course data (which takes about 30 minutes).
+
+    The **build** command creates a local database and build of your source code.
+    The **up** command runs everything. Be careful not to build when you don't need to as this will destroy your entire database and you'll need to ingest/digest again to get your course data (which takes about 30 minutes).
 
     You now have Semester.ly running. If this is the first time, you will want some data which done in the next step.
 
@@ -93,10 +94,10 @@ Steps are below on getting your local development environment running:
 
      .. code-block:: bash
 
-         python manage.py ingest jhu --term Spring --years 2018
+         python manage.py ingest jhu --term Fall --years 2021
          python manage.py digest jhu
 
-7.  Open a browser and visit https://jhu.sem.ly and hack away.
+7.  Open a browser and visit https://jhu.sem.ly or http://jhu.sem.ly:8000 (timetable view) and hack away. Visit http://localhost:8000 to view the landing page.
     You can skip ahead to **Advanced Configuration** or **How it All Works** now.
 
 Option 2: Setup using a Python Virtual Environment
@@ -121,7 +122,7 @@ To enter your virtual environment, execute the following code from your Semester
 
     source venv/bin/activate
 
-.. note:: Be sure to execute the above "source" command anytime you are working on Semesterly!
+.. note:: Be sure to execute the above "source" command anytime you're working on Semesterly!
 
 Check your OS info
 ~~~~~~~~~~~~~~~~~~
