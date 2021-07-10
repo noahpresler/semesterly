@@ -17,6 +17,7 @@ import re
 import simplejson as json
 
 from datetime import datetime
+import dateparser
 
 from parsing.library.words import conjunctions_and_prepositions
 
@@ -34,7 +35,7 @@ def clean(dirt):
         - filter out None valued key, value pairs
         - `None` on empty dict
 
-    `basestring`::
+    `str`::
         - convert unicode whitespace to ascii
         - strip extra whitespace
         - None on empty string
@@ -343,7 +344,7 @@ def short_date(date):
     from parsing.library.validator import ValidationError
 
     if date is not None:
-        if isinstance(date, basestring):
+        if isinstance(date, str):
             date = dateparser.parse(date)
         if not isinstance(date, datetime):
             raise ValidationError('invalid date input {}'.format(date))
@@ -376,9 +377,9 @@ def is_short_course(date_start, date_end, short_course_weeks_limit):
     is_short = False
 
     if short_course_weeks_limit is not None:
-        if isinstance(date_start, basestring):
+        if isinstance(date_start, str):
             date_start = dateparser.parse(date_start)
-        if isinstance(date_end, basestring):
+        if isinstance(date_end, str):
             date_end = dateparser.parse(date_end)
         if not isinstance(date_start, datetime):
             raise ValidationError('invalid date input {}'.format(date_start))
