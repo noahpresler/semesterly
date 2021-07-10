@@ -25,7 +25,7 @@ COPY ./build/run_parser.sh /code/run_parser.sh
 
 RUN pip3 install -r /code/requirements.txt
 # This is needed on newer ubuntu
-RUN pip3 install psycopg2-binary
+RUN pip3 install psycopg2-binary==2.8.6
 
 # Install package.json dependencies
 RUN npm install
