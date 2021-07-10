@@ -15,4 +15,4 @@ RUN apt-get install -y nodejs
 
 # This saves some build time by installing base requirements
 ADD ./requirements_base.txt /tmp
-RUN pip3 install -r /tmp/requirements_base.txt
+RUN pip install -r /tmp/requirements_base.txt

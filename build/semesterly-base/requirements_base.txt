@@ -1,4 +1,4 @@
-setuptools>=31.0.1
+setuptools==57.1.0
 Babel==2.5.0
 Django==2.2.18
 Jinja2==2.9.6
@@ -110,6 +110,7 @@ requests==2.25.1
 requests-oauthlib==0.8.0
 rollbar==0.16.1
 rsa==3.4.2
+ruamel.yaml.clib==0.2.0
 scikit-learn==0.24.1
 scipy==1.7.0
 selenium==3.5.0
