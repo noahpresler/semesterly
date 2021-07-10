@@ -1,4 +1,4 @@
-FROM scabrej1/semesterly-py3-base:latest
+FROM scabrej1/semesterly-py3_8-base:latest
 # sgerli/horariotec-base:
 RUN mkdir /code
 WORKDIR /code
