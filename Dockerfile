@@ -27,11 +27,6 @@ RUN pip3 install -r /code/requirements.txt
 # This is needed on newer ubuntu
 RUN pip3 install psycopg2-binary
 
-# Install node 14.x
-# RUN pip3 install -r /tmp/requirements_base.txt
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get install -y nodejs
-
 # Install package.json dependencies
 RUN npm install
 RUN npm run build
