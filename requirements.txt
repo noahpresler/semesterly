@@ -118,6 +118,7 @@ simplejson==3.11.1
 six==1.10.0
 snowballstemmer==1.2.1
 sphinx-autobuild==2021.3.14
+sphinx-rtd-theme==0.5.2
 sphinxcontrib-inlinesyntaxhighlight==0.2
 sphinxcontrib-websupport==1.2.4
 ssh-import-id==5.11
