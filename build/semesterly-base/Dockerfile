@@ -7,8 +7,7 @@ RUN apt-get install -y \
 	libxml2-dev \
 	libxslt-dev \
 	git \
-	curl \
-	nginx
+	curl
 
 # Install node 14.x
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
