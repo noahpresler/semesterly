@@ -70,7 +70,7 @@ lxml==3.8.0
 mccabe==0.6.1
 mock==2.0.0
 nltk==3.2.4
-numpy==1.19.0
+numpy==1.16.4
 oauth==1.0.1
 oauth2client==4.1.2
 oauthlib==2.0.2
@@ -106,7 +106,7 @@ pytz==2017.2
 pywebpush==1.4.0
 recommonmark==0.4.0
 redis==2.10.6
-requests==2.18.4
+requests==2.25.1
 requests-oauthlib==0.8.0
 rollbar==0.16.1
 rsa==3.4.2
@@ -121,7 +121,7 @@ sphinx-rtd-theme==0.5.2
 sphinxcontrib-inlinesyntaxhighlight==0.2
 sphinxcontrib-websupport==1.0.1
 ssh-import-id==5.11
-supervisor==3.3.1
+supervisor==4.2.2
 toolz==0.11.1
 tornado==4.5.1
 uritemplate==3.0.0
