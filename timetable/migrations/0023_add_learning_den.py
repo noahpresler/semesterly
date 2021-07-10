@@ -84,7 +84,7 @@ def add_learning_den(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0022_auto_20170821_1305'),
+        ('timetable', '0023_auto_20170910_2155'),
     ]
 
     operations = [
