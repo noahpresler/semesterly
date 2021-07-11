@@ -20,6 +20,10 @@ In order for Semester.ly to run out of the box, we have included credentials to 
         'SOCIAL_AUTH_FACEBOOK_SECRET': ...,
         'FB_TEST_EMAIL': ...,
         'FB_TEST_PASS': ...,
+        'SOCIAL_AUTH_AZURE_TENANT_KEY': ...,
+        'SOCIAL_AUTH_AZURE_TENANT_SECRET': ...,
+        'SOCIAL_AUTH_AZURE_TENANT_ID': ...,
+        'STUDENT_SIS_AUTH_SECRET': ...,
 
         #Not essential for testing, but can be filled in for advanced usage
         ...
