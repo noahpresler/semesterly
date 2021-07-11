@@ -140,6 +140,23 @@ class Semesterly extends React.Component {
     });
   }
 
+  toLocalDate(dateString){
+    // Input example-  2021-05-02 14:42 UTC
+    // Params: How the backend sends a timestamp
+    // dateString: of the form yyyy-mm-dd hh:mm
+
+    // If we pass anything false return empty string
+    if (!dateString) return ''
+    if (dateString.length === 0) return ''
+
+    const dateObj = new Date(dateString)
+    return dateObj.toString()
+  }
+
+  toString(obj){
+    return obj.toString()
+  }
+
   render() {
     const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const cal = mobile && $(window).width() < 767 && this.state.orientation === 'portrait' ?
@@ -167,7 +184,7 @@ class Semesterly extends React.Component {
             {cal}
             <footer className="footer navbar no-print">
               <p className="data-last-updated no-print">Data last
-                updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
+                updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.toLocalDate(this.toString(this.props.dataLastUpdated)) : null }</p>
               <ul className="nav nav-pills no-print">
                 <li className="footer-button" role="presentation">
                   <a href="/termsofservice">Terms</a>
