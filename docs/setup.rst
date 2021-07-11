@@ -98,7 +98,7 @@ Steps are below on getting your local development environment running:
          python manage.py digest jhu
 
 7.  Open a browser and visit https://jhu.sem.ly or http://jhu.sem.ly:8000 (timetable view) and hack away. Visit http://localhost:8000 to view the landing page.
-    You can skip ahead to **Advanced Configuration** or **How it All Works** now.
+    You can skip ahead to :ref:`advancedconfig` or :ref:`howitworks` now.
 
 Option 2: Setup using a Python Virtual Environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
