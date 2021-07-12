@@ -140,21 +140,21 @@ class Semesterly extends React.Component {
     });
   }
 
-  toLocalDate(dateString){
+  toLocalDate(dateString) {
     // Input example-  2021-05-02 14:42 UTC
     // Params: How the backend sends a timestamp
     // dateString: of the form yyyy-mm-dd hh:mm
 
     // If we pass anything false return empty string
-    if (!dateString) return ''
-    if (dateString.length === 0) return ''
+    if (!dateString) return '';
+    if (dateString.length === 0) return '';
 
-    const dateObj = new Date(dateString)
-    return dateObj.toString()
+    const dateObj = new Date(dateString);
+    return dateObj.toString();
   }
 
-  toString(obj){
-    return obj.toString()
+  toString(obj) {
+    return obj.toString();
   }
 
   render() {
