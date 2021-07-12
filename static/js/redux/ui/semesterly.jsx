@@ -142,7 +142,7 @@ class Semesterly extends React.Component {
     });
   }
 
-  toLocalDate = (dateString) => {
+  toLocalDate(dateString) {
     // Input example-  2021-05-02 14:42 UTC
     // Params: How the backend sends a timestamp
     // dateString: of the form yyyy-mm-dd hh:mm
@@ -155,7 +155,7 @@ class Semesterly extends React.Component {
     return dateObj.toString();
   }
 
-  toString = (obj) => {
+  toString(obj) {
     return obj.toString();
   }
 
