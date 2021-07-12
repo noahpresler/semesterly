@@ -48,6 +48,8 @@ class Semesterly extends React.Component {
       orientation: !mql.matches ? 'landscape' : 'portrait',
     };
     this.updateOrientation = this.updateOrientation.bind(this);
+    this.toLocalDate = this.toLocalDate.bind(this);
+    this.toString = this.toString.bind(this);
   }
 
   componentWillMount() {
@@ -140,7 +142,7 @@ class Semesterly extends React.Component {
     });
   }
 
-  toLocalDate = (dateString) => {
+  toLocalDate(dateString) {
     // Input example-  2021-05-02 14:42 UTC
     // Params: How the backend sends a timestamp
     // dateString: of the form yyyy-mm-dd hh:mm
@@ -153,7 +155,7 @@ class Semesterly extends React.Component {
     return dateObj.toString();
   }
 
-  toString = (obj) => {
+  toString(obj) {
     return obj.toString();
   }
 
@@ -201,9 +203,20 @@ class Semesterly extends React.Component {
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="http://goo.gl/forms/YSltU2YI54PC9sXw1"
+                    href="https://github.com/jhuopensource/semesterly/issues/new/choose"
                   >
                     Feedback
+                  </a>
+                </li>
+                <li className="footer-button" role="presentation">
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://discord.gg/txYbphsAV7"
+                    // TODO: add discord logo correctly
+                  >
+                    <i className="fab fa-discord" />
+                    Discord
                   </a>
                 </li>
                 <li className="footer-button" role="presentation">
