@@ -108,7 +108,7 @@ Install virtualenv:
 
 .. code-block:: bash
 
-    sudo pip install virtualenv
+    sudo pip3 install virtualenv
 
 Create a virtual environment called ``venv``:
 
@@ -161,7 +161,7 @@ Install Python Requirements
 
 .. note:: **ATTENTION MAC USERS:** you must install the xcode command line tools via ``xcode-select --install`` before proceeding.
 
-All python dependencies are kept in a file called ``requirements.txt``. Anytime a dependency is added or changed, we update it in this file. To bring your virutal environment up to date with all of these requirements easily, simply execute:
+All python dependencies are kept in a file called ``requirements.txt``. Anytime a dependency is added or changed, we update it in this file. To bring your virtual environment up to date with all of these requirements easily, simply execute:
 
 .. code-block:: bash
 
