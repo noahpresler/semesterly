@@ -168,12 +168,6 @@ All python dependencies are kept in a file called ``requirements.txt``. Anytime 
     pip3 install --upgrade pip
     pip3 install -r requirements.txt
 
-There are python modules that are missing from requirements.txt. Install them with:
-
-.. code-block:: bash
-
-    pip3 install pyyaml pygments kombu==3.0.33 billiard
-
 Install Node Packages
 ~~~~~~~~~~~~~~~~~~~~~~
 Node and node package manager are the backbone of our frontend setup. To begin, install Node Package Manager (npm).
