@@ -115,7 +115,7 @@ scikit-learn==0.24.1
 scipy==1.7.0
 selenium==3.5.0
 simplejson==3.11.1
-six==1.10.0
+six==1.16.0
 snowballstemmer==1.2.1
 sphinx-autobuild==2021.3.14
 sphinx-rtd-theme==0.5.2
