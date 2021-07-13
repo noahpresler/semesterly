@@ -48,7 +48,7 @@ class Parser(BaseParser):
         Returns:
             Parser
         """
-        new_instance = object.__new__(cls, *args, **kwargs)
+        new_instance = object.__new__(cls)
         cls.KEY = get_secret('JHU_API_KEY')
         return new_instance
 
@@ -123,7 +123,7 @@ class Parser(BaseParser):
         if school == "Krieger School of Arts and Sciences" or school == "Whiting School of Engineering":
             if course['Areas'] != "None":
                 for letter in course['Areas']:
-                    areas.append(letter.encode('ascii', 'ignore'))
+                    areas.append(letter)
             # Add specialty areas for computer science department
             #if course['Department'] == 'EN Computer Science':
             #    cs_areas_re = r'\bApplications|\bAnalysis|\bSystems|\bGeneral'

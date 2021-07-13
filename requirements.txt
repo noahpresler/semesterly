@@ -64,7 +64,7 @@ jsondiff==1.1.1
 jsonfield==2.0.2
 jsonpatch==1.16
 jsonpointer==1.10
-jsonschema==2.6.0
+jsonschema==3.2.0
 kombu==3.0.37
 livereload==2.5.1
 lxml==4.6.3
