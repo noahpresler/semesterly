@@ -102,7 +102,7 @@ Steps are below on getting your local development environment running:
 
 Option 2: Setup using a Python Virtual Environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Make sure you have installed Python 2.7. If you have not you can `follow this <https://wiki.python.org/moin/BeginnersGuide/Download>`_. Please also download the python installer, `PIP (install guide) <https://pip.pypa.io/en/stable/installing/>`_. We will now install and setup a python virtual environment. This keeps your dependencies for other projects and classes seperate from those required for Semester.ly.
+Make sure you have installed **Python 3.8.5**. If you have not you can `follow this <https://wiki.python.org/moin/BeginnersGuide/Download>`_. Please also download the python installer, `PIP (install guide) <https://pip.pypa.io/en/stable/installing/>`_. We will now install and setup a python virtual environment. This keeps your dependencies for other projects and classes seperate from those required for Semester.ly.
 
 Install virtualenv:
 
@@ -114,7 +114,7 @@ Create a virtual environment called ``venv``:
 
 .. code-block:: bash
 
-    virtualenv -p /usr/bin/python2.7 venv
+    virtualenv -p /usr/bin/python3.8 venv
 
 To enter your virtual environment, execute the following code from your Semesterly directory:
 
@@ -165,14 +165,14 @@ All python dependencies are kept in a file called ``requirements.txt``. Anytime 
 
 .. code-block:: bash
 
-    pip install --upgrade pip
-    pip install -r requirements.txt
+    pip3 install --upgrade pip
+    pip3 install -r requirements.txt
 
 There are python modules that are missing from requirements.txt. Install them with:
 
 .. code-block:: bash
 
-    pip install pyyaml pygments kombu==3.0.33 billiard
+    pip3 install pyyaml pygments kombu==3.0.33 billiard
 
 Install Node Packages
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -189,7 +189,7 @@ Node and node package manager are the backbone of our frontend setup. To begin, 
 .. code-block:: bash
     
     sudo apt-get install wget
-    wget -qO- https://deb.nodesource.com/setup_16.x | sudo bash -
+    wget -qO- https://deb.nodesource.com/setup_14.x | sudo bash -
     sudo apt-get install -y nodejs
 
 **On CentOS / Fedora**:
@@ -197,7 +197,7 @@ Node and node package manager are the backbone of our frontend setup. To begin, 
 .. code-block:: bash
 
     sudo yum install -y gcc-c++ make
-    curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash -
+    curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -
     sudo yum install nodejs
 
 Then use the newly installed Node Package Manager (npm) to install all javascript dependencies. When you execute this command, it reads from the file ``package.json`` which specifies all dependencies, their versions, and some additional node related configurations:
