@@ -39,8 +39,9 @@ export const getFinalExamSchedulerEndpoint = () => '/exams/';
 export const getRequestShareExamLinkEndpoint = () => '/exams/links/';
 export const acceptTOSEndpoint = () => '/tos/accept/';
 export function getCourseShareLinkFromModal(code, semester) {
-  return `${window.location.href.split('/')[2]}/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;
+  return `/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;
 }
+// TODO: ${window.location.href.split('/')[2]} insert above ^
 
 export function getCourseShareLink(code, semester) {
   return `${window.location.href.split('/')[2]}/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;
