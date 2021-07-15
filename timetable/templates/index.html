@@ -29,7 +29,7 @@
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	  	<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
 		
-		  <!-- Google Analytics script -->
+		<!-- Google Analytics script -->
 	    <script>
 	      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -49,14 +49,15 @@
                 <h1>Semester.ly</h1>
 				<h1 class="navbar-nav">
 					&nbsp;&nbsp;&nbsp;&nbsp;
-					<a class="nav-item nav-link active" href="/"><i></i>Home&nbsp;&nbsp;</a>
+					{% comment %} <a class="nav-item nav-link active" href="/"><i></i>Home&nbsp;&nbsp;</a> {% endcomment %}
 					<a class="nav-item nav-link" href="/about">About&nbsp;&nbsp;</a>
-					<a class="nav-item nav-link" href="https://discord.gg/txYbphsAV7" target="_blank">Community&nbsp;&nbsp;</a>
 					<a class="navbar-brand" href="https://semesterly-v2.readthedocs.io/en/latest" target="_blank">Docs&nbsp;&nbsp;</a>
 					<a class="nav-item nav-link" href="/press">News&nbsp;&nbsp;</a>
+					<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/releases" target="_blank">Updates&nbsp;&nbsp;</a>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/" target="_blank"><i class="fa fa-github"></i>GitHub</a>
 				</h1>
 				<nav>
@@ -71,9 +72,9 @@
 							<div class="nav-dropdown-list">
 								<a class="nav-item nav-link active" href="/"><i></i>Home</a>
 								<a class="nav-item nav-link" href="/about">About</a>
-								<a class="nav-item nav-link" href="https://discord.gg/txYbphsAV7" target="_blank">Community</a>
 								<a class="navbar-brand" href="https://semesterly-v2.readthedocs.io/en/latest" target="_blank">Docs</a>
 								<a class="nav-item nav-link" href="/press">News</a>
+								<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/releases">Updates</a>
 								<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/" target="_blank"><i class="fa fa-github"></i>GitHub</a>
 							</div>
 						</div>
@@ -86,17 +87,17 @@
 				<div class="grid cf">
 					<div class="col-1-3">
 						<h2>Your Semester, Made Simple</h2>
-                            <h4 style="font-size: 1.3em;">Semester.ly started at Johns Hopkins University and the University of Toronto.</h4>
+                            <h4 style="font-size: 1.3em;">Semester.ly started at Johns Hopkins University...</h4>
                             <ul>
 							<a href="https://jhu.semester.ly">
 								<div class="square-logo" style="background-image: url(/static/img/school_logos/jhu-square.png);"></div>
 								<span>Johns Hopkins University</span>
 							</a>
-							<h4 style="font-size: 1.3em;">Why not add your school? 😎</h4>
-							<!-- <a href="https://horario-tec.sger.li">
-								<div class="square-logo" style="background-image: url(/static/img/school_logos/itcr-square.png);"></div>
-								<span>Instituto Tecnológico de Costa Rica</span>
-							</a> -->
+							<a href="https://horario-tec.sger.li">
+								<div class="square-logo" style="background-image: url(/static/img/school_logos/itcr-logo.png);"></div>
+								<span>Costa Rica Institute of Technology</span>
+							</a>
+							<h4 style="font-size: 1.3em;">So why not add your school?! 🚀</h4>
 							<a href="https://semesterly-v2.readthedocs.io/en/latest/addaschool.html" target="_blank">
                                 <div class="square-logo"><i class="fa fa-github"></i></div>
 								<span>Add Your School</span>
@@ -127,7 +128,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="tutorial">
+					<!--<div class="tutorial">
 						<div class="grid cf">
 							<div class="tutorial-half tutorial-text left">
 								<h5>Options</h5>
@@ -138,7 +139,7 @@
 								<img src="/static/img/splash/pagination.gif" alt="a sample ">
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="tutorial">
 						<div class="grid cf">
 							<div class="tutorial-half tutorial-text center mobile">
@@ -160,8 +161,17 @@
                 <div id="open-source" class="reason">
                     <div class="grid cf">
                         <h2>Open Source</h2>
-                        <p class="col-10-16 push-3">Semester.ly believes that students know best. University IT departments can't keep up with the latest but students are always on the cutting edge. That’s why Semester.ly is built by students, and always will be. That’s why we have open sourced our platform.</p>
-                        <p class="col-10-16 push-3">Our vision is to make Semester.ly the most popular college student contributed open source project in existence. Our goal is to make it accessible for students to make impactful changes and contributions and we will do everything in our power to enable students to leverage our system to make everyone's semester easier.</p>
+                        <p class="col-10-16 push-3">
+							Semester.ly believes that students know best. University IT departments can't keep up with 
+							the latest but students are always on the cutting edge. That’s why Semester.ly is built by 
+							students, and always will be. That’s why we've open sourced our platform.
+						</p>
+                        <p class="col-10-16 push-3">
+							Our vision is to make Semester.ly the most popular college student contributed open source project 
+							in existence. Our goal is to make it accessible for students to make impactful changes and contributions 
+							and we will do everything in our power to enable students to leverage our system to make everyone's 
+							semester easier.
+						</p>
                         <div class="open-source__cta">
                             <a href="https://semesterly-v2.readthedocs.io/en/latest/" target="_blank" class="cta--primary"><i class="fa fa-code"></i>Get Started</a>
                             <a href="https://github.com/jhuopensource/semesterly" target="_blank" class="cta--alt"><i class="fa fa-github"></i>Github</a>
@@ -169,7 +179,7 @@
                     </div>
                 </div>
 				<div class="reason" id="authors">
-					<h2>Supported By</h2>
+					<h2>Supported By Johns Hopkins University</h2>
 					<p class="col-10-16 push-3">
 						Since our initial adoption by the Johns Hopkins University IT Department, Semester.ly
 						has been involved in several JHU courses, supported by notable faculty and administrators,
@@ -196,10 +206,14 @@
 									<div class="square-logo" style="background-image: url(/static/img/school_logos/jhu-square.png);"></div>
 									<span>JHU</span>
 								</a>
+								<a href="https://horario-tec.sger.li">
+									<div class="square-logo" style="background-image: url(/static/img/school_logos/itcr-circle.png);"></div>
+									<span>ITCR</span>
+								</a>
 							</ul>
 						</div>
 						<div class="col-1-2">
-							<img src="/static/img/splash/iPhoneMockupCropped.png" alt="iPhone with Semester.ly open">
+							<img src="/static/img/splash/iPhoneMockupCropped2.png" alt="iPhone with Semester.ly open">
 						</div>
 					</div>
 				</div>
@@ -219,17 +233,17 @@
 						</a></li>
 						<li><a href="https://discord.gg/txYbphsAV7" target="_blank">
 							<i class="fab fa-discord fa-lg"></i>
-							<span>Join the Discord</span>
+							<span>Join the Community Forum</span>
 						</a></li>
 						<li><a href="mailto:contact@semester.ly">
 							<i class="fa fa-at"></i>
 							<span>Email us at contact@semester.ly</span>
 						</a></li>
-						<li><a href="https://semester.ly/termsofservice">
+						<li><a href="/termsofservice">
 							<i class="fa fa-bookmark"></i>
 							<span>Read our Terms of Service</span>
 						</a></li>
-						<li><a href="https://semester.ly/privacypolicy">
+						<li><a href="/privacypolicy">
 							<i class="fa fa-lock"></i>
 							<span>Read our Privacy Policy</span>
 						</a></li>

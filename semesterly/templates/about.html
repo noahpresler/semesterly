@@ -45,9 +45,9 @@
 	<body>
 		<header class="down">
 			<div class="grid cf">
-				<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
 				<a href="/">
-					<!-- TODO: fix bug to actually change this css on hover -->
+					<h1><i class="fa fa-chevron-circle-left"></i>&nbsp;Back&nbsp;&nbsp;</h1>
+					<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
 					<h1>Semester.ly</h1>
 				</a>
 				<nav>
@@ -67,16 +67,15 @@
 					<h4>
 						Semester.ly started in 2014 by a few university students who wanted to not only challenge
 						themselves but change the way students develop their course schedules. By 2017, we rolled out
-						at Johns Hopkins University and several others, quickly accumulating many intrigued users. In 2019,
+						at Johns Hopkins University and several other schools, quickly accumulating many intrigued users. In 2019,
 						we decided to partner with the Hopkins IT Department to subsidize our student developers and
 						sustain our project. If there's anything we learned, it's that students can dream big and continue
-						to help this project grow.
+						to help this project flourish.
 					</h4>
 					<br>
 					<h4>
-						As of 2021, we are still an open source project, integrated in several CS courses, supported by Hopkins 
-						administration, faculty, & students, and are motivated to continue growing this project. Interested in
-						what we're doing next? Check our more here!
+						As of 2021, Semester.ly is still an open source project, integrated in several CS courses, supported by Hopkins 
+						administration, faculty, & students, and motivated to continue growing this project!
 						<!-- TODO: add link to new updates page -->
 					</h4>
 				</div>
@@ -166,6 +165,11 @@
 								<a href="https://www.linkedin.com/in/ameya-dehade-7150851a8/"><i class="fab fa-linkedin fa-2x"></i></a>
 							</div>
 						</div>
+					</div>
+					<div class="grid cf">
+						<div class="col-1-1">
+							<h5>Our Board Members</h5>
+						</div>
 						<div class="col-1-3 member">
 							<div class="circular" style="background-image: url(/static/img/blank.jpg)"></div>
 							<h4 class="name">Ali Soylu</h4>
@@ -174,11 +178,6 @@
 								<a href="https://github.com/alihacks"><i class="fab fa-github fa-2x"></i></a>
 								<a href="https://www.linkedin.com/in/alisoylu"><i class="fab fa-linkedin fa-2x"></i></a>
 							</div>
-						</div>
-					</div>
-					<div class="grid cf">
-						<div class="col-1-1">
-							<h5>Our Board Members</h5>
 						</div>
 						<div class="col-1-3 member">
 							<div class="circular" style="background-image: url(/static/img/blank.jpg)"></div>
@@ -220,13 +219,13 @@
 						</div>
 						<div class="col-1-4 member">
 							<div class="circular" style="background-image: url(https://i.postimg.cc/MZ0F1LV9/mia.png)"></div>
-							<h4 class="name">Mia Boloix</h4>
+							<a href="https://www.linkedin.com/in/miaboloix/"><h4 class="name">Mia Boloix</h4></a>
 							<h3>Former Program Manager ('19-'21)</h3>
 							<h3>JHU '21</h3>
-							<div>
+							{% comment %} <div>
 								<a href="https://github.com/miaboloix"><i class="fab fa-github fa-2x"></i></a>
-								<a href="https://www.linkedin.com/in/miaboloix/"><i class="fab fa-linkedin fa-2x"></i></a>
-							</div>
+								<a href="https://www.linkedin.com/in/miaboloix/"><i class="fab fa-linkedin fa-2x"></i
+							</div> {% endcomment %}
 						</div>
 						<div class="col-1-4 member">
 							<div class="circular" style="background-image: url(/static/img/blank.jpg)"></div>
@@ -325,7 +324,7 @@
 						</a></li>
 						<li><a href="https://discord.gg/txYbphsAV7">
 							<i class="fab fa-discord fa-lg"></i>
-							<span>Join the Discord</span>
+							<span>Join the Community Forum</span>
 						</a></li>
 						<li><a href="mailto:contact@semester.ly">
 							<i class="fa fa-at"></i>
