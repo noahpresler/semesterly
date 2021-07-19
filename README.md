@@ -15,7 +15,7 @@
 
 ## Documentation
 
-Read the docs and learn more: http://semesterly.readthedocs.io/en/latest/
+Read the [Docs](https://semesterly-v2.readthedocs.io/en/latest/) and learn more.
 
 ## Contributing
 

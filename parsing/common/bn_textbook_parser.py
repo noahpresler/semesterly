@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import re
 import requests
 from random import randint
@@ -100,7 +98,7 @@ class BarnesAndNoblesParser(BaseParser):
               years_and_terms_filter=None):
 
         # TODO - remove hardcoding of year and term and use filtering
-        for year, terms in years_and_terms_filter.items():
+        for year, terms in list(years_and_terms_filter.items()):
             self.year = year
             for term in terms:
                 self.term = term

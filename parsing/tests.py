@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 import simplejson as json
-import StringIO
+import io
 
 from copy import deepcopy
 from django.test import TestCase, SimpleTestCase
@@ -36,7 +36,7 @@ class UtilsTest(SimpleTestCase):
         self.assertEqual([1, '2', False], clean(dirty1))
         dirty2 = {'a': [None, None]}
         self.assertEqual(None, clean(dirty2))
-        dirty3 = u'\u00a0\t \t\xa0'
+        dirty3 = '\u00a0\t \t\xa0'
         self.assertEqual(None, clean(dirty3))
         dirty4 = 'hello '
         self.assertEqual('hello', clean(dirty4))
@@ -170,7 +170,7 @@ class UtilsTest(SimpleTestCase):
 
 class JSONStreamWriterTest(SimpleTestCase):
     def test1(self):
-        output = StringIO.StringIO()
+        output = io.StringIO()
         with JSONStreamWriter(output, type_=dict) as streamer:
             streamer.write('a', 1)
             streamer.write('b', 2)
@@ -187,7 +187,7 @@ class JSONStreamWriterTest(SimpleTestCase):
                                     indent=2,
                                     separators=(',', ': ')))
 
-        output = StringIO.StringIO()
+        output = io.StringIO()
         with JSONStreamWriter(output, type_=dict) as streamer:
             streamer.write('a', 1)
             with streamer.write('data', type_=list) as streamer2:
@@ -269,7 +269,7 @@ class ValidationTest(SimpleTestCase):
 
         for req in config_required:
             invalid_config = {
-                k: v for k, v in ValidationTest.config.items() if k != req
+                k: v for k, v in list(ValidationTest.config.items()) if k != req
             }
             with self.assertRaises(ValidationError):
                 Validator(invalid_config)
@@ -651,7 +651,7 @@ class DigestionTest(TestCase):
             'description': 'Um, hi hello',
         }
 
-        output = StringIO.StringIO()
+        output = io.StringIO()
         digestor.digest(course, diff=True, load=False, output=output)
         diff = [
             {
@@ -684,7 +684,7 @@ class DigestionTest(TestCase):
         self.assertEqual(course_model.prerequisites,
                          'Pre: ABC, DEF Co: A, AB, BC, B, C')
 
-        output = StringIO.StringIO()
+        output = io.StringIO()
         digestor.digest(course, diff=True, load=True, output=output)
         self.assertEqual(len(eval(output.getvalue())), 0)
 
@@ -733,7 +733,7 @@ class DigestionTest(TestCase):
             'fees': 50.,
         }
 
-        output = StringIO.StringIO()
+        output = io.StringIO()
         digestor.digest(section, diff=True, load=True, output=output)
         diff = [
             {
@@ -798,7 +798,7 @@ class DigestionTest(TestCase):
             'is_short_course': False
         }
 
-        output = StringIO.StringIO()
+        output = io.StringIO()
         digestor.digest(meeting, diff=True, load=True, output=output)
         diff = [
             {
@@ -956,7 +956,7 @@ class DigestionTest(TestCase):
             ]
         }
 
-        output = StringIO.StringIO()
+        output = io.StringIO()
         digestor.digest(nested_course, diff=True, load=True, output=output)
 
         diff = [

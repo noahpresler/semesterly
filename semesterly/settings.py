@@ -44,7 +44,7 @@ def get_secret(key):
             return SECRETS[key]
         except:
             try:
-                from dev_credentials import SECRETS
+                from .dev_credentials import SECRETS
                 return SECRETS[key]
             except:
                 raise ValueError("""'%s' not correctly configured.
@@ -193,7 +193,7 @@ REST_FRAMEWORK ={
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -252,7 +252,7 @@ WSGI_APPLICATION = 'semesterly.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '',  # os.path.join(BASE_DIR, 'db.postgresql')
+        'NAME': os.path.join(BASE_DIR, 'db.postgresql'),  # os.path.join(BASE_DIR, 'db.postgresql')
         'USER': '',
         'PASSWORD': '',
         'HOST': 'localhost',
@@ -326,7 +326,7 @@ CACHES = {
 CACHALOT_ENABLED = True
 
 try:
-    from local_settings import *
+    from .local_settings import *
 except:
     pass
 

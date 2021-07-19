@@ -10,7 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
 import operator
 
 from django.core.paginator import Paginator, EmptyPage
@@ -28,6 +27,7 @@ from student.models import Student
 from student.utils import get_student
 from timetable.models import Semester
 from helpers.mixins import ValidateSubdomainMixin, CsrfExemptMixin
+from functools import reduce
 
 
 class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
@@ -89,7 +89,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                                      get_student(request),
                                      advanced=True)
         student = None
-        logged = request.user.is_authenticated()
+        logged = request.user.is_authenticated
         if logged and Student.objects.filter(user=request.user).exists():
             student = Student.objects.get(user=request.user)
         serializer_context = {'semester': sem, 'student': student, 'school': request.subdomain}

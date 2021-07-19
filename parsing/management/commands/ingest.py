@@ -10,13 +10,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import logging
 import simplejson as json
 
 from django.core.management.base import BaseCommand
-from timetable.school_mappers import SCHOOLS_MAP
 from parsing.management.commands.arguments import ingest_args
 from parsing.library.exceptions import PipelineException
 from parsing.library.tracker import Tracker
@@ -61,11 +58,29 @@ class Command(BaseCommand):
         for parser_type in options['types']:
             for school in options['schools']:
                 tracker.school = school
-                self.run(SCHOOLS_MAP[school].parsers[parser_type],
-                         tracker,
-                         options,
-                         parser_type,
-                         school)
+
+                try:
+                    parsing = __import__(
+                        'parsing.schools.{school}.{parser_type}'.format(
+                            school=school,
+                            parser_type=parser_type
+                        )
+                    )
+                    parser = eval(
+                        'parsing.schools.{school}.{parser_type}.Parser'.format(
+                            school=school,
+                            parser_type=parser_type
+                        )
+                    )
+                    self.run(parser,
+                             tracker,
+                             options,
+                             parser_type,
+                             school)
+                except ImportError:
+                    logging.exception('Invalid parser')
+                    continue
+
         tracker.end()
 
     def run(self, parser, tracker, options, parser_type, school):

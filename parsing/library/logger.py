@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import logging
 import sys
 
@@ -20,7 +18,7 @@ from pygments import highlight, lexers, formatters
 from parsing.library.utils import pretty_json
 
 
-class JSONStreamWriter(object):
+class JSONStreamWriter:
     """Context to stream JSON list to file.
 
     Attributes:
@@ -81,7 +79,7 @@ class JSONStreamWriter(object):
             self.file = obj
             self.close_file = False
         else:
-            self.file = open(obj, 'wb')
+            self.file = open(obj, 'w')
             self.close_file = True
         self.open, self.close = JSONStreamWriter.BRACES[type_]
         self.type_ = type_
@@ -215,7 +213,7 @@ class JSONFormatter(logging.Formatter):
 def colored_json(j):
     lexer = lexers.JsonLexer()
     lexer.add_filter('whitespace')
-    colorful_json = highlight(unicode(pretty_json(j), 'UTF-8'),
+    colorful_json = highlight(str(pretty_json(j), 'UTF-8'),
                               lexer,
                               formatters.TerminalFormatter())
     return colorful_json

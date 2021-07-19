@@ -18,7 +18,7 @@ from student.models import *
 from timetable.models import *
 from django.db.models import Q
 from django.forms.models import model_to_dict
-from mailer import Mailer
+from .mailer import Mailer
 
 if len(sys.argv) < 4:
     print("Please specify a school, a term (e.g. Fall), and a year (e.g. 2017).")
@@ -39,12 +39,11 @@ for student_id in students:
         continue
 
     tt = student.personaltimetable_set.filter(semester=semester).order_by('last_updated').last()
-    textbook_json = map(lambda c:
-                    {
-                        "textbooks": map(lambda t: model_to_dict(Textbook.objects.get(isbn=t)), tt.sections.filter(~Q(textbooks=None), course=c).values_list("textbooks", flat=True).distinct()),
+    textbook_json = [{
+                        "textbooks": [model_to_dict(Textbook.objects.get(isbn=t)) for t in tt.sections.filter(~Q(textbooks=None), course=c).values_list("textbooks", flat=True).distinct()],
                         "course_name": c.name,
                         "course_code": c.code,
-                    }, tt.courses.all())
+                    } for c in tt.courses.all()]
 
     # Go through textbooks. If all empty lists (no textbooks), go to next student.
     have_textbooks = False

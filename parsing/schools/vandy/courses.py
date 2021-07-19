@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import re
 
 from parsing.library.base_parser import BaseParser
@@ -334,8 +332,8 @@ class Parser(BaseParser):
             raise ParseError('number of labels and values should be the same')
 
         try:
-            for label, value in zip(map(lambda x: x.text.strip(), labels),
-                                    map(lambda x: x.text.strip(), values)):
+            for label, value in zip([x.text.strip() for x in labels],
+                                    [x.text.strip() for x in values]):
                 if len(label) <= 0 or len(value) <= 0:
                     continue
 
@@ -389,7 +387,7 @@ class Parser(BaseParser):
         description = self.ingestor.setdefault('description', [])
         if isinstance(description, list):
             description.append(notes)
-        elif isinstance(description, basestring):
+        elif isinstance(description, str):
             description += '\n' + notes
 
     def extract_description(self, soup):

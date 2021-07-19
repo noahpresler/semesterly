@@ -1,24 +1,21 @@
 # Copyright (C) 2017 Semester.ly Technologies, LLC
-
+#
 # Semester.ly is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-
+#
 # Semester.ly is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import simplejson as json
 from collections import OrderedDict, namedtuple
-from django.conf import settings
 
+# import parsing.schools.jhu.courses  # NOTE: used in eval statement
 from parsing.library.utils import DotDict
 from parsing.schools.active import ACTIVE_SCHOOLS
-
 
 _school_attrs = [
     'code',
@@ -40,6 +37,8 @@ School = namedtuple(
 
 
 def load_school(school):
+    from django.conf import settings
+
     config_file = '{}/{}/schools/{}/config.json'.format(settings.BASE_DIR,
                                                         settings.PARSING_MODULE,
                                                         school)
@@ -47,7 +46,7 @@ def load_school(school):
         config = DotDict(json.load(f))
 
     active_semesters = OrderedDict(
-        sorted(config.active_semesters.items(), key=lambda x: x[0])
+        sorted(list(config.active_semesters.items()), key=lambda x: x[0])
     )
 
     return School(code=config.school.code,
@@ -66,16 +65,28 @@ def load_school(school):
 def load_parsers(school):
     parsers = {}
     for parser_type in ['courses', 'evals', 'textbooks']:
-        try:
-            parser = None  # Binding below in exec.
-            exec 'from {}.schools.{}.{} import Parser as parser'.format(
-                settings.PARSING_MODULE,
-                school,
-                parser_type
-            )
-            parsers[parser_type] = parser
-        except ImportError:
-            pass
+        pass
+        # try:
+        #     # parser = None  # Binding below in exec.
+        #     # exec('from {}.schools.{}.{} import Parser as parser'.format(
+        #     #     settings.PARSING_MODULE,
+        #     #     school,
+        #     #     parser_type
+        #     # ))
+        #     # print(parser)
+        #     # exec('import parsing.schools.{school}.{parser_type}.Parser'.format(
+        #     #     school=school,
+        #     #     parser_type=parser_type
+        #     # ))
+        #     parsers[parser_type] = __import__(
+        #         'parsing.schools.{school}.{parser_type}.Parser'.format(
+        #             school=school,
+        #             parser_type=parser_type
+        #         )
+        #     )
+        # except (ImportError) as e:
+        #     print(e)
+        #     print(school, parser_type)
     return parsers
 
 

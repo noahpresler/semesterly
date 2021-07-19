@@ -126,7 +126,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 trace.append(' File "{1}", line {2}, in {3}'.format(*item))
                 for line in item[4]:
                     trace.append(' ' + line.strip())
-            raise type(exc)(exc.message + '\n'.join(trace) + msg)
+            raise type(exc)(str(exc) + '\n'.join(trace) + msg)
 
     def get_test_url(self, school, path=''):
         """Get's the live server testing url for a given school.
@@ -687,10 +687,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def ptt_equals(self, ptt):
         slots, master_slots, tt_name = ptt
-        self.assertItemsEqual(slots, self.get_elements_as_text((By.CLASS_NAME, 'slot')))
-        self.assertItemsEqual(master_slots,
+        self.assertCountEqual(slots, self.get_elements_as_text((By.CLASS_NAME, 'slot')))
+        self.assertCountEqual(master_slots,
             self.get_elements_as_text((By.CLASS_NAME, 'master-slot')))
-        self.assertItemsEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))
+        self.assertCountEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))
         return True
 
     def ptt_to_tuple(self):
@@ -776,7 +776,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             "//input[contains(@class, 'timetable-name') and @value='%s']" % name
         ))
 
-class url_matches_regex(object):
+class url_matches_regex:
     """Expected Condition which waits until the browser's url matches the provided regex"""
     def __init__(self, pattern):
         self.pattern = re.compile(pattern)
@@ -788,7 +788,7 @@ class url_matches_regex(object):
         else:
             return False
 
-class text_to_be_present_in_element_attribute(object):
+class text_to_be_present_in_element_attribute:
     """
     An expectation for checking if the given text is present in the element's
     locator, text
@@ -808,7 +808,7 @@ class text_to_be_present_in_element_attribute(object):
         except StaleElementReferenceException:
             return False
 
-class text_to_be_present_in_nth_element(object):
+class text_to_be_present_in_nth_element:
     """
     An expectation for checking if the given text is present in the nth element's
     locator, text
@@ -829,7 +829,7 @@ class text_to_be_present_in_nth_element(object):
             return False
 
 
-class n_elements_to_be_found(object):
+class n_elements_to_be_found:
     """
     An expectation for checking if the n elements are found
     locator, text
@@ -848,7 +848,7 @@ class n_elements_to_be_found(object):
         except StaleElementReferenceException:
             return False
 
-class function_returns_true(object):
+class function_returns_true:
     """
     An expectation for checking if the provided function returns true
     """

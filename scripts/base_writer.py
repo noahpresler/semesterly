@@ -14,9 +14,7 @@ import abc
 import json
 
 
-class BaseWriter:
-  __metaclass__ = abc.ABCMeta
-
+class BaseWriter(metaclass=abc.ABCMeta):
   def __init__(self, semester=None):
     self.semester = semester
 
@@ -34,8 +32,8 @@ class BaseWriter:
     """
     course_code, course_data = self.parse_course_element(course_element)
 
-    section_writables = map(self.get_section_writable, 
-                            self.get_section_elements(course_element))
+    section_writables = list(map(self.get_section_writable, 
+                            self.get_section_elements(course_element)))
 
     course_writable = {
       'course_code': course_code,
@@ -48,8 +46,8 @@ class BaseWriter:
     section_code, section_data = self.parse_section_element(section_element)
     section_data['semester'] = section_data.get('semester', self.semester)
 
-    meeting_writables = map(self.get_meeting_writable,
-                            self.get_meeting_elements(section_element))
+    meeting_writables = list(map(self.get_meeting_writable,
+                            self.get_meeting_elements(section_element)))
 
     section_writable = {
       'section_code': section_code,

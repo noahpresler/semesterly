@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from django.conf.urls import url
+from django.conf.urls import re_path
 from django.contrib import admin
 
 import courses.views
@@ -19,18 +19,18 @@ admin.autodiscover()
 
 urlpatterns = [
     # old endpoints:
-    url(r'c/(?P<code>.+?)$', courses.views.course_page),
-    url(r'^courses/?$', courses.views.all_courses),
+    re_path(r'c/(?P<code>.+?)$', courses.views.course_page),
+    re_path(r'^courses/?$', courses.views.all_courses),
 
-    url(r'course/(?P<code>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/*$',
+    re_path(r'course/(?P<code>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/*$',
         courses.views.CourseModal.as_view()),
-    url((r'^course_classmates/(?P<school>.+?)/(?P<sem_name>.+)/'
+    re_path((r'^course_classmates/(?P<school>.+?)/(?P<sem_name>.+)/'
          r'(?P<year>[0-9]{4})/id/(?P<course_id>[0-9]+)/*$'),
         courses.views.get_classmates_in_course),
     # course info
-    url(r'^courses/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<course_id>[0-9]+)/?$',
+    re_path(r'^courses/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<course_id>[0-9]+)/?$',
         courses.views.CourseDetail.as_view()),
     # school info
-    url(r'^school/(?P<school>.+?)/?$',
+    re_path(r'^school/(?P<school>.+?)/?$',
         courses.views.SchoolList.as_view())
 ]

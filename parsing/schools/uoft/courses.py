@@ -1,5 +1,17 @@
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
 from parsing.library.base_parser import BaseParser
-import requests, cookielib
+import requests, http.cookiejar
 # import http.cookiejar
 from bs4 import BeautifulSoup
 from collections import OrderedDict
@@ -10,7 +22,7 @@ import os
 import sys
 import django
 import datetime
-from HTMLParser import HTMLParser
+from html.parser import HTMLParser
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
@@ -37,7 +49,7 @@ class Parser(BaseParser):
 
     def __init__(self, **kwargs):
         self.school = "uoft"
-        self.cookies = cookielib.CookieJar()
+        self.cookies = http.cookiejar.CookieJar()
         self.s = requests.Session()
         self.years_of_study = ["1", "2", "3", "4"]
         self.level_map = {"1": "100", "2": "200", "3": "300", "4": "400"}
@@ -45,7 +57,7 @@ class Parser(BaseParser):
         self.errors = 0
         self.host = 'http://coursefinder.utoronto.ca/course-search/search'
         self.urls = None
-        self.cookies = cookielib.CookieJar()
+        self.cookies = http.cookiejar.CookieJar()
         self.s = requests.Session()
         self.new = 0
         super(Parser, self).__init__('uoft', **kwargs)
@@ -67,12 +79,12 @@ class Parser(BaseParser):
         engineering_day_map = {"Mon": "M", "Tue": "T", "Wed": "W", "Thu": "T", "Fri": "F"}
         try:
             for semester in ["fall", "winter"]:
-                print "Parsing " + semester + " for engineering"
+                print("Parsing " + semester + " for engineering")
                 json = {}
-                print "Making request, will update when response received..."
+                print("Making request, will update when response received...")
                 request_url = "http://www.apsc.utoronto.ca/timetable/{}.html".format(semester)
                 soup = BeautifulSoup(self.s.get(url=request_url, cookies=self.cookies, timeout=15).text)
-                print "Response received. Initiating parse of response HTML."
+                print("Response received. Initiating parse of response HTML.")
                 tables = soup.find_all('table',attrs={"border": "border"})
                 data = []
                 for table in tables:
@@ -88,7 +100,7 @@ class Parser(BaseParser):
                         course = course.strip()
                         section = section.strip()
                         section = section[0] + section[3:]
-                        print "On", course + ", section " + section + "..."
+                        print("On", course + ", section " + section + "...")
                         if course not in json:
                             json[course] = {}
                         if section not in json[course]:
@@ -134,17 +146,17 @@ class Parser(BaseParser):
                                 })
                             o.save()
 
-            print "Done Engineering, found %d new courses (collectively) so far. Now wrapping up..." % (self.new)
+            print("Done Engineering, found %d new courses (collectively) so far. Now wrapping up..." % (self.new))
         except requests.ConnectionError:
-            print "Couldn't connect. Found %d new courses (collectively) so far. Now wrapping up..." % (self.new)
+            print("Couldn't connect. Found %d new courses (collectively) so far. Now wrapping up..." % (self.new))
         self.wrap_up()
 
 
     def start(self, **kwargs):
-        print "Starting St. George."
+        print("Starting St. George.")
         for year_of_study in self.years_of_study:
             level = self.level_map[year_of_study]
-            print "Parsing year: {}".format(year_of_study)
+            print("Parsing year: {}".format(year_of_study))
             request_url = "https://timetable.iit.artsci.utoronto.ca/api/courses?org=&code=&section=&studyyear={}&daytime=&weekday=&prof=&breadth=".format(year_of_study)
             data = json.loads(self.s.get(url=request_url, cookies=self.cookies).text)
             for key in data:
@@ -166,7 +178,7 @@ class Parser(BaseParser):
                             'level': level,
                             'department': course_code[:3]
                         })
-                    print "Course:", C, "New?:", created
+                    print("Course:", C, "New?:", created)
                     if created:
                         self.new += 1
                     meetings = course_data['meetings']
@@ -209,20 +221,20 @@ class Parser(BaseParser):
                                 CO.save()
                             except Exception as e:
                                 S.delete()
-                                print e
+                                print(e)
                                 self.errors += 1
                                 break
                 except Exception as f:
                     import traceback
                     traceback.print_exc()
 
-        print "Total errors:", self.errors
-        print "Done St. George, found %d new courses. Now starting UTM." % (self.new)
+        print("Total errors:", self.errors)
+        print("Done St. George, found %d new courses. Now starting UTM." % (self.new))
         self.start_utm()
 
     def start_utm(self):
 
-        print "Parsing UTM"
+        print("Parsing UTM")
         found_map = {"1": 0, "2": 0, "3": 0, "4": 0}
         for year_of_study in self.years_of_study:
             payload = {
@@ -294,7 +306,7 @@ class Parser(BaseParser):
                     'level': level,
                     'department': code[:3],
                 })
-                print "Course:", C, "New?:", created
+                print("Course:", C, "New?:", created)
                 if created:
                     self.new += 1
                 section_data = []
@@ -320,9 +332,9 @@ class Parser(BaseParser):
                     if len(locations) == 2*len(days) or code[:-2] in ['FAS147', 'FAS247', 'FAS343', 'FAS447']:
                         locations = locations[:len(days)]
                     if len(locations) != len(days):
-                        print "Failed on:",code, "Locations:",locations, "Days:",days, "Section:",section
+                        print("Failed on:",code, "Locations:",locations, "Days:",days, "Section:",section)
                     assert len(days) == len(start_times) == len(end_times) == len(locations)
-                    print "\t\tSection:", section
+                    print("\t\tSection:", section)
                     S, s_created = Section.objects.update_or_create(
                         course=C,
                         meeting_section=section,
@@ -336,10 +348,10 @@ class Parser(BaseParser):
                     })
                     S.save()
                     S.offering_set.all().delete()
-                    for o in xrange(len(days)):
+                    for o in range(len(days)):
                         day, start, end, loc = days[o], start_times[o], end_times[o], locations[o]
                         if day not in self.day_map:
-                            print "==============ERROR: Day", day, " is not valid!=============="
+                            print("==============ERROR: Day", day, " is not valid!==============")
                             continue
                         CO, co_created = Offering.objects.update_or_create(section=S,
                                 day=self.day_map[day],
@@ -349,8 +361,8 @@ class Parser(BaseParser):
 
                         CO.save()
 
-                        print "\t\t\t", day, start, end, loc
-        print "Done UTM, found %d new courses (collectively) so far. Now starting UTSC." % (self.new)
+                        print("\t\t\t", day, start, end, loc)
+        print("Done UTM, found %d new courses (collectively) so far. Now starting UTSC." % (self.new))
         self.start_utsc()
 
     def remove_intermediary_spaces(self, text):
@@ -438,7 +450,7 @@ class Parser(BaseParser):
 
          return result
        except:
-        print "\tError: Couldn't find desc/excl/prereq/breadth details for", code
+        print("\tError: Couldn't find desc/excl/prereq/breadth details for", code)
         return {
           'description': '',
           'exclusions': '',
@@ -465,7 +477,7 @@ class Parser(BaseParser):
 
         soup = BeautifulSoup(response)
         table = soup.find("table", class_="tb_border_tb")
-        trs = filter(self.is_tr_relevant, table.find_all('tr'))
+        trs = list(filter(self.is_tr_relevant, table.find_all('tr')))
         i = 0
         utsc_level_map = {"A": "100", "B": "200", "C": "300", "D": "400"}
         while i < len(trs):
@@ -479,7 +491,7 @@ class Parser(BaseParser):
               name = tr.find('b').text.strip()[2:]
               level = code[3].upper()
               assert level in ["A", "B", "C", "D"]
-              print "On Course:", code, ":", name, "\n"
+              print("On Course:", code, ":", name, "\n")
               course_details = self.get_course_details(code, course_link)
               C, created = Course.objects.update_or_create(code=code, school="uoft", defaults={
                     'name': name,
@@ -504,7 +516,7 @@ class Parser(BaseParser):
                  meeting_section = section_info['meeting_section'][0] + section_info['meeting_section'][3:]
 
               if section_info['time_start'] == '' or section_info['time_end'] == '':
-                 print "\tInvalid details for course", code, section_info['meeting_section'], ". Perhaps online?\n"
+                 print("\tInvalid details for course", code, section_info['meeting_section'], ". Perhaps online?\n")
                  i += 1
                  continue
 
@@ -527,15 +539,15 @@ class Parser(BaseParser):
                                     })
 
               CO.save()
-              print "\t", meeting_section, "taught by", instructors
-              print "\t\t", section_info['day'] + ":", section_info['time_start'] + "-" + section_info['time_end'], "at", section_info['location']
+              print("\t", meeting_section, "taught by", instructors)
+              print("\t\t", section_info['day'] + ":", section_info['time_start'] + "-" + section_info['time_end'], "at", section_info['location'])
 
             i += 1
-        print "Done UTSC, found %d new courses (collectively) so far. Now starting Engineering." % (self.new)
+        print("Done UTSC, found %d new courses (collectively) so far. Now starting Engineering." % (self.new))
         self.start_engineering()
 
     def wrap_up(self):
-        print "Done! Total new courses found:", self.new
+        print("Done! Total new courses found:", self.new)
 
         update_object, created = Updates.objects.update_or_create(
             school=self.school,

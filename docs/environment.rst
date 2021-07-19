@@ -5,59 +5,6 @@ Setup Your Dev Environment
 
 Now that all of the requirements are installed, it's time to get your environment up and running.
 
-Setup Your Database
-~~~~~~~~~~~~~~~~~~~
-
-Semester.ly stores objects like courses, timetables, and students in a Postgres database. Let's get a database setup for you.
-
-Let's first initialize Postgres using the default user account ``postgres``
-
-.. note:: If using Linux, log into this account with
-
-    .. code-block:: bash
-
-        sudo -i -u postgres
-
-Then, enter Postgres environment with
-
-.. code-block:: bash
-
-    psql postgres
-
-.. note:: If you see an error in CentOS / Fedora, it's most likely because postgres is not running. Initialize it with ``sudo service postgresql initdb && sudo service postgresql start``.
-
-Here you can enter SQL to create/manipulate/access databases. Let's create a Semester.ly database. Enter:
-
-.. code-block:: psql
-
-    CREATE DATABASE semesterly;
-
-Then, create a database user, set ``myusername`` and ``mypassword`` to whatever you wish
-
-.. code-block:: psql 
-
-    CREATE USER myusername WITH PASSWORD 'mypassword';
-
-Finally, grant all access to the created database to your new user, ``myusername``:
-
-.. code-block:: psql
-
-    GRANT ALL PRIVILEGES ON DATABASE semesterly TO myusername;
-
-Great. You are all set. Enter the following to quit psql:
-
-.. code-block:: psql
-    
-    \q
-
-.. note:: If using Linux, exit postgres by 
-
-    .. code-block:: bash
-
-        exit
-
-.. note:: For CentOS / Fedora, Change all occurances of ident to md5 in pg_hba.conf. You can modify the file through ``sudo vim /var/lib/pgsql9/data/pg_hba.conf``. After you change it, restart postgres with ``sudo service postgresql restart``.
-
 Create Local Settings
 ~~~~~~~~~~~~~~~~~~~~~
 

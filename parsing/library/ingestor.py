@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import logging
 
 from parsing.library.logger import JSONStreamWriter
@@ -214,7 +212,7 @@ class Ingestor(dict):
             instructors = clean(make_list(instructors))
             if instructors is not None:
                 for i in range(len(instructors)):
-                    if isinstance(instructors[i], basestring):
+                    if isinstance(instructors[i], str):
                         instructors[i] = {'name': instructors[i]}
         elif len(instr_keys) > 1:
             raise IngestionWarning(
@@ -245,7 +243,7 @@ class Ingestor(dict):
 
     def _resolve_location(self):
         location = self._get('location')
-        if isinstance(self._get('location', 'loc', 'where'), basestring):
+        if isinstance(self._get('location', 'loc', 'where'), str):
             location = {'where': self._get('location', 'loc', 'where')}
         return location
 

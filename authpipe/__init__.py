@@ -10,7 +10,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+# TODO: Check again for PYTHON 3 MIGRATION!
+# should be able to comment out per: https://stackoverflow.com/questions/28127513/attributeerror-module-object-has-no-attribute-setdefaultencoding
 
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+# import sys
+# reload(sys)
+# sys.setdefaultencoding('utf-8')
