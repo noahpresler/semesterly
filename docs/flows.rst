@@ -149,7 +149,7 @@ We start be defining a new endpoint for this feature flow:
 
     .. code-block:: python
 
-        url(r'course/(?P<code>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/*$',
+        re_path(r'course/(?P<code>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/*$',
                            courses.views.CourseModal.as_view())
 
 Then we create a new ``FeatureFlowView`` for this endpoint which needs to do two things: define
@@ -212,8 +212,7 @@ by simply declaring this view directly inside of the urls file:
 
     .. code-block:: python
 
-        url(r'^signup/*$/', FeatureFlowView.as_view(feature_name='SIGNUP')
-
+        re_path(r'^signup/*$/', FeatureFlowView.as_view(feature_name='SIGNUP')
 
 see https://github.com/noahpresler/semesterly/pull/838 for the 
 original pull request implementing feature flows

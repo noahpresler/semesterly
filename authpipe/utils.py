@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 import requests
 from django.conf import settings
@@ -65,7 +65,6 @@ def create_student(strategy, details, response, user, *args, **kwargs):
     Part of the Python Social Auth pipeline which creates a student upon
     signup. If student already exists, updates information from Facebook
     or Google (depending on the backend).
-
     Saves friends and other information to fill database.
     """
     backend_name = kwargs['backend'].name
@@ -101,23 +100,23 @@ def create_student(strategy, details, response, user, *args, **kwargs):
             access_token = json.loads(social_user.extra_data)["access_token"]
 
         if social_user:
-            new_student.img_url = 'https://graph.facebook.com/' + social_user.uid + '/picture?type=normal'
-            url = u'https://graph.facebook.com/{0}/' \
-                  u'&access_token={1}'.format(
+            new_student.img_url = 'https://graph.facebook.com/v9.0/' + social_user.uid + '/picture?type=normal'
+            url = 'https://graph.facebook.com/v9.0/{0}/' \
+                  '&access_token={1}'.format(
                       social_user.uid,
                       access_token,
                   )
-            request = urllib2.Request(url)
+            request = urllib.request.Request(url)
             new_student.fbook_uid = social_user.uid
             new_student.save()
-            url = u'https://graph.facebook.com/{0}/' \
-                  u'friends?fields=id' \
-                  u'&access_token={1}'.format(
+            url = 'https://graph.facebook.com/{0}/' \
+                  'friends?fields=id' \
+                  '&access_token={1}'.format(
                       social_user.uid,
                       access_token,
                   )
-            request = urllib2.Request(url)
-            friends = json.loads(urllib2.urlopen(request).read()).get('data')
+            request = urllib.request.Request(url)
+            friends = json.loads(urllib.request.urlopen(request).read().decode('utf-8')).get('data')
 
             for friend in friends:
                 if Student.objects.filter(fbook_uid=friend['id']).exists():
@@ -128,7 +127,6 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                         new_student.friends.add(friend_student)
                         new_student.save()
                         friend_student.save()
-    if backend_name == 'azuread-tenant-oauth2':
-        print('hi')
 
     return kwargs
+    

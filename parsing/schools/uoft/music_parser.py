@@ -1,3 +1,15 @@
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
 import pandas as pd
 from copy import deepcopy
 from numpy import nan
@@ -27,7 +39,7 @@ class UofTMusicWriter(BaseWriter):
           course_rows.append(next_row)
           next_row = next(self.row_iter)[1]
         # save to be used as header in next iteration of while loop
-        self.next_course_row = next_row 
+        self.next_course_row = next_row
         yield course_rows
     except StopIteration:
       pass
@@ -37,7 +49,7 @@ class UofTMusicWriter(BaseWriter):
     course_code = course_element[0].course_code
     course_data = {
       # mandatory
-      'name': ' '.join([row.title for row in course_element if row.title]), 
+      'name': ' '.join([row.title for row in course_element if row.title]),
       'school': 'uoft',
 
       # optional
@@ -118,16 +130,16 @@ class UofTMusicWriter(BaseWriter):
 
 def get_tt_df(path):
   xl = pd.ExcelFile(path)
-  colnames = ['course_code', 
-              'sem', 
-              'credits', 
-              'title', 
-              'meeting_name', 
-              'hrs', 
-              'day_time', 
-              'location', 
-              'instructor', 
-              'enrol_indicator', 
+  colnames = ['course_code',
+              'sem',
+              'credits',
+              'title',
+              'meeting_name',
+              'hrs',
+              'day_time',
+              'location',
+              'instructor',
+              'enrol_indicator',
               'enrol_controls']
   return xl.parse('FM', skiprows=4, parse_cols=len(colnames) - 1, names=colnames).fillna('')
 

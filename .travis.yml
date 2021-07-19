@@ -6,7 +6,7 @@ services:
   - postgresql
 language: python
 python:
-- "2.7"
+- "3.8"
 env:
   - NODE_ENV=production NODE_VERSION="10.23.0" DATABASE_URL="postgresql://localhost/travis_test"
 branches:
@@ -30,7 +30,6 @@ install:
 - npm -g install chromedriver
 - npm -g install jest@20
 - npm install
-- pip install --upgrade pip
 - pip install -r requirements.txt
 addons:
   chrome: stable
@@ -49,5 +48,5 @@ script:
 - npm run build
 - npm run lint
 - npm run test
-- python manage.py test
+- python3 manage.py test
 - make html -C docs

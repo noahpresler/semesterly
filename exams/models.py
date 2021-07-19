@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import unicode_literals
-
 from django.db import models
 from jsonfield import JSONField
 
@@ -24,6 +22,6 @@ class FinalExamShare(models.Model):
        classes which the user needs to check finals for
     """
     school = models.CharField(max_length=50)
-    student = models.ForeignKey(Student, null=True, default=None)
+    student = models.ForeignKey(Student, null=True, default=None, on_delete=models.deletion.CASCADE)
     exam_json = JSONField()
     last_updated = models.DateTimeField(auto_now=True)

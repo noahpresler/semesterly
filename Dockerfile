@@ -1,5 +1,5 @@
-FROM jhuopensource/semesterly-base:latest
-
+FROM jhuopensource/semesterly-base-py3:latest
+# sgerli/horariotec-base:
 RUN mkdir /code
 WORKDIR /code
 
@@ -23,10 +23,10 @@ COPY ./build/local_settings.py /code/semesterly/local_settings.py
 # Add parser script
 COPY ./build/run_parser.sh /code/run_parser.sh
 
-RUN pip install -r /code/requirements.txt
+RUN pip3 install -r /code/requirements.txt
 # This is needed on newer ubuntu
-RUN pip install psycopg2-binary
+RUN pip3 install psycopg2-binary==2.8.6
 
+# Install package.json dependencies
 RUN npm install
 RUN npm run build
-

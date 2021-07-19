@@ -48,7 +48,7 @@ class DataUpdate(models.Model):
     )
 
     school = models.CharField(max_length=100)
-    semester = models.ForeignKey(Semester)
+    semester = models.ForeignKey(Semester, on_delete=models.deletion.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
     reason = models.CharField(max_length=200, default='Scheduled Update')
     update_type = models.CharField(max_length=1,

@@ -13,7 +13,8 @@ import unittest
 
 from semesterly.test_utils import SeleniumTestCase
 from timetable.models import Semester, Course
-from settings import get_secret
+from .settings import get_secret
+
 
 
 class EndToEndTest(SeleniumTestCase):
@@ -24,7 +25,9 @@ class EndToEndTest(SeleniumTestCase):
     ]
 
     def test_logged_out_flow(self):
-        self.driver.set_window_size(1440, 1080)
+				# Set window size is not a recognized command for some reason,
+				# try commenting it out for now
+        # self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
         with self.description("search, add, then remove course"):
             self.search_course('calc', 3)
@@ -92,7 +95,7 @@ class EndToEndTest(SeleniumTestCase):
 
     @unittest.skip('TODO: fix on mac')
     def test_logged_in_via_fb_flow(self):
-        self.driver.set_window_size(1440, 1080)
+        # self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
         with self.description("succesfully signup with facebook"):
             self.login_via_fb(
@@ -158,7 +161,7 @@ class EndToEndTest(SeleniumTestCase):
     @unittest.skip('TODO: fix on mac')
     def test_logged_in_via_google_flow(self):
         with self.description("setup and clear tutorial"):
-            self.driver.set_window_size(1440, 1080)
+            # self.driver.set_window_size(1440, 1080)
             self.clear_tutorial()
         with self.description("login via Google, complete user settings"):
             self.login_via_google(

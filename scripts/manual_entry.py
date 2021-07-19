@@ -32,23 +32,23 @@ section_type_map = {
     }
 days = ['_', 'M', 'T', 'W', 'R', 'F']
 
-print "Manual entry starting for " + school
+print("Manual entry starting for " + school)
 
 while True:
 	try:
-		cont = raw_input("ENTER COURSE? Y/N")
+		cont = input("ENTER COURSE? Y/N")
 		if cont != 'Y':
-			print "EXITTING"
+			print("EXITTING")
 			exit(1) 
 
-		name = raw_input("Enter course name: ") 
-		code = raw_input("Enter course code: ")
-		desc = raw_input("Enter description: ")
-		prereqs = raw_input("Enter preqreqs: ")
-		credits = float(raw_input("Enter credits: "))
-		areas = raw_input("Enter areas: ")   
-		dept = raw_input("Enter department: ")
-		level = int(raw_input("Enter level: "))
+		name = input("Enter course name: ") 
+		code = input("Enter course code: ")
+		desc = input("Enter description: ")
+		prereqs = input("Enter preqreqs: ")
+		credits = float(input("Enter credits: "))
+		areas = input("Enter areas: ")   
+		dept = input("Enter department: ")
+		level = int(input("Enter level: "))
 
 		course, CourseCreated = Course.objects.update_or_create(
             code = code,
@@ -63,21 +63,21 @@ while True:
                 'department': dept
             }
         )
-		print "-----------------COURSE CREATED----------------"
+		print("-----------------COURSE CREATED----------------")
 
 		while course and True:
-			cont = raw_input("ENTER SECTION? Y/N")
+			cont = input("ENTER SECTION? Y/N")
 			if cont != 'Y':
 				break
 
-			section_code = raw_input("Section code: ")
-			print section_type_map
-			section_type = raw_input("Section type: ")
-			instructors = raw_input("Instructors: ")
-			size = int(raw_input("Size: "))
-			waitlist_size = int(raw_input("Waitlist Size: "))
-			enrolment = int(raw_input("Enrollment: "))
-			waitlist = int(raw_input("Waitlist: "))
+			section_code = input("Section code: ")
+			print(section_type_map)
+			section_type = input("Section type: ")
+			instructors = input("Instructors: ")
+			size = int(input("Size: "))
+			waitlist_size = int(input("Waitlist Size: "))
+			enrolment = int(input("Enrollment: "))
+			waitlist = int(input("Waitlist: "))
 
 
 			section, section_created = Section.objects.update_or_create(
@@ -94,24 +94,23 @@ while True:
 			        }
 			    )
 
-			print "-----------------SECTION CREATED----------------"
+			print("-----------------SECTION CREATED----------------")
 
 			while section and True:
-				
-				cont = raw_input("ENTER OFFERING? Y/N")
+				cont = input("ENTER OFFERING? Y/N")
 				if cont != 'Y':
-					print "EXITTING"
+					print("EXITTING")
 					break 
 
-				print days
+				print(days)
 
 				short_course_weeks_limit = SCHOOLS_MAP[school].short_course_weeks_limit
-				day = raw_input("day: ")
-				start = raw_input("time_start (XX:YY) : ")
-				end = raw_input("time_end (XX:YY) : ")
-				offer_date_start = raw_input("date_start mm-dd-yyyy : ")
-				offer_date_end = raw_input("date_end mm-dd-yyyy : ")
-				location = raw_input("location: ")
+				day = input("day: ")
+				start = input("time_start (XX:YY) : ")
+				end = input("time_end (XX:YY) : ")
+				offer_date_start = input("date_start mm-dd-yyyy : ")
+				offer_date_end = input("date_end mm-dd-yyyy : ")
+				location = input("location: ")
 				offering, OfferingCreated = Offering.objects.update_or_create(
 						section = section,
 						day = day,
@@ -125,10 +124,10 @@ while True:
 						}
 					)
 
-				print "-----------------OFFERING CREATED----------------"
+				print("-----------------OFFERING CREATED----------------")
 
 
 
 	except EOFError:
-		print "EXITING"
+		print("EXITING")
 		exit(0)

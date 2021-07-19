@@ -10,15 +10,14 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import collections
-import dateparser
+import dateutil
 import os
 import re
 import simplejson as json
 
 from datetime import datetime
+import dateparser
 
 from parsing.library.words import conjunctions_and_prepositions
 
@@ -36,7 +35,7 @@ def clean(dirt):
         - filter out None valued key, value pairs
         - `None` on empty dict
 
-    `basestring`::
+    `str`::
         - convert unicode whitespace to ascii
         - strip extra whitespace
         - None on empty string
@@ -51,17 +50,14 @@ def clean(dirt):
 
     if isinstance(dirt, dict):
         cleaned = {}
-        for k, v in dirt.items():
+        for k, v in list(dirt.items()):
             cleaned_value = clean(v)
             if cleaned_value is None:
                 continue
             cleaned[k] = cleaned_value
     elif isinstance(dirt, list):
-        cleaned = filter(
-            lambda x: x is not None,
-            map(clean, dirt)
-        )
-    elif isinstance(dirt, basestring):
+        cleaned = [x for x in map(clean, dirt) if x is not None]
+    elif isinstance(dirt, str):
         cleaned = UNICODE_WHITESPACE.sub(' ', dirt).strip()
     else:
         return dirt
@@ -117,7 +113,7 @@ class DotDict(dict):
         Args:
             dct (dict): Dictionary to create DotDict with.
         """
-        for key, value in dct.items():
+        for key, value in list(dct.items()):
             if hasattr(value, 'keys'):
                 value = DotDict(value)
             self[key] = value
@@ -129,7 +125,7 @@ class DotDict(dict):
                 return d.as_dict()
             return d
         return {
-            key: rec(value) for key, value in self.items()
+            key: rec(value) for key, value in list(self.items())
         }
 
 
@@ -172,7 +168,7 @@ def update(d, u):
         >>> update({0: {1: 2, 3: 4}}, {1: 2, 0: {5: 6, 3: 7}})
         {0: {1: 2}}
     """
-    for k, v in u.iteritems():
+    for k, v in u.items():
         if isinstance(v, collections.Mapping):
             r = update(d.get(k, {}), v)
             d[k] = r
@@ -197,7 +193,7 @@ def iterrify(x):
         ...     print(i)
         'hello'
     """
-    if isinstance(x, collections.Iterable) and not isinstance(x, basestring):
+    if isinstance(x, collections.Iterable) and not isinstance(x, str):
         return x
     else:
         return (x,)
@@ -268,8 +264,8 @@ def dict_filter_by_dict(a, b):
         return a
 
     filtered = {}
-    for x, ys in a.items():
-        for p, qs in b.items():
+    for x, ys in list(a.items()):
+        for p, qs in list(b.items()):
             m = re.match(str(p), str(x))
             if m is None:
                 continue
@@ -327,8 +323,8 @@ def time24(time):
     """
     from parsing.library.validator import ValidationError
 
-    if isinstance(time, basestring):
-        time = dateparser.parse(time)
+    if isinstance(time, str):
+        time = dateutil.parser.parse(time)
     if not isinstance(time, datetime):
         raise ValidationError('invalid time input {}'.format(time))
     return time.strftime('%H:%M')
@@ -348,7 +344,7 @@ def short_date(date):
     from parsing.library.validator import ValidationError
 
     if date is not None:
-        if isinstance(date, basestring):
+        if isinstance(date, str):
             date = dateparser.parse(date)
         if not isinstance(date, datetime):
             raise ValidationError('invalid date input {}'.format(date))
@@ -381,9 +377,9 @@ def is_short_course(date_start, date_end, short_course_weeks_limit):
     is_short = False
 
     if short_course_weeks_limit is not None:
-        if isinstance(date_start, basestring):
+        if isinstance(date_start, str):
             date_start = dateparser.parse(date_start)
-        if isinstance(date_end, basestring):
+        if isinstance(date_end, str):
             date_end = dateparser.parse(date_end)
         if not isinstance(date_start, datetime):
             raise ValidationError('invalid date input {}'.format(date_start))

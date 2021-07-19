@@ -1,16 +1,14 @@
-"""
-Copyright (C) 2017 Semester.ly Technologies, LLC
-
-Semester.ly is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Semester.ly is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-"""
+# Copyright (C) 2017 Semester.ly Technologies, LLC
+#
+# Semester.ly is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Semester.ly is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
 from django.test import TransactionTestCase
 from django.test.runner import DiscoverRunner
@@ -18,9 +16,9 @@ from django.test.runner import DiscoverRunner
 from mock import patch
 
 
-class NoDatabaseMixin(object):
+class NoDatabaseMixin:
     """
-    Test runner mixin which skips the DB setup/teardown when there are no subclasses of 
+    Test runner mixin which skips the DB setup/teardown when there are no subclasses of
     TransactionTestCase to improve the speed of running the tests.
     Adapted from: https://www.caktusgroup.com/blog/2013/10/02/skipping-test-db-creation/
     """
@@ -39,7 +37,7 @@ class NoDatabaseMixin(object):
         if self._needs_db:
             return super(NoDatabaseMixin, self).setup_databases(*args, **kwargs)
         if self.verbosity >= 1:
-            print 'No DB tests detected. Skipping Test DB creation...'
+            print('No DB tests detected. Skipping Test DB creation...')
         self._db_patch = patch('django.db.backends.utils.CursorWrapper')
         self._db_mock = self._db_patch.start()
         self._db_mock.side_effect = RuntimeError('No testing the database!')

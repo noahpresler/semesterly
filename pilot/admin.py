@@ -36,7 +36,9 @@ class PilotOfferingAdmin(admin.ModelAdmin):
 		StudentsInline,
 		WaitlistStudentsInline,
 	]
-	autocomplete_fields = ('sections', 'students', 'wait_students')
+	# TODO: Define search_fields for SectionAdmin, StudentAdmin if necessary
+    # See https://docs.djangoproject.com/en/2.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin.autocomplete_fields
+	# autocomplete_fields = ('sections', 'students', 'wait_students')
 	exclude = ('sections', 'students', 'wait_students')
 	list_display = ('id', 'course_name', 'day', 'time_start', 'time_end')
 

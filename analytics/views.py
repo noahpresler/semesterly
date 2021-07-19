@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import heapq
 from dateutil import tz
 from datetime import timedelta, datetime
@@ -146,7 +146,7 @@ def number_timetables(**parameters):
     if "distinct" in parameters:
         timetables = timetables.distinct(parameters.pop("distinct"))
     timetables = timetables.filter(
-        **{param: val for (param, val) in parameters.iteritems() if val is not None})
+        **{param: val for (param, val) in parameters.items() if val is not None})
     return timetables.count()
 
 def number_timetables_per_hour(Timetable=AnalyticsTimetable, school=None,
@@ -191,7 +191,7 @@ def number_of_reactions(max_only=False):
         reactions = Reaction.objects.filter(title=title)
         num_reactions[title] = len(reactions)
     if max_only:
-        return max(num_reactions.iterkeys(), key=num_reactions.get)
+        return max(iter(num_reactions.keys()), key=num_reactions.get)
     else:
         return num_reactions
 

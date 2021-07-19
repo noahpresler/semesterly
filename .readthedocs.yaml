@@ -17,6 +17,6 @@ formats: all
 
 # Optionally set the version of Python and requirements required to build your docs
 python:
-   version: "2.7" # TODO: Change to Python 3.x when we update
+   version: "3.8"
    install:
-   - requirements: "requirements.txt"
+   - requirements: requirements.txt

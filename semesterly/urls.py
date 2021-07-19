@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from django.conf.urls import include, url
+from django.conf.urls import include, re_path
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import admin
@@ -27,50 +27,50 @@ import pilot.urls
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^$', helpers.mixins.FeatureFlowView.as_view(), name='home'),
-    url(r'about/*', TemplateView.as_view(template_name='about.html')),
-    url(r'press/*', TemplateView.as_view(template_name='press.html')),
-    url(r'notice', TemplateView.as_view(
+    re_path(r'^$', helpers.mixins.FeatureFlowView.as_view(), name='home'),
+    re_path(r'about/*', TemplateView.as_view(template_name='about.html')),
+    re_path(r'press/*', TemplateView.as_view(template_name='press.html')),
+    re_path(r'notice', TemplateView.as_view(
         template_name='notice.html')),
-    url('', include('authpipe.urls')),
-    url('', include('timetable.urls')),
-    url('', include('courses.urls')),
-    url('', include('integrations.urls')),
-    url('', include('exams.urls')),
-    url('', include('searches.urls')),
-    url('', include('student.urls')),
-    url('', include('analytics.urls')),
-    url('', include('agreement.urls')),
-    url('', include('pilot.urls')),
-    url(r'admin/*', include(admin.site.urls)),
+    re_path('', include('authpipe.urls')),
+    re_path('', include('timetable.urls')),
+    re_path('', include('courses.urls')),
+    re_path('', include('integrations.urls')),
+    re_path('', include('exams.urls')),
+    re_path('', include('searches.urls')),
+    re_path('', include('student.urls')),
+    re_path('', include('analytics.urls')),
+    re_path('', include('agreement.urls')),
+    re_path('', include('pilot.urls')),
+    re_path(r'admin/*', admin.site.urls),
 
     # Automatic deployment endpoint
-    url(r'deploy_staging/', semesterly.views.deploy_staging),
+    re_path(r'deploy_staging/', semesterly.views.deploy_staging),
 
-    url(r'^sw(.*.js)$', semesterly.views.sw_js, name='sw_js'),
-    url(r'^manifest(.*.json)$',
+    re_path(r'^sw(.*.js)$', semesterly.views.sw_js, name='sw_js'),
+    re_path(r'^manifest(.*.json)$',
         semesterly.views.manifest_json, name='manifest_json'),
 
 
     # error page testing
-    url(r'^404testing/',
+    re_path(r'^404testing/',
         TemplateView.as_view(template_name='404.html')),
-    url(r'^500testing/',
+    re_path(r'^500testing/',
         TemplateView.as_view(template_name='500.html')),
-    url(r'^maintenance_testing/',
+    re_path(r'^maintenance_testing/',
         TemplateView.as_view(template_name='maintenance.html'))
 ]
 
 if getattr(settings, 'STAGING', False):
-    urlpatterns += [url(r'^robots.txt$',
+    urlpatterns += [re_path(r'^robots.txt$',
                         lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain"))]
 else:
-    urlpatterns += [url(r'^robots.txt$',
+    urlpatterns += [re_path(r'^robots.txt$',
                         lambda r: HttpResponse("User-agent: *\nDisallow:", content_type="text/plain"))]
 
 # api views
 if getattr(settings, 'DEBUG', True):
     urlpatterns += [
-        url(r'^swagger/$', get_swagger_view(title='semesterly')),
-        url(r'^schema/$', get_schema_view(title='semesterly')),
+        re_path(r'^swagger/$', get_swagger_view(title='semesterly')),
+        re_path(r'^schema/$', get_schema_view(title='semesterly')),
     ]

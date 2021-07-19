@@ -37,9 +37,8 @@ def load_school_logger(school):
         config = file.read().format(
             parsing_log_filename=os.path.join(os.path.dirname(__file__),
                                               school,
-                                             'logs',
-                                             'parsing.log'),
+                                              'logs',
+                                              'parsing.log'),
             module='parsing.schools.' + school
         )
     logging.config.dictConfig(yaml.safe_load(config))
-

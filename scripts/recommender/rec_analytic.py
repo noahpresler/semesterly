@@ -27,7 +27,7 @@ from operator import itemgetter
 
 def score(recommender, course_ids, similarities, num_remove):
     removed = list(np.random.choice(course_ids, num_remove, replace=False))
-    print "removed: ", removed
+    print("removed: ", removed)
     for r in removed:
         course_ids.remove(r)
     scores = np.zeros(num_remove)
@@ -39,7 +39,7 @@ def score(recommender, course_ids, similarities, num_remove):
             removed.remove(c)
             scores[i] = 1
         elif recs[0] in similarities:
-            keys = map(lambda x: x[0], (similarities[recs[0]]))
+            keys = [x[0] for x in (similarities[recs[0]])]
             if set(removed).intersection(set(keys)):
                 c = set(removed).intersection(set(keys)).pop()
                 course_ids.append(c)
@@ -57,13 +57,13 @@ def main(args):
     if args.action == "all":
         ptts = PersonalTimetable.objects.filter(school=args.school, semester=Semester.objects.filter(name=args.semester, year=args.year))
     else:
-        print(args.action)
+        print((args.action))
         major_students = Student.objects.filter(major=args.action)
         ptts = PersonalTimetable.objects.filter(school=args.school, semester=Semester.objects.filter(name=args.semester, year=args.year), student__in=major_students)
     scores = {}
     num_timetables = {}
     for ptt in ptts:
-        course_ids = map(lambda c: c.id, list(ptt.courses.all()))
+        course_ids = [c.id for c in list(ptt.courses.all())]
         length = len(course_ids)
         if length < args.num_remove + 1:
             continue

@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from urllib2 import urlopen
+from urllib.request import urlopen
 import requests
 import re
 import datetime
@@ -40,7 +40,7 @@ if __name__ == '__main__':
   subjects_url = "http://www.courses.as.pitt.edu/subj-index.html"
 
   # find subject codes by looking for upper case sequences in page text
-  print "retrieving subject codes"
+  print("retrieving subject codes")
   html = urlopen(subjects_url).read()
   soup = BeautifulSoup(html)
   text = soup.findAll(text=True)

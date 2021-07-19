@@ -10,7 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from django.conf.urls import include, url
+from django.conf.urls import include, re_path
 from django.contrib import admin
 
 import authpipe.views
@@ -20,12 +20,12 @@ admin.autodiscover()
 
 urlpatterns = [
     # auth
-    url('', include('social_django.urls', namespace='social')),
-    url('', include('django.contrib.auth.urls', namespace='auth')),
+    re_path('', include('social_django.urls', namespace='social')),
+    re_path('', include(('django.contrib.auth.urls', 'auth'), namespace='auth')),
 
     # device token registration
-    url(r'^registration-token/$',
+    re_path(r'^registration-token/$',
         authpipe.views.RegistrationTokenView.as_view()),
-    url(r'^registration-token/(?P<endpoint>.+?)/',
+    re_path(r'^registration-token/(?P<endpoint>.+?)/',
         authpipe.views.RegistrationTokenView.as_view())
 ]
