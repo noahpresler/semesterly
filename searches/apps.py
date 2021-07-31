@@ -19,6 +19,9 @@ class SearchesConfig(AppConfig):
 
     def ready(self):
         """ Constructs Searcher object to be used if it can be built using course.vector field """
+
+        # TODO : re-enable if implementing vectorized search
+        """
         from searches.utils import Searcher
         if not self.searcher:
             try:
@@ -29,3 +32,4 @@ class SearchesConfig(AppConfig):
                       'setting searcher object to None and',
                       'using baseline_search instead.',
                       '\nError:', str(e))
+        """
