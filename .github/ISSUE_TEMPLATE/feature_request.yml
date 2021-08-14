@@ -2,10 +2,6 @@ name: Feature Request
 description: Suggest an idea for this project
 labels: [feature-request]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for taking the time to fill out this bug report!
   - type: input
     id: contact
     attributes:
@@ -55,5 +51,9 @@ body:
       label: Code of Conduct
       description: By submitting this request, you agree to follow our [Code of Conduct](../../CODE_OF_CONDUCT.md)
       options:
-        - label: I agree to follow this project's Code of Conduct
+        - label: I agree to follow Semester.ly's Code of Conduct
           required: true
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to request a new feature!
