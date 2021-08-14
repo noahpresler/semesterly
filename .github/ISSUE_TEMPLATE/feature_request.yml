@@ -1,5 +1,5 @@
 name: Feature Request
-description: Suggest an idea for this project
+description: Suggest a new idea/feature for Semester.ly
 labels: [feature-request]
 body:
   - type: input
