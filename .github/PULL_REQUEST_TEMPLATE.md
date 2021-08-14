@@ -1,4 +1,4 @@
-Please review the [guidelines for contributing](../docs/contributing.rst) to this repository.
+Please review the [guidelines for contributing](../CODE_OF_CONDUCT.md) to this repository.
 ### Description - Describe your pull request
 
 
