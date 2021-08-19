@@ -8,8 +8,8 @@ This guide will bring you through the steps of creating a local Semester.ly serv
 Setting up Visual Studio Code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 We recommend using `Visual Studio Code <https://code.visualstudio.com/>`_
-(VSCode) for its integration with WSL, Docker, and the Postgres database. This 
-section assumes you will be using Visual Studio Code for development with 
+(VSCode) for its integration with WSL 2, Docker, and the Postgres database. 
+This section assumes you will be using Visual Studio Code for development with 
 Semester.ly.
 
 1. If you are on Windows OS, see the following guide on
@@ -118,7 +118,7 @@ Steps are below on getting your local development environment running:
         docker-compose build
         docker-compose up
 
-    The **build** command creates a local Database and build of your source code.
+    The **build** command creates a local database and build of your source code.
     The **up** command runs everything. Be careful not to build when you don't need to as this will destroy your entire database and you'll need to ingest/digest again to get your course data (which takes about 30 minutes).
 
     .. note:: If you are using WSL 2, you may, but not necessarily, need 
@@ -153,7 +153,7 @@ several tables. Right clicking any of these tables gives you options to select
 
 If this is your first time running Semester.ly, you will want to populate your 
 database with courses. Before you continue to :ref:`parsing`, please read the
-following additional tips for working with Docker.
+following additional tips for working with Docker and Postgres.
 
 Additional Tips
 ~~~~~~~~~~~~~~~
@@ -165,14 +165,15 @@ named jhuopensource/semesterly, semesterly, and postgres:12.1. Right clicking
 any of these should give you the option ``Attach Shell``, which will open a
 terminal into the corresponding terminal.
 
-You may also need to run postgres commands beyond what running queries are
+You may also need to run Postgres commands beyond what running queries are
 capable of. In this case, open a terminal in the postgres container and run
-``psql -U postgres`` and you should be in the postgres shell.
+``psql -U postgres``. You should now be in the postgres shell.
 
 If you ever need to hard reset Docker, use the command ``docker system prune
 -a``.
 
 In order to log in on your local running version of Semester.ly, you will need
 access to auth keys. Please ask one of the current developers for access to
-these keys. Furthermore, some logins require use of https, so ensure that you
-are on https://jhu.sem.ly instead of http://jhu.sem.ly:8000 in these cases.
+these keys if you require use of login authentication for development. 
+Furthermore, some logins require use of https, so ensure that you are on 
+https://jhu.sem.ly instead of http://jhu.sem.ly:8000 in these cases.
