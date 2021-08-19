@@ -62,7 +62,6 @@ Steps are below on getting your local development environment running:
     .. code-block:: bash
 
         DEBUG = True
-        TEMPLATE_DEBUG = DEBUG
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.postgresql_psycopg2',
