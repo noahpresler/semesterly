@@ -20,7 +20,7 @@ Cloning your Semester.ly fork will create a directory with all of the code requi
 
          git clone https://github.com/[YOUR-USERNAME]/semesterly
 
-Option 1: Set up using Docker
+Setting up Docker
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Steps are below on getting your local development environment running:
 
@@ -98,30 +98,6 @@ Steps are below on getting your local development environment running:
 
 7.  Open a browser and visit http://jhu.sem.ly:8000 and hack away.
     You can skip ahead to **Advanced Configuration** or **How it All Works** now.
-
-Option 2: Setup using a Python Virtual Environment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Make sure you have installed Python 2.7. If you have not you can `follow this <https://wiki.python.org/moin/BeginnersGuide/Download>`_. Please also download the python installer, `PIP (install guide) <https://pip.pypa.io/en/stable/installing/>`_. We will now install and setup a python virtual environment. This keeps your dependencies for other projects and classes seperate from those required for Semester.ly.
-
-Install virtualenv:
-
-.. code-block:: bash
-
-    sudo pip install virtualenv
-
-Create a virtual environment called ``venv``:
-
-.. code-block:: bash
-
-    virtualenv -p /usr/bin/python2.7 venv
-
-To enter your virtual environment, execute the following code from your Semesterly directory:
-
-.. code-block:: bash
-
-    source venv/bin/activate
-
-.. note:: Be sure to execute the above "source" command anytime you are working on Semesterly!
 
 Check your OS info
 ~~~~~~~~~~~~~~~~~~
