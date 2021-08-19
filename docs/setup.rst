@@ -154,3 +154,25 @@ several tables. Right clicking any of these tables gives you options to select
 If this is your first time running Semester.ly, you will want to populate your 
 database with courses. Before you continue to :ref:`parsing`, please read the
 following additional tips for working with Docker.
+
+Additional Tips
+~~~~~~~~~~~~~~~
+You will often have to run commands within the Docker containers. For
+example, the next section requires you to run ``python manage.py ingest jhu
+--term Fall --years 2021`` in the semesterly container. To access containers, 
+open the Docker explorer on the left pane. There should be three containers 
+named jhuopensource/semesterly, semesterly, and postgres:12.1. Right clicking 
+any of these should give you the option ``Attach Shell``, which will open a
+terminal into the corresponding terminal.
+
+You may also need to run postgres commands beyond what running queries are
+capable of. In this case, open a terminal in the postgres container and run
+``psql -U postgres`` and you should be in the postgres shell.
+
+If you ever need to hard reset Docker, use the command ``docker system prune
+-a``.
+
+In order to log in on your local running version of Semester.ly, you will need
+access to auth keys. Please ask one of the current developers for access to
+these keys. Furthermore, some logins require use of https, so ensure that you
+are on https://jhu.sem.ly instead of http://jhu.sem.ly:8000 in these cases.
