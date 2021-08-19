@@ -18,12 +18,15 @@ installing Windows Subsystem for Linux (WSL) `here
 choosing Ubuntu 20.04 as your linux distribution. Make sure you take the extra
 steps to enable WSL 2 as it will be required for Docker.
 
-After WSL 2 is installed, install the Remote - WSL extension by Microsoft in
-VSCode. This will allow you to open a VSCode window within your linux
+After WSL 2 is installed, install the `Remote - WSL extension by Microsoft 
+<https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl>`_
+in VSCode. This will allow you to open a VSCode window within your linux
 subsystem. Press Ctrl+Shift+P and select the option Remote-WSL: New WSL Window.
 
-2. Install the Docker extension by Microsoft and the Postgres extension by 
-Chris Kolkman.
+2. Install the `Docker extension by Microsoft 
+<https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker>`_
+and the `Postgres extension by Chris Kolkman 
+<https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres>`_.
 
 3. Ensure that you are in a WSL Window in VSCode before continuing to the next 
 step. You can open a terminal by selecting the menu option ``Terminal -> New
