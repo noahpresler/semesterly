@@ -44,6 +44,12 @@ Cloning your Semester.ly fork will create a directory with all of the code requi
 
          git clone https://github.com/[YOUR-USERNAME]/semesterly
 
+3. Set up the upstream remote to jhuopensource/semesterly:
+
+    .. code-block:: bash
+
+        git remote add upstream https://github.com/jhuopensource/semesterly
+
 Setting up Docker
 ~~~~~~~~~~~~~~~~~
 Steps are below on getting your local development environment running:
