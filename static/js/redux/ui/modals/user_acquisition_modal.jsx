@@ -72,7 +72,7 @@ class UserAcquisitionModal extends React.Component {
             <span>Continue with Facebook</span>
           </button>
           <p className="method-details">Allows the option to friends in your classes.</p>
-          
+
           <br></br>
 
           <button
@@ -90,9 +90,9 @@ class UserAcquisitionModal extends React.Component {
                 src="/static/img/school_logos/jhu-square.png"
               />
             </span>
-            <span>Continue with JHU</span>
+            <span>Continue with JHED*</span>
           </button>
-          <p className="method-details">Login with Johns Hopkins JHED Authentication.</p>
+          <p className="method-details">* Exclusive to enrolled JHU students & faculty.</p>
 
           <div className="or-separator">
             <span className="h6 or-separator--text">or</span>
