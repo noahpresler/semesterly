@@ -67,10 +67,10 @@ def get_classmates_in_course(request, school, sem_name, year, course_id):
     json_data = {'current': [], 'past': []}
     course = Course.objects.get(school=school, id=course_id)
     student = None
-    is_logged_in = request.user.is_authenticated()
+    is_logged_in = request.user.is_authenticated
     if is_logged_in and Student.objects.filter(user=request.user).exists():
         student = Student.objects.get(user=request.user)
-    if student and student.user.is_authenticated() and student.social_courses:
+    if student and student.user.is_authenticated and student.social_courses:
         json_data = get_classmates_from_course_id(
             school, student, course.id, sem)
     return HttpResponse(json.dumps(json_data), content_type="application/json")
@@ -94,16 +94,16 @@ def course_page(request, code):
             name='Fall', year=current_year)
         course_dict = CourseSerializer(course_obj,
                                        context={'semester': semester, 'school': school}).data
-        l = course_dict['sections'].get('L', {}).values()
-        t = course_dict['sections'].get('T', {}).values()
-        p = course_dict['sections'].get('P', {}).values()
+        l = list(course_dict['sections'].get('L', {}).values())
+        t = list(course_dict['sections'].get('T', {}).values())
+        p = list(course_dict['sections'].get('P', {}).values())
         avg = round(course_obj.get_avg_rating(), 2)
         evals = course_dict['evals']
         clean_evals = evals
         for i, v in enumerate(evals):
-            for k, e in v.items():
-                if isinstance(evals[i][k], basestring):
-                    clean_evals[i][k] = evals[i][k].replace(u'\xa0', u' ')
+            for k, e in list(v.items()):
+                if isinstance(evals[i][k], str):
+                    clean_evals[i][k] = evals[i][k].replace('\xa0', ' ')
                 if k == "year":
                     clean_evals[i][k] = evals[i][k].replace(":", " ")
         if school == "jhu":
@@ -135,7 +135,7 @@ class CourseDetail(ValidateSubdomainMixin, APIView):
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         course = get_object_or_404(Course, school=school, id=course_id)
         student = None
-        is_logged_in = request.user.is_authenticated()
+        is_logged_in = request.user.is_authenticated
         if is_logged_in and Student.objects.filter(user=request.user).exists():
             student = Student.objects.get(user=request.user)
         json_data = CourseSerializer(course,

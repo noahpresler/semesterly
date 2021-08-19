@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import datetime
 
 from timeit import default_timer as timer
@@ -23,7 +21,7 @@ class TrackerError(PipelineError):
     """Tracker error class."""
 
 
-class Tracker(object):
+class Tracker:
     """Tracks specified attributes and broadcasts to viewers.
 
     @property attributes are defined for all BROADCAST_TYPES
@@ -118,7 +116,7 @@ class Tracker(object):
         Args:
             name (str): Viewer name to remove.
         """
-        self.viewers = filter(lambda v: v[0] != name, self.viewers)
+        self.viewers = [v for v in self.viewers if v[0] != name]
 
     def has_viewer(self, name):
         """Determine if name exists in viewers.

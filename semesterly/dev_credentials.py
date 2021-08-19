@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
-
 #DANGER: Should not be used in production
 #THE CREDENTIALS PROVIDED HERE ARE FOR TEST USE ONLY
 #THEY ARE NOT USED ON SEMESTER.LY NOR SHOULD THEY BE
@@ -29,7 +27,10 @@ SECRETS = {
     'SOCIAL_AUTH_FACEBOOK_SECRET': '75f855457ff18db012e57ccaaf3470eb',
     'FB_TEST_EMAIL': 'open_ejvbpxf_user@tfbnw.net',
     'FB_TEST_PASS': 'asdfasdfdsfdsfadfdsflsdflglfg',
-    'SOCIAL_AUTH_AZURE_SECRET': 'shh',
+    'SOCIAL_AUTH_AZURE_TENANT_KEY': None,
+    'SOCIAL_AUTH_AZURE_TENANT_SECRET': None,
+    'SOCIAL_AUTH_AZURE_TENANT_ID': None,
+    'STUDENT_SIS_AUTH_SECRET': 'TEST_KEY',
 
     #Not essential for testing, but can be filled in for advanced usage
     'GW_PASS': None,

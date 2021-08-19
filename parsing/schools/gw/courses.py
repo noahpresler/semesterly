@@ -10,9 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
-from __future__ import absolute_import, division, print_function
-
 import re
 import sys
 
@@ -77,7 +74,7 @@ class Parser(BaseParser):
             years_and_terms_filter
         )
 
-        for year, terms in years_and_terms.items():
+        for year, terms in list(years_and_terms.items()):
             self.ingestor['year'] = year
             for term_name in terms:
                 term_code = Parser.YEARS_AND_TERMS[year][term_name]
@@ -116,7 +113,7 @@ class Parser(BaseParser):
                 for dept_soup in depts_soup:
                     depts[dept_soup.text.strip()] = dept_soup['value']
 
-                for dept_name, dept_code in depts.iteritems():
+                for dept_name, dept_code in depts.items():
                     self.ingestor['department'] = {
                         'name': dept_name,
                         'code': dept_code
@@ -259,7 +256,7 @@ class Parser(BaseParser):
     def _direct_to_search_page(self):
         genurl = Parser.URL + '/twbkwbis.P_GenMenu'
         actions = ['bmenu.P_MainMnu', 'bmenu.P_StuMainMnu', 'bmenu.P_RegMnu']
-        map(lambda n: self.requester.get(genurl, params={'name': n}), actions)
+        list(map(lambda n: self.requester.get(genurl, params={'name': n}), actions))
         self.requester.get(Parser.URL + '/bwskfcls.P_CrseSearch',
                            parse=False,
                            params={'term_in': ''})
@@ -272,9 +269,8 @@ class Parser(BaseParser):
                 continue
             self.ingestor['time_start'] = time.group(1)
             self.ingestor['time_end'] = time.group(2)
-            self.ingestor['days'] = list(col[2].text)
-            filtered_days = filter(lambda x: x.replace(u'\xa0', u''),
-                                   self.ingestor['days'])
+            self.ingestor['days'] = [col[2].text]
+            filtered_days = [x for x in self.ingestor['days'] if x.replace('\xa0', '')]
             if len(filtered_days) == 0:
                 break
             self.ingestor['location'] = col[3].text
@@ -341,7 +337,7 @@ class Parser(BaseParser):
 
         # Filter and map over (header, content) pairs.
         extracted = {}
-        for name, data in fields.items():
+        for name, data in list(fields.items()):
             if extraction.get(name):
                 extracted[extraction[name][0]] = extraction[name][1](data)
 

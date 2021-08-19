@@ -48,6 +48,7 @@ class Semesterly extends React.Component {
       orientation: !mql.matches ? 'landscape' : 'portrait',
     };
     this.updateOrientation = this.updateOrientation.bind(this);
+    this.toLocalDate = this.toLocalDate.bind(this);
   }
 
   componentWillMount() {
@@ -140,6 +141,22 @@ class Semesterly extends React.Component {
     });
   }
 
+  toLocalDate() {
+    // DataLastUpdated Input example-  2021-05-02 14:42 UTC
+    // Params: How the backend sends a timestamp
+    // dateString: of the form yyyy-mm-dd hh:mm
+    const dateString = (this.props.dataLastUpdated).toString();
+
+    // If we pass anything false return empty string
+    if (!dateString) return '';
+    if (dateString.length === 0) return '';
+
+    // Convert given datetime to local datetime of user
+    // in form yyyy-mm-dd hh:mm TZ (Timezone full name)
+    const dateObj = new Date(dateString);
+    return dateObj.toString();
+  }
+
   render() {
     const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const cal = mobile && $(window).width() < 767 && this.state.orientation === 'portrait' ?
@@ -167,7 +184,7 @@ class Semesterly extends React.Component {
             {cal}
             <footer className="footer navbar no-print">
               <p className="data-last-updated no-print">Data last
-                updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
+                updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.toLocalDate() : null }</p>
               <ul className="nav nav-pills no-print">
                 <li className="footer-button" role="presentation">
                   <a href="/termsofservice">Terms</a>
@@ -184,9 +201,20 @@ class Semesterly extends React.Component {
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="http://goo.gl/forms/YSltU2YI54PC9sXw1"
+                    href="https://github.com/jhuopensource/semesterly/issues/new/choose"
                   >
                     Feedback
+                  </a>
+                </li>
+                <li className="footer-button" role="presentation">
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://discord.gg/txYbphsAV7"
+                    // TODO: add discord logo correctly
+                  >
+                    <i className="fab fa-discord" />
+                    Forum
                   </a>
                 </li>
                 <li className="footer-button" role="presentation">

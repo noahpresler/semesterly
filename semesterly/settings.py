@@ -44,7 +44,7 @@ def get_secret(key):
             return SECRETS[key]
         except:
             try:
-                from dev_credentials import SECRETS
+                from .dev_credentials import SECRETS
                 return SECRETS[key]
             except:
                 raise ValueError("""'%s' not correctly configured.
@@ -69,7 +69,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/calendar'
+    # 'https://www.googleapis.com/auth/calendar'
 ]
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
     'access_type': 'offline',  # Enables the refreshing grant
@@ -87,9 +87,10 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 SOCIAL_AUTH_FACEBOOK_KEY = get_secret('SOCIAL_AUTH_FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = get_secret('SOCIAL_AUTH_FACEBOOK_SECRET')
-SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY = '529bad73-004a-4ebf-8e46-98fe8ff05d82'
-SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET = get_secret('SOCIAL_AUTH_AZURE_SECRET')
-SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID = '9fa4f438-b1e6-473b-803f-86f8aedf0dec'
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY = get_secret('SOCIAL_AUTH_AZURE_TENANT_KEY')
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET = get_secret('SOCIAL_AUTH_AZURE_TENANT_SECRET')
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID = get_secret('SOCIAL_AUTH_AZURE_TENANT_ID')
+STUDENT_SIS_AUTH_SECRET = get_secret('STUDENT_SIS_AUTH_SECRET')
 
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
@@ -192,7 +193,7 @@ REST_FRAMEWORK ={
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -240,6 +241,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+SESSION_COOKIE_SAMESITE = None
+
 ROOT_URLCONF = 'semesterly.urls'
 
 WSGI_APPLICATION = 'semesterly.wsgi.application'
@@ -251,7 +254,7 @@ WSGI_APPLICATION = 'semesterly.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '',  # os.path.join(BASE_DIR, 'db.postgresql')
+        'NAME': os.path.join(BASE_DIR, 'db.postgresql'),  # os.path.join(BASE_DIR, 'db.postgresql')
         'USER': '',
         'PASSWORD': '',
         'HOST': 'localhost',
@@ -325,7 +328,7 @@ CACHES = {
 CACHALOT_ENABLED = True
 
 try:
-    from local_settings import *
+    from .local_settings import *
 except:
     pass
 

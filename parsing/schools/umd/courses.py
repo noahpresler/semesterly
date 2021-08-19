@@ -10,8 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from __future__ import absolute_import, division, print_function
-
 import re
 
 from parsing.library.base_parser import BaseParser
@@ -102,7 +100,7 @@ class Parser(BaseParser):
 
     def get_courses(self, departments):
         num_created, num_updated = 0, 0
-        for department_url, department_name in departments.items():
+        for department_url, department_name in list(departments.items()):
             soup = self.requester.get(url=department_url)
             course_div = soup.findAll(class_="course")
             for c in course_div:

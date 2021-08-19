@@ -15,7 +15,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from student.models import *
 from timetable.models import *
-from mailer import Mailer
+from .mailer import Mailer
 
 if len(sys.argv) < 3:
     print("Please specify a school (e.g. jhu) and a semester (F or S).")
@@ -34,8 +34,8 @@ for section in sections:
         try:
             timetables = PersonalTimetable.objects.filter(sections__id__contains=section.id, semester=semester)
         except:
-            print("Problem with getting section with id = " + str(section.id))
-        for student, timetable in zip(map(lambda t: t.student, timetables), timetables):
+            print(("Problem with getting section with id = " + str(section.id)))
+        for student, timetable in zip([t.student for t in timetables], timetables):
             if timetable != student.personaltimetable_set.filter(semester=semester).order_by('last_updated').last():
                 # Only applies for the student's last modified schedule.
                 continue
@@ -48,7 +48,7 @@ for section in sections:
         section.was_full = False
         section.save()
 
-for student, sections in d.items():
+for student, sections in list(d.items()):
     client.send_mail(student, "Course Waitlist Notification from Semester.ly", "email_waitlist.html", {'sections': sections})
 
 

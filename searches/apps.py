@@ -10,9 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-
-from __future__ import unicode_literals
-
 from django.apps import AppConfig
 
 
@@ -22,11 +19,17 @@ class SearchesConfig(AppConfig):
 
     def ready(self):
         """ Constructs Searcher object to be used if it can be built using course.vector field """
+
+        # TODO : re-enable if implementing vectorized search
+        """
         from searches.utils import Searcher
         if not self.searcher:
             try:
                 self.searcher = Searcher()
             except Exception as e:
                 self.searcher = None
-                print("Unable to create Searcher object: setting searcher object to None " +
-                      "and using baseline_search instead. \nError:%s" %e.message)
+                print('Unable to create Searcher object:',
+                      'setting searcher object to None and',
+                      'using baseline_search instead.',
+                      '\nError:', str(e))
+        """
