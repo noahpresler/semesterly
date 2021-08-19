@@ -112,8 +112,17 @@ Steps are below on getting your local development environment running:
 
         docker-compose build
         docker-compose up
-        The **build** command creates a local Database and build of your source code.
-        The **up** command runs everything. Be careful not to build when you don't need to as this will destroy your entire database and you'll need to ingest/digest again to get your course data (which takes about 30 minutes).
+
+    The **build** command creates a local Database and build of your source code.
+    The **up** command runs everything. Be careful not to build when you don't need to as this will destroy your entire database and you'll need to ingest/digest again to get your course data (which takes about 30 minutes).
+
+    .. note:: If you are using WSL 2, you may, but not necessarily, need 
+    additional setup described in this `guide
+    <https://docs.docker.com/desktop/windows/wsl/>`_. If you run into 
+    additional errors, try the following:
+    1. Change "buildkit" from ``true`` to ``false`` in Settings -> Docker Engine. 
+    2. Refer to the Docker troubleshooting document `here
+    <https://github.com/microsoft/vscode-docker/wiki/Troubleshooting>`_
 
     You now have Semester.ly running. If this is the first time, you will want some data which done in the next step.
 
