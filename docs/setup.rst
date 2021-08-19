@@ -62,6 +62,18 @@ Steps are below on getting your local development environment running:
 
         git update-index --skip-worktree semesterly/dev_credentials.py
 
+    *Alternatively*, you may create **semesterly/sensitive.py** as follows:
+
+    .. code-block:: bash
+
+        SECRETS = {
+            'JHU_API_KEY': 'xxxxxxxx',
+            # Other sensitive information goes here
+        }
+
+    This file will automatically be ignored by git. Be sure to replace
+    'xxxxxxxx' with your own API key.
+
 4. Add this entry to your hosts file as follows (This file is in c:\\Windows\\System32\\drivers\\etc\\hosts or /etc/hosts)
 
     .. code-block:: bash
