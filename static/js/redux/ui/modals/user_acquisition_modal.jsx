@@ -92,7 +92,7 @@ class UserAcquisitionModal extends React.Component {
             </span>
             <span>Continue with JHED*</span>
           </button>
-          <p className="method-details">* Exclusive to enrolled JHU students & faculty.</p>
+          <p className="method-details">* Exclusive to JHU students & faculty.</p>
 
           <div className="or-separator">
             <span className="h6 or-separator--text">or</span>
