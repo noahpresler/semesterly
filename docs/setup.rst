@@ -24,7 +24,7 @@ Setting up Docker
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Steps are below on getting your local development environment running:
 
-1. **Download and install docker** for your environment (Windows/Mac/Linux are supporter)
+1. **Download and install docker** for your environment (Windows/Mac/Linux are supported)
     https://www.docker.com/get-started
 
 2. Create **semesterly/local_settings.py** as follows:
@@ -62,7 +62,7 @@ Steps are below on getting your local development environment running:
 
         git update-index --skip-worktree semesterly/dev_credentials.py
 
-4. Add this entry to your hosts file as follows (This file is in c:\Windows\System32\drivers\etc\hosts or /etc/hosts)
+4. Add this entry to your hosts file as follows (This file is in c:\\Windows\\System32\\drivers\\etc\\hosts or /etc/hosts)
 
     .. code-block:: bash
 
