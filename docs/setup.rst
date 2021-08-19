@@ -129,22 +129,28 @@ Steps are below on getting your local development environment running:
     2. Refer to the Docker troubleshooting document `here
     <https://github.com/microsoft/vscode-docker/wiki/Troubleshooting>`_
 
-    You now have Semester.ly running. If this is the first time, you will want some data which done in the next step.
+    Open a browser and visit http://jhu.sem.ly:8000 to verify you have
+    Semester.ly running.
 
-6. Getting JHU data for a given term. In a new terminal run the following
+Setting up Postgres
+~~~~~~~~~~~~~~~~~~~
+You can easily access the Postgres database within VSCode by following the next
+steps. You should have the Postgres extension by Chris Kolkman installed.
 
-     .. code-block:: bash
+1. Open the Postgres explorer on the left pane and click the plus button in the
+top right of the explorer to add a new database connection.
+2. Enter ``127.0.0.1`` as the database connection.
+3. Enter ``postgres`` as the user to authenticate as.
+4. Enter nothing as the password of the PostgreSQL user.
+5. Enter ``5432`` as the port number to connect to.
+6. Select ``Standard Connection``
+7. Select ``postgres``
+8. Enter a display name for the database connection, such as ``semesterly``.
 
-        docker exec -it $(docker ps -q -f ancestor=semesterly) /bin/bash
-        * OR *
-        docker exec -it $(docker ps -q -f ancestor=semesterly) shell
+Upon expanding a few tabs under the new semesterly database, you should see
+several tables. Right clicking any of these tables gives you options to select
+(view) the items in the table or run a query.
 
-     This will put you inside of the shell. Now you can get courses by running these commands:
-
-     .. code-block:: bash
-
-         python manage.py ingest jhu --term Fall --years 2021
-         python manage.py digest jhu
-
-7.  Open a browser and visit http://jhu.sem.ly:8000 and hack away.
-    You can skip ahead to **Advanced Configuration** or **How it All Works** now.
+If this is your first time running Semester.ly, you will want to populate your 
+database with courses. Before you continue to :ref:`parsing`, please read the
+following additional tips for working with Docker.
