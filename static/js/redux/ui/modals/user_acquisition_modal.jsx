@@ -73,7 +73,7 @@ class UserAcquisitionModal extends React.Component {
           </button>
           <p className="method-details">Allows the option to friends in your classes.</p>
 
-          <br></br>
+          <br/>
 
           <button
             className="btn abnb-btn secondary" onClick={() => {
