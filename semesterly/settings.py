@@ -241,6 +241,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+SESSION_COOKIE_SAMESITE = None
+
 ROOT_URLCONF = 'semesterly.urls'
 
 WSGI_APPLICATION = 'semesterly.wsgi.application'
