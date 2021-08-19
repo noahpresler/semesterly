@@ -5,6 +5,30 @@ Installation
 
 This guide will bring you through the steps of creating a local Semester.ly server and development environment. It will walk through the setup of the core ecosystems we work within: Django/Python and React/Node/JS. It will additionally require the setup of a PostgreSQL database.
 
+Setting up Visual Studio Code
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+We recommend using `Visual Studio Code <https://code.visualstudio.com/>`_
+(VSCode) for its integration with WSL, Docker, and the Postgres database. This 
+section assumes you will be using Visual Studio Code for development with 
+Semester.ly.
+
+1. If you are on Windows OS, see the following guide on
+installing Windows Subsystem for Linux (WSL) `here
+<https://docs.microsoft.com/en-us/windows/wsl/install-win10>`_. We recommend 
+choosing Ubuntu 20.04 as your linux distribution. Make sure you take the extra
+steps to enable WSL 2 as it will be required for Docker.
+
+After WSL 2 is installed, install the Remote - WSL extension by Microsoft in
+VSCode. This will allow you to open a VSCode window within your linux
+subsystem. Press Ctrl+Shift+P and select the option Remote-WSL: New WSL Window.
+
+2. Install the Docker extension by Microsoft and the Postgres extension by 
+Chris Kolkman.
+
+3. Ensure that you are in a WSL Window in VSCode before continuing to the next 
+step. You can open a terminal by selecting the menu option ``Terminal -> New
+Terminal``.
+
 Fork/Clone The Repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 Forking Semester.ly will create your own version of Semester.ly listed on your GitHub!
