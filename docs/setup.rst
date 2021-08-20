@@ -138,7 +138,10 @@ Steps are below on getting your local development environment running:
 Setting up Postgres
 ~~~~~~~~~~~~~~~~~~~
 You can easily access the Postgres database within VSCode by following the next
-steps. You should have the Postgres extension by Chris Kolkman installed.
+steps. You should have the `Postgres extension by Chris Kolkman
+<https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres>`_
+installed.
+
 
 1. Open the Postgres explorer on the left pane and click the plus button in the
 top right of the explorer to add a new database connection.
