@@ -10,8 +10,8 @@ Our Stack
 =================== =========== ================= =====================================================================================================================================
 Component           Technology  Style/Methodology Tutorials
 =================== =========== ================= =====================================================================================================================================
-Database            PostgreSQL  Django ORM        `Making Queries with Django <https://docs.djangoproject.com/en/1.11/topics/db/queries/>`_
-Backend Framework   Django      PEP8              `Writing your first Django app <https://docs.djangoproject.com/en/1.11/intro/tutorial01/>`_
+Database            PostgreSQL  Django ORM        `Making Queries with Django <https://docs.djangoproject.com/en/2.2/topics/db/queries/>`_
+Backend Framework   Django      PEP8              `Writing your first Django app <https://docs.djangoproject.com/en/2.2/intro/tutorial01/>`_
 Frontend Framework  React       Redux/Airbnb      `React Basics <https://github.com/noahpresler/React-Tutorial>`_, `React <https://egghead.io/courses/react-fundamentals>`_, `Redux <https://egghead.io/courses/getting-started-with-redux>`_.
 CSS Framework       SCSS        BEM/Airbnb        `CSS Basics <https://www.w3schools.com/css/>`_, `SCSS <http://sass-lang.com/guide>`_, `BEM <http://getbem.com/introduction/>`_
 =================== =========== ================= =====================================================================================================================================
@@ -24,7 +24,7 @@ Learning the Backend
 
 **Django** is a Python Web framework that provides a huge number of tools for web developers to quickly write scalable code with minimal configuration. It is used all over the tech industry by companies like Spotify, Instagram, YouTube, and DropBox!
 
-`Writing your first Django app <https://docs.djangoproject.com/en/1.11/intro/tutorial01/>`_ is the official Django tutorial. It is top notch! The official documentation can be found at the same url and provides high quality information about how to build with this modern web framework.
+`Writing your first Django app <https://docs.djangoproject.com/en/2.2/intro/tutorial01/>`_ is the official Django tutorial. It is top notch! The official documentation can be found at the same url and provides high quality information about how to build with this modern web framework.
 
 Learning React/Redux
 ####################
