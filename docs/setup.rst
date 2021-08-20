@@ -12,8 +12,8 @@ We recommend using `Visual Studio Code <https://code.visualstudio.com/>`_
 This section assumes you will be using Visual Studio Code for development with 
 Semester.ly.
 
-1. If you are on Windows OS, see the following guide on
-installing Windows Subsystem for Linux (WSL) `here
+1. **If you are on Windows OS**, see the following guide on
+`installing Windows Subsystem for Linux (WSL)
 <https://docs.microsoft.com/en-us/windows/wsl/install-win10>`_. We recommend 
 choosing Ubuntu 20.04 as your linux distribution. Make sure you take the extra
 steps to enable WSL 2 as it will be required for Docker.
@@ -21,7 +21,8 @@ steps to enable WSL 2 as it will be required for Docker.
 After WSL 2 is installed, install the `Remote - WSL extension by Microsoft 
 <https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl>`_
 in VSCode. This will allow you to open a VSCode window within your linux
-subsystem. Press Ctrl+Shift+P and select the option Remote-WSL: New WSL Window.
+subsystem. Press ``Ctrl+Shift+P`` and select the option ``Remote-WSL: New WSL 
+Window``.
 
 2. Install the `Docker extension by Microsoft 
 <https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker>`_
@@ -106,7 +107,7 @@ Steps are below on getting your local development environment running:
     This file will automatically be ignored by git. Be sure to replace
     'xxxxxxxx' with your own API key.
 
-4. Add this entry to your hosts file as follows (This file is in c:\\Windows\\System32\\drivers\\etc\\hosts or /etc/hosts)
+4. Add this entry to your hosts file as follows (This file is in C:\\Windows\\System32\\drivers\\etc\\hosts or /etc/hosts)
 
     .. code-block:: bash
 
@@ -124,13 +125,15 @@ Steps are below on getting your local development environment running:
     The **build** command creates a local database and build of your source code.
     The **up** command runs everything. Be careful not to build when you don't need to as this will destroy your entire database and you'll need to ingest/digest again to get your course data (which takes about 30 minutes).
 
-    .. note:: If you are using WSL 2, you may, but not necessarily, need 
-    additional setup described in this `guide
-    <https://docs.docker.com/desktop/windows/wsl/>`_. If you run into 
-    additional errors, try the following:
-    1. Change "buildkit" from ``true`` to ``false`` in Settings -> Docker Engine. 
-    2. Refer to the Docker troubleshooting document `here
-    <https://github.com/microsoft/vscode-docker/wiki/Troubleshooting>`_
+    .. note:: 
+    
+        If you run into additional errors, try the following:
+
+            1. Change "buildkit" from ``true`` to ``false`` in ``Settings -> Docker 
+            Engine``. 
+
+            2. Refer to the `Docker troubleshooting document
+            <https://github.com/microsoft/vscode-docker/wiki/Troubleshooting>`_
 
     Open a browser and visit http://jhu.sem.ly:8000 to verify you have
     Semester.ly running.
@@ -142,15 +145,20 @@ steps. You should have the `Postgres extension by Chris Kolkman
 <https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres>`_
 installed.
 
+1. Open the Postgres explorer on the left pane and click the plus button in the top right of the explorer to add a new database connection.
 
-1. Open the Postgres explorer on the left pane and click the plus button in the
-top right of the explorer to add a new database connection.
 2. Enter ``127.0.0.1`` as the database connection.
+
 3. Enter ``postgres`` as the user to authenticate as.
+
 4. Enter nothing as the password of the PostgreSQL user.
+
 5. Enter ``5432`` as the port number to connect to.
-6. Select ``Standard Connection``
-7. Select ``postgres``
+
+6. Select ``Standard Connection``.
+
+7. Select ``postgres``.
+
 8. Enter a display name for the database connection, such as ``semesterly``.
 
 Upon expanding a few tabs under the new semesterly database, you should see
@@ -164,19 +172,20 @@ following additional tips for working with Docker and Postgres.
 Additional Tips
 ~~~~~~~~~~~~~~~
 You will often have to run commands within the Docker containers. For
-example, the next section requires you to run ``python manage.py ingest jhu
---term Fall --years 2021`` in the semesterly container. To access containers, 
-open the Docker explorer on the left pane. There should be three containers 
-named jhuopensource/semesterly, semesterly, and postgres:12.1. Right clicking 
-any of these should give you the option ``Attach Shell``, which will open a
-terminal into the corresponding terminal.
+example, the next section requires you to run something similiar to ``python 
+manage.py ingest jhu --term Fall --years 2021`` in the semesterly container. To
+access containers, open the Docker explorer on the left pane. There should be
+three containers named jhuopensource/semesterly, semesterly, and postgres:12.1.
+Right clicking any of these should give you the option ``Attach Shell``, which
+will open a terminal into the corresponding container.
 
 You may also need to run Postgres commands beyond what running queries are
 capable of. In this case, open a terminal in the postgres container and run
 ``psql -U postgres``. You should now be in the postgres shell.
 
 If you ever need to hard reset Docker, use the command ``docker system prune
--a``.
+-a``. You can then follow up with ``docker-compose build`` and ``docker-compose
+up``.
 
 In order to log in on your local running version of Semester.ly, you will need
 access to auth keys. Please ask one of the current developers for access to
