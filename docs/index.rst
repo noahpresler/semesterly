@@ -28,7 +28,6 @@ Students know best
 
    self
    setup
-   environment
    parsing
    advancedconfig
    howitworks   
