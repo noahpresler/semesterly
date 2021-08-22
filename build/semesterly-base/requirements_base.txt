@@ -6,7 +6,7 @@ Markdown==2.6.9
 MarkupSafe==1.1.1
 PyJWT==2.0.1
 PyYAML==5.4.1
-Pygments==2.2.0
+Pygments==2.7.4
 South==1.0.2
 Sphinx==4.0.2
 alabaster==0.7.10
