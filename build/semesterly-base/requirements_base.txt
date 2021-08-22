@@ -1,6 +1,6 @@
 setuptools==57.1.0
 Babel==2.5.0
-Django==2.2.18
+Django==2.2.24
 Jinja2==2.9.6
 Markdown==2.6.9
 MarkupSafe==1.1.1
