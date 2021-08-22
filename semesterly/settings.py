@@ -40,13 +40,13 @@ def get_secret(key):
         return os.environ[key]
     except KeyError:
         try:
-            from sensitive import SECRETS
+            from .sensitive import SECRETS
             return SECRETS[key]
-        except:
+        except (ModuleNotFoundError, KeyError):
             try:
                 from .dev_credentials import SECRETS
                 return SECRETS[key]
-            except:
+            except KeyError:
                 raise ValueError("""'%s' not correctly configured.
                 Try adding it to the file semesterly/sensitive.py.
                 If this fails only on travis, make sure get_secret
