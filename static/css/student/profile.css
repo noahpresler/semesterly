@@ -29,6 +29,7 @@ header.down {
 	border-bottom: 1px solid transparent;
 }
 header h1 {
+	color: #34495E;
 	float: left;
 	font-size: 26px;
 	line-height: 30px;
