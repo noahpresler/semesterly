@@ -1,0 +1,74 @@
+name: Semesterly CI
+
+on:
+  push:
+    branches: [ master, staging, cs310-spring21, github-actions ]
+  pull_request:
+    branches: [ master, staging, cs310-spring21, github-actions ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+        - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8]
+        node-version: [10.x, 12.x, 14.x]
+
+    steps:
+    - name: Adjust hosts file
+      run: sudo echo "127.0.0.1 jhu.sem.ly sem.ly jhu" | sudo tee -a /etc/hosts
+
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm install
+    - run: npm -g install chromedriver
+    - run: npm -g install jest@20
+    - run: npm run build --if-present
+    - run: npm run lint
+    - run: npm run test
+
+    - name: Run Backend Tests
+      uses: GabrielBB/xvfb-action@v1
+      env:
+        NODE_ENV: production
+        host: jhu.sem.ly
+        DB_PORT: ${{ job.services.postgres.ports[5432] }}
+      with:
+        run: python manage.py test
+
+    - name: Run docs
+      run: make html -C docs
+
