@@ -1,0 +1,55 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: semesterly-parsing
+  namespace: semesterly-stage
+spec:
+  schedule: "40 19 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - image: semesterly.azurecr.io/semesterly:Version
+              name: gunicorn-cron
+              command: ["/bin/bash","/code/run_parser.sh"]
+              workingDir: /code
+              envFrom:
+                - secretRef:
+                    name: semesterly-secrets
+              env:
+                - name: NODE_ENV
+                  value: stage
+                - name: DB_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: semesterly-secrets
+                      key: DB_HOST
+                - name: DB_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: semesterly-secrets
+                      key: DB_NAME
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: semesterly-secrets
+                      key: DB_PASSWORD
+                - name: DB_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: semesterly-secrets
+                      key: DB_PORT
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: semesterly-secrets
+                      key: DB_USER
+                - name: JHU_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: semesterly-secrets
+                      key: JHU_API_KEY
+          restartPolicy: OnFailure

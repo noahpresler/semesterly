@@ -1,0 +1,8 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: ingress-config
+  namespace: semesterly-stage
+data:
+  use-forwarded-headers: "true"
+  forwarded-for-header: "X-Forwarded-For"
