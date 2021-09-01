@@ -10,4 +10,4 @@ COPY ./50x.html /usr/share/nginx/html/50x.html
 
 # Get assets
 RUN mkdir /code
-COPY --from=semesterly.azurecr.io/nginx:latest /code/static /code/static
+COPY --from=semesterly.azurecr.io/semesterly:latest /code/static /code/static
