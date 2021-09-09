@@ -31,7 +31,6 @@ class SubdomainMiddleware(MiddlewareMixin):
 
 		if subdomain in ACTIVE_SCHOOLS:
 			request.subdomain = subdomain
-			logging.error("ACTIVE SCHOOLS")
 		elif subdomain.endswith(nonprod_suffixes):
 			# Default to JHU for non-prod URLs for ease of setup/testing
 			request.subdomain = "jhu"
