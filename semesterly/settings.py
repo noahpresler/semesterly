@@ -59,6 +59,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
+USE_X_FORWARDED_HOST = True
+
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
     'user_friends',
