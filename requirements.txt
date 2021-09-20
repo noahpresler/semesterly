@@ -33,7 +33,7 @@ cryptography==3.4.7
 dateparser==1.0.0
 defusedxml==0.5.0
 distlib==0.2.5
-Django==3.0
+Django==3.1
 django-cachalot==2.3.2
 django-celery==3.3.1
 django-celery-beat==1.0.0
