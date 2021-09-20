@@ -1,6 +1,5 @@
 setuptools==57.1.0
 Babel==2.5.0
-Django==2.2.18
 Jinja2==2.9.6
 Markdown==2.6.9
 MarkupSafe==1.1.1
@@ -34,6 +33,7 @@ cryptography==3.4.7
 dateparser==1.0.0
 defusedxml==0.5.0
 distlib==0.2.5
+Django==3.0
 django-cachalot==2.3.2
 django-celery==3.3.1
 django-celery-beat==1.0.0
@@ -61,7 +61,7 @@ imagesize==0.7.1
 interruptingcow==0.7
 itypes==1.1.0
 jsondiff==1.1.1
-jsonfield==2.0.2
+jsonfield==3.0.0
 jsonpatch==1.16
 jsonpointer==1.10
 jsonschema==3.2.0

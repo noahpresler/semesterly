@@ -1,117 +1,130 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-		<meta name="description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
-		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder, Sebastian Cabrejos">
 
-		<!-- Facebook thumbnail info -->
-		<meta property="og:title" content="Semester.ly - Course Scheduling Made Easy" />
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="Semesterly" />
-		<meta property="og:url" content="http://semester.ly" />
-		<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
-		<meta property="og:description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
-		<meta property="fb:admins" content="535129063" />
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+	<meta name="description"
+		content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
+	<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder, Sebastian Cabrejos">
 
-		<title>Semester.ly: Course Scheduling, Textbooks, Social & More</title>
-		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+	<!-- Facebook thumbnail info -->
+	<meta property="og:title" content="Semester.ly - Course Scheduling Made Easy" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Semesterly" />
+	<meta property="og:url" content="http://semester.ly" />
+	<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
+	<meta property="og:description"
+		content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
+	<meta property="fb:admins" content="535129063" />
 
-		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
-		<link rel="stylesheet" href="{% static 'css/global.css'%}">
-		<link rel="stylesheet" href="{% static 'css/about.css'%}">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css" integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni" crossorigin="anonymous">
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-		
-		<script src="https://kit.fontawesome.com/54815f8287.js" crossorigin="anonymous"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-		<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
-		 
-		<!-- Google Analytics script -->
-	    <script>
-	      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	<title>Semester.ly: Course Scheduling, Textbooks, Social & More</title>
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
 
-	      ga('create', 'UA-68704308-1', 'auto');
-	      ga('send', 'pageview');
+	<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet"
+		type='text/css'>
+	<link rel="stylesheet" href="{% static 'css/global.css'%}">
+	<link rel="stylesheet" href="{% static 'css/about.css'%}">
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css"
+		integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-	    </script>
-	</head>
-	<body>
-		<header class="down">
-			<div class="grid cf">
-				<a href="/">
-					<h1><i class="fa fa-chevron-circle-left"></i>&nbsp;Back&nbsp;&nbsp;</h1>
-					<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
-					<h1>Semester.ly</h1>
-				</a>
-				<nav>
-					<!-- <a href="https://jhu.semester.ly">JHU</a>
+	<script src="https://kit.fontawesome.com/54815f8287.js" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
+
+	<!-- Google Analytics script -->
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+		ga('create', 'UA-68704308-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</head>
+
+<body>
+	<header class="down">
+		<div class="grid cf">
+			<a href="/">
+				<h1><i class="fa fa-chevron-circle-left"></i>&nbsp;Back&nbsp;&nbsp;</h1>
+				<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
+				<h1>Semester.ly</h1>
+			</a>
+			<nav>
+				<!-- <a href="https://jhu.semester.ly">JHU</a>
 					<a href="https://horario-tec.sger.li">ITCR</a> -->
-					<!-- <a href="https://umd.semester.ly">UMD</a>
+				<!-- <a href="https://umd.semester.ly">UMD</a>
 					<a href="https://uoft.semester.ly">UofT</a> -->
-				</nav>
+			</nav>
+		</div>
+	</header>
+	<div id="page">
+		<div class="grid cf">
+			<div id="pre">
+				<!-- TODO: fix font color -->
+				<h1>Built by students, for students</h1>
+				<br>
+				<h4>
+					Semester.ly started in 2014 by a few university students who wanted to not only challenge
+					themselves but change the way students develop their course schedules. By 2017, we rolled out
+					at Johns Hopkins University and several other schools, quickly accumulating many intrigued users. In
+					2019,
+					we decided to partner with the Hopkins IT Department to subsidize our student developers and
+					sustain our project. If there's anything we learned, it's that students can dream big and continue
+					to help this project flourish.
+				</h4>
 			</div>
-		</header>
-		<div id="page">
-			<div class="grid cf">
-				<div id="pre">
-					<!-- TODO: fix font color -->
-					<h1>Built by students, for students</h1>
-					<br>
-					<h4>
-						Semester.ly started in 2014 by a few university students who wanted to not only challenge
-						themselves but change the way students develop their course schedules. By 2017, we rolled out
-						at Johns Hopkins University and several other schools, quickly accumulating many intrigued users. In 2019,
-						we decided to partner with the Hopkins IT Department to subsidize our student developers and
-						sustain our project. If there's anything we learned, it's that students can dream big and continue
-						to help this project flourish.
-					</h4>
-				</div>
-				<!-- <p align="center"><a target="_blank"><img width="100"src="https://semester.ly/static/img/logo2.0-32x32.png"></a></p>
+			<!-- <p align="center"><a target="_blank"><img width="100"src="https://semester.ly/static/img/logo2.0-32x32.png"></a></p>
 				<p align="center"><a target="_blank"><img width="200" src="http://i.imgur.com/9mMP9bY.png"/></a></p> -->
-				<!-- <div id="hero"></div> -->
-			</div>
-			<div id="learn">
-				<div class="about">
-					<div class="grid cf">
-						<div class="col-1-1">
-							<h5>Our Founders</h5>
-						</div>
-						<div class="col-1-3 member">
-							<div class="circular" style="background-image: url(/static/img/noah.jpg)"></div>
-							<h4 class="name">Noah Presler</h4>
-							<h3>Board Member</h3>
-							<h3>Former Program Manager</h3>
-							<h3>JHU '17</h3>
-							<a href="https://www.linkedin.com/in/noahpresler"><i class="fab fa-linkedin fa-2x"></i></a>
-						</div>
-						<div class="col-1-3 member">
-							<div class="circular" style="background-image: url(/static/img/rohan.jpg)"></div>
-							<h4 class="name">Rohan Das</h4>
-							<h3>Board Member</h3>
-							<h3>Former Software Developer</h3>
-							<h3>UT '16</h3>
-							<a href="https://www.linkedin.com/in/rohan-das-6aab0496"><i class="fab fa-linkedin fa-2x"></i></a>
-						</div>
-						<div class="col-1-3 member">
-							<div class="circular" style="background-image: url(/static/img/felix.jpg)"></div>
-							<h4 class="name">Felix Zhu</h4>
-							<h3>Former Software Developer</h3>
-							<h3>UT '16</h3>
-							<a href="https://www.linkedin.com/in/zhufelix"><i class="fab fa-linkedin fa-2x"></i></a>
-						</div>
+			<!-- <div id="hero"></div> -->
+		</div>
+		<div id="learn">
+			<div class="about">
+				<div class="grid cf">
+					<div class="col-1-1">
+						<h5>Our Founders</h5>
 					</div>
-					<div id="page">
+					<div class="col-1-3 member">
+						<div class="circular" style="background-image: url(/static/img/noah.jpg)"></div>
+						<h4 class="name">Noah Presler</h4>
+						<h3>Board Member</h3>
+						<h3>Former Program Manager</h3>
+						<h3>JHU '17</h3>
+						<a href="https://www.linkedin.com/in/noahpresler"><i class="fab fa-linkedin fa-2x"></i></a>
+					</div>
+					<div class="col-1-3 member">
+						<div class="circular" style="background-image: url(/static/img/rohan.jpg)"></div>
+						<h4 class="name">Rohan Das</h4>
+						<h3>Board Member</h3>
+						<h3>Former Software Developer</h3>
+						<h3>UT '16</h3>
+						<a href="https://www.linkedin.com/in/rohan-das-6aab0496"><i
+								class="fab fa-linkedin fa-2x"></i></a>
+					</div>
+					<div class="col-1-3 member">
+						<div class="circular" style="background-image: url(/static/img/felix.jpg)"></div>
+						<h4 class="name">Felix Zhu</h4>
+						<h3>Former Software Developer</h3>
+						<h3>UT '16</h3>
+						<a href="https://www.linkedin.com/in/zhufelix"><i class="fab fa-linkedin fa-2x"></i></a>
+					</div>
+				</div>
+				<div id="page">
 					<div class="grid cf">
 						<div id="pre">
 							<h4>
-								As of 2021, Semester.ly is still an open source project, integrated in several CS courses, supported by Hopkins 
+								As of 2021, Semester.ly is still an open source project, integrated in several CS
+								courses, supported by Hopkins
 								administration, faculty, & students, and motivated to continue growing this project!
 							</h4>
 						</div>
@@ -127,7 +140,8 @@
 							<h5>Our Current Team</h5>
 						</div>
 						<div class="col-1-3 member">
-							<div class="circular" style="background-image: url(/static/img/sebastiancabrejos.jpg)"></div>
+							<div class="circular" style="background-image: url(/static/img/sebastiancabrejos.jpg)">
+							</div>
 							<h4 class="name">Sebastian Cabrejos</h4>
 							<h3>Program Manager</h3>
 							<h3>JHU '22</h3>
@@ -135,7 +149,8 @@
 								<!-- TODO: FIX class tags to display correctly -->
 								<a href="https://sebastiancabrejos.com"><i class="fa fa-fw fa-link fa-2x"></i></a>
 								<a href="https://github.com/Boccca2014"><i class="fab fa-github fa-2x"></i></a>
-								<a href="https://www.linkedin.com/in/sebastian-c2022/"><i class="fab fa-linkedin fa-2x"></i></a>
+								<a href="https://www.linkedin.com/in/sebastian-c2022/"><i
+										class="fab fa-linkedin fa-2x"></i></a>
 							</div>
 						</div>
 						<div class="col-1-3 member">
@@ -146,17 +161,21 @@
 							<div class="social">
 								<a href="https://jjameswwang.com/"><i class="fa fa-fw fa-link fa-2x"></i></a>
 								<a href="https://github.com/JJamesWWang"><i class="fab fa-github fa-2x"></i></a>
-								<a href="https://www.linkedin.com/in/jjameswwang/"><i class="fab fa-linkedin fa-2x"></i></a>
+								<a href="https://www.linkedin.com/in/jjameswwang/"><i
+										class="fab fa-linkedin fa-2x"></i></a>
 							</div>
 						</div>
 						<div class="col-1-3 member">
-							<div class="circular" style="background-image: url(https://i.postimg.cc/MG5KN5Qx/T01-KNFNS92-L-U01-KB9-VPE0-Z-ba84b1ba0d19-512.png)"></div>
+							<div class="circular"
+								style="background-image: url(https://i.postimg.cc/MG5KN5Qx/T01-KNFNS92-L-U01-KB9-VPE0-Z-ba84b1ba0d19-512.png)">
+							</div>
 							<h4 class="name">Jeanie Fung</h4>
 							<h3>Software Developer</h3>
 							<h3>JHU '23</h3>
 							<div class="social">
 								<a href="https://github.com/jwfung"><i class="fab fa-github fa-2x"></i></a>
-								<a href="https://www.linkedin.com/in/jeanie-fung-4281b8161/"><i class="fab fa-linkedin fa-2x"></i></a>
+								<a href="https://www.linkedin.com/in/jeanie-fung-4281b8161/"><i
+										class="fab fa-linkedin fa-2x"></i></a>
 							</div>
 						</div>
 						<div class="col-1-3 member">
@@ -166,7 +185,8 @@
 							<h3>JHU '24</h3>
 							<div class="social">
 								<a href="https://github.com/jwfung"><i class="fab fa-github fa-2x"></i></a>
-								<a href="https://www.linkedin.com/in/ameya-dehade-7150851a8/"><i class="fab fa-linkedin fa-2x"></i></a>
+								<a href="https://www.linkedin.com/in/ameya-dehade-7150851a8/"><i
+										class="fab fa-linkedin fa-2x"></i></a>
 							</div>
 						</div>
 					</div>
@@ -189,7 +209,8 @@
 							<h3>CS Lecturer @JHU</h3>
 							<div class="social">
 								<a href="https://github.com/madooei"><i class="fab fa-github fa-2x"></i></a>
-								<a href="https://www.linkedin.com/in/alimadooei"><i class="fab fa-linkedin fa-2x"></i></a>
+								<a href="https://www.linkedin.com/in/alimadooei"><i
+										class="fab fa-linkedin fa-2x"></i></a>
 							</div>
 						</div>
 						<div class="col-1-3 member">
@@ -197,7 +218,8 @@
 							<h4 class="name">Dr. Ali Darvish</h4>
 							<h3>CS Lecturer @JHU</h3>
 							<div class="social">
-								<a href="https://www.linkedin.com/in/alidarvish"><i class="fab fa-linkedin fa-2x"></i></a>
+								<a href="https://www.linkedin.com/in/alidarvish"><i
+										class="fab fa-linkedin fa-2x"></i></a>
 							</div>
 						</div>
 						<div class="col-1-3 member">
@@ -205,7 +227,8 @@
 							<h4 class="name">Joshua Ambrose</h4>
 							<h3>Director of Student Ventures @FFU</h3>
 							<div class="social">
-								<a href="https://www.linkedin.com/in/josh-ambrose"><i class="fab fa-linkedin fa-2x"></i></a>
+								<a href="https://www.linkedin.com/in/josh-ambrose"><i
+										class="fab fa-linkedin fa-2x"></i></a>
 							</div>
 						</div>
 						<div class="col-1-3 member">
@@ -213,7 +236,8 @@
 							<h4 class="name">Dr. Yair Amir</h4>
 							<h3>CS Professor @JHU</h3>
 							<div class="social">
-								<a href="https://www.linkedin.com/in/yair-amir-61b58"><i class="fab fa-linkedin fa-2x"></i></a>
+								<a href="https://www.linkedin.com/in/yair-amir-61b58"><i
+										class="fab fa-linkedin fa-2x"></i></a>
 							</div>
 						</div>
 					</div>
@@ -222,8 +246,11 @@
 							<h5>Our Former Team Members</h5>
 						</div>
 						<div class="col-1-4 member">
-							<div class="circular" style="background-image: url(https://i.postimg.cc/MZ0F1LV9/mia.png)"></div>
-							<a href="https://www.linkedin.com/in/miaboloix/"><h4 class="name">Mia Boloix</h4></a>
+							<div class="circular" style="background-image: url(https://i.postimg.cc/MZ0F1LV9/mia.png)">
+							</div>
+							<a href="https://www.linkedin.com/in/miaboloix/">
+								<h4 class="name">Mia Boloix</h4>
+							</a>
 							<h3>Former Program Manager ('19-'21)</h3>
 							<h3>JHU '21</h3>
 							<!-- <div>
@@ -261,7 +288,7 @@
 							<h3>Former Software Developer</h3>
 							<h3>JHU Alum</h3>
 						</div>
-						<div class="col-1-4 member">	
+						<div class="col-1-4 member">
 							<div class="circular" style="background-image: url(/static/img/william.jpg)"></div>
 							<h4 class="name">William Yao</h4>
 							<h3>Former Software Developer</h3>
@@ -285,7 +312,7 @@
 							<h3>Former Software Developer</h3>
 							<h3>JHU Alum</h3>
 						</div>
-						<div class="col-1-4 member">	
+						<div class="col-1-4 member">
 							<div class="circular" style="background-image: url(/static/img/blank.jpg)"></div>
 							<h4 class="name">Eddie Wang</h4>
 							<h3>Former Software Developer</h3>
@@ -319,33 +346,34 @@
 				<div class="col-1-1">
 					<ul>
 						<li><a href="https://www.facebook.com/semesterly/" target="_blank">
-							<i class="fa fa-facebook"></i>
-							<span>Like us on Facebook</span>
-						</a></li>
+								<i class="fa fa-facebook"></i>
+								<span>Like us on Facebook</span>
+							</a></li>
 						<li><a href="https://github.com/jhuopensource/semesterly/">
-							<i class="fa fa-github fa-lg"></i>
-							<span>Find us on GitHub</span>
-						</a></li>
+								<i class="fa fa-github fa-lg"></i>
+								<span>Find us on GitHub</span>
+							</a></li>
 						<li><a href="https://discord.gg/txYbphsAV7">
-							<i class="fab fa-discord fa-lg"></i>
-							<span>Join the Community Forum</span>
-						</a></li>
+								<i class="fab fa-discord fa-lg"></i>
+								<span>Join the Community Forum</span>
+							</a></li>
 						<li><a href="mailto:contact@semester.ly">
-							<i class="fa fa-at"></i>
-							<span>Email us at contact@semester.ly</span>
-						</a></li>
+								<i class="fa fa-at"></i>
+								<span>Email us at contact@semester.ly</span>
+							</a></li>
 						<li><a href="https://semester.ly/termsofservice" target="_blank">
-							<i class="fa fa-bookmark"></i>
-							<span>Read our Terms of Service</span>
-						</a></li>
+								<i class="fa fa-bookmark"></i>
+								<span>Read our Terms of Service</span>
+							</a></li>
 						<li><a href="https://semester.ly/privacypolicy" target="_blank">
-							<i class="fa fa-lock"></i>
-							<span>Read our Privacy Policy</span>
-						</a></li>
+								<i class="fa fa-lock"></i>
+								<span>Read our Privacy Policy</span>
+							</a></li>
 					</ul>
 				</div>
 				<h6>COPYRIGHT © 2017-2021 SEMESTERLY TECHNOLOGIES, LLC.</h6>
 			</div>
 		</footer>
-	</body>
+</body>
+
 </html>
