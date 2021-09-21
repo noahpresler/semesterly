@@ -1,142 +1,172 @@
 {% extends "header.html" %}
-{% load staticfiles %}
+{% load static %}
 
 {% block title_description_block %}
-	<title>Press Page - Semester.ly: Course Scheduling, Textbooks, Social & More</title>
-	<meta name="description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
+<title>Press Page - Semester.ly: Course Scheduling, Textbooks, Social & More</title>
+<meta name="description"
+	content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
 {% endblock %}
 
 {% block og_block %}
-	<meta property="og:title" content="Press Page - Semester.ly" />
-	<meta property="og:type" content="website" />
-	<meta property="og:site_name" content="Semesterly" />
-	<meta property="og:url" content="http://semester.ly/press" />
-	<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
-	<meta property="og:description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
-	<meta property="fb:admins" content="535129063" />
+<meta property="og:title" content="Press Page - Semester.ly" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Semesterly" />
+<meta property="og:url" content="http://semester.ly/press" />
+<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
+<meta property="og:description"
+	content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
+<meta property="fb:admins" content="535129063" />
 {% endblock %}
 
 {% block css_block %}
-	<link rel="stylesheet" href="{% static 'css/press.css'%}">
+<link rel="stylesheet" href="{% static 'css/press.css'%}">
 {% endblock %}
 
 {% block body_block %}
-    <div id="page">
-		<div id="hero">
-			<div class="grid cf">	
-				<div class="col-1-1 about-text">
-					<h1>Press</h1>
-				</div>
-			</div>
-		</div>
-		<div id="authors">
-			<div class="grid cf">
-				<h1>Featured In</h1>
-				<a class="author" href="https://www.jhu.edu/" target="_blank" style="background-image:url(/static/img/press_img/jhu-logo.png);"></a>
-				<a class="author" href="https://engineering.jhu.edu/" target="_blank" style="background-image:url(/static/img/press_img/whiting.png);"></a>
-				<a class="author" href="https://hub.jhu.edu/" target="_blank" id="hub" style="background-image:url(/static/img/press_img/hub.png);"></a>
-				<a class="author" href="https://www.jhunewsletter.com/" target="_blank" style="background-image:url(/static/img/press_img/jhu-newsletter.png);"></a>
-				<a class="author" href="https://www.theodysseyonline.com/" target="_blank" style="background-image:url(/static/img/press_img/odyssey-transparent.png);"></a>
-				<a class="author" href="https://technical.ly/" target="_blank" style="background-image:url(/static/img/press_img/technically-black.png);"></a>
-			</div>
-		</div>
-		<!-- TODO: CACHE ALL THESE IMAGE LINKS -->
-		<div id="press">
-			<div class="grid row">
-				<div class="col-1-1 push-1">
-					<a href="https://www.jhunewsletter.com/article/2017/09/semester-ly-platform-becomes-open-source" class="col-1-2 article" target="_blank"  >
-						<div class="article-link">
-						<div class="embed-image" style="background-image:url(https://snworksceo.imgix.net/jhn/b39fa8dd-0148-48e8-9338-954fbf857f19.sized-1000x1000.jpg?w=1000);"></div>
-						</div>
-
-						<div class="article-data">
-							Semesterly Becomes Open Source
-						</div>  
-						<div class="article-overlay"></div>
-					</a>
-					<a href="http://hub.jhu.edu/2016/10/20/semesterly-scheduling-app/" class="col-1-2 article" target="_blank"  >
-						<div class="article-link">
-						<div class="embed-image" style="background-image:url(http://api.hub.jhu.edu/factory/sites/default/files/styles/landscape/public/semester101916.jpg?itok=2satXP8a);"></div>
-						</div>
-
-						<div class="article-data">
-							JHU Loves Semesterly
-						</div>  
-						<div class="article-overlay"></div>
-					</a>
-				</div>
-			</div>
-			<div class="grid row">
-				<div class="col-1-1 push-1">
-					<a href="http://www.cs.jhu.edu/2016/10/05/css-noah-presler-team-create-online-scheduler-streamline-course-registration-process/#.V_UYZeArJhG" class="col-1-2 article" target="_blank" >
-						<div class="article-link">
-							<div class="embed-image" style="background-image:url(https://www.cs.jhu.edu/wp-content/uploads/2016/10/hopSemesterly-768x553.png);"></div>
-						</div>
-
-						<div class="article-data">
-							JHU CS Recognizes Semesterly
-						</div>  
-						<div class="article-overlay"></div>
-					</a>
-					<a href="https://www.theodysseyonline.com/reasons-semesterly-will-save-course-registration" class="col-1-2 article" target="_blank" >
-						<div class="article-link">
-							<div class="embed-image" style="background-image:url(https://assets.rebelmouse.io/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbWFnZSI6Imh0dHBzOi8vbWVkaWEucmJsLm1zL2ltYWdlP3U9JTJGZmlsZXMlMkYyMDE2JTJGMDclMkYxNiUyRjYzNjA0MjQwMDkwMzIzMTI0NDE4NzEwMTA0NDJfMTMyMjEyODFfMTExMjQwNjY3MjE1NTg4M180MDgwMTMzMzgxODk1MDI0MjIxX28uanBnJmhvPWh0dHBzJTNBJTJGJTJGYXo2MTY1Nzgudm8ubXNlY25kLm5ldCZzPTk5MSZoPTc3M2U3MTg0ZGQ1NGFkYTM5MTJiNGU2ZmQ3YjUyYTg2Yzg0NDczMjYyMTkyNzE2NDZjNmE1M2Q4MGM5MzA3YTgmc2l6ZT05ODB4JmM9MjQ5OTYyNDc5MSIsImV4cGlyZXNfYXQiOjE2NjUxNDM4NTR9.H0H3tY9aKWYzumUea9RmppJ9QTItlOL5V_y0-_mylLM/img.jpg?width=1200&height=628);"></div>
-						</div>
-
-						<div class="article-data">
-							13 Reasons Why Semesterly Will Save Your Life
-						</div>  
-						<div class="article-overlay"></div>
-					</a>
-				</div>
-			</div>
-			<div class="grid row">
-				<div class="col-1-1 push-1">
-					<a href="https://www.theodysseyonline.com/how-semesterly-can-change-your-course-registration" class="col-1-2 article" target="_blank" >
-						<div class="article-link">
-							<div class="embed-image" style="background-image:url(https://assets.rebelmouse.io/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbWFnZSI6Imh0dHBzOi8vbWVkaWEucmJsLm1zL2ltYWdlP3U9JTJGZmlsZXMlMkYyMDE2JTJGMDYlMkYxNCUyRjYzNjAxNDcxMjA2MzUwMDA4NDExNjI5OTMwMTBfc2VtZXN0ZXJseS5qcGcmaG89aHR0cHMlM0ElMkYlMkZhejYxNjU3OC52by5tc2VjbmQubmV0JnM9MjEzJmg9N2RmNWQ5MGYxY2IzZjRjN2JjOWZjMGI0OGU2NjM1N2FhNDIyYzZlOGZkZTBmNjNlOWI1ZGM4ZDZiZTE1Y2YxYyZzaXplPTk4MHgmYz00MDI3NTU4ODIwIiwiZXhwaXJlc19hdCI6MTY2Nzg5MDAwN30.xudID4_VPI0NZN7tJfUqlM9_iZ15nEwali1uOWV-9xg/img.jpg?width=1200&height=628);"></div>
-						</div>
-
-						<div class="article-data">
-							How Semesterly Can Change Your Course Registration
-						</div>  
-						<div class="article-overlay"></div>
-					</a>
-					<a href="https://nlonthedl.wordpress.com/2015/11/05/semester-ly-simplifies-course-scheduling/" class="col-1-2 article" target="_blank" >
-						<div class="article-link">
-							<div class="embed-image" style="background-image:url(https://nlonthedl.files.wordpress.com/2015/11/a6_semester-ly.png?w=600&h=376);"></div>
-						</div>
-
-						<div class="article-data">
-							Semesterly Simplifies Course Scheduling
-						</div>  
-						<div class="article-overlay"></div>
-					</a>
-				</div>
-			</div>
-			<div class="grid row">
-				<div class="col-1-1 push-1">
-					<a href="http://www.jhunewsletter.com/2016/09/08/oconnor-fund-backs-campus-entrepreneurs/" class="col-1-2 article" target="_blank" >
-						<div class="article-link">
-							<div class="embed-image" style="background-image:url(http://i.imgur.com/Eem4KTj.png);"></div>
-						</div>
-
-						<div class="article-data">
-							O’Connor Fund backs Semesterly
-						</div>  
-						<div class="article-overlay"></div>
-					</a>
-					<a href="http://technical.ly/baltimore/2016/10/24/semesterly-noah-presler-johns-hopkins/" class="col-1-2 article" target="_blank" >
-						<div class="article-link">
-							<div class="embed-image" style="background-image:url(http://technical.ly/baltimore/wp-content/uploads/sites/3/2016/10/classroom.jpg);"></div>
-						</div>
-						<div class="article-data">
-							JHU undergrads have a startup for course registration
-						</div>  
-						<div class="article-overlay"></div>
-					</a>
-				</div>
+<div id="page">
+	<div id="hero">
+		<div class="grid cf">
+			<div class="col-1-1 about-text">
+				<h1>Press</h1>
 			</div>
 		</div>
 	</div>
+	<div id="authors">
+		<div class="grid cf">
+			<h1>Featured In</h1>
+			<a class="author" href="https://www.jhu.edu/" target="_blank"
+				style="background-image:url(/static/img/press_img/jhu-logo.png);"></a>
+			<a class="author" href="https://engineering.jhu.edu/" target="_blank"
+				style="background-image:url(/static/img/press_img/whiting.png);"></a>
+			<a class="author" href="https://hub.jhu.edu/" target="_blank" id="hub"
+				style="background-image:url(/static/img/press_img/hub.png);"></a>
+			<a class="author" href="https://www.jhunewsletter.com/" target="_blank"
+				style="background-image:url(/static/img/press_img/jhu-newsletter.png);"></a>
+			<a class="author" href="https://www.theodysseyonline.com/" target="_blank"
+				style="background-image:url(/static/img/press_img/odyssey-transparent.png);"></a>
+			<a class="author" href="https://technical.ly/" target="_blank"
+				style="background-image:url(/static/img/press_img/technically-black.png);"></a>
+		</div>
+	</div>
+	<!-- TODO: CACHE ALL THESE IMAGE LINKS -->
+	<div id="press">
+		<div class="grid row">
+			<div class="col-1-1 push-1">
+				<a href="https://www.jhunewsletter.com/article/2017/09/semester-ly-platform-becomes-open-source"
+					class="col-1-2 article" target="_blank">
+					<div class="article-link">
+						<div class="embed-image"
+							style="background-image:url(https://snworksceo.imgix.net/jhn/b39fa8dd-0148-48e8-9338-954fbf857f19.sized-1000x1000.jpg?w=1000);">
+						</div>
+					</div>
+
+					<div class="article-data">
+						Semesterly Becomes Open Source
+					</div>
+					<div class="article-overlay"></div>
+				</a>
+				<a href="http://hub.jhu.edu/2016/10/20/semesterly-scheduling-app/" class="col-1-2 article"
+					target="_blank">
+					<div class="article-link">
+						<div class="embed-image"
+							style="background-image:url(http://api.hub.jhu.edu/factory/sites/default/files/styles/landscape/public/semester101916.jpg?itok=2satXP8a);">
+						</div>
+					</div>
+
+					<div class="article-data">
+						JHU Loves Semesterly
+					</div>
+					<div class="article-overlay"></div>
+				</a>
+			</div>
+		</div>
+		<div class="grid row">
+			<div class="col-1-1 push-1">
+				<a href="http://www.cs.jhu.edu/2016/10/05/css-noah-presler-team-create-online-scheduler-streamline-course-registration-process/#.V_UYZeArJhG"
+					class="col-1-2 article" target="_blank">
+					<div class="article-link">
+						<div class="embed-image"
+							style="background-image:url(https://www.cs.jhu.edu/wp-content/uploads/2016/10/hopSemesterly-768x553.png);">
+						</div>
+					</div>
+
+					<div class="article-data">
+						JHU CS Recognizes Semesterly
+					</div>
+					<div class="article-overlay"></div>
+				</a>
+				<a href="https://www.theodysseyonline.com/reasons-semesterly-will-save-course-registration"
+					class="col-1-2 article" target="_blank">
+					<div class="article-link">
+						<div class="embed-image"
+							style="background-image:url(https://assets.rebelmouse.io/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbWFnZSI6Imh0dHBzOi8vbWVkaWEucmJsLm1zL2ltYWdlP3U9JTJGZmlsZXMlMkYyMDE2JTJGMDclMkYxNiUyRjYzNjA0MjQwMDkwMzIzMTI0NDE4NzEwMTA0NDJfMTMyMjEyODFfMTExMjQwNjY3MjE1NTg4M180MDgwMTMzMzgxODk1MDI0MjIxX28uanBnJmhvPWh0dHBzJTNBJTJGJTJGYXo2MTY1Nzgudm8ubXNlY25kLm5ldCZzPTk5MSZoPTc3M2U3MTg0ZGQ1NGFkYTM5MTJiNGU2ZmQ3YjUyYTg2Yzg0NDczMjYyMTkyNzE2NDZjNmE1M2Q4MGM5MzA3YTgmc2l6ZT05ODB4JmM9MjQ5OTYyNDc5MSIsImV4cGlyZXNfYXQiOjE2NjUxNDM4NTR9.H0H3tY9aKWYzumUea9RmppJ9QTItlOL5V_y0-_mylLM/img.jpg?width=1200&height=628);">
+						</div>
+					</div>
+
+					<div class="article-data">
+						13 Reasons Why Semesterly Will Save Your Life
+					</div>
+					<div class="article-overlay"></div>
+				</a>
+			</div>
+		</div>
+		<div class="grid row">
+			<div class="col-1-1 push-1">
+				<a href="https://www.theodysseyonline.com/how-semesterly-can-change-your-course-registration"
+					class="col-1-2 article" target="_blank">
+					<div class="article-link">
+						<div class="embed-image"
+							style="background-image:url(https://assets.rebelmouse.io/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbWFnZSI6Imh0dHBzOi8vbWVkaWEucmJsLm1zL2ltYWdlP3U9JTJGZmlsZXMlMkYyMDE2JTJGMDYlMkYxNCUyRjYzNjAxNDcxMjA2MzUwMDA4NDExNjI5OTMwMTBfc2VtZXN0ZXJseS5qcGcmaG89aHR0cHMlM0ElMkYlMkZhejYxNjU3OC52by5tc2VjbmQubmV0JnM9MjEzJmg9N2RmNWQ5MGYxY2IzZjRjN2JjOWZjMGI0OGU2NjM1N2FhNDIyYzZlOGZkZTBmNjNlOWI1ZGM4ZDZiZTE1Y2YxYyZzaXplPTk4MHgmYz00MDI3NTU4ODIwIiwiZXhwaXJlc19hdCI6MTY2Nzg5MDAwN30.xudID4_VPI0NZN7tJfUqlM9_iZ15nEwali1uOWV-9xg/img.jpg?width=1200&height=628);">
+						</div>
+					</div>
+
+					<div class="article-data">
+						How Semesterly Can Change Your Course Registration
+					</div>
+					<div class="article-overlay"></div>
+				</a>
+				<a href="https://nlonthedl.wordpress.com/2015/11/05/semester-ly-simplifies-course-scheduling/"
+					class="col-1-2 article" target="_blank">
+					<div class="article-link">
+						<div class="embed-image"
+							style="background-image:url(https://nlonthedl.files.wordpress.com/2015/11/a6_semester-ly.png?w=600&h=376);">
+						</div>
+					</div>
+
+					<div class="article-data">
+						Semesterly Simplifies Course Scheduling
+					</div>
+					<div class="article-overlay"></div>
+				</a>
+			</div>
+		</div>
+		<div class="grid row">
+			<div class="col-1-1 push-1">
+				<a href="http://www.jhunewsletter.com/2016/09/08/oconnor-fund-backs-campus-entrepreneurs/"
+					class="col-1-2 article" target="_blank">
+					<div class="article-link">
+						<div class="embed-image" style="background-image:url(http://i.imgur.com/Eem4KTj.png);"></div>
+					</div>
+
+					<div class="article-data">
+						O’Connor Fund backs Semesterly
+					</div>
+					<div class="article-overlay"></div>
+				</a>
+				<a href="http://technical.ly/baltimore/2016/10/24/semesterly-noah-presler-johns-hopkins/"
+					class="col-1-2 article" target="_blank">
+					<div class="article-link">
+						<div class="embed-image"
+							style="background-image:url(http://technical.ly/baltimore/wp-content/uploads/sites/3/2016/10/classroom.jpg);">
+						</div>
+					</div>
+					<div class="article-data">
+						JHU undergrads have a startup for course registration
+					</div>
+					<div class="article-overlay"></div>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}

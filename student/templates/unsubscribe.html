@@ -1,49 +1,56 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-		<meta name="description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
-		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder">
 
-		<title>Unsubscribe | Semester.ly</title>
-		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+	<meta name="description"
+		content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
+	<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder">
 
-		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
-		<link rel="stylesheet" href="{% static 'css/timetable/global.css'%}">
-		<link rel="stylesheet" href="{% static 'css/course-page.css'%}">
-		<link rel="stylesheet" href="{% static 'css/unsubscribe.css'%}">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<title>Unsubscribe | Semester.ly</title>
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
 
-	</head>
-	<body>
-		<header>
-			<div class="grid cf">
-				<a href="/">
-					<span id="logo"></span>
-					<h1>Semester.ly</h1>
-				</a>
-			</div>
-		</header>
+	<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet"
+		type='text/css'>
+	<link rel="stylesheet" href="{% static 'css/timetable/global.css'%}">
+	<link rel="stylesheet" href="{% static 'css/course-page.css'%}">
+	<link rel="stylesheet" href="{% static 'css/unsubscribe.css'%}">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
-		<div id="unsubscribe">
-			<img src="{% static 'img/email/sad.png' %}" />
-			<h2>IT'S NOT THE SAME<br>WITHOUT YOU!</h2>
-			<h3>You have been successfully unsubscribed.<br> Go back to <a href="/">Semester.ly</a></h3>
+</head>
+
+<body>
+	<header>
+		<div class="grid cf">
+			<a href="/">
+				<span id="logo"></span>
+				<h1>Semester.ly</h1>
+			</a>
 		</div>
+	</header>
 
-		 <!-- Google Analytics script -->
-	    <script>
-	      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	<div id="unsubscribe">
+		<img src="{% static 'img/email/sad.png' %}" />
+		<h2>IT'S NOT THE SAME<br>WITHOUT YOU!</h2>
+		<h3>You have been successfully unsubscribed.<br> Go back to <a href="/">Semester.ly</a></h3>
+	</div>
 
-	      ga('create', 'UA-68704308-1', 'auto');
-	      ga('send', 'pageview');
+	<!-- Google Analytics script -->
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-	    </script>
-	</body>
+		ga('create', 'UA-68704308-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</body>
+
 </html>
