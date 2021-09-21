@@ -196,6 +196,7 @@ REST_FRAMEWORK ={
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 MIDDLEWARE = (
+    'semesterly.middleware.middleware.MultipleProxyMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
