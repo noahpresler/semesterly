@@ -92,7 +92,7 @@ pycparser==2.18
 pycrypto==2.6.1
 pyelliptic==1.5.8
 pyflakes==2.2.0
-pyparsing==2.2.0
+pyparsing==2.4.7
 pyserial==3.4
 python-amazon-simple-product-api==2.2.11
 python-dateutil==2.6.1
