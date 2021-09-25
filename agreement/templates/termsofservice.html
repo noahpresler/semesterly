@@ -1,181 +1,407 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-		<meta name="description" content="Semester.ly Terms of Service">
-		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Kristin Yim, Sebastian Cabrejos">
 
-		<!-- Facebook thumbnail info -->
-		<meta property="og:title" content="Terms of Service | Semester.ly" />
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="Semesterly" />
-		<meta property="og:url" content="http://semester.ly" />
-		<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
-		<meta property="og:description" content="Terms of Service" />
-		<meta property="fb:admins" content="535129063" />
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+	<meta name="description" content="Semester.ly Terms of Service">
+	<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Kristin Yim, Sebastian Cabrejos">
 
-		<title>Terms of Service | Semester.ly</title>
-		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+	<!-- Facebook thumbnail info -->
+	<meta property="og:title" content="Terms of Service | Semester.ly" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Semesterly" />
+	<meta property="og:url" content="http://semester.ly" />
+	<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
+	<meta property="og:description" content="Terms of Service" />
+	<meta property="fb:admins" content="535129063" />
 
-		<!-- TODO: For future SWEs, Find the latest CDNs here https://www.bootstrapcdn.com/ -->
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css" integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni" crossorigin="anonymous">
-		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
-		
-		<!-- Google analytics script -->
-		<script>
-			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	<title>Terms of Service | Semester.ly</title>
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
 
-			ga('create', 'UA-68704308-1', 'auto');
-			ga('send', 'pageview');
-		</script>
+	<!-- TODO: For future SWEs, Find the latest CDNs here https://www.bootstrapcdn.com/ -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css"
+		integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet"
+		type='text/css'>
 
-		<script src="https://kit.fontawesome.com/54815f8287.js" crossorigin="anonymous"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="https://malsup.github.io/jquery.cycle2.js"></script>
-		<script type='text/javascript' src='/static/js/course-page.js'></script>
+	<!-- Google analytics script -->
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-		<!-- <img class="timer-logo" height=75 src="{% static 'img/logo2.0.png' %}"/> -->
-		<link rel="stylesheet" href="{% static 'css/course-page.css' %}">
-	</head>
-	<body>
-		<header>
+		ga('create', 'UA-68704308-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+	<script src="https://kit.fontawesome.com/54815f8287.js" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://malsup.github.io/jquery.cycle2.js"></script>
+	<script type='text/javascript' src='/static/js/course-page.js'></script>
+
+	<!-- <img class="timer-logo" height=75 src="{% static 'img/logo2.0.png' %}"/> -->
+	<link rel="stylesheet" href="{% static 'css/course-page.css' %}">
+</head>
+
+<body>
+	<header>
+		<div class="grid cf">
+			<a href="/">
+				<span id="logo"></span>
+				<h1>Semester.ly</h1>
+			</a>
+		</div>
+	</header>
+	<div id="page" itemscope itemtype="http://schema.org/Rating">
+		<meta itemprop="worstRating" content="0" />
+		<meta itemprop="bestRating" content="5" />
+		<div id="top-bg"></div>
+		<div id="top" class="grid cf">
+			<div class="card-width">
+				<h1>Terms of Service | March 8, 2019</h1>
+			</div>
+		</div>
+		<div id="content">
 			<div class="grid cf">
-				<a href="/">
-					<span id="logo"></span>
-					<h1>Semester.ly</h1>
-				</a>
-			</div>
-		</header>
-		<div id="page" itemscope itemtype="http://schema.org/Rating">
-			<meta itemprop="worstRating" content = "0"/>
-			<meta itemprop="bestRating" content = "5"/>
-			<div id="top-bg"></div>
-			<div id="top" class="grid cf">
-				<div class="card-width">
-					<h1>Terms of Service | March 8, 2019</h1>
-				</div>
-			</div>
-			<div id="content">
-				<div class="grid cf">
-					<div id="card">
-            <div id="TOC">
-<ul>
-<li><a href="#about-semester.ly-service"><em>About Semester.ly Service</em></a></li>
-<li><a href="#privacy-policy-and-user-data"><em>Privacy Policy and User Data</em></a></li>
-<li><a href="#acceptable-use-of-our-service"><em>Acceptable Use of Our Service</em></a></li>
-<li><a href="#thirdparty-services"><em>Third‑Party Services</em></a></li>
-<li><a href="#content-and-licenses"><em>Content and Licenses</em></a></li>
-<li><a href="#reporting-thirdparty-copyright-trademark-and-other-intellectual-property-infringement"><em>Reporting Third‑Party Copyright, Trademark, and other Intellectual Property Infringement</em></a></li>
-<li><a href="#disclaimers"><em>Disclaimers</em></a></li>
-<li><a href="#limitation-of-liability"><em>Limitation of Liability</em></a></li>
-<li><a href="#indemnification"><em>Indemnification</em></a></li>
-<li><a href="#dispute-resolution"><em>Dispute resolution</em></a></li>
-<li><a href="#availability-and-termination-of-our-service"><em>Availability and Termination of Our Service</em></a></li>
-<li><a href="#other"><em>Other</em></a></li>
-</ul>
-</div>
-<p>Semester.ly Technologies, LLC (“Semester.ly,” “our,” or “we”) provides a social and collaborative course scheduling platform for University student across north America. Please read our Terms of Service, which control how you use Semester.ly.</p>
-<p>By using or accessing our platform and communications service or website (collectively, the “Service”), you agree to our Terms of Service (“Terms”), as updated from time‑to‑time.</p>
-<p>Because Semester.ly provides scheduling and messaging services, we may ask you to review and accept supplemental provisions that apply to your use of a specific app, product, or service. In the event of a conflict between these Terms and those supplement provisions, the supplemental provisions will govern your use of the specific app, product, or service.</p>
-<p><strong><br />
-</strong></p>
-
-<h1 id="about-semester.ly-service"><em>About Semester.ly Service</em></h1>
-<p><strong>Registration.</strong> You may register for our Service using accurate data, provide your current e‑mail address and/or mobile phone number, and, if you change your e‑mail address and/or mobile phone number, update this e‑mail address and/or mobile phone number using our in‑app change mobile number and/or e‑mail address feature. You agree to receive text messages, phone calls, and/or e‑mails (from us or our third‑party providers) with codes to register for our Service.</p>
-<p><strong>Address Book.</strong> You may provide us the phone numbers of Semester.ly users and your other contacts in your mobile phone address book on a regular basis. You confirm you are authorized to provide us such numbers to allow us to provide our Service.</p>
-<p><strong>Age.</strong> You must be at least 18 years old to use our Service (or such greater age required in your country for you to be authorized to use our Service without parental approval). In addition to being of the minimum required age to use our Service under applicable law, if you are not old enough to have authority to agree to our Terms in your country, your parent or guardian agrees to our Terms on your behalf.</p>
-<p><strong>Devices and Software.</strong> You must provide certain devices, software, and data connections to use our Service, which we otherwise do not supply. For as long as you use our Service, you consent to downloading and installing updates to our Service, including automatically.</p>
-<p><strong>Fees and Taxes.</strong> You are responsible for all carrier data plan and other fees and taxes associated with your use of our Service. We may charge you for our Service, including applicable taxes. We may refuse or cancel orders. We do not provide refunds for our Service, except as required by law.</p>
-
-<p><span id="_Toc467660596" class="anchor"><span id="_Toc467660668" class="anchor"></span></span></p>
-<h1 id="privacy-policy-and-user-data"><em>Privacy Policy and User Data</em></h1>
-<p>Your privacy is very important to Semester.ly. Please read our Privacy Policy, which describes our information (including messaging) practices, including the types of information we receive and collect from you and how we use and share this information.</p>
-
-<p>You agree to our data practices, including the collection, use, processing, and sharing of your information as described in our Privacy Policy, as well as the transfer and processing of your information to the United States and other countries globally where we have or use facilities, service providers, or partners, regardless of where you use our Service. You acknowledge that the laws, regulations, and standards of the country in which your information is stored or processed may be different from those of your own country.</p>
-
-<p><span id="_Toc467660597" class="anchor"><span id="_Toc467660669" class="anchor"></span></span></p>
-<h1 id="acceptable-use-of-our-service"><em>Acceptable Use of Our Service</em></h1>
-<p><strong>Our Terms and Policies.</strong> You must use our Service according to our Terms and posted policies. If we disable your account for a violation of our Terms, you will not create another account without our permission.</p>
-
-<p><strong>Legal and Acceptable Use.</strong> You must access and use our Service only for legal, authorized, and acceptable purposes.</p>
-
-<p>You will not use (or assist others in using) our Service in ways that: (a) violate, misappropriate, or infringe the rights of Semester.ly, our users, or others, including privacy, publicity, intellectual property, or other proprietary rights; (b) are illegal, obscene, defamatory, threatening, intimidating, harassing, hateful, racially, or ethnically offensive, or instigate or encourage conduct that would be illegal, or otherwise inappropriate, including promoting violent crimes; (c) involve publishing falsehoods, misrepresentations, or misleading statements; (d) impersonate someone; (e) involve sending illegal or impermissible communications such as bulk messaging, auto‑messaging, auto‑dialing, and the like; or (f) involve any non‑personal use of our Service unless otherwise authorized by us.</p>
-
-<p><strong>Harm to Semester.ly or Our Users.</strong> You must not directly or indirectly use, access, copy, modify, prepare derivative works based upon, distribute, license, sublicense, transfer, display, perform, or otherwise exploit our Service in impermissible or unauthorized manners, or in ways that burden, impair, or harm us, our Service, systems, our users, or others.</p>
-
-<p>You must not directly or through automated means: (a) reverse engineer, alter, modify, create derivative works from, decompile, or extract code from our Service; (b) send, store, or transmit viruses or other harmful computer code through or onto our Service; (c) gain or attempt to gain unauthorized access to our Service or systems; (d) interfere with or disrupt the integrity or performance of our Service; (e) create accounts for our Service through unauthorized or automated means; (f) collect the information of or about our users in any impermissible or unauthorized manner; (g) sell, resell, rent, or charge for our Service; or (h) distribute or make our Service available over a network where they could be used by multiple devices at the same time.</p>
-
-<p><strong>Keeping Your Account Secure.</strong> You are responsible for keeping your device and your Semester.ly account safe and secure, and you must notify us promptly of any unauthorized use or security breach of your account or our Service.</p>
-
-</strong><span id="_Toc467660598" class="anchor"><span id="_Toc467660670" class="anchor"></span></span></p>
-<h1 id="thirdparty-services"><em>Third‑Party Services</em></h1>
-<p>All third‑party integrations (including, but not limited to, social media) are subject to privacy and security vulnerabilities. Content sent through such services (<em>i.e.</em>, “out of band” from the Semester.ly service) is frequently insecure.</p>
-
-<p>There may be places on the Service where you may click on a link to access other websites or services that do not operate under this Privacy Policy. In addition, you may be logged into a third party website, such as a payment processing site or social media site, while using the Service. These third‑party websites may independently solicit and collect information, including personal information, from you and, in some instances, provide us with information about your activities on those websites. We recommend that you consult the privacy statements of all third‑party websites you visit by clicking on the “privacy” link typically located at the bottom of the webpage you are visiting.</p>
-<p>As of March 8th, 2019, Johns Hopkins University’s IT department will become a vital third-party integration. Hopkins IT will now host Semester.ly and offer an opt-in connection to users’ Student Information Systems (SIS) accounts. The terms and specifics of this integration are listed in the Privacy Policy under SIS Connected Users. If this integration is not satisfactory, a Delete Account button is offered in the Account Settings portion of the website.</p>
-<h1 id="content-and-licenses"><em>Content and Licenses</em></h1>
-<p><strong>Content.</strong> You retain ownership of all content that you upload, submit, store, or send through your Semester.ly account. Any intellectual property rights in that content belong to you.</p>
-<p><strong>Your Rights.</strong> Semester.ly does not claim ownership of the information that you submit for your Semester.ly account or through our Service. You must have the necessary rights to such information that you submit for your Semester.ly account or through our Service and the right to grant the rights and licenses in our Terms.</p>
-<p><strong>Semester.ly’s Rights.</strong> We own all copyrights, trademarks, domains, logos, trade dress, trade secrets, patents, and other intellectual property rights associated with our Service. You may not use our copyrights, trademarks, domains, logos, trade dress, patents, and other intellectual property rights unless you have our express permission and except in accordance with our Intellectual Property Policy.</p>
-<p><strong>Your License to Semester.ly.</strong> When you upload, submit, store, send or receive content to our through our Service, you grant Semester.ly a worldwide, non‑exclusive, royalty‑free, sublicensable, and transferable license to use, reproduce, distribute, host, store, create derivative works of, communicate, display, publish, and perform the content. The rights you grant in this license are for the limited purpose of operating, promoting, and providing our Service (such as to allow us to transmit your messages, and as otherwise described in our Privacy Policy).</p>
-<p><strong>Semester.ly’s License to You.</strong> We grant you a limited, revocable, non‑exclusive, non‑sublicensable, and non‑transferable license to use our Service, subject to and in accordance with our Terms. This license is for the sole purpose of enabling you to use our Service, in the manner permitted by our Terms. No licenses or rights are granted to you by implication or otherwise, except for the licenses and rights expressly granted to you.</p>
-
-<h1 id="reporting-thirdparty-copyright-trademark-and-other-intellectual-property-infringement"><em>Reporting Third‑Party Copyright, Trademark, and other Intellectual Property Infringement</em></h1>
-<p>To report claims of third‑party copyright, trademark, or other intellectual property infringement, please e-mail contact@semester.ly. We may terminate your Semester.ly account if you repeatedly infringe the intellectual property rights of others.</p>
-
-<h1 id="disclaimers"><em>Disclaimers</em></h1>
-<p>YOU USE SEMESTER.LY’S SERVICE AT YOUR OWN RISK AND SUBJECT TO THE FOLLOWING DISCLAIMERS.</p>
-<p>WE ARE PROVIDING OUR SERVICE ON AN “AS IS” BASIS WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, NON‑INFRINGEMENT, AND FREEDOM FROM COMPUTER VIRUS OR OTHER HARMFUL CODE. WE DO NOT WARRANT THAT ANY INFORMATION PROVIDED BY US IS ACCURATE, COMPLETE, OR USEFUL, THAT OUR SERVICE WILL BE OPERATIONAL, ERROR FREE, SECURE, OR SAFE, OR THAT OUR SERVICE WILL FUNCTION WITHOUT DISRUPTIONS, DELAYS, OR IMPERFECTIONS. WE DO NOT CONTROL, AND ARE NOT RESPONSIBLE FOR, CONTROLLING HOW OR WHEN OUR USERS USE OUR SERVICE OR THE FEATURES, SERVICE, AND INTERFACES OUR SERVICE PROVIDE. WE ARE NOT RESPONSIBLE FOR AND ARE NOT OBLIGATED TO CONTROL THE ACTIONS OR INFORMATION (INCLUDING CONTENT) OF OUR USERS OR OTHER THIRD PARTIES.</p>
-<p>YOU RELEASE SEMESTER.LY AND ITS AFFILIATES, AND THEIR DIRECTORS, OFFICERS, EMPLOYEES, PARTNERS, AND AGENTS (COLLECTIVELY THE “SEMESTER.LY PARTIES”) FROM ANY CLAIM, COMPLAINT, CAUSE OF ACTION, CONTROVERSY, OR DISPUTE (COLLECTIVELY “CLAIM”) AND DAMAGES, KNOWN AND UNKNOWN, RELATING TO, ARISING OUT OF, OR IN ANY WAY CONNECTED WITH ANY SUCH CLAIM YOU HAVE AGAINST ANY THIRD PARTIES. YOU WAIVE ANY RIGHTS YOU MAY HAVE UNDER CALIFORNIA CIVIL CODE §1542, OR ANY OTHER SIMILAR APPLICABLE STATUTE OR LAW OF ANY OTHER JURISDICTION, WHICH SAYS THAT: A GENERAL RELEASE DOES NOT EXTEND TO CLAIMS WHICH THE CREDITOR DOES NOT KNOW OR SUSPECT TO EXIST IN HIS OR HER FAVOR AT THE TIME OF EXECUTING THE RELEASE, WHICH IF KNOWN BY HIM OR HER MUST HAVE MATERIALLY AFFECTED HIS OR HER SETTLEMENT WITH THE DEBTOR.</p>
-
-<h1 id="limitation-of-liability"><em>Limitation of Liability</em></h1>
-<p>THE SEMESTER.LY PARTIES WILL NOT BE LIABLE TO YOU FOR ANY LOST PROFITS OR CONSEQUENTIAL, SPECIAL, PUNITIVE, INDIRECT, OR INCIDENTAL DAMAGES RELATING TO, ARISING OUT OF, OR IN ANY WAY IN CONNECTION WITH OUR TERMS, US, OR OUR SERVICE, EVEN IF SEMESTER.LY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. THE SEMESTER.LY PARTIES’ LIABILITY RELATING TO, ARISING OUT OF, OR IN ANY WAY IN CONNECTION WITH OUR TERMS, US, OR OUR SERVICE WILL NOT EXCEED THE GREATER OF ONE HUNDRED DOLLARS ($100) OR THE AMOUNT YOU HAVE PAID US IN THE PAST TWELVE MONTHS. THE FOREGOING DISCLAIMER OF CERTAIN DAMAGES AND LIMITATION OF LIABILITY WILL APPLY TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW. THE LAWS OF SOME STATES OR JURISDICTIONS MAY NOT ALLOW THE EXCLUSION OR LIMITATION OF CERTAIN DAMAGES, SO SOME OR ALL OF THE EXCLUSIONS AND LIMITATIONS SET FORTH ABOVE MAY NOT APPLY TO YOU. NOTWITHSTANDING ANYTHING TO THE CONTRARY IN OUR TERMS, IN SUCH CASES, THE SEMESTER.LY PARTIES’ LIABILITY WILL BE LIMITED TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW.</p>
-
-<h1 id="indemnification"><em>Indemnification</em></h1>
-<p>You agree to defend, indemnify, and hold harmless the Semester.ly Parties from and against all liabilities, damages, losses, and expenses of any kind (including reasonable legal fees and costs) relating to, arising out of, or in any way in connection with any of the following: (a) your access to or use of our Service, including information provided in connection therewith; (b) your breach or alleged breach of our Terms; or (c) any misrepresentation made by you. You will cooperate as fully as required by us in the defense or settlement of any Claim.</p>
-
-<h1 id="dispute-resolution"><em>Dispute resolution</em></h1>
-<p><strong>Forum and Venue.</strong> You agree that you will resolve any Claim you have with us relating to, arising out of, or in any way in connection with our Terms, us, or our Service exclusively in the United States District Court for the Southern District of New York or a state court located in New York County in New York, and you agree to submit to the personal jurisdiction of such courts for the purpose of litigating all such Disputes.</p>
-<p><strong>Governing Law.</strong> The laws of the State of New York govern our Terms, as well as any Disputes, whether in court or arbitration, which might arise between Semester.ly and you, without regard to conflict of law provisions.</p>
-
-<h1 id="availability-and-termination-of-our-service"><em>Availability and Termination of Our Service</em></h1>
-<p><strong>Availability of Our Service.</strong> Our Service may be interrupted, including for maintenance, repairs, upgrades, or network or equipment failures. We may discontinue some or all of our Service, including certain features and the support for certain devices and platforms, at any time. Events beyond our control may affect our Service, such as events in nature and other force majeure events.</p>
-<p><strong>Termination.</strong> We may modify, suspend, or terminate your access to or use of our Service anytime for any reason, such as if you violate the letter or spirit of our Terms or create harm, risk, or possible legal exposure for us, our users, or others. The following provisions will survive any termination of your relationship with Semester.ly: “Licenses,” “Disclaimers,” “Limitation of Liability,” “Indemnification,” “Dispute Resolution,” “Availability and Termination of our Service,” and “Other.”</p>
-
-<h1 id="other"><em>Other</em></h1>
-<ul>
-<li><p>Unless a mutually executed agreement between you and us states otherwise, our Terms make up the entire agreement between you and us regarding Semester.ly and our Service, and supersede any prior agreements.</p></li>
-<li><p>We may ask you to agree to additional terms for certain of our Service in the future, which will govern to the extent there is a conflict between our Terms and such additional terms.</p></li>
-<li><p>Our Service is not intended for distribution to or use in any country where such distribution or use would violate local law or would subject us to any regulations in another country. We reserve the right to limit our Service in any country.</p></li>
-<li><p>You will comply with all applicable U.S. and non‑U.S. export control and trade sanctions laws (“Export Laws”). You will not, directly or indirectly, export, re‑export, provide, or otherwise transfer our Service: (a) to any individual, entity, or country prohibited by Export Laws; (b) to anyone on U.S. or non‑U.S. government restricted parties lists; or (c) for any purpose prohibited by Export Laws, including nuclear, chemical, or biological weapons, or missile technology applications without the required government authorizations. You will not use or download our Service if you are located in a restricted country, if you are currently listed on any U.S. or non‑U.S. restricted parties list, or for any purpose prohibited by Export Laws, and you will not disguise your location through IP proxying or other methods.</p></li>
-<li><p>Our Terms are written in English (U.S.). Any translated version is provided solely for your convenience. To the extent any translated version of our Terms conflicts with the English version, the English version controls.</p></li>
-<li><p>Any amendment to or waiver of our Terms requires our express consent.</p></li>
-<li><p>We may amend or update these Terms. We will provide you notice of amendments to our Terms, as appropriate, and update the “Last Modified” date at the top of our Terms. Your continued use of our Service confirms your acceptance of our Terms, as amended. If you do not agree to our Terms, as amended, you must stop using our Service. Please review our Terms from time‑to‑time.</p></li>
-<li><p>All of our rights and obligations under our Terms are freely assignable by us to any of our affiliates or in connection with a merger, acquisition, restructuring, or sale of assets, or by operation of law or otherwise, and we may transfer your information to any of our affiliates, successor entities, or new owner.</p></li>
-<li><p>You will not transfer any of your rights or obligations under our Terms to anyone else without our prior written consent.</p></li>
-<li><p>Nothing in our Terms will prevent us from complying with the law.</p></li>
-<li><p>Except as contemplated herein, our Terms do not give any third‑party beneficiary rights.</p></li>
-<li><p>If we fail to enforce any of our Terms, it will not be considered a waiver.</p></li>
-<li><p>If any provision of these Terms is deemed unlawful, void, or for any reason unenforceable, then that provision shall be deemed severable from our Terms and shall not affect the validity and enforceability of the remaining provisions.</p></li>
-<li><p>We reserve all rights not expressly granted by us to you. In certain jurisdictions, you may have legal rights as a consumer, and our Terms are not intended to limit such consumer legal rights that may not be waived by contract.</p></li>
-<li><p>As of March 8th, 2019, Semester.ly is now hosted by Johns Hopkins University’s IT Department. This partnership will help us provide more reliable service and custom features. There is more information about this merger here: <a href="https://jhu.semester.ly/notice">https://jhu.semester.ly/notice</a>. Updates to the Privacy Policy were also made. Please direct any other specific questions regarding this change to contact@semester.ly.</p></li>
-<li><p>We always appreciate your feedback or other suggestions about Semester.ly and our Service, but you understand that we may use your feedback or suggestions without any obligation to compensate you for them (just as you have no obligation to offer them).</p></li>
-</ul>
+				<div id="card">
+					<div id="TOC">
+						<ul>
+							<li><a href="#about-semester.ly-service"><em>About Semester.ly Service</em></a></li>
+							<li><a href="#privacy-policy-and-user-data"><em>Privacy Policy and User Data</em></a></li>
+							<li><a href="#acceptable-use-of-our-service"><em>Acceptable Use of Our Service</em></a></li>
+							<li><a href="#thirdparty-services"><em>Third‑Party Services</em></a></li>
+							<li><a href="#content-and-licenses"><em>Content and Licenses</em></a></li>
+							<li><a
+									href="#reporting-thirdparty-copyright-trademark-and-other-intellectual-property-infringement"><em>Reporting
+										Third‑Party Copyright, Trademark, and other Intellectual Property
+										Infringement</em></a></li>
+							<li><a href="#disclaimers"><em>Disclaimers</em></a></li>
+							<li><a href="#limitation-of-liability"><em>Limitation of Liability</em></a></li>
+							<li><a href="#indemnification"><em>Indemnification</em></a></li>
+							<li><a href="#dispute-resolution"><em>Dispute resolution</em></a></li>
+							<li><a href="#availability-and-termination-of-our-service"><em>Availability and Termination
+										of Our Service</em></a></li>
+							<li><a href="#other"><em>Other</em></a></li>
+						</ul>
 					</div>
+					<p>Semester.ly Technologies, LLC (“Semester.ly,” “our,” or “we”) provides a social and collaborative
+						course scheduling platform for University student across north America. Please read our Terms of
+						Service, which control how you use Semester.ly.</p>
+					<p>By using or accessing our platform and communications service or website (collectively, the
+						“Service”), you agree to our Terms of Service (“Terms”), as updated from time‑to‑time.</p>
+					<p>Because Semester.ly provides scheduling and messaging services, we may ask you to review and
+						accept supplemental provisions that apply to your use of a specific app, product, or service. In
+						the event of a conflict between these Terms and those supplement provisions, the supplemental
+						provisions will govern your use of the specific app, product, or service.</p>
+					<p><strong><br />
+						</strong></p>
+
+					<h1 id="about-semester.ly-service"><em>About Semester.ly Service</em></h1>
+					<p><strong>Registration.</strong> You may register for our Service using accurate data, provide your
+						current e‑mail address and/or mobile phone number, and, if you change your e‑mail address and/or
+						mobile phone number, update this e‑mail address and/or mobile phone number using our in‑app
+						change mobile number and/or e‑mail address feature. You agree to receive text messages, phone
+						calls, and/or e‑mails (from us or our third‑party providers) with codes to register for our
+						Service.</p>
+					<p><strong>Address Book.</strong> You may provide us the phone numbers of Semester.ly users and your
+						other contacts in your mobile phone address book on a regular basis. You confirm you are
+						authorized to provide us such numbers to allow us to provide our Service.</p>
+					<p><strong>Age.</strong> You must be at least 18 years old to use our Service (or such greater age
+						required in your country for you to be authorized to use our Service without parental approval).
+						In addition to being of the minimum required age to use our Service under applicable law, if you
+						are not old enough to have authority to agree to our Terms in your country, your parent or
+						guardian agrees to our Terms on your behalf.</p>
+					<p><strong>Devices and Software.</strong> You must provide certain devices, software, and data
+						connections to use our Service, which we otherwise do not supply. For as long as you use our
+						Service, you consent to downloading and installing updates to our Service, including
+						automatically.</p>
+					<p><strong>Fees and Taxes.</strong> You are responsible for all carrier data plan and other fees and
+						taxes associated with your use of our Service. We may charge you for our Service, including
+						applicable taxes. We may refuse or cancel orders. We do not provide refunds for our Service,
+						except as required by law.</p>
+
+					<p><span id="_Toc467660596" class="anchor"><span id="_Toc467660668" class="anchor"></span></span>
+					</p>
+					<h1 id="privacy-policy-and-user-data"><em>Privacy Policy and User Data</em></h1>
+					<p>Your privacy is very important to Semester.ly. Please read our Privacy Policy, which describes
+						our information (including messaging) practices, including the types of information we receive
+						and collect from you and how we use and share this information.</p>
+
+					<p>You agree to our data practices, including the collection, use, processing, and sharing of your
+						information as described in our Privacy Policy, as well as the transfer and processing of your
+						information to the United States and other countries globally where we have or use facilities,
+						service providers, or partners, regardless of where you use our Service. You acknowledge that
+						the laws, regulations, and standards of the country in which your information is stored or
+						processed may be different from those of your own country.</p>
+
+					<p><span id="_Toc467660597" class="anchor"><span id="_Toc467660669" class="anchor"></span></span>
+					</p>
+					<h1 id="acceptable-use-of-our-service"><em>Acceptable Use of Our Service</em></h1>
+					<p><strong>Our Terms and Policies.</strong> You must use our Service according to our Terms and
+						posted policies. If we disable your account for a violation of our Terms, you will not create
+						another account without our permission.</p>
+
+					<p><strong>Legal and Acceptable Use.</strong> You must access and use our Service only for legal,
+						authorized, and acceptable purposes.</p>
+
+					<p>You will not use (or assist others in using) our Service in ways that: (a) violate,
+						misappropriate, or infringe the rights of Semester.ly, our users, or others, including privacy,
+						publicity, intellectual property, or other proprietary rights; (b) are illegal, obscene,
+						defamatory, threatening, intimidating, harassing, hateful, racially, or ethnically offensive, or
+						instigate or encourage conduct that would be illegal, or otherwise inappropriate, including
+						promoting violent crimes; (c) involve publishing falsehoods, misrepresentations, or misleading
+						statements; (d) impersonate someone; (e) involve sending illegal or impermissible communications
+						such as bulk messaging, auto‑messaging, auto‑dialing, and the like; or (f) involve any
+						non‑personal use of our Service unless otherwise authorized by us.</p>
+
+					<p><strong>Harm to Semester.ly or Our Users.</strong> You must not directly or indirectly use,
+						access, copy, modify, prepare derivative works based upon, distribute, license, sublicense,
+						transfer, display, perform, or otherwise exploit our Service in impermissible or unauthorized
+						manners, or in ways that burden, impair, or harm us, our Service, systems, our users, or others.
+					</p>
+
+					<p>You must not directly or through automated means: (a) reverse engineer, alter, modify, create
+						derivative works from, decompile, or extract code from our Service; (b) send, store, or transmit
+						viruses or other harmful computer code through or onto our Service; (c) gain or attempt to gain
+						unauthorized access to our Service or systems; (d) interfere with or disrupt the integrity or
+						performance of our Service; (e) create accounts for our Service through unauthorized or
+						automated means; (f) collect the information of or about our users in any impermissible or
+						unauthorized manner; (g) sell, resell, rent, or charge for our Service; or (h) distribute or
+						make our Service available over a network where they could be used by multiple devices at the
+						same time.</p>
+
+					<p><strong>Keeping Your Account Secure.</strong> You are responsible for keeping your device and
+						your Semester.ly account safe and secure, and you must notify us promptly of any unauthorized
+						use or security breach of your account or our Service.</p>
+
+					</strong><span id="_Toc467660598" class="anchor"><span id="_Toc467660670"
+							class="anchor"></span></span></p>
+					<h1 id="thirdparty-services"><em>Third‑Party Services</em></h1>
+					<p>All third‑party integrations (including, but not limited to, social media) are subject to privacy
+						and security vulnerabilities. Content sent through such services (<em>i.e.</em>, “out of band”
+						from the Semester.ly service) is frequently insecure.</p>
+
+					<p>There may be places on the Service where you may click on a link to access other websites or
+						services that do not operate under this Privacy Policy. In addition, you may be logged into a
+						third party website, such as a payment processing site or social media site, while using the
+						Service. These third‑party websites may independently solicit and collect information, including
+						personal information, from you and, in some instances, provide us with information about your
+						activities on those websites. We recommend that you consult the privacy statements of all
+						third‑party websites you visit by clicking on the “privacy” link typically located at the bottom
+						of the webpage you are visiting.</p>
+					<p>As of March 8th, 2019, Johns Hopkins University’s IT department will become a vital third-party
+						integration. Hopkins IT will now host Semester.ly and offer an opt-in connection to users’
+						Student Information Systems (SIS) accounts. The terms and specifics of this integration are
+						listed in the Privacy Policy under SIS Connected Users. If this integration is not satisfactory,
+						a Delete Account button is offered in the Account Settings portion of the website.</p>
+					<h1 id="content-and-licenses"><em>Content and Licenses</em></h1>
+					<p><strong>Content.</strong> You retain ownership of all content that you upload, submit, store, or
+						send through your Semester.ly account. Any intellectual property rights in that content belong
+						to you.</p>
+					<p><strong>Your Rights.</strong> Semester.ly does not claim ownership of the information that you
+						submit for your Semester.ly account or through our Service. You must have the necessary rights
+						to such information that you submit for your Semester.ly account or through our Service and the
+						right to grant the rights and licenses in our Terms.</p>
+					<p><strong>Semester.ly’s Rights.</strong> We own all copyrights, trademarks, domains, logos, trade
+						dress, trade secrets, patents, and other intellectual property rights associated with our
+						Service. You may not use our copyrights, trademarks, domains, logos, trade dress, patents, and
+						other intellectual property rights unless you have our express permission and except in
+						accordance with our Intellectual Property Policy.</p>
+					<p><strong>Your License to Semester.ly.</strong> When you upload, submit, store, send or receive
+						content to our through our Service, you grant Semester.ly a worldwide, non‑exclusive,
+						royalty‑free, sublicensable, and transferable license to use, reproduce, distribute, host,
+						store, create derivative works of, communicate, display, publish, and perform the content. The
+						rights you grant in this license are for the limited purpose of operating, promoting, and
+						providing our Service (such as to allow us to transmit your messages, and as otherwise described
+						in our Privacy Policy).</p>
+					<p><strong>Semester.ly’s License to You.</strong> We grant you a limited, revocable, non‑exclusive,
+						non‑sublicensable, and non‑transferable license to use our Service, subject to and in accordance
+						with our Terms. This license is for the sole purpose of enabling you to use our Service, in the
+						manner permitted by our Terms. No licenses or rights are granted to you by implication or
+						otherwise, except for the licenses and rights expressly granted to you.</p>
+
+					<h1 id="reporting-thirdparty-copyright-trademark-and-other-intellectual-property-infringement">
+						<em>Reporting Third‑Party Copyright, Trademark, and other Intellectual Property
+							Infringement</em></h1>
+					<p>To report claims of third‑party copyright, trademark, or other intellectual property
+						infringement, please e-mail contact@semester.ly. We may terminate your Semester.ly account if
+						you repeatedly infringe the intellectual property rights of others.</p>
+
+					<h1 id="disclaimers"><em>Disclaimers</em></h1>
+					<p>YOU USE SEMESTER.LY’S SERVICE AT YOUR OWN RISK AND SUBJECT TO THE FOLLOWING DISCLAIMERS.</p>
+					<p>WE ARE PROVIDING OUR SERVICE ON AN “AS IS” BASIS WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES,
+						INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+						TITLE, NON‑INFRINGEMENT, AND FREEDOM FROM COMPUTER VIRUS OR OTHER HARMFUL CODE. WE DO NOT
+						WARRANT THAT ANY INFORMATION PROVIDED BY US IS ACCURATE, COMPLETE, OR USEFUL, THAT OUR SERVICE
+						WILL BE OPERATIONAL, ERROR FREE, SECURE, OR SAFE, OR THAT OUR SERVICE WILL FUNCTION WITHOUT
+						DISRUPTIONS, DELAYS, OR IMPERFECTIONS. WE DO NOT CONTROL, AND ARE NOT RESPONSIBLE FOR,
+						CONTROLLING HOW OR WHEN OUR USERS USE OUR SERVICE OR THE FEATURES, SERVICE, AND INTERFACES OUR
+						SERVICE PROVIDE. WE ARE NOT RESPONSIBLE FOR AND ARE NOT OBLIGATED TO CONTROL THE ACTIONS OR
+						INFORMATION (INCLUDING CONTENT) OF OUR USERS OR OTHER THIRD PARTIES.</p>
+					<p>YOU RELEASE SEMESTER.LY AND ITS AFFILIATES, AND THEIR DIRECTORS, OFFICERS, EMPLOYEES, PARTNERS,
+						AND AGENTS (COLLECTIVELY THE “SEMESTER.LY PARTIES”) FROM ANY CLAIM, COMPLAINT, CAUSE OF ACTION,
+						CONTROVERSY, OR DISPUTE (COLLECTIVELY “CLAIM”) AND DAMAGES, KNOWN AND UNKNOWN, RELATING TO,
+						ARISING OUT OF, OR IN ANY WAY CONNECTED WITH ANY SUCH CLAIM YOU HAVE AGAINST ANY THIRD PARTIES.
+						YOU WAIVE ANY RIGHTS YOU MAY HAVE UNDER CALIFORNIA CIVIL CODE §1542, OR ANY OTHER SIMILAR
+						APPLICABLE STATUTE OR LAW OF ANY OTHER JURISDICTION, WHICH SAYS THAT: A GENERAL RELEASE DOES NOT
+						EXTEND TO CLAIMS WHICH THE CREDITOR DOES NOT KNOW OR SUSPECT TO EXIST IN HIS OR HER FAVOR AT THE
+						TIME OF EXECUTING THE RELEASE, WHICH IF KNOWN BY HIM OR HER MUST HAVE MATERIALLY AFFECTED HIS OR
+						HER SETTLEMENT WITH THE DEBTOR.</p>
+
+					<h1 id="limitation-of-liability"><em>Limitation of Liability</em></h1>
+					<p>THE SEMESTER.LY PARTIES WILL NOT BE LIABLE TO YOU FOR ANY LOST PROFITS OR CONSEQUENTIAL, SPECIAL,
+						PUNITIVE, INDIRECT, OR INCIDENTAL DAMAGES RELATING TO, ARISING OUT OF, OR IN ANY WAY IN
+						CONNECTION WITH OUR TERMS, US, OR OUR SERVICE, EVEN IF SEMESTER.LY HAS BEEN ADVISED OF THE
+						POSSIBILITY OF SUCH DAMAGES. THE SEMESTER.LY PARTIES’ LIABILITY RELATING TO, ARISING OUT OF, OR
+						IN ANY WAY IN CONNECTION WITH OUR TERMS, US, OR OUR SERVICE WILL NOT EXCEED THE GREATER OF ONE
+						HUNDRED DOLLARS ($100) OR THE AMOUNT YOU HAVE PAID US IN THE PAST TWELVE MONTHS. THE FOREGOING
+						DISCLAIMER OF CERTAIN DAMAGES AND LIMITATION OF LIABILITY WILL APPLY TO THE MAXIMUM EXTENT
+						PERMITTED BY APPLICABLE LAW. THE LAWS OF SOME STATES OR JURISDICTIONS MAY NOT ALLOW THE
+						EXCLUSION OR LIMITATION OF CERTAIN DAMAGES, SO SOME OR ALL OF THE EXCLUSIONS AND LIMITATIONS SET
+						FORTH ABOVE MAY NOT APPLY TO YOU. NOTWITHSTANDING ANYTHING TO THE CONTRARY IN OUR TERMS, IN SUCH
+						CASES, THE SEMESTER.LY PARTIES’ LIABILITY WILL BE LIMITED TO THE FULLEST EXTENT PERMITTED BY
+						APPLICABLE LAW.</p>
+
+					<h1 id="indemnification"><em>Indemnification</em></h1>
+					<p>You agree to defend, indemnify, and hold harmless the Semester.ly Parties from and against all
+						liabilities, damages, losses, and expenses of any kind (including reasonable legal fees and
+						costs) relating to, arising out of, or in any way in connection with any of the following:
+						(a) your access to or use of our Service, including information provided in connection
+						therewith; (b) your breach or alleged breach of our Terms; or (c) any misrepresentation made by
+						you. You will cooperate as fully as required by us in the defense or settlement of any Claim.
+					</p>
+
+					<h1 id="dispute-resolution"><em>Dispute resolution</em></h1>
+					<p><strong>Forum and Venue.</strong> You agree that you will resolve any Claim you have with us
+						relating to, arising out of, or in any way in connection with our Terms, us, or our Service
+						exclusively in the United States District Court for the Southern District of New York or a state
+						court located in New York County in New York, and you agree to submit to the personal
+						jurisdiction of such courts for the purpose of litigating all such Disputes.</p>
+					<p><strong>Governing Law.</strong> The laws of the State of New York govern our Terms, as well as
+						any Disputes, whether in court or arbitration, which might arise between Semester.ly and you,
+						without regard to conflict of law provisions.</p>
+
+					<h1 id="availability-and-termination-of-our-service"><em>Availability and Termination of Our
+							Service</em></h1>
+					<p><strong>Availability of Our Service.</strong> Our Service may be interrupted, including for
+						maintenance, repairs, upgrades, or network or equipment failures. We may discontinue some or all
+						of our Service, including certain features and the support for certain devices and platforms, at
+						any time. Events beyond our control may affect our Service, such as events in nature and other
+						force majeure events.</p>
+					<p><strong>Termination.</strong> We may modify, suspend, or terminate your access to or use of our
+						Service anytime for any reason, such as if you violate the letter or spirit of our Terms or
+						create harm, risk, or possible legal exposure for us, our users, or others. The following
+						provisions will survive any termination of your relationship with Semester.ly: “Licenses,”
+						“Disclaimers,” “Limitation of Liability,” “Indemnification,” “Dispute Resolution,” “Availability
+						and Termination of our Service,” and “Other.”</p>
+
+					<h1 id="other"><em>Other</em></h1>
+					<ul>
+						<li>
+							<p>Unless a mutually executed agreement between you and us states otherwise, our Terms make
+								up the entire agreement between you and us regarding Semester.ly and our Service, and
+								supersede any prior agreements.</p>
+						</li>
+						<li>
+							<p>We may ask you to agree to additional terms for certain of our Service in the future,
+								which will govern to the extent there is a conflict between our Terms and such
+								additional terms.</p>
+						</li>
+						<li>
+							<p>Our Service is not intended for distribution to or use in any country where such
+								distribution or use would violate local law or would subject us to any regulations in
+								another country. We reserve the right to limit our Service in any country.</p>
+						</li>
+						<li>
+							<p>You will comply with all applicable U.S. and non‑U.S. export control and trade sanctions
+								laws (“Export Laws”). You will not, directly or indirectly, export, re‑export, provide,
+								or otherwise transfer our Service: (a) to any individual, entity, or country prohibited
+								by Export Laws; (b) to anyone on U.S. or non‑U.S. government restricted parties lists;
+								or (c) for any purpose prohibited by Export Laws, including nuclear, chemical, or
+								biological weapons, or missile technology applications without the required government
+								authorizations. You will not use or download our Service if you are located in a
+								restricted country, if you are currently listed on any U.S. or non‑U.S. restricted
+								parties list, or for any purpose prohibited by Export Laws, and you will not disguise
+								your location through IP proxying or other methods.</p>
+						</li>
+						<li>
+							<p>Our Terms are written in English (U.S.). Any translated version is provided solely for
+								your convenience. To the extent any translated version of our Terms conflicts with the
+								English version, the English version controls.</p>
+						</li>
+						<li>
+							<p>Any amendment to or waiver of our Terms requires our express consent.</p>
+						</li>
+						<li>
+							<p>We may amend or update these Terms. We will provide you notice of amendments to our
+								Terms, as appropriate, and update the “Last Modified” date at the top of our Terms. Your
+								continued use of our Service confirms your acceptance of our Terms, as amended. If you
+								do not agree to our Terms, as amended, you must stop using our Service. Please review
+								our Terms from time‑to‑time.</p>
+						</li>
+						<li>
+							<p>All of our rights and obligations under our Terms are freely assignable by us to any of
+								our affiliates or in connection with a merger, acquisition, restructuring, or sale of
+								assets, or by operation of law or otherwise, and we may transfer your information to any
+								of our affiliates, successor entities, or new owner.</p>
+						</li>
+						<li>
+							<p>You will not transfer any of your rights or obligations under our Terms to anyone else
+								without our prior written consent.</p>
+						</li>
+						<li>
+							<p>Nothing in our Terms will prevent us from complying with the law.</p>
+						</li>
+						<li>
+							<p>Except as contemplated herein, our Terms do not give any third‑party beneficiary rights.
+							</p>
+						</li>
+						<li>
+							<p>If we fail to enforce any of our Terms, it will not be considered a waiver.</p>
+						</li>
+						<li>
+							<p>If any provision of these Terms is deemed unlawful, void, or for any reason
+								unenforceable, then that provision shall be deemed severable from our Terms and shall
+								not affect the validity and enforceability of the remaining provisions.</p>
+						</li>
+						<li>
+							<p>We reserve all rights not expressly granted by us to you. In certain jurisdictions, you
+								may have legal rights as a consumer, and our Terms are not intended to limit such
+								consumer legal rights that may not be waived by contract.</p>
+						</li>
+						<li>
+							<p>As of March 8th, 2019, Semester.ly is now hosted by Johns Hopkins University’s IT
+								Department. This partnership will help us provide more reliable service and custom
+								features. There is more information about this merger here: <a
+									href="https://jhu.semester.ly/notice">https://jhu.semester.ly/notice</a>. Updates to
+								the Privacy Policy were also made. Please direct any other specific questions regarding
+								this change to contact@semester.ly.</p>
+						</li>
+						<li>
+							<p>We always appreciate your feedback or other suggestions about Semester.ly and our
+								Service, but you understand that we may use your feedback or suggestions without any
+								obligation to compensate you for them (just as you have no obligation to offer them).
+							</p>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<footer>
+	<footer>
 
-		</footer>
-	</body>
+	</footer>
+</body>
+
 </html>
