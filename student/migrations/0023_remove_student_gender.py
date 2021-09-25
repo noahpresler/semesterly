@@ -8,7 +8,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student', '0023_auto_20170910_2155'),
+        ('student', '0022_remove_personaltimetable_time_updated'),
     ]
 
     operations = [

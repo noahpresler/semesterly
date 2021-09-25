@@ -44,10 +44,10 @@ class Student(models.Model):
     friends = models.ManyToManyField("self", blank=True)
     fbook_uid = models.CharField(max_length=255, default='')
     major = models.CharField(max_length=255, default='')
-    social_courses = models.NullBooleanField(null=True)
-    social_offerings = models.NullBooleanField(null=True)
-    social_all = models.NullBooleanField(null=True)
-    emails_enabled = models.NullBooleanField(null=True, default=True)
+    social_courses = models.BooleanField(null=True)
+    social_offerings = models.BooleanField(null=True)
+    social_all = models.BooleanField(null=True)
+    emails_enabled = models.BooleanField(null=True, default=True)
     integrations = models.ManyToManyField(timetable_models.Integration,
                                           blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
@@ -55,10 +55,10 @@ class Student(models.Model):
     time_accepted_tos = models.DateTimeField(null=True)
     hopid = models.CharField(max_length=10, null=True, default='')
     jhed = models.CharField(max_length=10, null=True, default='')
-    pre_health = models.NullBooleanField(null=True, default=False)
+    pre_health = models.BooleanField(null=True, default=False)
     first_name = models.CharField(max_length=255, default='', null=True)
     last_name = models.CharField(max_length=255, default='', null=True)
-    disabilities = models.NullBooleanField(null=True, default=False)
+    disabilities = models.BooleanField(null=True, default=False)
 
     def __str__(self):
         return "{0}".format(self.jhed)

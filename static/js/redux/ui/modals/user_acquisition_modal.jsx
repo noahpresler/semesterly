@@ -73,12 +73,31 @@ class UserAcquisitionModal extends React.Component {
           </button>
           <p className="method-details">Allows the option to friends in your classes.</p>
 
+          <br />
+
+          <button
+            className="btn abnb-btn secondary" onClick={() => {
+              const link = document.createElement('a');
+              link.href = `/login/azuread-tenant-oauth2/?student_token=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
+              document.body.appendChild(link);
+              link.click();
+            }}
+          >
+            <span className="img-icon">
+              <img
+                alt="JHU"
+                className="jhu-square"
+                src="/static/img/school_logos/jhu-square.png"
+              />
+            </span>
+            <span>Continue with JHED*</span>
+          </button>
+          <p className="method-details">* Exclusive to JHU students & faculty.</p>
 
           <div className="or-separator">
             <span className="h6 or-separator--text">or</span>
             <hr />
           </div>
-
 
           <button
             className="btn abnb-btn secondary" onClick={() => {
@@ -99,7 +118,7 @@ class UserAcquisitionModal extends React.Component {
           </button>
 
 
-          <button
+          {/* <button
             className="btn abnb-btn secondary eight-px-top" onClick={() => {
               // this.props.createiCalfromTimetable();
             }} disabled
@@ -108,7 +127,7 @@ class UserAcquisitionModal extends React.Component {
               <i className="fa fa-envelope-o" />
             </span>
             <span>Email Coming Soon</span>
-          </button>
+          </button> */}
         </div>
       </Modal>
     );

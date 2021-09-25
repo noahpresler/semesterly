@@ -1,15 +1,9 @@
-Please review the [guidelines for contributing](../../docs/contributing.rst) to this repository.
-
-### Description
-Please describe your pull request (PR).
-
+Please review the [guidelines for contributing](https://github.com/jhuopensource/semesterly/blob/master/CODE_OF_CONDUCT.md) to this repository.
+### Description - Describe your pull request
 
 ### If applicable, add a checklist of incremental tasks for this PR.
 - [ ] 
 
-
 ### Your Checklist
 - [ ] Linked Issue and/or Project?
 - [ ] Added Reviewer, Assignee, and/or Label?
-
-Thank you! 🚀

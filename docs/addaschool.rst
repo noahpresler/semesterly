@@ -15,7 +15,7 @@ Running the *makeschool* command will create a directory for your school, creati
 
     python manage.py makeschool --name "University of Toronto" --code "uoft" --regex "([A-Z]{2,8}\\s\\d{3})"
 
-Don't forget to add this new school to your /etc/hosts! (Check here for a reminder on how: :ref:`environment`)
+Don't forget to add this new school to your /etc/hosts! (Check here for a reminder on how: :ref:`setup`)
 
 Develop the Parser
 ~~~~~~~~~~~~~~~~~~

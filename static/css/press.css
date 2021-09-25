@@ -31,6 +31,7 @@ header.down {
 	border-bottom: 1px solid transparent;
 }
 header h1 {
+	color: #34495E;
 	float: left;
 	font-size: 26px;
 	line-height: 30px;
@@ -164,6 +165,10 @@ header nav a:hover {
     height: 50px;
     width: 15.5%;
     filter: grayscale(100%);
+}
+
+.author:hover {
+	filter: none;
 }
 
 #hub {
@@ -339,9 +344,10 @@ footer h6 {
 }
 
 @media(max-width: 766px) {
-/*	.article-link {
-		border: 10px solid #F3F3F3;
-	}*/
+	.article-link {
+		max-width: 100%;  
+		height: auto;  
+	}
 	.article {
 		padding: 20px 0px;
 	}

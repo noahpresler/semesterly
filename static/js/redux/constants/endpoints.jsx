@@ -41,6 +41,7 @@ export const acceptTOSEndpoint = () => '/tos/accept/';
 export function getCourseShareLinkFromModal(code, semester) {
   return `/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;
 }
+// TODO: ${window.location.href.split('/')[2]} insert above ^
 
 export function getCourseShareLink(code, semester) {
   return `${window.location.href.split('/')[2]}/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;

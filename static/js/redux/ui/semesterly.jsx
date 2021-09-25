@@ -214,7 +214,7 @@ class Semesterly extends React.Component {
                     // TODO: add discord logo correctly
                   >
                     <i className="fab fa-discord" />
-                    Discord
+                    Forum
                   </a>
                 </li>
                 <li className="footer-button" role="presentation">

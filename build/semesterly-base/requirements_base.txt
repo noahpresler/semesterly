@@ -1,12 +1,12 @@
 setuptools==57.1.0
 Babel==2.5.0
-Django==2.2.18
-Jinja2==2.9.6
+Django==3.2.7
+Jinja2==2.11.3
 Markdown==2.6.9
 MarkupSafe==1.1.1
 PyJWT==2.0.1
 PyYAML==5.4.1
-Pygments==2.2.0
+Pygments==2.7.4
 South==1.0.2
 Sphinx==4.0.2
 alabaster==0.7.10
@@ -110,7 +110,7 @@ redis==2.10.6
 requests==2.25.1
 requests-oauthlib==0.8.0
 rollbar==0.16.1
-rsa==3.4.2
+rsa==4.7
 scikit-learn==0.24.1
 scipy==1.7.0
 selenium==3.5.0
