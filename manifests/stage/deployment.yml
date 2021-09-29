@@ -28,7 +28,10 @@ spec:
             path: /
             port: 80
           initialDelaySeconds: 3
-          periodSeconds: 3
+          periodSeconds: 60
+          successThreshold: 1
+          failureThreshold: 3
+          timeoutSeconds: 60
         resources:
           requests:
             cpu: 250m
@@ -78,10 +81,25 @@ spec:
       - name: gunicorn
         image: semesterly.azurecr.io/semesterly:Version
         command: ["bash"]
-        args: ["-c","python manage.py migrate; gunicorn semesterly.wsgi wsgi:application --bind=0.0.0.0:8000 --preload --workers=3 --access-logfile - --error-logfile - --log-level info"]
+        args: ["-c","python manage.py migrate; gunicorn semesterly.wsgi wsgi:application --bind=0.0.0.0:8000 --preload --workers=3 --access-logfile - --error-logfile - --log-level info"]  
         workingDir: /code
         ports:
         - containerPort: 8000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 3
+          periodSeconds: 60
+          successThreshold: 1
+          failureThreshold: 5
+          timeoutSeconds: 5
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 2000m
+            memory: 2048M
         env:
             - name: NODE_ENV
               value: stage
@@ -152,9 +170,3 @@ spec:
                 secretKeyRef:
                   name: semesterly-secrets
                   key: JHU_JWT_AUTH_SECRET
-        resources:
-          requests:
-            cpu: 250m
-          limits:
-            cpu: 2000m
-            memory: 2048M
