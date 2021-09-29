@@ -70,7 +70,7 @@ livereload==2.5.1
 lxml==4.6.3
 mccabe==0.6.1
 mock==2.0.0
-nltk==3.2.4
+nltk==3.6.3
 numpy==1.16.5
 oauth==1.0.1
 oauth2client==4.1.2
