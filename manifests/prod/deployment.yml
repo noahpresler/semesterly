@@ -78,8 +78,10 @@ spec:
               value: plain
             - name: SERVER_TLS_SSLMODE
               value: verify-ca
-            - name: PGBOUNCER_MAX_CLIENT_CONN
-              value: "960"
+            - name: MAX_CLIENT_CONN
+              value: "2000"
+            - name: MAX_DB_CONNECTIONS
+              value: "200"
       - name: gunicorn
         image: semesterly.azurecr.io/semesterly:Version
         command: ["bash"]
