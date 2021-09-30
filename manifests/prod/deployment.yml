@@ -34,10 +34,11 @@ spec:
           timeoutSeconds: 60
         resources:
           requests:
-            cpu: 250m
+            cpu: 100m
+            memory: 250M
           limits:
-            cpu: 750m   
-            memory: 2048M
+            cpu: 250m   
+            memory: 500M
       - name: pgbouncer
         image: uisacr.azurecr.io/pgbouncer:latest
         ports:
@@ -97,13 +98,14 @@ spec:
           periodSeconds: 60
           successThreshold: 1
           failureThreshold: 5
-          timeoutSeconds: 5
+          timeoutSeconds: 60
         resources:
           requests:
-            cpu: 250m
+            cpu: "2"
+            memory: 2000M
           limits:
-            cpu: 2000m
-            memory: 2048M
+            cpu: "4"
+            memory: 4000M
         env:
             - name: NODE_ENV
               value: production

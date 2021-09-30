@@ -34,20 +34,22 @@ spec:
           timeoutSeconds: 60
         resources:
           requests:
-            cpu: 250m
+            cpu: 100m
+            memory: 2000M
           limits:
-            cpu: 750m   
-            memory: 2048M
+            cpu: 250m   
+            memory: 4000M
       - name: pgbouncer
         image: uisacr.azurecr.io/pgbouncer:latest
         ports:
         - containerPort: 5432
         resources:
           requests:
-            cpu: 500m
+            cpu: 100m
+            memory: 250M
           limits:
-            cpu: 2048m   
-            memory: 4096M
+            cpu: 250m   
+            memory: 500M
         env:
             - name: DB_HOST
               valueFrom:
@@ -100,10 +102,11 @@ spec:
           timeoutSeconds: 5
         resources:
           requests:
-            cpu: 250m
+            cpu: "2"
+            memory: 2000M
           limits:
-            cpu: 2000m
-            memory: 2048M
+            cpu: "4"
+            memory: 4000M
         env:
             - name: NODE_ENV
               value: stage
