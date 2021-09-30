@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels: 
       app: semesterly
-  replicas: 2
+  replicas: 4
   strategy:
     rollingUpdate:
       maxSurge: 1
