@@ -80,9 +80,13 @@ spec:
             - name: SERVER_TLS_SSLMODE
               value: verify-ca
             - name: MAX_CLIENT_CONN
-              value: "2000"
+              value: "10000"
+            - name: DEFAULT_POOL_SIZE
+              value: "100"
             - name: MAX_DB_CONNECTIONS
-              value: "200"
+              value: "100"
+            - name: MAX_USER_CONNECTIONS
+              value: "100"
       - name: gunicorn
         image: semesterly.azurecr.io/semesterly:Version
         command: ["bash"]
