@@ -1,9 +1,9 @@
-Please review the [guidelines for contributing](https://github.com/jhuopensource/semesterly/blob/master/CODE_OF_CONDUCT.md) to this repository.
-### Description - Describe your pull request
+### Description
 
-### If applicable, add a checklist of incremental tasks for this PR.
+### Tasks
 - [ ] 
 
 ### Your Checklist
+- [ ] Reviewed the [guidelines for contributing?](https://github.com/jhuopensource/semesterly/blob/master/CODE_OF_CONDUCT.md)
 - [ ] Linked Issue and/or Project?
 - [ ] Added Reviewer, Assignee, and/or Label?
