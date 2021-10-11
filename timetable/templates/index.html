@@ -1,113 +1,132 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-		<meta name="description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
-		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder, Sebastian Cabrejos">
 
-		<!-- Facebook thumbnail info -->
-		<meta property="og:title" content="Semester.ly - Course Scheduling Made Easy" />
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="Semesterly" />
-		<meta property="og:url" content="http://semester.ly" />
-		<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
-		<meta property="og:description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
-		<meta property="fb:admins" content="535129063" />
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+	<meta name="description"
+		content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
+	<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder, Sebastian Cabrejos">
 
-		<title>Semester.ly: Course Scheduling, Textbooks, Social & More</title>
-		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+	<!-- Facebook thumbnail info -->
+	<meta property="og:title" content="Semester.ly - Course Scheduling Made Easy" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Semesterly" />
+	<meta property="og:url" content="http://semester.ly" />
+	<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
+	<meta property="og:description"
+		content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
+	<meta property="fb:admins" content="535129063" />
 
-		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
-		<link rel="stylesheet" href="{% static 'css/global.css'%}">
-		<link rel="stylesheet" href="{% static 'css/splash.css'%}">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css" integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni" crossorigin="anonymous">
-		
-		<script src="https://kit.fontawesome.com/54815f8287.js" crossorigin="anonymous"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	  	<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
-		
-		<!-- Google Analytics script -->
-	    <script>
-	      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	<title>Semester.ly: Course Scheduling, Textbooks, Social & More</title>
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
 
-	      ga('create', 'UA-68704308-1', 'auto');
-	      ga('send', 'pageview');
+	<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet"
+		type='text/css'>
+	<link rel="stylesheet" href="{% static 'css/global.css'%}">
+	<link rel="stylesheet" href="{% static 'css/splash.css'%}">
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css"
+		integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni" crossorigin="anonymous">
 
-	    </script>
-		<meta name="google-site-verification" content="A-t9Ubnq-7M8FVU4ImQIXnRFQwPR98UUDey5x_suvek" />
-	</head>
-	<body>
-		<header class="navbar navbar-light bg-light">
-			<nav class="grid cf navbar navbar-light bg-light">
-				<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
-                <h1>Semester.ly</h1>
-				<h1 class="navbar-nav">
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<!-- <a class="nav-item nav-link active" href="/"><i></i>Home&nbsp;&nbsp;</a> -->
-					<a class="nav-item nav-link" href="/about">About&nbsp;&nbsp;</a>
-					<a class="navbar-brand" href="https://semesterly-v2.readthedocs.io/en/latest" target="_blank">Docs&nbsp;&nbsp;</a>
-					<a class="nav-item nav-link" href="/press">News&nbsp;&nbsp;</a>
-					<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/discussions" target="_blank">Updates&nbsp;&nbsp;</a>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/" target="_blank"><i class="fa fa-github"></i>GitHub</a>
-				</h1>
-				<nav>
-					<div id="schools-dropdown" class="mobile-nav">
-						<div class="mobile-nav-label">
-							<span></span>
-							<span class="fa fa-bars"></span>
-						</div>
-						<div class="nav-dropdown center">
-							<div class="tip-border"></div>
-							<div class="tip"></div>
-							<div class="nav-dropdown-list">
-								<a class="nav-item nav-link active" href="/"><i></i>Home</a>
-								<a class="nav-item nav-link" href="/about">About</a>
-								<a class="navbar-brand" href="https://semesterly-v2.readthedocs.io/en/latest" target="_blank">Docs</a>
-								<a class="nav-item nav-link" href="/press">News</a>
-								<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/releases">Updates</a>
-								<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/" target="_blank"><i class="fa fa-github"></i>GitHub</a>
-							</div>
+	<script src="https://kit.fontawesome.com/54815f8287.js" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
+
+	<!-- Google Analytics script -->
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+		ga('create', 'UA-68704308-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+	<meta name="google-site-verification" content="A-t9Ubnq-7M8FVU4ImQIXnRFQwPR98UUDey5x_suvek" />
+</head>
+
+<body>
+	<header class="navbar navbar-light bg-light">
+		<nav class="grid cf navbar navbar-light bg-light">
+			<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
+			<h1>Semester.ly</h1>
+			<h1 class="navbar-nav">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<!-- <a class="nav-item nav-link active" href="/"><i></i>Home&nbsp;&nbsp;</a> -->
+				<a class="nav-item nav-link" href="/about">About&nbsp;&nbsp;</a>
+				<a class="navbar-brand" href="https://semesterly-v2.readthedocs.io/en/latest"
+					target="_blank">Docs&nbsp;&nbsp;</a>
+				<a class="nav-item nav-link" href="/press">News&nbsp;&nbsp;</a>
+				<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/discussions"
+					target="_blank">Updates&nbsp;&nbsp;</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/" target="_blank"><i
+						class="fa fa-github"></i>GitHub</a>
+			</h1>
+			<nav>
+				<div id="schools-dropdown" class="mobile-nav">
+					<div class="mobile-nav-label">
+						<span></span>
+						<span class="fa fa-bars"></span>
+					</div>
+					<div class="nav-dropdown center">
+						<div class="tip-border"></div>
+						<div class="tip"></div>
+						<div class="nav-dropdown-list">
+							<a class="nav-item nav-link active" href="/"><i></i>Home</a>
+							<a class="nav-item nav-link" href="/about">About</a>
+							<a class="navbar-brand" href="https://semesterly-v2.readthedocs.io/en/latest"
+								target="_blank">Docs</a>
+							<a class="nav-item nav-link" href="/press">News</a>
+							<a class="nav-item nav-link"
+								href="https://github.com/jhuopensource/semesterly/releases">Updates</a>
+							<a class="nav-item nav-link" href="https://github.com/jhuopensource/semesterly/"
+								target="_blank"><i class="fa fa-github"></i>GitHub</a>
 						</div>
 					</div>
-				</nav>
+				</div>
 			</nav>
-		</header>
-		<div id="page">
-			<div id="hero">
-				<div class="grid cf">
-					<div class="col-1-3">
-						<h2>Your Semester, Made Simple</h2>
-                            <h4 style="font-size: 1.3em;">Semester.ly is currently available at...</h4>
-                            <ul>
-							<a href="https://jhu.semester.ly">
-								<div class="square-logo" style="background-image: url(/static/img/school_logos/jhu-square.png);"></div>
-								<span>Johns Hopkins University</span>
-							</a>
-							<a href="https://horario-tec.sger.li">
-								<div class="square-logo" style="background-image: url(/static/img/school_logos/itcr-logo.png);"></div>
-								<span>Costa Rica Institute of Technology</span>
-							</a>
-							<h4 style="font-size: 1.3em;">Why not add your school too?! 🚀</h4>
-							<a href="https://github.com/jhuopensource/semesterly/blob/master/docs/addaschool.rst" target="_blank">
-                                <div class="square-logo"><i class="fa fa-github"></i></div>
-								<span>Add Your School</span>
-							</a>
-						</ul>
-                        <h4>Scheduling your classes for the next semester just got easier!  Semester.ly is the one stop shop for finding the classes that fit your schedule, course reviews, ratings, textbooks, and classes that your friends are in!  Select a school to start!</h3>
-                    </div>
-					<div class="col-2-3">
-						<div id="screenshot"></div>
-					</div>
+		</nav>
+	</header>
+	<div id="page">
+		<div id="hero">
+			<div class="grid cf">
+				<div class="col-1-3">
+					<h2>Your Semester, Made Simple</h2>
+					<h4 style="font-size: 1.3em;">Semester.ly is currently available at...</h4>
+					<ul>
+						<a href="https://jhu.semester.ly">
+							<div class="square-logo"
+								style="background-image: url(/static/img/school_logos/jhu-square.png);"></div>
+							<span>Johns Hopkins University</span>
+						</a>
+						<a href="https://horario-tec.sger.li">
+							<div class="square-logo"
+								style="background-image: url(/static/img/school_logos/itcr-logo.png);"></div>
+							<span>Costa Rica Institute of Technology</span>
+						</a>
+						<h4 style="font-size: 1.3em;">Why not add your school too?! 🚀</h4>
+						<a href="https://github.com/jhuopensource/semesterly/blob/master/docs/addaschool.rst"
+							target="_blank">
+							<div class="square-logo"><i class="fa fa-github"></i></div>
+							<span>Add Your School</span>
+						</a>
+					</ul>
+					<h4>Scheduling your classes for the next semester just got easier! Semester.ly is the one stop shop
+						for finding the classes that fit your schedule, course reviews, ratings, textbooks, and classes
+						that your friends are in! Select a school to start!</h3>
+				</div>
+				<div class="col-2-3">
+					<div id="screenshot"></div>
 				</div>
 			</div>
 			<div id="reasons">
@@ -144,120 +163,134 @@
 							</div>
 							<div class="tutorial-half">
 
-							</div>
-						</div>
-					</div>
-					<div class="tutorial">
-						<div class="grid cf">
-							<div class="tutorial-half tutorial-text center mobile">
-								<h5>Filters</h5>
-								<h2>Advanced Search to Find the Right Class</h2>
-								<h4>A myriad of filters and toggles will narrow your search results to the perfect class for you!  Only want 200 or 300 level CompSci classes in the CompSci Department? You got it!</h4>
-							</div>
-							<div class="tutorial-half">
-								<img src="/static/img/splash/advancedsearch2.png" alt="a sample ">
-							</div>
-							<div class="tutorial-half tutorial-text right desktop">
-								<h5>Filters</h5>
-								<h2>Advanced Search to Find the Right Class</h2>
-								<h4>A myriad of filters and toggles will narrow your search results to the perfect class for you!  Only want 200 or 300 level CompSci classes in the CompSci Department? You got it!</h4>
-							</div>
 						</div>
 					</div>
 				</div>
-                <div id="open-source" class="reason">
-                    <div class="grid cf">
-                        <h2>Open Source</h2>
-                        <p class="col-10-16 push-3">
-							Semester.ly believes that students know best. University IT departments can't keep up with 
-							the latest but students are always on the cutting edge. That’s why Semester.ly is built by 
-							students, and always will be. That’s why we've open sourced our platform.
-						</p>
-                        <p class="col-10-16 push-3">
-							Our vision is to make Semester.ly the most popular college student contributed open source project 
-							in existence. Our goal is to make it accessible for students to make impactful changes and contributions 
-							and we will do everything in our power to enable students to leverage our system to make everyone's 
-							semester easier.
-						</p>
-                        <div class="open-source__cta">
-                            <a href="https://semesterly-v2.readthedocs.io/en/latest/" target="_blank" class="cta--primary"><i class="fa fa-code"></i>Get Started</a>
-                            <a href="https://github.com/jhuopensource/semesterly" target="_blank" class="cta--alt"><i class="fa fa-github"></i>Github</a>
-                        </div>
-                    </div>
-                </div>
-				<div class="reason" id="authors">
-					<h2>Supported By Johns Hopkins University</h2>
-					<p class="col-10-16 push-3">
-						Since our initial adoption by the Johns Hopkins University IT Department, Semester.ly
-						has been involved in several JHU courses, supported by notable faculty and administrators,
-						and recognized as an integral learning experience for many students.
-					<p>
+				<div class="tutorial">
 					<div class="grid cf">
-						<a class="author" href="https://www.jhu.edu/" target="_blank" style="background-image:url(/static/img/press_img/jhu-logo.png);"></a>
-						<a class="author" href="https://engineering.jhu.edu/" target="_blank" style="background-image:url(/static/img/press_img/whiting.png);"></a>
-						<!-- <div class="author" id="hub" style="background-image:url(/static/img/press_img/hub.png);"></div>
+						<div class="tutorial-half tutorial-text center mobile">
+							<h5>Filters</h5>
+							<h2>Advanced Search to Find the Right Class</h2>
+							<h4>A myriad of filters and toggles will narrow your search results to the perfect class for
+								you! Only want 200 or 300 level CompSci classes in the CompSci Department? You got it!
+							</h4>
+						</div>
+						<div class="tutorial-half">
+							<img src="/static/img/splash/advancedsearch2.png" alt="a sample ">
+						</div>
+						<div class="tutorial-half tutorial-text right desktop">
+							<h5>Filters</h5>
+							<h2>Advanced Search to Find the Right Class</h2>
+							<h4>A myriad of filters and toggles will narrow your search results to the perfect class for
+								you! Only want 200 or 300 level CompSci classes in the CompSci Department? You got it!
+							</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="open-source" class="reason">
+				<div class="grid cf">
+					<h2>Open Source</h2>
+					<p class="col-10-16 push-3">
+						Semester.ly believes that students know best. University IT departments can't keep up with
+						the latest but students are always on the cutting edge. That’s why Semester.ly is built by
+						students, and always will be. That’s why we've open sourced our platform.
+					</p>
+					<p class="col-10-16 push-3">
+						Our vision is to make Semester.ly the most popular college student contributed open source
+						project
+						in existence. Our goal is to make it accessible for students to make impactful changes and
+						contributions
+						and we will do everything in our power to enable students to leverage our system to make
+						everyone's
+						semester easier.
+					</p>
+					<div class="open-source__cta">
+						<a href="https://semesterly-v2.readthedocs.io/en/latest/" target="_blank"
+							class="cta--primary"><i class="fa fa-code"></i>Get Started</a>
+						<a href="https://github.com/jhuopensource/semesterly" target="_blank" class="cta--alt"><i
+								class="fa fa-github"></i>Github</a>
+					</div>
+				</div>
+			</div>
+			<div class="reason" id="authors">
+				<h2>Supported By Johns Hopkins University</h2>
+				<p class="col-10-16 push-3">
+					Since our initial adoption by the Johns Hopkins University IT Department, Semester.ly
+					has been involved in several JHU courses, supported by notable faculty and administrators,
+					and recognized as an integral learning experience for many students.
+				<p>
+				<div class="grid cf">
+					<a class="author" href="https://www.jhu.edu/" target="_blank"
+						style="background-image:url(/static/img/press_img/jhu-logo.png);"></a>
+					<a class="author" href="https://engineering.jhu.edu/" target="_blank"
+						style="background-image:url(/static/img/press_img/whiting.png);"></a>
+					<!-- <div class="author" id="hub" style="background-image:url(/static/img/press_img/hub.png);"></div>
 						<div class="author" style="background-image:url(/static/img/press_img/jhu-newsletter.png);"></div>
 						<div class="author" style="background-image:url(/static/img/press_img/odyssey-transparent.png);"></div>
 						<div class="author" style="background-image:url(/static/img/press_img/technically-black.png);"></div> -->
-					</div>
 				</div>
-				<div id="mobile" class="reason">
-					<div class="grid cf">
-						<div class="col-1-2 reason-text">
-							<h5>Mobile</h5>
-							<h2>Modern, Social, Easy</h2>
-							<h4>A mobile-friendly application means finding your perfect semester on any device!</h4>
-							<h3>Select your school to begin</h3>
-							<ul>
-								<a href="https://jhu.semester.ly">
-									<div class="square-logo" style="background-image: url(/static/img/school_logos/jhu-square.png);"></div>
-									<span>JHU</span>
-								</a>
-								<a href="https://horario-tec.sger.li">
-									<div class="square-logo" style="background-image: url(/static/img/school_logos/itcr-circle.png);"></div>
-									<span>ITCR</span>
-								</a>
-							</ul>
-						</div>
-						<div class="col-1-2">
-							<img src="/static/img/splash/iPhoneMockupCropped2.png" alt="iPhone with Semester.ly open">
-						</div>
+			</div>
+			<div id="mobile" class="reason">
+				<div class="grid cf">
+					<div class="col-1-2 reason-text">
+						<h5>Mobile</h5>
+						<h2>Modern, Social, Easy</h2>
+						<h4>A mobile-friendly application means finding your perfect semester on any device!</h4>
+						<h3>Select your school to begin</h3>
+						<ul>
+							<a href="https://jhu.semester.ly">
+								<div class="square-logo"
+									style="background-image: url(/static/img/school_logos/jhu-square.png);"></div>
+								<span>JHU</span>
+							</a>
+							<a href="https://horario-tec.sger.li">
+								<div class="square-logo"
+									style="background-image: url(/static/img/school_logos/itcr-circle.png);"></div>
+								<span>ITCR</span>
+							</a>
+						</ul>
+					</div>
+					<div class="col-1-2">
+						<img src="/static/img/splash/iPhoneMockupCropped2.png" alt="iPhone with Semester.ly open">
 					</div>
 				</div>
 			</div>
 		</div>
-		<footer>
-			<div class="grid cf">
-				<div class="col-1-1">
-					<ul>
-						<li><a href="https://www.facebook.com/semesterly/" target="_blank">
+	</div>
+	<footer>
+		<div class="grid cf">
+			<div class="col-1-1">
+				<ul>
+					<li><a href="https://www.facebook.com/semesterly/" target="_blank">
 							<i class="fa fa-facebook"></i>
 							<span>Like us on Facebook</span>
 						</a></li>
-						<li><a href="https://github.com/jhuopensource/semesterly/" target="_blank">
+					<li><a href="https://github.com/jhuopensource/semesterly/" target="_blank">
 							<i class="fa fa-github fa-lg"></i>
 							<span>Find us on GitHub</span>
 						</a></li>
-						<li><a href="https://discord.gg/txYbphsAV7" target="_blank">
+					<li><a href="https://discord.gg/txYbphsAV7" target="_blank">
 							<i class="fab fa-discord fa-lg"></i>
 							<span>Join the Community Forum</span>
 						</a></li>
-						<li><a href="mailto:contact@semester.ly">
+					<li><a href="mailto:contact@semester.ly">
 							<i class="fa fa-at"></i>
 							<span>Email us at contact@semester.ly</span>
 						</a></li>
-						<li><a href="/termsofservice" target="_blank">
+					<li><a href="/termsofservice" target="_blank">
 							<i class="fa fa-bookmark"></i>
 							<span>Read our Terms of Service</span>
 						</a></li>
-						<li><a href="/privacypolicy" target="_blank">
+					<li><a href="/privacypolicy" target="_blank">
 							<i class="fa fa-lock"></i>
 							<span>Read our Privacy Policy</span>
 						</a></li>
-					</ul>
-				</div>
-				<h6>COPYRIGHT © 2017-2021 SEMESTERLY TECHNOLOGIES, LLC.</h6>
+				</ul>
 			</div>
-		</footer>
-	</body>
+			<h6>COPYRIGHT © 2017-2021 SEMESTERLY TECHNOLOGIES, LLC.</h6>
+		</div>
+	</footer>
+</body>
+
 </html>

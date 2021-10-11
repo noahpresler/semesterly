@@ -1,40 +1,45 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-		<meta name="description" content="{{ course.name }} at {{ school_name }}: {{ course.description }}">
-		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo">
 
-		<!-- Facebook thumbnail info -->
-		<meta property="og:title" content="{{ course.code }} {{ course.name }} | Semester.ly" />
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="Semesterly" />
-		<meta property="og:url" content="http://semester.ly" />
-		<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
-		<meta property="og:description" content="{{ course.description }}" />
-		<meta property="fb:admins" content="535129063" />
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+	<meta name="description" content="{{ course.name }} at {{ school_name }}: {{ course.description }}">
+	<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo">
 
-		<title>{{ course.code }} {{ course.name }} | Semester.ly</title>
-		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+	<!-- Facebook thumbnail info -->
+	<meta property="og:title" content="{{ course.code }} {{ course.name }} | Semester.ly" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Semesterly" />
+	<meta property="og:url" content="http://semester.ly" />
+	<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
+	<meta property="og:description" content="{{ course.description }}" />
+	<meta property="fb:admins" content="535129063" />
 
-		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
-		
-		<!-- <img class="timer-logo" height=75 src="{% static 'img/logo2.0.png' %}"/> -->
-		<link rel="stylesheet" href="{% static 'css/course-page.css' %}">
-	</head>
-	<body>
-		<header>
-			<div class="grid cf">
-				<a href="/">
-					<span id="logo"></span>
-					<h1>Semester.ly</h1>
-				</a>
-				<!-- <div id="social">
+	<title>{{ course.code }} {{ course.name }} | Semester.ly</title>
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw=="
+		crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet"
+		type='text/css'>
+
+	<!-- <img class="timer-logo" height=75 src="{% static 'img/logo2.0.png' %}"/> -->
+	<link rel="stylesheet" href="{% static 'css/course-page.css' %}">
+</head>
+
+<body>
+	<header>
+		<div class="grid cf">
+			<a href="/">
+				<span id="logo"></span>
+				<h1>Semester.ly</h1>
+			</a>
+			<!-- <div id="social">
 					<div id="social-card">
 						<div id="social-pro-pic" style="background-image: url();"></div>
 					_	<h2>Max</h2>
@@ -52,252 +57,239 @@
 						<h2>Signup/Login <i className="fa fa-facebook-square"></i></h2>
 					</a>
 				</div> -->
+		</div>
+	</header>
+	<div id="page" itemscope itemtype="http://schema.org/Rating">
+		<meta itemprop="worstRating" content="0" />
+		<meta itemprop="bestRating" content="5" />
+		<div id="top-bg"></div>
+		<div id="top" class="grid cf">
+			<div class="card-width">
+				<h1>{{ school_name }} | {{ course.code }}</h1>
 			</div>
-		</header>
-		<div id="page" itemscope itemtype="http://schema.org/Rating">
-			<meta itemprop="worstRating" content = "0"/>
-			<meta itemprop="bestRating" content = "5"/>
-			<div id="top-bg"></div>
-			<div id="top" class="grid cf">
-				<div class="card-width">
-					<h1>{{ school_name }} | {{ course.code }}</h1>
-				</div>
-			</div>
-			<div id="content">
-				<div class="grid cf">
-					<div id="card">
-						<h1 itemprop="name">{{ course.name }}</h1>
-						<div class="cf">
-							<div class="col-1-4">
-								<div id="credits">
-									<h3>{{ course.num_credits }}</h3>
-									<span>credits</span>
+		</div>
+		<div id="content">
+			<div class="grid cf">
+				<div id="card">
+					<h1 itemprop="name">{{ course.name }}</h1>
+					<div class="cf">
+						<div class="col-1-4">
+							<div id="credits">
+								<h3>{{ course.num_credits }}</h3>
+								<span>credits</span>
+							</div>
+							<div id="avg-rating">
+								{% if avg %}
+								<h3>Average Course Rating</h3>
+								<div class="rating-wrapper" data-score="{{ avg }}">
+									<div class="star-ratings-sprite eval-stars">
+										<span class="rating" style="width: 0%;"></span>
+									</div>
+									<div class="numeric-rating">
+										<b>({{ avg }})</b>
+									</div>
 								</div>
-								<div id="avg-rating">
-									{% if avg %}
-										<h3>Average Course Rating</h3>
-										<div class="rating-wrapper"
-											data-score="{{ avg }}">
+								{% endif %}
+							</div>
+						</div>
+						<div class="col-3-4">
+							<div id="description">
+								{% if course.description %}
+								<p>{{ course.description }}</p>
+								{% else %}
+								<p>No description found.</p>
+								{% endif %}
+							</div>
+						</div>
+						<div class="col-1-1">
+							{% if evals and evals|length > 1 %}
+							<div id="no-template-pager" class="cycle-pager external cf">
+								{% for e in evals %}
+								<div class="review-pager">
+									<div class="review-pager-border">
+										<h4 class="review-pager-year">{{ e.year }}</h4>
+										<div class="rating-wrapper" data-score="{{ e.score }}">
 											<div class="star-ratings-sprite eval-stars">
 												<span class="rating" style="width: 0%;"></span>
 											</div>
 											<div class="numeric-rating">
-												<b>({{ avg }})</b>
+												<b>({{ e.score }})</b>
 											</div>
 										</div>
-									{% endif %}
-								</div>
-							</div>
-							<div class="col-3-4">
-								<div id="description">
-									{% if course.description %}
-										<p>{{ course.description }}</p>
-									{% else %}
-										<p>No description found.</p>
-									{% endif %}
-								</div>
-							</div>
-							<div class="col-1-1">
-								{% if evals and evals|length > 1 %}
-									<div id="no-template-pager" class="cycle-pager external cf">
-										{% for e in evals %}
-											<div class="review-pager">
-												<div class="review-pager-border">
-													<h4 class="review-pager-year">{{ e.year }}</h4>
-													<div class="rating-wrapper"
-														data-score="{{ e.score }}">
-														<div class="star-ratings-sprite eval-stars">
-															<span class="rating" style="width: 0%;"></span>
-														</div>
-														<div class="numeric-rating">
-															<b>({{ e.score }})</b>
-														</div>
-													</div>
-												</div>
-											</div>
-										{% endfor %}
 									</div>
-									<div class="cycle-slideshow" 
-										data-cycle-fx="fade" 
-										data-cycle-timeout="0"
-										data-cycle-slides="> div"
-										data-cycle-pager="#no-template-pager"
-										data-cycle-pager-template=""
-										data-cycle-auto-height=container
-										>
-										{% for e in evals %}
-											<div class="review">
-												<div class="review-border">
-													<div class="review-header">
-														<h4 class="review-year">{{ e.year }}</h4>
-														<h4 class="review-prof">Professor: {{ e.professor }}</h4>
-														<div class="rating-wrapper"
-															data-score="{{ e.score }}">
-															<div class="star-ratings-sprite eval-stars">
-																<span class="rating" style="width: 0%;"></span>
-															</div>
-															<div class="numeric-rating">
-																<b>({{ e.score }})</b>
-															</div>
-														</div>
-													</div>
-													<div class="review-body">
-														<p>{{ e.summary|linebreaks }}</p>
-													</div>
+								</div>
+								{% endfor %}
+							</div>
+							<div class="cycle-slideshow" data-cycle-fx="fade" data-cycle-timeout="0"
+								data-cycle-slides="> div" data-cycle-pager="#no-template-pager"
+								data-cycle-pager-template="" data-cycle-auto-height=container>
+								{% for e in evals %}
+								<div class="review">
+									<div class="review-border">
+										<div class="review-header">
+											<h4 class="review-year">{{ e.year }}</h4>
+											<h4 class="review-prof">Professor: {{ e.professor }}</h4>
+											<div class="rating-wrapper" data-score="{{ e.score }}">
+												<div class="star-ratings-sprite eval-stars">
+													<span class="rating" style="width: 0%;"></span>
 												</div>
-											</div>
-										{% endfor %}
-									</div>
-								{% elif evals %}
-									{% for e in evals %}
-										<div class="review">
-											<div class="review-border">
-												<div class="review-header">
-													<h4 class="review-year">{{ e.year }}</h4>
-													<h4 class="review-prof">Professor: {{ e.professor }}</h4>
-													<div class="rating-wrapper"
-														data-score="{{ e.score }}">
-														<div class="star-ratings-sprite eval-stars">
-															<span class="rating" style="width: 0%;"></span>
-														</div>
-														<div class="numeric-rating">
-															<b>({{ e.score }})</b>
-														</div>
-													</div>
-												</div>
-												<div class="review-body">
-													<p>{{ e.summary|linebreaks }}</p>
+												<div class="numeric-rating">
+													<b>({{ e.score }})</b>
 												</div>
 											</div>
 										</div>
-									{% endfor %}
+										<div class="review-body">
+											<p>{{ e.summary|linebreaks }}</p>
+										</div>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+							{% elif evals %}
+							{% for e in evals %}
+							<div class="review">
+								<div class="review-border">
+									<div class="review-header">
+										<h4 class="review-year">{{ e.year }}</h4>
+										<h4 class="review-prof">Professor: {{ e.professor }}</h4>
+										<div class="rating-wrapper" data-score="{{ e.score }}">
+											<div class="star-ratings-sprite eval-stars">
+												<span class="rating" style="width: 0%;"></span>
+											</div>
+											<div class="numeric-rating">
+												<b>({{ e.score }})</b>
+											</div>
+										</div>
+									</div>
+									<div class="review-body">
+										<p>{{ e.summary|linebreaks }}</p>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+							{% else %}
+							<p>No Course Evaluations found</p>
+							{% endif %}
+						</div>
+						<div id="call-to-action" class="col-1-1">
+							<a href="{{ url }}">
+								<span>Course evaluations, professor ratings, textbooks and more!</span>
+								<svg viewBox="0 0 48 48">
+									<path
+										d="M20.17 31.17L23 34l10-10-10-10-2.83 2.83L25.34 22H6v4h19.34l-5.17 5.17zM38 6H10c-2.21 0-4 1.79-4 4v8h4v-8h28v28H10v-8H6v8c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4z">
+									</path>
+								</svg>
+							</a>
+						</div>
+					</div>
+					<div id="sections" class="cf">
+						{% if lectures %}
+						<div class="section-group cf">
+							<h3>Lecture Sections</h3>
+							{% for l in lectures %}
+							{% if l %}
+							<div class="section" data-waitlist="{{ l.0.waitlist }}" data-enrolment="{{ l.0.enrolment }}"
+								data-size="{{ l.0.size }}" a>
+								{% if l.0.meeting_section %}
+								<h4>{{ l.0.meeting_section }}</h4>
 								{% else %}
-									<p>No Course Evaluations found</p>
+								<h4>No section number</h4>
 								{% endif %}
+								{% if l.0.location %}
+								<h5>{{ l.0.location }}</h5>
+								{% else %}
+								<h5>No location info</h5>
+								{% endif %}
+								{% if l.0.instructors %}
+								<h5>{{ l.0.instructors }}</h5>
+								{% else %}
+								<h5>No instructor info</h5>
+								{% endif %}
+								{% if l.0.time_start %}
+								<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
+								{% else %}
+								<h5>No class times info</h5>
+								{% endif %}
+								<h5 class="enrollment"></h5>
 							</div>
-							<div id="call-to-action" class="col-1-1">
-								<a href="{{ url }}">
-									<span>Course evaluations, professor ratings, textbooks and more!</span>
-									<svg viewBox="0 0 48 48">
-										<path d="M20.17 31.17L23 34l10-10-10-10-2.83 2.83L25.34 22H6v4h19.34l-5.17 5.17zM38 6H10c-2.21 0-4 1.79-4 4v8h4v-8h28v28H10v-8H6v8c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4z"></path>
-									</svg>
-								</a>
+							{% endif %}
+							{% endfor %}
+						</div>
+						{% endif %}
+						{% if tutorials %}
+						<div class="section-group cf">
+							<h3>Tutorial Sections</h3>
+							{% for t in tutorials %}
+							<div class="section" data-waitlist="{{ t.0.waitlist }}" data-enrolment="{{ t.0.enrolment }}"
+								data-size="{{ t.0.size }}">
+								<h4>{{ t.0.meeting_section }}</h4>
+								<h5>{{ t.0.location }}</h5>
+								{% if t.0.instructors %}
+								<h5>{{ t.0.instructors }}</h5>
+								{% else %}
+								<h5>No instructor info</h5>
+								{% endif %}
+								{% if t.0.time_start %}
+								<h5>{{ t.0.time_start }} - {{ t.0.time_end }}</h5>
+								{% else %}
+								<h5>No class times info</h5>
+								{% endif %}
+								<h5 class="enrollment"></h5>
 							</div>
+							{% endfor %}
 						</div>
-						<div id="sections" class="cf">
-							{% if lectures %}
-								<div class="section-group cf">
-									<h3>Lecture Sections</h3>
-									{% for l in lectures %}
-										{% if l %}
-											<div class="section"
-												data-waitlist="{{ l.0.waitlist }}"
-												data-enrolment="{{ l.0.enrolment }}"
-												data-size="{{ l.0.size }}"a
-												>
-												{% if l.0.meeting_section %}
-													<h4>{{ l.0.meeting_section }}</h4>
-												{% else %}
-													<h4>No section number</h4>
-												{% endif %}
-												{% if l.0.location %}
-													<h5>{{ l.0.location }}</h5>
-												{% else %}
-													<h5>No location info</h5>
-												{% endif %}
-												{% if l.0.instructors %}
-													<h5>{{ l.0.instructors }}</h5>
-												{% else %}
-													<h5>No instructor info</h5>
-												{% endif %}
-												{% if l.0.time_start %}
-													<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
-												{% else %}
-													<h5>No class times info</h5>
-												{% endif %}
-												<h5 class="enrollment"></h5>
-											</div>
-										{% endif %}
-									{% endfor %}
-								</div>
-							{% endif %}
-							{% if tutorials %}
-								<div class="section-group cf">
-									<h3>Tutorial Sections</h3>
-									{% for t in tutorials %}
-										<div class="section"
-											data-waitlist="{{ t.0.waitlist }}"
-											data-enrolment="{{ t.0.enrolment }}"
-											data-size="{{ t.0.size }}"
-											>
-											<h4>{{ t.0.meeting_section }}</h4>
-											<h5>{{ t.0.location }}</h5>
-											{% if t.0.instructors %}
-												<h5>{{ t.0.instructors }}</h5>
-											{% else %}
-												<h5>No instructor info</h5>
-											{% endif %}
-											{% if t.0.time_start %}
-												<h5>{{ t.0.time_start }} - {{ t.0.time_end }}</h5>
-											{% else %}
-												<h5>No class times info</h5>
-											{% endif %}
-											<h5 class="enrollment"></h5>
-										</div>
-									{% endfor %}
-								</div>
-							{% endif %}
-							{% if practicals %}
-								<div class="section-group cf">
-									<h3>Lab/Practical Sections</h3>
-									{% for p in practicals %}
-										<div class="section"
-											data-waitlist="{{ p.0.waitlist }}"
-											data-enrolment="{{ p.0.enrolment }}"
-											data-size="{{ p.0.size }}"
-											>
-											<h4>{{ p.0.meeting_section }}</h4>
-											<h5>{{ p.0.location }}</h5>
-											{% if p.0.instructors %}
-												<h5>{{ p.0.instructors }}</h5>
-											{% else %}
-												<h5>No instructor info</h5>
-											{% endif %}
-											{% if p.0.time_start %}
-												<h5>{{ p.0.time_start }} - {{ p.0.time_end }}</h5>
-											{% else %}
-												<h5>No class times info</h5>
-											{% endif %}
-											<h5 class="enrollment"></h5>
-										</div>
-									{% endfor %}
-								</div>
-							{% endif %}
+						{% endif %}
+						{% if practicals %}
+						<div class="section-group cf">
+							<h3>Lab/Practical Sections</h3>
+							{% for p in practicals %}
+							<div class="section" data-waitlist="{{ p.0.waitlist }}" data-enrolment="{{ p.0.enrolment }}"
+								data-size="{{ p.0.size }}">
+								<h4>{{ p.0.meeting_section }}</h4>
+								<h5>{{ p.0.location }}</h5>
+								{% if p.0.instructors %}
+								<h5>{{ p.0.instructors }}</h5>
+								{% else %}
+								<h5>No instructor info</h5>
+								{% endif %}
+								{% if p.0.time_start %}
+								<h5>{{ p.0.time_start }} - {{ p.0.time_end }}</h5>
+								{% else %}
+								<h5>No class times info</h5>
+								{% endif %}
+								<h5 class="enrollment"></h5>
+							</div>
+							{% endfor %}
 						</div>
+						{% endif %}
 					</div>
-					<div id="outcard">
-						
-					</div>
+				</div>
+				<div id="outcard">
+
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<footer>
-			
-		</footer>
+	<footer>
 
-		<!-- Google analytics script -->
-		<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	</footer>
+
+	<!-- Google analytics script -->
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
 		ga('create', 'UA-68704308-1', 'auto');
 		ga('send', 'pageview');
-		</script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-		<script src="https://malsup.github.com/jquery.cycle2.js"></script>
-		<script type='text/javascript' src='/static/js/course-page.js'></script>
-	</body>
+	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script src="https://malsup.github.com/jquery.cycle2.js"></script>
+	<script type='text/javascript' src='/static/js/course-page.js'></script>
+</body>
+
 </html>

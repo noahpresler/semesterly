@@ -1,45 +1,65 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-        <title>Notice - Semester.ly</title>
-        <meta name="description" content="Semester.ly: Course Scheduling, Textbooks, Social & More.">
-        <meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder, Sebastian Cabrejos">
 
-        <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Notice - Semester.ly</title>
+    <meta name="description" content="Semester.ly: Course Scheduling, Textbooks, Social & More.">
+    <meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder, Sebastian Cabrejos">
 
-        <link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
-        <link rel="stylesheet" href="{% static 'css/global.css'%}">
-        <!-- get header styles from press css file -->
-        <link rel="stylesheet" href="{% static 'css/press.css'%}">
-        <link rel="stylesheet" href="{% static 'css/notice.css'%}">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css" integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni" crossorigin="anonymous">
-		<script src="https://kit.fontawesome.com/54815f8287.js" crossorigin="anonymous"></script>
-    </head>
-    <body>
-        <header class="down">
-            <div class="grid cf">
-                <a href="/">
-                    <h1><i class="fa fa-chevron-circle-left"></i>&nbsp;Back&nbsp;&nbsp;</h1>
-					<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
-                </a>
-				<h1>Semester.ly</h1>
-            </div>
-        </header>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
 
-        <div class="notice-body">
-<p>Dear Semester.ly user,</p>
-<p class="indent">Our goal has always been to make course registration easier. We believe that you deserve speed, ease, convenience, and beautiful design in everything you touch. From finding the courses that are right for you to registering for them on the University system, we aim to improve every aspect of course registration. That is why we are excited to announce that we are partnering with Johns Hopkins University’s IT department to provide more reliable service, scalability, and integration with the university system!</p>
-<p class="indent">We tested out this partnership with last semesters’ “Add to SIS Cart” button and will be building on that success to launch features that you have been asking for: course pre-requirement checking, recommended courses based on your major, and so much more!  As part of this partnership, starting March 8th, 2019, Semester.ly will be hosted by HopkinsIT.</p>
-<p class="indent">This means that HopkinsIT will be helping us improve the reliability of Semester.ly, but it also means user data will be hosted on their network. Only Semester.ly team members will be able to access user data but we still think this is a change you should be aware of. We believe that you should have control of your personal data and with that in mind, we would like to give you the option to delete your account. On the account dropdown, there is now a Delete Account button. If you wish, you may delete your account <a href="https://jhu.semester.ly/delete_account">HERE</a>. After careful consideration, we have decided that this move will help take Semester.ly to the next level and hope that you will join us on this new journey!
-</p>
-<p>
-Sincerely,<br>
-The Semester.ly Team
-</p>
+    <link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet"
+        type='text/css'>
+    <link rel="stylesheet" href="{% static 'css/global.css'%}">
+    <!-- get header styles from press css file -->
+    <link rel="stylesheet" href="{% static 'css/press.css'%}">
+    <link rel="stylesheet" href="{% static 'css/notice.css'%}">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css"
+        integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/54815f8287.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header class="down">
+        <div class="grid cf">
+            <a href="/">
+                <h1><i class="fa fa-chevron-circle-left"></i>&nbsp;Back&nbsp;&nbsp;</h1>
+                <img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
+            </a>
+            <h1>Semester.ly</h1>
         </div>
-    </body>
+    </header>
+
+    <div class="notice-body">
+        <p>Dear Semester.ly user,</p>
+        <p class="indent">Our goal has always been to make course registration easier. We believe that you deserve
+            speed, ease, convenience, and beautiful design in everything you touch. From finding the courses that are
+            right for you to registering for them on the University system, we aim to improve every aspect of course
+            registration. That is why we are excited to announce that we are partnering with Johns Hopkins University’s
+            IT department to provide more reliable service, scalability, and integration with the university system!</p>
+        <p class="indent">We tested out this partnership with last semesters’ “Add to SIS Cart” button and will be
+            building on that success to launch features that you have been asking for: course pre-requirement checking,
+            recommended courses based on your major, and so much more! As part of this partnership, starting March 8th,
+            2019, Semester.ly will be hosted by HopkinsIT.</p>
+        <p class="indent">This means that HopkinsIT will be helping us improve the reliability of Semester.ly, but it
+            also means user data will be hosted on their network. Only Semester.ly team members will be able to access
+            user data but we still think this is a change you should be aware of. We believe that you should have
+            control of your personal data and with that in mind, we would like to give you the option to delete your
+            account. On the account dropdown, there is now a Delete Account button. If you wish, you may delete your
+            account <a href="https://jhu.semester.ly/delete_account">HERE</a>. After careful consideration, we have
+            decided that this move will help take Semester.ly to the next level and hope that you will join us on this
+            new journey!
+        </p>
+        <p>
+            Sincerely,<br>
+            The Semester.ly Team
+        </p>
+    </div>
+</body>
+
 </html>

@@ -1,90 +1,99 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-		{% block title_description_block %}{% endblock %}
-		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder, Sebastian Cabrejos">
 
-		<!-- Facebook thumbnail info -->
-		{% block og_block %}{% endblock %}
-		
-		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+	{% block title_description_block %}{% endblock %}
+	<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder, Sebastian Cabrejos">
 
-		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
-		<link rel="stylesheet" href="{% static 'css/global.css'%}">
+	<!-- Facebook thumbnail info -->
+	{% block og_block %}{% endblock %}
 
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css" integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni" crossorigin="anonymous">
-		<script src="https://kit.fontawesome.com/54815f8287.js" crossorigin="anonymous"></script>
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
 
-		{% block css_block %}{% endblock %}
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-		
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-		<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
-		
-		 <!-- Google Analytics script -->
-	    <script>
-	      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet"
+		type='text/css'>
+	<link rel="stylesheet" href="{% static 'css/global.css'%}">
 
-	      ga('create', 'UA-68704308-1', 'auto');
-	      ga('send', 'pageview');
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css"
+		integrity="sha384-wESLQ85D6gbsF459vf1CiZ2+rr+CsxRY0RpiF1tLlQpDnAgg6rwdsUF1+Ics2bni" crossorigin="anonymous">
+	<script src="https://kit.fontawesome.com/54815f8287.js" crossorigin="anonymous"></script>
 
-	    </script>
-	</head>
-	<body>
-		<header class="down">
-			<div class="grid cf">
-				<a href="/">
-					<h1><i class="fa fa-chevron-circle-left"></i>&nbsp;Back&nbsp;&nbsp;</h1>
-					<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
-				</a>
-				<h1>Semester.ly</h1>
-				<nav>
-					<!-- <a href="https://jhu.semester.ly">JHU</a> -->
-				</nav>
-			</div>
-		</header>
-		
-		{% block body_block %}{% endblock %}
+	{% block css_block %}{% endblock %}
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-		<footer>
-			<div class="grid cf">
-				<div class="col-1-1">
-					<ul>
-						<li><a href="https://www.facebook.com/semesterly/" target="_blank">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
+
+	<!-- Google Analytics script -->
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+		ga('create', 'UA-68704308-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</head>
+
+<body>
+	<header class="down">
+		<div class="grid cf">
+			<a href="/">
+				<h1><i class="fa fa-chevron-circle-left"></i>&nbsp;Back&nbsp;&nbsp;</h1>
+				<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
+			</a>
+			<h1>Semester.ly</h1>
+			<nav>
+				<!-- <a href="https://jhu.semester.ly">JHU</a> -->
+			</nav>
+		</div>
+	</header>
+
+	{% block body_block %}{% endblock %}
+
+	<footer>
+		<div class="grid cf">
+			<div class="col-1-1">
+				<ul>
+					<li><a href="https://www.facebook.com/semesterly/" target="_blank">
 							<i class="fa fa-facebook"></i>
 							<span>Like us on Facebook</span>
 						</a></li>
-						<li><a href="https://github.com/jhuopensource/semesterly/">
+					<li><a href="https://github.com/jhuopensource/semesterly/">
 							<i class="fa fa-github fa-lg"></i>
 							<span>Find us on GitHub</span>
 						</a></li>
-						<li><a href="https://discord.gg/txYbphsAV7">
+					<li><a href="https://discord.gg/txYbphsAV7">
 							<i class="fab fa-discord fa-lg"></i>
 							<span>Join the Community Forum</span>
 						</a></li>
-						<li><a href="mailto:contact@semester.ly">
+					<li><a href="mailto:contact@semester.ly">
 							<i class="fa fa-at"></i>
 							<span>Email us at contact@semester.ly</span>
 						</a></li>
-						<li><a href="https://semester.ly/termsofservice" target="_blank">
+					<li><a href="https://semester.ly/termsofservice" target="_blank">
 							<i class="fa fa-bookmark"></i>
 							<span>Read our Terms of Service</span>
 						</a></li>
-						<li><a href="https://semester.ly/privacypolicy" target="_blank">
+					<li><a href="https://semester.ly/privacypolicy" target="_blank">
 							<i class="fa fa-lock"></i>
 							<span>Read our Privacy Policy</span>
 						</a></li>
-					</ul>
-				</div>
-				<h6>COPYRIGHT © 2017-2021 SEMESTERLY TECHNOLOGIES, LLC.</h6>
+				</ul>
 			</div>
-		</footer>
-	</body>
+			<h6>COPYRIGHT © 2017-2021 SEMESTERLY TECHNOLOGIES, LLC.</h6>
+		</div>
+	</footer>
+</body>
+
 </html>
