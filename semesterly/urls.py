@@ -14,7 +14,7 @@ from django.conf.urls import include, re_path
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import admin
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.schemas import get_schema_view
 
@@ -29,7 +29,9 @@ admin.autodiscover()
 urlpatterns = [
     re_path(r'^$', helpers.mixins.FeatureFlowView.as_view(), name='home'),
     re_path(r'about/*', TemplateView.as_view(template_name='about.html')),
+    re_path(r'press/ucredit/*', TemplateView.as_view(template_name='ucredit.html')),
     re_path(r'press/*', TemplateView.as_view(template_name='press.html')),
+    re_path(r'ucredit/*', RedirectView.as_view(url='https://ucredit.me')),
     re_path(r'notice', TemplateView.as_view(
         template_name='notice.html')),
     re_path('', include('authpipe.urls')),
