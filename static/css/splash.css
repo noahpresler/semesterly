@@ -330,7 +330,6 @@ header nav a .fa {
 	margin: 0;
 	text-transform: uppercase;
 	letter-spacing: 0.2em;
-	padding: 0 40px 0 0;
 	color: #555;
 }
 .tutorial h2,
@@ -375,7 +374,7 @@ header nav a .fa {
 	font-weight: 400;
 	color: #777;
 	padding: 5px 40px;
-	margin: 10px 40px 0 0;
+	margin: 10px 0 0 0;
 }
 #mobile {
 	background-color: #ddd;
