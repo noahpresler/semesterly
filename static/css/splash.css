@@ -290,7 +290,7 @@ header nav a .fa {
 .tutorial {
 	padding: 120px 0;
 	font-size: 0;
-	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #ddd;
 	position: relative;
 }
 .tutorial:last-child {
