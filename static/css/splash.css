@@ -330,6 +330,7 @@ header nav a .fa {
 	margin: 0;
 	text-transform: uppercase;
 	letter-spacing: 0.2em;
+	padding: 0 40px 0 0;
 	color: #555;
 }
 .tutorial h2,
