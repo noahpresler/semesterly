@@ -88,7 +88,7 @@
     "watchify": "^3.6.1",
     "webpack": "^2.4.1",
     "webpack-bundle-tracker": "^0.2.0",
-    "webpack-dev-server": "^3.1.11"
+    "webpack-dev-server": "^2.4.2"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./misc/test_env.jsx",
