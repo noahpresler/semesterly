@@ -434,7 +434,7 @@ export const removeCustomSlot = id => (dispatch) => {
 export const updateCustomSlot = (newValues, id) => (dispatch) => {
   if (newValues.time_start !== undefined && newValues.time_start === newValues.time_end) {
     dispatch(removeCustomSlot(id));
-  } else {
+  } else if (newValues.time_end !== undefined && newValues.time_end <= "24:00") {
     dispatch({
       type: ActionTypes.UPDATE_CUSTOM_SLOT,
       newValues,
