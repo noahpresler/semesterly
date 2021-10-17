@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Select from 'react-select';
 import classnames from 'classnames';
-import {WaveModal} from 'boron-15';
+import { WaveModal } from 'boron-15';
 import majors from '../../constants/majors';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 import { isIncomplete } from '../../util';

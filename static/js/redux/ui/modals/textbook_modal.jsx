@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import uniqBy from 'lodash/uniqBy';
 import range from 'lodash/range';
-import {WaveModal} from 'boron-15';
+import { WaveModal } from 'boron-15';
 import Textbook from '../textbook';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 

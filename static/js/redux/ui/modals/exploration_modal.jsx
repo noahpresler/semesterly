@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {DropModal} from 'boron-15';
+import { DropModal } from 'boron-15';
 import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';

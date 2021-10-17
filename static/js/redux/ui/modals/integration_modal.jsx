@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {WaveModal} from 'boron-15';
+import { WaveModal } from 'boron-15';
 import { addIntegration, delIntegration } from '../../actions/user_actions';
 
 class IntegrationModal extends React.Component {

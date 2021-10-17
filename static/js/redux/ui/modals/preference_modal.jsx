@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {FadeModal} from 'boron-15';
+import { FadeModal } from 'boron-15';
 import SortMenuContainer from '../containers/sort_menu_container';
 
 class PreferenceModal extends React.Component {

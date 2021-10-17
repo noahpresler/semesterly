@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {WaveModal} from 'boron-15';
+import { WaveModal } from 'boron-15';
 import classNames from 'classnames';
 import Clipboard from 'clipboard';
 import COLOUR_DATA from '../../constants/colours';

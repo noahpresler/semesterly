@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import PropTypes from 'prop-types';
 import React from 'react';
 import twemoji from 'twemoji';
-import {WaveModal} from 'boron-15';
+import { WaveModal } from 'boron-15';
 import renderHTML from 'react-render-html';
 
 class SignupModal extends React.Component {

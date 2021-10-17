@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {WaveModal} from 'boron-15';
+import { WaveModal } from 'boron-15';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 class UserAcquisitionModal extends React.Component {
