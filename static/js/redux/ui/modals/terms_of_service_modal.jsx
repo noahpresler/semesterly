@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { WaveModal } from 'boron-15';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 class TermsOfServiceModal extends React.Component {
   componentDidMount() {
