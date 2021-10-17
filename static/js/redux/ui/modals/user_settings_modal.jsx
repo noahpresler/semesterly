@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Select from 'react-select';
 import classnames from 'classnames';
-import Modal from 'boron/WaveModal';
+import {WaveModal} from 'boron-15';
 import majors from '../../constants/majors';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 import { isIncomplete } from '../../util';
@@ -273,7 +273,7 @@ class UserSettingsModal extends React.Component {
       link.click();
     }
     return (
-      <Modal
+      <WaveModal
         ref={(c) => { this.modal = c; }}
         className="welcome-modal max-modal"
         closeOnClick={false}
@@ -328,7 +328,7 @@ class UserSettingsModal extends React.Component {
             </div>
           </div>
         </div>
-      </Modal>
+      </WaveModal>
     );
   }
 }

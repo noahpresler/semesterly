@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Modal from 'boron/WaveModal';
+import {WaveModal} from 'boron-15';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 class UserAcquisitionModal extends React.Component {
@@ -42,7 +42,7 @@ class UserAcquisitionModal extends React.Component {
     };
 
     return (
-      <Modal
+      <WaveModal
         ref={(c) => { this.modal = c; }}
         className="user-acquisition-modal abnb-modal max-modal"
         modalStyle={modalStyle}
@@ -129,7 +129,7 @@ class UserAcquisitionModal extends React.Component {
             <span>Email Coming Soon</span>
           </button> */}
         </div>
-      </Modal>
+      </WaveModal>
     );
   }
 }

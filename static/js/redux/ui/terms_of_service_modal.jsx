@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'boron/WaveModal';
+import {WaveModal} from 'boron-15';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class TermsOfServiceModal extends React.Component {
@@ -79,7 +79,7 @@ class TermsOfServiceModal extends React.Component {
     };
 
     return (
-      <Modal
+      <WaveModal
         ref={(c) => { this.modal = c; }}
         className="terms-of-service-modal max-modal"
         modalStyle={modalStyle}
@@ -121,7 +121,7 @@ class TermsOfServiceModal extends React.Component {
             You must accept the new Terms of Service to continue using Semester.ly.
           </p>
         </div>
-      </Modal>
+      </WaveModal>
     );
   }
 }

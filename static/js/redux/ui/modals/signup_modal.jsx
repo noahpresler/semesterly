@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import PropTypes from 'prop-types';
 import React from 'react';
 import twemoji from 'twemoji';
-import Modal from 'boron/WaveModal';
+import {WaveModal} from 'boron-15';
 import renderHTML from 'react-render-html';
 
 class SignupModal extends React.Component {
@@ -56,7 +56,7 @@ class SignupModal extends React.Component {
       width: '100%',
     };
     return (
-      <Modal
+      <WaveModal
         ref={(c) => { this.modal = c; }}
         className="signup-modal max-modal"
         modalStyle={modalStyle}
@@ -109,7 +109,7 @@ class SignupModal extends React.Component {
             </a>
           </div>
         </div>
-      </Modal>
+      </WaveModal>
     );
   }
 }
