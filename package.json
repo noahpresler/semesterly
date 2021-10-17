@@ -69,7 +69,7 @@
     "react-render-html": "^0.1.6",
     "react-select": "^1.0.0-beta13",
     "react-swipeable": "^4.0.0",
-    "react-test-renderer": "^15.5.4",
+    "react-test-renderer": "^16.14.0",
     "react-tooltip": "^3.2.6",
     "reactify": "^1.1.1",
     "redux": "^3.3.1",
