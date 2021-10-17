@@ -272,7 +272,7 @@ def get_tt_stats(timetable, day_to_usage):
 def get_day_to_usage(custom_events, school):
     """Initialize day_to_usage dictionary, which has custom events blocked out."""
     day_to_usage = {
-        day: [set() for _ in range(int(14 * 60 / SCHOOLS_MAP[school].granularity))]
+        day: [set() for _ in range(int(16 * 60 / SCHOOLS_MAP[school].granularity))]
         for day in ['M', 'T', 'W', 'R', 'F']
     }
 
