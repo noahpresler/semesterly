@@ -15,7 +15,6 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babelify": "^7.2.0",
-    "boron": "^0.2.3",
     "boron-15": "^0.3.3",
     "browser-filesaver": "^1.1.1",
     "browserify": "^14.3.0",
