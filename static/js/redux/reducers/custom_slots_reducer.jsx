@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import update from 'react/lib/update';
+import update from 'immutability-helper';
 import * as ActionTypes from '../constants/actionTypes';
 
 // slot fields:
