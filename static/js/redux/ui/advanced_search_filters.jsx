@@ -120,7 +120,7 @@ export const SelectedFilterSection = ({ name, toggle, children }) => (
   </div>
 );
 
-SelectedFilterSection.PropTypes = {
+SelectedFilterSection.propTypes = {
   name: PropTypes.string.isRequired,
   toggle: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
