@@ -124,13 +124,19 @@ function collectCreateDrop(connect) {
   };
 }
 
-const Cell = props => props.connectDragTarget(
-    props.connectCreateTarget(
-        props.connectCreateSource(
-          <div className="cal-cell" />,
+class Cell extends React.Component {
+  render() {
+    return (
+      this.props.connectDragTarget(
+        this.props.connectCreateTarget(
+          this.props.connectCreateSource(
+            <div className="cal-cell" />,
+          ),
         ),
-    ),
-);
+      )
+    );
+  }
+}
 
 export default DragSource(DRAG_TYPES.CREATE, createSource, collectCreateBegin)(
     DropTarget(DRAG_TYPES.CREATE, createTarget, collectCreateDrop)(
