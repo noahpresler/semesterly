@@ -12,6 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+import PropTypes from 'prop-types';
 import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import { DRAG_TYPES } from '../constants/constants';
@@ -137,6 +138,12 @@ class Cell extends React.Component {
     );
   }
 }
+
+Cell.propTypes = {
+  connectCreateSource: PropTypes.func.isRequired,
+  connectDragTarget: PropTypes.func.isRequired,
+  connectCreateTarget: PropTypes.func.isRequired,
+};
 
 export default DragSource(DRAG_TYPES.CREATE, createSource, collectCreateBegin)(
     DropTarget(DRAG_TYPES.CREATE, createTarget, collectCreateDrop)(
