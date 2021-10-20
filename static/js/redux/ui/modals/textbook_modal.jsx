@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import uniqBy from 'lodash/uniqBy';
 import range from 'lodash/range';
-import Modal from 'boron/WaveModal';
+import { WaveModal } from 'boron-15';
 import Textbook from '../textbook';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
@@ -173,7 +173,7 @@ class TextbookModal extends React.Component {
     }
 
     return (
-      <Modal
+      <WaveModal
         ref={(c) => { this.modal = c; }}
         className="textbook-modal abnb-modal max-modal"
         modalStyle={modalStyle}
@@ -190,7 +190,7 @@ class TextbookModal extends React.Component {
         </div>
 
 
-      </Modal>
+      </WaveModal>
     );
   }
 }

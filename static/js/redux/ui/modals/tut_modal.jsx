@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Modal from 'boron/WaveModal';
+import { WaveModal } from 'boron-15';
 import { browserSupportsLocalStorage } from '../../util';
 
 class TutModal extends React.Component {
@@ -81,7 +81,7 @@ class TutModal extends React.Component {
         contentStyle.backgroundColor = '#FC7372';
     }
     return (
-      <Modal
+      <WaveModal
         ref={(c) => { this.modal = c; }}
         className="tut-modal max-modal"
         closeOnClick={false}
@@ -127,7 +127,7 @@ class TutModal extends React.Component {
             width="100%"
           />
         </div>
-      </Modal>
+      </WaveModal>
     );
   }
 }
