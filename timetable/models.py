@@ -99,7 +99,7 @@ class Course(models.Model):
     """
     school = models.CharField(db_index=True, max_length=100)
     code = models.CharField(max_length=20)
-    name = models.CharField(max_length=250)
+    name = models.CharField(max_length=255)
     description = models.TextField(default='')
     notes = models.TextField(default='', null=True)
     info = models.TextField(default='', null=True)
@@ -109,7 +109,7 @@ class Course(models.Model):
     corequisites = models.TextField(default='', null=True)
     exclusions = models.TextField(default='')
     num_credits = models.FloatField(default=-1)
-    department = models.CharField(max_length=250, default='', null=True)
+    department = models.CharField(max_length=255, default='', null=True)
     level = models.CharField(max_length=500, default='', null=True)
     # TODO generalize core/gened/breadth field
     cores = models.CharField(max_length=50, null=True, blank=True)
@@ -275,7 +275,7 @@ class Evaluation(models.Model):
     course = models.ForeignKey(Course, on_delete=models.deletion.CASCADE)
     score = models.FloatField(default=5.0)
     summary = models.TextField()
-    professor = models.CharField(max_length=250)
+    professor = models.CharField(max_length=255)
     course_code = models.CharField(max_length=20)
     year = models.CharField(max_length=200)
 
@@ -299,7 +299,7 @@ class TextbookLink(models.Model):
 
 
 class Integration(models.Model):
-    name = models.CharField(max_length=250)
+    name = models.CharField(max_length=255)
 
 
 class CourseIntegration(models.Model):
