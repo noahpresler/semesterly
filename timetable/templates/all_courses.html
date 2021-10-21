@@ -1,40 +1,45 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-		<meta name="description" content="">
-		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo">
 
-		<!-- Facebook thumbnail info -->
-		<meta property="og:title" content="Courses at {{ school_name }} | Semester.ly" />
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="Semesterly" />
-		<meta property="og:url" content="http://semester.ly" />
-		<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
-		<meta property="og:description" content="" />
-		<meta property="fb:admins" content="535129063" />
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo">
 
-		<title>Courses at {{ school_name }} | Semester.ly</title>
-		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+	<!-- Facebook thumbnail info -->
+	<meta property="og:title" content="Courses at {{ school_name }} | Semester.ly" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Semesterly" />
+	<meta property="og:url" content="http://semester.ly" />
+	<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
+	<meta property="og:description" content="" />
+	<meta property="fb:admins" content="535129063" />
 
-		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
-		
-		<!-- <img class="timer-logo" height=75 src="{% static 'img/logo2.0.png' %}"/> -->
-		<link rel="stylesheet" href="{% static 'css/course-page.css' %}">
-	</head>
-	<body>
-		<header>
-			<div class="grid cf">
-				<a href="/">
-					<span id="logo"></span>
-					<h1>Semester.ly</h1>
-				</a>
-				<!-- <div id="social">
+	<title>Courses at {{ school_name }} | Semester.ly</title>
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw=="
+		crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet"
+		type='text/css'>
+
+	<!-- <img class="timer-logo" height=75 src="{% static 'img/logo2.0.png' %}"/> -->
+	<link rel="stylesheet" href="{% static 'css/course-page.css' %}">
+</head>
+
+<body>
+	<header>
+		<div class="grid cf">
+			<a href="/">
+				<span id="logo"></span>
+				<h1>Semester.ly</h1>
+			</a>
+			<!-- <div id="social">
 					<div id="social-card">
 						<div id="social-pro-pic" style="background-image: url();"></div>
 						<h2>Max</h2>
@@ -52,49 +57,52 @@
 						<h2>Signup/Login <i className="fa fa-facebook-square"></i></h2>
 					</a>
 				</div> -->
+		</div>
+	</header>
+	<div id="page">
+		<div id="top-bg"></div>
+		<div id="top" class="grid cf">
+			<div class="card-width">
+				<h1>Courses at {{ school_name }} | Semester.ly</h1>
 			</div>
-		</header>
-		<div id="page">
-			<div id="top-bg"></div>
-			<div id="top" class="grid cf">
-				<div class="card-width">
-					<h1>Courses at {{ school_name }} | Semester.ly</h1>
-				</div>
-			</div>
-			<div id="content">
-				<div class="grid cf">
-					<div id="card">
-						{% for department, courses in course_map.items %}
-							<div class="department">
-								{% if department == '' %}
-									<h2>Not Listed Under a Department</h2>
-								{% else %}
-									<h2>{{ department }}</h2>
-								{% endif %}
-								{% for c in courses %}
-									<p><a href="/c/{{ c.code }}">{{ c.code }}</a> {{ c.name }}</p>
-								{% endfor %}
-							</div>
+		</div>
+		<div id="content">
+			<div class="grid cf">
+				<div id="card">
+					{% for department, courses in course_map.items %}
+					<div class="department">
+						{% if department == '' %}
+						<h2>Not Listed Under a Department</h2>
+						{% else %}
+						<h2>{{ department }}</h2>
+						{% endif %}
+						{% for c in courses %}
+						<p><a href="/c/{{ c.code }}">{{ c.code }}</a> {{ c.name }}</p>
 						{% endfor %}
 					</div>
+					{% endfor %}
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<footer>
-			
-		</footer>
+	<footer>
 
-		<!-- Google analytics script -->
-		<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	</footer>
+
+	<!-- Google analytics script -->
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
 		ga('create', 'UA-68704308-1', 'auto');
 		ga('send', 'pageview');
-		</script>
-		<script type='text/javascript' src='/static/js/course-page.js'></script>
-	</body>
+	</script>
+	<script type='text/javascript' src='/static/js/course-page.js'></script>
+</body>
+
 </html>

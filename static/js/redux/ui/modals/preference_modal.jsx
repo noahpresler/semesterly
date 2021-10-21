@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Modal from 'boron/FadeModal';
+import { FadeModal } from 'boron-15';
 import SortMenuContainer from '../containers/sort_menu_container';
 
 class PreferenceModal extends React.Component {
@@ -35,7 +35,7 @@ class PreferenceModal extends React.Component {
       width: '100%',
     };
     return (
-      <Modal
+      <FadeModal
         ref={(c) => { this.modal = c; }}
         className="pref-modal max-modal"
         modalStyle={modalStyle}
@@ -76,7 +76,7 @@ class PreferenceModal extends React.Component {
             </button>
           </div>
         </div>
-      </Modal>
+      </FadeModal>
     );
   }
 }

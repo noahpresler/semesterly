@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import Clipboard from 'clipboard';
-import Modal from 'boron/WaveModal';
+import { WaveModal } from 'boron-15';
 import { AreaBubble, WritingIntensive } from '../search_result';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
@@ -160,14 +160,14 @@ class CourseModal extends React.Component {
               />
             </div>);
     return (
-      <Modal
+      <WaveModal
         ref={(c) => { this.modal = c; }}
         className={classNames('course-modal max-modal', { trans: this.props.hasHoveredResult })}
         modalStyle={modalStyle}
         onHide={this.hide}
       >
         {content}
-      </Modal>
+      </WaveModal>
     );
   }
 }

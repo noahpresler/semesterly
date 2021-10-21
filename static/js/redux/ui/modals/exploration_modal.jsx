@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Modal from 'boron/DropModal';
+import { DropModal } from 'boron-15';
 import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
@@ -429,14 +429,14 @@ class ExplorationModal extends React.Component {
       </div>
         );
     return (
-      <Modal
+      <DropModal
         ref={(c) => { this.modal = c; }}
         className={classNames('exploration-modal max-modal', { trans: this.props.hasHoveredResult })}
         modalStyle={modalStyle}
         onHide={this.props.hideExplorationModal}
       >
         {content}
-      </Modal>
+      </DropModal>
     );
   }
 }

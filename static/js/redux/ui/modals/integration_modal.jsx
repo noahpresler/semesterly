@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Modal from 'boron/WaveModal';
+import { WaveModal } from 'boron-15';
 import { addIntegration, delIntegration } from '../../actions/user_actions';
 
 class IntegrationModal extends React.Component {
@@ -51,7 +51,7 @@ class IntegrationModal extends React.Component {
       backgroundImage: 'url(/static/img/integrations/pilotLogo.png)',
     };
     return (
-      <Modal
+      <WaveModal
         ref={(c) => { this.modal = c; }}
         className="integration-modal narrow-modal"
         modalStyle={modalStyle}
@@ -86,7 +86,7 @@ class IntegrationModal extends React.Component {
             </button>
           </div>
         </div>
-      </Modal>
+      </WaveModal>
     );
   }
 }

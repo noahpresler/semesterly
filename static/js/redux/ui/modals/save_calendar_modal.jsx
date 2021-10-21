@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Modal from 'boron/WaveModal';
+import { WaveModal } from 'boron-15';
 // import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 class SaveCalendarModal extends React.Component {
@@ -65,7 +65,7 @@ class SaveCalendarModal extends React.Component {
     // DownloadText = this.props.hasUploaded ? 'Added to Your Google Calendar' : DownloadText;
 
     return (
-      <Modal
+      <WaveModal
         ref={(c) => { this.modal = c; }}
         className="save-calendar-modal abnb-modal max-modal"
         modalStyle={modalStyle}
@@ -117,7 +117,7 @@ class SaveCalendarModal extends React.Component {
                         Google Calendar, loaded
                         in to iCal., or any other calendar application.</p>
         </div>
-      </Modal>
+      </WaveModal>
     );
   }
 }
