@@ -151,12 +151,12 @@ spec:
                 secretKeyRef:
                   name: semesterly-secrets
                   key: SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
-            - name: SOCIAL_AUTH_FACEBOOK_OAUTH2_KEY
+            - name: SOCIAL_AUTH_FACEBOOK_KEY
               valueFrom:
                 secretKeyRef:
                   name: semesterly-secrets
                   key: SOCIAL_AUTH_FACEBOOK_OAUTH2_KEY
-            - name: SOCIAL_AUTH_FACEBOOK_OAUTH2_SECRET
+            - name: SOCIAL_AUTH_FACEBOOK_SECRET
               valueFrom:
                 secretKeyRef:
                   name: semesterly-secrets
