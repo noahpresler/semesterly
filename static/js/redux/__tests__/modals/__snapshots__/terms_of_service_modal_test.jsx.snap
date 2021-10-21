@@ -1,201 +1,141 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TOS Modal is hidden when isVisible is false 1`] = `null`;
+exports[`TOS Modal is hidden when isVisible is false 1`] = `<div />`;
 
 exports[`TOS Modal shows welcome message for new users 1`] = `
-<span>
-  <div
-    className="terms-of-service-modal max-modal"
-    style={
-      Object {
-        "left": "50%",
-        "position": "fixed",
-        "top": "50%",
-        "transform": "translate3d(-50%, -50%, 0)",
-        "width": "100%",
-        "zIndex": 1050,
-      }
-    }
-  >
+<div>
+  <span>
     <div
-      style={
-        Object {
-          "animationDuration": "1s",
-          "animationFillMode": "forwards",
-          "animationTimingFunction": "linear",
-          "backgroundColor": "white",
-          "margin": 0,
-        }
-      }
-      tabIndex="-1"
+      style="z-index: 1050; position: fixed; width: 100%; top: 50%; left: 50%;"
+      class="terms-of-service-modal max-modal"
     >
       <div
-        className="tos-modal-container"
+        tabindex="-1"
+        style="margin: 0px; background-color: white;"
       >
-        <h1>
-          Terms of Service and Privacy Policy
-        </h1>
-        <h3>
-          Welcome to Semester.ly! Please take a look at our Terms of Service and Privacy Policy before getting started:
-        </h3>
-        <div>
-          <a
-            className="legal-links"
-            href="/termsofservice"
-            rel="noopener noreferrer"
-            target="_blank"
+        <div
+          class="tos-modal-container"
+        >
+          <h1>
+            Terms of Service and Privacy Policy
+          </h1>
+          <h3>
+            Welcome to Semester.ly! Please take a look at our Terms of Service and Privacy Policy before getting started:
+          </h3>
+          <div>
+            <a
+              href="/termsofservice"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="legal-links"
+            >
+              Terms of Service
+              <i
+                class="fa fa-external-link"
+              />
+            </a>
+            <a
+              href="/privacypolicy"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="legal-links"
+            >
+              Privacy Policy
+              <i
+                class="fa fa-external-link"
+              />
+            </a>
+          </div>
+          <button
+            class="accept-tos-btn"
           >
-            Terms of Service
             <i
-              className="fa fa-external-link"
+              class="fa fa-check"
             />
-          </a>
-          <a
-            className="legal-links"
-            href="/privacypolicy"
-            rel="noopener noreferrer"
-            target="_blank"
+            <span>
+              I accept the Terms of Service
+            </span>
+          </button>
+          <p
+            class="method-details"
           >
-            Privacy Policy
-            <i
-              className="fa fa-external-link"
-            />
-          </a>
+            You must accept the new Terms of Service to continue using Semester.ly.
+          </p>
         </div>
-        <button
-          className="accept-tos-btn"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-check"
-          />
-          <span>
-            I accept the Terms of Service
-          </span>
-        </button>
-        <p
-          className="method-details"
-        >
-          You must accept the new Terms of Service to continue using Semester.ly.
-        </p>
       </div>
     </div>
-  </div>
-  <div
-    onClick={null}
-    style={
-      Object {
-        "animationDuration": "0.3s",
-        "animationFillMode": "forwards",
-        "animationTimingFunction": "linear",
-        "backgroundColor": "#373A47",
-        "bottom": 0,
-        "left": 0,
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-        "zIndex": 1040,
-      }
-    }
-  />
-</span>
+    <div
+      style="position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 1040; background-color: rgb(55, 58, 71);"
+    />
+  </span>
+</div>
 `;
 
 exports[`TOS Modal shows when isVisible is true 1`] = `
-<span>
-  <div
-    className="terms-of-service-modal max-modal"
-    style={
-      Object {
-        "left": "50%",
-        "position": "fixed",
-        "top": "50%",
-        "transform": "translate3d(-50%, -50%, 0)",
-        "width": "100%",
-        "zIndex": 1050,
-      }
-    }
-  >
+<div>
+  <span>
     <div
-      style={
-        Object {
-          "animationDuration": "1s",
-          "animationFillMode": "forwards",
-          "animationTimingFunction": "linear",
-          "backgroundColor": "white",
-          "margin": 0,
-        }
-      }
-      tabIndex="-1"
+      style="z-index: 1050; position: fixed; width: 100%; top: 50%; left: 50%;"
+      class="terms-of-service-modal max-modal"
     >
       <div
-        className="tos-modal-container"
+        tabindex="-1"
+        style="margin: 0px; background-color: white;"
       >
-        <h1>
-          Terms of Service and Privacy Policy
-        </h1>
-        <h3>
-          Our Terms of Service and Privacy Policy have been updated. Please review them here:
-        </h3>
-        <div>
-          <a
-            className="legal-links"
-            href="/termsofservice"
-            rel="noopener noreferrer"
-            target="_blank"
+        <div
+          class="tos-modal-container"
+        >
+          <h1>
+            Terms of Service and Privacy Policy
+          </h1>
+          <h3>
+            Our Terms of Service and Privacy Policy have been updated. Please review them here:
+          </h3>
+          <div>
+            <a
+              href="/termsofservice"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="legal-links"
+            >
+              Terms of Service
+              <i
+                class="fa fa-external-link"
+              />
+            </a>
+            <a
+              href="/privacypolicy"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="legal-links"
+            >
+              Privacy Policy
+              <i
+                class="fa fa-external-link"
+              />
+            </a>
+          </div>
+          <button
+            class="accept-tos-btn"
           >
-            Terms of Service
             <i
-              className="fa fa-external-link"
+              class="fa fa-check"
             />
-          </a>
-          <a
-            className="legal-links"
-            href="/privacypolicy"
-            rel="noopener noreferrer"
-            target="_blank"
+            <span>
+              I accept the Terms of Service
+            </span>
+          </button>
+          <p
+            class="method-details"
           >
-            Privacy Policy
-            <i
-              className="fa fa-external-link"
-            />
-          </a>
+            You must accept the new Terms of Service to continue using Semester.ly.
+          </p>
         </div>
-        <button
-          className="accept-tos-btn"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-check"
-          />
-          <span>
-            I accept the Terms of Service
-          </span>
-        </button>
-        <p
-          className="method-details"
-        >
-          You must accept the new Terms of Service to continue using Semester.ly.
-        </p>
       </div>
     </div>
-  </div>
-  <div
-    onClick={null}
-    style={
-      Object {
-        "animationDuration": "0.3s",
-        "animationFillMode": "forwards",
-        "animationTimingFunction": "linear",
-        "backgroundColor": "#373A47",
-        "bottom": 0,
-        "left": 0,
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-        "zIndex": 1040,
-      }
-    }
-  />
-</span>
+    <div
+      style="position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 1040; background-color: rgb(55, 58, 71);"
+    />
+  </span>
+</div>
 `;
