@@ -11,24 +11,24 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
-import React from "react";
-import { render } from "@testing-library/react";
-import thunk from "redux-thunk";
-import Provider from "react-redux/src/components/Provider";
-import configureMockStore from "redux-mock-store";
+import React from 'react';
+import { render } from '@testing-library/react';
+import thunk from 'redux-thunk';
+import Provider from 'react-redux/src/components/Provider';
+import configureMockStore from 'redux-mock-store';
 import {
   tosModalFixture,
   userInfoFixture,
-} from "../../__fixtures__/terms_of_service_modal.fixture";
-import { handleAgreement } from "../../actions/user_actions";
-import * as ActionTypes from "../../constants/actionTypes";
-import TermsOfServiceModalContainer from "../../ui/containers/terms_of_service_modal_container";
+} from '../../__fixtures__/terms_of_service_modal.fixture';
+import { handleAgreement } from '../../actions/user_actions';
+import * as ActionTypes from '../../constants/actionTypes';
+import TermsOfServiceModalContainer from '../../ui/containers/terms_of_service_modal_container';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe("TOS Modal", () => {
-  it("shows when isVisible is true", () => {
+describe('TOS Modal', () => {
+  it('shows when isVisible is true', () => {
     const store = mockStore({
       termsOfServiceModal: tosModalFixture,
       userInfo: userInfoFixture,
@@ -37,27 +37,27 @@ describe("TOS Modal", () => {
     const { container } = render(
       <Provider store={store}>
         <TermsOfServiceModalContainer />
-      </Provider>
+      </Provider>,
     );
     expect(container).toMatchSnapshot();
   });
 
-  it("shows welcome message for new users", () => {
+  it('shows welcome message for new users', () => {
     const newUser = userInfoFixture;
     newUser.data.timeAcceptedTos = null;
     const store = mockStore({
       termsOfServiceModal: tosModalFixture,
       userInfo: userInfoFixture,
     });
-    const { container, debug } = render(
+    const { container } = render(
       <Provider store={store}>
         <TermsOfServiceModalContainer />
-      </Provider>
+      </Provider>,
     );
     expect(container).toMatchSnapshot();
   });
 
-  it("is hidden when isVisible is false", () => {
+  it('is hidden when isVisible is false', () => {
     const store = mockStore({
       termsOfServiceModal: { ...tosModalFixture, isVisible: false },
       userInfo: userInfoFixture,
@@ -65,7 +65,7 @@ describe("TOS Modal", () => {
     const { container } = render(
       <Provider store={store}>
         <TermsOfServiceModalContainer />
-      </Provider>
+      </Provider>,
     );
     expect(container).toMatchSnapshot();
   });

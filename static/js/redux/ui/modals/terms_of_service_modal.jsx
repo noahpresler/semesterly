@@ -12,10 +12,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import { WaveModal } from "boron-15";
-import * as SemesterlyPropTypes from "../../constants/semesterlyPropTypes";
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { WaveModal } from 'boron-15';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
+
+/* eslint-disable react/no-unused-prop-types, no-shadow */
 
 const TermsOfServiceModal = (props) => {
   let modal = null;
@@ -75,7 +77,7 @@ const TermsOfServiceModal = (props) => {
   };
 
   const modalStyle = {
-    width: "100%",
+    width: '100%',
   };
 
   return (

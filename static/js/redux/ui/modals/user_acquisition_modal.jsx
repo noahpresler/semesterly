@@ -12,10 +12,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from "prop-types";
-import React, { useEffect } from "react";
-import { WaveModal } from "boron-15";
-import * as SemesterlyPropTypes from "../../constants/semesterlyPropTypes";
+import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+import { WaveModal } from 'boron-15';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 const UserAcquisitionModal = (props) => {
   let modal = null;
@@ -35,7 +35,7 @@ const UserAcquisitionModal = (props) => {
   );
 
   const modalStyle = {
-    width: "100%",
+    width: '100%',
   };
 
   return (
@@ -47,7 +47,7 @@ const UserAcquisitionModal = (props) => {
       modalStyle={modalStyle}
       onHide={() => {
         props.toggleUserAcquisitionModal();
-        history.replaceState({}, "Semester.ly", "/");
+        history.replaceState({}, 'Semester.ly', '/');
       }}
     >
       {modalHeader}
@@ -57,7 +57,7 @@ const UserAcquisitionModal = (props) => {
         <button
           className="btn abnb-btn fb-btn"
           onClick={() => {
-            const link = document.createElement("a");
+            const link = document.createElement('a');
             link.href =
               `/login/facebook/?student_token=${props.userInfo.LoginToken}` +
               `&login_hash=${props.userInfo.LoginHash}`;
@@ -79,7 +79,7 @@ const UserAcquisitionModal = (props) => {
         <button
           className="btn abnb-btn secondary"
           onClick={() => {
-            const link = document.createElement("a");
+            const link = document.createElement('a');
             link.href = `/login/azuread-tenant-oauth2/?student_token=${props.userInfo.LoginToken}&login_hash=${props.userInfo.LoginHash}`;
             document.body.appendChild(link);
             link.click();
@@ -104,7 +104,7 @@ const UserAcquisitionModal = (props) => {
         <button
           className="btn abnb-btn secondary"
           onClick={() => {
-            const link = document.createElement("a");
+            const link = document.createElement('a');
             link.href = `/login/google-oauth2/?student_token=${props.userInfo.LoginToken}&login_hash=${props.userInfo.LoginHash}`;
             document.body.appendChild(link);
             link.click();
