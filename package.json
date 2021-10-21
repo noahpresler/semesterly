@@ -125,6 +125,7 @@
     "lint-staged"
   ],
   "devDependencies": {
+    "@testing-library/react": "^12.1.2",
     "jest": "^20.0.1",
     "lint-staged": "^3.6.1",
     "nock": "^9.0.13",
