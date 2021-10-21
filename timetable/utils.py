@@ -167,6 +167,10 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting, school):
                     potential_conflict_found = offering.has_potential_conflict
                 else:
                     for existing_offering in day_to_usage[day][slot]:
+                        # TODO: Check for conflicts against custom slots
+                        # I tried setting it to true, but it blew up the tt.
+                        if existing_offering == 'custom_slot':
+                            break
                         potential_conflict_found = can_potentially_conflict(
                             existing_offering.date_start,
                             existing_offering.date_end,
@@ -270,7 +274,9 @@ def get_tt_stats(timetable, day_to_usage):
 def get_day_to_usage(custom_events, school):
     """Initialize day_to_usage dictionary, which has custom events blocked out."""
     day_to_usage = {
-        day: [set() for _ in range(int(14 * 60 / SCHOOLS_MAP[school].granularity))]
+        # This really should be 24 * 60, but for some reason the timetable is
+        # capped at starting at 8am, so 8am-12am is 16 hours.
+        day: [set() for _ in range(int(16 * 60 / SCHOOLS_MAP[school].granularity))]
         for day in ['M', 'T', 'W', 'R', 'F']
     }
 
