@@ -66,7 +66,7 @@ class AnalyticsCourseSearch(models.Model):
 
     # TODO: fill in for advanced search later.
     # areas = models.CharField(max_length=300, default='', null=True)
-    # department = models.CharField(max_length=250, default='', null=True)
+    # department = models.CharField(max_length=255, default='', null=True)
     # level = models.CharField(max_length=30, default='', null=True)
 
 

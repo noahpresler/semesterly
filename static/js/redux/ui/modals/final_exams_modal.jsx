@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Modal from 'boron/WaveModal';
+import { WaveModal } from 'boron-15';
 import classNames from 'classnames';
 import Clipboard from 'clipboard';
 import COLOUR_DATA from '../../constants/colours';
@@ -444,7 +444,7 @@ export default class FinalExamsModal extends React.Component {
       display = mobile && $(window).width() < 767 && this.state.orientation === 'portrait' ? this.loadFinalsToDivs(true) : this.loadFinalsToDivs(false);
     }
     return (
-      <Modal
+      <WaveModal
         ref={(c) => {
           this.modal = c;
         }}
@@ -458,7 +458,7 @@ export default class FinalExamsModal extends React.Component {
             { display }
           </div>
         </div>
-      </Modal>
+      </WaveModal>
     );
   }
 }

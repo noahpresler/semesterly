@@ -1,11 +1,13 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <meta name="description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
+    <meta name="description"
+        content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
     <meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder">
 
     <!-- Facebook thumbnail info -->
@@ -14,13 +16,15 @@
     <meta property="og:site_name" content="Semesterly" />
     <meta property="og:url" content="http://semester.ly" />
     <meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
-    <meta property="og:description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
+    <meta property="og:description"
+        content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
     <meta property="fb:admins" content="535129063" />
 
     <title>Queens Unavailable | Semester.ly: Course Scheduling, Textbooks, Social & More</title>
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
 
-    <link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet"
+        type='text/css'>
     <link rel="stylesheet" href="{% static 'css/global.css'%}">
     <link rel="stylesheet" href="{% static 'css/course-page.css'%}">
     <link rel="stylesheet" href="{% static 'css/unsubscribe.css'%}">
@@ -28,24 +32,27 @@
 
     <!-- Google Analytics script -->
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-      ga('create', 'UA-68704308-1', 'auto');
-      ga('send', 'pageview');
+        ga('create', 'UA-68704308-1', 'auto');
+        ga('send', 'pageview');
 
     </script>
 </head>
+
 <body>
-<header>
-    <div class="grid cf">
-        <a href="/">
-            <span id="logo"></span>
-            <h1>Semester.ly</h1>
-        </a>
-        <!-- <div id="social">
+    <header>
+        <div class="grid cf">
+            <a href="/">
+                <span id="logo"></span>
+                <h1>Semester.ly</h1>
+            </a>
+            <!-- <div id="social">
             <div id="social-card">
                 <div id="social-pro-pic" style="background-image: url();"></div>
                 <h2>Max</h2>
@@ -63,20 +70,21 @@
                 <h2>Signup/Login <i className="fa fa-facebook-square"></i></h2>
             </a>
         </div> -->
-    </div>
-</header>
+        </div>
+    </header>
 
-<div id="error-404">
-    <div id="error-404-center">
-        <img src="{% static 'img/email/sad.png' %}" />
-        <h2>Queens is currently not available</h2>
-        <br>
-        <h2>by request of the university</h2>
-        <h3>Page Not Found.<br> Go back to <a href="/">Semester.ly</a></h3>
+    <div id="error-404">
+        <div id="error-404-center">
+            <img src="{% static 'img/email/sad.png' %}" />
+            <h2>Queens is currently not available</h2>
+            <br>
+            <h2>by request of the university</h2>
+            <h3>Page Not Found.<br> Go back to <a href="/">Semester.ly</a></h3>
+        </div>
     </div>
-</div>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
 </body>
+
 </html>
