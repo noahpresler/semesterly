@@ -23,31 +23,65 @@ import { isIncomplete as TOSIncomplete } from '../../util';
 
 const UserSettingsModal = (props) => {
   let modal = null;
-  const shareCourses = useRef();
-  const shareAll = useRef();
-  const shareSections = useRef();
+  const [fbSettings, setfbSettings] = useState({
+    shareClassesWithFriends: props.userInfo.social_courses,
+    shareSectionsWithFriends: props.userInfo.social_offerings,
+    findNewFriends: props.userInfo.social_all
+  })
   const tosAgreed = useRef();
 
   const [showDelete, setShowDelete] = useState(false);
+  const [fbSwitchAlertText, setFbSwitchAlertText] = useState(null);
 
   const isIncomplete = prop => prop === undefined || prop === '';
 
   const changeForm = (obj = {}) => {
-    let newUserSettings = {};
-    if (props.userInfo.FacebookSignedUp) {
-      newUserSettings = {
-        social_courses:
-          shareAll.current.checked || shareCourses.current.checked,
-        social_offerings:
-          shareAll.current.checked || shareSections.current.checked,
-        social_all: shareAll.current.checked,
-      };
-    }
-    const userSettings = { ...props.userInfo, ...newUserSettings, ...obj };
+    const userSettings = { ...props.userInfo, ...obj };
     props.changeUserInfo(userSettings);
     props.saveSettings();
   };
 
+  const handleChangefbSettings = (e) => {
+    const name = e.target.name;
+    const checked = e.target.checked;
+    if (name === "shareClassesWithFriends") {
+      if (!checked && (fbSettings.shareSectionsWithFriends || fbSettings.findNewFriends)) {
+        alert("2 or 3 is true")
+        setfbSettings({...fbSettings, shareClassesWithFriends:true})
+      }
+      else {
+        setfbSettings({...fbSettings, shareClassesWithFriends:checked})
+      }
+    }
+    else if (name === "shareSectionsWithFriends") {
+      if (!checked && fbSettings.findNewFriends) {
+        alert("3 is true")
+        setfbSettings({...fbSettings, shareSectionsWithFriends:true})
+      }
+      else if(checked){
+        setfbSettings({...fbSettings, shareClassesWithFriends:true, shareSectionsWithFriends:true})
+      } else {
+        setfbSettings({...fbSettings, shareSectionsWithFriends: false})
+      }
+    }
+    else if (name === "findNewFriends"){
+      if (checked) {
+        setfbSettings({shareClassesWithFriends:true, shareSectionsWithFriends:true, findNewFriends:true})
+      }
+      else {
+        setfbSettings({...fbSettings, findNewFriends: false})
+      }
+    }
+  }
+
+  const onDisableFBSettingAlertUser = (target) => {
+
+    if(shareAll.current.checked){
+      if (target.id === 'share-sections-input' && target.checked) {
+        setFbSwitchAlertText('You have turned on \"Find new friends in all courses\"');
+      }
+    }
+  }
   const toggleDelete = () => {
     setShowDelete(!showDelete);
   };
@@ -106,6 +140,17 @@ const UserSettingsModal = (props) => {
     }
   }, [props]);
 
+  useEffect(() => {
+    const userSettings = {
+      ...props.userInfo,
+      social_offerings: fbSettings.shareSectionsWithFriends,
+      social_courses: fbSettings.shareClassesWithFriends,
+      social_all: fbSettings.findNewFriends
+    };
+    props.changeUserInfo(userSettings);
+    props.saveSettings();
+  }, [fbSettings])
+
   const tos = props.isSigningUp ? (
     <div className="preference cf">
       <label className="switch switch-slide" htmlFor="tos-agreed-input">
@@ -146,12 +191,12 @@ const UserSettingsModal = (props) => {
       <div className="preference cf">
         <label className="switch switch-slide" htmlFor="social-courses-input">
           <input
-            ref={shareCourses}
+            name="shareClassesWithFriends"
             id="social-courses-input"
             className="switch-input"
             type="checkbox"
-            checked={props.userInfo.social_courses}
-            onChange={() => changeForm()}
+            checked={fbSettings.shareClassesWithFriends}
+            onChange={(e) => {handleChangefbSettings(e)}}
           />
           <span className="switch-label" data-on="Yes" data-off="No" />
           <span className="switch-handle" />
@@ -167,12 +212,14 @@ const UserSettingsModal = (props) => {
       <div className="preference cf">
         <label className="switch switch-slide" htmlFor="share-sections-input">
           <input
-            ref={shareSections}
             id="share-sections-input"
+            name="shareSectionsWithFriends"
             className="switch-input"
             type="checkbox"
-            checked={props.userInfo.social_offerings === true}
-            onChange={() => changeForm()}
+            checked={fbSettings.shareSectionsWithFriends}
+            onChange={(e) => {
+              handleChangefbSettings(e)
+            }}
           />
           <span className="switch-label" data-on="Yes" data-off="No" />
           <span className="switch-handle" />
@@ -188,12 +235,14 @@ const UserSettingsModal = (props) => {
       <div className="preference cf">
         <label className="switch switch-slide" htmlFor="social-all-input">
           <input
-            ref={shareAll}
+            name="findNewFriends"
             id="social-all-input"
             className="switch-input"
             type="checkbox"
-            checked={props.userInfo.social_all === true}
-            onChange={() => changeForm()}
+            checked={fbSettings.findNewFriends}
+            onChange={(e) => {
+              handleChangefbSettings(e)
+            }}
           />
           <span className="switch-label" data-on="Yes" data-off="No" />
           <span className="switch-handle" />
