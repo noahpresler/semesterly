@@ -28,8 +28,8 @@ const UserSettingsModal = (props) => {
   const [fbSettings, setfbSettings] = useState({
     shareClassesWithFriends: props.userInfo.social_courses || true,
     shareSectionsWithFriends: props.userInfo.social_offerings || false,
-    findNewFriends: props.userInfo.social_all || false
-  })
+    findNewFriends: props.userInfo.social_all || false,
+  });
 
   const tosAgreed = useRef();
 
@@ -47,39 +47,45 @@ const UserSettingsModal = (props) => {
   const handleChangefbSettings = (e) => {
     const name = e.target.name;
     const checked = e.target.checked;
-    if (name === "shareClassesWithFriends") {
+    if (name === 'shareClassesWithFriends') {
       if (!checked && (fbSettings.shareSectionsWithFriends || fbSettings.findNewFriends)) {
-        setFbSwitchAlertText("Please switch off \"find sections with friends\" first")
-        setfbSettings({...fbSettings, shareClassesWithFriends:true})
-      }
-      else {
-        setfbSettings({ ...fbSettings, shareClassesWithFriends: checked })
-        setFbSwitchAlertText(null)
-      }
-    }
-    else if (name === "shareSectionsWithFriends") {
-      if (!checked && fbSettings.findNewFriends) {
-        setFbSwitchAlertText("Please switch off \"find new friends\" first")
-        setfbSettings({...fbSettings, shareSectionsWithFriends:true})
-      }
-      else if(checked){
-        setfbSettings({ ...fbSettings, shareClassesWithFriends: true, shareSectionsWithFriends: true })
-        setFbSwitchAlertText(null)
+        setFbSwitchAlertText('Please switch off "find sections with friends" first');
+        setfbSettings({ ...fbSettings, shareClassesWithFriends: true });
       } else {
-        setfbSettings({ ...fbSettings, shareSectionsWithFriends: false })
-        setFbSwitchAlertText(null)
+        setfbSettings({ ...fbSettings, shareClassesWithFriends: checked });
+        setFbSwitchAlertText(null);
       }
-    }
-    else if (name === "findNewFriends"){
+    } else if (name === 'shareSectionsWithFriends') {
+      if (!checked && fbSettings.findNewFriends) {
+        setFbSwitchAlertText('Please switch off "find new friends" first');
+        setfbSettings({ ...fbSettings, shareSectionsWithFriends: true });
+      } else if (checked) {
+        setfbSettings(
+          {
+            ...fbSettings,
+            shareClassesWithFriends: true,
+            shareSectionsWithFriends: true,
+          },
+        );
+        setFbSwitchAlertText(null);
+      } else {
+        setfbSettings({ ...fbSettings, shareSectionsWithFriends: false });
+        setFbSwitchAlertText(null);
+      }
+    } else if (name === 'findNewFriends') {
       if (checked) {
-        setfbSettings({shareClassesWithFriends:true, shareSectionsWithFriends:true, findNewFriends:true})
+        setfbSettings(
+          {
+            shareClassesWithFriends: true,
+            shareSectionsWithFriends: true,
+            findNewFriends: true,
+          });
+      } else {
+        setfbSettings({ ...fbSettings, findNewFriends: false });
       }
-      else {
-        setfbSettings({...fbSettings, findNewFriends: false})
-      }
-      setFbSwitchAlertText(null)
+      setFbSwitchAlertText(null);
     }
-  }
+  };
 
   const toggleDelete = () => {
     setShowDelete(!showDelete);
@@ -137,7 +143,6 @@ const UserSettingsModal = (props) => {
       modal.show();
       props.setVisible();
     }
-    console.log(props.userInfo)
   }, [props]);
 
   useEffect(() => {
@@ -145,11 +150,11 @@ const UserSettingsModal = (props) => {
       ...props.userInfo,
       social_offerings: fbSettings.shareSectionsWithFriends,
       social_courses: fbSettings.shareClassesWithFriends,
-      social_all: fbSettings.findNewFriends
+      social_all: fbSettings.findNewFriends,
     };
     props.changeUserInfo(userSettings);
     props.saveSettings();
-  }, [fbSettings])
+  }, [fbSettings]);
 
   const tos = props.isSigningUp ? (
     <div className="preference cf">
@@ -196,7 +201,7 @@ const UserSettingsModal = (props) => {
             className="switch-input"
             type="checkbox"
             checked={fbSettings.shareClassesWithFriends}
-            onChange={(e) => {handleChangefbSettings(e)}}
+            onChange={(e) => { handleChangefbSettings(e); }}
           />
           <span className="switch-label" data-on="Yes" data-off="No" />
           <span className="switch-handle" />
@@ -218,7 +223,7 @@ const UserSettingsModal = (props) => {
             type="checkbox"
             checked={fbSettings.shareSectionsWithFriends}
             onChange={(e) => {
-              handleChangefbSettings(e)
+              handleChangefbSettings(e);
             }}
           />
           <span className="switch-label" data-on="Yes" data-off="No" />
@@ -241,7 +246,7 @@ const UserSettingsModal = (props) => {
             type="checkbox"
             checked={fbSettings.findNewFriends}
             onChange={(e) => {
-              handleChangefbSettings(e)
+              handleChangefbSettings(e);
             }}
           />
           <span className="switch-label" data-on="Yes" data-off="No" />
@@ -260,8 +265,8 @@ const UserSettingsModal = (props) => {
   const renderedfbAlert = fbSwitchAlertText ?
     (<div className="alert alert-danger" role="alert">
       {fbSwitchAlertText}
-    </div>) : null
-  
+    </div>) : null;
+
   const fbUpsell =
     props.userInfo.isLoggedIn && !props.userInfo.FacebookSignedUp ? (
       <div
