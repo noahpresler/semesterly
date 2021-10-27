@@ -1,0 +1,163 @@
+# Deploy to Azure Kubernetes Service
+# Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+    branches:
+        include:
+        - prod
+
+pr: none # will disable PR builds 
+
+resources:
+- repo: self
+
+variables:
+
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '1c9c2c2d-f3c3-454f-9fbb-d5242dc2d0cb'
+  imageRepository: 'semesterly'
+  containerRegistry: 'semesterly.azurecr.io'
+  tag: '$(Build.BuildId)'
+  imagePullSecret: 'semesterly193122b2-auth'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+  # Name of the new namespace being created to deploy the PR changes.
+  k8sNamespaceForPR: 'review-app-$(System.PullRequest.PullRequestId)'
+
+stages:
+- stage: Build
+  displayName: Build
+  condition: not(startsWith(variables['Build.SourceBranch'], 'refs/pull/'))
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push Django Container
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: ./Dockerfile
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+    - task: Docker@2
+      displayName: Build nginx Container
+      inputs:
+        command: 'build'
+        repository: 'semesterly-nginx'
+        arguments: '--build-arg djangoImage=$(containerRegistry)/$(imageRepository):$(tag)'
+        Dockerfile: './build/semesterly-nginx/Dockerfile'
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)          
+    - task: Docker@2
+      displayName: Push nginx Container
+      inputs:
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: 'semesterly-nginx'
+        command: 'push'
+        tags: |
+          $(tag)
+
+    - upload: manifests
+      artifact: manifests
+      
+
+- stage: DeployStage
+  displayName: DeployStage
+  dependsOn: Build
+
+# Deploy to stage environment
+  jobs:
+  - deployment: DeployStage
+    condition: and(succeeded(), not(startsWith(variables['Build.SourceBranch'], 'refs/pull/'))) 
+    displayName: DeployStage
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'uis-prod.semesterly-stage'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/stage/deployment.yml
+                $(Pipeline.Workspace)/manifests/stage/service.yml
+                $(Pipeline.Workspace)/manifests/stage/ingress.yml
+                $(Pipeline.Workspace)/manifests/stage/ingress-config-map.yml
+                $(Pipeline.Workspace)/manifests/stage/cronjob.yml
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+                $(containerRegistry)/semesterly-nginx:$(tag)
+
+
+- stage: Validation
+  displayName: Validation
+  dependsOn: DeployStage
+# Await stage environment validation
+  jobs:
+  - job: waitForValidation
+    displayName: Wait for external validation  
+    pool: server    
+    timeoutInMinutes: 10080 # job times out in 7 days
+    steps:   
+    - task: ManualValidation@0
+      timeoutInMinutes: 10080 # task times out in 7 days
+      inputs:
+          notifyUsers: |
+              isistechops@lists.johnshopkins.edu
+          instructions: 'Please validate the build as deployed to https://semesterly-stage.az.sis.jhu.edu'
+          onTimeout: 'reject'
+
+
+- stage: DeployProd
+  displayName: DeployProd
+  dependsOn: Validation
+# Deploy to prod
+  jobs:
+  - deployment: DeployProd
+    condition: and(succeeded(), not(startsWith(variables['Build.SourceBranch'], 'refs/pull/'))) 
+    displayName: DeployProd
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'uis-prod.semesterly-prod'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/prod/deployment.yml
+                $(Pipeline.Workspace)/manifests/prod/service.yml
+                $(Pipeline.Workspace)/manifests/prod/ingress.yml
+                $(Pipeline.Workspace)/manifests/prod/ingress-config-map.yml
+                $(Pipeline.Workspace)/manifests/prod/cronjob.yml
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+                $(containerRegistry)/semesterly-nginx:$(tag)

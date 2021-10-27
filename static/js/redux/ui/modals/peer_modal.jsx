@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Modal from 'boron/WaveModal';
+import { WaveModal } from 'boron-15';
 import COLOUR_DATA from '../../constants/colours';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
@@ -235,7 +235,7 @@ class PeerModal extends React.Component {
               </div>
             </div>);
     return (
-      <Modal
+      <WaveModal
         ref={(c) => { this.modal = c; }}
         className="peer-modal"
         onHide={this.hide}
@@ -247,7 +247,7 @@ class PeerModal extends React.Component {
             {display}
           </div>
         </div>
-      </Modal>
+      </WaveModal>
     );
   }
 }

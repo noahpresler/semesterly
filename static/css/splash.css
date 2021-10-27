@@ -70,6 +70,11 @@ header nav a .fa {
 .desktop-nav {
 	display: block;
 }
+header nav a:last-child{
+	position: absolute;
+	right: 0;
+	margin-right: 11%;
+}
 .mobile-nav {
 	display: none;
 	position: relative;
