@@ -59,6 +59,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
+USE_X_FORWARDED_HOST = True
+
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
     'user_friends',
@@ -194,6 +196,7 @@ REST_FRAMEWORK ={
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 MIDDLEWARE = (
+    'semesterly.middleware.middleware.MultipleProxyMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

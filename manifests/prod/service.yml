@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: semesterly-service
+  namespace: semesterly-prod
+spec:
+  selector:
+    app: semesterly
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
