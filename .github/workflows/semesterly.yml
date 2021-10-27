@@ -2,9 +2,9 @@ name: Semesterly CI
 
 on:
   push:
-    branches: [ master, staging, cs310-spring21, github-actions ]
+    branches: [ prod, staging, cs310-spring21, github-actions ]
   pull_request:
-    branches: [ master, staging, cs310-spring21, github-actions ]
+    branches: [ prod, staging, cs310-spring21, github-actions ]
 
 jobs:
   build:
