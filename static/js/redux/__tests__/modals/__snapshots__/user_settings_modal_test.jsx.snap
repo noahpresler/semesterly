@@ -1,1196 +1,832 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`User Setting Modal Renders As Expected HIDDEN if settings filled 1`] = `null`;
+exports[`User Setting Modal Renders As Expected HIDDEN if settings filled 1`] = `<div />`;
 
 exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing up with Google only 1`] = `
-<span>
-  <div
-    className="welcome-modal max-modal"
-    style={
-      Object {
-        "left": "50%",
-        "position": "fixed",
-        "top": "50%",
-        "transform": "translate3d(-50%, -50%, 0)",
-        "width": "100%",
-        "zIndex": 1050,
-      }
-    }
-  >
+<div>
+  <span>
     <div
-      style={
-        Object {
-          "animationDuration": "1s",
-          "animationFillMode": "forwards",
-          "animationTimingFunction": "linear",
-          "backgroundColor": "white",
-          "margin": 0,
-        }
-      }
-      tabIndex="-1"
+      style="z-index: 1050; position: fixed; width: 100%; top: 50%; left: 50%;"
+      class="welcome-modal max-modal"
     >
       <div
-        className="modal-content"
+        tabindex="-1"
+        style="margin: 0px; background-color: white;"
       >
         <div
-          className="modal-header"
+          class="modal-content"
         >
           <div
-            className="pro-pic"
-            style={
-              Object {
-                "backgroundImage": "url(https://lh5.googleusercontent.com/-jT-TI0NDQHQ/AAAAAAAAAAI/AAAAAAAAQQ8/BM79nJFKph8/photo.jpg?sz=50)",
-              }
-            }
-          />
-          <h1>
-            Welcome!
-          </h1>
-        </div>
-        <div
-          className="modal-body"
-        >
-          <div
-            className="preference cf"
+            class="modal-header"
           >
-            <h3>
-              What's your major?
-            </h3>
             <div
-              className="Select Select--single is-clearable is-searchable"
-              style={undefined}
-            >
-              <div
-                className="Select-control"
-                onKeyDown={[Function]}
-                onMouseDown={[Function]}
-                onTouchEnd={[Function]}
-                onTouchMove={[Function]}
-                onTouchStart={[Function]}
-                style={undefined}
-              >
-                <span
-                  className="Select-multi-value-wrapper"
-                  id="react-select-6--value"
-                >
-                  <div
-                    className="Select-placeholder"
-                  >
-                    Select...
-                  </div>
-                  <div
-                    className="Select-input"
-                    style={
-                      Object {
-                        "display": "inline-block",
-                      }
-                    }
-                  >
-                    <input
-                      aria-activedescendant="react-select-6--value"
-                      aria-describedby={undefined}
-                      aria-expanded="false"
-                      aria-haspopup="false"
-                      aria-label={undefined}
-                      aria-labelledby={undefined}
-                      aria-owns=""
-                      className={undefined}
-                      onBlur={[Function]}
-                      onChange={[Function]}
-                      onFocus={[Function]}
-                      required={false}
-                      role="combobox"
-                      style={
-                        Object {
-                          "boxSizing": "content-box",
-                          "width": "5px",
-                        }
-                      }
-                      tabIndex={undefined}
-                      value=""
-                    />
-                    <div
-                      style={
-                        Object {
-                          "height": 0,
-                          "left": 0,
-                          "overflow": "scroll",
-                          "position": "absolute",
-                          "top": 0,
-                          "visibility": "hidden",
-                          "whiteSpace": "pre",
-                        }
-                      }
-                    >
-                      
-                    </div>
-                  </div>
-                </span>
-                <span
-                  aria-label="Clear value"
-                  className="Select-clear-zone"
-                  onMouseDown={[Function]}
-                  onTouchEnd={[Function]}
-                  onTouchMove={[Function]}
-                  onTouchStart={[Function]}
-                  title="Clear value"
-                >
-                  <span
-                    className="Select-clear"
-                    dangerouslySetInnerHTML={
-                      Object {
-                        "__html": "&times;",
-                      }
-                    }
-                  />
-                </span>
-                <span
-                  className="Select-arrow-zone"
-                  onMouseDown={[Function]}
-                >
-                  <span
-                    className="Select-arrow"
-                    onMouseDown={[Function]}
-                  />
-                </span>
-              </div>
-            </div>
+              class="pro-pic"
+              style="background-image: url(https://lh5.googleusercontent.com/-jT-TI0NDQHQ/AAAAAAAAAAI/AAAAAAAAQQ8/BM79nJFKph8/photo.jpg?sz=50);"
+            />
+            <h1>
+              Welcome!
+            </h1>
           </div>
           <div
-            className="preference cf"
+            class="modal-body"
           >
-            <h3>
-              What's your graduating class year?
-            </h3>
             <div
-              className="Select Select--single is-clearable is-searchable"
-              style={undefined}
-            >
-              <div
-                className="Select-control"
-                onKeyDown={[Function]}
-                onMouseDown={[Function]}
-                onTouchEnd={[Function]}
-                onTouchMove={[Function]}
-                onTouchStart={[Function]}
-                style={undefined}
-              >
-                <span
-                  className="Select-multi-value-wrapper"
-                  id="react-select-7--value"
-                >
-                  <div
-                    className="Select-placeholder"
-                  >
-                    Select...
-                  </div>
-                  <div
-                    className="Select-input"
-                    style={
-                      Object {
-                        "display": "inline-block",
-                      }
-                    }
-                  >
-                    <input
-                      aria-activedescendant="react-select-7--value"
-                      aria-describedby={undefined}
-                      aria-expanded="false"
-                      aria-haspopup="false"
-                      aria-label={undefined}
-                      aria-labelledby={undefined}
-                      aria-owns=""
-                      className={undefined}
-                      onBlur={[Function]}
-                      onChange={[Function]}
-                      onFocus={[Function]}
-                      required={false}
-                      role="combobox"
-                      style={
-                        Object {
-                          "boxSizing": "content-box",
-                          "width": "5px",
-                        }
-                      }
-                      tabIndex={undefined}
-                      value=""
-                    />
-                    <div
-                      style={
-                        Object {
-                          "height": 0,
-                          "left": 0,
-                          "overflow": "scroll",
-                          "position": "absolute",
-                          "top": 0,
-                          "visibility": "hidden",
-                          "whiteSpace": "pre",
-                        }
-                      }
-                    >
-                      
-                    </div>
-                  </div>
-                </span>
-                <span
-                  className="Select-arrow-zone"
-                  onMouseDown={[Function]}
-                >
-                  <span
-                    className="Select-arrow"
-                    onMouseDown={[Function]}
-                  />
-                </span>
-              </div>
-            </div>
-          </div>
-          <div
-            className="preference welcome-modal__notifications second cf"
-          >
-            <button
-              className="btn abnb-btn fb-btn"
-              onClick={[Function]}
-            >
-              <span
-                className="img-icon"
-              >
-                <i
-                  className="fa fa-facebook"
-                />
-              </span>
-              <span>
-                Continue with Facebook
-              </span>
-            </button>
-            <p
-              className="disclaimer ctr"
-            >
-              Connecting your Facebook allows you to see which of your Facebook friends are in your classes! Only friends in your course will see your name – your information is never shared with any other party.
-            </p>
-          </div>
-          <div
-            className="preference cf"
-          >
-            <label
-              className="switch switch-slide"
-              htmlFor="tos-agreed-input"
-            >
-              <input
-                checked={false}
-                className="switch-input"
-                disabled={false}
-                id="tos-agreed-input"
-                onChange={[Function]}
-                type="checkbox"
-              />
-              <span
-                className="switch-label"
-                data-off="CLICK TO ACCEPT"
-                data-on="ACCEPTED"
-              />
-              <span
-                className="switch-handle"
-              />
-            </label>
+              class="preference cf"
+            />
             <div
-              className="preference-wrapper"
+              class="preference cf"
             >
               <h3>
-                Accept the terms and conditions
+                What's your major?
               </h3>
-              <p
-                className="disclaimer"
+              <div
+                class="Select Select--single is-clearable is-searchable"
               >
-                By agreeing, you accept our 
-                <a>
-                  terms and conditions
-                </a>
-                 & 
-                <a>
-                  privacy policy
-                </a>
-                .
+                <div
+                  class="Select-control"
+                >
+                  <span
+                    class="Select-multi-value-wrapper"
+                    id="react-select-6--value"
+                  >
+                    <div
+                      class="Select-placeholder"
+                    >
+                      Select...
+                    </div>
+                    <div
+                      class="Select-input"
+                      style="display: inline-block;"
+                    >
+                      <input
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-owns=""
+                        aria-haspopup="false"
+                        aria-activedescendant="react-select-6--value"
+                        style="width: 5px; box-sizing: content-box;"
+                        value=""
+                      />
+                      <div
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                      />
+                    </div>
+                  </span>
+                  <span
+                    class="Select-clear-zone"
+                    title="Clear value"
+                    aria-label="Clear value"
+                  >
+                    <span
+                      class="Select-clear"
+                    >
+                      ×
+                    </span>
+                  </span>
+                  <span
+                    class="Select-arrow-zone"
+                  >
+                    <span
+                      class="Select-arrow"
+                    />
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="preference cf"
+            >
+              <h3>
+                What's your graduating class year?
+              </h3>
+              <div
+                class="Select Select--single is-clearable is-searchable"
+              >
+                <div
+                  class="Select-control"
+                >
+                  <span
+                    class="Select-multi-value-wrapper"
+                    id="react-select-7--value"
+                  >
+                    <div
+                      class="Select-placeholder"
+                    >
+                      Select...
+                    </div>
+                    <div
+                      class="Select-input"
+                      style="display: inline-block;"
+                    >
+                      <input
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-owns=""
+                        aria-haspopup="false"
+                        aria-activedescendant="react-select-7--value"
+                        style="width: 5px; box-sizing: content-box;"
+                        value=""
+                      />
+                      <div
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                      />
+                    </div>
+                  </span>
+                  <span
+                    class="Select-arrow-zone"
+                  >
+                    <span
+                      class="Select-arrow"
+                    />
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="preference welcome-modal__notifications second cf"
+            >
+              <button
+                class="btn abnb-btn fb-btn"
+              >
+                <span
+                  class="img-icon"
+                >
+                  <i
+                    class="fa fa-facebook"
+                  />
+                </span>
+                <span>
+                  Continue with Facebook
+                </span>
+              </button>
+              <p
+                class="disclaimer ctr"
+              >
+                Connecting your Facebook allows you to see which of your Facebook friends are in your classes! Only friends in your course will see your name – your information is never shared with any other party.
               </p>
             </div>
-          </div>
-          <div
-            className="button-wrapper"
-          >
-            <button
-              className="signup-button"
-              onClick={[Function]}
+            <div
+              class="preference cf"
             >
-              Save
-            </button>
+              <label
+                class="switch switch-slide"
+                for="tos-agreed-input"
+              >
+                <input
+                  id="tos-agreed-input"
+                  class="switch-input"
+                  type="checkbox"
+                />
+                <span
+                  class="switch-label"
+                  data-on="ACCEPTED"
+                  data-off="CLICK TO ACCEPT"
+                />
+                <span
+                  class="switch-handle"
+                />
+              </label>
+              <div
+                class="preference-wrapper"
+              >
+                <h3>
+                  Accept the terms and conditions
+                </h3>
+                <p
+                  class="disclaimer"
+                >
+                  By agreeing, you accept our 
+                  <a>
+                    terms and conditions
+                  </a>
+                  & 
+                  <a>
+                    privacy policy
+                  </a>
+                  .
+                </p>
+              </div>
+            </div>
+            <div
+              class="button-wrapper"
+            >
+              <button
+                class="signup-button"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div
-    onClick={null}
-    style={
-      Object {
-        "animationDuration": "0.3s",
-        "animationFillMode": "forwards",
-        "animationTimingFunction": "linear",
-        "backgroundColor": "#373A47",
-        "bottom": 0,
-        "left": 0,
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-        "zIndex": 1040,
-      }
-    }
-  />
-</span>
+    <div
+      style="position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 1040; background-color: rgb(55, 58, 71);"
+    />
+  </span>
+</div>
 `;
 
 exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but showOverrided 1`] = `
-<span>
-  <div
-    className="welcome-modal max-modal"
-    style={
-      Object {
-        "left": "50%",
-        "position": "fixed",
-        "top": "50%",
-        "transform": "translate3d(-50%, -50%, 0)",
-        "width": "100%",
-        "zIndex": 1050,
-      }
-    }
-  >
+<div>
+  <span>
     <div
-      style={
-        Object {
-          "animationDuration": "1s",
-          "animationFillMode": "forwards",
-          "animationTimingFunction": "linear",
-          "backgroundColor": "white",
-          "margin": 0,
-        }
-      }
-      tabIndex="-1"
+      style="z-index: 1050; position: fixed; width: 100%; top: 50%; left: 50%;"
+      class="welcome-modal max-modal"
     >
       <div
-        className="modal-content"
+        tabindex="-1"
+        style="margin: 0px; background-color: white;"
       >
         <div
-          className="modal-header"
+          class="modal-content"
         >
           <div
-            className="pro-pic"
-            style={
-              Object {
-                "backgroundImage": "url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/18193968_10208799143997309_4182518417368859549_n.jpg?oh=1e9b37d0a11caa04dc04fd43272fe377&oe=59D65C0A)",
-              }
-            }
-          />
-          <h1>
-            Welcome!
-          </h1>
-          <div
-            className="modal-close"
-            onClick={[Function]}
+            class="modal-header"
           >
-            <i
-              className="fa fa-times"
-            />
-          </div>
-        </div>
-        <div
-          className="modal-body"
-        >
-          <div
-            className="preference cf"
-          >
-            <h3>
-              What's your major?
-            </h3>
             <div
-              className="Select Select--single is-clearable is-searchable has-value"
-              style={undefined}
+              class="pro-pic"
+              style="background-image: url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/18193968_10208799143997309_4182518417368859549_n.jpg?oh=1e9b37d0a11caa04dc04fd43272fe377&oe=59D65C0A);"
+            />
+            <h1>
+              Welcome!
+            </h1>
+            <div
+              class="modal-close"
             >
-              <input
-                disabled={false}
-                name="form-field-name"
-                type="hidden"
-                value="Computer Science"
+              <i
+                class="fa fa-times"
               />
+            </div>
+          </div>
+          <div
+            class="modal-body"
+          >
+            <div
+              class="preference cf"
+            />
+            <div
+              class="preference cf"
+            >
+              <h3>
+                What's your major?
+              </h3>
               <div
-                className="Select-control"
-                onKeyDown={[Function]}
-                onMouseDown={[Function]}
-                onTouchEnd={[Function]}
-                onTouchMove={[Function]}
-                onTouchStart={[Function]}
-                style={undefined}
+                class="Select Select--single is-clearable is-searchable has-value"
               >
-                <span
-                  className="Select-multi-value-wrapper"
-                  id="react-select-4--value"
+                <input
+                  type="hidden"
+                  name="form-field-name"
+                  value="Computer Science"
+                />
+                <div
+                  class="Select-control"
                 >
-                  <div
-                    className="Select-value"
-                    style={undefined}
-                    title={undefined}
+                  <span
+                    class="Select-multi-value-wrapper"
+                    id="react-select-4--value"
+                  >
+                    <div
+                      class="Select-value"
+                    >
+                      <span
+                        class="Select-value-label"
+                        role="option"
+                        aria-selected="true"
+                        id="react-select-4--value-item"
+                      >
+                        Computer Science
+                      </span>
+                    </div>
+                    <div
+                      class="Select-input"
+                      style="display: inline-block;"
+                    >
+                      <input
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-owns=""
+                        aria-haspopup="false"
+                        aria-activedescendant="react-select-4--value"
+                        style="width: 5px; box-sizing: content-box;"
+                        value=""
+                      />
+                      <div
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                      />
+                    </div>
+                  </span>
+                  <span
+                    class="Select-clear-zone"
+                    title="Clear value"
+                    aria-label="Clear value"
                   >
                     <span
-                      aria-selected="true"
-                      className="Select-value-label"
-                      id="react-select-4--value-item"
-                      role="option"
+                      class="Select-clear"
                     >
-                      Computer Science
+                      ×
                     </span>
-                  </div>
-                  <div
-                    className="Select-input"
-                    style={
-                      Object {
-                        "display": "inline-block",
-                      }
-                    }
+                  </span>
+                  <span
+                    class="Select-arrow-zone"
                   >
-                    <input
-                      aria-activedescendant="react-select-4--value"
-                      aria-describedby={undefined}
-                      aria-expanded="false"
-                      aria-haspopup="false"
-                      aria-label={undefined}
-                      aria-labelledby={undefined}
-                      aria-owns=""
-                      className={undefined}
-                      onBlur={[Function]}
-                      onChange={[Function]}
-                      onFocus={[Function]}
-                      required={false}
-                      role="combobox"
-                      style={
-                        Object {
-                          "boxSizing": "content-box",
-                          "width": "5px",
-                        }
-                      }
-                      tabIndex={undefined}
-                      value=""
+                    <span
+                      class="Select-arrow"
                     />
-                    <div
-                      style={
-                        Object {
-                          "height": 0,
-                          "left": 0,
-                          "overflow": "scroll",
-                          "position": "absolute",
-                          "top": 0,
-                          "visibility": "hidden",
-                          "whiteSpace": "pre",
-                        }
-                      }
-                    >
-                      
-                    </div>
-                  </div>
-                </span>
-                <span
-                  aria-label="Clear value"
-                  className="Select-clear-zone"
-                  onMouseDown={[Function]}
-                  onTouchEnd={[Function]}
-                  onTouchMove={[Function]}
-                  onTouchStart={[Function]}
-                  title="Clear value"
-                >
-                  <span
-                    className="Select-clear"
-                    dangerouslySetInnerHTML={
-                      Object {
-                        "__html": "&times;",
-                      }
-                    }
-                  />
-                </span>
-                <span
-                  className="Select-arrow-zone"
-                  onMouseDown={[Function]}
-                >
-                  <span
-                    className="Select-arrow"
-                    onMouseDown={[Function]}
-                  />
-                </span>
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div
-            className="preference cf"
-          >
-            <h3>
-              What's your graduating class year?
+            <div
+              class="preference cf"
+            >
+              <h3>
+                What's your graduating class year?
+              </h3>
+              <div
+                class="Select Select--single is-clearable is-searchable"
+              >
+                <div
+                  class="Select-control"
+                >
+                  <span
+                    class="Select-multi-value-wrapper"
+                    id="react-select-5--value"
+                  >
+                    <div
+                      class="Select-placeholder"
+                    >
+                      Select...
+                    </div>
+                    <div
+                      class="Select-input"
+                      style="display: inline-block;"
+                    >
+                      <input
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-owns=""
+                        aria-haspopup="false"
+                        aria-activedescendant="react-select-5--value"
+                        style="width: 5px; box-sizing: content-box;"
+                        value=""
+                      />
+                      <div
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                      />
+                    </div>
+                  </span>
+                  <span
+                    class="Select-clear-zone"
+                    title="Clear value"
+                    aria-label="Clear value"
+                  >
+                    <span
+                      class="Select-clear"
+                    >
+                      ×
+                    </span>
+                  </span>
+                  <span
+                    class="Select-arrow-zone"
+                  >
+                    <span
+                      class="Select-arrow"
+                    />
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div
+                class="preference cf"
+              >
+                <label
+                  class="switch switch-slide"
+                  for="social-courses-input"
+                >
+                  <input
+                    name="shareClassesWithFriends"
+                    id="social-courses-input"
+                    class="switch-input"
+                    type="checkbox"
+                    checked=""
+                  />
+                  <span
+                    class="switch-label"
+                    data-on="Yes"
+                    data-off="No"
+                  />
+                  <span
+                    class="switch-handle"
+                  />
+                </label>
+                <div
+                  class="preference-wrapper"
+                >
+                  <h3>
+                    Would you like to find classes with friends?
+                  </h3>
+                  <p
+                    class="disclaimer"
+                  >
+                    See which Facebook friends will be your classmates! Only friends in your course will see your name.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="preference cf"
+              >
+                <label
+                  class="switch switch-slide"
+                  for="share-sections-input"
+                >
+                  <input
+                    id="share-sections-input"
+                    name="shareSectionsWithFriends"
+                    class="switch-input"
+                    type="checkbox"
+                    checked=""
+                  />
+                  <span
+                    class="switch-label"
+                    data-on="Yes"
+                    data-off="No"
+                  />
+                  <span
+                    class="switch-handle"
+                  />
+                </label>
+                <div
+                  class="preference-wrapper"
+                >
+                  <h3>
+                    Would you like to find sections with friends?
+                  </h3>
+                  <p
+                    class="disclaimer"
+                  >
+                    See which Facebook friends will be in your section! Only friends in your section will see your name.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="preference cf"
+              >
+                <label
+                  class="switch switch-slide"
+                  for="social-all-input"
+                >
+                  <input
+                    name="findNewFriends"
+                    id="social-all-input"
+                    class="switch-input"
+                    type="checkbox"
+                    checked=""
+                  />
+                  <span
+                    class="switch-label"
+                    data-on="Yes"
+                    data-off="No"
+                  />
+                  <span
+                    class="switch-handle"
+                  />
+                </label>
+                <div
+                  class="preference-wrapper"
+                >
+                  <h3>
+                    Find new friends in your classes!
+                  </h3>
+                  <p
+                    class="disclaimer"
+                  >
+                    Find your peers for this semester. All students in your courses will be able to view your name and public Facebook profile.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <h3
+              class="delete-link"
+            >
+              Delete my account and all related information
             </h3>
             <div
-              className="Select Select--single is-clearable is-searchable"
-              style={undefined}
+              class="button-wrapper"
             >
-              <div
-                className="Select-control"
-                onKeyDown={[Function]}
-                onMouseDown={[Function]}
-                onTouchEnd={[Function]}
-                onTouchMove={[Function]}
-                onTouchStart={[Function]}
-                style={undefined}
+              <button
+                class="signup-button"
               >
-                <span
-                  className="Select-multi-value-wrapper"
-                  id="react-select-5--value"
-                >
-                  <div
-                    className="Select-placeholder"
-                  >
-                    Select...
-                  </div>
-                  <div
-                    className="Select-input"
-                    style={
-                      Object {
-                        "display": "inline-block",
-                      }
-                    }
-                  >
-                    <input
-                      aria-activedescendant="react-select-5--value"
-                      aria-describedby={undefined}
-                      aria-expanded="false"
-                      aria-haspopup="false"
-                      aria-label={undefined}
-                      aria-labelledby={undefined}
-                      aria-owns=""
-                      className={undefined}
-                      onBlur={[Function]}
-                      onChange={[Function]}
-                      onFocus={[Function]}
-                      required={false}
-                      role="combobox"
-                      style={
-                        Object {
-                          "boxSizing": "content-box",
-                          "width": "5px",
-                        }
-                      }
-                      tabIndex={undefined}
-                      value=""
-                    />
-                    <div
-                      style={
-                        Object {
-                          "height": 0,
-                          "left": 0,
-                          "overflow": "scroll",
-                          "position": "absolute",
-                          "top": 0,
-                          "visibility": "hidden",
-                          "whiteSpace": "pre",
-                        }
-                      }
-                    >
-                      
-                    </div>
-                  </div>
-                </span>
-                <span
-                  aria-label="Clear value"
-                  className="Select-clear-zone"
-                  onMouseDown={[Function]}
-                  onTouchEnd={[Function]}
-                  onTouchMove={[Function]}
-                  onTouchStart={[Function]}
-                  title="Clear value"
-                >
-                  <span
-                    className="Select-clear"
-                    dangerouslySetInnerHTML={
-                      Object {
-                        "__html": "&times;",
-                      }
-                    }
-                  />
-                </span>
-                <span
-                  className="Select-arrow-zone"
-                  onMouseDown={[Function]}
-                >
-                  <span
-                    className="Select-arrow"
-                    onMouseDown={[Function]}
-                  />
-                </span>
-              </div>
+                Save
+              </button>
             </div>
-          </div>
-          <div>
-            <div
-              className="preference cf"
-            >
-              <label
-                className="switch switch-slide"
-                htmlFor="social-courses-input"
-              >
-                <input
-                  checked={true}
-                  className="switch-input"
-                  defaultChecked={true}
-                  id="social-courses-input"
-                  onChange={[Function]}
-                  type="checkbox"
-                />
-                <span
-                  className="switch-label"
-                  data-off="No"
-                  data-on="Yes"
-                />
-                <span
-                  className="switch-handle"
-                />
-              </label>
-              <div
-                className="preference-wrapper"
-              >
-                <h3>
-                  Would you like to find classes with friends?
-                </h3>
-                <p
-                  className="disclaimer"
-                >
-                  See which Facebook friends will be your classmates! Only friends in your course will see your name.
-                </p>
-              </div>
-            </div>
-            <div
-              className="preference cf"
-            >
-              <label
-                className="switch switch-slide"
-                htmlFor="share-sections-input"
-              >
-                <input
-                  checked={true}
-                  className="switch-input"
-                  id="share-sections-input"
-                  onChange={[Function]}
-                  type="checkbox"
-                />
-                <span
-                  className="switch-label"
-                  data-off="No"
-                  data-on="Yes"
-                />
-                <span
-                  className="switch-handle"
-                />
-              </label>
-              <div
-                className="preference-wrapper"
-              >
-                <h3>
-                  Would you like to find sections with friends?
-                </h3>
-                <p
-                  className="disclaimer"
-                >
-                  See which Facebook friends will be in your section! Only friends in your section will see your name.
-                </p>
-              </div>
-            </div>
-            <div
-              className="preference cf"
-            >
-              <label
-                className="switch switch-slide"
-                htmlFor="social-all-input"
-              >
-                <input
-                  checked={true}
-                  className="switch-input"
-                  id="social-all-input"
-                  onChange={[Function]}
-                  type="checkbox"
-                />
-                <span
-                  className="switch-label"
-                  data-off="No"
-                  data-on="Yes"
-                />
-                <span
-                  className="switch-handle"
-                />
-              </label>
-              <div
-                className="preference-wrapper"
-              >
-                <h3>
-                  Find new friends in your classes!
-                </h3>
-                <p
-                  className="disclaimer"
-                >
-                  Find your peers for this semester. All students in your courses will be able to view your name and public Facebook profile.
-                </p>
-              </div>
-            </div>
-          </div>
-          <h3
-            className="delete-link"
-            onClick={[Function]}
-          >
-            Delete my account and all related information 
-          </h3>
-          <div
-            className="button-wrapper"
-          >
-            <button
-              className="signup-button"
-              onClick={[Function]}
-            >
-              Save
-            </button>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div
-    onClick={null}
-    style={
-      Object {
-        "animationDuration": "0.3s",
-        "animationFillMode": "forwards",
-        "animationTimingFunction": "linear",
-        "backgroundColor": "#373A47",
-        "bottom": 0,
-        "left": 0,
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-        "zIndex": 1040,
-      }
-    }
-  />
-</span>
+    <div
+      style="position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 1040; background-color: rgb(55, 58, 71);"
+    />
+  </span>
+</div>
 `;
 
 exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`] = `
-<span>
-  <div
-    className="welcome-modal max-modal"
-    style={
-      Object {
-        "left": "50%",
-        "position": "fixed",
-        "top": "50%",
-        "transform": "translate3d(-50%, -50%, 0)",
-        "width": "100%",
-        "zIndex": 1050,
-      }
-    }
-  >
+<div>
+  <span>
     <div
-      style={
-        Object {
-          "animationDuration": "1s",
-          "animationFillMode": "forwards",
-          "animationTimingFunction": "linear",
-          "backgroundColor": "white",
-          "margin": 0,
-        }
-      }
-      tabIndex="-1"
+      style="z-index: 1050; position: fixed; width: 100%; top: 50%; left: 50%;"
+      class="welcome-modal max-modal"
     >
       <div
-        className="modal-content"
+        tabindex="-1"
+        style="margin: 0px; background-color: white;"
       >
         <div
-          className="modal-header"
+          class="modal-content"
         >
           <div
-            className="pro-pic"
-            style={
-              Object {
-                "backgroundImage": "url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/18193968_10208799143997309_4182518417368859549_n.jpg?oh=1e9b37d0a11caa04dc04fd43272fe377&oe=59D65C0A)",
-              }
-            }
-          />
-          <h1>
-            Welcome!
-          </h1>
-        </div>
-        <div
-          className="modal-body"
-        >
-          <div
-            className="preference cf"
+            class="modal-header"
           >
-            <h3>
-              What's your major?
-            </h3>
             <div
-              className="Select Select--single is-clearable is-searchable"
-              style={undefined}
-            >
-              <div
-                className="Select-control"
-                onKeyDown={[Function]}
-                onMouseDown={[Function]}
-                onTouchEnd={[Function]}
-                onTouchMove={[Function]}
-                onTouchStart={[Function]}
-                style={undefined}
-              >
-                <span
-                  className="Select-multi-value-wrapper"
-                  id="react-select-2--value"
-                >
-                  <div
-                    className="Select-placeholder"
-                  >
-                    Select...
-                  </div>
-                  <div
-                    className="Select-input"
-                    style={
-                      Object {
-                        "display": "inline-block",
-                      }
-                    }
-                  >
-                    <input
-                      aria-activedescendant="react-select-2--value"
-                      aria-describedby={undefined}
-                      aria-expanded="false"
-                      aria-haspopup="false"
-                      aria-label={undefined}
-                      aria-labelledby={undefined}
-                      aria-owns=""
-                      className={undefined}
-                      onBlur={[Function]}
-                      onChange={[Function]}
-                      onFocus={[Function]}
-                      required={false}
-                      role="combobox"
-                      style={
-                        Object {
-                          "boxSizing": "content-box",
-                          "width": "5px",
-                        }
-                      }
-                      tabIndex={undefined}
-                      value=""
-                    />
-                    <div
-                      style={
-                        Object {
-                          "height": 0,
-                          "left": 0,
-                          "overflow": "scroll",
-                          "position": "absolute",
-                          "top": 0,
-                          "visibility": "hidden",
-                          "whiteSpace": "pre",
-                        }
-                      }
-                    >
-                      
-                    </div>
-                  </div>
-                </span>
-                <span
-                  className="Select-arrow-zone"
-                  onMouseDown={[Function]}
-                >
-                  <span
-                    className="Select-arrow"
-                    onMouseDown={[Function]}
-                  />
-                </span>
-              </div>
-            </div>
+              class="pro-pic"
+              style="background-image: url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/18193968_10208799143997309_4182518417368859549_n.jpg?oh=1e9b37d0a11caa04dc04fd43272fe377&oe=59D65C0A);"
+            />
+            <h1>
+              Welcome!
+            </h1>
           </div>
           <div
-            className="preference cf"
+            class="modal-body"
           >
-            <h3>
-              What's your graduating class year?
-            </h3>
             <div
-              className="Select Select--single is-clearable is-searchable"
-              style={undefined}
-            >
-              <div
-                className="Select-control"
-                onKeyDown={[Function]}
-                onMouseDown={[Function]}
-                onTouchEnd={[Function]}
-                onTouchMove={[Function]}
-                onTouchStart={[Function]}
-                style={undefined}
-              >
-                <span
-                  className="Select-multi-value-wrapper"
-                  id="react-select-3--value"
-                >
-                  <div
-                    className="Select-placeholder"
-                  >
-                    Select...
-                  </div>
-                  <div
-                    className="Select-input"
-                    style={
-                      Object {
-                        "display": "inline-block",
-                      }
-                    }
-                  >
-                    <input
-                      aria-activedescendant="react-select-3--value"
-                      aria-describedby={undefined}
-                      aria-expanded="false"
-                      aria-haspopup="false"
-                      aria-label={undefined}
-                      aria-labelledby={undefined}
-                      aria-owns=""
-                      className={undefined}
-                      onBlur={[Function]}
-                      onChange={[Function]}
-                      onFocus={[Function]}
-                      required={false}
-                      role="combobox"
-                      style={
-                        Object {
-                          "boxSizing": "content-box",
-                          "width": "5px",
-                        }
-                      }
-                      tabIndex={undefined}
-                      value=""
-                    />
-                    <div
-                      style={
-                        Object {
-                          "height": 0,
-                          "left": 0,
-                          "overflow": "scroll",
-                          "position": "absolute",
-                          "top": 0,
-                          "visibility": "hidden",
-                          "whiteSpace": "pre",
-                        }
-                      }
-                    >
-                      
-                    </div>
-                  </div>
-                </span>
-                <span
-                  className="Select-arrow-zone"
-                  onMouseDown={[Function]}
-                >
-                  <span
-                    className="Select-arrow"
-                    onMouseDown={[Function]}
-                  />
-                </span>
-              </div>
-            </div>
-          </div>
-          <div>
+              class="preference cf"
+            />
             <div
-              className="preference cf"
-            >
-              <label
-                className="switch switch-slide"
-                htmlFor="social-courses-input"
-              >
-                <input
-                  checked={true}
-                  className="switch-input"
-                  defaultChecked={true}
-                  id="social-courses-input"
-                  onChange={[Function]}
-                  type="checkbox"
-                />
-                <span
-                  className="switch-label"
-                  data-off="No"
-                  data-on="Yes"
-                />
-                <span
-                  className="switch-handle"
-                />
-              </label>
-              <div
-                className="preference-wrapper"
-              >
-                <h3>
-                  Would you like to find classes with friends?
-                </h3>
-                <p
-                  className="disclaimer"
-                >
-                  See which Facebook friends will be your classmates! Only friends in your course will see your name.
-                </p>
-              </div>
-            </div>
-            <div
-              className="preference cf"
-            >
-              <label
-                className="switch switch-slide"
-                htmlFor="share-sections-input"
-              >
-                <input
-                  checked={false}
-                  className="switch-input"
-                  id="share-sections-input"
-                  onChange={[Function]}
-                  type="checkbox"
-                />
-                <span
-                  className="switch-label"
-                  data-off="No"
-                  data-on="Yes"
-                />
-                <span
-                  className="switch-handle"
-                />
-              </label>
-              <div
-                className="preference-wrapper"
-              >
-                <h3>
-                  Would you like to find sections with friends?
-                </h3>
-                <p
-                  className="disclaimer"
-                >
-                  See which Facebook friends will be in your section! Only friends in your section will see your name.
-                </p>
-              </div>
-            </div>
-            <div
-              className="preference cf"
-            >
-              <label
-                className="switch switch-slide"
-                htmlFor="social-all-input"
-              >
-                <input
-                  checked={false}
-                  className="switch-input"
-                  id="social-all-input"
-                  onChange={[Function]}
-                  type="checkbox"
-                />
-                <span
-                  className="switch-label"
-                  data-off="No"
-                  data-on="Yes"
-                />
-                <span
-                  className="switch-handle"
-                />
-              </label>
-              <div
-                className="preference-wrapper"
-              >
-                <h3>
-                  Find new friends in your classes!
-                </h3>
-                <p
-                  className="disclaimer"
-                >
-                  Find your peers for this semester. All students in your courses will be able to view your name and public Facebook profile.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div
-            className="preference cf"
-          >
-            <label
-              className="switch switch-slide"
-              htmlFor="tos-agreed-input"
-            >
-              <input
-                checked={false}
-                className="switch-input"
-                disabled={false}
-                id="tos-agreed-input"
-                onChange={[Function]}
-                type="checkbox"
-              />
-              <span
-                className="switch-label"
-                data-off="CLICK TO ACCEPT"
-                data-on="ACCEPTED"
-              />
-              <span
-                className="switch-handle"
-              />
-            </label>
-            <div
-              className="preference-wrapper"
+              class="preference cf"
             >
               <h3>
-                Accept the terms and conditions
+                What's your major?
               </h3>
-              <p
-                className="disclaimer"
+              <div
+                class="Select Select--single is-clearable is-searchable"
               >
-                By agreeing, you accept our 
-                <a>
-                  terms and conditions
-                </a>
-                 & 
-                <a>
-                  privacy policy
-                </a>
-                .
-              </p>
+                <div
+                  class="Select-control"
+                >
+                  <span
+                    class="Select-multi-value-wrapper"
+                    id="react-select-2--value"
+                  >
+                    <div
+                      class="Select-placeholder"
+                    >
+                      Select...
+                    </div>
+                    <div
+                      class="Select-input"
+                      style="display: inline-block;"
+                    >
+                      <input
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-owns=""
+                        aria-haspopup="false"
+                        aria-activedescendant="react-select-2--value"
+                        style="width: 5px; box-sizing: content-box;"
+                        value=""
+                      />
+                      <div
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                      />
+                    </div>
+                  </span>
+                  <span
+                    class="Select-arrow-zone"
+                  >
+                    <span
+                      class="Select-arrow"
+                    />
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-          <div
-            className="button-wrapper"
-          >
-            <button
-              className="signup-button"
-              onClick={[Function]}
+            <div
+              class="preference cf"
             >
-              Save
-            </button>
+              <h3>
+                What's your graduating class year?
+              </h3>
+              <div
+                class="Select Select--single is-clearable is-searchable"
+              >
+                <div
+                  class="Select-control"
+                >
+                  <span
+                    class="Select-multi-value-wrapper"
+                    id="react-select-3--value"
+                  >
+                    <div
+                      class="Select-placeholder"
+                    >
+                      Select...
+                    </div>
+                    <div
+                      class="Select-input"
+                      style="display: inline-block;"
+                    >
+                      <input
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-owns=""
+                        aria-haspopup="false"
+                        aria-activedescendant="react-select-3--value"
+                        style="width: 5px; box-sizing: content-box;"
+                        value=""
+                      />
+                      <div
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                      />
+                    </div>
+                  </span>
+                  <span
+                    class="Select-arrow-zone"
+                  >
+                    <span
+                      class="Select-arrow"
+                    />
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div
+                class="preference cf"
+              >
+                <label
+                  class="switch switch-slide"
+                  for="social-courses-input"
+                >
+                  <input
+                    name="shareClassesWithFriends"
+                    id="social-courses-input"
+                    class="switch-input"
+                    type="checkbox"
+                    checked=""
+                  />
+                  <span
+                    class="switch-label"
+                    data-on="Yes"
+                    data-off="No"
+                  />
+                  <span
+                    class="switch-handle"
+                  />
+                </label>
+                <div
+                  class="preference-wrapper"
+                >
+                  <h3>
+                    Would you like to find classes with friends?
+                  </h3>
+                  <p
+                    class="disclaimer"
+                  >
+                    See which Facebook friends will be your classmates! Only friends in your course will see your name.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="preference cf"
+              >
+                <label
+                  class="switch switch-slide"
+                  for="share-sections-input"
+                >
+                  <input
+                    id="share-sections-input"
+                    name="shareSectionsWithFriends"
+                    class="switch-input"
+                    type="checkbox"
+                  />
+                  <span
+                    class="switch-label"
+                    data-on="Yes"
+                    data-off="No"
+                  />
+                  <span
+                    class="switch-handle"
+                  />
+                </label>
+                <div
+                  class="preference-wrapper"
+                >
+                  <h3>
+                    Would you like to find sections with friends?
+                  </h3>
+                  <p
+                    class="disclaimer"
+                  >
+                    See which Facebook friends will be in your section! Only friends in your section will see your name.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="preference cf"
+              >
+                <label
+                  class="switch switch-slide"
+                  for="social-all-input"
+                >
+                  <input
+                    name="findNewFriends"
+                    id="social-all-input"
+                    class="switch-input"
+                    type="checkbox"
+                  />
+                  <span
+                    class="switch-label"
+                    data-on="Yes"
+                    data-off="No"
+                  />
+                  <span
+                    class="switch-handle"
+                  />
+                </label>
+                <div
+                  class="preference-wrapper"
+                >
+                  <h3>
+                    Find new friends in your classes!
+                  </h3>
+                  <p
+                    class="disclaimer"
+                  >
+                    Find your peers for this semester. All students in your courses will be able to view your name and public Facebook profile.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="preference cf"
+            >
+              <label
+                class="switch switch-slide"
+                for="tos-agreed-input"
+              >
+                <input
+                  id="tos-agreed-input"
+                  class="switch-input"
+                  type="checkbox"
+                />
+                <span
+                  class="switch-label"
+                  data-on="ACCEPTED"
+                  data-off="CLICK TO ACCEPT"
+                />
+                <span
+                  class="switch-handle"
+                />
+              </label>
+              <div
+                class="preference-wrapper"
+              >
+                <h3>
+                  Accept the terms and conditions
+                </h3>
+                <p
+                  class="disclaimer"
+                >
+                  By agreeing, you accept our 
+                  <a>
+                    terms and conditions
+                  </a>
+                  & 
+                  <a>
+                    privacy policy
+                  </a>
+                  .
+                </p>
+              </div>
+            </div>
+            <div
+              class="button-wrapper"
+            >
+              <button
+                class="signup-button"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div
-    onClick={null}
-    style={
-      Object {
-        "animationDuration": "0.3s",
-        "animationFillMode": "forwards",
-        "animationTimingFunction": "linear",
-        "backgroundColor": "#373A47",
-        "bottom": 0,
-        "left": 0,
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-        "zIndex": 1040,
-      }
-    }
-  />
-</span>
+    <div
+      style="position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 1040; background-color: rgb(55, 58, 71);"
+    />
+  </span>
+</div>
 `;
