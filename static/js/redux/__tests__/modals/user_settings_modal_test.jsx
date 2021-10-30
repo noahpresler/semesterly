@@ -16,7 +16,7 @@ import React from 'react';
 import thunk from 'redux-thunk';
 import Provider from 'react-redux/src/components/Provider';
 import configureMockStore from 'redux-mock-store';
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react';
 import UserSettingsModalContainer from '../../ui/containers/modals/user_settings_modal_container';
 import { unfilledFixture, filledFixture, googleFixture } from '../../__fixtures__/user_settings_modal.fixture';
 
@@ -34,12 +34,10 @@ describe('User Setting Modal Renders As Expected', () => {
         highlightNotifs: false,
       },
     });
-    const tree = renderer.create(
+    const { container } = render(
       <Provider store={store}><UserSettingsModalContainer /></Provider>,
-    ).toJSON();
-    delete tree.children[0].children[0].props.style.animationName;
-    delete tree.children[1].props.style.animationName;
-    expect(tree).toMatchSnapshot();
+    );
+    expect(container).toMatchSnapshot();
   });
 
   it('HIDDEN if settings filled', () => {
@@ -52,10 +50,10 @@ describe('User Setting Modal Renders As Expected', () => {
         highlightNotifs: false,
       },
     });
-    const tree = renderer.create(
+    const { container } = render(
       <Provider store={store}><UserSettingsModalContainer /></Provider>,
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(container).toMatchSnapshot();
   });
 
   it('VISIBLE if settings filled but showOverrided', () => {
@@ -70,12 +68,10 @@ describe('User Setting Modal Renders As Expected', () => {
         highlightNotifs: false,
       },
     });
-    const tree = renderer.create(
+    const { container } = render(
       <Provider store={store}><UserSettingsModalContainer /></Provider>,
-    ).toJSON();
-    delete tree.children[0].children[0].props.style.animationName;
-    delete tree.children[1].props.style.animationName;
-    expect(tree).toMatchSnapshot();
+    );
+    expect(container).toMatchSnapshot();
   });
 
   it('VISIBLE but reduced if signing up with Google only', () => {
@@ -88,11 +84,9 @@ describe('User Setting Modal Renders As Expected', () => {
         highlightNotifs: false,
       },
     });
-    const tree = renderer.create(
+    const { container } = render(
       <Provider store={store}><UserSettingsModalContainer /></Provider>,
-    ).toJSON();
-    delete tree.children[0].children[0].props.style.animationName;
-    delete tree.children[1].props.style.animationName;
-    expect(tree).toMatchSnapshot();
+    );
+    expect(container).toMatchSnapshot();
   });
 });

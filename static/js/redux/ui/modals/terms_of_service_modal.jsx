@@ -12,28 +12,30 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { WaveModal } from 'boron-15';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
-class TermsOfServiceModal extends React.Component {
-  componentDidMount() {
-    if (this.props.isVisible) {
-      this.modal.show();
-    }
-  }
+/* eslint-disable react/no-unused-prop-types, no-shadow */
 
-  componentDidUpdate() {
-    if (this.props.isVisible) {
-      this.modal.show();
-    }
-  }
+const TermsOfServiceModal = (props) => {
+  let modal = null;
 
-  getBody() {
-    const { description, url } = this.props;
-    const isNewUser = !this.props.userInfo.timeAcceptedTos;
-    const link = <a href={url} target="_blank" rel="noopener noreferrer">here</a>;
+  useEffect(() => {
+    if (modal && props.isVisible) {
+      modal.show();
+    }
+  }, [props.isVisible]);
+
+  const getBody = (props) => {
+    const { description, url } = props;
+    const isNewUser = !props.userInfo.timeAcceptedTos;
+    const link = (
+      <a href={url} target="_blank" rel="noopener noreferrer">
+        here
+      </a>
+    );
     if (isNewUser) {
       return (
         <h3>
@@ -44,16 +46,17 @@ class TermsOfServiceModal extends React.Component {
     } else if (description && url) {
       return (
         <h3>
-          <strong>{description}</strong> - you can read our announcement about it{' '}
-          {link}, and review our updated Terms of Service and Privacy Policy here:
+          <strong>{description}</strong> - you can read our announcement about
+          it {link}, and review our updated Terms of Service and Privacy Policy
+          here:
         </h3>
       );
     } else if (url) {
       return (
         <h3>
-          We have made some changes that we think you should know about - you can
-          read our announcement about it {link},
-          and review our updated Terms of Service and Privacy Policy here:
+          We have made some changes that we think you should know about - you
+          can read our announcement about it {link}, and review our updated
+          Terms of Service and Privacy Policy here:
         </h3>
       );
     } else if (description) {
@@ -71,60 +74,63 @@ class TermsOfServiceModal extends React.Component {
         </h3>
       );
     }
-  }
+  };
 
-  render() {
-    const modalStyle = {
-      width: '100%',
-    };
+  const modalStyle = {
+    width: '100%',
+  };
 
-    return (
-      <WaveModal
-        ref={(c) => { this.modal = c; }}
-        className="terms-of-service-modal max-modal"
-        modalStyle={modalStyle}
-        closeOnClick={false}
-      >
-        <div className="tos-modal-container">
-          <h1>Terms of Service and Privacy Policy</h1>
-          {this.getBody()}
-          <div>
-            <a
-              href="/termsofservice"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="legal-links"
-            >
-              Terms of Service
-              <i className="fa fa-external-link" />
-            </a>
-            <a
-              href="/privacypolicy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="legal-links"
-            >
-              Privacy Policy
-              <i className="fa fa-external-link" />
-            </a>
-          </div>
-          <button
-            className="accept-tos-btn" onClick={() => {
-              this.props.acceptTOS();
-              this.modal.hide();
-            }}
+  return (
+    <WaveModal
+      ref={(c) => {
+        modal = c;
+      }}
+      className="terms-of-service-modal max-modal"
+      modalStyle={modalStyle}
+      closeOnClick={false}
+    >
+      <div className="tos-modal-container">
+        <h1>Terms of Service and Privacy Policy</h1>
+        {getBody(props)}
+        <div>
+          <a
+            href="/termsofservice"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="legal-links"
           >
-            <i className="fa fa-check" />
-            <span>I accept the Terms of Service</span>
-          </button>
-          <p className="method-details">
-            You must accept the new Terms of Service to continue using Semester.ly.
-          </p>
+            Terms of Service
+            <i className="fa fa-external-link" />
+          </a>
+          <a
+            href="/privacypolicy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="legal-links"
+          >
+            Privacy Policy
+            <i className="fa fa-external-link" />
+          </a>
         </div>
-      </WaveModal>
-    );
-  }
-}
+        <button
+          className="accept-tos-btn"
+          onClick={() => {
+            props.acceptTOS();
+            modal.hide();
+          }}
+        >
+          <i className="fa fa-check" />
+          <span>I accept the Terms of Service</span>
+        </button>
+        <p className="method-details">
+          You must accept the new Terms of Service to continue using
+          Semester.ly.
+        </p>
+      </div>
+    </WaveModal>
+  );
+};
+
 
 TermsOfServiceModal.propTypes = {
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
