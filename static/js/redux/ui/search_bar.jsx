@@ -39,8 +39,21 @@ const getAbbreviatedSemesterName = semester => `${abbreviateSemesterName(semeste
 const SearchBar = (props) => {
   const [inputFocused, setInputFocused] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
   const input = useRef();
-  let changeTimer = false;
+
+  useEffect(() => {
+    // better way to search, only run API call when user stops typing for 1 seconds
+    const timeoutId = setTimeout(() => {
+      // when user stops typing we search
+      props.fetchCourses(searchTerm);
+    }, 1000);
+    // clear timeout everytime user updates query
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [searchTerm]);
 
   const handleKeyDown = useCallback((e) => {
     if (
@@ -92,15 +105,6 @@ const SearchBar = (props) => {
   const maybeSetSemester = (semester) => {
     setShowDropdown(false);
     props.maybeSetSemester(semester);
-  };
-
-  const fetchSearchResults = () => {
-    if (changeTimer) clearTimeout(changeTimer);
-    const query = input.current.value;
-    changeTimer = setTimeout(() => {
-      props.fetchCourses(query);
-      changeTimer = false;
-    }, 200);
   };
 
   const toggleDropdown = () => {
@@ -186,7 +190,7 @@ const SearchBar = (props) => {
               props.isFetching ? 'results-loading-gif' : '',
               { results: resultsShown },
             )}
-            onInput={fetchSearchResults}
+            onChange={e => setSearchTerm(e.target.value)}
             onFocus={() => {
               setInputFocused(true);
               setShowDropdown(false);
