@@ -50,9 +50,9 @@ stages:
     - task: Docker@2
       displayName: Push Django Container
       inputs:
-        command: push
-        repository: $(imageRepository)
         containerRegistry: $(dockerRegistryServiceConnection)
+        repository: $(imageRepository)
+        command: push
         tags: |
           $(tag)
     - task: Docker@2
