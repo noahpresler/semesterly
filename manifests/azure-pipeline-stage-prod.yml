@@ -51,7 +51,7 @@ stages:
       inputs:
         command: 'build'
         repository: 'semesterly-nginx'
-        arguments: '--build-arg djangoImage=$(containerRegistry)/$(imageRepository):$(tag)'
+        arguments: '--build-arg djangoImage=$(containerRegistry)/$(imageRepository):$(tag) --build-arg BASE_IMAGE=semesterly.azurecr.io/semesterly-base-py3:latest'
         Dockerfile: './build/semesterly-nginx/Dockerfile'
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
