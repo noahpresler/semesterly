@@ -16,6 +16,7 @@ import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
@@ -38,9 +39,9 @@ import {
 // import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
 
-const store = createStore(rootReducer,
-    window.devToolsExtension && window.devToolsExtension(),
-    applyMiddleware(thunkMiddleware),
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunkMiddleware)) //way to use devtools with newer version of redux
 );
 
 // load initial timetable from user data if logged in or local storage
