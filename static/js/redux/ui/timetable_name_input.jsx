@@ -13,59 +13,60 @@ GNU General Public License for more details.
 */
 
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import classnames from 'classnames';
 
-class TimetableNameInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.alterTimetableName = this.alterTimetableName.bind(this);
-    this.setTimetableName = this.setTimetableName.bind(this);
-    this.showSignupModal = this.showSignupModal.bind(this);
-    this.state = { name: this.props.activeLoadedTimetableName };
-  }
+const TimetableNameInput = (props) => {
+  const[activeLoadedTimetableName, setActiveLoadedTimetableName] = useState(props.activeLoadedTimetableName)
+  const inputRef = useRef();
 
-  componentWillMount() {
-    $(document.body).on('keydown', (e) => {
-      if (e.key === 'Enter') {
-        this.setTimetableName();
-        $('input.timetable-name').blur();
-      }
-    });
-  }
+  const handleEnterKeyPressed = useCallback((e) => {
+    //save course when user pressed enter
+    if (inputRef && e.key === 'Enter') {
+      setTimetableName();
+      inputRef.current.blur();
+    }
+  })
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ name: nextProps.activeLoadedTimetableName });
-  }
+  useEffect(() => {
+    $(document.body).on('keydown', handleEnterKeyPressed);
+    return () => {
+      $(document.body).off('keydown');
+    }
+  }, [handleEnterKeyPressed])
 
-  setTimetableName() {
-    const newName = this.state.name;
+  useEffect(() => {
+    setActiveLoadedTimetableName(props.activeLoadedTimetableName)
+  }, [props.activeLoadedTimetableName])
+
+  const setTimetableName = () =>{
+    const newName = activeLoadedTimetableName;
     if (newName.length === 0) {
-      this.setState({ name: this.props.activeLoadedTimetableName });
-    } else if (newName !== this.props.activeLoadedTimetableName) {
-      this.props.changeTimetableName(newName);
+      setActiveLoadedTimetableName(props.activeLoadedTimetableName);
+    } else if (newName !== props.activeLoadedTimetableName) {
+      props.changeTimetableName(newName);
     }
   }
 
-  showSignupModal() {
-    if (!this.props.isLoggedIn) {
-      this.props.openSignUpModal();
+  const showSignupModal = () =>{
+    if (!props.isLoggedIn) {
+      props.openSignUpModal();
     }
   }
 
-  alterTimetableName(event) {
-    this.setState({ name: event.target.value });
+  const alterTimetableName = (event) => {
+    setActiveLoadedTimetableName(event.target.value)
   }
 
-  render() {
-    return (<input
-      className={classnames('timetable-name', { unsaved: !this.props.upToDate })}
-      value={this.state.name}
-      onChange={this.alterTimetableName}
-      onBlur={this.setTimetableName}
-      onClick={this.showSignupModal}
-    />);
-  }
+  return (<input
+    className={classnames('timetable-name', { unsaved: !props.upToDate })}
+    value={activeLoadedTimetableName}
+    onChange={alterTimetableName}
+    onBlur={setTimetableName}
+    onClick={showSignupModal}
+    ref={inputRef}
+  />);
+  
 }
 
 TimetableNameInput.propTypes = {
