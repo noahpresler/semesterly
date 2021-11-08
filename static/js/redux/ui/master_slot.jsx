@@ -22,30 +22,28 @@ import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 const MasterSlot = (props) => {
   const [shareLinkShown, setShareLinkShown] = useState(false);
-  const [hovered, setHovered] = useState(false)
 
-  const onMasterSlotHover = () => {
-    setHovered(true);
-    updateColours(COLOUR_DATA[props.colourIndex].highlight);
-  }
-  const onMasterSlotUnhover = () => {
-    setHovered(false);
-    updateColours(COLOUR_DATA[props.colourIndex].background);
-  }
-  const stopPropagation = (callback, event) =>{
-    event.stopPropagation();
-    onMasterSlotUnhover();
-    callback();
-  }
   const updateColours = (colour) => {
-        // no updating when hovering over a masterslot in the course modal (i.e. related course)
+    // no updating when hovering over a masterslot in the course modal (i.e. related course)
     if (props.inModal) {
       return;
     }
-        // update sibling slot colours (i.e. the slots for the same course)
-    $(`.slot-${props.course.id}`)
-            .css('background-color', colour);
-  }
+    // update sibling slot colours (i.e. the slots for the same course)
+    $(`.slot-${props.course.id}`).css('background-color', colour);
+  };
+
+  const onMasterSlotHover = () => {
+    updateColours(COLOUR_DATA[props.colourIndex].highlight);
+  };
+  const onMasterSlotUnhover = () => {
+    updateColours(COLOUR_DATA[props.colourIndex].background);
+  };
+  const stopPropagation = (callback, event) => {
+    event.stopPropagation();
+    onMasterSlotUnhover();
+    callback();
+  };
+
   const showShareLink = () => {
     setShareLinkShown(true);
     const idEventTarget = `#clipboard-btn-course-${props.course.id}`;
@@ -53,10 +51,10 @@ const MasterSlot = (props) => {
     clipboard.on('success', () => {
       $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
     });
-  }
+  };
   const hideShareLink = () => {
     setShareLinkShown(false);
-  }
+  };
 
   let friendCircles = null;
   if (props.fakeFriends) {
@@ -159,7 +157,7 @@ const MasterSlot = (props) => {
     </div>
   </div>
   );
-}
+};
 
 MasterSlot.defaultProps = {
   inModal: false,

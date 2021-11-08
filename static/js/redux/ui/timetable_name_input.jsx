@@ -17,46 +17,48 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import classnames from 'classnames';
 
 const TimetableNameInput = (props) => {
-  const[activeLoadedTimetableName, setActiveLoadedTimetableName] = useState(props.activeLoadedTimetableName)
+  const [activeLoadedTimetableName, setActiveLoadedTimetableName]
+    = useState(props.activeLoadedTimetableName);
   const inputRef = useRef();
 
-  const handleEnterKeyPressed = useCallback((e) => {
-    //save course when user pressed enter
-    if (inputRef && e.key === 'Enter') {
-      setTimetableName();
-      inputRef.current.blur();
-    }
-  })
-
-  useEffect(() => {
-    $(document.body).on('keydown', handleEnterKeyPressed);
-    return () => {
-      $(document.body).off('keydown');
-    }
-  }, [handleEnterKeyPressed])
-
-  useEffect(() => {
-    setActiveLoadedTimetableName(props.activeLoadedTimetableName)
-  }, [props.activeLoadedTimetableName])
-
-  const setTimetableName = () =>{
+  const setTimetableName = () => {
     const newName = activeLoadedTimetableName;
     if (newName.length === 0) {
       setActiveLoadedTimetableName(props.activeLoadedTimetableName);
     } else if (newName !== props.activeLoadedTimetableName) {
       props.changeTimetableName(newName);
     }
-  }
+  };
 
-  const showSignupModal = () =>{
+  const handleEnterKeyPressed = useCallback((e) => {
+    // save course when user pressed enter
+    if (inputRef && e.key === 'Enter') {
+      setTimetableName();
+      inputRef.current.blur();
+    }
+  });
+
+  useEffect(() => {
+    $(document.body).on('keydown', handleEnterKeyPressed);
+    return () => {
+      $(document.body).off('keydown');
+    };
+  }, [handleEnterKeyPressed]);
+
+  useEffect(() => {
+    setActiveLoadedTimetableName(props.activeLoadedTimetableName);
+  }, [props.activeLoadedTimetableName]);
+
+
+  const showSignupModal = () => {
     if (!props.isLoggedIn) {
       props.openSignUpModal();
     }
-  }
+  };
 
   const alterTimetableName = (event) => {
-    setActiveLoadedTimetableName(event.target.value)
-  }
+    setActiveLoadedTimetableName(event.target.value);
+  };
 
   return (<input
     className={classnames('timetable-name', { unsaved: !props.upToDate })}
@@ -66,8 +68,7 @@ const TimetableNameInput = (props) => {
     onClick={showSignupModal}
     ref={inputRef}
   />);
-  
-}
+};
 
 TimetableNameInput.propTypes = {
   activeLoadedTimetableName: PropTypes.string.isRequired,
