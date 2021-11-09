@@ -12,9 +12,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 import React from 'react';
-import { renderWithRedux } from '../../test-utils';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
+import { renderWithRedux } from '../../test-utils';
 import {
   tosModalFixture,
   userInfoFixture,
@@ -42,7 +42,7 @@ describe('TOS Modal', () => {
   it('shows welcome message for new users', () => {
     const newUser = userInfoFixture;
     newUser.data.timeAcceptedTos = null;
-    const initialState ={
+    const initialState = {
       termsOfServiceModal: tosModalFixture,
       userInfo: userInfoFixture,
     };

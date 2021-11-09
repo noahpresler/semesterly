@@ -13,9 +13,9 @@ GNU General Public License for more details.
 */
 
 import React from 'react';
-import { renderWithRedux } from '../../test-utils';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
+import { renderWithRedux } from '../../test-utils';
 import { userInfoFixture } from '../../__fixtures__/terms_of_service_modal.fixture';
 import { handleAgreement } from '../../actions/user_actions';
 import * as ActionTypes from '../../constants/actionTypes';

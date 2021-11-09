@@ -3,6 +3,7 @@ import { render as rtlRender } from '@testing-library/react';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
+/* eslint-disable import/prefer-default-export, react/prop-types */
 
 function renderWithRedux(
   ui,
@@ -10,7 +11,7 @@ function renderWithRedux(
     preloadedState,
     store = configureStore({ reducer: rootReducer, preloadedState }),
     ...renderOptions
-  } = {}
+  } = {},
 ) {
   function Wrapper({ children }) {
     return <Provider store={store}>{children}</Provider>;

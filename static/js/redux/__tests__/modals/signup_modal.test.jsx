@@ -32,8 +32,8 @@ describe('Signup Modal', () => {
       signupModal: { isVisible: false },
     };
     const { container } = renderWithRedux(<SignupModalContainer />, {
-        preloadedState: initialState,
-      }
+      preloadedState: initialState,
+    },
     );
     expect(container).toMatchSnapshot();
   });

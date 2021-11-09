@@ -41,7 +41,8 @@ import * as ActionTypes from './constants/actionTypes';
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunkMiddleware)) //way to use devtools with newer version of redux
+  composeWithDevTools(applyMiddleware(thunkMiddleware)),
+  // way to use devtools with newer version of redux
 );
 
 // load initial timetable from user data if logged in or local storage
