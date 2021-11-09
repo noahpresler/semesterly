@@ -508,11 +508,6 @@ export const LogFacebookAlertClick = () => {
   });
 };
 
-export const changeUserInfo = info => ({
-  type: ActionTypes.CHANGE_USER_INFO,
-  data: info,
-});
-
 export const changeTimetableName = name => (dispatch) => {
   if (name.length === 0 || name.length > MAX_TIMETABLE_NAME_LENGTH) {
     return;
