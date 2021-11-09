@@ -19,7 +19,7 @@ import ClickOutHandler from 'react-onclickout';
 import uniqBy from 'lodash/uniqBy';
 import flatMap from 'lodash/flatMap';
 import MasterSlot from './master_slot';
-import TimetableNameInputContainer from './containers/timetable_name_input_container';
+import TimetableNameInput from './timetable_name_input';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import Textbook from './textbook';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
@@ -149,7 +149,7 @@ class SideBar extends React.Component {
     return (
       <div className="side-bar no-print">
         <div className="sb-name">
-          <TimetableNameInputContainer />
+          <TimetableNameInput />
           <ClickOutHandler onClickOut={this.hideDropdown}>
             {dropItDown}
             <div
@@ -178,7 +178,8 @@ class SideBar extends React.Component {
           <h4 className="sb-header">
             Current Courses
             <div className="sb-header-link">
-              <i className="fa fa-users" />&nbsp;Find new friends
+              <i className="fa fa-users" />
+              &nbsp;Find new friends
             </div>
           </h4>
         </a>
@@ -187,11 +188,11 @@ class SideBar extends React.Component {
           to lock a section in place.
         </h4>
         <div className="sb-master-slots">
-          { masterSlots }
-          { finalScheduleLink }
+          {masterSlots}
+          {finalScheduleLink}
         </div>
-        { optionalSlotsHeader }
-        { optionalSlots }
+        {optionalSlotsHeader}
+        {optionalSlots}
         <div id="sb-optional-slots" />
       </div>
     );

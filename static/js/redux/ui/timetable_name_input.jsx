@@ -12,21 +12,29 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import classnames from 'classnames';
+import { useSelector } from 'react-redux';
+import { useActions } from '../hooks';
 
-const TimetableNameInput = (props) => {
-  const [activeLoadedTimetableName, setActiveLoadedTimetableName]
-    = useState(props.activeLoadedTimetableName);
+const TimetableNameInput = () => {
+  // select redux state, same as mapStateToProps
+  const isLoggedIn = useSelector(state => state.userInfo.data.isLoggedIn);
+  const { activeTimetable, upToDate } = useSelector(
+    state => state.savingTimetable,
+  );
+
+  // get actionCreators needed
+  const { openSignUpModal, changeTimetableName } = useActions();
+
+  const [inputValue, setInputValue] = useState(activeTimetable.name);
   const inputRef = useRef();
 
   const setTimetableName = () => {
-    const newName = activeLoadedTimetableName;
-    if (newName.length === 0) {
-      setActiveLoadedTimetableName(props.activeLoadedTimetableName);
-    } else if (newName !== props.activeLoadedTimetableName) {
-      props.changeTimetableName(newName);
+    if (inputValue.length === 0) {
+      setInputValue(activeTimetable.name);
+    } else if (inputValue !== activeTimetable.name) {
+      changeTimetableName(inputValue);
     }
   };
 
@@ -46,36 +54,32 @@ const TimetableNameInput = (props) => {
   }, [handleEnterKeyPressed]);
 
   useEffect(() => {
-    setActiveLoadedTimetableName(props.activeLoadedTimetableName);
-  }, [props.activeLoadedTimetableName]);
+    setInputValue(activeTimetable.name);
+  }, [activeTimetable.name]);
 
 
   const showSignupModal = () => {
-    if (!props.isLoggedIn) {
-      props.openSignUpModal();
+    if (!isLoggedIn) {
+      openSignUpModal();
     }
   };
 
   const alterTimetableName = (event) => {
-    setActiveLoadedTimetableName(event.target.value);
+    setInputValue(event.target.value);
   };
 
-  return (<input
-    className={classnames('timetable-name', { unsaved: !props.upToDate })}
-    value={activeLoadedTimetableName}
-    onChange={alterTimetableName}
-    onBlur={setTimetableName}
-    onClick={showSignupModal}
-    ref={inputRef}
-  />);
-};
-
-TimetableNameInput.propTypes = {
-  activeLoadedTimetableName: PropTypes.string.isRequired,
-  openSignUpModal: PropTypes.func.isRequired,
-  upToDate: PropTypes.bool.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
-  changeTimetableName: PropTypes.func.isRequired,
+  return (
+    <input
+      className={classnames('timetable-name', {
+        unsaved: !upToDate,
+      })}
+      value={inputValue}
+      onChange={alterTimetableName}
+      onBlur={setTimetableName}
+      onClick={showSignupModal}
+      ref={inputRef}
+    />
+  );
 };
 
 
