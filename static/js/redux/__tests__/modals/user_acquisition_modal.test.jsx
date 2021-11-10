@@ -14,7 +14,7 @@ GNU General Public License for more details.
 import React from 'react';
 import { renderWithRedux } from '../../test-utils';
 import { userInfoFixture } from '../../__fixtures__/user_acquisition_modal.fixture';
-import UserAcquisitionModalContainer from '../../ui/containers/modals/user_acquisition_modal_container';
+import UserAcquisitionModal from '../../ui/modals/user_acquisition_modal';
 
 
 describe('User Aquisition Modal', () => {
@@ -24,7 +24,7 @@ describe('User Aquisition Modal', () => {
       userInfo: userInfoFixture,
     };
 
-    const { container } = renderWithRedux(<UserAcquisitionModalContainer />, {
+    const { container } = renderWithRedux(<UserAcquisitionModal />, {
       preloadedState: initialState,
     });
     expect(container).toMatchSnapshot();
@@ -35,7 +35,7 @@ describe('User Aquisition Modal', () => {
       userAcquisitionModal: { isVisible: false },
       userInfo: userInfoFixture,
     };
-    const { container } = renderWithRedux(<UserAcquisitionModalContainer />, {
+    const { container } = renderWithRedux(<UserAcquisitionModal />, {
       preloadedState: initialState,
     });
     expect(container).toMatchSnapshot();
