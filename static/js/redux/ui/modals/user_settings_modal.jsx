@@ -22,8 +22,6 @@ import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 import { isIncomplete as TOSIncomplete } from '../../util';
 
 const UserSettingsModal = (props) => {
-  let modal = null;
-
   // refactor facebook settings to controlled input in order to perform checks and render alert
   const [fbSettings, setfbSettings] = useState({
     shareClassesWithFriends: props.userInfo.social_courses || true,
@@ -31,6 +29,7 @@ const UserSettingsModal = (props) => {
     findNewFriends: props.userInfo.social_all || false,
   });
 
+  const modal = useRef();
   const tosAgreed = useRef();
 
   const [showDelete, setShowDelete] = useState(false);
@@ -48,8 +47,13 @@ const UserSettingsModal = (props) => {
     const name = e.target.name;
     const checked = e.target.checked;
     if (name === 'shareClassesWithFriends') {
-      if (!checked && (fbSettings.shareSectionsWithFriends || fbSettings.findNewFriends)) {
-        setFbSwitchAlertText('Please switch off "find sections with friends" first');
+      if (
+        !checked &&
+        (fbSettings.shareSectionsWithFriends || fbSettings.findNewFriends)
+      ) {
+        setFbSwitchAlertText(
+          'Please switch off "find sections with friends" first',
+        );
         setfbSettings({ ...fbSettings, shareClassesWithFriends: true });
       } else {
         setfbSettings({ ...fbSettings, shareClassesWithFriends: checked });
@@ -60,13 +64,11 @@ const UserSettingsModal = (props) => {
         setFbSwitchAlertText('Please switch off "find new friends" first');
         setfbSettings({ ...fbSettings, shareSectionsWithFriends: true });
       } else if (checked) {
-        setfbSettings(
-          {
-            ...fbSettings,
-            shareClassesWithFriends: true,
-            shareSectionsWithFriends: true,
-          },
-        );
+        setfbSettings({
+          ...fbSettings,
+          shareClassesWithFriends: true,
+          shareSectionsWithFriends: true,
+        });
         setFbSwitchAlertText(null);
       } else {
         setfbSettings({ ...fbSettings, shareSectionsWithFriends: false });
@@ -74,12 +76,11 @@ const UserSettingsModal = (props) => {
       }
     } else if (name === 'findNewFriends') {
       if (checked) {
-        setfbSettings(
-          {
-            shareClassesWithFriends: true,
-            shareSectionsWithFriends: true,
-            findNewFriends: true,
-          });
+        setfbSettings({
+          shareClassesWithFriends: true,
+          shareSectionsWithFriends: true,
+          findNewFriends: true,
+        });
       } else {
         setfbSettings({ ...fbSettings, findNewFriends: false });
       }
@@ -106,7 +107,7 @@ const UserSettingsModal = (props) => {
 
   const hide = () => {
     if (!props.isUserInfoIncomplete) {
-      modal.hide();
+      modal.current.hide();
       props.setHidden();
       props.closeUserSettings();
       setShowDelete(false);
@@ -140,7 +141,7 @@ const UserSettingsModal = (props) => {
 
   useEffect(() => {
     if (shouldShow(props)) {
-      modal.show();
+      modal.current.show();
       props.setVisible();
     }
   }, [props]);
@@ -185,7 +186,8 @@ const UserSettingsModal = (props) => {
       <div className="preference-wrapper">
         <h3>Accept the terms and conditions</h3>
         <p className="disclaimer">
-          By agreeing, you accept our <a>terms and conditions</a> & <a>privacy policy</a>.
+          By agreeing, you accept our <a>terms and conditions</a> &{' '}
+          <a>privacy policy</a>.
         </p>
       </div>
     </div>
@@ -201,7 +203,9 @@ const UserSettingsModal = (props) => {
             className="switch-input"
             type="checkbox"
             checked={fbSettings.shareClassesWithFriends}
-            onChange={(e) => { handleChangefbSettings(e); }}
+            onChange={(e) => {
+              handleChangefbSettings(e);
+            }}
           />
           <span className="switch-label" data-on="Yes" data-off="No" />
           <span className="switch-handle" />
@@ -262,10 +266,11 @@ const UserSettingsModal = (props) => {
       </div>
     </div>
   );
-  const renderedfbAlert = fbSwitchAlertText ?
-    (<div className="alert alert-danger" role="alert">
+  const renderedfbAlert = fbSwitchAlertText ? (
+    <div className="alert alert-danger" role="alert">
       {fbSwitchAlertText}
-    </div>) : null;
+    </div>
+  ) : null;
 
   const fbUpsell =
     props.userInfo.isLoggedIn && !props.userInfo.FacebookSignedUp ? (
@@ -325,9 +330,7 @@ const UserSettingsModal = (props) => {
 
   return (
     <WaveModal
-      ref={(c) => {
-        modal = c;
-      }}
+      ref={modal}
       className="welcome-modal max-modal"
       closeOnClick={false}
       keyboard={false}
@@ -343,9 +346,7 @@ const UserSettingsModal = (props) => {
           {!props.isSigningUp ? cancelButton : null}
         </div>
         <div className="modal-body">
-          <div className="preference cf">
-            {renderedfbAlert}
-          </div>
+          <div className="preference cf">{renderedfbAlert}</div>
           <div className="preference cf">
             <h3>What&#39;s your major?</h3>
             <Select
