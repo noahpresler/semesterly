@@ -206,11 +206,11 @@ const UserSettingsModal = () => {
       <div className="preference-wrapper">
         <h3>Accept the terms and conditions</h3>
         <p className="disclaimer">
-          By agreeing, you accept our 
+          By agreeing, you accept our
           <a>
             terms and conditions
           </a>
-          & 
+          &
           <a>
             privacy policy
           </a>
