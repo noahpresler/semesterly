@@ -14,6 +14,8 @@ GNU General Public License for more details.
 
 import PropTypes from 'prop-types';
 import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useActions } from '../../hooks';
 import Select from 'react-select';
 import classnames from 'classnames';
 import { WaveModal } from 'boron-15';
@@ -22,6 +24,15 @@ import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 import { isIncomplete as TOSIncomplete } from '../../util';
 
 const UserSettingsModal = (props) => {
+  const {
+    saveSettings,
+    overrideSettingsShow,
+    changeUserInfo,
+    acceptTOS,
+    setUserSettingsModalVisible,
+    setUserSettingsModalHidden,
+  } = useActions();
+
   // refactor facebook settings to controlled input in order to perform checks and render alert
   const [fbSettings, setfbSettings] = useState({
     shareClassesWithFriends: props.userInfo.social_courses || true,
@@ -39,8 +50,8 @@ const UserSettingsModal = (props) => {
 
   const changeForm = (obj = {}) => {
     const userSettings = { ...props.userInfo, ...obj };
-    props.changeUserInfo(userSettings);
-    props.saveSettings();
+    changeUserInfo(userSettings);
+    saveSettings();
   };
 
   const handleChangefbSettings = (e) => {
@@ -108,8 +119,8 @@ const UserSettingsModal = (props) => {
   const hide = () => {
     if (!props.isUserInfoIncomplete) {
       modal.current.hide();
-      props.setHidden();
-      props.closeUserSettings();
+      setUserSettingsModalHidden();
+      overrideSettingsShow(false);
       setShowDelete(false);
     }
   };
@@ -126,7 +137,7 @@ const UserSettingsModal = (props) => {
         social_all: false,
       };
       const userSettings = Object.assign({}, props.userInfo, newUserSettings);
-      props.changeUserInfo(userSettings);
+      changeUserInfo(userSettings);
     }
   }, []);
 
@@ -142,7 +153,7 @@ const UserSettingsModal = (props) => {
   useEffect(() => {
     if (shouldShow(props)) {
       modal.current.show();
-      props.setVisible();
+      setUserSettingsModalVisible();
     }
   }, [props]);
 
@@ -153,8 +164,8 @@ const UserSettingsModal = (props) => {
       social_courses: fbSettings.shareClassesWithFriends,
       social_all: fbSettings.findNewFriends,
     };
-    props.changeUserInfo(userSettings);
-    props.saveSettings();
+    changeUserInfo(userSettings);
+    saveSettings();
   }, [fbSettings]);
 
   const tos = props.isSigningUp ? (
@@ -168,8 +179,8 @@ const UserSettingsModal = (props) => {
           checked={!TOSIncomplete(props.userInfo.timeAcceptedTos)}
           disabled={!TOSIncomplete(props.userInfo.timeAcceptedTos)}
           onChange={() => {
-            props.acceptTOS();
-            props.changeUserInfo(
+            acceptTOS();
+            changeUserInfo(
               Object.assign({}, props.userInfo, {
                 timeAcceptedTos: String(new Date()),
               }),
