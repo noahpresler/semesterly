@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import React from 'react';
 import { renderWithRedux } from '../../test-utils';
-import UserSettingsModalContainer from '../../ui/containers/modals/user_settings_modal_container';
+import UserSettingsModal from '../../ui/modals/user_settings_modal';
 import { unfilledFixture, filledFixture, googleFixture } from '../../__fixtures__/user_settings_modal.fixture';
 
 describe('User Setting Modal Renders As Expected', () => {
@@ -28,7 +28,7 @@ describe('User Setting Modal Renders As Expected', () => {
         highlightNotifs: false,
       },
     };
-    const { container } = renderWithRedux(<UserSettingsModalContainer />, {
+    const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,
     });
     expect(container).toMatchSnapshot();
@@ -44,7 +44,7 @@ describe('User Setting Modal Renders As Expected', () => {
         highlightNotifs: false,
       },
     };
-    const { container } = renderWithRedux(<UserSettingsModalContainer />, {
+    const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,
     });
     expect(container).toMatchSnapshot();
@@ -62,7 +62,7 @@ describe('User Setting Modal Renders As Expected', () => {
         highlightNotifs: false,
       },
     };
-    const { container } = renderWithRedux(<UserSettingsModalContainer />, {
+    const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,
     });
     expect(container).toMatchSnapshot();
@@ -78,7 +78,7 @@ describe('User Setting Modal Renders As Expected', () => {
         highlightNotifs: false,
       },
     };
-    const { container } = renderWithRedux(<UserSettingsModalContainer />, {
+    const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,
     });
     expect(container).toMatchSnapshot();
