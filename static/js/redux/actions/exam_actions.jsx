@@ -17,7 +17,7 @@ import Cookie from 'js-cookie';
 import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
 import * as ActionTypes from '../constants/actionTypes';
-import { getActiveDenormTimetable } from '../reducers/root_reducer';
+import { getActiveDenormTimetable } from '../reducers';
 import { getRequestShareExamLinkEndpoint, getFinalExamSchedulerEndpoint } from '../constants/endpoints';
 
 // this is a function introduced in #934 to a revert a timetable into the timetable shape from

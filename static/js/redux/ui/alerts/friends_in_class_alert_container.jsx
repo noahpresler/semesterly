@@ -13,7 +13,7 @@ GNU General Public License for more details.
 */
 
 import { connect } from 'react-redux';
-import { getActiveTimetable } from '../../reducers/root_reducer';
+import { getActiveTimetable } from '../../reducers';
 import { setDeclinedNotifications } from '../../util';
 import { logFacebookAlertView, saveSettings } from '../../actions/user_actions';
 import FriendsInClassAlert from './friends_in_class_alert';

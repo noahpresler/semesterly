@@ -2,14 +2,14 @@ import React from 'react';
 import { render as rtlRender } from '@testing-library/react';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import rootReducer from './reducers/root_reducer';
+import reducers from './reducers';
 /* eslint-disable import/prefer-default-export, react/prop-types */
 
 function renderWithRedux(
   ui,
   {
     preloadedState,
-    store = configureStore({ reducer: rootReducer, preloadedState }),
+    store = configureStore({ reducer: reducers, preloadedState }),
     ...renderOptions
   } = {},
 ) {

@@ -13,7 +13,7 @@ GNU General Public License for more details.
 */
 
 import { connect } from 'react-redux';
-import { getActiveTimetableDenormCourses } from '../../../reducers/root_reducer';
+import { getActiveTimetableDenormCourses } from '../../../reducers';
 import TextbookModal from '../../modals/textbook_modal';
 import { toggleTextbookModal } from '../../../actions/modal_actions';
 

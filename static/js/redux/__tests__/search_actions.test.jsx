@@ -1,7 +1,7 @@
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import nock from 'nock';
-import rootReducer from '../reducers/root_reducer';
+import reducers from '../reducers';
 import { maybeSetSemester } from '../actions/search_actions';
 import {
   loggedIn,
@@ -18,8 +18,13 @@ describe('maybeSetSemester', () => {
 
   it('switches for logged in user', () => {
     const store = createStore(
-      rootReducer,
-      { userInfo: loggedIn, timetables: withTimetables, semester: sampleSemesters, entities },
+      combineReducers(reducers),
+      {
+        userInfo: loggedIn,
+        timetables: withTimetables,
+        semester: sampleSemesters,
+        entities,
+      },
       applyMiddleware(thunkMiddleware),
     );
 
@@ -44,7 +49,7 @@ describe('maybeSetSemester', () => {
 
   it('switches for anonymous user without timetables', () => {
     const store = createStore(
-      rootReducer,
+      combineReducers(reducers),
       { semester: sampleSemesters },
       applyMiddleware(thunkMiddleware),
     );
@@ -54,7 +59,7 @@ describe('maybeSetSemester', () => {
 
   it('does not switch for anonymous user with timetables', () => {
     const store = createStore(
-      rootReducer,
+      combineReducers(reducers),
       { semester: sampleSemesters, timetables: withTimetables, entities },
       applyMiddleware(thunkMiddleware),
     );

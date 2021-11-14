@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import CourseModalBody from '../../modals/course_modal_body';
-import { getActiveTimetable, getCurrentSemester } from '../../../reducers/root_reducer';
+import { getActiveTimetable, getCurrentSemester } from '../../../reducers';
 import { getSectionTypeToSections } from '../../../reducers/entities_reducer';
 import { hoverSection } from '../../../actions/timetable_actions';
 import {

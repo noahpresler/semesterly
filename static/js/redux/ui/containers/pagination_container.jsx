@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import { connect } from 'react-redux';
 import Pagination from '../pagination';
-import { getTimetables } from '../../reducers/root_reducer';
+import { getTimetables } from '../../reducers';
 import { setActiveTimetable } from '../../actions/timetable_actions';
 
 const mapStateToProps = state => ({

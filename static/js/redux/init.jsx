@@ -15,11 +15,9 @@ GNU General Public License for more details.
 import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
-import { applyMiddleware, createStore } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import thunkMiddleware from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import rootReducer from './reducers/root_reducer';
+import reducers from './reducers';
 import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
 import {
@@ -39,11 +37,7 @@ import {
 // import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
 
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(applyMiddleware(thunkMiddleware)),
-  // way to use devtools with newer version of redux
-);
+const store = configureStore({ reducer: reducers });
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {

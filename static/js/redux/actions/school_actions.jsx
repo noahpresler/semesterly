@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import { getSchoolInfoEndpoint } from '../constants/endpoints';
 import * as ActionTypes from '../constants/actionTypes';
-import { getCurrentSemester } from '../reducers/root_reducer';
+import { getCurrentSemester } from '../reducers';
 
 export const getSchool = state => state.school.school;
 export const getSemester = (state) => {

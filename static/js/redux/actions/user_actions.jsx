@@ -32,7 +32,7 @@ import {
 } from '../constants/endpoints';
 import {
   getActiveTimetable,
-  getCurrentSemester } from '../reducers/root_reducer';
+  getCurrentSemester } from '../reducers';
 import { fetchCourseClassmates } from './modal_actions';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { receiveCourses } from './search_actions';

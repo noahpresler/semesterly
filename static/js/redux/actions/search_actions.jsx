@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import fetch from 'isomorphic-fetch';
 import { normalize } from 'normalizr';
 import { courseSchema } from '../schema';
-import { getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
+import { getActiveTimetableCourses, getCurrentSemester } from '../reducers';
 import { getCourseSearchEndpoint } from '../constants/endpoints';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
