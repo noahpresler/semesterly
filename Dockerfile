@@ -1,4 +1,5 @@
-FROM semesterly.azurecr.io/semesterly-base-py3:latest
+ARG BASE_IMAGE=jhuopensource/semesterly-base-py3
+FROM $BASE_IMAGE
 # sgerli/horariotec-base:
 RUN mkdir /code
 WORKDIR /code
