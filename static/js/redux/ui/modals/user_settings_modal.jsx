@@ -12,25 +12,44 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
 import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useActions } from '../../hooks';
 import Select from 'react-select';
 import classnames from 'classnames';
 import { WaveModal } from 'boron-15';
 import majors from '../../constants/majors';
-import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 import { isIncomplete as TOSIncomplete } from '../../util';
+import { getIsUserInfoIncomplete } from '../../reducers';
 
-const UserSettingsModal = (props) => {
-  let modal = null;
+const UserSettingsModal = () => {
+  const {
+    saveSettings,
+    overrideSettingsShow,
+    changeUserInfo,
+    acceptTOS,
+    setUserSettingsModalVisible,
+    setUserSettingsModalHidden,
+    deleteUser,
+  } = useActions();
+
+  const userInfo = useSelector(state => state.userInfo.data);
+  const showOverrided = useSelector(state => state.userInfo.overrideShow);
+  const hideOverrided = useSelector(state => state.userInfo.overrideHide);
+  const isUserInfoIncomplete = useSelector(state => getIsUserInfoIncomplete(state));
+  const highlightNotifs = useSelector(state => state.ui.highlightNotifs);
+  const isSigningUp
+    = useSelector(state => !state.userInfo.overrideShow && getIsUserInfoIncomplete(state));
+  const isDeleted = useSelector(state => state.userInfo.isDeleted);
 
   // refactor facebook settings to controlled input in order to perform checks and render alert
   const [fbSettings, setfbSettings] = useState({
-    shareClassesWithFriends: props.userInfo.social_courses || true,
-    shareSectionsWithFriends: props.userInfo.social_offerings || false,
-    findNewFriends: props.userInfo.social_all || false,
+    shareClassesWithFriends: userInfo.social_courses || true,
+    shareSectionsWithFriends: userInfo.social_offerings || false,
+    findNewFriends: userInfo.social_all || false,
   });
 
+  const modal = useRef();
   const tosAgreed = useRef();
 
   const [showDelete, setShowDelete] = useState(false);
@@ -39,17 +58,22 @@ const UserSettingsModal = (props) => {
   const isIncomplete = prop => prop === undefined || prop === '';
 
   const changeForm = (obj = {}) => {
-    const userSettings = { ...props.userInfo, ...obj };
-    props.changeUserInfo(userSettings);
-    props.saveSettings();
+    const userSettings = { ...userInfo, ...obj };
+    changeUserInfo(userSettings);
+    saveSettings();
   };
 
   const handleChangefbSettings = (e) => {
     const name = e.target.name;
     const checked = e.target.checked;
     if (name === 'shareClassesWithFriends') {
-      if (!checked && (fbSettings.shareSectionsWithFriends || fbSettings.findNewFriends)) {
-        setFbSwitchAlertText('Please switch off "find sections with friends" first');
+      if (
+        !checked &&
+        (fbSettings.shareSectionsWithFriends || fbSettings.findNewFriends)
+      ) {
+        setFbSwitchAlertText(
+          'Please switch off "find sections with friends" first',
+        );
         setfbSettings({ ...fbSettings, shareClassesWithFriends: true });
       } else {
         setfbSettings({ ...fbSettings, shareClassesWithFriends: checked });
@@ -60,13 +84,11 @@ const UserSettingsModal = (props) => {
         setFbSwitchAlertText('Please switch off "find new friends" first');
         setfbSettings({ ...fbSettings, shareSectionsWithFriends: true });
       } else if (checked) {
-        setfbSettings(
-          {
-            ...fbSettings,
-            shareClassesWithFriends: true,
-            shareSectionsWithFriends: true,
-          },
-        );
+        setfbSettings({
+          ...fbSettings,
+          shareClassesWithFriends: true,
+          shareSectionsWithFriends: true,
+        });
         setFbSwitchAlertText(null);
       } else {
         setfbSettings({ ...fbSettings, shareSectionsWithFriends: false });
@@ -74,12 +96,11 @@ const UserSettingsModal = (props) => {
       }
     } else if (name === 'findNewFriends') {
       if (checked) {
-        setfbSettings(
-          {
-            shareClassesWithFriends: true,
-            shareSectionsWithFriends: true,
-            findNewFriends: true,
-          });
+        setfbSettings({
+          shareClassesWithFriends: true,
+          shareSectionsWithFriends: true,
+          findNewFriends: true,
+        });
       } else {
         setfbSettings({ ...fbSettings, findNewFriends: false });
       }
@@ -100,15 +121,15 @@ const UserSettingsModal = (props) => {
   };
 
   const shouldShow = () =>
-    props.userInfo.isLoggedIn &&
-    !props.hideOverrided &&
-    (props.showOverrided || props.isUserInfoIncomplete);
+    userInfo.isLoggedIn &&
+    !hideOverrided &&
+    (showOverrided || isUserInfoIncomplete);
 
   const hide = () => {
-    if (!props.isUserInfoIncomplete) {
-      modal.hide();
-      props.setHidden();
-      props.closeUserSettings();
+    if (!isUserInfoIncomplete) {
+      modal.current.hide();
+      setUserSettingsModalHidden();
+      overrideSettingsShow(false);
       setShowDelete(false);
     }
   };
@@ -118,45 +139,45 @@ const UserSettingsModal = (props) => {
   };
 
   useEffect(() => {
-    if (isIncomplete(props.userInfo.social_courses)) {
+    if (isIncomplete(userInfo.social_courses)) {
       const newUserSettings = {
         social_courses: true,
         social_offerings: false,
         social_all: false,
       };
-      const userSettings = Object.assign({}, props.userInfo, newUserSettings);
-      props.changeUserInfo(userSettings);
+      const userSettings = Object.assign({}, userInfo, newUserSettings);
+      changeUserInfo(userSettings);
     }
   }, []);
 
   useEffect(() => {
-    if (props.isDeleted) {
+    if (isDeleted) {
       const link = document.createElement('a');
       link.href = '/user/logout/';
       document.body.appendChild(link);
       link.click();
     }
-  }, [props.isDeleted]);
+  }, [isDeleted]);
 
   useEffect(() => {
-    if (shouldShow(props)) {
-      modal.show();
-      props.setVisible();
+    if (shouldShow()) {
+      modal.current.show();
+      setUserSettingsModalVisible();
     }
-  }, [props]);
+  }, [userInfo.isLoggedIn, hideOverrided, showOverrided, isUserInfoIncomplete]);
 
   useEffect(() => {
     const userSettings = {
-      ...props.userInfo,
+      ...userInfo,
       social_offerings: fbSettings.shareSectionsWithFriends,
       social_courses: fbSettings.shareClassesWithFriends,
       social_all: fbSettings.findNewFriends,
     };
-    props.changeUserInfo(userSettings);
-    props.saveSettings();
+    changeUserInfo(userSettings);
+    saveSettings();
   }, [fbSettings]);
 
-  const tos = props.isSigningUp ? (
+  const tos = isSigningUp ? (
     <div className="preference cf">
       <label className="switch switch-slide" htmlFor="tos-agreed-input">
         <input
@@ -164,12 +185,12 @@ const UserSettingsModal = (props) => {
           id="tos-agreed-input"
           className="switch-input"
           type="checkbox"
-          checked={!TOSIncomplete(props.userInfo.timeAcceptedTos)}
-          disabled={!TOSIncomplete(props.userInfo.timeAcceptedTos)}
+          checked={!TOSIncomplete(userInfo.timeAcceptedTos)}
+          disabled={!TOSIncomplete(userInfo.timeAcceptedTos)}
           onChange={() => {
-            props.acceptTOS();
-            props.changeUserInfo(
-              Object.assign({}, props.userInfo, {
+            acceptTOS();
+            changeUserInfo(
+              Object.assign({}, userInfo, {
                 timeAcceptedTos: String(new Date()),
               }),
             );
@@ -185,13 +206,21 @@ const UserSettingsModal = (props) => {
       <div className="preference-wrapper">
         <h3>Accept the terms and conditions</h3>
         <p className="disclaimer">
-          By agreeing, you accept our <a>terms and conditions</a> & <a>privacy policy</a>.
+          By agreeing, you accept our
+          <a>
+            terms and conditions
+          </a>
+          &
+          <a>
+            privacy policy
+          </a>
+          .
         </p>
       </div>
     </div>
   ) : null;
 
-  const preferences = !props.userInfo.FacebookSignedUp ? null : (
+  const preferences = !userInfo.FacebookSignedUp ? null : (
     <div>
       <div className="preference cf">
         <label className="switch switch-slide" htmlFor="social-courses-input">
@@ -201,7 +230,9 @@ const UserSettingsModal = (props) => {
             className="switch-input"
             type="checkbox"
             checked={fbSettings.shareClassesWithFriends}
-            onChange={(e) => { handleChangefbSettings(e); }}
+            onChange={(e) => {
+              handleChangefbSettings(e);
+            }}
           />
           <span className="switch-label" data-on="Yes" data-off="No" />
           <span className="switch-handle" />
@@ -262,24 +293,25 @@ const UserSettingsModal = (props) => {
       </div>
     </div>
   );
-  const renderedfbAlert = fbSwitchAlertText ?
-    (<div className="alert alert-danger" role="alert">
+  const renderedfbAlert = fbSwitchAlertText ? (
+    <div className="alert alert-danger" role="alert">
       {fbSwitchAlertText}
-    </div>) : null;
+    </div>
+  ) : null;
 
   const fbUpsell =
-    props.userInfo.isLoggedIn && !props.userInfo.FacebookSignedUp ? (
+    userInfo.isLoggedIn && !userInfo.FacebookSignedUp ? (
       <div
         className={classnames(
           'preference welcome-modal__notifications second cf',
-          { 'preference-attn': props.highlightNotifs },
+          { 'preference-attn': highlightNotifs },
         )}
       >
         <button
           className="btn abnb-btn fb-btn"
           onClick={() => {
             const link = document.createElement('a');
-            link.href = `/login/facebook?student_token=${props.userInfo.LoginToken}&login_hash=${props.userInfo.LoginHash}`;
+            link.href = `/login/facebook?student_token=${userInfo.LoginToken}&login_hash=${userInfo.LoginHash}`;
             document.body.appendChild(link);
             link.click();
           }}
@@ -309,7 +341,7 @@ const UserSettingsModal = (props) => {
         <h4 className="delete-btn-text">
           This will delete all timetables and user data!
         </h4>
-        <button className="delete-btn" onClick={() => props.deleteUser()}>
+        <button className="delete-btn" onClick={() => deleteUser()}>
           Delete
         </button>
         <button className="delete-btn cancel-delete" onClick={toggleDelete}>
@@ -325,9 +357,7 @@ const UserSettingsModal = (props) => {
 
   return (
     <WaveModal
-      ref={(c) => {
-        modal = c;
-      }}
+      ref={modal}
       className="welcome-modal max-modal"
       closeOnClick={false}
       keyboard={false}
@@ -337,20 +367,18 @@ const UserSettingsModal = (props) => {
         <div className="modal-header">
           <div
             className="pro-pic"
-            style={{ backgroundImage: `url(${props.userInfo.img_url})` }}
+            style={{ backgroundImage: `url(${userInfo.img_url})` }}
           />
           <h1>Welcome!</h1>
-          {!props.isSigningUp ? cancelButton : null}
+          {!isSigningUp ? cancelButton : null}
         </div>
         <div className="modal-body">
-          <div className="preference cf">
-            {renderedfbAlert}
-          </div>
+          <div className="preference cf">{renderedfbAlert}</div>
           <div className="preference cf">
             <h3>What&#39;s your major?</h3>
             <Select
               name="form-field-name"
-              value={props.userInfo.major}
+              value={userInfo.major}
               options={majors}
               searchable
               onChange={changeMajor}
@@ -360,7 +388,7 @@ const UserSettingsModal = (props) => {
             <h3>What&#39;s your graduating class year?</h3>
             <Select
               name="form-field-name"
-              value={props.userInfo.class_year}
+              value={userInfo.class_year}
               options={[
                 { value: 2021, label: 2021 },
                 { value: 2022, label: 2022 },
@@ -378,7 +406,7 @@ const UserSettingsModal = (props) => {
           {/* { !state.isSigningUp ? notifications : null } */}
           {fbUpsell}
           {tos}
-          {!props.isSigningUp ? deleteDropdown : null}
+          {!isSigningUp ? deleteDropdown : null}
           <div className="button-wrapper">
             <button className="signup-button" onClick={hide}>
               Save
@@ -388,26 +416,6 @@ const UserSettingsModal = (props) => {
       </div>
     </WaveModal>
   );
-};
-
-UserSettingsModal.propTypes = {
-  userInfo: SemesterlyPropTypes.userInfo.isRequired,
-  closeUserSettings: PropTypes.func.isRequired,
-  saveSettings: PropTypes.func.isRequired,
-  changeUserInfo: PropTypes.func.isRequired,
-  // tokenRegistered: PropTypes.bool.isRequired,
-  // unsubscribeToNotifications: PropTypes.func.isRequired,
-  // subscribeToNotifications: PropTypes.func.isRequired,
-  highlightNotifs: PropTypes.bool.isRequired,
-  isUserInfoIncomplete: PropTypes.bool.isRequired,
-  isSigningUp: PropTypes.bool.isRequired,
-  acceptTOS: PropTypes.func.isRequired,
-  setVisible: PropTypes.func.isRequired,
-  setHidden: PropTypes.func.isRequired,
-  deleteUser: PropTypes.func.isRequired,
-  isDeleted: PropTypes.bool.isRequired,
-  hideOverrided: PropTypes.bool.isRequired,
-  showOverrided: PropTypes.bool.isRequired,
 };
 
 export default UserSettingsModal;

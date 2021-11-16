@@ -12,7 +12,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { combineReducers } from 'redux';
 import { createSelector } from 'reselect';
 import { getMaxHourBasedOnWindowHeight } from '../util';
 import school from './school_reducer';
@@ -47,7 +46,7 @@ import finalExamsModal from './final_exams_modal_reducer';
 import registrar from './registrar_reducer';
 import entities, * as fromEntities from './entities_reducer';
 
-const rootReducer = combineReducers({
+const reducers = {
   alerts,
   calendar,
   classmates,
@@ -79,7 +78,7 @@ const rootReducer = combineReducers({
   ui,
   userAcquisitionModal,
   userInfo,
-});
+};
 
 // timetable/entity selectors
 export const getTimetables = state => fromTimetables.getTimetables(state.timetables);
@@ -137,4 +136,4 @@ export const getCourseInfoId = state => fromCourseInfo.getCourseInfoId(state.cou
 export const getIsUserInfoIncomplete = state =>
   fromUserInfo.isUserInfoIncomplete(state.userInfo);
 
-export default rootReducer;
+export default reducers;

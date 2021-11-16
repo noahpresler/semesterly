@@ -17,7 +17,7 @@ const entities = (state = {}, action) => {
         });
     default:
       if (action.response && action.response.entities) {
-        return merge(state, action.response.entities);
+        return merge({}, state, action.response.entities);
       }
       return state;
   }

@@ -195,11 +195,11 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                 <p
                   class="disclaimer"
                 >
-                  By agreeing, you accept our 
+                  By agreeing, you accept our
                   <a>
                     terms and conditions
                   </a>
-                  & 
+                  &
                   <a>
                     privacy policy
                   </a>
@@ -799,11 +799,11 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                 <p
                   class="disclaimer"
                 >
-                  By agreeing, you accept our 
+                  By agreeing, you accept our
                   <a>
                     terms and conditions
                   </a>
-                  & 
+                  &
                   <a>
                     privacy policy
                   </a>

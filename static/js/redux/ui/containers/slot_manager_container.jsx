@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import {
   getActiveDenormTimetable,
   getHoveredSlots,
-  getDenormCourseById } from '../../reducers/root_reducer';
+  getDenormCourseById } from '../../reducers';
 import { fetchCourseInfo } from '../../actions/modal_actions';
 import {
     addCustomSlot,
