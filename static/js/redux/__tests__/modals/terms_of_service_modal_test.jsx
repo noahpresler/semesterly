@@ -12,10 +12,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 import React from 'react';
-import { render } from '@testing-library/react';
 import thunk from 'redux-thunk';
-import Provider from 'react-redux/src/components/Provider';
 import configureMockStore from 'redux-mock-store';
+import { renderWithRedux } from '../../test-utils';
 import {
   tosModalFixture,
   userInfoFixture,
@@ -29,44 +28,38 @@ const mockStore = configureMockStore(middlewares);
 
 describe('TOS Modal', () => {
   it('shows when isVisible is true', () => {
-    const store = mockStore({
+    const initialState = {
       termsOfServiceModal: tosModalFixture,
       userInfo: userInfoFixture,
-    });
+    };
 
-    const { container } = render(
-      <Provider store={store}>
-        <TermsOfServiceModalContainer />
-      </Provider>,
-    );
+    const { container } = renderWithRedux(<TermsOfServiceModalContainer />, {
+      preloadedState: initialState,
+    });
     expect(container).toMatchSnapshot();
   });
 
   it('shows welcome message for new users', () => {
     const newUser = userInfoFixture;
     newUser.data.timeAcceptedTos = null;
-    const store = mockStore({
+    const initialState = {
       termsOfServiceModal: tosModalFixture,
       userInfo: userInfoFixture,
+    };
+    const { container } = renderWithRedux(<TermsOfServiceModalContainer />, {
+      preloadedState: initialState,
     });
-    const { container } = render(
-      <Provider store={store}>
-        <TermsOfServiceModalContainer />
-      </Provider>,
-    );
     expect(container).toMatchSnapshot();
   });
 
   it('is hidden when isVisible is false', () => {
-    const store = mockStore({
+    const initialState = {
       termsOfServiceModal: { ...tosModalFixture, isVisible: false },
       userInfo: userInfoFixture,
+    };
+    const { container } = renderWithRedux(<TermsOfServiceModalContainer />, {
+      preloadedState: initialState,
     });
-    const { container } = render(
-      <Provider store={store}>
-        <TermsOfServiceModalContainer />
-      </Provider>,
-    );
     expect(container).toMatchSnapshot();
   });
 });

@@ -32,8 +32,8 @@ class SubdomainMiddleware(MiddlewareMixin):
 		if subdomain in ACTIVE_SCHOOLS:
 			request.subdomain = subdomain
 		elif subdomain.endswith(nonprod_suffixes):
-			# Default to JHU for non-prod URLs for ease of setup/testing
-			request.subdomain = "jhu"
+			# DO NOT default to JHU for non-prod URLs for ease of setup/testing
+			request.subdomain = None
 		elif subdomain in (prod_suffixes):
 			request.subdomain = None
 		else:

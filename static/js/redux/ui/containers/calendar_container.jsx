@@ -22,7 +22,7 @@ import {
     fetchSISTimetableData,
 } from '../../actions/calendar_actions';
 import { togglePreferenceModal, triggerSaveCalendarModal } from '../../actions/modal_actions';
-import { getMaxEndHour } from '../../reducers/root_reducer';
+import { getMaxEndHour } from '../../reducers';
 
 const mapStateToProps = (state) => {
   const { isFetchingShareLink, shareLink, shareLinkValid } = state.calendar;

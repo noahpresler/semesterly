@@ -13,19 +13,13 @@ GNU General Public License for more details.
 */
 
 import React from 'react';
-import thunk from 'redux-thunk';
-import Provider from 'react-redux/src/components/Provider';
-import configureMockStore from 'redux-mock-store';
-import { render } from '@testing-library/react';
-import UserSettingsModalContainer from '../../ui/containers/modals/user_settings_modal_container';
+import { renderWithRedux } from '../../test-utils';
+import UserSettingsModal from '../../ui/modals/user_settings_modal';
 import { unfilledFixture, filledFixture, googleFixture } from '../../__fixtures__/user_settings_modal.fixture';
-
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
 describe('User Setting Modal Renders As Expected', () => {
   it('VISIBLE if settings unfilled', () => {
-    const store = mockStore({
+    const initialState = {
       userInfo: unfilledFixture.userInfo,
       notificationToken: {
         hasToken: false,
@@ -33,15 +27,15 @@ describe('User Setting Modal Renders As Expected', () => {
       ui: {
         highlightNotifs: false,
       },
+    };
+    const { container } = renderWithRedux(<UserSettingsModal />, {
+      preloadedState: initialState,
     });
-    const { container } = render(
-      <Provider store={store}><UserSettingsModalContainer /></Provider>,
-    );
     expect(container).toMatchSnapshot();
   });
 
   it('HIDDEN if settings filled', () => {
-    const store = mockStore({
+    const initialState = {
       userInfo: filledFixture.userInfo,
       notificationToken: {
         hasToken: false,
@@ -49,17 +43,17 @@ describe('User Setting Modal Renders As Expected', () => {
       ui: {
         highlightNotifs: false,
       },
+    };
+    const { container } = renderWithRedux(<UserSettingsModal />, {
+      preloadedState: initialState,
     });
-    const { container } = render(
-      <Provider store={store}><UserSettingsModalContainer /></Provider>,
-    );
     expect(container).toMatchSnapshot();
   });
 
   it('VISIBLE if settings filled but showOverrided', () => {
     const userInfo = filledFixture.userInfo;
     userInfo.overrideShow = true;
-    const store = mockStore({
+    const initialState = {
       userInfo,
       notificationToken: {
         hasToken: false,
@@ -67,15 +61,15 @@ describe('User Setting Modal Renders As Expected', () => {
       ui: {
         highlightNotifs: false,
       },
+    };
+    const { container } = renderWithRedux(<UserSettingsModal />, {
+      preloadedState: initialState,
     });
-    const { container } = render(
-      <Provider store={store}><UserSettingsModalContainer /></Provider>,
-    );
     expect(container).toMatchSnapshot();
   });
 
   it('VISIBLE but reduced if signing up with Google only', () => {
-    const store = mockStore({
+    const initialState = {
       userInfo: googleFixture.userInfo,
       notificationToken: {
         hasToken: false,
@@ -83,10 +77,10 @@ describe('User Setting Modal Renders As Expected', () => {
       ui: {
         highlightNotifs: false,
       },
+    };
+    const { container } = renderWithRedux(<UserSettingsModal />, {
+      preloadedState: initialState,
     });
-    const { container } = render(
-      <Provider store={store}><UserSettingsModalContainer /></Provider>,
-    );
     expect(container).toMatchSnapshot();
   });
 });

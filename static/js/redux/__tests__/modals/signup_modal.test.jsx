@@ -12,37 +12,28 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 import React from 'react';
-import { render } from '@testing-library/react';
-import thunk from 'redux-thunk';
-import Provider from 'react-redux/src/components/Provider';
-import configureMockStore from 'redux-mock-store';
+import { renderWithRedux } from '../../test-utils';
 import SignupModalContainer from '../../ui/containers/modals/signup_modal_container';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
 describe('Signup Modal', () => {
   it('shows when isVisible is true', () => {
-    const store = mockStore({
+    const initialState = {
       signupModal: { isVisible: true },
+    };
+    const { container } = renderWithRedux(<SignupModalContainer />, {
+      preloadedState: initialState,
     });
-
-    const { container } = render(
-      <Provider store={store}>
-        <SignupModalContainer />
-      </Provider>,
-    );
     expect(container).toMatchSnapshot();
   });
 
   it('is hidden when isVisible is false', () => {
-    const store = mockStore({
+    const initialState = {
       signupModal: { isVisible: false },
-    });
-    const { container } = render(
-      <Provider store={store}>
-        <SignupModalContainer />
-      </Provider>,
+    };
+    const { container } = renderWithRedux(<SignupModalContainer />, {
+      preloadedState: initialState,
+    },
     );
     expect(container).toMatchSnapshot();
   });

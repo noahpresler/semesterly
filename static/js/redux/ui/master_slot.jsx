@@ -13,159 +13,151 @@ GNU General Public License for more details.
 */
 
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import ClickOutHandler from 'react-onclickout';
 import uniq from 'lodash/uniq';
 import Clipboard from 'clipboard';
 import COLOUR_DATA from '../constants/colours';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
-class MasterSlot extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onMasterSlotHover = this.onMasterSlotHover.bind(this);
-    this.onMasterSlotUnhover = this.onMasterSlotUnhover.bind(this);
-    this.updateColours = this.updateColours.bind(this);
-    this.showShareLink = this.showShareLink.bind(this);
-    this.hideShareLink = this.hideShareLink.bind(this);
-    this.state = { shareLinkShown: false };
-  }
-  onMasterSlotHover() {
-    this.setState({ hovered: true });
-    this.updateColours(COLOUR_DATA[this.props.colourIndex].highlight);
-  }
-  onMasterSlotUnhover() {
-    this.setState({ hovered: false });
-    this.updateColours(COLOUR_DATA[this.props.colourIndex].background);
-  }
-  stopPropagation(callback, event) {
-    event.stopPropagation();
-    this.onMasterSlotUnhover();
-    callback();
-  }
-  updateColours(colour) {
-        // no updating when hovering over a masterslot in the course modal (i.e. related course)
-    if (this.props.inModal) {
+const MasterSlot = (props) => {
+  const [shareLinkShown, setShareLinkShown] = useState(false);
+
+  const updateColours = (colour) => {
+    // no updating when hovering over a masterslot in the course modal (i.e. related course)
+    if (props.inModal) {
       return;
     }
-        // update sibling slot colours (i.e. the slots for the same course)
-    $(`.slot-${this.props.course.id}`)
-            .css('background-color', colour);
-  }
-  showShareLink() {
-    this.setState({ shareLinkShown: true });
-    const idEventTarget = `#clipboard-btn-course-${this.props.course.id}`;
+    // update sibling slot colours (i.e. the slots for the same course)
+    $(`.slot-${props.course.id}`).css('background-color', colour);
+  };
+
+  const onMasterSlotHover = () => {
+    updateColours(COLOUR_DATA[props.colourIndex].highlight);
+  };
+  const onMasterSlotUnhover = () => {
+    updateColours(COLOUR_DATA[props.colourIndex].background);
+  };
+  const stopPropagation = (callback, event) => {
+    event.stopPropagation();
+    onMasterSlotUnhover();
+    callback();
+  };
+
+  const showShareLink = () => {
+    setShareLinkShown(true);
+    const idEventTarget = `#clipboard-btn-course-${props.course.id}`;
     const clipboard = new Clipboard(idEventTarget);
     clipboard.on('success', () => {
       $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
     });
-  }
-  hideShareLink() {
-    this.setState({ shareLinkShown: false });
-  }
-  render() {
-    let friendCircles = null;
-    if (this.props.fakeFriends) {
-      friendCircles = new Array(this.props.fakeFriends);
-      for (let i = 0; i < this.props.fakeFriends; i++) {
-        friendCircles[i] =
-          (<div
-            className="ms-friend"
-            key={i}
-            style={{ backgroundImage: 'url(/static/img/blank.jpg)' }}
-          />);
-      }
-    } else {
-      friendCircles = this.props.classmates.current.map(c => (
-        <div
-          className="ms-friend"
-          key={c.img_url}
-          style={{ backgroundImage: `url(${c.img_url})` }}
-        />
-      ));
-    }
+  };
+  const hideShareLink = () => {
+    setShareLinkShown(false);
+  };
 
-    if ((this.props.classmates.current.length > 0 && friendCircles.length > 4)
-            || (this.props.fakeFriends && this.props.fakeFriends > 4)) {
-      const plusMore = `${friendCircles.length - 3}+`;
-      friendCircles = [<div
-        className="ms-friend"
-        key={4}
-      >{plusMore}</div>].concat(friendCircles.slice(0, 3));
+  let friendCircles = null;
+  if (props.fakeFriends) {
+    friendCircles = new Array(props.fakeFriends);
+    for (let i = 0; i < props.fakeFriends; i++) {
+      friendCircles[i] =
+        (<div
+          className="ms-friend"
+          key={i}
+          style={{ backgroundImage: 'url(/static/img/blank.jpg)' }}
+        />);
     }
-    let masterSlotClass = `master-slot slot-${this.props.course.id}`;
-    const validProfs = this.props.professors ? uniq(this.props.professors.filter(p => p)) : false;
-    const prof = !validProfs || validProfs.length === 0 || validProfs[0] === '' ? 'Professor Unlisted' : validProfs.join(', ');
-    masterSlotClass = this.props.onTimetable ? masterSlotClass : `${masterSlotClass} optional`;
-    const numCredits = this.props.course.num_credits;
-    let creditsDisplay = numCredits === 1 ? ' credit' : ' credits';
-    creditsDisplay = numCredits + creditsDisplay;
-    const profDisp = this.props.professors === null ? null : <h3>{ prof }</h3>;
-    const shareLink = this.state.shareLinkShown ?
-            (<ShareLink
-              uniqueId={`course-${this.props.course.id}`}
-              link={this.props.getShareLink(this.props.course.code)}
-              onClickOut={this.hideShareLink}
-              type="Course"
-            />) :
-            null;
-    let waitlistOnlyFlag = null;
-    if (this.props.course.slots !== undefined) {
-      if (this.props.course.slots.length > 0) {
-        if (this.props.course.slots[0].is_section_filled === true) {
-          let flagValue = '';
-          if (this.props.course.is_waitlist_only === true) {
-            flagValue = 'Waitlist Only';
-          } else {
-            flagValue = 'Section Filled';
-          }
-          waitlistOnlyFlag = (<span
-            className="ms-flag"
-            style={{ backgroundColor: COLOUR_DATA[this.props.colourIndex].border }}
-          >{flagValue}</span>);
+  } else {
+    friendCircles = props.classmates.current.map(c => (
+      <div
+        className="ms-friend"
+        key={c.img_url}
+        style={{ backgroundImage: `url(${c.img_url})` }}
+      />
+    ));
+  }
+
+  if ((props.classmates.current.length > 0 && friendCircles.length > 4)
+          || (props.fakeFriends && props.fakeFriends > 4)) {
+    const plusMore = `${friendCircles.length - 3}+`;
+    friendCircles = [<div
+      className="ms-friend"
+      key={4}
+    >{plusMore}</div>].concat(friendCircles.slice(0, 3));
+  }
+  let masterSlotClass = `master-slot slot-${props.course.id}`;
+  const validProfs = props.professors ? uniq(props.professors.filter(p => p)) : false;
+  const prof = !validProfs || validProfs.length === 0 || validProfs[0] === '' ? 'Professor Unlisted' : validProfs.join(', ');
+  masterSlotClass = props.onTimetable ? masterSlotClass : `${masterSlotClass} optional`;
+  const numCredits = props.course.num_credits;
+  let creditsDisplay = numCredits === 1 ? ' credit' : ' credits';
+  creditsDisplay = numCredits + creditsDisplay;
+  const profDisp = props.professors === null ? null : <h3>{ prof }</h3>;
+  const shareLink = shareLinkShown ?
+          (<ShareLink
+            uniqueId={`course-${props.course.id}`}
+            link={props.getShareLink(props.course.code)}
+            onClickOut={hideShareLink}
+            type="Course"
+          />) :
+          null;
+  let waitlistOnlyFlag = null;
+  if (props.course.slots !== undefined) {
+    if (props.course.slots.length > 0) {
+      if (props.course.slots[0].is_section_filled === true) {
+        let flagValue = '';
+        if (props.course.is_waitlist_only === true) {
+          flagValue = 'Waitlist Only';
+        } else {
+          flagValue = 'Section Filled';
         }
+        waitlistOnlyFlag = (<span
+          className="ms-flag"
+          style={{ backgroundColor: COLOUR_DATA[props.colourIndex].border }}
+        >{flagValue}</span>);
       }
     }
-    return (<div
-      className={masterSlotClass}
-      onMouseEnter={this.onMasterSlotHover}
-      onMouseLeave={this.onMasterSlotUnhover}
-      style={{ backgroundColor: COLOUR_DATA[this.props.colourIndex].background }}
-      onClick={this.props.fetchCourseInfo}
-    >
-      <div
-        className="slot-bar"
-        style={{ backgroundColor: COLOUR_DATA[this.props.colourIndex].border }}
-      />
-      <div className="master-slot-content">
-        <h3>
-          <span>{ this.props.course.code }</span>
-          {waitlistOnlyFlag}
-        </h3>
-        <h3>{ this.props.course.name }</h3>
-        { profDisp }
-        <h3>{ creditsDisplay }</h3>
-      </div>
-      <div className="master-slot-actions">
-        <i
-          className="fa fa-share-alt"
-          onClick={event => this.stopPropagation(this.showShareLink, event)}
-        />
-        {shareLink}
-        {
-          !this.props.hideCloseButton ?
-            <i
-              className="fa fa-times"
-              onClick={event => this.stopPropagation(this.props.removeCourse, event)}
-            /> : null
-        }
-      </div>
-      <div className="master-slot-friends">
-        {friendCircles}
-      </div>
-    </div>);
   }
-}
+  return (<div
+    className={masterSlotClass}
+    onMouseEnter={onMasterSlotHover}
+    onMouseLeave={onMasterSlotUnhover}
+    style={{ backgroundColor: COLOUR_DATA[props.colourIndex].background }}
+    onClick={props.fetchCourseInfo}
+  >
+    <div
+      className="slot-bar"
+      style={{ backgroundColor: COLOUR_DATA[props.colourIndex].border }}
+    />
+    <div className="master-slot-content">
+      <h3>
+        <span>{ props.course.code }</span>
+        {waitlistOnlyFlag}
+      </h3>
+      <h3>{ props.course.name }</h3>
+      { profDisp }
+      <h3>{ creditsDisplay }</h3>
+    </div>
+    <div className="master-slot-actions">
+      <i
+        className="fa fa-share-alt"
+        onClick={event => stopPropagation(showShareLink, event)}
+      />
+      {shareLink}
+      {
+        !props.hideCloseButton ?
+          <i
+            className="fa fa-times"
+            onClick={event => stopPropagation(props.removeCourse, event)}
+          /> : null
+      }
+    </div>
+    <div className="master-slot-friends">
+      {friendCircles}
+    </div>
+  </div>
+  );
+};
 
 MasterSlot.defaultProps = {
   inModal: false,
