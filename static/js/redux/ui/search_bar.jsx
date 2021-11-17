@@ -92,9 +92,9 @@ const SearchBar = (props) => {
   });
 
   useEffect(() => {
-    $(document.body).on('keydown', handleKeyDown);
+    $(document).on('keydown', handleKeyDown);
     return () => {
-      $(document.body).off('keydown');
+      $(document).off('keydown');
     };
   }, [handleKeyDown]);
 
@@ -196,7 +196,6 @@ const SearchBar = (props) => {
               setShowDropdown(false);
             }}
             onBlur={() => setInputFocused(false)}
-            focus
           />
         </div>
         <div

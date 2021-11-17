@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import { connect } from 'react-redux';
 import FinalExamsModal from '../../modals/final_exams_modal';
-import { getActiveTimetable } from '../../../reducers/root_reducer';
+import { getActiveTimetable } from '../../../reducers';
 import { fetchFinalExamSchedule, getFinalExamShareLink } from '../../../actions/exam_actions';
 import { logFinalExamView } from '../../../util';
 import { hideFinalExamsModal, triggerAcquisitionModal } from '../../../actions/modal_actions';

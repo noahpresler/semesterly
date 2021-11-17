@@ -12,41 +12,32 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 import React from 'react';
-import { render } from '@testing-library/react';
-import thunk from 'redux-thunk';
-import Provider from 'react-redux/src/components/Provider';
-import configureMockStore from 'redux-mock-store';
+import { renderWithRedux } from '../../test-utils';
 import { userInfoFixture } from '../../__fixtures__/user_acquisition_modal.fixture';
-import UserAcquisitionModalContainer from '../../ui/containers/modals/user_acquisition_modal_container';
+import UserAcquisitionModal from '../../ui/modals/user_acquisition_modal';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
 describe('User Aquisition Modal', () => {
   it('shows when isVisible is true', () => {
-    const store = mockStore({
+    const initialState = {
       userAcquisitionModal: { isVisible: true },
       userInfo: userInfoFixture,
-    });
+    };
 
-    const { container } = render(
-      <Provider store={store}>
-        <UserAcquisitionModalContainer />
-      </Provider>,
-    );
+    const { container } = renderWithRedux(<UserAcquisitionModal />, {
+      preloadedState: initialState,
+    });
     expect(container).toMatchSnapshot();
   });
 
   it('is hidden when isVisible is false', () => {
-    const store = mockStore({
+    const initialState = {
       userAcquisitionModal: { isVisible: false },
       userInfo: userInfoFixture,
+    };
+    const { container } = renderWithRedux(<UserAcquisitionModal />, {
+      preloadedState: initialState,
     });
-    const { container } = render(
-      <Provider store={store}>
-        <UserAcquisitionModalContainer />
-      </Provider>,
-    );
     expect(container).toMatchSnapshot();
   });
 });

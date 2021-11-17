@@ -1,67 +1,69 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TOS Banner Renders As Expected fully if isVisible 1`] = `
-<div
-  className="tos-banner show"
->
-  <p>
-    By using Semester.ly you agree to our
-    <a
-      href="/termsofservice"
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      Terms of Service
-    </a>
-    and
-    <a
-      href="/privacypolicy"
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      Privacy Policy
-    </a>
-  </p>
+<div>
   <div
-    className="tos-banner__close"
-    onClick={[Function]}
+    class="tos-banner show"
   >
-    <i
-      className="fa fa-times"
-    />
+    <p>
+      By using Semester.ly you agree to our
+      <a
+        href="/termsofservice"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Terms of Service
+      </a>
+      and
+      <a
+        href="/privacypolicy"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Privacy Policy
+      </a>
+    </p>
+    <div
+      class="tos-banner__close"
+    >
+      <i
+        class="fa fa-times"
+      />
+    </div>
   </div>
 </div>
 `;
 
 exports[`TOS Banner Renders As Expected null if not isVisible 1`] = `
-<div
-  className="tos-banner"
->
-  <p>
-    By using Semester.ly you agree to our
-    <a
-      href="/termsofservice"
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      Terms of Service
-    </a>
-    and
-    <a
-      href="/privacypolicy"
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      Privacy Policy
-    </a>
-  </p>
+<div>
   <div
-    className="tos-banner__close"
-    onClick={[Function]}
+    class="tos-banner"
   >
-    <i
-      className="fa fa-times"
-    />
+    <p>
+      By using Semester.ly you agree to our
+      <a
+        href="/termsofservice"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Terms of Service
+      </a>
+      and
+      <a
+        href="/privacypolicy"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Privacy Policy
+      </a>
+    </p>
+    <div
+      class="tos-banner__close"
+    >
+      <i
+        class="fa fa-times"
+      />
+    </div>
   </div>
 </div>
 `;

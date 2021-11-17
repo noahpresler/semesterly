@@ -32,7 +32,7 @@ import {
 } from '../constants/endpoints';
 import {
   getActiveTimetable,
-  getCurrentSemester } from '../reducers/root_reducer';
+  getCurrentSemester } from '../reducers';
 import { fetchCourseClassmates } from './modal_actions';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { receiveCourses } from './search_actions';
@@ -507,11 +507,6 @@ export const LogFacebookAlertClick = () => {
     credentials: 'include',
   });
 };
-
-export const changeUserInfo = info => ({
-  type: ActionTypes.CHANGE_USER_INFO,
-  data: info,
-});
 
 export const changeTimetableName = name => (dispatch) => {
   if (name.length === 0 || name.length > MAX_TIMETABLE_NAME_LENGTH) {

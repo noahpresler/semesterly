@@ -18,7 +18,7 @@ import {
     hoverSearchResult,
     maybeSetSemester,
 } from '../../actions/search_actions';
-import { getCurrentSemester, getSearchResults, getHoveredSlots } from '../../reducers/root_reducer';
+import { getCurrentSemester, getSearchResults, getHoveredSlots } from '../../reducers';
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions';
 import SearchBar from '../search_bar';
 import { fetchCourseInfo, showExplorationModal } from '../../actions/modal_actions';

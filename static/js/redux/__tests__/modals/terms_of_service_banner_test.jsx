@@ -14,9 +14,8 @@ GNU General Public License for more details.
 
 import React from 'react';
 import thunk from 'redux-thunk';
-import Provider from 'react-redux/src/components/Provider';
 import configureMockStore from 'redux-mock-store';
-import renderer from 'react-test-renderer';
+import { renderWithRedux } from '../../test-utils';
 import { userInfoFixture } from '../../__fixtures__/terms_of_service_modal.fixture';
 import { handleAgreement } from '../../actions/user_actions';
 import * as ActionTypes from '../../constants/actionTypes';
@@ -33,29 +32,29 @@ beforeEach(() => {
 
 describe('TOS Banner Renders As Expected', () => {
   it('fully if isVisible', () => {
-    const store = mockStore({
+    const initialState = {
       termsOfServiceBanner: {
         isVisible: true,
       },
       userInfo: userInfoFixture,
+    };
+    const { container } = renderWithRedux(<TermsOfServiceBannerContainer />, {
+      preloadedState: initialState,
     });
-    const tree = renderer.create(
-      <Provider store={store}><TermsOfServiceBannerContainer /></Provider>,
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it('null if not isVisible', () => {
-    const store = mockStore({
+    const initialState = {
       termsOfServiceBanner: {
         isVisible: false,
       },
       userInfo: userInfoFixture,
+    };
+    const { container } = renderWithRedux(<TermsOfServiceBannerContainer />, {
+      preloadedState: initialState,
     });
-    const tree = renderer.create(
-      <Provider store={store}><TermsOfServiceBannerContainer /></Provider>,
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });
 
