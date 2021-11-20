@@ -40,7 +40,6 @@ import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
 
-let autoSaveTimer;
 
 export const receiveClassmates = json => dispatch => (
   dispatch({
@@ -341,17 +340,14 @@ export const fetchFriends = () => (dispatch, getState) => {
     });
 };
 
-export const autoSave = (delay = 2000) => (dispatch, getState) => {
-  clearTimeout(autoSaveTimer);
-  autoSaveTimer = setTimeout(() => {
-    const state = getState();
-    const existsSlots = getActiveTimetable(state).slots.length > 0;
-    const existsCustomEvents = state.customSlots.length > 0;
-    if (state.userInfo.data.isLoggedIn && (existsSlots || existsCustomEvents)) {
-      dispatch(saveTimetable(true));
-      clearLocalTimetable();
-    }
-  }, delay);
+export const autoSave = () => (dispatch, getState) => {
+  const state = getState();
+  const existsSlots = getActiveTimetable(state).slots.length > 0;
+  const existsCustomEvents = state.customSlots.length > 0;
+  if (state.userInfo.data.isLoggedIn && (existsSlots || existsCustomEvents)) {
+    dispatch(saveTimetable(true));
+    clearLocalTimetable();
+  }
 };
 
 export const sendRegistrationToken = token => (dispatch) => {

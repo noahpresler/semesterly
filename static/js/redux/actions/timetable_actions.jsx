@@ -111,6 +111,8 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
       if (userData.isLoggedIn && json.timetables.length > 0 && userData.social_courses !== null) {
         dispatch(fetchClassmates(json.timetables[0]));
       }
+      // dispatch only after this promise resolves
+      dispatch(autoSave());
     });
 };
 
@@ -359,7 +361,6 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
   // and they're not trying to lock a new section).
   // otherwise, they're adding it
   dispatch(fetchTimetables(reqBody, removing));
-  dispatch(autoSave());
 };
 
 // fetch timetables with same courses, but updated optional courses/custom slots
