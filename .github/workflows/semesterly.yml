@@ -54,7 +54,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm install
-    - run: npm -g install chromedriver --chromedriver_version=94.0.4606.61
+    - run: npm -g install chromedriver
     - run: npm -g install jest@20
     - run: npm run build --if-present
     - run: npm run lint
