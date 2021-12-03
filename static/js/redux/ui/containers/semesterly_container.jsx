@@ -53,4 +53,4 @@ const SemesterlyContainer = connect(
   },
 )(Semesterly);
 
-export default DragDropContext(HTML5Backend)(SemesterlyContainer);
+export default SemesterlyContainer;
