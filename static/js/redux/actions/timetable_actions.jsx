@@ -433,18 +433,21 @@ export const removeCustomSlot = id => (dispatch) => {
 };
 
 export const updateCustomSlot = (newValues, id) => (dispatch) => {
+  const changedProps = Object.keys(newValues);
+  const onlyChangingName = changedProps.length === 1 && changedProps[0] === 'name';
   if (newValues.time_start !== undefined && newValues.time_start === newValues.time_end) {
     dispatch(removeCustomSlot(id));
     // For some reason, students can drag and drop past midnight
-  } else if (newValues.time_end !== undefined && newValues.time_end <= '24:00') {
+  } else if (
+    onlyChangingName || (newValues.time_end !== undefined &&
+    newValues.time_end <= '24:00')
+  ) {
     dispatch({
       type: ActionTypes.UPDATE_CUSTOM_SLOT,
       newValues,
       id,
     });
   }
-  const changedProps = Object.keys(newValues);
-  const onlyChangingName = changedProps.length === 1 && changedProps[0] === 'name';
   if (onlyChangingName) {
     dispatch(autoSave());
   } else { // only refetch if we are changing the slot time
