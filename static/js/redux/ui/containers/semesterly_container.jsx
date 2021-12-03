@@ -13,8 +13,6 @@ GNU General Public License for more details.
 */
 
 import { connect } from 'react-redux';
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
 import Semesterly from '../semesterly';
 import { saveTimetable } from '../../actions/user_actions';
 import { setActiveTimetable } from '../../actions/timetable_actions';

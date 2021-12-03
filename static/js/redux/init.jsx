@@ -193,5 +193,5 @@ render(
       <SemesterlyContainer />
     </DndProvider>
   </Provider>,
-  document.getElementsByClassName('page')[0]
+  document.getElementsByClassName('page')[0],
 );
