@@ -40,6 +40,9 @@ import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
 
+// temporary fix to allow custom event debounce
+let autoSaveTimer;
+
 
 export const receiveClassmates = json => dispatch => (
   dispatch({
@@ -341,13 +344,18 @@ export const fetchFriends = () => (dispatch, getState) => {
 };
 
 export const autoSave = () => (dispatch, getState) => {
-  const state = getState();
-  const existsSlots = getActiveTimetable(state).slots.length > 0;
-  const existsCustomEvents = state.customSlots.length > 0;
-  if (state.userInfo.data.isLoggedIn && (existsSlots || existsCustomEvents)) {
-    dispatch(saveTimetable(true));
-    clearLocalTimetable();
-  }
+  // add back debounce code to allow custom event name change to be debounced
+  // will remove after refactoring CustomSlot to functional component and adding debouncing logic
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(() => {
+    const state = getState();
+    const existsSlots = getActiveTimetable(state).slots.length > 0;
+    const existsCustomEvents = state.customSlots.length > 0;
+    if (state.userInfo.data.isLoggedIn && (existsSlots || existsCustomEvents)) {
+      dispatch(saveTimetable(true));
+      clearLocalTimetable();
+    }
+  }, 500);
 };
 
 export const sendRegistrationToken = token => (dispatch) => {

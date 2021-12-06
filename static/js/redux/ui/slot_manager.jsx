@@ -139,10 +139,9 @@ class SlotManager extends React.Component {
       });
     }
 
-    // make a copy of the state then perform operation
-    const customObj = this.props.custom.splice();
-    for (let i = 0; i < customObj.length; i++) {
-      const customSlot = customObj[i];
+    // custom slots
+    for (let i = 0; i < this.props.custom.length; i++) {
+      const customSlot = Object.assign({}, this.props.custom[i]);
       customSlot.custom = true;
       customSlot.key = customSlot.id;
       slotsByDay[customSlot.day].push(customSlot);

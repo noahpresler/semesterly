@@ -17,6 +17,8 @@ import React from 'react';
 import { render } from 'react-dom';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 import reducers from './reducers';
 import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
@@ -187,5 +189,9 @@ store.dispatch(
 
 render(
   <Provider store={store}>
-    <SemesterlyContainer />
-  </Provider>, document.getElementsByClassName('page')[0]);
+    <DndProvider backend={HTML5Backend}>
+      <SemesterlyContainer />
+    </DndProvider>
+  </Provider>,
+  document.getElementsByClassName('page')[0],
+);
