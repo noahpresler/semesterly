@@ -22,7 +22,7 @@ const mapStateToProps = state => ({
 });
 
 const TermsOfServiceBannerContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     triggerTermsOfServiceBanner,
     dismissTermsOfServiceBanner,

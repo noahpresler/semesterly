@@ -34,7 +34,7 @@ class ChangeSemesterAlert extends React.Component {
           onClick={() => this.handleClick()}
           className="conflict-alert-btn"
         >
-        Change Semester Anyway
+          Change Semester Anyway
         </button>
         <small className="alert-extra">
           Psst – Signing up allows you to save multiple timetables for all semesters!

@@ -88,17 +88,17 @@ class CourseModal extends React.Component {
     const courseAndDept = data.department && data.department !== '' ?
       (<div>{data.code}, {data.department} </div>) : data.code;
     const shareLink = this.state.shareLinkShown ?
-            (<ShareLink
-              link={this.props.getShareLink(data.code)}
-              uniqueId="modal"
-              type="Course"
-              onClickOut={this.hideShareLink}
-            />) :
-            null;
+      (<ShareLink
+        link={this.props.getShareLink(data.code)}
+        uniqueId="modal"
+        type="Course"
+        onClickOut={this.hideShareLink}
+      />) :
+      null;
     const addOptional = this.props.inRoster ? null :
-            (<div className="modal-save" onClick={() => this.addOrRemoveOptionalCourse(data)}>
-              <i className="fa fa-bookmark" />
-            </div>);
+      (<div className="modal-save" onClick={() => this.addOrRemoveOptionalCourse(data)}>
+        <i className="fa fa-bookmark" />
+      </div>);
     const add = data.sections !== undefined && Object.keys(data.sections).length > 0 ? (<div
       className={classNames('modal-add search-course-add', {
         'in-roster': inRoster,
@@ -108,15 +108,15 @@ class CourseModal extends React.Component {
         this.addOrRemoveCourse(this.props.data.id);
       }}
       onMouseEnter={
-                () => {
-                  this.setState({ addBtnIsHover: true });
-                }
-            }
+        () => {
+          this.setState({ addBtnIsHover: true });
+        }
+      }
       onMouseLeave={
-                () => {
-                  this.setState({ addBtnIsHover: false });
-                }
-            }
+        () => {
+          this.setState({ addBtnIsHover: false });
+        }
+      }
     >
       <i
         className={classNames('fa', {

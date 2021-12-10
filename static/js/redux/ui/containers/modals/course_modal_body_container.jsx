@@ -4,10 +4,10 @@ import { getActiveTimetable, getCurrentSemester } from '../../../reducers';
 import { getSectionTypeToSections } from '../../../reducers/entities_reducer';
 import { hoverSection } from '../../../actions/timetable_actions';
 import {
-    changeUserInfo,
-    fetchCourseInfo,
-    openSignUpModal,
-    react,
+  changeUserInfo,
+  fetchCourseInfo,
+  openSignUpModal,
+  react,
 } from '../../../actions/modal_actions';
 import { saveSettings } from '../../../actions/user_actions';
 import { getSchoolSpecificInfo } from '../../../constants/schools';
@@ -34,8 +34,8 @@ const mapStateToProps = (state, ownProps) => {
         return false;
       }
       return Object.keys(courseSections[courseId]).some(
-                type => courseSections[courseId][type] === section,
-            );
+        type => courseSections[courseId][type] === section,
+      );
     },
     isSectionOnActiveTimetable: (courseId, sectionId) =>
       activeTimetable.slots.some(slot => slot.course === courseId && slot.section === sectionId),

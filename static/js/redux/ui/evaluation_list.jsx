@@ -21,7 +21,6 @@ import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 
 class EvaluationList extends React.Component {
-
   static evalCompare(e1, e2) {
     // Note that Evaluation.year is a string composing of both a semester
     // and a numerical year (e.g "Spring:2015", "Fall:2013"). We first
@@ -53,14 +52,14 @@ class EvaluationList extends React.Component {
     const { evalInfo } = this.props;
 
     const navs = evalInfo
-            .sort((e1, e2) => EvaluationList.evalCompare(e1, e2))
-            .map(e => (<Evaluation evalData={e} key={e.id} mini />));
+      .sort((e1, e2) => EvaluationList.evalCompare(e1, e2))
+      .map(e => (<Evaluation evalData={e} key={e.id} mini />));
 
     const evals = evalInfo
-            .sort((e1, e2) => EvaluationList.evalCompare(e1, e2))
-            .map(e => (<Evaluation evalData={e} key={e.id} />));
+      .sort((e1, e2) => EvaluationList.evalCompare(e1, e2))
+      .map(e => (<Evaluation evalData={e} key={e.id} />));
 
-        // console.log(navs, evals);
+    // console.log(navs, evals);
 
     let evaluationScroller = (
       <p className="empty-intro">
@@ -78,7 +77,7 @@ class EvaluationList extends React.Component {
       customClass = 'spacious-entry';
     }
 
-        // console.log(evaluationScroller)
+    // console.log(evaluationScroller)
 
     return (
       <div className={`modal-entry course-evaluations ${customClass}`}>

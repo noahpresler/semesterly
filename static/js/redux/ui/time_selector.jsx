@@ -17,7 +17,6 @@ import React from 'react';
 import InputRange from 'react-input-range';
 
 class TimeSelector extends React.Component {
-
   componentDidMount() {
     $('.input-range__label-container').filter(i => i % 2 === 0)
       .addClass('input-range__label--max-time');

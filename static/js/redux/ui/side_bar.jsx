@@ -65,7 +65,7 @@ class SideBar extends React.Component {
           <i className="fa fa-clone" />
         </button>
       </div>
-        )) : null;
+    )) : null;
     // TOOD: code duplication between masterslots/optionalslots
     let masterSlots = this.props.mandatoryCourses ?
       this.props.mandatoryCourses.map((course) => {
@@ -101,19 +101,19 @@ class SideBar extends React.Component {
       />);
     }) : null;
     const dropItDown = savedTimetables && savedTimetables.length !== 0 ?
-            (<div
-              className="timetable-drop-it-down"
-              onMouseDown={this.toggleDropdown}
-            >
-              <span className={classNames('tip-down', { down: this.state.showDropdown })} />
-            </div>) : null;
+      (<div
+        className="timetable-drop-it-down"
+        onMouseDown={this.toggleDropdown}
+      >
+        <span className={classNames('tip-down', { down: this.state.showDropdown })} />
+      </div>) : null;
     if (masterSlots.length === 0) {
       masterSlots = (
         <div className="empty-state">
           <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
           <h4>Looks like you don&#39;t have any courses yet!</h4>
           <h3>Your selections will appear here along with credits, professors and friends
-                        in the class</h3>
+            in the class</h3>
         </div>);
     }
     const optionalSlotsHeader = (optionalSlots.length === 0 && masterSlots.length > 3) ? null :
@@ -138,14 +138,14 @@ class SideBar extends React.Component {
     const finalScheduleLink = (masterSlots.length > 0 &&
       this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0
       && this.props.hasLoaded) ?
-            (<div
-              className="final-schedule-link"
-              onClick={this.props.launchFinalExamsModal}
-            >
-              <i className="fa fa-calendar" aria-hidden="true" />
-                See Finals Schedule
-            </div>)
-            : null;
+      (<div
+        className="final-schedule-link"
+        onClick={this.props.launchFinalExamsModal}
+      >
+        <i className="fa fa-calendar" aria-hidden="true" />
+        See Finals Schedule
+      </div>)
+      : null;
     return (
       <div className="side-bar no-print">
         <div className="sb-name">

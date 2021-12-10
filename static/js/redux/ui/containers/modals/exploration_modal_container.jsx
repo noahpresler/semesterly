@@ -20,20 +20,20 @@ import {
 } from '../../../reducers';
 import ExplorationModal from '../../modals/exploration_modal';
 import {
-    clearAdvancedSearchPagination,
-    fetchAdvancedSearchResults,
-    paginateAdvancedSearchResults,
-    setAdvancedSearchResultIndex,
+  clearAdvancedSearchPagination,
+  fetchAdvancedSearchResults,
+  paginateAdvancedSearchResults,
+  setAdvancedSearchResultIndex,
 } from '../../../actions/search_actions';
 import {
-    addOrRemoveCourse,
-    addOrRemoveOptionalCourse,
-    unHoverSection,
+  addOrRemoveCourse,
+  addOrRemoveOptionalCourse,
+  unHoverSection,
 } from '../../../actions/timetable_actions';
 import { getSchoolSpecificInfo } from '../../../constants/schools';
 import {
-    fetchCourseClassmates,
-    hideExplorationModal,
+  fetchCourseClassmates,
+  hideExplorationModal,
 } from '../../../actions/modal_actions';
 import { getCourseShareLinkFromModal } from '../../../constants/endpoints';
 
@@ -64,7 +64,7 @@ const mapStateToProps = (state) => {
 };
 
 const ExplorationModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     hideExplorationModal,
     fetchAdvancedSearchResults,

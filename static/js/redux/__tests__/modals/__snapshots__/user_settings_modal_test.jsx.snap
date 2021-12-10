@@ -40,12 +40,12 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                 What's your major?
               </h3>
               <div
-                class="Select Select--single is-clearable is-searchable"
+                class="Select is-clearable is-searchable Select--single"
               >
                 <div
                   class="Select-control"
                 >
-                  <span
+                  <div
                     class="Select-multi-value-wrapper"
                     id="react-select-6--value"
                   >
@@ -59,30 +59,19 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                       style="display: inline-block;"
                     >
                       <input
-                        role="combobox"
-                        aria-expanded="false"
-                        aria-owns=""
-                        aria-haspopup="false"
                         aria-activedescendant="react-select-6--value"
-                        style="width: 5px; box-sizing: content-box;"
+                        aria-expanded="false"
+                        aria-haspopup="false"
+                        aria-owns=""
+                        role="combobox"
+                        style="box-sizing: content-box; width: 5px;"
                         value=""
                       />
                       <div
-                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;"
                       />
                     </div>
-                  </span>
-                  <span
-                    class="Select-clear-zone"
-                    title="Clear value"
-                    aria-label="Clear value"
-                  >
-                    <span
-                      class="Select-clear"
-                    >
-                      ×
-                    </span>
-                  </span>
+                  </div>
                   <span
                     class="Select-arrow-zone"
                   >
@@ -100,12 +89,12 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                 What's your graduating class year?
               </h3>
               <div
-                class="Select Select--single is-clearable is-searchable"
+                class="Select is-clearable is-searchable Select--single"
               >
                 <div
                   class="Select-control"
                 >
-                  <span
+                  <div
                     class="Select-multi-value-wrapper"
                     id="react-select-7--value"
                   >
@@ -119,19 +108,19 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                       style="display: inline-block;"
                     >
                       <input
-                        role="combobox"
-                        aria-expanded="false"
-                        aria-owns=""
-                        aria-haspopup="false"
                         aria-activedescendant="react-select-7--value"
-                        style="width: 5px; box-sizing: content-box;"
+                        aria-expanded="false"
+                        aria-haspopup="false"
+                        aria-owns=""
+                        role="combobox"
+                        style="box-sizing: content-box; width: 5px;"
                         value=""
                       />
                       <div
-                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;"
                       />
                     </div>
-                  </span>
+                  </div>
                   <span
                     class="Select-arrow-zone"
                   >
@@ -272,17 +261,17 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
                 What's your major?
               </h3>
               <div
-                class="Select Select--single is-clearable is-searchable has-value"
+                class="Select has-value is-clearable is-searchable Select--single"
               >
                 <input
-                  type="hidden"
                   name="form-field-name"
+                  type="hidden"
                   value="Computer Science"
                 />
                 <div
                   class="Select-control"
                 >
-                  <span
+                  <div
                     class="Select-multi-value-wrapper"
                     id="react-select-4--value"
                   >
@@ -303,23 +292,23 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
                       style="display: inline-block;"
                     >
                       <input
-                        role="combobox"
-                        aria-expanded="false"
-                        aria-owns=""
-                        aria-haspopup="false"
                         aria-activedescendant="react-select-4--value"
-                        style="width: 5px; box-sizing: content-box;"
+                        aria-expanded="false"
+                        aria-haspopup="false"
+                        aria-owns=""
+                        role="combobox"
+                        style="box-sizing: content-box; width: 5px;"
                         value=""
                       />
                       <div
-                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;"
                       />
                     </div>
-                  </span>
+                  </div>
                   <span
+                    aria-label="Clear value"
                     class="Select-clear-zone"
                     title="Clear value"
-                    aria-label="Clear value"
                   >
                     <span
                       class="Select-clear"
@@ -344,12 +333,12 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
                 What's your graduating class year?
               </h3>
               <div
-                class="Select Select--single is-clearable is-searchable"
+                class="Select is-clearable is-searchable Select--single"
               >
                 <div
                   class="Select-control"
                 >
-                  <span
+                  <div
                     class="Select-multi-value-wrapper"
                     id="react-select-5--value"
                   >
@@ -363,30 +352,19 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
                       style="display: inline-block;"
                     >
                       <input
-                        role="combobox"
-                        aria-expanded="false"
-                        aria-owns=""
-                        aria-haspopup="false"
                         aria-activedescendant="react-select-5--value"
-                        style="width: 5px; box-sizing: content-box;"
+                        aria-expanded="false"
+                        aria-haspopup="false"
+                        aria-owns=""
+                        role="combobox"
+                        style="box-sizing: content-box; width: 5px;"
                         value=""
                       />
                       <div
-                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;"
                       />
                     </div>
-                  </span>
-                  <span
-                    class="Select-clear-zone"
-                    title="Clear value"
-                    aria-label="Clear value"
-                  >
-                    <span
-                      class="Select-clear"
-                    >
-                      ×
-                    </span>
-                  </span>
+                  </div>
                   <span
                     class="Select-arrow-zone"
                   >
@@ -570,12 +548,12 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                 What's your major?
               </h3>
               <div
-                class="Select Select--single is-clearable is-searchable"
+                class="Select is-clearable is-searchable Select--single"
               >
                 <div
                   class="Select-control"
                 >
-                  <span
+                  <div
                     class="Select-multi-value-wrapper"
                     id="react-select-2--value"
                   >
@@ -589,19 +567,19 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                       style="display: inline-block;"
                     >
                       <input
-                        role="combobox"
-                        aria-expanded="false"
-                        aria-owns=""
-                        aria-haspopup="false"
                         aria-activedescendant="react-select-2--value"
-                        style="width: 5px; box-sizing: content-box;"
+                        aria-expanded="false"
+                        aria-haspopup="false"
+                        aria-owns=""
+                        role="combobox"
+                        style="box-sizing: content-box; width: 5px;"
                         value=""
                       />
                       <div
-                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;"
                       />
                     </div>
-                  </span>
+                  </div>
                   <span
                     class="Select-arrow-zone"
                   >
@@ -619,12 +597,12 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                 What's your graduating class year?
               </h3>
               <div
-                class="Select Select--single is-clearable is-searchable"
+                class="Select is-clearable is-searchable Select--single"
               >
                 <div
                   class="Select-control"
                 >
-                  <span
+                  <div
                     class="Select-multi-value-wrapper"
                     id="react-select-3--value"
                   >
@@ -638,19 +616,19 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings unfilled 1`]
                       style="display: inline-block;"
                     >
                       <input
-                        role="combobox"
-                        aria-expanded="false"
-                        aria-owns=""
-                        aria-haspopup="false"
                         aria-activedescendant="react-select-3--value"
-                        style="width: 5px; box-sizing: content-box;"
+                        aria-expanded="false"
+                        aria-haspopup="false"
+                        aria-owns=""
+                        role="combobox"
+                        style="box-sizing: content-box; width: 5px;"
                         value=""
                       />
                       <div
-                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre;"
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; height: 0px; overflow: scroll; white-space: pre; font-family: -webkit-small-control; letter-spacing: normal; text-transform: none;"
                       />
                     </div>
-                  </span>
+                  </div>
                   <span
                     class="Select-arrow-zone"
                   >

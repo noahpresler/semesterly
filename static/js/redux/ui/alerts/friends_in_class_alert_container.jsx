@@ -55,7 +55,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const FriendsInClassAlertContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps,
 )(FriendsInClassAlert);
 export default FriendsInClassAlertContainer;

@@ -43,7 +43,7 @@ const SortRow = props => (
         <option value={props.chosenMetric.metric}>{props.chosenMetric.metric}</option>
         {props.availMetrics.slice(1).map(m => (
           <option value={m.metric} key={m.metric}>{m.metric}</option>
-                ))}
+        ))}
       </select>
     </div>
     <div
@@ -79,14 +79,14 @@ const SortMenu = ({ metrics, addMetric, removeMetric }) => {
   const selectedMetrics = metrics.filter(m => m.selected);
   const availMetrics = metrics.filter(m => !m.selected);
   const headerRow = selectedMetrics.length > 0 ?
-          (<SortRow
-            addMetric={addMetric}
-            removeMetric={removeMetric}
-            actionText="Sort by"
-            chosenMetric={selectedMetrics[0]}
-            availMetrics={availMetrics}
-          />)
-          : null;
+    (<SortRow
+      addMetric={addMetric}
+      removeMetric={removeMetric}
+      actionText="Sort by"
+      chosenMetric={selectedMetrics[0]}
+      availMetrics={availMetrics}
+    />)
+    : null;
   const middleRows = selectedMetrics.slice(1).map(m => (
     <SortRow
       addMetric={addMetric}
@@ -96,10 +96,10 @@ const SortMenu = ({ metrics, addMetric, removeMetric }) => {
       availMetrics={availMetrics}
       key={m}
     />
-      ));
+  ));
   const footer = availMetrics.length > 0 ?
     <FooterRow addNextMetric={() => addMetric(availMetrics[0].metric)} />
-          : null;
+    : null;
 
   return (
     <div className="sort-menu">

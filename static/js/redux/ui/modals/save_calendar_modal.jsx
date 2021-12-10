@@ -76,33 +76,33 @@ class SaveCalendarModal extends React.Component {
       >
         {modalHeader}
         <div className="save-calendar-modal__container">
-          {/* <button*/}
-          {/*  className="btn abnb-btn" onClick={() => {*/}
-          {/*    if (!this.props.userInfo.isLoggedIn || !this.props.userInfo.GoogleSignedUp ||*/}
-          {/*      !this.props.userInfo.GoogleLoggedIn) {*/}
-          {/*      const link = document.createElement('a');*/}
-          {/*      link.href = `/login/google-oauth2/?next=${location.protocol}//${location.host}*/}
-          {/*      /callback/google_calendar&student_token=${this.props.userInfo.LoginToken}*/}
-          {/*      &login_hash=${this.props.userInfo.LoginHash}`;*/}
-          {/*      document.body.appendChild(link);*/}
-          {/*      link.click();*/}
-          {/*    } else {*/}
-          {/*      this.props.addTTtoGCal();*/}
-          {/*    }*/}
-          {/*  }}*/}
-          {/* >*/}
-          {/*  <span className="img-icon">*/}
-          {/*    { UploadIcon }*/}
-          {/*  </span>*/}
-          {/*  <span>{ DownloadText }</span>*/}
-          {/* </button>*/}
-          {/* <p className="method-details">Add to your Google Calendar in just one click, no*/}
-          {/*              downloads. No*/}
-          {/*              importing.</p>*/}
-          {/* <div className="or-separator">*/}
-          {/*  <span className="h6 or-separator--text">or</span>*/}
-          {/*  <hr />*/}
-          {/* </div>*/}
+          {/* <button */}
+          {/*  className="btn abnb-btn" onClick={() => { */}
+          {/*    if (!this.props.userInfo.isLoggedIn || !this.props.userInfo.GoogleSignedUp || */}
+          {/*      !this.props.userInfo.GoogleLoggedIn) { */}
+          {/*      const link = document.createElement('a'); */}
+          {/*      link.href = `/login/google-oauth2/?next=${location.protocol}//${location.host} */}
+          {/*      /callback/google_calendar&student_token=${this.props.userInfo.LoginToken} */}
+          {/*      &login_hash=${this.props.userInfo.LoginHash}`; */}
+          {/*      document.body.appendChild(link); */}
+          {/*      link.click(); */}
+          {/*    } else { */}
+          {/*      this.props.addTTtoGCal(); */}
+          {/*    } */}
+          {/*  }} */}
+          {/* > */}
+          {/*  <span className="img-icon"> */}
+          {/*    { UploadIcon } */}
+          {/*  </span> */}
+          {/*  <span>{ DownloadText }</span> */}
+          {/* </button> */}
+          {/* <p className="method-details">Add to your Google Calendar in just one click, no */}
+          {/*              downloads. No */}
+          {/*              importing.</p> */}
+          {/* <div className="or-separator"> */}
+          {/*  <span className="h6 or-separator--text">or</span> */}
+          {/*  <hr /> */}
+          {/* </div> */}
           <button
             className="btn abnb-btn secondary" onClick={() => {
               this.props.createICalFromTimetable();
@@ -114,8 +114,8 @@ class SaveCalendarModal extends React.Component {
             <span>Download Calendar</span>
           </button>
           <p className="method-details">Downloads a .ics file which can be uploaded to
-                        Google Calendar, loaded
-                        in to iCal., or any other calendar application.</p>
+            Google Calendar, loaded
+            in to iCal., or any other calendar application.</p>
         </div>
       </WaveModal>
     );

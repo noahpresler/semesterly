@@ -33,8 +33,8 @@ const mapStateToProps = (state) => {
         return false;
       }
       return Object.keys(courseSections[courseId]).some(
-                type => courseSections[courseId][type] === section,
-            );
+        type => courseSections[courseId][type] === section,
+      );
     },
     isSectionOnActiveTimetable: (course, section) =>
       activeTimetable.slots.some(slot => slot.course === course.id && slot.section === section.id),
@@ -42,7 +42,7 @@ const mapStateToProps = (state) => {
 };
 
 const SearchSideBarContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     addCourse: addOrRemoveCourse,
     hoverSection,

@@ -168,7 +168,7 @@ class CourseModalBody extends React.Component {
           emoji={title}
           count={reaction.count} total={totalReactions}
         />);
-      }             // noone has reacted with this emoji yet
+      } // noone has reacted with this emoji yet
       return (<Reaction
         key={title} react={() => this.sendReact(cid, title)} emoji={title} count={0}
         total={totalReactions}
@@ -183,19 +183,19 @@ class CourseModalBody extends React.Component {
     const maxColourIndex = COLOUR_DATA.length - 1;
 
     const similarCourses = relatedCourses.length === 0 ? null :
-            (<div className="modal-module">
-              <h3 className="modal-module-header">Students Also Take</h3>
-              {relatedCourses.map((rc, i) => (<MasterSlot
-                key={rc.id} course={rc}
-                professors={null}
-                colourIndex={Math.min(i, maxColourIndex)}
-                onTimetable
-                hideCloseButton
-                inModal
-                fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
-                getShareLink={this.props.getShareLink}
-              />))}
-            </div>);
+      (<div className="modal-module">
+        <h3 className="modal-module-header">Students Also Take</h3>
+        {relatedCourses.map((rc, i) => (<MasterSlot
+          key={rc.id} course={rc}
+          professors={null}
+          colourIndex={Math.min(i, maxColourIndex)}
+          onTimetable
+          hideCloseButton
+          inModal
+          fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
+          getShareLink={this.props.getShareLink}
+        />))}
+      </div>);
     const courseRegex = new RegExp(this.props.schoolSpecificInfo.courseRegex, 'g');
     const matchedCoursesDescription = this.props.data.description.match(courseRegex);
     const description = this.props.data.description === '' ? 'No description available' :
@@ -284,11 +284,11 @@ class CourseModalBody extends React.Component {
     let friendCircles = (<div className="loading"><span className="img-icon"><div
       className="loader"
     /></span><p>
-            loading...</p></div>);
+      loading...</p></div>);
     let hasTakenCircles = (<div className="loading"><span className="img-icon"><div
       className="loader"
     /></span><p>
-            loading...</p></div>);
+      loading...</p></div>);
     if (!this.props.isFetchingClassmates) {
       friendCircles = this.props.classmates.current.length > 0 ?
         this.props.classmates.current.map(c =>
@@ -333,16 +333,16 @@ class CourseModalBody extends React.Component {
           className="fa fa-facebook"
           aria-hidden="true"
         />Link
-              Facebook</a>) :
-          (<a onClick={this.enableSocial}><i
-            className="fa fa-facebook" aria-hidden="true"
-          />Enable Facebook
-          </a>
-      );
+          Facebook</a>) :
+        (<a onClick={this.enableSocial}><i
+          className="fa fa-facebook" aria-hidden="true"
+        />Enable Facebook
+        </a>
+        );
       hasTakenDisplay = null;
       friendDisplay = (<div className="modal-module friends">
         <h3 className="modal-module-header">Friends In This Course or Who Have Taken This
-                    Course</h3>
+          Course</h3>
         <div id="friends-wrapper">
           <div className="friends__inner">
             <div className="conversion">
@@ -357,14 +357,14 @@ class CourseModalBody extends React.Component {
 
     const textbooksArray = flatMap(Object.keys(textbooks), sectionCode => textbooks[sectionCode]);
     const textbooksDisplay = !textbooksArray || textbooksArray.length === 0 ? null :
-            (<div className="modal-module">
-              <h3 className="modal-module-header">Textbooks</h3>
-              <div className="modal-textbook-list">
-                {
-                    textbooksArray.map(t => <Textbook key={t.isbn} tb={t} />)
-                }
-              </div>
-            </div>);
+      (<div className="modal-module">
+        <h3 className="modal-module-header">Textbooks</h3>
+        <div className="modal-textbook-list">
+          {
+            textbooksArray.map(t => <Textbook key={t.isbn} tb={t} />)
+          }
+        </div>
+      </div>);
 
     const creditsSuffix = numCredits === 1 ? ' credit' : ' credits';
     const avgRating = evalInfo.reduce((sum, e) => sum + parseFloat(e.score), 0) / evalInfo.length;
@@ -386,14 +386,14 @@ class CourseModalBody extends React.Component {
           </div>
         </div>
       </div>
-        );
+    );
     const capacityTracker = (
       <div className="capacity">
         <div className="capacity__tracker-text">
           <span>{parseInt(this.props.popularityPercent, 10)}% of Seats Added on Semesterly</span>
         </div>
       </div>
-        );
+    );
     return (
       <div className="modal-body">
         <div className="cf">
@@ -415,10 +415,10 @@ class CourseModalBody extends React.Component {
             </div>
             { !showCapacityAttention &&
                         capacityTracker
-                        }
+            }
             { showCapacityAttention && this.state.mobile &&
                         attentioncapacityTracker
-                        }
+            }
             { prerequisitesDisplay }
             { posTags }
             { academicSupportDisplay }
@@ -429,10 +429,10 @@ class CourseModalBody extends React.Component {
           <div className="col-8-16">
             { showCapacityAttention && !this.state.mobile &&
                         attentioncapacityTracker
-                        }
+            }
             <h3 className="modal-module-header">Reactions</h3>
             <p>Check out your classmate&apos;s reactions – click an emoji to add your own
-                            opinion!</p>
+              opinion!</p>
             <div className="reactions-wrapper">
               <div className="reactions">
                 {reactionsDisplay}

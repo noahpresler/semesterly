@@ -21,7 +21,6 @@ import { getNextAvailableColour, slotToDisplayOffering } from '../util';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SlotManager extends React.Component {
-
   static getMinutes(timeString) {
     const l = timeString.split(':');
     return ((+l[0]) * 60) + (+l[1]);

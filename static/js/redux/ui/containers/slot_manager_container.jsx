@@ -19,11 +19,11 @@ import {
   getDenormCourseById } from '../../reducers';
 import { fetchCourseInfo } from '../../actions/modal_actions';
 import {
-    addCustomSlot,
-    addOrRemoveCourse,
-    addOrRemoveOptionalCourse,
-    removeCustomSlot,
-    updateCustomSlot,
+  addCustomSlot,
+  addOrRemoveCourse,
+  addOrRemoveOptionalCourse,
+  removeCustomSlot,
+  updateCustomSlot,
 } from '../../actions/timetable_actions';
 import { getSchoolSpecificInfo } from '../../constants/schools';
 import SlotManager from '../slot_manager';
@@ -33,11 +33,11 @@ const mapStateToProps = (state, ownProps) => ({
   slots: getActiveDenormTimetable(state).slots,
   hoveredSlot: getHoveredSlots(state),
   isLocked: (courseId, section) => {
-      // check the courseSections state variable, which tells us
-      // precisely which courses have which sections locked, if any
+    // check the courseSections state variable, which tells us
+    // precisely which courses have which sections locked, if any
     const typeToLocked = state.courseSections.objects[courseId];
     return (typeToLocked !== undefined) && Object.keys(typeToLocked)
-          .some(sectionType => (section === typeToLocked[sectionType]));
+      .some(sectionType => (section === typeToLocked[sectionType]));
   },
   isLoggedIn: state.userInfo.data.isLoggedIn,
   socialSections: state.userInfo.data.social_offerings,
@@ -58,7 +58,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const SlotManagerContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     fetchCourseInfo,
     addOrRemoveOptionalCourse,
