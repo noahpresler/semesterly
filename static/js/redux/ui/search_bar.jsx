@@ -125,8 +125,8 @@ const SearchBar = (props) => {
       <div className="see-more__inner">
         <h4>Don&#39;t see what you&#39;re looking for?</h4>
         <p>Try switching semesters or click <i className="fa fa-compass" /> above to
-                        filter by areas,
-                        departments, times and more!</p>
+          filter by areas,
+          departments, times and more!</p>
       </div>
     </div>
   ) : null;

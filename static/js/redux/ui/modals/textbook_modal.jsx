@@ -84,8 +84,8 @@ class TextbookModal extends React.Component {
                     allTbs.length > 0 ? (
                       <div>
                         <p>Click any textbook to view purchasing options on Amazon, or add to
-                                your Amazon cart for a
-                                quick checkout</p>
+                          your Amazon cart for a
+                          quick checkout</p>
                         <button
                           className="add-to-cart" type="submit" form="aws-cart-form"
                           value="Submit"
@@ -97,8 +97,8 @@ class TextbookModal extends React.Component {
                         </button>
                       </div>) :
                       <p>Signin to view your saved timetables, or check back later to see if
-                            textbooks have been
-                            added!</p>
+                        textbooks have been
+                        added!</p>
 
                 }
       </div>

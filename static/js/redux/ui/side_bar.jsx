@@ -113,7 +113,7 @@ class SideBar extends React.Component {
           <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
           <h4>Looks like you don&#39;t have any courses yet!</h4>
           <h3>Your selections will appear here along with credits, professors and friends
-                        in the class</h3>
+            in the class</h3>
         </div>);
     }
     const optionalSlotsHeader = (optionalSlots.length === 0 && masterSlots.length > 3) ? null :
@@ -143,7 +143,7 @@ class SideBar extends React.Component {
               onClick={this.props.launchFinalExamsModal}
             >
               <i className="fa fa-calendar" aria-hidden="true" />
-                See Finals Schedule
+              See Finals Schedule
             </div>)
             : null;
     return (

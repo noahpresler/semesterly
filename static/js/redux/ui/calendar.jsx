@@ -370,19 +370,19 @@ class Calendar extends React.Component {
                               style={{ width: 49 }}
                             />
                             <th className="fc-day-header fc-widget-header fc-mon">
-                                                    Mon
+                              Mon
                             </th>
                             <th className="fc-day-header fc-widget-header fc-tue">
-                                                    Tue
+                              Tue
                             </th>
                             <th className="fc-day-header fc-widget-header fc-wed">
-                                                    Wed
+                              Wed
                             </th>
                             <th className="fc-day-header fc-widget-header fc-thu">
-                                                    Thu
+                              Thu
                             </th>
                             <th className="fc-day-header fc-widget-header fc-fri">
-                                                    Fri
+                              Fri
                             </th>
                           </tr>
                         </thead>

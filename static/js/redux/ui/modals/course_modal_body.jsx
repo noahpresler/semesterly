@@ -284,11 +284,11 @@ class CourseModalBody extends React.Component {
     let friendCircles = (<div className="loading"><span className="img-icon"><div
       className="loader"
     /></span><p>
-            loading...</p></div>);
+      loading...</p></div>);
     let hasTakenCircles = (<div className="loading"><span className="img-icon"><div
       className="loader"
     /></span><p>
-            loading...</p></div>);
+      loading...</p></div>);
     if (!this.props.isFetchingClassmates) {
       friendCircles = this.props.classmates.current.length > 0 ?
         this.props.classmates.current.map(c =>
@@ -333,7 +333,7 @@ class CourseModalBody extends React.Component {
           className="fa fa-facebook"
           aria-hidden="true"
         />Link
-              Facebook</a>) :
+          Facebook</a>) :
           (<a onClick={this.enableSocial}><i
             className="fa fa-facebook" aria-hidden="true"
           />Enable Facebook
@@ -342,7 +342,7 @@ class CourseModalBody extends React.Component {
       hasTakenDisplay = null;
       friendDisplay = (<div className="modal-module friends">
         <h3 className="modal-module-header">Friends In This Course or Who Have Taken This
-                    Course</h3>
+          Course</h3>
         <div id="friends-wrapper">
           <div className="friends__inner">
             <div className="conversion">
@@ -432,7 +432,7 @@ class CourseModalBody extends React.Component {
                         }
             <h3 className="modal-module-header">Reactions</h3>
             <p>Check out your classmate&apos;s reactions – click an emoji to add your own
-                            opinion!</p>
+              opinion!</p>
             <div className="reactions-wrapper">
               <div className="reactions">
                 {reactionsDisplay}

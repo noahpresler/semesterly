@@ -106,9 +106,9 @@ class PeerModal extends React.Component {
               <div className="peer-card-wrapper upsell cf">
                 <h4>Check back later!</h4>
                 <p className="description">Seems you are the first one here! Add some more
-                        classes to your timetable
-                        or check back later to find peers who have added the same classes as
-                        you!</p>
+                  classes to your timetable
+                  or check back later to find peers who have added the same classes as
+                  you!</p>
               </div>
             </div>);
     const optInClick = this.props.userInfo.isLoggedIn ? this.optInAll : this.optInSignUp;
