@@ -22,7 +22,7 @@ const mapStateToProps = state => ({
 });
 
 const CellContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     addCustomSlot,
     updateCustomSlot,

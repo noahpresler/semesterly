@@ -204,36 +204,36 @@ class PeerModal extends React.Component {
     const ghostCards = !this.props.userInfo.social_all || peerCards.length === 0 ?
       <div>{ghostCard}{ghostCard}{ghostCard}{ghostCard}</div> : null;
     const display = (!this.props.isLoading) ?
-            (<div className="main-modal-wrapper">
-              <div className="pm-header">
-                <h4>Your Classmates</h4>
-                <div className="key">
-                  <div className="key-entry">
-                    <div className="course-color-circle" style={{ backgroundColor: '#ddd' }}>
-                      <i
-                        className="fa fa-check"
-                      /></div>
-                    <p>peer is in your class & section</p>
-                  </div>
-                  <div className="key-entry">
-                    <div className="course-color-circle" style={{ backgroundColor: '#ddd' }} />
-                    <p>peer is in your class only</p>
-                  </div>
-                </div>
-              </div>
-              {!this.props.userInfo.social_all ? upsell : null}
-              {peerCards.length === 0 && this.props.userInfo.social_all ? emptyState : null}
-              {this.props.userInfo.social_all ? peerCards : null}
-              {ghostCards}
-            </div>) :
-            (<div className="main-modal-wrapper">
-              <span className="img-icon">
-                <div className="loader" />
-              </span>
-              <div className="pm-header">
-                <h4>Your Classmates</h4>
-              </div>
-            </div>);
+      (<div className="main-modal-wrapper">
+        <div className="pm-header">
+          <h4>Your Classmates</h4>
+          <div className="key">
+            <div className="key-entry">
+              <div className="course-color-circle" style={{ backgroundColor: '#ddd' }}>
+                <i
+                  className="fa fa-check"
+                /></div>
+              <p>peer is in your class & section</p>
+            </div>
+            <div className="key-entry">
+              <div className="course-color-circle" style={{ backgroundColor: '#ddd' }} />
+              <p>peer is in your class only</p>
+            </div>
+          </div>
+        </div>
+        {!this.props.userInfo.social_all ? upsell : null}
+        {peerCards.length === 0 && this.props.userInfo.social_all ? emptyState : null}
+        {this.props.userInfo.social_all ? peerCards : null}
+        {ghostCards}
+      </div>) :
+      (<div className="main-modal-wrapper">
+        <span className="img-icon">
+          <div className="loader" />
+        </span>
+        <div className="pm-header">
+          <h4>Your Classmates</h4>
+        </div>
+      </div>);
     return (
       <WaveModal
         ref={(c) => { this.modal = c; }}

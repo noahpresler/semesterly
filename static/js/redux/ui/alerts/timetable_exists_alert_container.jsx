@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const TimetableExistsAlertContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps,
 )(TimetableExistsAlert);
 export default TimetableExistsAlertContainer;

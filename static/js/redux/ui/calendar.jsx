@@ -92,11 +92,11 @@ class Calendar extends React.Component {
 
   getTimelineStyle() {
     const now = new Date();
-    if (now.getHours() > this.props.endHour ||  // if the current time is before
+    if (now.getHours() > this.props.endHour || // if the current time is before
         now.getHours() < 8 ||// 8am or after the schedule end
         now.getDay() === 0 || // time or if the current day is
-        now.getDay() === 6    // Saturday or Sunday, then
-        ) { // display no line
+        now.getDay() === 6 // Saturday or Sunday, then
+    ) { // display no line
       return { display: 'none' };
     }
     const diff = Math.abs(new Date() - new Date().setHours(8, 0, 0));
@@ -199,8 +199,8 @@ class Calendar extends React.Component {
         >
           <i
             className={classnames('fa',
-                            { 'fa-share-alt': !this.props.isFetchingShareLink },
-                            { 'fa-spin fa-circle-o-notch': this.props.isFetchingShareLink })}
+              { 'fa-share-alt': !this.props.isFetchingShareLink },
+              { 'fa-spin fa-circle-o-notch': this.props.isFetchingShareLink })}
             onClick={this.showShareLink}
           />
         </button>
@@ -214,15 +214,15 @@ class Calendar extends React.Component {
           <span>Share Calendar</span>
         </ReactTooltip>
       </div>
-        );
+    );
     const shareLink = this.state.shareLinkShown ?
-            (<ShareLink
-              link={this.props.shareLink}
-              uniqueId="timetable"
-              type="Calendar"
-              onClickOut={this.hideShareLink}
-            />) :
-            null;
+      (<ShareLink
+        link={this.props.shareLink}
+        uniqueId="timetable"
+        type="Calendar"
+        onClickOut={this.hideShareLink}
+      />) :
+      null;
     const addButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -243,7 +243,7 @@ class Calendar extends React.Component {
           <span>New Timetable</span>
         </ReactTooltip>
       </div>
-        );
+    );
     const addCustomEventButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -264,7 +264,7 @@ class Calendar extends React.Component {
           <span>Add Custom Event</span>
         </ReactTooltip>
       </div>
-        );
+    );
     const saveToCalendarButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -285,7 +285,7 @@ class Calendar extends React.Component {
           <span>Save to Calendar</span>
         </ReactTooltip>
       </div>
-        );
+    );
     const preferenceButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -306,7 +306,7 @@ class Calendar extends React.Component {
           <span>Preferences</span>
         </ReactTooltip>
       </div>
-        );
+    );
 
 
     const pilotButton = (
@@ -443,7 +443,6 @@ class Calendar extends React.Component {
       </div>
     );
   }
-
 }
 
 Calendar.defaultProps = {

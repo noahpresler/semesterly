@@ -44,7 +44,7 @@ const mapStateToProps = (state) => {
 };
 
 const SemesterlyContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     saveTimetable,
     setPgActive: setActiveTimetable,

@@ -31,7 +31,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const ChangeSemesterAlertContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps,
 )(ChangeSemesterAlert);
 export default ChangeSemesterAlertContainer;

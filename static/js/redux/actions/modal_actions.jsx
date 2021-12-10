@@ -16,9 +16,9 @@ import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 import { normalize } from 'normalizr';
 import {
-    getClassmatesInCourseEndpoint,
-    getCourseInfoEndpoint,
-    getReactToCourseEndpoint,
+  getClassmatesInCourseEndpoint,
+  getCourseInfoEndpoint,
+  getReactToCourseEndpoint,
 } from '../constants/endpoints';
 import { courseSchema } from '../schema';
 import { getSchool, getSemester } from '../actions/school_actions';
@@ -55,10 +55,10 @@ export const fetchCourseInfo = courseId => (dispatch, getState) => {
   fetch(getCourseInfoEndpoint(courseId, getSemester(getState())), {
     credentials: 'include',
   })
-  .then(response => response.json())
-  .then((json) => {
-    dispatch(setCourseInfo(json));
-  });
+    .then(response => response.json())
+    .then((json) => {
+      dispatch(setCourseInfo(json));
+    });
   dispatch(fetchCourseClassmates(courseId));
 };
 
@@ -76,16 +76,16 @@ export const react = (cid, title) => (dispatch) => {
     }),
     credentials: 'include',
   })
-  .then(response => response.json())
-  .then((json) => {
-    if (!json.error) {
-      dispatch({
-        id: cid,
-        type: ActionTypes.SET_COURSE_REACTIONS,
-        reactions: json.reactions,
-      });
-    }
-  });
+    .then(response => response.json())
+    .then((json) => {
+      if (!json.error) {
+        dispatch({
+          id: cid,
+          type: ActionTypes.SET_COURSE_REACTIONS,
+          reactions: json.reactions,
+        });
+      }
+    });
 };
 
 export const togglePreferenceModal = () => ({ type: ActionTypes.TOGGLE_PREFERENCE_MODAL });

@@ -139,10 +139,10 @@ class ExplorationModal extends React.Component {
   fetchAdvancedSearchResultsWrapper() {
     if (this.changeTimer) clearTimeout(this.changeTimer);
     this.changeTimer = setTimeout(() => {
-            // fetchAdvancedSearchResults requires that its argument contain
-            // at least the filters. since this.state has them, we simply pass this.state
-            // as its argument. there are other aspects of state that are irrelevant for the call,
-            // but we include them for the brevity of just passing this.state
+      // fetchAdvancedSearchResults requires that its argument contain
+      // at least the filters. since this.state has them, we simply pass this.state
+      // as its argument. there are other aspects of state that are irrelevant for the call,
+      // but we include them for the brevity of just passing this.state
       this.fetchAdvancedSearchResults(this.state);
       this.changeTimer = false;
     }, 200);
@@ -210,8 +210,8 @@ class ExplorationModal extends React.Component {
     const availableDays = VERBOSE_DAYS;
     const addedDays = [...this.state.addedDays, day];
     addedDays.sort((a, b) => (
-            availableDays.indexOf(a) - availableDays.indexOf(b)
-        ));
+      availableDays.indexOf(a) - availableDays.indexOf(b)
+    ));
     const times = [...this.state.times, {
       min: 8,
       max: 24,
@@ -262,11 +262,11 @@ class ExplorationModal extends React.Component {
     if (active >= 0 && active < advancedSearchResults.length) {
       const selectedCourse = advancedSearchResults[active];
       const shareLink = this.state.shareLinkShown ?
-                (<ShareLink
-                  link={this.props.getShareLink(selectedCourse.code)}
-                  onClickOut={this.hideShareLink}
-                />) :
-                null;
+        (<ShareLink
+          link={this.props.getShareLink(selectedCourse.code)}
+          onClickOut={this.hideShareLink}
+        />) :
+        null;
       courseModal = (
         <div className="modal-content">
           <div className="modal-header">
@@ -277,14 +277,14 @@ class ExplorationModal extends React.Component {
             </div>
             { shareLink }
             {
-                          inRoster ? null :
-                          <div
-                            className="modal-save"
-                            onClick={() => this.addOrRemoveOptionalCourse(selectedCourse)}
-                          >
-                            <i className="fa fa-bookmark" />
-                          </div>
-                      }
+              inRoster ? null :
+              <div
+                  className="modal-save"
+                  onClick={() => this.addOrRemoveOptionalCourse(selectedCourse)}
+                >
+                  <i className="fa fa-bookmark" />
+                </div>
+            }
             <div className="modal-add" onClick={() => this.addOrRemoveCourse(selectedCourse.id)}>
               <i
                 className={classNames('fa', {
@@ -308,32 +308,32 @@ class ExplorationModal extends React.Component {
     }
     const filterTypes = ['departments', 'areas', 'levels'];
     const filters = filterTypes.map(filterType => (
-            this.props[filterType].length === 0 ? null :
-            <Filter
-              results={this.props[filterType]}
-              key={filterType} filterType={filterType}
-              add={this.addFilter} show={this.state[`show_${filterType}`]}
-              isFiltered={this.isFiltered}
-              isFetching={this.props.isFetching}
-              onClickOut={this.hideAll}
-              schoolSpecificInfo={this.props.schoolSpecificInfo}
-            />
-        ));
+      this.props[filterType].length === 0 ? null :
+      <Filter
+          results={this.props[filterType]}
+          key={filterType} filterType={filterType}
+          add={this.addFilter} show={this.state[`show_${filterType}`]}
+          isFiltered={this.isFiltered}
+          isFetching={this.props.isFetching}
+          onClickOut={this.hideAll}
+          schoolSpecificInfo={this.props.schoolSpecificInfo}
+        />
+    ));
     const selectedFilterSections = filterTypes.map((filterType) => {
       if (this.props[filterType].length === 0) {
         return null;
       }
       const availableFilters = this.props[filterType];
-            // sort selected filters according to the order in which they were received from props
+      // sort selected filters according to the order in which they were received from props
       const sortedFilters = this.state[filterType].concat().sort((a, b) => (
-                availableFilters.indexOf(a) - availableFilters.indexOf(b)
-            ));
+        availableFilters.indexOf(a) - availableFilters.indexOf(b)
+      ));
       const selectedItems = sortedFilters.map(name => (
         <SelectedFilter
           key={name} name={name}
           remove={() => this.removeFilter(filterType, name)}
         />
-            ));
+      ));
       const name = this.props.schoolSpecificInfo[`${filterType}Name`];
 
       return (
@@ -381,7 +381,7 @@ class ExplorationModal extends React.Component {
                 this.props.clearPagination();
                 this.fetchAdvancedSearchResultsWrapper();
               }
-                            }
+              }
             />
           </div>
           <div
@@ -420,14 +420,14 @@ class ExplorationModal extends React.Component {
             schoolSpecificInfo={this.props.schoolSpecificInfo}
           />
           {
-                        this.props.isFetching && this.props.page === 1 ? null :
-                        <div className="col-7-16 exp-modal">
-                          { courseModal }
-                        </div>
-                    }
+            this.props.isFetching && this.props.page === 1 ? null :
+            <div className="col-7-16 exp-modal">
+                { courseModal }
+              </div>
+          }
         </div>
       </div>
-        );
+    );
     return (
       <DropModal
         ref={(c) => { this.modal = c; }}

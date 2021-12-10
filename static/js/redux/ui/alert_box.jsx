@@ -19,7 +19,6 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Alert from './alert';
 
 class AlertBox extends React.Component {
-
   /**
    * Generate a key
    * @return {string}
@@ -93,7 +92,7 @@ class AlertBox extends React.Component {
     };
   }
 
-    /**
+  /**
      * Set the style of the alert based on the chosen theme
      */
   setTheme() {

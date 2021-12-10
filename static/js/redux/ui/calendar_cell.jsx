@@ -67,12 +67,12 @@ const createSource = {
   beginDrag(props) {
     const newSlotId = generateCustomEventId();
     props.addCustomSlot(
-            props.time,
-            props.time,
-            props.day,
-            true,
-            newSlotId,
-        );
+      props.time,
+      props.time,
+      props.day,
+      true,
+      newSlotId,
+    );
     return {
       timeStart: props.time,
       day: props.day,
@@ -146,8 +146,8 @@ Cell.propTypes = {
 };
 
 export default DragSource(DRAG_TYPES.CREATE, createSource, collectCreateBegin)(
-    DropTarget(DRAG_TYPES.CREATE, createTarget, collectCreateDrop)(
-        DropTarget(DRAG_TYPES.DRAG, dragTarget, collectDragDrop)(Cell),
-    ),
+  DropTarget(DRAG_TYPES.CREATE, createTarget, collectCreateDrop)(
+    DropTarget(DRAG_TYPES.DRAG, dragTarget, collectDragDrop)(Cell),
+  ),
 );
 

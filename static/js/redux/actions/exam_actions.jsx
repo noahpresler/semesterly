@@ -71,8 +71,8 @@ export const getFinalExamShareLink = () => (dispatch, getState) => {
     method: 'POST',
     body: JSON.stringify(revert(getActiveDenormTimetable(state))),
   })
-  .then(response => response.json())
-  .then((json) => {
-    dispatch({ type: ActionTypes.RECEIVE_EXAMS_SHARE_LINK, link: json.slug });
-  });
+    .then(response => response.json())
+    .then((json) => {
+      dispatch({ type: ActionTypes.RECEIVE_EXAMS_SHARE_LINK, link: json.slug });
+    });
 };

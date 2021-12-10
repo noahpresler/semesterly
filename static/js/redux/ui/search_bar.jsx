@@ -138,11 +138,11 @@ const SearchBar = (props) => {
       </div>
       <SearchSideBarContainer />
     </ul>
-      );
+  );
   const availableSemesters = props.allSemesters.map((semester, index) => {
     const name = ($(window).width() < 767) ?
-              getAbbreviatedSemesterName(semester) :
-              getSemesterName(semester);
+      getAbbreviatedSemesterName(semester) :
+      getSemesterName(semester);
     return (
       <div
         key={name}
@@ -154,8 +154,8 @@ const SearchBar = (props) => {
     );
   });
   const currSem = ($(window).width() < 767) ?
-          getAbbreviatedSemesterName(props.semester) :
-          getSemesterName(props.semester);
+    getAbbreviatedSemesterName(props.semester) :
+    getSemesterName(props.semester);
   const resultsShown = results.length !== 0 && inputFocused && !props.hasHoveredResult;
   return (
     <div className="search-bar no-print">

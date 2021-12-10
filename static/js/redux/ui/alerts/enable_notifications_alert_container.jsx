@@ -29,7 +29,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const EnableNotificationsAlertContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps,
 )(EnableNotificationsAlert);
 export default EnableNotificationsAlertContainer;

@@ -69,40 +69,40 @@ class TextbookModal extends React.Component {
       (<div key={courseName} className="tb-list-entry">
         <h3 className="modal-module-header">{courseName}</h3>
         {
-                    tbs[courseName].length > 0 ? uniqBy(tbs[courseName], tb => tb.isbn).map(tb =>
-                      <Textbook tb={tb} key={tb.isbn} />) :
-                    <p className="no-tbs">No textbooks found for this course.</p>
-                }
+          tbs[courseName].length > 0 ? uniqBy(tbs[courseName], tb => tb.isbn).map(tb =>
+            <Textbook tb={tb} key={tb.isbn} />) :
+          <p className="no-tbs">No textbooks found for this course.</p>
+        }
       </div>),
-        );
+    );
 
     const exists = x => x && x.length > 0 && x !== 'Cannot be found';
 
     const footer = (
       <div className="modal-footer">
         {
-                    allTbs.length > 0 ? (
-                      <div>
-                        <p>Click any textbook to view purchasing options on Amazon, or add to
-                          your Amazon cart for a
-                          quick checkout</p>
-                        <button
-                          className="add-to-cart" type="submit" form="aws-cart-form"
-                          value="Submit"
-                        >
-                          <div className="button-label">
-                            <i className="fa fa-amazon" aria-hidden="true" />
-                            <span>Add to Cart</span>
-                          </div>
-                        </button>
-                      </div>) :
-                      <p>Signin to view your saved timetables, or check back later to see if
-                        textbooks have been
-                        added!</p>
+          allTbs.length > 0 ? (
+            <div>
+              <p>Click any textbook to view purchasing options on Amazon, or add to
+                your Amazon cart for a
+                quick checkout</p>
+              <button
+                className="add-to-cart" type="submit" form="aws-cart-form"
+                value="Submit"
+              >
+                <div className="button-label">
+                  <i className="fa fa-amazon" aria-hidden="true" />
+                  <span>Add to Cart</span>
+                </div>
+              </button>
+            </div>) :
+            <p>Signin to view your saved timetables, or check back later to see if
+              textbooks have been
+              added!</p>
 
-                }
+        }
       </div>
-        );
+    );
 
     const textbookForm = (
       <form
@@ -114,26 +114,26 @@ class TextbookModal extends React.Component {
         <div className="tb-list-container">
           {textbookList}
           {
-                        range(allTbs.length).map((idx) => {
-                          const tb = allTbs[idx];
-                          if (!exists(tb.detail_url)) {
-                            return null;
-                          }
-                          const asin = tb.detail_url.match('/([a-zA-Z0-9]{10})(?:[/?]|$|%3F)')[1];
-                          return (
-                            <div key={asin}>
-                              <input type="hidden" name={`ASIN.${idx}${1}`} value={asin} />
-                              <input type="hidden" name={`Quantity.${idx}${1}`} value="1" />
-                            </div>
-                          );
-                        })
-                    }
+            range(allTbs.length).map((idx) => {
+              const tb = allTbs[idx];
+              if (!exists(tb.detail_url)) {
+                return null;
+              }
+              const asin = tb.detail_url.match('/([a-zA-Z0-9]{10})(?:[/?]|$|%3F)')[1];
+              return (
+                <div key={asin}>
+                  <input type="hidden" name={`ASIN.${idx}${1}`} value={asin} />
+                  <input type="hidden" name={`Quantity.${idx}${1}`} value="1" />
+                </div>
+              );
+            })
+          }
         </div>
 
         {footer}
 
       </form>
-        );
+    );
 
     const loader = (
       <div>
@@ -147,7 +147,7 @@ class TextbookModal extends React.Component {
         </div>
         {footer}
       </div>
-        );
+    );
 
     const emptyState = (
       <div>
@@ -161,7 +161,7 @@ class TextbookModal extends React.Component {
         </div>
         {footer}
       </div>
-        );
+    );
 
     let modalContent = null;
     if (this.props.isLoading) {

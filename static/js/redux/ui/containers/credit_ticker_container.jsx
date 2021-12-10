@@ -21,8 +21,8 @@ const mapStateToProps = state => ({
 });
 
 const CreditTickerContainer = connect(
-    mapStateToProps,
-    {},
+  mapStateToProps,
+  {},
 )(CreditTicker);
 
 export default CreditTickerContainer;

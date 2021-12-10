@@ -38,7 +38,7 @@ const dragSlotTarget = {
     const endHalfhour = convertToHalfHours(timeEnd);
 
     const slotTop = $(`#${props.id}`).offset().top;
-        // number half hours from slot start
+    // number half hours from slot start
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
 
     const newStartHour = convertToHalfHours(props.time_start) + n;
@@ -100,7 +100,6 @@ function collectCreateDrop(connect) { // inject props as drop target
 }
 
 class Slot extends React.Component {
-
   static stopPropagation(callback, event) {
     event.stopPropagation();
     callback();
@@ -199,18 +198,18 @@ class Slot extends React.Component {
 
   render() {
     const removeButton = this.state.hovered ?
-            (<i
-              className="fa fa-times"
-              onClick={event => Slot.stopPropagation(this.props.removeCourse, event)}
-            />) : null;
+      (<i
+        className="fa fa-times"
+        onClick={event => Slot.stopPropagation(this.props.removeCourse, event)}
+      />) : null;
 
     const shortCourseDatesPanel = this.state.hovered && this.props.is_short_course ?
-    (
-      <div className="slot-shortCourseDates">
-        Start Date: <b>{this.props.date_start}</b><br />
-        End Date: <b>{this.props.date_end}</b>
-      </div>
-    ) : null;
+      (
+        <div className="slot-shortCourseDates">
+          Start Date: <b>{this.props.date_start}</b><br />
+          End Date: <b>{this.props.date_end}</b>
+        </div>
+      ) : null;
 
     let lockButton = null;
     let shortCourseIndicator = '';
@@ -228,7 +227,7 @@ class Slot extends React.Component {
         onClick={event => Slot.stopPropagation(this.props.lockOrUnlockSection, event)}
       />);
     } else if (this.state.hovered) { // not a locked section
-     // show unlock icon on hover
+      // show unlock icon on hover
       lockButton = (<i
         title="Lock this section"
         className="fa fa-unlock"
@@ -291,7 +290,7 @@ class Slot extends React.Component {
           </div>
         </StyleRoot>
       </div>,
-        ));
+    ));
   }
 }
 
@@ -324,6 +323,6 @@ Slot.propTypes = {
 };
 
 export default DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(
-    DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(Slot),
+  DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(Slot),
 );
 

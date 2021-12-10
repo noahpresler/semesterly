@@ -21,12 +21,12 @@ import {
   getDenormTimetable } from '../reducers';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
-    browserSupportsLocalStorage,
-    generateCustomEventId,
-    saveLocalActiveIndex,
-    saveLocalCourseSections,
-    saveLocalPreferences,
-    saveLocalSemester,
+  browserSupportsLocalStorage,
+  generateCustomEventId,
+  saveLocalActiveIndex,
+  saveLocalCourseSections,
+  saveLocalPreferences,
+  saveLocalSemester,
 } from '../util';
 import { autoSave, fetchClassmates, lockActiveSections, getUserSavedTimetables } from './user_actions';
 import { receiveCourses } from './search_actions';
@@ -211,7 +211,7 @@ const getSemesterIndex = function getSemesterIndex(allSemesters, oldSemesters) {
   if (cachedSemesterIndex !== null) { // last timetable was cached using old format
     if (cachedSemesterIndex === 'S') { // last timetable was cached using old old format
       cachedSemesterIndex = allSemesters.findIndex(s =>
-       (s.name === 'Spring' || s.name === 'Winter')
+        (s.name === 'Spring' || s.name === 'Winter')
        && s.year === '2017');
     } else if (cachedSemesterIndex === 'F') {
       cachedSemesterIndex = allSemesters.findIndex(s => s.name === 'Fall' && s.year === '2016');

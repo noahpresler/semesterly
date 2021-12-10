@@ -74,7 +74,6 @@ InSlot.propTypes = {
 };
 
 export default class FinalExamsModal extends React.Component {
-
   static generateWeekHeaders(dates) {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const mobileDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];// ['S', 'M', 'T', 'W', 'T', 'F', 'S']
@@ -110,7 +109,7 @@ export default class FinalExamsModal extends React.Component {
         <h3><span className="day">Fri</span></h3>
         <h3><span className="day">Sat</span></h3>
       </div>
-      );
+    );
     const weekDaysHtml = (
       <div className="final-exam-days-ctn" >
         <div className="final-exam-day" />
@@ -121,7 +120,7 @@ export default class FinalExamsModal extends React.Component {
         <div className="final-exam-day" />
         <div className="final-exam-day" />
       </div>
-      );
+    );
     return (
       <div>
         <div className="final-exam-week">

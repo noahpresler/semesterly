@@ -19,7 +19,7 @@ const mapStateToProps = state => ({
   loading: state.timetables.isFetching,
 });
 const TimetableLoaderContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
 )(TimetableLoader);
 
 export default TimetableLoaderContainer;

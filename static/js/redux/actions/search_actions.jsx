@@ -91,12 +91,12 @@ export const fetchSearchResults = query => (dispatch, getState) => {
   fetch(getCourseSearchEndpoint(query, getSemester(state)), {
     credentials: 'include',
   })
-  .then(response => response.json())
-  .then((json) => {
-    if (getState().searchResults.seqNumber === seqNumber) { // this is most recent request
-      dispatch(receiveSearchResults(json));
-    }
-  });
+    .then(response => response.json())
+    .then((json) => {
+      if (getState().searchResults.seqNumber === seqNumber) { // this is most recent request
+        dispatch(receiveSearchResults(json));
+      }
+    });
 };
 
 export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getState) => {
@@ -130,14 +130,14 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
       page: state.explorationModal.page,
     }),
   })
-  .then(response => response.json()) // TODO(rohan): error-check the response
-  .then((json) => {
+    .then(response => response.json()) // TODO(rohan): error-check the response
+    .then((json) => {
     // indicate that courses have been received
-    dispatch({
-      type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
-      response: normalize(json, [courseSchema]),
+      dispatch({
+        type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
+        response: normalize(json, [courseSchema]),
+      });
     });
-  });
 };
 
 export const hoverSearchResult = position => ({

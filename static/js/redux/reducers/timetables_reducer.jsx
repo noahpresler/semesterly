@@ -26,7 +26,6 @@ export const initialState = {
 
 const timetables = (state = initialState, action) => {
   switch (action.type) {
-
     case ActionTypes.LOADING_CACHED_TT:
       return Object.assign({}, state, { loadingCachedTT: true });
 

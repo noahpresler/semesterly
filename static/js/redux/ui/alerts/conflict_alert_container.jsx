@@ -28,7 +28,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const ConflictAlertContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps,
 )(ConflictAlert);
 export default ConflictAlertContainer;
