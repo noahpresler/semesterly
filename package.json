@@ -4,6 +4,8 @@
   "description": "A Timetable Generator",
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
     "autoprefixer": "^7.2.6",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
@@ -24,7 +26,7 @@
     "clipboard": "^1.7.1",
     "css-loader": "^0.28.11",
     "es6-promise": "^4.2.8",
-    "eslint": "^3.19.0",
+    "eslint": "^8.4.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-loader": "^1.7.1",
     "eslint-plugin-import": "^2.25.3",
