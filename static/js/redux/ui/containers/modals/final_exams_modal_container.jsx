@@ -17,7 +17,8 @@ import FinalExamsModal from '../../modals/final_exams_modal';
 import { getActiveTimetable } from '../../../state';
 import { fetchFinalExamSchedule, getFinalExamShareLink } from '../../../actions/exam_actions';
 import { logFinalExamView } from '../../../util';
-import { hideFinalExamsModal, triggerAcquisitionModal } from '../../../actions/modal_actions';
+import { hideFinalExamsModal } from '../../../actions/modal_actions';
+import { userAcquisitionModalActions } from '../../../state/slices';
 
 const remapCourseDetails = (finalExams) => {
   const remap = {};
@@ -85,7 +86,7 @@ const FinalExamsModalContainer = connect(
     hideFinalExamsModal,
     fetchFinalExamSchedule,
     getFinalExamShareLink,
-    launchUserAcquisitionModal: triggerAcquisitionModal,
+    launchUserAcquisitionModal: userAcquisitionModalActions.triggerAcquisitionModal,
   },
 )(FinalExamsModal);
 
