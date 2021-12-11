@@ -1,7 +1,7 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import nock from 'nock';
-import reducers from '../state';
+import { reducers } from '../state';
 import { maybeSetSemester } from '../actions/search_actions';
 import {
   loggedIn,
