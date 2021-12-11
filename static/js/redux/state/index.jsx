@@ -12,6 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+import { configureStore } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { getMaxHourBasedOnWindowHeight } from '../util';
 import school from './school_reducer';
@@ -80,6 +81,8 @@ const reducers = {
   userInfo,
 };
 
+export default store = configureStore({reducer:reducers})
+
 // timetable/entity selectors
 export const getTimetables = state => fromTimetables.getTimetables(state.timetables);
 
@@ -135,5 +138,3 @@ export const getCourseInfoId = state => fromCourseInfo.getCourseInfoId(state.cou
 
 export const getIsUserInfoIncomplete = state =>
   fromUserInfo.isUserInfoIncomplete(state.userInfo);
-
-export default reducers;

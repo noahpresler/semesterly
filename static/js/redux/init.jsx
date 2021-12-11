@@ -14,12 +14,11 @@ GNU General Public License for more details.
 
 import 'babel-polyfill';
 import React from 'react';
+import store from './state';
 import { render } from 'react-dom';
-import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import reducers from './state';
 import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
 import {
@@ -39,7 +38,6 @@ import {
 // import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
 
-const store = configureStore({ reducer: reducers });
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
