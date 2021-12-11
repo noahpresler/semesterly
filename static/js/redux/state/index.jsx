@@ -41,7 +41,7 @@ import integrations from './integrations_reducer';
 import saveCalendarModal from './save_calendar_modal_reducer';
 import termsOfServiceModal from './terms_of_service_modal_reducer';
 import termsOfServiceBanner from './terms_of_service_banner_reducer';
-import userAcquisitionModal from './user_acquisition_modal_reducer';
+import userAcquisitionModal from './slices/userAcquisitionModalSlice';
 import textbookModal from './textbook_modal_reducer';
 import finalExamsModal from './final_exams_modal_reducer';
 import registrar from './registrar_reducer';
@@ -81,7 +81,7 @@ const reducers = {
   userInfo,
 };
 
-export default store = configureStore({reducer:reducers})
+const store = configureStore({reducer:reducers})
 
 // timetable/entity selectors
 export const getTimetables = state => fromTimetables.getTimetables(state.timetables);
@@ -138,3 +138,5 @@ export const getCourseInfoId = state => fromCourseInfo.getCourseInfoId(state.cou
 
 export const getIsUserInfoIncomplete = state =>
   fromUserInfo.isUserInfoIncomplete(state.userInfo);
+
+export default store;

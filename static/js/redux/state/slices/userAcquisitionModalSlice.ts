@@ -21,6 +21,5 @@ const userAcquisitionModalSlice = createSlice({
   },
 });
 
-export const { toggleAcquisitionModal, triggerAcquisitionModal } =
-  userAcquisitionModalSlice.actions;
+export const userAcquisitionModalActions = userAcquisitionModalSlice.actions;
 export default userAcquisitionModalSlice.reducer;

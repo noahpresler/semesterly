@@ -107,10 +107,6 @@ export const showExplorationModal = () => ({ type: ActionTypes.SHOW_EXPLORATION_
 
 export const hideFinalExamsModal = () => ({ type: ActionTypes.HIDE_FINAL_EXAMS_MODAL });
 
-export const triggerAcquisitionModal = () => ({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
-
-export const toggleAcquisitionModal = () => ({ type: ActionTypes.TOGGLE_ACQUISITION_MODAL });
-
 export const toggleIntegrationModal = () => ({ type: ActionTypes.TOGGLE_INTEGRATION_MODAL });
 
 export const togglePeerModal = () => ({ type: ActionTypes.TOGGLE_PEER_MODAL });
