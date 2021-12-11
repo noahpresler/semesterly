@@ -22,7 +22,7 @@ const mapStateToProps = state => ({
 });
 
 const SignupModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     toggleSignupModal: openSignUpModal,
   },

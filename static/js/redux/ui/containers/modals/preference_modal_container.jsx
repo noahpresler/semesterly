@@ -25,7 +25,7 @@ const mapStateToProps = state => ({
 
 
 const PreferenceModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     togglePreferenceModal,
     toggleConflicts,

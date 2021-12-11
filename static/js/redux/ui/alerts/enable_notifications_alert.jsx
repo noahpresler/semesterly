@@ -18,7 +18,6 @@ import { setARegistrationToken } from '../../actions/user_actions';
 import { setDeclinedNotifications } from '../../util';
 
 class EnableNotificationsAlert extends React.Component {
-
   componentWillUnmount() {
     if (!(localStorage.getItem('declinedNotifications') === 'true' || localStorage.getItem('declinedNotifications') === 'false')) {
       const date = new Date();
@@ -55,7 +54,7 @@ class EnableNotificationsAlert extends React.Component {
           occur!
         </small>
         <a className="decline-notifications" onClick={() => this.clickDecline()}>Don&apos;t ask
-                    me again.</a>
+          me again.</a>
       </div>);
   }
 }

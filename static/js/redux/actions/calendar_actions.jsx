@@ -16,10 +16,10 @@ import ical from 'ical-generator';
 import Cookie from 'js-cookie';
 import FileSaver from 'browser-filesaver';
 import {
-    // getAddTTtoGCalEndpoint,
-    getLogiCalEndpoint,
-    getRequestShareTimetableLinkEndpoint,
-    getCourseShareLink,
+  // getAddTTtoGCalEndpoint,
+  getLogiCalEndpoint,
+  getRequestShareTimetableLinkEndpoint,
+  getCourseShareLink,
 } from '../constants/endpoints';
 import { FULL_WEEK_LIST } from '../constants/constants';
 import {
@@ -77,10 +77,10 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
     }),
     credentials: 'include',
   })
-  .then(response => response.json())
-  .then((ref) => {
-    dispatch(receiveShareLink(`${window.location.href.split('/')[2]}/timetables/links/${ref.slug}`));
-  });
+    .then(response => response.json())
+    .then((ref) => {
+      dispatch(receiveShareLink(`${window.location.href.split('/')[2]}/timetables/links/${ref.slug}`));
+    });
 };
 
 export const fetchSISTimetableData = () => (

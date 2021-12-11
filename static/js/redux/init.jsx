@@ -30,11 +30,11 @@ import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo, overrideSettingsShow } from './actions/modal_actions';
 import { receiveCourses } from './actions/search_actions';
 import {
-    browserSupportsLocalStorage,
-    setFirstVisit,
-    setFriendsCookie,
-    timeLapsedGreaterThan,
-    timeLapsedInDays,
+  browserSupportsLocalStorage,
+  setFirstVisit,
+  setFriendsCookie,
+  timeLapsedGreaterThan,
+  timeLapsedInDays,
 } from './util';
 // import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
@@ -184,7 +184,7 @@ const setup = () => (dispatch) => {
 };
 
 store.dispatch(
-    setup(),
+  setup(),
 );
 
 render(

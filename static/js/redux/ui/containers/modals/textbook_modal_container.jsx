@@ -25,7 +25,7 @@ const mapStateToProps = state => ({
 
 
 const TextbookModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     toggleTextbookModal,
   },

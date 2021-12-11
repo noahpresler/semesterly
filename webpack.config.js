@@ -72,6 +72,17 @@ const config = {
         },
       },
       {
+        // add loader option to bundle and transpile typescript 
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: { onlyCompileBundledFiles: true }
+          }
+        ],
+      },
+      {
         test: /\.scss$/,
         exclude: /node_modules/,
         use: ExtractTextPlugin.extract({
@@ -111,7 +122,7 @@ const config = {
     // tells webpack where to look for modules
     modules: ['node_modules'],
     // extensions that should be used to resolve modules
-    extensions: ['.jsx', '.js', '.scss', '.css'],
+    extensions: ['.jsx', '.js', '.ts', '.tsx', '.scss', '.css'],
   },
 };
 

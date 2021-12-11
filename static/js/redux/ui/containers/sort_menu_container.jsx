@@ -15,10 +15,10 @@ GNU General Public License for more details.
 import { connect } from 'react-redux';
 import SortMenu from '../sort_menu';
 import {
-    addMetric,
-    changeMetric,
-    removeMetric,
-    toggleMetricOrder,
+  addMetric,
+  changeMetric,
+  removeMetric,
+  toggleMetricOrder,
 } from '../../actions/timetable_actions';
 
 const mapStateToProps = state => ({
@@ -26,7 +26,7 @@ const mapStateToProps = state => ({
 });
 
 const SortMenuContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     addMetric,
     removeMetric,

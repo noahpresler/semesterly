@@ -24,7 +24,7 @@ const mapStateToProps = state => ({
 });
 
 const TutModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
 )(TutModal);
 
 export default TutModalContainer;

@@ -21,16 +21,16 @@ import {
   getHoveredSlots,
 } from '../../../reducers';
 import {
-    addOrRemoveCourse,
-    addOrRemoveOptionalCourse,
-    unHoverSection,
+  addOrRemoveCourse,
+  addOrRemoveOptionalCourse,
+  unHoverSection,
 } from '../../../actions/timetable_actions';
 import {
-    changeUserInfo,
-    fetchCourseInfo,
-    openSignUpModal,
-    react,
-    setCourseId,
+  changeUserInfo,
+  fetchCourseInfo,
+  openSignUpModal,
+  react,
+  setCourseId,
 } from '../../../actions/modal_actions';
 import { saveSettings } from '../../../actions/user_actions';
 import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../constants/endpoints';
@@ -54,7 +54,7 @@ const mapStateToProps = (state) => {
 };
 
 const CourseModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     hideModal: () => setCourseId(null),
     openSignUpModal,

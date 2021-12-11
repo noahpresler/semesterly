@@ -24,7 +24,7 @@ const mapStateToProps = state => ({
 });
 
 const TopBarContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
 )(TopBar);
 
 export default TopBarContainer;

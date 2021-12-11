@@ -16,19 +16,19 @@ import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 import uniq from 'lodash/uniq';
 import {
-    deleteRegistrationTokenEndpoint,
-    getClassmatesEndpoint,
-    getDeleteTimetableEndpoint,
-    getFriendsEndpoint,
-    getIntegrationEndpoint,
-    getLoadSavedTimetablesEndpoint,
-    getLogFacebookAlertClickEndpoint,
-    getLogFacebookAlertViewEndpoint,
-    getMostClassmatesCountEndpoint,
-    getSaveSettingsEndpoint,
-    getSaveTimetableEndpoint,
-    getSetRegistrationTokenEndpoint,
-    acceptTOSEndpoint,
+  deleteRegistrationTokenEndpoint,
+  getClassmatesEndpoint,
+  getDeleteTimetableEndpoint,
+  getFriendsEndpoint,
+  getIntegrationEndpoint,
+  getLoadSavedTimetablesEndpoint,
+  getLogFacebookAlertClickEndpoint,
+  getLogFacebookAlertViewEndpoint,
+  getMostClassmatesCountEndpoint,
+  getSaveSettingsEndpoint,
+  getSaveTimetableEndpoint,
+  getSetRegistrationTokenEndpoint,
+  acceptTOSEndpoint,
 } from '../constants/endpoints';
 import {
   getActiveTimetable,
@@ -107,15 +107,15 @@ export const fetchMostClassmatesCount = timetable => (dispatch, getState) => {
     credentials: 'include',
     method: 'GET',
   })
-      .then(response => response.json())
-      .then((json) => {
-        dispatch({
-          type: ActionTypes.CHANGE_MOST_FRIENDS_CLASS,
-          classId: json.id,
-          count: json.count,
-          total: json.total_count,
-        });
+    .then(response => response.json())
+    .then((json) => {
+      dispatch({
+        type: ActionTypes.CHANGE_MOST_FRIENDS_CLASS,
+        classId: json.id,
+        count: json.count,
+        total: json.total_count,
       });
+    });
 };
 
 export const fetchClassmates = timetable => (dispatch, getState) => {
@@ -219,15 +219,15 @@ export const duplicateTimetable = timetable => (dispatch, getState) => {
     }),
     credentials: 'include',
   })
-  .then(response => response.json())
-  .then((json) => {
-    dispatch(loadTimetable(json.saved_timetable));
-    dispatch({
-      type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
-      timetables: json.timetables,
+    .then(response => response.json())
+    .then((json) => {
+      dispatch(loadTimetable(json.saved_timetable));
+      dispatch({
+        type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+        timetables: json.timetables,
+      });
+      return json;
     });
-    return json;
-  });
 };
 
 
@@ -236,7 +236,7 @@ export const deleteTimetable = timetable => (dispatch, getState) => {
   if (!state.userInfo.data.isLoggedIn) {
     dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
-    // mark that we're now trying to save this timetable
+  // mark that we're now trying to save this timetable
   dispatch({
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });

@@ -17,8 +17,8 @@ import React from 'react';
 import classnames from 'classnames';
 
 const CourseModalSection = ({ secName, instr, enrolment, waitlist, size, hoverSection,
-                               unHoverSection, locked, lockOrUnlock,
-                               isOnActiveTimetable }) => {
+  unHoverSection, locked, lockOrUnlock,
+  isOnActiveTimetable }) => {
   const seats = size - enrolment;
   let seatStatus = waitlist > 0 ? (`${waitlist} waitlist`) : (`${seats} open`);
   if (seats === -1 || size === -1) {

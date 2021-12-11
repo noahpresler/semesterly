@@ -23,7 +23,7 @@ const mapStateToProps = state => ({
 });
 
 const IntegrationModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     toggleIntegrationModal,
   },

@@ -61,8 +61,8 @@ const userInfo = (state = initialState, action) => {
 
 export const isUserInfoIncomplete = (state) => {
   const fields = state.data.FacebookSignedUp ?
-  ['social_offerings', 'social_courses',
-    'major', 'class_year'] :
+    ['social_offerings', 'social_courses',
+      'major', 'class_year'] :
     ['major', 'class_year'];
   return state.data.isLoggedIn && fields.map(field => state.data[field])
     .some(val => isIncomplete(val));

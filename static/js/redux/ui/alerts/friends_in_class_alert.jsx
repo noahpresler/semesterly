@@ -79,8 +79,8 @@ class FriendsInClassAlert extends React.Component {
         >
           <i className="friends-in-class-done fa fa-check" />
           <small className={'alert-extra'}>
-              You can now see your friends in classes! To revert these changes, head to
-              Account Settings.
+            You can now see your friends in classes! To revert these changes, head to
+            Account Settings.
           </small>
         </div>
         <div

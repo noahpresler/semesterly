@@ -30,7 +30,6 @@ Bubble.propTypes = {
 };
 
 class Pagination extends React.Component {
-
   static getNumBubbles() {
     const bubbles = $(window).width() > 700 ? 10 : 4;
     return bubbles;
@@ -87,7 +86,7 @@ class Pagination extends React.Component {
           active={this.props.active === i}
           setActive={this.props.setActive}
         />,
-            );
+      );
     }
 
     return (

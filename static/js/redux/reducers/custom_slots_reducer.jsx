@@ -38,8 +38,8 @@ const customSlots = (state = [], action) => {
       const newSlot = Object.assign({}, state[tSlotIndex], action.newValues);
       return [...state.slice(0,
         tSlotIndex),
-        newSlot,
-        ...state.slice(tSlotIndex + 1, state.length),
+      newSlot,
+      ...state.slice(tSlotIndex + 1, state.length),
       ];
     }
 

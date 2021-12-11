@@ -23,7 +23,7 @@ const mapStateToProps = state => ({
 });
 
 const PaginationContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     setActive: setActiveTimetable,
   },

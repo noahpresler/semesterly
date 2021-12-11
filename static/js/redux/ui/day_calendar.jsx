@@ -165,17 +165,17 @@ class DayCalendar extends React.Component {
       >
         <i
           className={classnames('fa',
-                        { 'fa-share-alt': !this.props.isFetchingShareLink },
-                        { 'fa-spin fa-circle-o-notch': this.props.isFetchingShareLink })}
+            { 'fa-share-alt': !this.props.isFetchingShareLink },
+            { 'fa-spin fa-circle-o-notch': this.props.isFetchingShareLink })}
         />
       </button>
-        );
+    );
     const shareLink = this.state.shareLinkShown ?
-            (<ShareLink
-              link={this.props.shareLink}
-              onClickOut={this.hideShareLink}
-            />) :
-            null;
+      (<ShareLink
+        link={this.props.shareLink}
+        onClickOut={this.hideShareLink}
+      />) :
+      null;
     const addButton = (
       <button
         onClick={this.props.handleCreateNewTimetable}
@@ -183,12 +183,12 @@ class DayCalendar extends React.Component {
       >
         <i className="fa fa-plus" />
       </button>
-        );
+    );
     const saveButton = (
       <button className="save-timetable add-button" onMouseDown={this.props.saveTimetable}>
         {saveIcon}
       </button>
-        );
+    );
     const preferenceButton = (
       <button
         onClick={this.props.togglePreferenceModal}
@@ -196,7 +196,7 @@ class DayCalendar extends React.Component {
       >
         <i className="fa fa-cog" />
       </button>
-        );
+    );
     const dayPills = DAYS.map((day, i) => (<div
       key={day}
       className="day-pill"
@@ -213,7 +213,7 @@ class DayCalendar extends React.Component {
       >
         <img alt="add" src="static/img/addtocalendar.png" />
       </button>
-        );
+    );
     return (
       <div className="calendar fc fc-ltr fc-unthemed day-calendar">
         <div className="fc-toolbar no-print">

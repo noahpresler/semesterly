@@ -25,19 +25,19 @@ class Evaluation extends React.Component {
     let prof = null;
 
     if (!this.props.mini) { // only show extra information if this eval isn't mini
-            // (i.e. full evaluation, not nav item for full evaluations)
+      // (i.e. full evaluation, not nav item for full evaluations)
       const s = `<p>${evalData.summary.replace(/\u00a0/g, ' ').replace(/\n/g, '<br />')}</p>`;
       details = (
         <div className="eval-item__details">
           {renderHTML(s)}
         </div>
-            );
+      );
       prof = (
         <div className="eval-item__prof"><b>Professor: {evalData.professor}</b></div>
-            );
+      );
     }
 
-        // extract last name (if present)
+    // extract last name (if present)
     const shortProfName = (name) => {
       if (!name) {
         return '';
@@ -56,8 +56,8 @@ class Evaluation extends React.Component {
     };
 
     const year = evalData.year.indexOf(':') > -1 ?
-            evalData.year.replace(':', ' ') :
-            evalData.year;
+      evalData.year.replace(':', ' ') :
+      evalData.year;
     return (
       <div
         className={classnames('eval-item', {
@@ -71,7 +71,7 @@ class Evaluation extends React.Component {
               {year}
               {!evalData.unique_term_year &&
                             shortProfName(evalData.professor)
-                            }
+              }
             </b>
           </div>
           {prof}

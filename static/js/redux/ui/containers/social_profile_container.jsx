@@ -21,7 +21,7 @@ const mapStateToProps = state => ({
 });
 
 const SocialProfileContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     showUserSettings: () => overrideSettingsShow(true),
     triggerAcquisitionModal,

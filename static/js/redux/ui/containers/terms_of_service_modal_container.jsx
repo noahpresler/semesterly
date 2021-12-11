@@ -29,7 +29,7 @@ const mapStateToProps = state => ({
 });
 
 const TermsOfServiceModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     triggerTermsOfServiceModal,
     acceptTOS,

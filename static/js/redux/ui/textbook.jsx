@@ -30,7 +30,7 @@ const Textbook = ({ tb }) => {
     <a href={tb.detail_url} target="_blank" rel="noopener noreferrer">
       {children}
     </a>
-    );
+  );
 
   const textbook = (
     <div className="textbook">
@@ -49,7 +49,7 @@ const Textbook = ({ tb }) => {
         </div>
       }
     </div>
-    );
+  );
 
   return (
     <div className="textbook-ctn">

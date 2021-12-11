@@ -20,15 +20,15 @@ import {
   getDenormCourseById,
   getCoursesFromSlots } from '../../reducers';
 import {
-    fetchCourseInfo,
-    showFinalExamsModal,
-    togglePeerModal,
-    triggerTextbookModal,
+  fetchCourseInfo,
+  showFinalExamsModal,
+  togglePeerModal,
+  triggerTextbookModal,
 } from '../../actions/modal_actions';
 import {
-    addOrRemoveCourse,
-    addOrRemoveOptionalCourse,
-    loadTimetable,
+  addOrRemoveCourse,
+  addOrRemoveOptionalCourse,
+  loadTimetable,
 } from '../../actions/timetable_actions';
 import { deleteTimetable, duplicateTimetable } from '../../actions/user_actions';
 import { getCourseShareLink } from '../../constants/endpoints';
@@ -57,7 +57,7 @@ const mapStateToProps = (state) => {
 };
 
 const SideBarContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     fetchCourseInfo,
     removeCourse: addOrRemoveCourse,

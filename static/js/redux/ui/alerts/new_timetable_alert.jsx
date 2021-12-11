@@ -16,7 +16,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 class NewTimetableAlert extends React.Component {
-
   componentWillUnmount() {
     this.props.dismissSelf();
   }

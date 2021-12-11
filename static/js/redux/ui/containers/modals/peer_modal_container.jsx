@@ -20,8 +20,8 @@ import PeerModal from '../../modals/peer_modal';
 import { openSignUpModal, togglePeerModal } from '../../../actions/modal_actions';
 
 const mapStateToProps = state => ({
-    // don't want to consider courses that are shown on timetable only
-    // because of a 'HOVER_COURSE' action (i.e. fake courses)
+  // don't want to consider courses that are shown on timetable only
+  // because of a 'HOVER_COURSE' action (i.e. fake courses)
   courses: getActiveTimetableDenormCourses(state),
   courseToColourIndex: state.ui.courseToColourIndex,
   peers: state.friends.peers,
@@ -32,7 +32,7 @@ const mapStateToProps = state => ({
 
 
 const PeerModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     fetchFriends,
     saveSettings,

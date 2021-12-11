@@ -80,7 +80,7 @@ const mapStateToProps = (state) => {
 };
 
 const FinalExamsModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     hideFinalExamsModal,
     fetchFinalExamSchedule,
