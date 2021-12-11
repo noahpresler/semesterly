@@ -25,7 +25,7 @@ import { FULL_WEEK_LIST } from '../constants/constants';
 import {
   getCurrentSemester,
   getActiveDenormTimetable,
-  getActiveTimetable } from '../reducers';
+  getActiveTimetable } from '../state';
 import * as ActionTypes from '../constants/actionTypes';
 
 const DAY_MAP = {

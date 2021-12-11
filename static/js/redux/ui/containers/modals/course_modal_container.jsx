@@ -19,7 +19,7 @@ import {
   getDenormCourseById,
   getCourseInfoId,
   getHoveredSlots,
-} from '../../../reducers';
+} from '../../../state';
 import {
   addOrRemoveCourse,
   addOrRemoveOptionalCourse,

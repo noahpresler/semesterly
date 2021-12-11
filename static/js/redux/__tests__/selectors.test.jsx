@@ -1,7 +1,7 @@
 import {
   getSectionTypeToSections,
   getMaxEndHour,
-} from '../reducers/entities_reducer';
+} from '../state/entities_reducer';
 import { revert } from '../actions/exam_actions';
 
 describe('course selectors', () => {

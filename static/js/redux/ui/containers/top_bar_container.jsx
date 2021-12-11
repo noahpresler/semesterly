@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import { connect } from 'react-redux';
 import TopBar from '../top_bar';
-import { getCurrentSemester } from '../../reducers';
+import { getCurrentSemester } from '../../state';
 
 
 const mapStateToProps = state => ({

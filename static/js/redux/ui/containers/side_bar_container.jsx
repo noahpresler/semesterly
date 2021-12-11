@@ -18,7 +18,7 @@ import {
   getActiveTimetable,
   getCurrentSemester,
   getDenormCourseById,
-  getCoursesFromSlots } from '../../reducers';
+  getCoursesFromSlots } from '../../state';
 import {
   fetchCourseInfo,
   showFinalExamsModal,

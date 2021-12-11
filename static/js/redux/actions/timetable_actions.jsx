@@ -18,7 +18,7 @@ import {
   getActiveTimetable,
   getActiveTimetableCourses,
   getCurrentSemester,
-  getDenormTimetable } from '../reducers';
+  getDenormTimetable } from '../state';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
   browserSupportsLocalStorage,
