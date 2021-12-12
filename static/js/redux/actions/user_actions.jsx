@@ -256,34 +256,34 @@ export const deleteTimetable = timetable => (dispatch, getState) => {
     });
 };
 
-export const saveSettings = callback => (dispatch, getState) => {
+export const saveSettings = callback => async (dispatch, getState) => {
   dispatch(userInfoActions.requestSaveUserInfo());
-  fetch(getSaveSettingsEndpoint(), {
-    headers: {
-      'X-CSRFToken': Cookie.get('csrftoken'),
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'PATCH',
-    body: JSON.stringify(getState().userInfo.data),
-    credentials: 'include',
-  })
-    .then((response) => {
-      const state = getState();
-      if (state.userInfo.data.social_courses) {
-        dispatch(fetchClassmates(getActiveTimetable(state)));
-        if (state.courseInfo.id) {
-          dispatch(fetchCourseClassmates(state.courseInfo.id));
-        }
-      }
-      dispatch(userInfoActions.requestSaveUserInfo());
-      return response;
+  // TODO: refactor all fetch promise logic to async/await axios
+  try {
+    await fetch(getSaveSettingsEndpoint(), {
+      headers: {
+        'X-CSRFToken': Cookie.get('csrftoken'),
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      body: JSON.stringify(getState().userInfo.data),
+      credentials: 'include',
     })
-    .then(() => {
-      if (callback) {
-        callback();
-      }
-    });
+  } catch (err) {
+    // TODO: do alert
+  }
+  const state = getState();
+  if (state.userInfo.data.social_courses) {
+    dispatch(fetchClassmates(getActiveTimetable(state)));
+    if (state.courseInfo.id) {
+      dispatch(fetchCourseClassmates(state.courseInfo.id));
+    }
+  }
+  dispatch(userInfoActions.requestSaveUserInfo());
+  if (callback) {
+    callback();
+  }
 };
 
 export const getUserSavedTimetables = semester => (dispatch) => {
