@@ -18,6 +18,7 @@ import { setDeclinedNotifications } from '../../util';
 import { logFacebookAlertView, saveSettings } from '../../actions/user_actions';
 import FriendsInClassAlert from './friends_in_class_alert';
 import * as ActionTypes from '../../constants/actionTypes';
+import { userInfoActions } from '../../state/slices';
 
 const mapStateToProps = (state) => {
   const activeTT = getActiveTimetable(state);
@@ -48,10 +49,7 @@ const mapDispatchToProps = dispatch => ({
   declineNotifications: () => setDeclinedNotifications(true),
   enableNotifications: () => setDeclinedNotifications(false),
   saveSettings: () => dispatch(saveSettings()),
-  changeUserInfo: info => dispatch({
-    type: ActionTypes.CHANGE_USER_INFO,
-    data: info,
-  }),
+  changeUserInfo: info => dispatch(userInfoActions.changeUserInfo(info)),
 });
 
 const FriendsInClassAlertContainer = connect(

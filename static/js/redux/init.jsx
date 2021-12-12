@@ -26,7 +26,8 @@ import {
   lockTimetable,
 } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
-import { fetchCourseClassmates, setCourseInfo, overrideSettingsShow } from './actions/modal_actions';
+import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
+import { userInfoActions } from './state/slices';
 import { receiveCourses } from './actions/search_actions';
 import {
   browserSupportsLocalStorage,
@@ -137,10 +138,7 @@ const handleFlows = featureFlow => (dispatch) => {
       if (!initData.currentUser.isLoggedIn) {
         dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
       } else {
-        dispatch({
-          type: ActionTypes.OVERRIDE_SETTINGS_SHOW,
-          data: true,
-        });
+        dispatch(userInfoActions.overrideSettingsShow(true));
       }
       break;
     case 'FINAL_EXAMS':
@@ -150,7 +148,7 @@ const handleFlows = featureFlow => (dispatch) => {
       dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
       break;
     case 'DELETE_ACCOUNT':
-      dispatch(overrideSettingsShow(true));
+      dispatch(userInfoActions.overrideSettingsShow(true));
       break;
     default:
       // unexpected feature name

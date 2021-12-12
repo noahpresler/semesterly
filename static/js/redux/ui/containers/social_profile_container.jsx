@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import { connect } from 'react-redux';
 import SocialProfile from '../social_profile';
-import { overrideSettingsShow } from '../../actions/modal_actions';
+import { userInfoActions } from '../../state/slices';
 import { userAcquisitionModalActions } from '../../state/slices';
 
 const mapStateToProps = state => ({
@@ -24,7 +24,7 @@ const mapStateToProps = state => ({
 const SocialProfileContainer = connect(
   mapStateToProps,
   {
-    showUserSettings: () => overrideSettingsShow(true),
+    showUserSettings: () => userInfoActions.overrideSettingsShow(true),
     triggerAcquisitionModal: userAcquisitionModalActions.triggerAcquisitionModal,
   },
 )(SocialProfile);

@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions';
+import { userInfoActions } from '../state/slices';
 import { userAcquisitionModalActions } from '../state/slices/userAcquisitionModalSlice';
 /* eslint-disable import/prefer-default-export, react/prop-types */
 
@@ -9,5 +10,5 @@ export const useActions = () => {
   const dispatch = useDispatch();
 
   // @ts-ignore
-  return bindActionCreators({...actionCreators, ...userAcquisitionModalActions}, dispatch);
+  return bindActionCreators({...actionCreators, ...userAcquisitionModalActions, ...userInfoActions}, dispatch);
 };
