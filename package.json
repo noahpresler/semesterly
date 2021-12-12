@@ -139,7 +139,7 @@
     "jest": "^27.2.5",
     "jest-environment-jsdom": "^27.4.4",
     "lint-staged": "^3.6.1",
-    "nock": "^9.6.1",
+    "nock": "^13.2.1",
     "node-sass": "^4.5.2",
     "precommit-hook": "^3.0.0",
     "react-test-utils": "0.0.1",
