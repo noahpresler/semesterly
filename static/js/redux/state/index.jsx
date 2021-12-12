@@ -25,8 +25,7 @@ import preferences from './preferences_reducer';
 import courseInfo, * as fromCourseInfo from './course_info_reducer';
 import alerts from './alerts_reducer';
 import ui from './ui_reducer';
-import * as fromUserInfo from './user_info_reducer';
-import userInfo from './slices/userInfoSlice';
+import userInfo, { isUserInfoIncomplete } from './slices/userInfoSlice';
 import savingTimetable from './saving_timetable_reducer';
 import classmates from './classmates_reducer';
 import optionalCourses from './optional_courses_reducer';
@@ -138,6 +137,6 @@ export const getDenormAdvancedSearchResults = state =>
 export const getCourseInfoId = state => fromCourseInfo.getCourseInfoId(state.courseInfo);
 
 export const getIsUserInfoIncomplete = state =>
-  fromUserInfo.isUserInfoIncomplete(state.userInfo);
+  isUserInfoIncomplete(state.userInfo);
 
 export default store;

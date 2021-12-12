@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initAllState } from '../../actions';
+import { isIncomplete } from '../../util';
 
 interface UserData {
   FacebookSignedUp: boolean,
@@ -87,6 +88,15 @@ const userInfoSlice = createSlice({
       })
   },
 });
+
+export const isUserInfoIncomplete = (state:UserInfoReducerState) => {
+  const fields = state.data.FacebookSignedUp ?
+    ['social_offerings', 'social_courses',
+      'major', 'class_year'] :
+    ['major', 'class_year'];
+  return state.data.isLoggedIn && fields.map(field => state.data[field])
+    .some(val => isIncomplete(val));
+};
 
 export const userInfoActions = userInfoSlice.actions;
 export default userInfoSlice.reducer
