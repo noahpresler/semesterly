@@ -134,6 +134,7 @@
   "devDependencies": {
     "@testing-library/react": "^12.1.2",
     "@types/jest": "^27.0.3",
+    "@types/js-cookie": "^3.0.1",
     "jest": "^27.2.5",
     "jest-environment-jsdom": "^27.4.4",
     "lint-staged": "^3.6.1",
