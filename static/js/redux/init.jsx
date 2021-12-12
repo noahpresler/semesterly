@@ -27,7 +27,7 @@ import {
 } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
-import { userInfoActions } from './state/slices';
+import { userAcquisitionModalActions, userInfoActions } from './state/slices';
 import { receiveCourses } from './actions/search_actions';
 import {
   browserSupportsLocalStorage,
@@ -91,10 +91,10 @@ const showFriendAlert = () => (dispatch) => {
 const handleFlows = featureFlow => (dispatch) => {
   switch (featureFlow.name) {
     case 'SIGNUP':
-      dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
+      dispatch(userAcquisitionModalActions.triggerAcquisitionModal());
       break;
     case 'USER_ACQ':
-      dispatch({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
+      dispatch(userAcquisitionModalActions.triggerAcquisitionModal());
       break;
     // case 'GCAL_CALLBACK':
       // hide settings info modal until user is finished adding to gcal

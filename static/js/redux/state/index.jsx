@@ -81,7 +81,7 @@ export const reducers = {
   userInfo,
 };
 
-const store = configureStore({reducer:reducers})
+const store = configureStore({ reducer: reducers });
 
 // timetable/entity selectors
 export const getTimetables = state => fromTimetables.getTimetables(state.timetables);

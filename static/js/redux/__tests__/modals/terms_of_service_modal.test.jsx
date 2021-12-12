@@ -11,7 +11,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
-import "@testing-library/jest-dom/extend-expect";
+import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
@@ -61,7 +61,7 @@ describe('TOS Modal', () => {
     const { container } = renderWithRedux(<TermsOfServiceModalContainer />, {
       preloadedState: initialState,
     });
-    expect(container).toBeEmptyDOMElement()
+    expect(container).toBeEmptyDOMElement();
   });
 });
 

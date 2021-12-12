@@ -10,5 +10,5 @@ export const useActions = () => {
   const dispatch = useDispatch();
 
   // @ts-ignore
-  return bindActionCreators({...actionCreators, ...userAcquisitionModalActions, ...userInfoActions}, dispatch);
+  return bindActionCreators({ ...actionCreators, ...userAcquisitionModalActions, ...userInfoActions }, dispatch);
 };

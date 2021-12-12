@@ -14,8 +14,7 @@ GNU General Public License for more details.
 
 import { connect } from 'react-redux';
 import SocialProfile from '../social_profile';
-import { userInfoActions } from '../../state/slices';
-import { userAcquisitionModalActions } from '../../state/slices';
+import { userInfoActions, userAcquisitionModalActions } from '../../state/slices';
 
 const mapStateToProps = state => ({
   userInfo: state.userInfo.data,

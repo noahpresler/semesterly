@@ -78,14 +78,14 @@ const userInfoSlice = createSlice({
     },
     deleteAccount: (state) => {
       state.isDeleted = true;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(initAllState, (state, action: PayloadAction<any>) => {
         state.isFetching = false;
         state.data = action.payload.currentUser;
-      })
+      });
   },
 });
 
@@ -99,4 +99,4 @@ export const isUserInfoIncomplete = (state:UserInfoReducerState) => {
 };
 
 export const userInfoActions = userInfoSlice.actions;
-export default userInfoSlice.reducer
+export default userInfoSlice.reducer;

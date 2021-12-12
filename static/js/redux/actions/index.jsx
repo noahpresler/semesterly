@@ -1,4 +1,4 @@
-import { createAction } from "@reduxjs/toolkit";
+import { createAction } from '@reduxjs/toolkit';
 
 export * from './calendar_actions';
 export * from './exam_actions';
@@ -10,4 +10,4 @@ export * from './user_actions';
 
 
 // the INIT_STATE action typed version
-export const initAllState = createAction('global/init')
+export const initAllState = createAction('global/init');
