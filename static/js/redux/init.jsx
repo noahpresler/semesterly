@@ -37,6 +37,7 @@ import {
 } from './util';
 // import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
+import { initAllState } from './actions';
 
 
 // load initial timetable from user data if logged in or local storage
@@ -161,7 +162,7 @@ const setup = () => (dispatch) => {
   initData = JSON.parse(initData);
 
   dispatch({ type: ActionTypes.INIT_STATE, data: initData });
-
+  dispatch(initAllState(initData));
   dispatch(receiveCourses(initData.currentUser.courses));
   dispatch(setupTimetables(initData.currentUser.timetables, initData.allSemesters,
     initData.oldSemesters));
