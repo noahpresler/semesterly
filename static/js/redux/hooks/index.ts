@@ -7,5 +7,7 @@ import { userAcquisitionModalActions } from '../state/slices/userAcquisitionModa
 // custom hook used to combine all actionCreators to an object
 export const useActions = () => {
   const dispatch = useDispatch();
+
+  // @ts-ignore
   return bindActionCreators({...actionCreators, ...userAcquisitionModalActions}, dispatch);
 };
