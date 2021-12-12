@@ -12,6 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 import React from 'react';
+import "@testing-library/jest-dom/extend-expect";
 import { renderWithRedux } from '../../test-utils';
 import { userInfoFixture } from '../../__fixtures__/user_acquisition_modal.fixture';
 import UserAcquisitionModal from '../../ui/modals/user_acquisition_modal';
@@ -27,7 +28,7 @@ describe('User Aquisition Modal', () => {
     const { container } = renderWithRedux(<UserAcquisitionModal />, {
       preloadedState: initialState,
     });
-    expect(container).toMatchSnapshot();
+    expect(container).toHaveTextContent("Login/Signup")
   });
 
   it('is hidden when isVisible is false', () => {
@@ -38,6 +39,6 @@ describe('User Aquisition Modal', () => {
     const { container } = renderWithRedux(<UserAcquisitionModal />, {
       preloadedState: initialState,
     });
-    expect(container).toMatchSnapshot();
+    expect(container).not.toHaveTextContent("Login/Signup")
   });
 });
