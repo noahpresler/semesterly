@@ -40,10 +40,13 @@ import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
 import { alertsActions, userInfoActions } from '../state/slices';
-import { alertTimeTableExists } from '.';
+import { createAction } from '@reduxjs/toolkit';
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
+
+// ALERT_TIMETABLE_EXISTS
+export const alertTimeTableExists = createAction('global/alertTimeTableExists');
 
 
 export const receiveClassmates = json => dispatch => (

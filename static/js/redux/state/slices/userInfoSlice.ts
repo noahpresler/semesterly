@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { initAllState } from '../../actions';
+import { initAllState } from '../../actions/initActions';
 import { isIncomplete } from '../../util';
 
 interface UserData {
@@ -45,7 +45,7 @@ export const initialState: UserInfoReducerState = {
   isFetching: false,
   isDeleted: false,
 };
-
+console.log(initAllState)
 const userInfoSlice = createSlice({
   name: 'userInfo',
   initialState,
