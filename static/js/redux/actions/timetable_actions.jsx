@@ -105,7 +105,10 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         // (i.e. was adding a course/section), but we got no timetables back.
         // therefore course added by the user resulted in a conflict
         dispatch({ type: ActionTypes.CLEAR_CONFLICTING_EVENTS });
+        
+        // TODO: remove second ALERT_CONFLICT
         dispatch(alertConflict());
+        dispatch({ type: ActionTypes.ALERT_CONFLICT })
       }
       return json;
     })
