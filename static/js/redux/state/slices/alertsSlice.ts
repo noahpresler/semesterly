@@ -49,7 +49,7 @@ const alertsSlice = createSlice({
     // dispatched when the user tries to change semester,
     // while having an unsaved timetable (if logged in), or
     // if they're logged out, since while logged out their timetable is cleared
-    alertChangeSemester: (state, action: PayloadAction<any>) => {
+    alertChangeSemester: (state, action: PayloadAction<number>) => {
       state.alertChangeSemester = true;
       state.desiredSemester = action.payload;
     },
