@@ -39,7 +39,8 @@ import { receiveCourses } from './search_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
-import { userInfoActions } from '../state/slices';
+import { alertsActions, userInfoActions } from '../state/slices';
+import { alertTimeTableExists } from '.';
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
@@ -110,12 +111,11 @@ export const fetchMostClassmatesCount = timetable => (dispatch, getState) => {
   })
     .then(response => response.json())
     .then((json) => {
-      dispatch({
-        type: ActionTypes.CHANGE_MOST_FRIENDS_CLASS,
-        classId: json.id,
-        count: json.count,
-        total: json.total_count,
-      });
+      dispatch(alertsActions.changeMostFriendsClass({
+        mostFriendsCount: json.count,
+        mostFriendsClassId: json.id,
+        totalFriendsCount: json.total_count,
+      }))
     });
 };
 
@@ -185,9 +185,11 @@ export const saveTimetable = (
     })
     .catch((error) => {
       if (error.response && error.response.status === 409) {
+        // TODO: remove below after refactor done with saving_timetables_reducer
         dispatch({
           type: ActionTypes.ALERT_TIMETABLE_EXISTS,
         });
+        dispatch(alertTimeTableExists())
       }
       return null;
     });

@@ -31,10 +31,10 @@ import {
 import { autoSave, fetchClassmates, lockActiveSections, getUserSavedTimetables } from './user_actions';
 import { receiveCourses } from './search_actions';
 import * as ActionTypes from '../constants/actionTypes';
+import { alertConflict } from '.';
+import { alertsActions } from '../state/slices';
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
-
-export const alertConflict = () => ({ type: ActionTypes.ALERT_CONFLICT });
 
 export const receiveTimetables = timetables => ({
   type: ActionTypes.RECEIVE_TIMETABLES,
@@ -289,7 +289,7 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
   }
 
   if (getActiveTimetable(state).slots.length > 0 && !state.savingTimetable.upToDate) {
-    return dispatch({ type: ActionTypes.ALERT_NEW_TIMETABLE });
+    return dispatch(alertsActions.alertNewTimeTable());
   }
 
   return dispatch(createNewTimetable(getNumberedName('Untitled Schedule',

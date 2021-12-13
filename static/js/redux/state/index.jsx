@@ -23,7 +23,7 @@ import timetables, * as fromTimetables from './timetables_reducer';
 import searchResults, * as fromSearchResults from './search_results_reducer';
 import preferences from './preferences_reducer';
 import courseInfo, * as fromCourseInfo from './course_info_reducer';
-import alerts from './alerts_reducer';
+import alerts from './slices/alertsSlice';
 import ui from './ui_reducer';
 import userInfo, { isUserInfoIncomplete } from './slices/userInfoSlice';
 import savingTimetable from './saving_timetable_reducer';

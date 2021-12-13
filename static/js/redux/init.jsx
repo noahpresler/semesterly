@@ -27,7 +27,7 @@ import {
 } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
-import { userAcquisitionModalActions, userInfoActions } from './state/slices';
+import { alertsActions, userAcquisitionModalActions, userInfoActions } from './state/slices';
 import { receiveCourses } from './actions/search_actions';
 import {
   browserSupportsLocalStorage,
@@ -72,7 +72,7 @@ const setupChromeNotifs = () => (dispatch) => {
     const time = new Date();
     setFirstVisit(time.getTime());
   } else if ((isSecondVisit && daysSinceFirstVisit > 1) || (!isSecondVisit && !userHasActed)) {
-    dispatch({ type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS });
+    dispatch(alertsActions.alertEnableNotifications());
   }
 };
 
@@ -84,7 +84,7 @@ const showFriendAlert = () => (dispatch) => {
   if (isFirstVisit || timeLapsedGreaterThan(friendsCookie, 3)) {
     const time = new Date();
     setFriendsCookie(time.getTime());
-    dispatch({ type: ActionTypes.ALERT_FACEBOOK_FRIENDS });
+    dispatch(alertsActions.alertFacebookFriends());
   }
 };
 

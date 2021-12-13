@@ -80,5 +80,3 @@ const alerts = (state = defaultState, action) => {
       return state;
   }
 };
-
-export default alerts;

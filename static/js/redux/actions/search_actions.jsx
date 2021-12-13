@@ -22,6 +22,7 @@ import { nullifyTimetable } from './timetable_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { fetchCourseClassmates } from './modal_actions';
 import { getSemester } from './school_actions';
+import { alertsActions } from '../state/slices';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
@@ -69,10 +70,7 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
     } else if (state.userInfo.data.isLoggedIn) {
       dispatch(setSemester(semester));
     } else {
-      dispatch({
-        type: ActionTypes.ALERT_CHANGE_SEMESTER,
-        semester,
-      });
+      dispatch(alertsActions.alertChangeSemester(semester))
     }
   } else {
     dispatch(setSemester(semester));

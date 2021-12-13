@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { alertConflict, alertTimeTableExists } from '../../actions';
 
 interface AlertsSliceState {
   alertConflict: boolean;
@@ -33,16 +34,10 @@ const alertsSlice = createSlice({
   initialState,
   reducers: {
     // dispatched when there's a conflict
-    alertConflict: (state) => {
-      state.alertConflict = true;
-    },
     dismissAlertConflict: (state) => {
       state.alertConflict = false;
     },
     // dispatched there's a saved timetable with the same name
-    alertTimeTableExists: (state) => {
-      state.alertTimetableExists = true;
-    },
     dismissTimeTableExists: (state) => {
       state.alertTimetableExists = false;
     },
@@ -93,7 +88,16 @@ const alertsSlice = createSlice({
       state.alertFacebookFriends = false;
       state.facebookAlertIsOn = false;
     },
-  },
+	},
+	extraReducers: (builder) => {
+		builder
+			.addCase(alertConflict, (state) => {
+				state.alertConflict = true;
+			})
+			.addCase(alertTimeTableExists, (state) => {
+				state.alertTimetableExists = true;
+			})
+	}
 });
 
 export const alertsActions = alertsSlice.actions;
