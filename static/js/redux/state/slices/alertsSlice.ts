@@ -96,5 +96,5 @@ const alertsSlice = createSlice({
   },
 });
 
-export const alertsAction = alertsSlice.actions;
+export const alertsActions = alertsSlice.actions;
 export default alertsSlice.reducer;

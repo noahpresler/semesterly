@@ -14,7 +14,7 @@ export const useActions = () => {
       ...actionCreators,
       ...sliceAction.userAcquisitionModalActions,
       ...sliceAction.userInfoActions,
-      ...sliceAction.alertsAction,
+      ...sliceAction.alertsActions,
     },
     dispatch
   );
