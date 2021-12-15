@@ -49,7 +49,7 @@ const alertsSlice = createSlice({
       state.desiredSemester = action.payload;
     },
     dismissAlertChangeSemester: (state) => {
-      state.alertChangeSemester = true;
+      state.alertChangeSemester = false;
     },
     // dispatched when the user tries to create a new timetable but the current one is unsaved
     alertNewTimeTable: (state) => {
