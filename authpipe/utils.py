@@ -11,8 +11,9 @@
 # GNU General Public License for more details.
 
 import json
-import urllib.request, urllib.error, urllib.parse
-
+import urllib.request
+import urllib.error
+import urllib.parse
 import requests
 from django.conf import settings
 from django.contrib.auth.models import User
