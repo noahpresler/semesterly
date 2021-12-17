@@ -57,20 +57,25 @@ class TestToken(APITestCase):
 
     school = "uoft"
     request_headers = {"HTTP_HOST": "{}.sem.ly:8000".format(school)}
+    token = {
+        "auth": "someauth",
+        "p256dh": "something",
+        "endpoint": "some endpoint",
+    }
+
+    def put_token(self):
+        return self.client.put(
+            "/registration-token/",
+            data=self.token,
+            format="json",
+            **self.request_headers
+        )
 
     def test_create_token(self):
         """Test creating a new token."""
-        my_token = {
-            "auth": "someauth",
-            "p256dh": "something",
-            "endpoint": "some endpoint",
-        }
-
-        response = self.client.put(
-            "/registration-token/", data=my_token, format="json", **self.request_headers
-        )
+        response = self.put_token()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertDictContainsSubset(my_token, response.json())
+        self.assertDictContainsSubset(self.token, response.json())
         self.assertIsNotNone(RegistrationToken.objects.get(endpoint="some endpoint"))
 
     def test_create_token_student(self):
