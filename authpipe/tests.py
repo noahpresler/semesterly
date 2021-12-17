@@ -11,9 +11,9 @@
 # GNU General Public License for more details.
 
 from rest_framework import status
-from rest_framework.test import APITestCase
-
-from student.models import RegistrationToken
+from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
+from django.contrib.auth.models import User
+from student.models import Student, RegistrationToken
 from helpers.test.test_cases import UrlTestCase
 
 
@@ -55,25 +55,23 @@ class UrlsTest(UrlTestCase):
 class TestToken(APITestCase):
     """Test setting and deleting tokens"""
 
-    school = "uoft"
-    request_headers = {"HTTP_HOST": "{}.sem.ly:8000".format(school)}
-    token = {
-        "auth": "someauth",
-        "p256dh": "something",
-        "endpoint": "some endpoint",
-    }
+    def setUp(self):
+        school = "uoft"
+        self.request_headers = {"HTTP_HOST": "{}.sem.ly:8000".format(school)}
+        self.token = {
+            "auth": "someauth",
+            "p256dh": "something",
+            "endpoint": "some endpoint",
+        }
 
-    def put_token(self):
-        return self.client.put(
+    def test_create_token(self):
+        """Test creating a new token."""
+        response = self.client.put(
             "/registration-token/",
             data=self.token,
             format="json",
             **self.request_headers
         )
-
-    def test_create_token(self):
-        """Test creating a new token."""
-        response = self.put_token()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertDictContainsSubset(self.token, response.json())
         self.assertIsNotNone(RegistrationToken.objects.get(endpoint="some endpoint"))
