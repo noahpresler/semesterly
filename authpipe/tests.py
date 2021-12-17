@@ -21,12 +21,24 @@ class UrlsTest(UrlTestCase):
     """Test student/urls.py"""
 
     def test_urls_call_correct_views(self):
-        # auth
+        # facebook login
         self.assertUrlResolvesToView(
             "/login/facebook/", "social:begin", kwargs={"backend": "facebook"}
         )
         self.assertUrlResolvesToView(
             "/complete/facebook/", "social:complete", kwargs={"backend": "facebook"}
+        )
+
+        # jhed login
+        self.assertUrlResolvesToView(
+            "/login/azuread-tenant-oauth2/",
+            "social:begin",
+            kwargs={"backend": "azuread-tenant-oauth2"},
+        )
+        self.assertUrlResolvesToView(
+            "/complete/azuread-tenant-oauth2/",
+            "social:complete",
+            kwargs={"backend": "azuread-tenant-oauth2"},
         )
 
         # registration
