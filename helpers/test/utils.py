@@ -15,6 +15,7 @@ def create_student(user: User, **kwargs) -> None:
     student.save()
     return student
 
+
 def get_response(request, url, *args):
     request.subdomain = "uoft"
     view = resolve(url).func
