@@ -110,7 +110,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         new_student.img_url = response.json()["picture"]
         new_student.save()
 
-    elif backend_name == "facebook":
+    if backend_name == "facebook":
 
         try:
             access_token = social_user.extra_data["access_token"]
@@ -153,5 +153,8 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                         new_student.save()
                         friend_student.save()
 
+    if backend_name == "azuread-tenant-oauth2":
+        new_student.jhed = response["unique_name"]
+        new_student.save()
 
     return kwargs
