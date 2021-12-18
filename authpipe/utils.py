@@ -51,6 +51,12 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
     except BaseException:
         pass
     try:
+        jhed = response["unique_name"]
+        student = Student.objects.get(jhed=jhed).user
+        kwargs["user"] = student.user
+    except BaseException:
+        pass
+    try:
         token = strategy.session_get("student_token")
         ref = strategy.session_get("login_hash")
         student = Student.objects.get(id=hashids.decrypt(ref)[0])
