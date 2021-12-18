@@ -43,13 +43,13 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
     already has an account associated with an email, associates that user with
     the new backend.
     """
-    tryAssociateEmail(**kwargs)
-    tryAssociateJHED(response, **kwargs)
-    tryAssociateToken(strategy, **kwargs)
+    try_associate_email(**kwargs)
+    try_associate_jhed(response, **kwargs)
+    try_associate_token(strategy, **kwargs)
     return kwargs
 
 
-def tryAssociateEmail(**kwargs):
+def try_associate_email(**kwargs):
     try:
         email = kwargs["details"]["email"]
         kwargs["user"] = User.objects.get(email=email)
@@ -57,7 +57,7 @@ def tryAssociateEmail(**kwargs):
         pass
 
 
-def tryAssociateJHED(response, **kwargs):
+def try_associate_jhed(response, **kwargs):
     try:
         jhed = response["unique_name"]
         student = Student.objects.get(jhed=jhed)
@@ -66,7 +66,7 @@ def tryAssociateJHED(response, **kwargs):
         pass
 
 
-def tryAssociateToken(strategy, **kwargs):
+def try_associate_token(strategy, **kwargs):
     try:
         token = strategy.session_get("student_token")
         ref = strategy.session_get("login_hash")
