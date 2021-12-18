@@ -11,10 +11,10 @@
 # GNU General Public License for more details.
 
 from rest_framework import status
-from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
-from django.contrib.auth.models import User
-from student.models import Student, RegistrationToken
+from rest_framework.test import APITestCase, APIRequestFactory
+from student.models import RegistrationToken
 from helpers.test.test_cases import UrlTestCase
+from testing.utils import create_user, create_student, get_response, get_auth_response
 
 
 class UrlsTest(UrlTestCase):
@@ -63,26 +63,51 @@ class TestToken(APITestCase):
             "p256dh": "something",
             "endpoint": "some endpoint",
         }
+        self.factory = APIRequestFactory()
 
     def test_create_token(self):
         """Test creating a new token."""
-        response = self.client.put(
+        request = self.factory.put(
             "/registration-token/",
             data=self.token,
             format="json",
             **self.request_headers
         )
+        response = get_response(request, "/registration-token/")
+        self.assert_token_data(response, self.token)
+
+    def assert_token_data(self, response, token):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertDictContainsSubset(self.token, response.json())
-        self.assertIsNotNone(RegistrationToken.objects.get(endpoint="some endpoint"))
+        self.assertDictContainsSubset(token, response.data)
+        self.assertIsNotNone(RegistrationToken.objects.get(endpoint=token["endpoint"]))
+
+    def setUpAuth(self):
+        self.user = create_user()
+        self.student = create_student(self.user)
+
+    def putTokenAuth(self, data):
+        return self.factory.put(
+            "/registration-token/", data=data, format="json", **self.request_headers
+        )
 
     def test_create_token_student(self):
         """Test creating a new token when logged in."""
-        pass
+        self.setUpAuth()
+        request = self.putTokenAuth(self.token)
+        response = get_auth_response(request, self.user, "/registration-token/")
+        self.assert_token_data(response, self.token)
 
     def test_set_token(self):
         """Test updating an existing token."""
-        pass
+        self.test_create_token_student()
+        new_token = {
+            "auth": "somenewauth",
+            "p256dh": "somenewthing",
+            "endpoint": "somenew endpoint",
+        }
+        request = self.putTokenAuth(new_token)
+        response = get_auth_response(request, self.user, "/registration-token/")
+        self.assert_token_data(response, new_token)
 
     def test_delete_token_exists(self):
         """Test deleting an existing token."""
