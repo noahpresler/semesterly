@@ -14,7 +14,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory
 from student.models import RegistrationToken
 from helpers.test.test_cases import UrlTestCase
-from testing.utils import create_user, create_student, get_response, get_auth_response
+from helpers.test.utils import create_user, create_student, get_response, get_auth_response
 
 
 class UrlsTest(UrlTestCase):
