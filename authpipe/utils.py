@@ -45,17 +45,30 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
     already has an account associated with an email, associates that user with
     the new backend.
     """
+    tryAssociateEmail(**kwargs)
+    tryAssociateJHED(response, **kwargs)
+    tryAssociateToken(strategy, **kwargs)
+    return kwargs
+
+
+def tryAssociateEmail(**kwargs):
     try:
         email = kwargs["details"]["email"]
         kwargs["user"] = User.objects.get(email=email)
     except BaseException:
         pass
+
+
+def tryAssociateJHED(response, **kwargs):
     try:
         jhed = response["unique_name"]
-        student = Student.objects.get(jhed=jhed).user
+        student = Student.objects.get(jhed=jhed)
         kwargs["user"] = student.user
     except BaseException:
         pass
+
+
+def tryAssociateToken(strategy, **kwargs):
     try:
         token = strategy.session_get("student_token")
         ref = strategy.session_get("login_hash")
@@ -64,7 +77,6 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
             kwargs["user"] = student.user
     except BaseException:
         pass
-    return kwargs
 
 
 def create_student(strategy, details, response, user, *args, **kwargs):
@@ -75,11 +87,8 @@ def create_student(strategy, details, response, user, *args, **kwargs):
     Saves friends and other information to fill database.
     """
     backend_name = kwargs["backend"].name
-    if Student.objects.filter(user=user).exists():
-        new_student = Student.objects.get(user=user)
-    else:
-        new_student = Student(user=user)
-        new_student.save()
+    new_student, _ = Student.objects.get_or_create(user=user)
+    new_student.save()
     social_user = user.social_auth.filter(
         provider=backend_name,
     ).first()
@@ -143,5 +152,6 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                         new_student.friends.add(friend_student)
                         new_student.save()
                         friend_student.save()
+
 
     return kwargs
