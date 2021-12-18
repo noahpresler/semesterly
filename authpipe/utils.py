@@ -11,9 +11,7 @@
 # GNU General Public License for more details.
 
 import json
-import urllib.request
-import urllib.error
-import urllib.parse
+from urllib.request import Request, urlopen
 import requests
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -87,74 +85,70 @@ def create_student(strategy, details, response, user, *args, **kwargs):
     Saves friends and other information to fill database.
     """
     backend_name = kwargs["backend"].name
-    new_student, _ = Student.objects.get_or_create(user=user)
-    new_student.save()
-    social_user = user.social_auth.filter(
-        provider=backend_name,
-    ).first()
-
-    if (
-        backend_name == "google-oauth2"
-        and not user.social_auth.filter(provider="facebook").exists()
-    ):
-        try:
-            access_token = social_user.extra_data["access_token"]
-        except TypeError:
-            access_token = json.loads(social_user.extra_data)["access_token"]
-        response = requests.get(
-            "https://www.googleapis.com/userinfo/v2/me".format(
-                social_user.uid, get_secret("GOOGLE_API_KEY")
-            ),
-            params={"access_token": access_token},
-        )
-        new_student.img_url = response.json()["picture"]
-        new_student.save()
-
+    student, _ = Student.objects.get_or_create(user=user)
+    social_user = user.social_auth.filter(provider=backend_name).first()
+    hasFacebook = user.social_auth.filter(provider="facebook").exists()
     if backend_name == "facebook":
-
-        try:
-            access_token = social_user.extra_data["access_token"]
-        except TypeError:
-            access_token = json.loads(social_user.extra_data)["access_token"]
-
-        if social_user:
-            new_student.img_url = (
-                "https://graph.facebook.com/v9.0/"
-                + social_user.uid
-                + "/picture?type=normal"
-            )
-            url = "https://graph.facebook.com/v9.0/{0}/" "&access_token={1}".format(
-                social_user.uid,
-                access_token,
-            )
-            request = urllib.request.Request(url)
-            new_student.fbook_uid = social_user.uid
-            new_student.save()
-            url = (
-                "https://graph.facebook.com/{0}/"
-                "friends?fields=id"
-                "&access_token={1}".format(
-                    social_user.uid,
-                    access_token,
-                )
-            )
-            request = urllib.request.Request(url)
-            friends = json.loads(
-                urllib.request.urlopen(request).read().decode("utf-8")
-            ).get("data")
-
-            for friend in friends:
-                if Student.objects.filter(fbook_uid=friend["id"]).exists():
-                    friend_student = Student.objects.get(fbook_uid=friend["id"])
-                    if not new_student.friends.filter(
-                        user=friend_student.user
-                    ).exists():
-                        new_student.friends.add(friend_student)
-                        new_student.save()
-                        friend_student.save()
-
-    if backend_name == "azuread-tenant-oauth2":
-        new_student.jhed = response["unique_name"]
-        new_student.save()
-
+        update_student_facebook(student, social_user)
+    elif backend_name == "azuread-tenant-oauth2":
+        update_student_jhed(student, response)
+    elif backend_name == "google-oauth2":
+        update_student_google(student, social_user, hasFacebook)
+    student.save()
     return kwargs
+
+
+def update_student_facebook(student, social_user):
+    try:
+        access_token = social_user.extra_data["access_token"]
+    except TypeError:
+        access_token = json.loads(social_user.extra_data)["access_token"]
+
+    student.img_url = (
+        f"https://graph.facebook.com/v9.0/{social_user.uid}/picture?type=normal"
+    )
+    student.fbook_uid = social_user.uid
+    friends = get_facebook_friends(social_user, access_token)
+    update_facebook_friends(student, friends)
+
+
+def get_facebook_friends(social_user, access_token):
+    url = (
+        f"https://graph.facebook.com/{social_user.uid}"
+        f"/friends?fields=id&access_token={access_token}"
+    )
+    request = Request(url)
+    return json.loads(urlopen(request).read().decode("utf-8")).get("data")
+
+
+def update_facebook_friends(student, friends):
+    for friend in friends:
+        if Student.objects.filter(fbook_uid=friend["id"]).exists():
+            friend_student = Student.objects.get(fbook_uid=friend["id"])
+            if not student.friends.filter(user=friend_student.user).exists():
+                student.friends.add(friend_student)
+                friend_student.save()
+
+
+def update_student_jhed(student, response):
+    student.jhed = response["unique_name"]
+
+
+def update_student_google(student, social_user, hasFacebook):
+    try:
+        access_token = social_user.extra_data["access_token"]
+    except TypeError:
+        access_token = json.loads(social_user.extra_data)["access_token"]
+    # prioritize facebook picture if available
+    if not hasFacebook:
+        set_img_url_google(student, social_user, access_token)
+
+
+def set_img_url_google(student, social_user, access_token):
+    response = requests.get(
+        "https://www.googleapis.com/userinfo/v2/me".format(
+            social_user.uid, get_secret("GOOGLE_API_KEY")
+        ),
+        params={"access_token": access_token},
+    )
+    student.img_url = response.json()["picture"]
