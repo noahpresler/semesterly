@@ -17,7 +17,7 @@ import { createSelector } from 'reselect';
 import { getMaxHourBasedOnWindowHeight } from '../util';
 import school from './school_reducer';
 import semester, * as fromSemester from './semester_reducer';
-import calendar from './calendar_reducer';
+import calendar from './slices/calendarSlice';
 import courseSections from './course_sections_reducer';
 import timetables, * as fromTimetables from './timetables_reducer';
 import searchResults, * as fromSearchResults from './search_results_reducer';
