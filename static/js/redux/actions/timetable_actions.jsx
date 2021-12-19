@@ -59,6 +59,7 @@ export const changeActiveTimetable = newActive => ({
 
 export const setActiveTimetable = newActive => (dispatch) => {
   dispatch(changeActiveTimetable(newActive));
+  dispatch(NEW_chanegActiveTimeTable(newActive));
   dispatch(autoSave());
 };
 
@@ -95,12 +96,13 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         // receive new info into state
         dispatch(receiveCourses(json.courses));
         dispatch(receiveTimetables(json.timetables));
+        dispatch(NEW_receiveTimetables(json.timetables));
         dispatch({
           type: ActionTypes.RECEIVE_COURSE_SECTIONS,
           courseSections: json.new_c_to_s,
         });
         dispatch(changeActiveTimetable(newActive));
-
+        dispatch(NEW_chanegActiveTimeTable(newActive));
         // cache new info into local storage
         if (!state.userInfo.data.isLoggedIn) {
           saveLocalCourseSections(json.new_c_to_s);
@@ -159,6 +161,7 @@ export const lockTimetable = timetable => (dispatch, getState) => {
     courseSections: lockActiveSections(getDenormTimetable(state, timetable)),
   });
   dispatch(receiveTimetables([timetable]));
+  dispatch(NEW_receiveTimetables(json.timetables));
   if (state.userInfo.data.isLoggedIn) {
     dispatch(fetchClassmates(timetable));
   }
@@ -202,6 +205,7 @@ export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) =
 
 export const nullifyTimetable = () => (dispatch) => {
   dispatch(receiveTimetables([{ slots: [], has_conflict: false }]));
+  dispatch(NEW_receiveTimetables([{ slots: [], has_conflict: false }]));
   dispatch({
     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
     courseSections: {},
