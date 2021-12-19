@@ -39,6 +39,14 @@ let customEventUpdateTimer; // keep track of user's custom event actions for aut
 // action that alerts there is a timetable conflict
 export const alertConflict = createAction('global/alertConflict');
 
+export const NEW_chanegActiveTimeTable = createAction(
+  'global/chanegActiveTimeTable'
+);
+
+export const NEW_receiveTimetables = createAction(
+  'global/RECEIVE_TIMETABLES'
+);
+
 export const receiveTimetables = timetables => ({
   type: ActionTypes.RECEIVE_TIMETABLES,
   timetables,
