@@ -45,7 +45,7 @@ export const initialState: UserInfoReducerState = {
   isFetching: false,
   isDeleted: false,
 };
-console.log(initAllState)
+console.log(initAllState);
 const userInfoSlice = createSlice({
   name: 'userInfo',
   initialState,

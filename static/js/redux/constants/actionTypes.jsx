@@ -13,8 +13,8 @@ GNU General Public License for more details.
 */
 
 // ALERTS
-export const ALERT_CONFLICT = 'ALERT_CONFLICT'; //TODO: remove after timetable_reducer refactored
-export const ALERT_TIMETABLE_EXISTS = 'ALERT_TIMETABLE_EXISTS'; //TODO: remove after timetable_reducer refactored
+export const ALERT_CONFLICT = 'ALERT_CONFLICT'; // TODO: remove after timetable_reducer refactored
+export const ALERT_TIMETABLE_EXISTS = 'ALERT_TIMETABLE_EXISTS'; // TODO: remove after timetable_reducer refactored
 
 // CALENDAR
 export const EXPORT_SIS_TIMETABLE = 'EXPORT_SIS_TIMETABLE';

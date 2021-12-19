@@ -70,7 +70,7 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
     } else if (state.userInfo.data.isLoggedIn) {
       dispatch(setSemester(semester));
     } else {
-      dispatch(alertsActions.alertChangeSemester(semester))
+      dispatch(alertsActions.alertChangeSemester(semester));
     }
   } else {
     dispatch(setSemester(semester));

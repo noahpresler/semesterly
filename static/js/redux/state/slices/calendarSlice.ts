@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NEW_chanegActiveTimeTable, NEW_receiveTimetables } from '../../actions';
+import { NEW_changeActiveTimeTable, NEW_receiveTimetables } from '../../actions/initActions';
 
 interface CalendarSliceState {
   shareLink: null | String;
@@ -25,16 +25,16 @@ const calendarSlice = createSlice({
       state.isFetchingShareLink = false;
       state.shareLinkValid = true;
     },
-    },
-    extraReducers: (builder) => {
-      builder
-        .addCase(NEW_chanegActiveTimeTable, (state) => {
-          state.shareLinkValid = false;
-        })
-        .addCase(NEW_receiveTimetables, (state) => {
-          state.shareLinkValid = false;
-        })
-  }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(NEW_changeActiveTimeTable, (state) => {
+        state.shareLinkValid = false;
+      })
+      .addCase(NEW_receiveTimetables, (state) => {
+        state.shareLinkValid = false;
+      });
+  },
 });
 
 export const calendarActions = calendarSlice.actions;

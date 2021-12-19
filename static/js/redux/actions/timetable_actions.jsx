@@ -32,20 +32,9 @@ import { autoSave, fetchClassmates, lockActiveSections, getUserSavedTimetables }
 import { receiveCourses } from './search_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { alertsActions } from '../state/slices';
-import { createAction } from '@reduxjs/toolkit';
+import { NEW_changeActiveTimeTable, NEW_receiveTimetables, alertConflict } from './initActions';
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
-
-// action that alerts there is a timetable conflict
-export const alertConflict = createAction('global/alertConflict');
-
-export const NEW_chanegActiveTimeTable = createAction(
-  'global/chanegActiveTimeTable'
-);
-
-export const NEW_receiveTimetables = createAction(
-  'global/RECEIVE_TIMETABLES'
-);
 
 export const receiveTimetables = timetables => ({
   type: ActionTypes.RECEIVE_TIMETABLES,
@@ -59,7 +48,7 @@ export const changeActiveTimetable = newActive => ({
 
 export const setActiveTimetable = newActive => (dispatch) => {
   dispatch(changeActiveTimetable(newActive));
-  dispatch(NEW_chanegActiveTimeTable(newActive));
+  dispatch(NEW_changeActiveTimeTable(newActive));
   dispatch(autoSave());
 };
 
@@ -102,7 +91,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
           courseSections: json.new_c_to_s,
         });
         dispatch(changeActiveTimetable(newActive));
-        dispatch(NEW_chanegActiveTimeTable(newActive));
+        dispatch(NEW_changeActiveTimeTable(newActive));
         // cache new info into local storage
         if (!state.userInfo.data.isLoggedIn) {
           saveLocalCourseSections(json.new_c_to_s);
@@ -115,10 +104,10 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         // (i.e. was adding a course/section), but we got no timetables back.
         // therefore course added by the user resulted in a conflict
         dispatch({ type: ActionTypes.CLEAR_CONFLICTING_EVENTS });
-        
+
         // TODO: remove second ALERT_CONFLICT
         dispatch(alertConflict());
-        dispatch({ type: ActionTypes.ALERT_CONFLICT })
+        dispatch({ type: ActionTypes.ALERT_CONFLICT });
       }
       return json;
     })
@@ -161,7 +150,7 @@ export const lockTimetable = timetable => (dispatch, getState) => {
     courseSections: lockActiveSections(getDenormTimetable(state, timetable)),
   });
   dispatch(receiveTimetables([timetable]));
-  dispatch(NEW_receiveTimetables(json.timetables));
+  dispatch(NEW_receiveTimetables([timetable]));
   if (state.userInfo.data.isLoggedIn) {
     dispatch(fetchClassmates(timetable));
   }

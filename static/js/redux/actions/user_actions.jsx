@@ -40,14 +40,10 @@ import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
 import { alertsActions, userInfoActions } from '../state/slices';
-import { createAction } from '@reduxjs/toolkit';
+import { alertTimeTableExists } from './initActions';
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
-
-// ALERT_TIMETABLE_EXISTS
-export const alertTimeTableExists = createAction('global/alertTimeTableExists');
-
 
 export const receiveClassmates = json => dispatch => (
   dispatch({
@@ -118,7 +114,7 @@ export const fetchMostClassmatesCount = timetable => (dispatch, getState) => {
         mostFriendsCount: json.count,
         mostFriendsClassId: json.id,
         totalFriendsCount: json.total_count,
-      }))
+      }));
     });
 };
 
@@ -192,7 +188,7 @@ export const saveTimetable = (
         dispatch({
           type: ActionTypes.ALERT_TIMETABLE_EXISTS,
         });
-        dispatch(alertTimeTableExists())
+        dispatch(alertTimeTableExists());
       }
       return null;
     });
@@ -274,7 +270,7 @@ export const saveSettings = callback => async (dispatch, getState) => {
       method: 'PATCH',
       body: JSON.stringify(getState().userInfo.data),
       credentials: 'include',
-    })
+    });
   } catch (err) {
     // TODO: do alert
   }

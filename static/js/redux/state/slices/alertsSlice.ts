@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { alertConflict, alertTimeTableExists } from '../../actions';
+import { alertConflict, alertTimeTableExists } from '../../actions/initActions';
 
 interface AlertsSliceState {
   alertConflict: boolean;
@@ -72,7 +72,7 @@ const alertsSlice = createSlice({
         mostFriendsCount: number;
         mostFriendsClassId: number;
         totalFriendsCount: number;
-      }>
+      }>,
     ) => {
       state.mostFriendsCount = action.payload.mostFriendsCount;
       state.mostFriendsClassId = action.payload.mostFriendsClassId;
@@ -88,16 +88,16 @@ const alertsSlice = createSlice({
       state.alertFacebookFriends = false;
       state.facebookAlertIsOn = false;
     },
-	},
-	extraReducers: (builder) => {
-		builder
-			.addCase(alertConflict, (state) => {
-				state.alertConflict = true;
-			})
-			.addCase(alertTimeTableExists, (state) => {
-				state.alertTimetableExists = true;
-			})
-	}
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(alertConflict, (state) => {
+        state.alertConflict = true;
+      })
+      .addCase(alertTimeTableExists, (state) => {
+        state.alertTimetableExists = true;
+      });
+  },
 });
 
 export const alertsActions = alertsSlice.actions;
