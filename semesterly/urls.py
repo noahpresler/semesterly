@@ -21,7 +21,6 @@ from rest_framework.schemas import get_schema_view
 import helpers.mixins
 import semesterly.views
 import timetable.utils
-import pilot.urls
 
 
 admin.autodiscover()
@@ -41,7 +40,6 @@ urlpatterns = [
     re_path('', include('student.urls')),
     re_path('', include('analytics.urls')),
     re_path('', include('agreement.urls')),
-    re_path('', include('pilot.urls')),
     re_path(r'admin/*', admin.site.urls),
 
     # Automatic deployment endpoint
