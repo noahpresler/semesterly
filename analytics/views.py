@@ -21,7 +21,6 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404
 
-from analytics.models import FinalExamModalView
 from student.models import Student
 
 from student.utils import get_student
