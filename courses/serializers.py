@@ -35,8 +35,9 @@ class EvaluationSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     """
-    Serialize a Course into a dictionary with detailed information about the course, and all
-    related entities (eg Sections). Used for search results and course modals.
+    Serialize a Course into a dictionary with detailed information about the course, and
+    all related entities (eg Sections). Used for search results and course modals.
+
     Takes a context with parameters:
     school: str (required)
     semester: Semester (required)
@@ -57,7 +58,7 @@ class CourseSerializer(serializers.ModelSerializer):
     def get_evals(self, course):
         """
         Flag all eval instances s.t. there exists repeated term+year values.
-        Return:
+        Returns:
           List of modified evaluation dictionaries (added flag 'unique_term_year')
         """
         evals = list(
@@ -74,7 +75,7 @@ class CourseSerializer(serializers.ModelSerializer):
         )
         years = {e[0] for e in years}
         for course_eval in evals:
-            course_eval["unique_term_year"] = not course_eval["year"] in years
+            course_eval["unique_term_year"] = course_eval["year"] not in years
         return evals
 
     def get_integrations(self, course):
@@ -85,19 +86,14 @@ class CourseSerializer(serializers.ModelSerializer):
             Integration.objects.filter(id__in=ids).values_list("name", flat=True)
         )
 
-    # TODO: use course serializer but only recurse one level
     def get_related_courses(self, course):
-        info = []
         related = course.related_courses.filter(
             section__semester=self.context["semester"]
         ).distinct()[:5]
-        for course in related:
-            info.append(
-                model_to_dict(
-                    course, exclude=["related_courses", "unstopped_description"]
-                )
-            )
-        return info
+        return [
+            model_to_dict(course, exclude=["related_courses", "unstopped_description"])
+            for course in related
+        ]
 
     def get_reactions(self, course):
         return course.get_reactions(self.context.get("student"))
@@ -110,8 +106,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_regexed_courses(self, course):
         """
-        Given course data, search for all occurrences of a course code in the course description and
-        prereq info and return a map from course code to course name for each course code.
+        Given course data, search for all occurrences of a course code in the course
+        description and prereq info and return a map from course code to course name for
+        each course code.
         """
         school_to_course_regex = {
             "jhu": r"([A-Z]{2}\.\d{3}\.\d{3})",
@@ -128,19 +125,20 @@ class CourseSerializer(serializers.ModelSerializer):
                 school_to_course_regex[self.context["school"]],
                 course.description + course.prerequisites,
             )
-            # TODO: get all course objects in one db access
+
+            courses = Course.objects.filter(school=self.context["school"])
             for course_code in course_code_matches:
                 try:
-                    course = Course.objects.get(
-                        school=self.context["school"], code__icontains=course_code
-                    )
+                    course = courses.filter(code__icontains=course_code).get()
                     course_code_to_name[course_code] = course.name
                 except (Course.DoesNotExist, Course.MultipleObjectsReturned):
                     pass
         return course_code_to_name
 
     def get_popularity_percent(self, course):
-        """Return percentage of course capacity that is filled by registered students."""
+        """Return percentage of course capacity that is filled by registered
+        students.
+        """
         tts_with_course = course.personaltimetable_set.filter(
             semester=self.context["semester"]
         )
@@ -216,7 +214,8 @@ class SemesterSerializer(serializers.ModelSerializer):
 
 
 def get_section_dict(section):
-    """Returns a dictionary of a section including indicator of whether that section is filled"""
+    """Returns a dictionary of a section including indicator of whether that section is
+    filled"""
     section_data = model_to_dict(section)
     section_data["is_section_filled"] = section.is_full()
     return section_data
