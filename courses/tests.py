@@ -154,7 +154,10 @@ class UrlsTest(UrlTestCase):
             "/course/music101/Summer/2021", "courses.views.CourseModal"
         )
         self.assertUrlResolvesToView("/courses", "courses.views.all_courses")
-
+        self.assertUrlResolvesToView(
+            "/course_classmates/uoft/Fall/2019/id/82",
+            "courses.views.get_classmates_in_course",
+        )
         self.assertUrlResolvesToView(
             "/courses/Fall/2019/id/82", "courses.views.CourseDetail"
         )
