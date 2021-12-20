@@ -172,7 +172,6 @@ INSTALLED_APPS = (
     'django_extensions',
     'authpipe',
     'timetable',
-    'exams',
     'integrations',
     'searches',
     'courses',
