@@ -33,7 +33,6 @@ from helpers.decorators import validate_subdomain
 from parsing.models import DataUpdate
 
 
-# TODO: use CBV
 @validate_subdomain
 def all_courses(request):
     """
@@ -41,7 +40,7 @@ def all_courses(request):
     and is sorted by department.
     """
     school = request.subdomain
-    school_name = SCHOOLS_MAP[school].name  # TODO: use single groupby query
+    school_name = SCHOOLS_MAP[school].name
     dep_to_courses = collections.OrderedDict()
     departments = (
         Course.objects.filter(school=school)
