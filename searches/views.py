@@ -35,14 +35,14 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
         course_matches = search(request.subdomain, query, sem).distinct()[:4]
-        self.save_analytic(request, query, sem, course_matches)
+        self.save_analytic(request, query, course_matches, sem)
         course_match_data = [
             CourseSerializer(course, context={"semester": sem, "school": school}).data
             for course in course_matches
         ]
         return Response(course_match_data, status=status.HTTP_200_OK)
 
-    def save_analytic(self, request, query, sem, course_matches, advanced=False):
+    def save_analytic(self, request, query, course_matches, sem, advanced=False):
         save_analytics_course_search(
             query[:200],
             course_matches[:2],
