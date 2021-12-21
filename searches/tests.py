@@ -15,7 +15,6 @@ from rest_framework.test import APITestCase
 
 from timetable.models import Course, Section, Offering, Semester
 from helpers.test.test_cases import UrlTestCase
-from searches.utils import Vectorizer
 
 
 class BasicSearchTest(APITestCase):

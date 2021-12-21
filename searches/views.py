@@ -13,7 +13,6 @@
 import operator
 
 from django.core.paginator import Paginator, EmptyPage
-from django.apps import apps
 from django.db.models import Q
 
 from rest_framework import status
@@ -22,7 +21,7 @@ from rest_framework.views import APIView
 
 from analytics.views import save_analytics_course_search
 from courses.serializers import CourseSerializer
-from searches.utils import baseline_search
+from searches.utils import search
 from student.models import Student
 from student.utils import get_student
 from timetable.models import Semester
@@ -34,18 +33,10 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
     """Course Search List."""
 
     def get(self, request, query, sem_name, year):
-        """Return vectorized search results."""
+        """Return search results."""
         school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
-        # TODO: use vectorized search after completion.
-        # Use vectorized_search if and only if a valid Searcher object is created, otherwise use baseline_search
-        # if apps.get_app_config('searches').searcher:
-        #     course_match_objs = apps.get_app_config('searches').searcher.vectorized_search(request.subdomain, query, sem)[:4]
-        # else:
-        #     course_match_objs = baseline_search(request.subdomain, query, sem)[:4]
-        course_match_objs = baseline_search(request.subdomain, query, sem).distinct()[
-            :4
-        ]
+        course_match_objs = search(request.subdomain, query, sem).distinct()[:4]
         save_analytics_course_search(
             query[:200],
             course_match_objs[:2],
@@ -65,8 +56,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         page = int(request.query_params.get("page", 1))
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         # Filter first by the user's search query.
-        # TODO : use vectorized search (change returned obj to be filterable)
-        course_match_objs = baseline_search(school, query, sem)
+        course_match_objs = search(school, query, sem)
 
         # Filter now by departments, areas, levels, or times if provided.
         filters = request.data.get("filters", {})
