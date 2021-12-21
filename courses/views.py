@@ -143,15 +143,6 @@ class CourseDetail(ValidateSubdomainMixin, APIView):
         return Response(json_data.data, status=status.HTTP_200_OK)
 
 
-def get_distinct_areas(areas_group):
-    distinct_areas = []
-    for group in areas_group:
-        if group != list("None"):
-            for area in group:
-                distinct_areas.append(area)
-    return set(distinct_areas)
-
-
 class SchoolList(APIView):
     def get(self, request, school):
         """
@@ -202,6 +193,15 @@ class SchoolList(APIView):
         }
 
         return Response(json_data, status=status.HTTP_200_OK)
+
+
+def get_distinct_areas(areas_group):
+    distinct_areas = set()
+    for group in areas_group:
+        if group != list("None"):
+            for area in group:
+                distinct_areas.add(area)
+    return distinct_areas
 
 
 class CourseModal(FeatureFlowView):
