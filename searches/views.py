@@ -59,7 +59,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         filters = request.data.get("filters", {})
         course_matches = search(school, query, sem)
         course_matches = self.filter_course_matches(course_matches, filters, sem)
-        course_matches = course_matches.distinct()[:200]
+        course_matches = course_matches.distinct()[:100]    # prevent timeout
         self.save_analytic(request, query, course_matches, sem, True)
         student = get_student(request)
         serializer_context = {
