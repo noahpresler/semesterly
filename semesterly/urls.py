@@ -15,21 +15,17 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import admin
 from django.views.generic import TemplateView
-from rest_framework_swagger.views import get_swagger_view
-from rest_framework.schemas import get_schema_view
 
 import helpers.mixins
 import semesterly.views
-import timetable.utils
-
 
 admin.autodiscover()
 
 urlpatterns = [
     re_path(r"^$", helpers.mixins.FeatureFlowView.as_view(), name="home"),
-    re_path(r"about/*", TemplateView.as_view(template_name="about.html")),
-    re_path(r"press/*", TemplateView.as_view(template_name="press.html")),
-    re_path(r"notice", TemplateView.as_view(template_name="notice.html")),
+    re_path(r"about/?", TemplateView.as_view(template_name="about.html")),
+    re_path(r"press/?", TemplateView.as_view(template_name="press.html")),
+    re_path(r"notice/?", TemplateView.as_view(template_name="notice.html")),
     re_path("", include("authpipe.urls")),
     re_path("", include("timetable.urls")),
     re_path("", include("courses.urls")),
@@ -38,18 +34,19 @@ urlpatterns = [
     re_path("", include("student.urls")),
     re_path("", include("analytics.urls")),
     re_path("", include("agreement.urls")),
-    re_path(r"admin/*", admin.site.urls),
+    re_path(r"admin/?", admin.site.urls),
     # Automatic deployment endpoint
-    re_path(r"deploy_staging/", semesterly.views.deploy_staging),
+    re_path(r"deploy_staging/?", semesterly.views.deploy_staging),
     re_path(r"^sw(.*.js)$", semesterly.views.sw_js, name="sw_js"),
     re_path(
         r"^manifest(.*.json)$", semesterly.views.manifest_json, name="manifest_json"
     ),
     # error page testing
-    re_path(r"^404testing/", TemplateView.as_view(template_name="404.html")),
-    re_path(r"^500testing/", TemplateView.as_view(template_name="500.html")),
+    re_path(r"^404testing/?", TemplateView.as_view(template_name="404.html")),
+    re_path(r"^500testing/?", TemplateView.as_view(template_name="500.html")),
     re_path(
-        r"^maintenance_testing/", TemplateView.as_view(template_name="maintenance.html")
+        r"^maintenance_testing/?",
+        TemplateView.as_view(template_name="maintenance.html"),
     ),
 ]
 
@@ -74,7 +71,22 @@ else:
 
 # api views
 if getattr(settings, "DEBUG", True):
+    from rest_framework import permissions
+    from drf_yasg.views import get_schema_view
+    from drf_yasg import openapi
+
+    schema_view = get_schema_view(
+        openapi.Info(
+            title="Semester.ly Debug API",
+            default_version="v1",
+        ),
+        public=True,
+        permission_classes=[permissions.AllowAny],
+    )
     urlpatterns += [
-        re_path(r"^swagger/$", get_swagger_view(title="semesterly")),
-        re_path(r"^schema/$", get_schema_view(title="semesterly")),
+        re_path(
+            r"^swagger/$",
+            schema_view.with_ui("swagger", cache_timeout=0),
+            name="schema-swagger-ui",
+        ),
     ]

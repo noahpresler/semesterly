@@ -169,7 +169,7 @@ INSTALLED_APPS = (
     "student",
     "cachalot",
     "rest_framework",
-    "rest_framework_swagger",
+    "drf_yasg",
     "webpack_loader",
     "djcelery",
     "agreement",
