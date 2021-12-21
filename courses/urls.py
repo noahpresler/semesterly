@@ -19,16 +19,16 @@ admin.autodiscover()
 
 urlpatterns = [
     # old endpoints:
-    re_path(r"c/(?P<code>.+?)$", courses.views.course_page),
+    re_path(r"c/(?P<code>.+?)/?$", courses.views.course_page),
     re_path(r"^courses/?$", courses.views.all_courses),
     re_path(
-        r"course/(?P<code>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/*$",
+        r"course/(?P<code>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/?$",
         courses.views.CourseModal.as_view(),
     ),
     re_path(
         (
             r"^course_classmates/(?P<school>.+?)/(?P<sem_name>.+)/"
-            r"(?P<year>[0-9]{4})/id/(?P<course_id>[0-9]+)/*$"
+            r"(?P<year>[0-9]{4})/id/(?P<course_id>[0-9]+)/?$"
         ),
         courses.views.get_classmates_in_course,
     ),

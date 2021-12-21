@@ -96,9 +96,9 @@ def course_page(request, code):
         course, context={"semester": semester, "school": school}
     ).data
     sections = course_dict["sections"]
-    l = [s for s in sections if s["section_type"] == "L"]
-    t = [s for s in sections if s["section_type"] == "T"]
-    p = [s for s in sections if s["section_type"] == "P"]
+    lectures = [s for s in sections if s["section_type"] == "L"]
+    tutorials = [s for s in sections if s["section_type"] == "T"]
+    practicals = [s for s in sections if s["section_type"] == "P"]
     avg = round(course.get_avg_rating(), 2)
     clean_evals = get_clean_evals(course_dict)
     course_url = f"/course/{course_dict['code']}/{semester.name}/{semester.year}"
@@ -106,9 +106,9 @@ def course_page(request, code):
         "school": school,
         "school_name": school_name,
         "course": course_dict,
-        "lectures": l or None,
-        "tutorials": t or None,
-        "practicals": p or None,
+        "lectures": lectures,
+        "tutorials": tutorials,
+        "practicals": practicals,
         "url": course_url,
         "evals": clean_evals,
         "avg": avg,
