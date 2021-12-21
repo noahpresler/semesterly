@@ -124,12 +124,7 @@ SOCIAL_AUTH_PIPELINE = (
     # Make up a username for this person, appends a random string at the end if
     # there's any collision.
     "social_core.pipeline.user.get_username",
-    # Send a validation email to the user to verify its email address.
-    # Disabled by default.
-    # 'social_core.pipeline.mail.mail_validation',
-    # Associates the current social details with another user account with
-    # a similar email address. Disabled by default.
-    # 'social_core.pipeline.social_auth.associate_by_email',
+    # Our method to associate the current social details with another user account
     "authpipe.utils.associate_students",
     # Create a user account if we haven't found one yet.
     "social_core.pipeline.user.create_user",
@@ -140,6 +135,7 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.load_extra_data",
     # Update the user record with any changed info from the auth service.
     "social_core.pipeline.user.user_details",
+    # Our method to initialize the new student object.
     "authpipe.utils.create_student",
 )
 
@@ -159,7 +155,6 @@ INSTALLED_APPS = (
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
-    # 'django.contrib.sites',
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "social_django",
@@ -328,7 +323,7 @@ CACHALOT_ENABLED = True
 
 try:
     from .local_settings import *
-except:
+except ModuleNotFoundError:
     pass
 
 if not DEBUG:
