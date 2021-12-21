@@ -96,10 +96,6 @@ class AdvancedSearchTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
 
-    def test_pagination(self):
-        pass
-
-
 class UrlsTest(UrlTestCase):
     """Test search/urls.py"""
 
