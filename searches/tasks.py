@@ -17,9 +17,9 @@ from searches.utils import Vectorizer
 
 
 @periodic_task(
-    run_every=(crontab(day_of_week='mon', hour=12, minute=00)),
+    run_every=(crontab(day_of_week="mon", hour=12, minute=00)),
     name="task_parse_textbooks",
-    ignore_result=True
+    ignore_result=True,
 )
 def task_vectorize():
     """Run the vectorizer."""
