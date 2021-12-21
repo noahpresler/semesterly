@@ -21,7 +21,6 @@ from rest_framework.views import APIView
 from analytics.views import save_analytics_course_search
 from courses.serializers import CourseSerializer
 from searches.utils import search
-from student.models import Student
 from student.utils import get_student
 from timetable.models import Semester
 from helpers.mixins import ValidateSubdomainMixin, CsrfExemptMixin
@@ -35,41 +34,70 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         """Return search results."""
         school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
-        course_match_objs = search(request.subdomain, query, sem).distinct()[:4]
+        course_matches = search(request.subdomain, query, sem).distinct()[:4]
+        self.save_analytic(request, query, sem, course_matches)
+        course_match_data = [
+            CourseSerializer(course, context={"semester": sem, "school": school}).data
+            for course in course_matches
+        ]
+        return Response(course_match_data, status=status.HTTP_200_OK)
+
+    def save_analytic(self, request, query, sem, course_matches, advanced=False):
         save_analytics_course_search(
             query[:200],
-            course_match_objs[:2],
+            course_matches[:2],
             sem,
             request.subdomain,
             get_student(request),
+            advanced,
         )
-        course_matches = [
-            CourseSerializer(course, context={"semester": sem, "school": school}).data
-            for course in course_match_objs
-        ]
-        return Response(course_matches, status=status.HTTP_200_OK)
 
     def post(self, request, query, sem_name, year):
         """Return advanced search results."""
         school = request.subdomain
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-        # Filter first by the user's search query.
-        course_match_objs = search(school, query, sem)
-
-        # Filter now by departments, areas, levels, or times if provided.
         filters = request.data.get("filters", {})
+        course_matches = search(school, query, sem)
+        course_matches = self.filter_course_matches(course_matches, filters, sem)
+        self.save_analytic(request, query, course_matches, sem, True)
+        student = get_student(request)
+        serializer_context = {
+            "semester": sem,
+            "student": student,
+            "school": request.subdomain,
+        }
+        course_match_data = [
+            CourseSerializer(course, context=serializer_context).data
+            for course in course_matches
+        ]
+        return Response(course_match_data, status=status.HTTP_200_OK)
+
+    def filter_course_matches(self, course_matches, filters, sem):
+        course_matches = self.filter_by_areas(course_matches, filters)
+        course_matches = self.filter_by_departments(course_matches, filters)
+        course_matches = self.filter_by_levels(course_matches, filters)
+        course_matches = self.filter_by_times(sem, course_matches, filters)
+        course_matches = course_matches.order_by("id")
+        return course_matches
+
+    def filter_by_areas(self, course_matches, filters):
         if filters.get("areas"):
-            course_match_objs = course_match_objs.filter(
-                areas__contains=filters.get("areas")
-            )
+            course_matches = course_matches.filter(areas__contains=filters.get("areas"))
+        return course_matches
+
+    def filter_by_departments(self, course_matches, filters):
         if filters.get("departments"):
-            course_match_objs = course_match_objs.filter(
+            course_matches = course_matches.filter(
                 department__in=filters.get("departments")
             )
+        return course_matches
+
+    def filter_by_levels(self, course_matches, filters):
         if filters.get("levels"):
-            course_match_objs = course_match_objs.filter(
-                level__in=filters.get("levels")
-            )
+            course_matches = course_matches.filter(level__in=filters.get("levels"))
+        return course_matches
+
+    def filter_by_times(self, sem, course_matches, filters):
         if filters.get("times"):
             day_map = {
                 "Monday": "M",
@@ -78,7 +106,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                 "Thursday": "R",
                 "Friday": "F",
             }
-            course_match_objs = course_match_objs.filter(
+            course_matches = course_matches.filter(
                 reduce(
                     operator.or_,
                     (
@@ -97,28 +125,4 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                     ),
                 )
             )
-        course_match_objs = course_match_objs.order_by("id")
-
-        save_analytics_course_search(
-            query[:200],
-            course_match_objs[:2],
-            sem,
-            school,
-            get_student(request),
-            advanced=True,
-        )
-        student = None
-        logged = request.user.is_authenticated
-        if logged and Student.objects.filter(user=request.user).exists():
-            student = Student.objects.get(user=request.user)
-        serializer_context = {
-            "semester": sem,
-            "student": student,
-            "school": request.subdomain,
-        }
-        json_data = [
-            CourseSerializer(course, context=serializer_context).data
-            for course in course_match_objs
-        ]
-
-        return Response(json_data, status=status.HTTP_200_OK)
+        return course_matches
