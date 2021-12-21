@@ -24,6 +24,8 @@ def setUpTests(self):
         code="SEA101",
         name="Intro",
         level=100,
+        areas=["E", "Q"],
+        department="Computer Science",
     )
     section = Section.objects.create(
         course=course, semester=sem, meeting_section="L1", section_type="L"
@@ -107,10 +109,20 @@ class AdvancedSearchTest(APITestCase):
         assertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
 
     def test_filter_areas(self):
-        pass
+        body = {"filters": {"areas": "{H}"}}
+        assertEmptyResponse(self, body, "/search/Winter/1995/sea/")
+        body = {"filters": {"areas": "{E}"}}
+        assertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
+        body = {"filters": {"areas": "{Q}"}}
+        assertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
+        body = {"filters": {"areas": "{E,Q}"}}
+        assertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
 
     def test_filter_departments(self):
-        pass
+        body = {"filters": {"departments": ["Psychology"]}}
+        assertEmptyResponse(self, body, "/search/Winter/1995/sea/")
+        body = {"filters": {"departments": ["Computer Science"]}}
+        assertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
 
 
 class UrlsTest(UrlTestCase):
