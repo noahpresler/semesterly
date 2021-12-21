@@ -124,6 +124,39 @@ def get_clean_evals(course_dict):
     return evals
 
 
+class CourseModal(FeatureFlowView):
+    """
+    A :obj:`FeatureFlowView` for loading a course share link
+    which directly opens the course modal on the frontend. Therefore,
+    this view overrides the *get_feature_flow* method to fill intData
+    with the detailed course json for the modal.abs
+
+    Saves a :obj:`SharedCourseView` for analytics purposes.
+    """
+
+    feature_name = "SHARE_COURSE"
+
+    def get_feature_flow(self, request, code, sem_name, year):
+        semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+        code = code.upper()
+        course = get_object_or_404(Course, school=self.school, code=code)
+        course_json = CourseSerializer(
+            course,
+            context={
+                "semester": semester,
+                "school": self.school,
+                "student": self.student,
+            },
+        )
+
+        # analytics
+        SharedCourseView.objects.create(
+            student=self.student,
+            shared_course=course,
+        ).save()
+
+        return {"sharedCourse": course_json.data, "semester": semester}
+
 class CourseDetail(ValidateSubdomainMixin, APIView):
     """View that handles individual course entities."""
 
@@ -201,37 +234,3 @@ def get_distinct_areas(areas_group):
             for area in group:
                 distinct_areas.add(area)
     return distinct_areas
-
-
-class CourseModal(FeatureFlowView):
-    """
-    A :obj:`FeatureFlowView` for loading a course share link
-    which directly opens the course modal on the frontend. Therefore,
-    this view overrides the *get_feature_flow* method to fill intData
-    with the detailed course json for the modal.abs
-
-    Saves a :obj:`SharedCourseView` for analytics purposes.
-    """
-
-    feature_name = "SHARE_COURSE"
-
-    def get_feature_flow(self, request, code, sem_name, year):
-        semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-        code = code.upper()
-        course = get_object_or_404(Course, school=self.school, code=code)
-        course_json = CourseSerializer(
-            course,
-            context={
-                "semester": semester,
-                "school": self.school,
-                "student": self.student,
-            },
-        )
-
-        # analytics
-        SharedCourseView.objects.create(
-            student=self.student,
-            shared_course=course,
-        ).save()
-
-        return {"sharedCourse": course_json.data, "semester": semester}
