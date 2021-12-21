@@ -12,7 +12,6 @@
 
 import operator
 
-from django.core.paginator import Paginator, EmptyPage
 from django.db.models import Q
 
 from rest_framework import status
@@ -53,7 +52,6 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
     def post(self, request, query, sem_name, year):
         """Return advanced search results."""
         school = request.subdomain
-        page = int(request.query_params.get("page", 1))
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         # Filter first by the user's search query.
         course_match_objs = search(school, query, sem)
@@ -100,11 +98,6 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                 )
             )
         course_match_objs = course_match_objs.order_by("id")
-        try:
-            paginator = Paginator(course_match_objs.distinct(), 20)
-            course_match_objs = paginator.page(page)
-        except EmptyPage:
-            return Response([])
 
         save_analytics_course_search(
             query[:200],
