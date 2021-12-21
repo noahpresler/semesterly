@@ -14,10 +14,9 @@ class MultipleProxyMiddleware:
         recent proxy is used.
         """
         for field in self.FORWARDED_FOR_FIELDS:
-            if field in request.META:
-                if "," in request.META[field]:
-                    parts = request.META[field].split(",")
-                    request.META[field] = parts[-1].strip()
+            if field in request.META and "," in request.META[field]:
+                parts = request.META[field].split(",")
+                request.META[field] = parts[-1].strip()
 
         """
         Rewrites the X Original Host to X Forwarded Host header
