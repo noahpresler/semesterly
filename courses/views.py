@@ -60,8 +60,6 @@ def all_courses(request):
     return render(request, "all_courses.html", context)
 
 
-# TODO: use implementation in student
-# TODO: should send along with course response
 def get_classmates_in_course(request, school, sem_name, year, course_id):
     """
     Finds all classmates for the authenticated user who also have a
