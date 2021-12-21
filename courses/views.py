@@ -149,7 +149,6 @@ class SchoolList(APIView):
         Provides the basic school information including the schools
         areas, departments, levels, and the time the data was last updated
         """
-        # TODO - last_updated should encode per-semester last updated statuses
         last_updated = (
             DataUpdate.objects.filter(school=school, update_type=DataUpdate.COURSES)
             .order_by("timestamp")
