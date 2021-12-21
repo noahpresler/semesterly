@@ -81,7 +81,6 @@ def get_classmates_in_course(request, school, sem_name, year, course_id):
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 
-# TODO delete or rewrite as CBV
 @validate_subdomain
 def course_page(request, code):
     """
@@ -90,45 +89,42 @@ def course_page(request, code):
     purely via Django templates.
     """
     school = request.subdomain
-    try:
-        school_name = SCHOOLS_MAP[school].name
-        course_obj = Course.objects.filter(code__iexact=code)[0]
-        # TODO: hard coding (section type, semester)
-        current_year = datetime.now().year
-        semester, _ = Semester.objects.get_or_create(name="Fall", year=current_year)
-        course_dict = CourseSerializer(
-            course_obj, context={"semester": semester, "school": school}
-        ).data
-        l = list(course_dict["sections"].get("L", {}).values())
-        t = list(course_dict["sections"].get("T", {}).values())
-        p = list(course_dict["sections"].get("P", {}).values())
-        avg = round(course_obj.get_avg_rating(), 2)
-        evals = course_dict["evals"]
-        clean_evals = evals
-        for i, v in enumerate(evals):
-            for k, e in list(v.items()):
-                if isinstance(evals[i][k], str):
-                    clean_evals[i][k] = evals[i][k].replace("\xa0", " ")
-                if k == "year":
-                    clean_evals[i][k] = evals[i][k].replace(":", " ")
-        if school == "jhu":
-            course_url = "/course/" + course_dict["code"] + "/F"
-        else:
-            course_url = "/course/" + course_dict["code"] + "/F"
-        context = {
-            "school": school,
-            "school_name": school_name,
-            "course": course_dict,
-            "lectures": l if l else None,
-            "tutorials": t if t else None,
-            "practicals": p if p else None,
-            "url": course_url,
-            "evals": clean_evals,
-            "avg": avg,
-        }
-        return render(request, "course_page.html", context)
-    except Exception as e:
-        return HttpResponse(str(e))
+    school_name = SCHOOLS_MAP[school].name
+    course = Course.objects.get(code__iexact=code)
+    semester, _ = Semester.objects.get_or_create(name="Fall", year=datetime.now().year)
+    course_dict = CourseSerializer(
+        course, context={"semester": semester, "school": school}
+    ).data
+    sections = course_dict["sections"]
+    l = [s for s in sections if s["section_type"] == "L"]
+    t = [s for s in sections if s["section_type"] == "T"]
+    p = [s for s in sections if s["section_type"] == "P"]
+    avg = round(course.get_avg_rating(), 2)
+    clean_evals = get_clean_evals(course_dict)
+    course_url = f"/course/{course_dict['code']}/{semester.name}/{semester.year}"
+    context = {
+        "school": school,
+        "school_name": school_name,
+        "course": course_dict,
+        "lectures": l or None,
+        "tutorials": t or None,
+        "practicals": p or None,
+        "url": course_url,
+        "evals": clean_evals,
+        "avg": avg,
+    }
+    return render(request, "course_page.html", context)
+
+
+def get_clean_evals(course_dict):
+    evals = course_dict["evals"]
+    for i, v in enumerate(evals):
+        for k in v:
+            if isinstance(evals[i][k], str):
+                evals[i][k] = evals[i][k].replace("\xa0", " ")
+            if k == "year":
+                evals[i][k] = evals[i][k].replace(":", " ")
+    return evals
 
 
 class CourseDetail(ValidateSubdomainMixin, APIView):

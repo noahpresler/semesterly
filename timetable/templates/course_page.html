@@ -188,25 +188,25 @@
 							<h3>Lecture Sections</h3>
 							{% for l in lectures %}
 							{% if l %}
-							<div class="section" data-waitlist="{{ l.0.waitlist }}" data-enrolment="{{ l.0.enrolment }}"
-								data-size="{{ l.0.size }}" a>
-								{% if l.0.meeting_section %}
-								<h4>{{ l.0.meeting_section }}</h4>
+							<div class="section" data-waitlist="{{ l.waitlist }}" data-enrolment="{{ l.enrolment }}"
+								data-size="{{ l.size }}" a>
+								{% if l.meeting_section %}
+								<h4>{{ l.meeting_section }}</h4>
 								{% else %}
 								<h4>No section number</h4>
 								{% endif %}
-								{% if l.0.location %}
-								<h5>{{ l.0.location }}</h5>
+								{% if l.location %}
+								<h5>{{ l.location }}</h5>
 								{% else %}
 								<h5>No location info</h5>
 								{% endif %}
-								{% if l.0.instructors %}
-								<h5>{{ l.0.instructors }}</h5>
+								{% if l.instructors %}
+								<h5>{{ l.instructors }}</h5>
 								{% else %}
 								<h5>No instructor info</h5>
 								{% endif %}
-								{% if l.0.time_start %}
-								<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
+								{% if l.offering_set.0.time_start %}
+								<h5>{{ l.offering_set.0.time_start }} - {{ l.offering_set.0.time_end }}</h5>
 								{% else %}
 								<h5>No class times info</h5>
 								{% endif %}
