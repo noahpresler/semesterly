@@ -8,12 +8,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('agreement', '0002_auto_20170520_1927'),
+        ("agreement", "0002_auto_20170520_1927"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='agreement',
-            options={'get_latest_by': 'last_updated'},
+            name="agreement",
+            options={"get_latest_by": "last_updated"},
         ),
     ]

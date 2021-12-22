@@ -22,14 +22,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0004_auto_20160520_1141'),
-        ('analytics', '0007_analyticscoursesearch_is_advanced'),
+        ("timetable", "0004_auto_20160520_1141"),
+        ("analytics", "0007_analyticscoursesearch_is_advanced"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='analyticscoursesearch',
-            name='courses',
-            field=models.ManyToManyField(to='timetable.Course'),
+            model_name="analyticscoursesearch",
+            name="courses",
+            field=models.ManyToManyField(to="timetable.Course"),
         ),
     ]

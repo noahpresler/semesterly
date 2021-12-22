@@ -28,14 +28,14 @@ class Tracker:
     """
 
     BROADCAST_TYPES = {
-        'SCHOOL',
-        'YEAR',
-        'TERM',
-        'DEPARTMENT',
-        'STATS',
-        'INSTRUCTOR',
-        'TIME',
-        'MODE',
+        "SCHOOL",
+        "YEAR",
+        "TERM",
+        "DEPARTMENT",
+        "STATS",
+        "INSTRUCTOR",
+        "TIME",
+        "MODE",
     }
 
     def __init__(self):
@@ -61,11 +61,14 @@ class Tracker:
         """
         for btype in Tracker.BROADCAST_TYPES:
             name = btype.lower()
-            storage_name = '_{}'.format(name)
+            storage_name = "_{}".format(name)
 
             # If attribute is already part of class, do not override it.
-            if (hasattr(self, storage_name) or hasattr(self.__class__, name) or
-                    hasattr(self, name)):
+            if (
+                hasattr(self, storage_name)
+                or hasattr(self.__class__, name)
+                or hasattr(self, name)
+            ):
                 continue
 
             # NOTE: closure methods are used to capture the variables
@@ -74,24 +77,28 @@ class Tracker:
             def closure_getter(name, storage_name):
                 def getter(self):
                     return getattr(self, storage_name)
+
                 return getter
 
             def closure_setter(btype, name, storage_name):
                 def setter(self, value):
                     setattr(self, storage_name, value)
                     self.broadcast(btype)
+
                 return setter
 
-            setattr(self.__class__, name, property(
-                closure_getter(name, storage_name),
-                closure_setter(btype, name, storage_name)
-            ))
+            setattr(
+                self.__class__,
+                name,
+                property(
+                    closure_getter(name, storage_name),
+                    closure_setter(btype, name, storage_name),
+                ),
+            )
 
     def start(self):
         """Start timer of tracker object."""
-        self.timestamp = datetime.datetime.utcnow().strftime(
-            '%Y/%m/%d-%H:%M:%S'
-        )
+        self.timestamp = datetime.datetime.utcnow().strftime("%Y/%m/%d-%H:%M:%S")
         self.start_time = timer()
 
     def end(self):
@@ -107,7 +114,7 @@ class Tracker:
             name (None, str, optional): Name the viewer.
         """
         if name is None:
-            name = 'viewer{}'.format(len(self.viewers))
+            name = "viewer{}".format(len(self.viewers))
         self.viewers.append((name, viewer))
 
     def remove_viewer(self, name):
@@ -152,9 +159,7 @@ class Tracker:
             TrackerError: if broadcast_type is not in BROADCAST_TYPE.
         """
         if broadcast_type not in Tracker.BROADCAST_TYPES:
-            raise TrackerError(
-                'unsupported broadcast type {}'.format(broadcast_type)
-            )
+            raise TrackerError("unsupported broadcast type {}".format(broadcast_type))
         # TODO - broadcast based on optional name argument
         for name, viewer in self.viewers:
             viewer.receive(self, broadcast_type)
