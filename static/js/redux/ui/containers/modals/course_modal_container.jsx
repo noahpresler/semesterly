@@ -17,7 +17,6 @@ import CourseModal from '../../modals/course_modal';
 import {
   getCurrentSemester,
   getDenormCourseById,
-  getCourseInfoId,
   getHoveredSlots,
 } from '../../../state';
 import {
@@ -34,6 +33,7 @@ import {
 import { saveSettings } from '../../../actions/user_actions';
 import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../constants/endpoints';
 import { userInfoActions } from '../../../state/slices';
+import { getCourseInfoId } from '../../../state/slices/courseInfoSlice';
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
