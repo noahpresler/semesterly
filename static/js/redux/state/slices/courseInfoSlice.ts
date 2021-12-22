@@ -24,19 +24,16 @@ const courseInfoSlice = createSlice({
   name: 'courseInfo',
   initialState,
   reducers: {
-    courseInfoReceived: (state, action: PayloadAction<{
-      isFetching: boolean,
-      id: Number;
-    }>) => {
-      state.isFetching = action.payload.isFetching;
-      state.id = action.payload.id;
+    courseInfoReceived: (state, action: PayloadAction<Number>) => {
+      state.isFetching = false;
+      state.id = action.payload;
     },
     // TODO: change any type
     courseClassmatesReceived: (state, action: PayloadAction<any>) => {
       state.isFetchingClassmates = false;
       state.classmates = action.payload;
     },
-    requestCourseInfo: (state) => {
+    requestCourseInfo: () => {
       // reset the state
       return initialState;
     },
@@ -58,7 +55,9 @@ const courseInfoSlice = createSlice({
   }
 })
 
-export const getCourseInfoId = (state: CourseInfoSliceState) => state.id;
+export const getCourseInfoId = (state:any) => {
+  return state.courseInfo.id
+};
 
 export const courseInfoActions = courseInfoSlice.actions;
 export default courseInfoSlice.reducer;

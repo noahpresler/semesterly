@@ -26,8 +26,8 @@ import {
   lockTimetable,
 } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
-import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
-import { alertsActions, userAcquisitionModalActions, userInfoActions } from './state/slices';
+import { fetchCourseClassmates } from './actions/modal_actions';
+import { alertsActions, courseInfoActions, userAcquisitionModalActions, userInfoActions } from './state/slices';
 import { receiveCourses } from './actions/search_actions';
 import {
   browserSupportsLocalStorage,
@@ -127,7 +127,7 @@ const handleFlows = featureFlow => (dispatch) => {
       dispatch({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });
       break;
     case 'SHARE_COURSE':
-      dispatch(setCourseInfo(featureFlow.sharedCourse));
+      dispatch(courseInfoActions.courseInfoReceived(featureFlow.sharedCourse.id))
       dispatch(fetchCourseClassmates(featureFlow.sharedCourse.id));
       break;
     case 'FIND_FRIENDS':
