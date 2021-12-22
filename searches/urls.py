@@ -20,6 +20,8 @@ admin.autodiscover()
 
 
 urlpatterns = [
-    re_path(r'^search/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/(?P<query>.*?)/?$',
-        searches.views.CourseSearchList.as_view()),
+    re_path(
+        r"^search/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/(?P<query>.*?)/?$",
+        searches.views.CourseSearchList.as_view(),
+    ),
 ]
