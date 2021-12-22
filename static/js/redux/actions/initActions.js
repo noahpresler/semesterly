@@ -15,3 +15,7 @@ export const NEW_changeActiveTimeTable = createAction(
 export const NEW_receiveTimetables = createAction(
   'global/RECEIVE_TIMETABLES',
 );
+
+export const setCourseReactions = createAction(
+  'global/setCourseReactions'
+)
