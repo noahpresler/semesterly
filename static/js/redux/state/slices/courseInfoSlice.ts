@@ -58,5 +58,7 @@ const courseInfoSlice = createSlice({
   }
 })
 
+export const getCourseInfoId = (state: CourseInfoSliceState) => state.id;
+
 export const courseInfoActions = courseInfoSlice.actions;
 export default courseInfoSlice.reducer;
