@@ -13,7 +13,7 @@
 
 import os
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
+os.environ["DJANGO_SETTINGS_MODULE"] = "semesterly.settings"
 
 from django.forms.models import model_to_dict
 from django.db import models
@@ -30,14 +30,15 @@ class Semester(models.Model):
         name (CharField): the name (e.g. Spring, Fall)
         year (CharField): the year (e.g. 2017, 2018)
     """
+
     name = models.CharField(max_length=50)
     year = models.CharField(max_length=4)
 
     def __unicode__(self):
-        return '{} {}'.format(self.name, self.year)
+        return "{} {}".format(self.name, self.year)
 
     def __str__(self):
-        return '{} {}'.format(self.name, self.year)
+        return "{} {}".format(self.name, self.year)
 
 
 class Textbook(models.Model):
@@ -53,6 +54,7 @@ class Textbook(models.Model):
         author (CharField): authors first and last name
         title (CharField): the title of the book
     """
+
     isbn = models.BigIntegerField(primary_key=True)
     detail_url = models.URLField(max_length=1000, null=True)
     image_url = models.URLField(max_length=1000, null=True)
@@ -97,31 +99,31 @@ class Course(models.Model):
         same_as (:obj:`ForeignKey`): If this course is the same as another course, provide Foreign key
         vector (:obj:`PickleObjectField`): the vector representation of a course transformed from course vectorizer
     """
+
     school = models.CharField(db_index=True, max_length=100)
     code = models.CharField(max_length=20)
     name = models.CharField(max_length=255)
-    description = models.TextField(default='')
-    notes = models.TextField(default='', null=True)
-    info = models.TextField(default='', null=True)
-    unstopped_description = models.TextField(default='')
-    campus = models.CharField(max_length=300, default='')
-    prerequisites = models.TextField(default='', null=True)
-    corequisites = models.TextField(default='', null=True)
-    exclusions = models.TextField(default='')
+    description = models.TextField(default="")
+    notes = models.TextField(default="", null=True)
+    info = models.TextField(default="", null=True)
+    unstopped_description = models.TextField(default="")
+    campus = models.CharField(max_length=300, default="")
+    prerequisites = models.TextField(default="", null=True)
+    corequisites = models.TextField(default="", null=True)
+    exclusions = models.TextField(default="")
     num_credits = models.FloatField(default=-1)
-    department = models.CharField(max_length=255, default='', null=True)
-    level = models.CharField(max_length=500, default='', null=True)
+    department = models.CharField(max_length=255, default="", null=True)
+    level = models.CharField(max_length=500, default="", null=True)
     # TODO generalize core/gened/breadth field
     cores = models.CharField(max_length=50, null=True, blank=True)
     geneds = models.CharField(max_length=300, null=True, blank=True)
-    related_courses = models.ManyToManyField('self', blank=True)
-    same_as = models.ForeignKey('self', null=True, on_delete=models.deletion.CASCADE)
+    related_courses = models.ManyToManyField("self", blank=True)
+    same_as = models.ForeignKey("self", null=True, on_delete=models.deletion.CASCADE)
     vector = PickledObjectField(default=None, null=True)
-    pos = ArrayField(models.TextField(default='', null=True), default=list)
-    areas = ArrayField(models.TextField(default='', null=True), default=list)
-    sub_school = models.TextField(default='', null=True)
-    writing_intensive = models.TextField(default='', null=True)
-
+    pos = ArrayField(models.TextField(default="", null=True), default=list)
+    areas = ArrayField(models.TextField(default="", null=True), default=list)
+    sub_school = models.TextField(default="", null=True)
+    writing_intensive = models.TextField(default="", null=True)
 
     def __str__(self):
         return self.code + ": " + self.name
@@ -136,14 +138,19 @@ class Course(models.Model):
 
         **reacted:** True if the student provided has given a reaction with this title
         """
-        result = list(self.reaction_set.values('title') \
-                      .annotate(count=models.Count('title')).distinct().all())
+        result = list(
+            self.reaction_set.values("title")
+            .annotate(count=models.Count("title"))
+            .distinct()
+            .all()
+        )
         if not student:
             return result
         # TODO: rewrite as a single DB query
         for i, reaction in enumerate(result):
-            result[i]['reacted'] = self.reaction_set.filter(student=student,
-                                                            title=reaction['title']).exists()
+            result[i]["reacted"] = self.reaction_set.filter(
+                student=student, title=reaction["title"]
+            ).exists()
         return result
 
     def get_avg_rating(self):
@@ -162,12 +169,12 @@ class Course(models.Model):
         return (ratings_sum / ratings_count) if ratings_count else -1
 
     def _get_ratings_sum_count(self):
-        """ Return the sum and count of ratings of this course not counting equivalent courses. """
-        ratings = Evaluation.objects.only('course', 'score').filter(course=self)
+        """Return the sum and count of ratings of this course not counting equivalent courses."""
+        ratings = Evaluation.objects.only("course", "score").filter(course=self)
         return sum([rating.score for rating in ratings]), len(ratings)
 
     def __unicode__(self):
-        return u'%s' % (self.name)
+        return u"%s" % (self.name)
 
 
 class Section(models.Model):
@@ -200,31 +207,38 @@ class Section(models.Model):
             textbooks for this section via the :obj:`TextbookLink` model
         was_full (:obj:`BooleanField`): whether the course was full during the last parse
     """
+
     course = models.ForeignKey(Course, on_delete=models.deletion.CASCADE)
     meeting_section = models.CharField(max_length=50)
     size = models.IntegerField(default=-1)
     enrolment = models.IntegerField(default=-1)
     waitlist = models.IntegerField(default=-1)
     waitlist_size = models.IntegerField(default=-1)
-    section_type = models.CharField(max_length=50, default='L')
-    instructors = models.CharField(max_length=500, default='TBA')
+    section_type = models.CharField(max_length=50, default="L")
+    instructors = models.CharField(max_length=500, default="TBA")
     semester = models.ForeignKey(Semester, on_delete=models.deletion.CASCADE)
-    textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
+    textbooks = models.ManyToManyField(Textbook, through="TextbookLink")
     was_full = models.BooleanField(default=False)
     course_section_id = models.IntegerField(default=0)
 
     def get_textbooks(self):
-        """ Returns the textbook info using `tb.get_info()` for each textbook """
+        """Returns the textbook info using `tb.get_info()` for each textbook"""
         return [tb.get_info() for tb in self.textbooks.all()]
 
     def is_full(self):
         return self.enrolment >= 0 and self.size >= 0 and self.enrolment >= self.size
 
     def __str__(self):
-        return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section, self.semester)
+        return "Course: {0}; Section: {0}; Semester: {0}".format(
+            self.course, self.meeting_section, self.semester
+        )
 
     def __unicode__(self):
-        return "Course: %s; Section: %s; Semester: %s" % (self.course, self.meeting_section, self.semester)
+        return "Course: %s; Section: %s; Semester: %s" % (
+            self.course,
+            self.meeting_section,
+            self.semester,
+        )
 
 
 class Offering(models.Model):
@@ -245,13 +259,14 @@ class Offering(models.Model):
         location (:obj:`CharField`, optional):
             the location the course takes place, defaulting to TBA if not provided
     """
+
     section = models.ForeignKey(Section, on_delete=models.deletion.CASCADE)
     day = models.CharField(max_length=1)
     date_start = models.CharField(max_length=15, null=True)
     date_end = models.CharField(max_length=15, null=True)
     time_start = models.CharField(max_length=15)
     time_end = models.CharField(max_length=15)
-    location = models.CharField(max_length=200, default='TBA')
+    location = models.CharField(max_length=200, default="TBA")
     is_short_course = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -272,6 +287,7 @@ class Evaluation(models.Model):
     year (:obj:`CharField`): the year of the review
     course_code (:obj:`Charfield`): a string of the course code, along with section indicator
     """
+
     course = models.ForeignKey(Course, on_delete=models.deletion.CASCADE)
     score = models.FloatField(default=5.0)
     summary = models.TextField()
@@ -293,6 +309,7 @@ class TextbookLink(models.Model):
         is_required (:obj:`BooleanField`): whether or not the textbook is required
         section (:obj:`Section`): the section the textbook is linked to
     """
+
     textbook = models.ForeignKey(Textbook, on_delete=models.deletion.CASCADE)
     is_required = models.BooleanField(default=False)
     section = models.ForeignKey(Section, on_delete=models.deletion.CASCADE)

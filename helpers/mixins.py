@@ -38,9 +38,9 @@ class ValidateSubdomainMixin:
 
     def dispatch(self, request, *args, **kwargs):
         if request.subdomain == "queens":
-            return render(request, 'queens_error.html')
+            return render(request, "queens_error.html")
         elif request.subdomain not in ACTIVE_SCHOOLS:
-            return render(request, 'index.html')
+            return render(request, "index.html")
         return super(ValidateSubdomainMixin, self).dispatch(request, *args, **kwargs)
 
 
@@ -49,6 +49,7 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
     Template that handles GET requests by rendering the homepage. Feature_name or get_feature_flow()
     can be overridden to launch a feature or action on homepage load.
     """
+
     feature_name = None
     allow_unauthenticated = True
 
@@ -63,7 +64,7 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
 
     def get(self, request, *args, **kwargs):
         if not self.allow_unauthenticated and not request.user.is_authenticated:
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect("/")
         self.school = request.subdomain
         self.student = get_student(request)
 
@@ -71,9 +72,9 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
 
         # take semester provided by feature flow if available, otherwise the first available sem
         all_semesters = get_current_semesters(self.school)
-        if 'semester' in feature_flow:
-            sem = feature_flow.pop('semester')
-            sem_dict = {'name': sem.name, 'year': sem.year}
+        if "semester" in feature_flow:
+            sem = feature_flow.pop("semester")
+            sem_dict = {"name": sem.name, "year": sem.year}
             if sem_dict not in all_semesters:
                 all_semesters.append(sem_dict)
             curr_sem_index = all_semesters.index(sem_dict)
@@ -94,29 +95,24 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
         else:
             for year, terms in SCHOOLS_MAP[self.school].final_exams.items():
                 for term in terms:
-                    final_exams.append({
-                        'name': term,
-                        'year': str(year)
-                    })
+                    final_exams.append({"name": term, "year": str(year)})
 
         init_data = {
-            'school': self.school,
-            'currentUser': get_student_dict(self.school, self.student, sem),
-            'currentSemester': curr_sem_index,
-            'allSemesters': all_semesters,
+            "school": self.school,
+            "currentUser": get_student_dict(self.school, self.student, sem),
+            "currentSemester": curr_sem_index,
+            "allSemesters": all_semesters,
             # 'oldSemesters': get_old_semesters(self.school),
-            'uses12HrTime': SCHOOLS_MAP[self.school].ampm,
-            'studentIntegrations': integrations,
-            'latestAgreement': AgreementSerializer(Agreement.objects.latest()).data,
-            'registrar': SCHOOLS_MAP[self.school].registrar,
-            'examSupportedSemesters': list(map(all_semesters.index,
-                                          final_exams)),
-            'timeUpdatedTos': Agreement.objects.latest().last_updated.isoformat(),
-
-            'featureFlow': dict(feature_flow, name=self.feature_name)
+            "uses12HrTime": SCHOOLS_MAP[self.school].ampm,
+            "studentIntegrations": integrations,
+            "latestAgreement": AgreementSerializer(Agreement.objects.latest()).data,
+            "registrar": SCHOOLS_MAP[self.school].registrar,
+            "examSupportedSemesters": list(map(all_semesters.index, final_exams)),
+            "timeUpdatedTos": Agreement.objects.latest().last_updated.isoformat(),
+            "featureFlow": dict(feature_flow, name=self.feature_name),
         }
 
-        return render(request, 'timetable.html', {'init_data': json.dumps(init_data)})
+        return render(request, "timetable.html", {"init_data": json.dumps(init_data)})
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -129,5 +125,5 @@ class CsrfExemptMixin:
 
 
 class RedirectToSignupMixin(LoginRequiredMixin):
-    login_url = '/signup/'
+    login_url = "/signup/"
     redirect_field_name = None

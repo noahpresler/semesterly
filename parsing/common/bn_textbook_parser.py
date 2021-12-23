@@ -29,7 +29,7 @@ class TextbookSection:
         self.sections = []
 
     def __str__(self):
-        return 'Section -- id: {}, name: {}'.format(self.id, self.name)
+        return "Section -- id: {}, name: {}".format(self.id, self.name)
 
 
 class TextbookCourse:
@@ -39,7 +39,7 @@ class TextbookCourse:
         self.sections = []
 
     def __str__(self):
-        return 'Course -- id: {}, name: {}'.format(self.id, self.name)
+        return "Course -- id: {}, name: {}".format(self.id, self.name)
 
 
 class TextbookDepartment:
@@ -49,7 +49,7 @@ class TextbookDepartment:
         self.courses = []
 
     def __str__(self):
-        return 'Department -- id: {}, name: {}'.format(self.id, self.name)
+        return "Department -- id: {}, name: {}".format(self.id, self.name)
 
 
 class TextbookSemester:
@@ -61,15 +61,17 @@ class TextbookSemester:
         self.departments = []
 
     def __str__(self):
-        return 'Semester -- term: {}, year: {}, id: {}'.format(self.term,
-                                                               self.year,
-                                                               self.id)
+        return "Semester -- term: {}, year: {}, id: {}".format(
+            self.term, self.year, self.id
+        )
 
 
 class BarnesAndNoblesParser(BaseParser):
 
     # TODO - make this constructor more readable
-    def __init__(self, store_id, store_link, school, delimeter, term=None, year=None, **kwargs):
+    def __init__(
+        self, store_id, store_link, school, delimeter, term=None, year=None, **kwargs
+    ):
         self.year = year
         self.term = term
         self.semesters = []
@@ -86,16 +88,22 @@ class BarnesAndNoblesParser(BaseParser):
         self.school = school
         self.delimeter = delimeter
 
-        self.begining_textbook_payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"storeId\"\r\n\r\n" + self.store_id + "\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"catalogId\"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"langId\"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"clearAll\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"viewName\"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"secCatList\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"removeSectionId\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"mcEnabled\"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"showCampus\"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectTerm\"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectDepartment\"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectSection\"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectCourse\"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"campus1\"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermName_14704480\"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermId_14704480\"\r\n\r\n73256452\r\n-----011000010111000001101001"
+        self.begining_textbook_payload = (
+            '-----011000010111000001101001\r\nContent-Disposition: form-data; name="storeId"\r\n\r\n'
+            + self.store_id
+            + '\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="catalogId"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="langId"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="clearAll"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="viewName"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="secCatList"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="removeSectionId"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="mcEnabled"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="showCampus"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectTerm"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectDepartment"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectSection"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectCourse"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="campus1"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="firstTermName_14704480"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="firstTermId_14704480"\r\n\r\n73256452\r\n-----011000010111000001101001'
+        )
         self.textbook_payload = TextbookPayload(self.store_id)
 
         super(BarnesAndNoblesParser, self).__init__(school, **kwargs)
 
-    def start(self,
-              verbosity=3,
-              textbooks=True,
-              departments_filter=None,
-              years_and_terms_filter=None):
+    def start(
+        self,
+        verbosity=3,
+        textbooks=True,
+        departments_filter=None,
+        years_and_terms_filter=None,
+    ):
 
         # TODO - remove hardcoding of year and term and use filtering
         for year, terms in list(years_and_terms_filter.items()):
@@ -106,7 +114,7 @@ class BarnesAndNoblesParser(BaseParser):
 
     def parse(self):
 
-        self.url = 'http://{}/webapp/wcs/stores/servlet/'.format(self.store_link)
+        self.url = "http://{}/webapp/wcs/stores/servlet/".format(self.store_link)
         self.params = {
             "campusId": "14704480",
             "termId": "",
@@ -116,11 +124,11 @@ class BarnesAndNoblesParser(BaseParser):
             "storeId": self.store_id,
             "catalogId": "10001",
             "langId": "-1",
-            "dropdown": "course"
+            "dropdown": "course",
         }
 
         self.semesters = self.parse_semesters(False)
-        self.requester.headers = {'User-Agent': UserAgent().random}
+        self.requester.headers = {"User-Agent": UserAgent().random}
         for semester in self.semesters:
             departments = self.parse_departments(semester)
             for department in departments:
@@ -133,19 +141,15 @@ class BarnesAndNoblesParser(BaseParser):
             textbooks = self.get_textbooks(section.id, True)
 
     def parse_semesters(self, is_retry=False):
-        url = self.url + 'TBWizardView'
-        params = {
-            "catalogId":"10001",
-            "langId":"-1",
-            "storeId":self.store_id
-        }
+        url = self.url + "TBWizardView"
+        params = {"catalogId": "10001", "langId": "-1", "storeId": self.store_id}
 
-        payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\n0\r\n-----011000010111000001101001--"
-        self.requester.headers['content-type'] = "multipart/form-data; boundary=---011000010111000001101001"
-        semester_list = self.requester.post(url,
-            params=params,
-            data=payload,
-            throttle=lambda:sleep(randint(300, 500))
+        payload = '-----011000010111000001101001\r\nContent-Disposition: form-data; name="id"\r\n\r\n0\r\n-----011000010111000001101001--'
+        self.requester.headers[
+            "content-type"
+        ] = "multipart/form-data; boundary=---011000010111000001101001"
+        semester_list = self.requester.post(
+            url, params=params, data=payload, throttle=lambda: sleep(randint(300, 500))
         ).find(class_="bncbSelectBox termHeader")
 
         if is_retry:
@@ -156,42 +160,33 @@ class BarnesAndNoblesParser(BaseParser):
             sem_id = li["data-optionvalue"]
             name = li.contents[0]
             names = name.split(" ")
-            term, year = names[:len(names) - 1], names[len(names) - 1:]
+            term, year = names[: len(names) - 1], names[len(names) - 1 :]
             semesters.append(TextbookSemester(sem_id, name, term, year))
         return semesters
 
     def parse_departments(self, semester):
-        url = self.url + 'TextBookProcessDropdownsCmd'
-        self.params.update({
-            'termId': semester.id,
-            'dropdown': 'term'
-        })
+        url = self.url + "TextBookProcessDropdownsCmd"
+        self.params.update({"termId": semester.id, "dropdown": "term"})
         self.requester.headers = {
-            'User-Agent': UserAgent().random,
+            "User-Agent": UserAgent().random,
         }
 
         return self.get_objects(url, self.params)
 
     def parse_courses(self, semester, department):
-        url = self.url + 'TextBookProcessDropdownsCmd'
-        self.params.update({
-            'deptId': department.id,
-            'dropdown': 'dept'
-        })
+        url = self.url + "TextBookProcessDropdownsCmd"
+        self.params.update({"deptId": department.id, "dropdown": "dept"})
         self.requester.headers = {
-            'User-Agent': UserAgent().random,
+            "User-Agent": UserAgent().random,
         }
 
         return self.get_objects(url, self.params)
 
     def parse_sections(self, semester, department, course):
-        url = self.url + 'TextBookProcessDropdownsCmd'
-        self.params.update({
-            'courseId': course.id,
-            'dropdown': 'course'
-        })
+        url = self.url + "TextBookProcessDropdownsCmd"
+        self.params.update({"courseId": course.id, "dropdown": "course"})
         self.requester.headers = {
-            'User-Agent': UserAgent().random,
+            "User-Agent": UserAgent().random,
         }
 
         return self.get_objects(url, self.params)
@@ -199,9 +194,8 @@ class BarnesAndNoblesParser(BaseParser):
     def get_objects(self, url, params):
         objs = []
         while True:
-            raw_objs = self.requester.post(url,
-                params=params,
-                throttle=lambda:sleep(randint(300, 500))
+            raw_objs = self.requester.post(
+                url, params=params, throttle=lambda: sleep(randint(300, 500))
             )
             objs = []
             success = True
@@ -223,29 +217,37 @@ class BarnesAndNoblesParser(BaseParser):
             return id_, name
         except KeyError:
             self.requester.session = requests.Session()
-            self.requester.headers = {'User-Agent': UserAgent().random}
+            self.requester.headers = {"User-Agent": UserAgent().random}
             self.parse_semesters(True)
             return False
 
     def parse_textbooks(self, soup):
-        textbooks = soup.find_all('div', class_='book_details')
-        textbook_sections = soup.find_all('div',class_="book_sec")
-        print("( Request #: " + str(self.book_request_count) + ") " + str(len(textbooks)) + " textbooks found.")
+        textbooks = soup.find_all("div", class_="book_details")
+        textbook_sections = soup.find_all("div", class_="book_sec")
+        print(
+            "( Request #: "
+            + str(self.book_request_count)
+            + ") "
+            + str(len(textbooks))
+            + " textbooks found."
+        )
         self.book_request_count += 1
         self.last_num_found = len(textbooks)
         for tbsec in textbook_sections:
-            raw_code = tbsec.find_all('h1')[0]
+            raw_code = tbsec.find_all("h1")[0]
             code_list = raw_code.get_text().split()[:-2]
             course_code = self.delimeter.join(code_list[:-1])
             if len(code_list[2]) == 1:
                 section = "(0" + code_list[2] + ")"
             else:
                 section = "(" + code_list[2] + ")"
-            for tb in tbsec.find_all('div',class_="book_details"):
-                match = re.findall(self.isbn_pattern,"".join(tb.get_text()))
+            for tb in tbsec.find_all("div", class_="book_details"):
+                match = re.findall(self.isbn_pattern, "".join(tb.get_text()))
                 if len(match) > 0:
                     isbn_number = match[0]
-                    is_required = self.check_required(tb.find('span', class_="recommendBookType").get_text())
+                    is_required = self.check_required(
+                        tb.find("span", class_="recommendBookType").get_text()
+                    )
                     self.make_textbook(is_required, isbn_number, course_code, section)
 
     def make_textbook(self, is_required, isbn_number, course_code, section_code):
@@ -268,26 +270,28 @@ class BarnesAndNoblesParser(BaseParser):
         # Before DB schema update, use old code:
 
         try:
-            course = Course.objects.filter(code__contains = course_code, school = self.school)[0]
+            course = Course.objects.filter(
+                code__contains=course_code, school=self.school
+            )[0]
             print(course)
         except IndexError:
             print("index error (course does not exist): " + course_code)
             return
-        sections = Section.objects.filter(course = course, meeting_section = section_code)
+        sections = Section.objects.filter(course=course, meeting_section=section_code)
         textbook_data = amazon_textbook_fields(str(isbn_number))
         if textbook_data is None or len(textbook_data) == 0:
-            print ("No such textbook on Amazon")
+            print("No such textbook on Amazon")
             return
         # update/create textbook
-        textbook, created = Textbook.objects.update_or_create(isbn=isbn_number, defaults=textbook_data)
+        textbook, created = Textbook.objects.update_or_create(
+            isbn=isbn_number, defaults=textbook_data
+        )
         self.create_count += int(created)
 
         # link to all course offerings
         for section in sections:
             section, created = TextbookLink.objects.update_or_create(
-                is_required = is_required,
-                section = section,
-                textbook = textbook
+                is_required=is_required, section=section, textbook=textbook
             )
 
         # print results
@@ -303,7 +307,7 @@ class BarnesAndNoblesParser(BaseParser):
             except UnicodeEncodeError:
                 pass
 
-    def check_required(self,html):
+    def check_required(self, html):
         if html.find("REQUIRED") != -1:
             return True
         else:
@@ -315,30 +319,39 @@ class BarnesAndNoblesParser(BaseParser):
             return None
 
         self.requester.headers = {
-            'content-type': "multipart/form-data; boundary=---011000010111000001101001",
-            'User-Agent': UserAgent().random,
+            "content-type": "multipart/form-data; boundary=---011000010111000001101001",
+            "User-Agent": UserAgent().random,
         }
-        url = self.url + 'BNCBTBListView'
-        soup = self.requester.post(url, data=payload, throttle=lambda:sleep(randint(300, 500)))
+        url = self.url + "BNCBTBListView"
+        soup = self.requester.post(
+            url, data=payload, throttle=lambda: sleep(randint(300, 500))
+        )
         textbooks = self.parse_textbooks(soup)
 
         return textbooks
 
 
 class TextbookPayload:
-    '''Builds up 100 textbook request to request from bn.'''
+    """Builds up 100 textbook request to request from bn."""
 
     def __init__(self, store_id):
         self.counter = 0
         self.max = 100
-        self.begining_payload = '-----011000010111000001101001\r\nContent-Disposition: form-data; name="storeId"\r\n\r\n{}'.format(store_id) + '\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="catalogId"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="langId"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="clearAll"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="viewName"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="secCatList"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="removeSectionId"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="mcEnabled"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="showCampus"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectTerm"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectDepartment"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectSection"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectCourse"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="campus1"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="firstTermName_14704480"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="firstTermId_14704480"\r\n\r\n73256452\r\n-----011000010111000001101001'
+        self.begining_payload = (
+            '-----011000010111000001101001\r\nContent-Disposition: form-data; name="storeId"\r\n\r\n{}'.format(
+                store_id
+            )
+            + '\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="catalogId"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="langId"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="clearAll"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="viewName"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="secCatList"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="removeSectionId"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="mcEnabled"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="showCampus"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectTerm"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectDepartment"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectSection"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectCourse"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="campus1"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="firstTermName_14704480"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="firstTermId_14704480"\r\n\r\n73256452\r\n-----011000010111000001101001'
+        )
         self.payload = self.begining_payload
 
     def add_textbook(self, section_id, forced=False):
         if forced:
             return self.dump()
         self.counter += 1
-        self.payload += '\r\nContent-Disposition: form-data; name="section_{}"\r\n\r\n{}\r\n-----011000010111000001101001'.format(str(self.counter), str(section_id))
+        self.payload += '\r\nContent-Disposition: form-data; name="section_{}"\r\n\r\n{}\r\n-----011000010111000001101001'.format(
+            str(self.counter), str(section_id)
+        )
         if self.counter >= self.max:
             return self.dump()
         return None
@@ -349,4 +362,4 @@ class TextbookPayload:
         self.counter = 0
         payload = self.payload
         self.payload = self.begining_payload
-        return payload + '--'
+        return payload + "--"
