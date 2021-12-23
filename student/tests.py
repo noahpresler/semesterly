@@ -415,7 +415,6 @@ class ReactionTest(APITestCase):
         """Create a user and course."""
         self.user = User.objects.create_user(username="jacob", password="top_secret")
         self.student = Student.objects.create(user=self.user)
-
         self.course = Course.objects.create(
             id=1, school="uoft", code="SEM101", name="Intro"
         )
