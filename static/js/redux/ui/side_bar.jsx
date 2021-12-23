@@ -24,7 +24,7 @@ import CreditTickerContainer from './containers/credit_ticker_container';
 import Textbook from './textbook';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import { getNextAvailableColour } from '../util';
-import { getTextbooksFromCourse } from '../reducers/entities_reducer';
+import { getTextbooksFromCourse } from '../state/entities_reducer';
 
 class SideBar extends React.Component {
   constructor(props) {
