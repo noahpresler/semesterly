@@ -43,7 +43,6 @@ import termsOfServiceModal from './terms_of_service_modal_reducer';
 import termsOfServiceBanner from './terms_of_service_banner_reducer';
 import userAcquisitionModal from './slices/userAcquisitionModalSlice';
 import textbookModal from './textbook_modal_reducer';
-import finalExamsModal from './final_exams_modal_reducer';
 import registrar from './registrar_reducer';
 import entities, * as fromEntities from './entities_reducer';
 
@@ -56,7 +55,6 @@ export const reducers = {
   customSlots,
   entities,
   explorationModal,
-  finalExamsModal,
   friends,
   integrationModal,
   integrations,

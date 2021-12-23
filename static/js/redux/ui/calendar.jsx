@@ -308,29 +308,6 @@ class Calendar extends React.Component {
       </div>
     );
 
-
-    const pilotButton = (
-      <a href={'/pilot/'} className="pilot-link">
-        <img
-          alt="logo"
-          className="pilot-logo"
-          src="/static/img/pilot-logo.png"
-        /> <p className="pilot-login-desc"> Register for PILOT </p>
-      </a>
-    );
-
-    const pilotLogIn = (
-      <a className="social-login-pilot">
-        <img
-          alt="logo"
-          className="pilot-logo"
-          src="/static/img/pilot-logo.png"
-        /> <p className="pilot-login-desc">  Log in to Semester.ly first to register for PILOT </p>
-      </a>
-    );
-
-    const pilot = this.props.userInfo.isLoggedIn ? pilotButton : pilotLogIn;
-
     return (
       <div className={classnames('calendar fc fc-ltr fc-unthemed week-calendar',
         { hoverCustomSlot: this.state.hoverCustomSlot })}
@@ -339,7 +316,6 @@ class Calendar extends React.Component {
           <div className="fc-left" style={{ display: 'none' }}>
             { !this.state.hoverCustomSlot ? <PaginationContainer /> : null }
             { description }
-            { pilot }
           </div>
           <div className="fc-right">
             { addSISButton }

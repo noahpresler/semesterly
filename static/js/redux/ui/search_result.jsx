@@ -138,13 +138,6 @@ class SearchResult extends React.Component {
       info = !inRoster ? 'Add this course to your timetable' :
         'Remove this course from your timetable';
     }
-    const pilotLogoImg = {
-      backgroundImage: 'url(/static/img/integrations/pilotLogo.png)',
-    };
-    const pilotLogo = course.integrations.indexOf('Pilot') > -1 ?
-      (<div className="label integration">
-        <span className="has-pilot" style={pilotLogoImg} />
-      </div>) : null;
     const learningDenLogoImg = {
       backgroundImage: 'url(/static/img/integrations/learningDen.png)',
     };
@@ -177,7 +170,6 @@ class SearchResult extends React.Component {
           <h4
             className={classNames('label', 'bubble')}
           >{this.props.campuses[course.campus]}</h4>
-          { pilotLogo }
           { learningDenLogo }
           { waitlistOnlyFlag }
         </div>
