@@ -23,28 +23,52 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0004_auto_20160520_1141'),
+        ("timetable", "0004_auto_20160520_1141"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CourseIntegration',
+            name="CourseIntegration",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('json', models.TextField()),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='timetable.Course')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("json", models.TextField()),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="timetable.Course",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Integration',
+            name="Integration",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=250)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=250)),
             ],
         ),
         migrations.AddField(
-            model_name='courseintegration',
-            name='integration',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='timetable.Integration'),
+            model_name="courseintegration",
+            name="integration",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="timetable.Integration"
+            ),
         ),
     ]

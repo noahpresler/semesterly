@@ -157,6 +157,7 @@ class CourseModal(FeatureFlowView):
 
         return {"sharedCourse": course_json.data, "semester": semester}
 
+
 class CourseDetail(ValidateSubdomainMixin, APIView):
     """View that handles individual course entities."""
 
