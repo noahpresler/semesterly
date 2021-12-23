@@ -420,7 +420,6 @@ class ReactionTest(APITestCase):
             id=1, school="uoft", code="SEM101", name="Intro"
         )
         self.title = Reaction.REACTION_CHOICES[0][0]
-
         self.factory = APIRequestFactory()
 
     def test_add_reaction(self):
