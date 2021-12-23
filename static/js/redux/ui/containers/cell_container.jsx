@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import { connect } from 'react-redux';
 import Cell from '../calendar_cell';
 import { addCustomSlot, updateCustomSlot } from '../../actions/timetable_actions';
-import { getMaxEndHour } from '../../reducers';
+import { getMaxEndHour } from '../../state';
 
 const mapStateToProps = state => ({
   endHour: getMaxEndHour(state),

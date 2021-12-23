@@ -96,11 +96,6 @@ export const toggleSaveCalendarModal = () => ({ type: ActionTypes.TOGGLE_SAVE_CA
 
 export const openSignUpModal = () => ({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
 
-export const changeUserInfo = info => ({
-  type: ActionTypes.CHANGE_USER_INFO,
-  data: info,
-});
-
 export const hideExplorationModal = () => ({ type: ActionTypes.HIDE_EXPLORATION_MODAL });
 
 export const showExplorationModal = () => ({ type: ActionTypes.SHOW_EXPLORATION_MODAL });
@@ -132,12 +127,4 @@ export const dismissTermsOfServiceBanner = () => ({
 
 export const triggerTermsOfServiceModal = () => ({
   type: ActionTypes.TRIGGER_TOS_MODAL,
-});
-
-export const setUserSettingsModalVisible = () => ({
-  type: ActionTypes.SET_SETTINGS_MODAL_VISIBLE,
-});
-
-export const setUserSettingsModalHidden = () => ({
-  type: ActionTypes.SET_SETTINGS_MODAL_HIDDEN,
 });
