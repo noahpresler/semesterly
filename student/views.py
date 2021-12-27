@@ -81,13 +81,9 @@ def unsubscribe(request, student_id, token):
     student = Student.objects.get(id=student_id)
 
     if student and check_student_token(student, token):
-        # Link is valid
         student.emails_enabled = False
         student.save()
-
         return render(request, "unsubscribe.html")
-
-    # Link is invalid. Redirect to homepage.
     return HttpResponseRedirect("/")
 
 
@@ -130,29 +126,12 @@ class UserView(RedirectToSignupMixin, APIView):
         reviews of courses, what social they have connected, whether notificaitons
         are enabled, etc.
         """
-        student = Student.objects.get(user=request.user)
-        reactions = (
-            Reaction.objects.filter(student=student)
-            .values("title")
-            .annotate(count=Count("title"))
+        student: Student = Student.objects.get(user=request.user)
+        img_url = (
+            f"https://graph.facebook.com/{student.fbook_uid}/picture?width=700&height=700"
+            if student.is_signed_up_through_fb()
+            else student.img_url.replace("sz=50", "sz=700")
         )
-        if student.user.social_auth.filter(provider="google-oauth2").exists():
-            has_google = True
-        else:
-            has_google = False
-        if student.user.social_auth.filter(provider="facebook").exists():
-            img_url = (
-                "https://graph.facebook.com/"
-                + student.fbook_uid
-                + "/picture?width=700&height=700"
-            )
-            has_facebook = True
-        else:
-            img_url = student.img_url.replace("sz=50", "sz=700")
-            has_facebook = False
-        has_notifications_enabled = RegistrationToken.objects.filter(
-            student=student
-        ).exists()
         context = {
             "name": student.user,
             "major": student.major,
@@ -160,17 +139,26 @@ class UserView(RedirectToSignupMixin, APIView):
             "student": student,
             "total": 0,
             "img_url": img_url,
-            "hasGoogle": has_google,
-            "hasFacebook": has_facebook,
-            "notifications": has_notifications_enabled,
+            "hasGoogle": student.is_signed_up_through_google(),
+            "hasFacebook": student.is_signed_up_through_fb(),
+            "hasJHU": student.is_signed_up_through_jhu(),
+            "notifications": RegistrationToken.objects.filter(student=student).exists(),
         }
+        self.add_reactions(context, student)
+        return render(request, "profile.html", context)
+
+    def add_reactions(self, context, student):
+        reactions = (
+            Reaction.objects.filter(student=student)
+            .values("title")
+            .annotate(count=Count("title"))
+        )
         for r in reactions:
             context[r["title"]] = r["count"]
         for r in Reaction.REACTION_CHOICES:
             if r[0] not in context:
                 context[r[0]] = 0
             context["total"] += context[r[0]]
-        return render(request, "profile.html", context)
 
     def patch(self, request):
         """
