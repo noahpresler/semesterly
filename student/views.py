@@ -196,7 +196,9 @@ class UserView(RedirectToSignupMixin, APIView):
 
 
 class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
-    """Responsible for the viewing and managing of all Students' :obj:`PersonalTimetable`."""
+    """Responsible for the viewing and managing of all Students'
+    :obj:`PersonalTimetable`.
+    """
 
     def get(self, request, sem_name, year):
         """Returns student's personal timetables"""
@@ -339,7 +341,8 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         tt.save()
 
     def update_events(self, tt, events):
-        """Replace tt's events with input events. Deletes all old events to avoid buildup in db"""
+        """Replace tt's events with input events. Deletes all old events to avoid
+        buildup in db"""
         to_delete = tt.events.all()
         tt.events.clear()
         to_delete.delete()
@@ -372,8 +375,9 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                     "total_count": the total # in all classes on timetable,
                 }
 
-            **If the query parameter course_ids is present** a list of dictionaries representing past classmates and current classmates. These are students who the authenticated user is friends
-            with and who has social courses enabled.::
+            **If the query parameter course_ids is present** a list of dictionaries
+            representing past classmates and current classmates. These are students who
+            the authenticated user is friends with and who has social courses enabled.::
 
                 [{
                     "course_id":6137,
@@ -381,9 +385,9 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                     "classmates":[...]
                 }, ...]
 
-            **Otherwise** a list of friends and non-friends alike who have social_all enabled to
-            be dispalyed in the "find-friends" modal. Sorted by the number courses
-            the authenticated user shares.::
+            **Otherwise** a list of friends and non-friends alike who have social_all
+            enabled to be displayed in the "find-friends" modal. Sorted by the number
+            courses the authenticated user shares.::
 
                 [{
                     "name": "...",
