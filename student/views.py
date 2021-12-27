@@ -198,100 +198,85 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         which are provided.
         """
         if "source" in request.data:  # duplicate existing timetable
-            school = request.subdomain
-            name = request.data["source"]
-            semester = Semester.objects.get(**request.data["semester"])
-            student = Student.objects.get(user=request.user)
-            new_name = request.data["name"]
-
-            duplicate = get_object_or_404(
-                PersonalTimetable,
-                student=student,
-                name=name,
-                school=school,
-                semester=semester,
-            )
-            # save manytomany relationships before copying
-            courses, sections = duplicate.courses.all(), duplicate.sections.all()
-            events = duplicate.events.all()
-            for (
-                event
-            ) in events:  # create duplicates of each event to allow for safe delete
-                event.pk = None
-                event.save()
-
-            duplicate.pk = None  # creates duplicate of object
-            duplicate.name = new_name
-            duplicate.save()
-            duplicate.courses.set(courses)
-            duplicate.sections.set(sections)
-            duplicate.events.set(events)
-
-            response = {
-                "timetables": get_student_tts(student, school, semester),
-                "saved_timetable": DisplayTimetableSerializer.from_model(
-                    duplicate
-                ).data,
-            }
-            return Response(response, status=status.HTTP_201_CREATED)
+            return self.duplicate_timetable(request)
         else:
-            school = request.subdomain
-            has_conflict = request.data["has_conflict"]
-            name = request.data["name"]
-            semester, _ = Semester.objects.get_or_create(**request.data["semester"])
-            student = Student.objects.get(user=request.user)
-            params = {
-                "school": school,
-                "name": name,
-                "semester": semester,
-                "student": student,
-            }
+            return self.create_or_update_timetable(request)
 
-            slots = request.data["slots"]
-            # id is None if this is a new timetable
-            tt_id = request.data.get("id")
-
-            if PersonalTimetable.objects.filter(~Q(id=tt_id), **params):
-                return Response(status=status.HTTP_409_CONFLICT)
-
-            personal_timetable = (
-                PersonalTimetable.objects.create(**params)
-                if tt_id is None
-                else PersonalTimetable.objects.get(id=tt_id)
-            )
-            self.update_tt(personal_timetable, name, has_conflict, slots)
-            self.update_events(personal_timetable, request.data["events"])
-
-            response = {
-                "timetables": get_student_tts(student, school, semester),
-                "saved_timetable": DisplayTimetableSerializer.from_model(
-                    personal_timetable
-                ).data,
-            }
-            response_status = (
-                status.HTTP_201_CREATED if tt_id is None else status.HTTP_200_OK
-            )
-            return Response(response, status=response_status)
-
-    def delete(self, request, sem_name, year, tt_name):
-        """Deletes a PersonalTimetable by name/year/term."""
+    def duplicate_timetable(self, request):
         school = request.subdomain
-        name = tt_name
-        semester = Semester.objects.get(name=sem_name, year=year)
+        name = request.data["source"]
+        semester = Semester.objects.get(**request.data["semester"])
         student = Student.objects.get(user=request.user)
-
-        to_delete = PersonalTimetable.objects.filter(
-            student=student, name=name, school=school, semester=semester
+        new_name = request.data["name"]
+        duplicate = get_object_or_404(
+            PersonalTimetable,
+            student=student,
+            name=name,
+            school=school,
+            semester=semester,
         )
-        for tt in to_delete:
-            tt.events.all().delete()
-        to_delete.delete()
+        courses, sections, events = self.get_duplicate_m2m_fields(duplicate)
+        self.create_duplicated_timetable(new_name, duplicate, courses, sections, events)
+        response = {
+            "timetables": get_student_tts(student, school, semester),
+            "saved_timetable": DisplayTimetableSerializer.from_model(duplicate).data,
+        }
+        return Response(response, status=status.HTTP_201_CREATED)
 
-        # TODO: should respond with deleted object
-        return Response(
-            {"timetables": get_student_tts(student, school, semester)},
-            status=status.HTTP_200_OK,
+    def get_duplicate_m2m_fields(self, duplicate):
+        # save manytomany relationships before copying
+        courses, sections = duplicate.courses.all(), duplicate.sections.all()
+        events = duplicate.events.all()
+        for event in events:  # create duplicates of each event to allow for safe delete
+            event.pk = None
+            event.save()
+        return courses, sections, events
+
+    def create_duplicated_timetable(
+        self, new_name, duplicate, courses, sections, events
+    ):
+        duplicate.pk = None  # creates duplicate of object
+        duplicate.name = new_name
+        duplicate.save()
+        duplicate.courses.set(courses)
+        duplicate.sections.set(sections)
+        duplicate.events.set(events)
+
+    def create_or_update_timetable(self, request):
+        school = request.subdomain
+        has_conflict = request.data["has_conflict"]
+        name = request.data["name"]
+        semester, _ = Semester.objects.get_or_create(**request.data["semester"])
+        student = Student.objects.get(user=request.user)
+        params = {
+            "school": school,
+            "name": name,
+            "semester": semester,
+            "student": student,
+        }
+        tt_id = request.data.get("id")  # id is None if this is a new timetable
+        if PersonalTimetable.objects.filter(~Q(id=tt_id), **params):
+            return Response(status=status.HTTP_409_CONFLICT)
+
+        personal_timetable = (
+            PersonalTimetable.objects.create(**params)
+            if tt_id is None
+            else PersonalTimetable.objects.get(id=tt_id)
         )
+        slots = request.data["slots"]
+        self.update_tt(personal_timetable, name, has_conflict, slots)
+        self.update_events(personal_timetable, request.data["events"])
+
+        response = {
+            "timetables": get_student_tts(student, school, semester),
+            "saved_timetable": DisplayTimetableSerializer.from_model(
+                personal_timetable
+            ).data,
+        }
+        response_status = (
+            status.HTTP_201_CREATED if tt_id is None else status.HTTP_200_OK
+        )
+        return Response(response, status=response_status)
 
     def update_tt(self, tt, new_name, new_has_conflict, new_slots):
         tt.name = new_name
@@ -325,6 +310,25 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             )
             tt.events.add(event_obj)
         tt.save()
+
+    def delete(self, request, sem_name, year, tt_name):
+        """Deletes a PersonalTimetable by name/year/term."""
+        school = request.subdomain
+        name = tt_name
+        semester = Semester.objects.get(name=sem_name, year=year)
+        student = Student.objects.get(user=request.user)
+
+        to_delete = PersonalTimetable.objects.filter(
+            student=student, name=name, school=school, semester=semester
+        )
+        for tt in to_delete:
+            tt.events.all().delete()
+        to_delete.delete()
+
+        return Response(
+            {"timetables": get_student_tts(student, school, semester)},
+            status=status.HTTP_200_OK,
+        )
 
 
 class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
