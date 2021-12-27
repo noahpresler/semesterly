@@ -46,24 +46,6 @@ DAY_MAP = {"M": "mo", "T": "tu", "W": "we", "R": "th", "F": "fr", "S": "sa", "U"
 hashids = Hashids(salt=get_secret("HASHING_SALT"))
 
 
-def get_friend_count_from_course_id(school, student, course_id, semester):
-    """
-    Computes the number of friends a user has in a given course for a given semester.
-
-    Ignores whether or not those friends have social courses enabled. Never exposes
-    those user's names or infromation. This count is used purely to upsell user's to
-    enable social courses.
-    """
-    return (
-        PersonalTimetable.objects.filter(
-            student__in=student.friends.all(), courses__id__exact=course_id
-        )
-        .filter(Q(semester=semester))
-        .distinct("student")
-        .count()
-    )
-
-
 def create_unsubscribe_link(student):
     """Generates a unsubscribe link which directs to the student unsubscribe view."""
     token = student.get_token()
@@ -491,6 +473,24 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
             friends.sort(key=lambda friend: len(friend["shared_courses"]), reverse=True)
             return Response(friends, status=status.HTTP_200_OK)
+
+
+def get_friend_count_from_course_id(school, student, course_id, semester):
+    """
+    Computes the number of friends a user has in a given course for a given semester.
+
+    Ignores whether or not those friends have social courses enabled. Never exposes
+    those user's names or infromation. This count is used purely to upsell user's to
+    enable social courses.
+    """
+    return (
+        PersonalTimetable.objects.filter(
+            student__in=student.friends.all(), courses__id__exact=course_id
+        )
+        .filter(Q(semester=semester))
+        .distinct("student")
+        .count()
+    )
 
 
 class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
