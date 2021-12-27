@@ -24,6 +24,12 @@ from student.models import (
     RegistrationToken,
 )
 from timetable.models import Semester, Course, Section, Offering
+from helpers.test.utils import (
+    create_user,
+    create_student,
+    get_response,
+    get_auth_response,
+)
 from helpers.test.test_cases import UrlTestCase
 
 
@@ -65,8 +71,8 @@ class UrlsTest(UrlTestCase):
 
 class UserViewTest(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="jacob", password="top_secret")
-        self.student = Student.objects.create(user=self.user)
+        self.user = create_user(username="jacob", password="top_secret")
+        self.student = create_student(user=self.user)
         self.factory = APIRequestFactory()
 
     def test_profile_page(self):
@@ -82,10 +88,7 @@ class UserViewTest(APITestCase):
     def test_update_settings(self):
         new_settings = {"emails_enabled": True, "social_courses": True, "major": "CS"}
         request = self.factory.patch("/user/settings/", new_settings, format="json")
-        force_authenticate(request, user=self.user)
-        request.user = self.user
-        view = resolve("/user/settings/").func
-        response = view(request)
+        response = get_auth_response(request, self.user, "/user/settings/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.student = Student.objects.get(user=self.user)
         self.assertDictContainsSubset(new_settings, model_to_dict(self.student))
@@ -114,10 +117,7 @@ class UserViewTest(APITestCase):
         token = RegistrationToken(student=self.student)
 
         request = self.factory.delete("/user/settings/")
-        force_authenticate(request, user=self.user)
-        request.user = self.user
-        view = resolve("/user/settings/").func
-        response = view(request)
+        response = get_auth_response(request, self.user, "/user/settings/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         # all student related data should be deleted
@@ -137,8 +137,8 @@ class UserViewTest(APITestCase):
 class UserTimetableViewTest(APITestCase):
     def setUp(self):
         """Create a user and personal timetable."""
-        self.user = User.objects.create_user(username="jacob", password="top_secret")
-        self.student = Student.objects.create(user=self.user)
+        self.user = create_user(username="jacob", password="top_secret")
+        self.student = create_student(user=self.user)
         self.sem = Semester.objects.create(name="Winter", year="1995")
 
         course = Course.objects.create(id=1, school="uoft", code="SEM101", name="Intro")
@@ -165,11 +165,9 @@ class UserTimetableViewTest(APITestCase):
 
     def test_get_timetables(self):
         request = self.factory.get("/user/timetables/Winter/1995/", format="json")
-        force_authenticate(request, user=self.user)
-        request.user = self.user
-        request.subdomain = "uoft"
-        view = resolve("/user/timetables/Winter/1995/").func
-        response = view(request, "Winter", "1995")
+        response = get_auth_response(
+            request, self.user, "/user/timetables/Winter/1995/", "Winter", "1995"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["timetables"]), 1)
         self.assertEqual(len(response.data["courses"]), 1)
@@ -189,11 +187,7 @@ class UserTimetableViewTest(APITestCase):
             "has_conflict": False,
         }
         request = self.factory.post("/user/timetables/", data, format="json")
-        force_authenticate(request, user=self.user)
-        request.user = self.user
-        request.subdomain = "uoft"
-        view = resolve("/user/timetables/").func
-        response = view(request)
+        response = get_auth_response(request, self.user, "/user/timetables/")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         PersonalTimetable.objects.get(name="new tt")
 
@@ -213,10 +207,7 @@ class UserTimetableViewTest(APITestCase):
         }
         request = self.factory.post("/user/timetables/", data, format="json")
         force_authenticate(request, user=self.user)
-        request.user = self.user
-        request.subdomain = "uoft"
-        view = resolve("/user/timetables/").func
-        response = view(request)
+        response = get_auth_response(request, self.user, "/user/timetables/")
         self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
 
     def test_duplicate_timetable(self):
@@ -226,11 +217,7 @@ class UserTimetableViewTest(APITestCase):
             "name": "dupe tt",
         }
         request = self.factory.post("/user/timetables/", data, format="json")
-        force_authenticate(request, user=self.user)
-        request.user = self.user
-        request.subdomain = "uoft"
-        view = resolve("/user/timetables/").func
-        response = view(request)
+        response = get_auth_response(request, self.user, "/user/timetables/")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         PersonalTimetable.objects.get(name="dupe tt")
 
@@ -253,11 +240,7 @@ class UserTimetableViewTest(APITestCase):
             id=10, name="oldtt", school="uoft", semester=self.sem, student=self.student
         )
         request = self.factory.post("/user/timetables/", data, format="json")
-        force_authenticate(request, user=self.user)
-        request.user = self.user
-        request.subdomain = "uoft"
-        view = resolve("/user/timetables/").func
-        response = view(request)
+        response = get_auth_response(request, self.user, "/user/timetables/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(PersonalTimetable.objects.get(id=10).name, "renamed")
 
@@ -270,11 +253,14 @@ class UserTimetableViewTest(APITestCase):
             student=self.student,
         )
         request = self.factory.delete("/user/timetables/Winter/1995/todelete")
-        force_authenticate(request, user=self.user)
-        request.user = self.user
-        request.subdomain = "uoft"
-        view = resolve("/user/timetables/").func
-        response = view(request, "Winter", "1995", "todelete")
+        response = get_auth_response(
+            request,
+            self.user,
+            "/user/timetables/Winter/1995/todelete",
+            "Winter",
+            "1995",
+            "todelete",
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(PersonalTimetable.objects.filter(id=20).exists())
 
@@ -282,24 +268,24 @@ class UserTimetableViewTest(APITestCase):
 class ClassmateViewTest(APITestCase):
     def setUp(self):
         # set up friends
-        self.user1 = User.objects.create_user(
+        self.user1 = create_user(
             first_name="jacob", last_name="D", username="jacob", password="secret"
         )
-        self.student1 = Student.objects.create(
+        self.student1 = create_student(
             id=1, user=self.user1, social_courses=True, social_all=True
         )
 
-        self.user2 = User.objects.create_user(
+        self.user2 = create_user(
             first_name="tim", last_name="F", username="tim", password="secret"
         )
-        self.student2 = Student.objects.create(
+        self.student2 = create_student(
             id=2, user=self.user2, social_courses=True, social_all=True
         )
 
-        self.user3 = User.objects.create_user(
+        self.user3 = create_user(
             first_name="matt", last_name="A", username="matt", password="secret"
         )
-        self.student3 = Student.objects.create(
+        self.student3 = create_student(
             id=3, user=self.user3, social_courses=True, social_all=True
         )
 
@@ -374,21 +360,17 @@ class ClassmateViewTest(APITestCase):
         request = self.factory.get(
             "/user/classmates/Fall/2000/", {"count": True, "course_ids[]": [1]}
         )
-        force_authenticate(request, user=self.user2)
-        request.user = self.user2
-        request.subdomain = "uoft"
-        view = resolve("/user/classmates/Fall/2016/").func
-        response = view(request, "Fall", "2000")
+        response = get_auth_response(
+            request, self.user2, "/user/classmates/Fall/2016", "Fall", "2000"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertDictEqual(response.data, {"id": 1, "count": 1, "total_count": 1})
 
     def test_get_classmates(self):
         request = self.factory.get("/user/classmates/Fall/2000/", {"course_ids[]": [1]})
-        force_authenticate(request, user=self.user2)
-        request.user = self.user2
-        request.subdomain = "uoft"
-        view = resolve("/user/classmates/Fall/2016/").func
-        response = view(request, "Fall", "2000")
+        response = get_auth_response(
+            request, "/user/classmates/Fall/2016/", self.user2, "Fall", "2000"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(len(response.data), 1)
@@ -400,11 +382,9 @@ class ClassmateViewTest(APITestCase):
 
     def test_find_friends(self):
         request = self.factory.get("/user/classmates/Fall/2000/")
-        force_authenticate(request, user=self.user3)
-        request.user = self.user3
-        request.subdomain = "uoft"
-        view = resolve("/user/classmates/Fall/2016/").func
-        response = view(request, "Fall", "2000")
+        response = get_auth_response(
+            request, "/user/classmates/Fall/2016/", self.user3, "Fall", "2000"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
 
@@ -412,8 +392,8 @@ class ClassmateViewTest(APITestCase):
 class ReactionTest(APITestCase):
     def setUp(self):
         """Create a user and course."""
-        self.user = User.objects.create_user(username="jacob", password="top_secret")
-        self.student = Student.objects.create(user=self.user)
+        self.user = create_user(username="jacob", password="top_secret")
+        self.student = create_student(user=self.user)
         self.course = Course.objects.create(
             id=1, school="uoft", code="SEM101", name="Intro"
         )
@@ -423,11 +403,7 @@ class ReactionTest(APITestCase):
     def test_add_reaction(self):
         data = {"cid": 1, "title": self.title}
         request = self.factory.post("/user/reactions/", data, format="json")
-        request.subdomain = "uoft"
-        force_authenticate(request, user=self.user)
-        request.user = self.user
-        view = resolve("/user/reactions/").func
-        response = view(request)
+        response = get_auth_response(request, self.user, "/user/reactions/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertTrue("reactions" in response.data)
