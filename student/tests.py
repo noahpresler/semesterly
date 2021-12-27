@@ -114,8 +114,6 @@ class UserViewTest(APITestCase):
         tt.sections.add(section)
         tt.save()
 
-        token = RegistrationToken(student=self.student)
-
         request = self.factory.delete("/user/settings/")
         response = get_auth_response(request, self.user, "/user/settings/")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -124,8 +122,7 @@ class UserViewTest(APITestCase):
         self.assertFalse(User.objects.exists())
         self.assertFalse(Student.objects.exists())
         self.assertFalse(PersonalTimetable.objects.exists())
-        # TODO
-        # self.assertFalse(PersonalEvent.objects.exists())
+        self.assertFalse(PersonalEvent.objects.exists())
         self.assertFalse(RegistrationToken.objects.exists())
 
         # course data should be untouched
