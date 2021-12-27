@@ -10,18 +10,15 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from datetime import datetime, timedelta
 import json
 
-import httplib2
 from django.urls import reverse
 from django.db.models import Q, Count
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from googleapiclient import discovery
+from django.utils import timezone
 from hashids import Hashids
 from rest_framework import status
 from rest_framework.response import Response
@@ -37,7 +34,7 @@ from student.models import (
     PersonalEvent,
     PersonalTimetable,
 )
-from student.utils import next_weekday, get_classmates_from_course_id, get_student_tts
+from student.utils import get_classmates_from_course_id, get_student_tts
 from timetable.models import Semester, Course, Section
 from timetable.serializers import DisplayTimetableSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
@@ -119,7 +116,7 @@ def accept_tos(request):
     terms were accepted.
     """
     student = Student.objects.get(user=request.user)
-    student.time_accepted_tos = datetime.today()
+    student.time_accepted_tos = timezone.now()
     student.save()
     return HttpResponse(status=204)
 
