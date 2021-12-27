@@ -11,14 +11,11 @@
 # GNU General Public License for more details.
 
 from django.conf.urls import re_path
-from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.views.generic.base import RedirectView
 
 import timetable.views
 from helpers.mixins import FeatureFlowView
-
-admin.autodiscover()
 
 urlpatterns = [
     re_path(r"^signin/*$", FeatureFlowView.as_view(feature_name="USER_ACQ")),
