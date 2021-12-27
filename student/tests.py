@@ -57,7 +57,6 @@ class UrlsTest(UrlTestCase):
             "student.views.ClassmateView",
             kwargs={"sem_name": "Fall", "year": "2016"},
         )
-        # self.assertUrlResolvesToView('/user/gcal/', 'student.views.GCalView')
         self.assertUrlResolvesToView("/user/reactions/", "student.views.ReactionView")
         self.assertUrlResolvesToView(
             "/delete_account/", "helpers.mixins.FeatureFlowView"
