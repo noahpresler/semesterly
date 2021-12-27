@@ -5,7 +5,7 @@ from django.urls import resolve
 
 
 def create_user(**kwargs) -> None:
-    user = User.objects.create_user(**kwargs)
+    user, _ = User.objects.get_or_create(**kwargs)
     user.save()
     return user
 
