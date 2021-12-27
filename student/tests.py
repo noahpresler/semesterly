@@ -256,7 +256,7 @@ class UserTimetableViewTest(APITestCase):
         response = get_auth_response(
             request,
             self.user,
-            "/user/timetables/Winter/1995/todelete",
+            "/user/timetables/",
             "Winter",
             "1995",
             "todelete",
@@ -361,7 +361,7 @@ class ClassmateViewTest(APITestCase):
             "/user/classmates/Fall/2000/", {"count": True, "course_ids[]": [1]}
         )
         response = get_auth_response(
-            request, self.user2, "/user/classmates/Fall/2016", "Fall", "2000"
+            request, self.user2, "/user/classmates/Fall/2016/", "Fall", "2000"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertDictEqual(response.data, {"id": 1, "count": 1, "total_count": 1})
@@ -369,7 +369,7 @@ class ClassmateViewTest(APITestCase):
     def test_get_classmates(self):
         request = self.factory.get("/user/classmates/Fall/2000/", {"course_ids[]": [1]})
         response = get_auth_response(
-            request, "/user/classmates/Fall/2016/", self.user2, "Fall", "2000"
+            request, self.user2, "/user/classmates/Fall/2016/", "Fall", "2000"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -383,7 +383,7 @@ class ClassmateViewTest(APITestCase):
     def test_find_friends(self):
         request = self.factory.get("/user/classmates/Fall/2000/")
         response = get_auth_response(
-            request, "/user/classmates/Fall/2016/", self.user3, "Fall", "2000"
+            request, self.user3, "/user/classmates/Fall/2016/", "Fall", "2000"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
