@@ -372,129 +372,153 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                 }, ...]
         """
         if request.query_params.get("count"):
-            school = request.subdomain
-            student = Student.objects.get(user=request.user)
-            course_ids = list(map(int, request.query_params.getlist("course_ids[]")))
-            semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-            total_count = 0
-            count = 0
-            most_friend_course_id = -1
-            for course_id in course_ids:
-                temp_count = get_friend_count_from_course_id(
-                    school, student, course_id, semester
-                )
-                if temp_count > count:
-                    count = temp_count
-                    most_friend_course_id = course_id
-                total_count += temp_count
-            data = {
-                "id": most_friend_course_id,
-                "count": count,
-                "total_count": total_count,
-            }
-            return Response(data, status=status.HTTP_200_OK)
+            return self.get_number_of_friends(request, sem_name, year)
         elif request.query_params.getlist("course_ids[]"):
-            school = request.subdomain
-            student = Student.objects.get(user=request.user)
-            course_ids = list(map(int, request.query_params.getlist("course_ids[]")))
-            semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-            # user opted in to sharing courses
-            course_to_classmates = {}
-            if student.social_courses:
-                friends = student.friends.filter(social_courses=True)
-                for course_id in course_ids:
-                    course_to_classmates[course_id] = get_classmates_from_course_id(
-                        school, student, course_id, semester, friends=friends
-                    )
-            return Response(course_to_classmates, status=status.HTTP_200_OK)
+            return self.get_social_friends(request, sem_name, year)
         else:
-            school = request.subdomain
-            student = Student.objects.get(user=request.user)
-            semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-            current_tt = (
-                student.personaltimetable_set.filter(school=school, semester=semester)
-                .order_by("last_updated")
-                .last()
-            )
-            if current_tt is None:
-                return Response([], status=status.HTTP_200_OK)
-            current_tt_courses = current_tt.courses.all()
+            return self.get_social_users(request, sem_name, year)
 
-            # The most recent TT per student with social enabled that has
-            # courses in common with input student
-            matching_tts = (
-                PersonalTimetable.objects.filter(
-                    student__social_all=True,
-                    courses__id__in=current_tt_courses,
-                    semester=semester,
-                )
-                .exclude(student=student)
-                .order_by("student", "last_updated")
-                .distinct("student")
-            )
-
-            friends = []
-            for matching_tt in matching_tts:
-                friend = matching_tt.student
-                sections_in_common = (
-                    matching_tt.sections.all() & current_tt.sections.all()
-                )
-                courses_in_common = matching_tt.courses.all() & current_tt_courses
-
-                shared_courses = []
-                for course in courses_in_common:
-                    shared_courses.append(
-                        {
-                            "course": model_to_dict(
-                                course,
-                                exclude=[
-                                    "unstopped_description",
-                                    "description",
-                                    "credits",
-                                ],
-                            ),
-                            # is there a section for this course that is in both timetables?
-                            "in_section": (
-                                sections_in_common & course.section_set.all()
-                            ).exists(),
-                        }
-                    )
-
-                friends.append(
-                    {
-                        "peer": model_to_dict(
-                            friend, exclude=["user", "id", "fbook_uid", "friends"]
-                        ),
-                        "is_friend": student.friends.filter(id=friend.id).exists(),
-                        "shared_courses": shared_courses,
-                        "profile_url": "https://www.facebook.com/" + friend.fbook_uid,
-                        "name": friend.user.first_name + " " + friend.user.last_name,
-                        "large_img": "https://graph.facebook.com/"
-                        + friend.fbook_uid
-                        + "/picture?width=700&height=700",
-                    }
-                )
-
-            friends.sort(key=lambda friend: len(friend["shared_courses"]), reverse=True)
-            return Response(friends, status=status.HTTP_200_OK)
-
-
-def get_friend_count_from_course_id(school, student, course_id, semester):
-    """
-    Computes the number of friends a user has in a given course for a given semester.
-
-    Ignores whether or not those friends have social courses enabled. Never exposes
-    those user's names or infromation. This count is used purely to upsell user's to
-    enable social courses.
-    """
-    return (
-        PersonalTimetable.objects.filter(
-            student__in=student.friends.all(), courses__id__exact=course_id
+    def get_number_of_friends(self, request, sem_name, year):
+        student = Student.objects.get(user=request.user)
+        course_ids = list(map(int, request.query_params.getlist("course_ids[]")))
+        semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+        total_count, count, most_friend_course_id = self.count_number_of_friends(
+            student, course_ids, semester
         )
-        .filter(Q(semester=semester))
-        .distinct("student")
-        .count()
-    )
+        data = {
+            "id": most_friend_course_id,
+            "count": count,
+            "total_count": total_count,
+        }
+        return Response(data, status=status.HTTP_200_OK)
+
+    def count_number_of_friends(self, student, course_ids, semester):
+        total_count = 0
+        count = 0
+        most_friend_course_id = -1
+        for course_id in course_ids:
+            temp_count = self.get_friend_count_from_course_id(
+                student, course_id, semester
+            )
+            if temp_count > count:
+                count = temp_count
+                most_friend_course_id = course_id
+            total_count += temp_count
+        return total_count, count, most_friend_course_id
+
+    def get_friend_count_from_course_id(self, student, course_id, semester):
+        """
+        Computes the number of friends a user has in a given course for a given
+        semester.
+
+        Ignores whether or not those friends have social courses enabled. Never exposes
+        those user's names or infromation. This count is used purely to upsell user's to
+        enable social courses.
+        """
+        return (
+            PersonalTimetable.objects.filter(
+                student__in=student.friends.all(), courses__id__exact=course_id
+            )
+            .filter(Q(semester=semester))
+            .distinct("student")
+            .count()
+        )
+
+    def get_social_friends(self, request, sem_name, year):
+        school = request.subdomain
+        student = Student.objects.get(user=request.user)
+        course_ids = list(map(int, request.query_params.getlist("course_ids[]")))
+        semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+        # user opted in to sharing courses
+        course_to_classmates = {}
+        if student.social_courses:
+            friends = student.friends.filter(social_courses=True)
+            for course_id in course_ids:
+                course_to_classmates[course_id] = get_classmates_from_course_id(
+                    school, student, course_id, semester, friends=friends
+                )
+        return Response(course_to_classmates, status=status.HTTP_200_OK)
+
+    def get_social_users(self, request, sem_name, year):
+        school = request.subdomain
+        student = Student.objects.get(user=request.user)
+        semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+        current_tt = self.get_current_tt(school, student, semester)
+        if current_tt is None:
+            return Response([], status=status.HTTP_200_OK)
+        current_tt_courses = current_tt.courses.all()
+        matching_tts = self.get_matching_tts(student, semester, current_tt_courses)
+        social_users = self.count_social_users(
+            student, current_tt, current_tt_courses, matching_tts
+        )
+        return Response(social_users, status=status.HTTP_200_OK)
+
+    def count_social_users(self, student, current_tt, current_tt_courses, matching_tts):
+        social_users = []
+        for matching_tt in matching_tts:
+            friend = matching_tt.student
+            sections_in_common = matching_tt.sections.all() & current_tt.sections.all()
+            courses_in_common = matching_tt.courses.all() & current_tt_courses
+            shared_courses = [
+                self.create_shared_course(sections_in_common, course)
+                for course in courses_in_common
+            ]
+            social_users.append(
+                self.create_social_user_dict(student, friend, shared_courses)
+            )
+        social_users.sort(
+            key=lambda friend: len(friend["shared_courses"]), reverse=True
+        )
+        return social_users
+
+    def get_current_tt(self, school, student, semester):
+        return (
+            student.personaltimetable_set.filter(school=school, semester=semester)
+            .order_by("last_updated")
+            .last()
+        )
+
+    def get_matching_tts(self, student, semester, current_tt_courses):
+        # The most recent TT per student with social enabled that has
+        # courses in common with input student
+        return (
+            PersonalTimetable.objects.filter(
+                student__social_all=True,
+                courses__id__in=current_tt_courses,
+                semester=semester,
+            )
+            .exclude(student=student)
+            .order_by("student", "last_updated")
+            .distinct("student")
+        )
+
+    def create_shared_course(self, sections_in_common, course):
+        return {
+            "course": model_to_dict(
+                course,
+                exclude=[
+                    "unstopped_description",
+                    "description",
+                    "credits",
+                ],
+            ),
+            # is there a section for this course that is in both timetables?
+            "in_section": (sections_in_common & course.section_set.all()).exists(),
+        }
+
+    def create_social_user_dict(self, student, friend, shared_courses):
+        return {
+            "peer": model_to_dict(
+                friend, exclude=["user", "id", "fbook_uid", "friends"]
+            ),
+            "is_friend": student.friends.filter(id=friend.id).exists(),
+            "shared_courses": shared_courses,
+            "profile_url": "https://www.facebook.com/" + friend.fbook_uid,
+            "name": friend.user.first_name + " " + friend.user.last_name,
+            "large_img": "https://graph.facebook.com/"
+            + friend.fbook_uid
+            + "/picture?width=700&height=700",
+        }
 
 
 class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
@@ -511,15 +535,24 @@ class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         title = request.data["title"]
         student = get_object_or_404(Student, user=request.user)
         course = Course.objects.get(id=cid)
-        if course.reaction_set.filter(title=title, student=student).exists():
-            reaction = course.reaction_set.get(title=title, student=student)
-            course.reaction_set.remove(reaction)
-            reaction.delete()
+        if self.reaction_exists(title, student, course):
+            self.remove_reaction(title, student, course)
         else:
-            reaction = Reaction(student=student, title=title)
-            reaction.save()
-            course.reaction_set.add(reaction)
+            self.create_reaction(title, student, course)
         course.save()
 
         response = {"reactions": course.get_reactions(student=student)}
         return Response(response, status=status.HTTP_200_OK)
+
+    def reaction_exists(self, title, student, course):
+        course.reaction_set.filter(title=title, student=student).exists()
+
+    def create_reaction(self, title, student, course):
+        reaction = Reaction(student=student, title=title)
+        reaction.save()
+        course.reaction_set.add(reaction)
+
+    def remove_reaction(self, title, student, course):
+        reaction = course.reaction_set.get(title=title, student=student)
+        course.reaction_set.remove(reaction)
+        reaction.delete()
