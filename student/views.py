@@ -34,7 +34,11 @@ from student.models import (
     PersonalEvent,
     PersonalTimetable,
 )
-from student.utils import get_classmates_from_course_id, get_student_tts
+from student.utils import (
+    get_classmates_from_course_id,
+    get_friend_count_from_course_id,
+    get_student_tts,
+)
 from timetable.models import Semester, Course, Section
 from timetable.serializers import DisplayTimetableSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
@@ -397,32 +401,12 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         count = 0
         most_friend_course_id = -1
         for course_id in course_ids:
-            temp_count = self.get_friend_count_from_course_id(
-                student, course_id, semester
-            )
+            temp_count = get_friend_count_from_course_id(student, course_id, semester)
             if temp_count > count:
                 count = temp_count
                 most_friend_course_id = course_id
             total_count += temp_count
         return total_count, count, most_friend_course_id
-
-    def get_friend_count_from_course_id(self, student, course_id, semester):
-        """
-        Computes the number of friends a user has in a given course for a given
-        semester.
-
-        Ignores whether or not those friends have social courses enabled. Never exposes
-        those user's names or infromation. This count is used purely to upsell user's to
-        enable social courses.
-        """
-        return (
-            PersonalTimetable.objects.filter(
-                student__in=student.friends.all(), courses__id__exact=course_id
-            )
-            .filter(Q(semester=semester))
-            .distinct("student")
-            .count()
-        )
 
     def get_social_friends(self, request, sem_name, year):
         school = request.subdomain

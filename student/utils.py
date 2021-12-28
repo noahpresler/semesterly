@@ -10,32 +10,12 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-import datetime
-
 from django.db.models import Q
 from django.forms import model_to_dict
 
 from student.models import Student, PersonalTimetable
 from timetable.models import Course
 from timetable.serializers import DisplayTimetableSerializer
-
-
-DAY_LIST = ["M", "T", "W", "R", "F", "S", "U"]
-
-
-def next_weekday(d, weekday):
-    """
-    Given a current date, d, and a target weekday, calculate
-    the next occurence (moving in the future) of that weekday.
-
-    Returns:
-        (:obj:`datetime.datetime`): the next weekday of the given type
-    """
-    d = d - datetime.timedelta(days=1)
-    days_ahead = DAY_LIST.index(weekday) - d.weekday()
-    if days_ahead <= 0:  # Target day already happened this week
-        days_ahead += 7
-    return d + datetime.timedelta(days_ahead)
 
 
 def get_student(request):
@@ -128,6 +108,25 @@ def get_classmates_from_tts(student, course_id, tts):
             classmate["sections"] = []
         classmates.append(classmate)
     return classmates
+
+
+def get_friend_count_from_course_id(student, course_id, semester):
+    """
+    Computes the number of friends a user has in a given course for a given
+    semester.
+
+    Ignores whether or not those friends have social courses enabled. Never exposes
+    those user's names or infromation. This count is used purely to upsell user's to
+    enable social courses.
+    """
+    return (
+        PersonalTimetable.objects.filter(
+            student__in=student.friends.all(), courses__id__exact=course_id
+        )
+        .filter(Q(semester=semester))
+        .distinct("student")
+        .count()
+    )
 
 
 def get_student_tts(student, school, semester):
