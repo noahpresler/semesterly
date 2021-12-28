@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { setCourseReactions } from '../../actions/initActions';
+import { setCourseReactions, setCourseInfo } from '../../actions/initActions';
 import { Reaction } from '../../constants/commonTypes';
 
 interface CourseInfoSliceState {
@@ -24,10 +24,6 @@ const courseInfoSlice = createSlice({
   name: 'courseInfo',
   initialState,
   reducers: {
-    courseInfoReceived: (state, action: PayloadAction<Number>) => {
-      state.isFetching = false;
-      state.id = action.payload;
-    },
     // TODO: change any type
     courseClassmatesReceived: (state, action: PayloadAction<any>) => {
       state.isFetchingClassmates = false;
@@ -40,6 +36,10 @@ const courseInfoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(setCourseInfo, (state, action) => {
+        state.isFetching = false;
+        state.id = action.payload.result;
+      })
       .addCase(setCourseReactions, (state, action: PayloadAction<{
         id: Number;
         reactions: Reaction[]

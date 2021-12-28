@@ -22,7 +22,7 @@ import {
 import { getSchool, getSemester } from '../actions/school_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { courseInfoActions } from '../state/slices';
-import { setCourseReactions } from './initActions';
+import { setCourseReactions, setCourseInfo } from './initActions';
 
 export const fetchCourseClassmates = courseId => (dispatch, getState) => {
   const state = getState();
@@ -42,7 +42,7 @@ export const fetchCourseInfo = courseId => (dispatch, getState) => {
   })
     .then(response => response.json())
     .then((json) => {
-      dispatch(courseInfoActions.courseInfoReceived(json.id));
+      dispatch(setCourseInfo(json));
     });
   dispatch(fetchCourseClassmates(courseId));
 };

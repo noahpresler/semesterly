@@ -27,7 +27,7 @@ import {
 } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates } from './actions/modal_actions';
-import { alertsActions, courseInfoActions, userAcquisitionModalActions, userInfoActions } from './state/slices';
+import { alertsActions, userAcquisitionModalActions, userInfoActions } from './state/slices';
 import { receiveCourses } from './actions/search_actions';
 import {
   browserSupportsLocalStorage,
@@ -38,7 +38,7 @@ import {
 } from './util';
 // import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
-import { initAllState } from './actions';
+import { initAllState, setCourseInfo } from './actions';
 
 
 // load initial timetable from user data if logged in or local storage
@@ -127,7 +127,7 @@ const handleFlows = featureFlow => (dispatch) => {
       dispatch({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });
       break;
     case 'SHARE_COURSE':
-      dispatch(courseInfoActions.courseInfoReceived(featureFlow.sharedCourse.id));
+      dispatch(setCourseInfo(featureFlow.sharedCourse));
       dispatch(fetchCourseClassmates(featureFlow.sharedCourse.id));
       break;
     case 'FIND_FRIENDS':
