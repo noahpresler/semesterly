@@ -14,30 +14,15 @@ GNU General Public License for more details.
 
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import { normalize } from 'normalizr';
 import {
     getClassmatesInCourseEndpoint,
     getCourseInfoEndpoint,
     getReactToCourseEndpoint,
 } from '../constants/endpoints';
-import { courseSchema } from '../schema';
 import { getSchool, getSemester } from '../actions/school_actions';
 import * as ActionTypes from '../constants/actionTypes';
-
-export const setCourseInfo = json => ({
-  type: ActionTypes.COURSE_INFO_RECEIVED,
-  response: normalize(json, courseSchema),
-});
-
-export const setCourseClassmates = json => ({
-  type: ActionTypes.COURSE_CLASSMATES_RECEIVED,
-  data: json,
-});
-
-export const setCourseId = id => ({
-  type: ActionTypes.SET_COURSE_ID,
-  id,
-});
+import { courseInfoActions } from '../state/slices';
+import { setCourseReactions, setCourseInfo } from './initActions';
 
 export const fetchCourseClassmates = courseId => (dispatch, getState) => {
   const state = getState();
@@ -46,12 +31,12 @@ export const fetchCourseClassmates = courseId => (dispatch, getState) => {
   })
     .then(response => response.json())
     .then((json) => {
-      dispatch(setCourseClassmates(json));
+      dispatch(courseInfoActions.courseClassmatesReceived(json));
     });
 };
 
 export const fetchCourseInfo = courseId => (dispatch, getState) => {
-  dispatch({ type: ActionTypes.REQUEST_COURSE_INFO });
+  dispatch(courseInfoActions.requestCourseInfo());
   fetch(getCourseInfoEndpoint(courseId, getSemester(getState())), {
     credentials: 'include',
   })
@@ -76,16 +61,21 @@ export const react = (cid, title) => (dispatch) => {
     }),
     credentials: 'include',
   })
-  .then(response => response.json())
-  .then((json) => {
-    if (!json.error) {
-      dispatch({
-        id: cid,
-        type: ActionTypes.SET_COURSE_REACTIONS,
-        reactions: json.reactions,
-      });
-    }
-  });
+    .then(response => response.json())
+    .then((json) => {
+      if (!json.error) {
+        // TODO: remove below
+        dispatch({
+          id: cid,
+          type: ActionTypes.SET_COURSE_REACTIONS,
+          reactions: json.reactions,
+        });
+        dispatch(setCourseReactions({
+          id: cid,
+          reactions: json.reactions,
+        }));
+      }
+    });
 };
 
 export const togglePreferenceModal = () => ({ type: ActionTypes.TOGGLE_PREFERENCE_MODAL });

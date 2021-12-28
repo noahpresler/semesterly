@@ -28,12 +28,12 @@ export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
 export const receiveCourses = courses => ({
   type: ActionTypes.RECEIVE_COURSES,
-  response: normalize(courses, [courseSchema]),
+  payload: normalize(courses, [courseSchema]),
 });
 
 export const receiveSearchResults = courses => ({
   type: ActionTypes.RECEIVE_SEARCH_RESULTS,
-  response: normalize(courses, [courseSchema]),
+  payload: normalize(courses, [courseSchema]),
 });
 
 export const setSemester = semester => (dispatch, getState) => {
@@ -104,7 +104,7 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
   if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
     dispatch({
       type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
-      response: { result: [] },
+      payload: { result: [] },
     });
     return;
   }
