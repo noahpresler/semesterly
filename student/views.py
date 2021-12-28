@@ -45,32 +45,7 @@ from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
 from semesterly.settings import get_secret
 
-DAY_MAP = {"M": "mo", "T": "tu", "W": "we", "R": "th", "F": "fr", "S": "sa", "U": "su"}
-
 hashids = Hashids(salt=get_secret("HASHING_SALT"))
-
-
-def create_unsubscribe_link(student):
-    """Generates a unsubscribe link which directs to the student unsubscribe view."""
-    token = student.get_token()
-    return reverse(
-        "student.views.unsubscribe", kwargs={"id": student.id, "token": token}
-    )
-
-
-def unsubscribe(request, student_id, token):
-    """
-    If the student matches the token and the tokens is valid ,
-    unsubscribes user from emails marking student.emails_enabled
-    to false. Redirects to index.
-    """
-    student = Student.objects.get(id=student_id)
-
-    if student and check_student_token(student, token):
-        student.emails_enabled = False
-        student.save()
-        return render(request, "unsubscribe.html")
-    return HttpResponseRedirect("/")
 
 
 @csrf_exempt
