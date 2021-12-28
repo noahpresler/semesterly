@@ -26,7 +26,7 @@ export const REQUEST_MOST_CLASSMATES = 'REQUEST_MOST_CLASSMATES';
 
 // COURSE INFO/MODAL DATA
 
-//TODO: remove below after refactor done
+// TODO: remove below after refactor done
 export const SET_COURSE_REACTIONS = 'SET_COURSE_REACTIONS';
 
 // COURSE SECTIONS
