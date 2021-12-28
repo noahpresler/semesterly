@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { setCourseReactions } from "../../actions/initActions";
-import { Reaction } from "../../constants/commonTypes";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { setCourseReactions } from '../../actions/initActions';
+import { Reaction } from '../../constants/commonTypes';
 
 interface CourseInfoSliceState {
   isFetching: boolean;
@@ -18,7 +18,7 @@ const initialState: CourseInfoSliceState = {
   data: {},
   id: null,
   classmates: {},
-}
+};
 
 const courseInfoSlice = createSlice({
   name: 'courseInfo',
@@ -33,13 +33,10 @@ const courseInfoSlice = createSlice({
       state.isFetchingClassmates = false;
       state.classmates = action.payload;
     },
-    requestCourseInfo: () => {
-      // reset the state
-      return initialState;
-    },
+    requestCourseInfo: () => initialState,
     setCourseId: (state, action: PayloadAction<Number>) => {
       state.id = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -51,13 +48,12 @@ const courseInfoSlice = createSlice({
         if (state.id !== null) {
           state.data.reactions = action.payload.reactions;
         }
-      })
-  }
-})
+      });
+  },
+});
 
-export const getCourseInfoId = (state:any) => {
-  return state.courseInfo.id
-};
+export const getCourseInfoId = (state: any) => state.courseInfo.id;
+
 
 export const courseInfoActions = courseInfoSlice.actions;
 export default courseInfoSlice.reducer;

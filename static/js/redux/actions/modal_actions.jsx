@@ -64,7 +64,7 @@ export const react = (cid, title) => (dispatch) => {
     .then(response => response.json())
     .then((json) => {
       if (!json.error) {
-        //TODO: remove below
+        // TODO: remove below
         dispatch({
           id: cid,
           type: ActionTypes.SET_COURSE_REACTIONS,
@@ -73,7 +73,7 @@ export const react = (cid, title) => (dispatch) => {
         dispatch(setCourseReactions({
           id: cid,
           reactions: json.reactions,
-        }))
+        }));
       }
     });
 };

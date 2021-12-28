@@ -127,7 +127,7 @@ const handleFlows = featureFlow => (dispatch) => {
       dispatch({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });
       break;
     case 'SHARE_COURSE':
-      dispatch(courseInfoActions.courseInfoReceived(featureFlow.sharedCourse.id))
+      dispatch(courseInfoActions.courseInfoReceived(featureFlow.sharedCourse.id));
       dispatch(fetchCourseClassmates(featureFlow.sharedCourse.id));
       break;
     case 'FIND_FRIENDS':
