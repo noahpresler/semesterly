@@ -28,7 +28,7 @@ import {
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates } from './actions/modal_actions';
 import { alertsActions, userAcquisitionModalActions, userInfoActions } from './state/slices';
-import { receiveCourses } from './actions/search_actions';
+import { receiveCourses } from './actions/initActions';
 import {
   browserSupportsLocalStorage,
   setFirstVisit,
@@ -39,6 +39,7 @@ import {
 // import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
 import { initAllState, setCourseInfo } from './actions';
+import { timetablesActions } from './state/slices/timetablesSlice';
 
 
 // load initial timetable from user data if logged in or local storage
@@ -51,7 +52,7 @@ const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatc
     }, 500);
   } else if (browserSupportsLocalStorage()) {
     dispatch(loadCachedTimetable(allSemesters, oldSemesters));
-    dispatch({ type: ActionTypes.CACHED_TT_LOADED });
+    dispatch(timetablesActions.cachedTimetableLoaded());
   }
 };
 
@@ -107,7 +108,7 @@ const handleFlows = featureFlow => (dispatch) => {
       dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
       break;
     case 'SHARE_TIMETABLE':
-      dispatch({ type: ActionTypes.CACHED_TT_LOADED });
+      dispatch(timetablesActions.cachedTimetableLoaded());
       // TODO: replace course objects in userInfo with course ids after storing in entities
       dispatch(receiveCourses(featureFlow.courses));
       if (initData.currentUser.isLoggedIn) {

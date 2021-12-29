@@ -35,12 +35,11 @@ import {
   getCurrentSemester } from '../state';
 import { fetchCourseClassmates } from './modal_actions';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
-import { receiveCourses } from './search_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
 import { alertsActions, userInfoActions } from '../state/slices';
-import { alertTimeTableExists } from './initActions';
+import { alertTimeTableExists, receiveCourses } from './initActions';
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
@@ -140,7 +139,6 @@ export const fetchClassmates = timetable => (dispatch, getState) => {
 };
 
 export const saveTimetable = (
-  isAutoSave = false,
   callback = null,
   autoLockAll = false,
 ) => (dispatch, getState) => {

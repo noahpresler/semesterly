@@ -23,13 +23,9 @@ import * as ActionTypes from '../constants/actionTypes';
 import { fetchCourseClassmates } from './modal_actions';
 import { getSemester } from './school_actions';
 import { alertsActions } from '../state/slices';
+import { updateSemester } from './initActions';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
-
-export const receiveCourses = courses => ({
-  type: ActionTypes.RECEIVE_COURSES,
-  payload: normalize(courses, [courseSchema]),
-});
 
 export const receiveSearchResults = courses => ({
   type: ActionTypes.RECEIVE_SEARCH_RESULTS,
@@ -45,10 +41,7 @@ export const setSemester = semester => (dispatch, getState) => {
     dispatch(nullifyTimetable(dispatch));
   }
 
-  dispatch({
-    type: ActionTypes.SET_SEMESTER,
-    semester,
-  });
+  dispatch(updateSemester(semester));
   dispatch(receiveSearchResults([]));
 };
 

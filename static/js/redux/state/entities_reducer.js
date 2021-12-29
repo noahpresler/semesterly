@@ -17,6 +17,7 @@ const entities = (state = {}, action) => {
         });
     // TODO: figure out all cases rely on default and explicitly state them with cases
     case 'global/setCourseInfo':
+    case 'global/receiveCourses':
     default:
       if (action.payload && action.payload.entities) {
         return merge({}, state, action.payload.entities);

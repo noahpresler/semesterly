@@ -39,9 +39,9 @@ class SearchSideBar extends React.Component {
         isOnActiveTimetable={
           this.props.isSectionOnActiveTimetable(this.props.hoveredResult, section)
         }
-        hoverSection={() => this.props.hoverSection(this.props.hoveredResult,
-          section)}
-        unHoverSection={this.props.unHoverSection}
+        hoverSection={() => this.props.hoverSection({ course: this.props.hoveredResult,
+          section })}
+        unHoverSection={() => this.props.unHoverSection()}
         onMouseDown={event => this.lockSectionWrapper(section.meeting_section, event)}
       />),
     );

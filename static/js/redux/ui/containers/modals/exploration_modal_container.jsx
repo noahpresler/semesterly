@@ -28,7 +28,6 @@ import {
 import {
   addOrRemoveCourse,
   addOrRemoveOptionalCourse,
-  unHoverSection,
 } from '../../../actions/timetable_actions';
 import { getSchoolSpecificInfo } from '../../../constants/schools';
 import {
@@ -36,6 +35,7 @@ import {
   hideExplorationModal,
 } from '../../../actions/modal_actions';
 import { getCourseShareLinkFromModal } from '../../../constants/endpoints';
+import { timetablesActions } from '../../../state/slices/timetablesSlice';
 
 
 const mapStateToProps = (state) => {
@@ -70,7 +70,7 @@ const ExplorationModalContainer = connect(
     fetchAdvancedSearchResults,
     fetchCourseClassmates,
     addOrRemoveOptionalCourse,
-    unHoverSection,
+    unHoverSection: timetablesActions.unhoverSection,
     addOrRemoveCourse,
     paginate: paginateAdvancedSearchResults,
     clearPagination: clearAdvancedSearchPagination,

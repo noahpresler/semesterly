@@ -29,36 +29,23 @@ import {
   saveLocalSemester,
 } from '../util';
 import { autoSave, fetchClassmates, lockActiveSections, getUserSavedTimetables } from './user_actions';
-import { receiveCourses } from './search_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { alertsActions } from '../state/slices';
-import { NEW_changeActiveTimeTable, NEW_receiveTimetables, alertConflict } from './initActions';
+import { updateSemester, changeActiveTimetable, receiveTimetables, alertConflict, receiveCourses } from './initActions';
+import { timetablesActions } from '../state/slices/timetablesSlice';
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
 
-export const receiveTimetables = timetables => ({
-  type: ActionTypes.RECEIVE_TIMETABLES,
-  timetables,
-});
-
-export const changeActiveTimetable = newActive => ({
-  type: ActionTypes.CHANGE_ACTIVE_TIMETABLE,
-  newActive,
-});
-
 export const setActiveTimetable = newActive => (dispatch) => {
   dispatch(changeActiveTimetable(newActive));
-  dispatch(NEW_changeActiveTimeTable(newActive));
   dispatch(autoSave());
 };
-
-export const requestTimetables = () => ({ type: ActionTypes.REQUEST_TIMETABLES });
 
 export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispatch, getState) => {
   const state = getState();
 
   // mark that we are now asynchronously requesting timetables
-  dispatch(requestTimetables());
+  dispatch(timetablesActions.requestTimetables());
 
   // send a request (via fetch) to the appropriate endpoint with
   // relevant data as contained in @state (including courses, preferences, etc)
@@ -85,13 +72,11 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         // receive new info into state
         dispatch(receiveCourses(json.courses));
         dispatch(receiveTimetables(json.timetables));
-        dispatch(NEW_receiveTimetables(json.timetables));
         dispatch({
           type: ActionTypes.RECEIVE_COURSE_SECTIONS,
           courseSections: json.new_c_to_s,
         });
         dispatch(changeActiveTimetable(newActive));
-        dispatch(NEW_changeActiveTimeTable(newActive));
         // cache new info into local storage
         if (!state.userInfo.data.isLoggedIn) {
           saveLocalCourseSections(json.new_c_to_s);
@@ -104,10 +89,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         // (i.e. was adding a course/section), but we got no timetables back.
         // therefore course added by the user resulted in a conflict
         dispatch({ type: ActionTypes.CLEAR_CONFLICTING_EVENTS });
-
-        // TODO: remove second ALERT_CONFLICT
         dispatch(alertConflict());
-        dispatch({ type: ActionTypes.ALERT_CONFLICT });
       }
       return json;
     })
@@ -150,7 +132,6 @@ export const lockTimetable = timetable => (dispatch, getState) => {
     courseSections: lockActiveSections(getDenormTimetable(state, timetable)),
   });
   dispatch(receiveTimetables([timetable]));
-  dispatch(NEW_receiveTimetables([timetable]));
   if (state.userInfo.data.isLoggedIn) {
     dispatch(fetchClassmates(timetable));
   }
@@ -194,7 +175,6 @@ export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) =
 
 export const nullifyTimetable = () => (dispatch) => {
   dispatch(receiveTimetables([{ slots: [], has_conflict: false }]));
-  dispatch(NEW_receiveTimetables([{ slots: [], has_conflict: false }]));
   dispatch({
     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
     courseSections: {},
@@ -235,7 +215,7 @@ const getSemesterIndex = function getSemesterIndex(allSemesters, oldSemesters) {
 
 // loads timetable from localStorage. assumes that the browser supports localStorage
 export const loadCachedTimetable = (allSemesters, oldSemesters) => (dispatch, getState) => {
-  dispatch({ type: ActionTypes.LOADING_CACHED_TT });
+  dispatch(timetablesActions.loadingCachedTimetable());
   // load timetable information from local storage
   const localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
   const localPreferences = JSON.parse(localStorage.getItem('preferences'));
@@ -261,7 +241,7 @@ export const loadCachedTimetable = (allSemesters, oldSemesters) => (dispatch, ge
     if (!personalTimetablesExist) {
       // if no personal TTs and local storage data is valid, load cached timetable
       dispatch({ type: ActionTypes.SET_ALL_PREFERENCES, preferences: localPreferences });
-      dispatch({ type: ActionTypes.SET_SEMESTER, semester: matchedIndex });
+      dispatch(updateSemester(matchedIndex));
       dispatch({
         type: ActionTypes.RECEIVE_COURSE_SECTIONS,
         courseSections: localCourseSections,
@@ -269,7 +249,7 @@ export const loadCachedTimetable = (allSemesters, oldSemesters) => (dispatch, ge
       dispatch(fetchStateTimetables(localActive));
     }
   }
-  dispatch({ type: ActionTypes.CACHED_TT_LOADED });
+  dispatch(timetablesActions.cachedTimetableLoaded());
 };
 
 /*
@@ -303,19 +283,6 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
     state.userInfo.data.timetables)));
 };
 
-export const unHoverSection = () => ({ type: ActionTypes.UNHOVER_SECTION });
-
-export const hoverSection = (denormCourse, section) => ({
-  type: ActionTypes.HOVER_SECTION,
-  slot: {
-    course: denormCourse,
-    section,
-    offerings: section.offering_set,
-    is_optional: false,
-    is_locked: true,
-  },
-});
-
 /*
  Attempts to add the course represented by newCourseId
  to the user's roster. If a section is provided, that section is
@@ -348,10 +315,7 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
       customSlots: state.customSlots,
     });
   } else { // adding a course
-    dispatch({
-      type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
-      course: newCourseId,
-    });
+    dispatch(timetablesActions.updateLastCourseAdded(newCourseId));
     state = getState();
     Object.assign(reqBody, {
       updated_courses: [{
@@ -407,10 +371,7 @@ const autoFetch = () => (dispatch, getState) => {
   clearTimeout(customEventUpdateTimer);
   customEventUpdateTimer = setTimeout(() => {
     if (getActiveTimetableCourses(state).length > 0) {
-      dispatch({
-        type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
-        course: state.customSlots,
-      });
+      dispatch(timetablesActions.updateLastCourseAdded(state.customSlots));
       dispatch(refetchTimetables());
     }
   }, 250);

@@ -26,8 +26,8 @@ const semester = (state = defaultState, action) => {
         current: parseInt(action.data.currentSemester, 10),
         all: action.data.allSemesters,
       });
-    case ActionTypes.SET_SEMESTER:
-      return Object.assign({}, state, { current: action.semester });
+    case 'global/updateSemester':
+      return Object.assign({}, state, { current: action.payload });
     default:
       return state;
   }

@@ -48,7 +48,7 @@ const savingTimetable = (state = initState, action) => {
     case ActionTypes.ADD_CUSTOM_SLOT:
     case ActionTypes.UPDATE_CUSTOM_SLOT:
     case ActionTypes.REMOVE_CUSTOM_SLOT:
-    case ActionTypes.CHANGE_ACTIVE_TIMETABLE:
+    case 'global/changeActiveTimetable':
       return Object.assign({}, state, { upToDate: false });
 
     default:
