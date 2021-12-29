@@ -13,7 +13,6 @@
 import simplejson as json
 from collections import OrderedDict, namedtuple
 
-# import parsing.schools.jhu.courses  # NOTE: used in eval statement
 from parsing.library.utils import DotDict
 from parsing.schools.active import ACTIVE_SCHOOLS
 
@@ -55,50 +54,10 @@ def load_school(school):
         full_academic_year_registration=config.full_academic_year_registration,
         single_access=config.single_access,
         final_exams=config.get("final_exams"),
-        parsers=load_parsers(school),
+        parsers={},
         registrar=config.get("registrar"),
         short_course_weeks_limit=config.get("short_course_weeks_limit"),
     )
 
 
-def load_parsers(school):
-    parsers = {}
-    for parser_type in ["courses", "evals", "textbooks"]:
-        pass
-        # try:
-        #     # parser = None  # Binding below in exec.
-        #     # exec('from {}.schools.{}.{} import Parser as parser'.format(
-        #     #     settings.PARSING_MODULE,
-        #     #     school,
-        #     #     parser_type
-        #     # ))
-        #     # print(parser)
-        #     # exec('import parsing.schools.{school}.{parser_type}.Parser'.format(
-        #     #     school=school,
-        #     #     parser_type=parser_type
-        #     # ))
-        #     parsers[parser_type] = __import__(
-        #         'parsing.schools.{school}.{parser_type}.Parser'.format(
-        #             school=school,
-        #             parser_type=parser_type
-        #         )
-        #     )
-        # except (ImportError) as e:
-        #     print(e)
-        #     print(school, parser_type)
-    return parsers
-
-
 SCHOOLS_MAP = {school: load_school(school) for school in ACTIVE_SCHOOLS}
-
-# course_parsers = {
-#     'uoft': lambda: UofTParser().start(),
-# }
-
-# eval_parsers = {
-#     'umd': lambda: umdReview().parse_reviews,
-# }
-
-# textbook_parsers = {
-#     # 'uoft': parse_uoft_textbooks,
-# }
