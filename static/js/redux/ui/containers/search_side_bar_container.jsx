@@ -16,7 +16,8 @@ import { connect } from 'react-redux';
 import { getActiveTimetable, getSearchResult } from '../../state';
 import { getSectionTypeToSections } from '../../state/entities_reducer';
 import SearchSideBar from '../search_side_bar';
-import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/timetable_actions';
+import { addOrRemoveCourse } from '../../actions/timetable_actions';
+import { timetablesActions } from '../../state/slices/timetablesSlice';
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
@@ -45,8 +46,8 @@ const SearchSideBarContainer = connect(
   mapStateToProps,
   {
     addCourse: addOrRemoveCourse,
-    hoverSection,
-    unHoverSection,
+    hoverSection: timetablesActions.hoverSection,
+    unHoverSection: timetablesActions.unhoverSection,
   },
 )(SearchSideBar);
 

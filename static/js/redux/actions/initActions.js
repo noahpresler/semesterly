@@ -10,14 +10,6 @@ export const alertConflict = createAction('global/alertConflict');
 // ALERT_TIMETABLE_EXISTS
 export const alertTimeTableExists = createAction('global/alertTimeTableExists');
 
-export const NEW_changeActiveTimeTable = createAction(
-  'global/chanegActiveTimeTable',
-);
-
-export const NEW_receiveTimetables = createAction(
-  'global/RECEIVE_TIMETABLES',
-);
-
 // course related actions
 
 /**
@@ -34,4 +26,26 @@ export const setCourseInfo = createAction(
 
 export const setCourseReactions = createAction(
   'global/setCourseReactions',
+);
+
+export const updateSemester = createAction(
+  'global/updateSemester',
+);
+
+export const receiveTimetables = createAction(
+  'global/receiveTimetables',
+);
+
+/**
+ * normalizes multiple courses
+ */
+export const receiveCourses = createAction(
+  'global/receiveCourses',
+  courses => ({
+    payload: normalize(courses, [courseSchema]),
+  }),
+);
+
+export const changeActiveTimetable = createAction(
+  'global/changeActiveTimetable',
 );
