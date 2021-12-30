@@ -11,13 +11,10 @@
 # GNU General Public License for more details.
 
 from django.conf.urls import re_path
-from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 
 from helpers.mixins import FeatureFlowView
 import student.views
-
-admin.autodiscover()
 
 urlpatterns = [
     # profile management
@@ -48,7 +45,6 @@ urlpatterns = [
         r"^user/classmates/(?P<sem_name>.+)/(?P<year>[0-9]{4})",
         student.views.ClassmateView.as_view(),
     ),
-    # re_path(r'^user/gcal/?$', student.views.GCalView.as_view()),
     re_path(r"^user/reactions/?$", student.views.ReactionView.as_view()),
     # for accepting TOS.
     re_path(r"^tos/accept/", student.views.accept_tos),

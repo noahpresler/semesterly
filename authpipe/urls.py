@@ -11,12 +11,9 @@
 # GNU General Public License for more details.
 
 from django.conf.urls import include, re_path
-from django.contrib import admin
 
 import authpipe.views
 
-
-admin.autodiscover()
 
 urlpatterns = [
     # auth
