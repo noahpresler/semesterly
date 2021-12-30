@@ -11,11 +11,8 @@
 # GNU General Public License for more details.
 
 from django.conf.urls import re_path
-from django.contrib import admin
 
 import courses.views
-
-admin.autodiscover()
 
 urlpatterns = [
     re_path(r"^courses/?$", courses.views.all_courses),
