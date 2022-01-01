@@ -17,16 +17,12 @@ from timetable.models import *
 
 
 def get_tt_cost(tt, sort_params):
-    return tuple([metric(tt.stats) for metric in map(metric_to_stat.get, sort_params)])
+    return tuple(metric(tt.stats) for metric in map(metric_to_stat.get, sort_params))
 
 
 # TODO
 def get_num_friends(timetable):
     return 0
-
-
-def get_num_conflicts(timetable):
-    pass
 
 
 def get_num_days(day_to_usage):
@@ -35,8 +31,7 @@ def get_num_days(day_to_usage):
 
 
 def get_avg_rating(timetable):
-    courses = set(slot.course for slot in timetable)
-    # TODO: consolidate with TimetableSerializer.get_avg_rating()
+    courses = {slot.course for slot in timetable}
     ratings_by_course = (course.get_avg_rating() for course in courses)
     valid_ratings = [rating for rating in ratings_by_course if 0 <= rating <= 5]
     return float(sum(valid_ratings)) / len(valid_ratings) if valid_ratings else 0
