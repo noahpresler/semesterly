@@ -10,7 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-import itertools
 from rest_framework import serializers
 
 from student.models import PersonalEvent
