@@ -27,7 +27,6 @@ urlpatterns = [
     re_path(r"^notifyme/*$", FeatureFlowView.as_view(feature_name="ENABLE_NOTIFS")),
     re_path(r"^find_friends/$", FeatureFlowView.as_view(feature_name="FIND_FRIENDS")),
     re_path(r"^timetable/.*$", RedirectView.as_view(url="/")),
-    re_path(r"^complete/facebook/.*$", FeatureFlowView.as_view()),
     # timetables
     re_path(r"^timetables/?$", timetable.views.TimetableView.as_view()),
     # sharing

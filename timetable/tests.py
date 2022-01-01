@@ -102,7 +102,7 @@ class UrlsTest(UrlTestCase):
         )
         self.assertUrlResolvesToView("/notifyme/", "helpers.mixins.FeatureFlowView")
         self.assertUrlResolvesToView("/find_friends/", "helpers.mixins.FeatureFlowView")
-
+        
         # redirects
         self.assertUrlResolvesToView(
             "/timetable/random_stuff", "django.views.generic.base.RedirectView"
