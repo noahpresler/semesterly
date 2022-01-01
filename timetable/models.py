@@ -97,7 +97,6 @@ class Course(models.Model):
         geneds (:obj:`CharField`): geneds satisfied by this course
         related_courses (:obj:`ManyToManyField` of :obj:`Course`, optional): courses computed similar to this course
         same_as (:obj:`ForeignKey`): If this course is the same as another course, provide Foreign key
-        vector (:obj:`PickleObjectField`): the vector representation of a course transformed from course vectorizer
     """
 
     school = models.CharField(db_index=True, max_length=100)
@@ -119,7 +118,6 @@ class Course(models.Model):
     geneds = models.CharField(max_length=300, null=True, blank=True)
     related_courses = models.ManyToManyField("self", blank=True)
     same_as = models.ForeignKey("self", null=True, on_delete=models.deletion.CASCADE)
-    vector = PickledObjectField(default=None, null=True)
     pos = ArrayField(models.TextField(default="", null=True), default=list)
     areas = ArrayField(models.TextField(default="", null=True), default=list)
     sub_school = models.TextField(default="", null=True)
