@@ -100,7 +100,6 @@ export interface Course{
   integrations: any;
   related_courses: Course[];
   reactions: Reaction[];
-  textbooks: any;
   regexed_courses: any;
   sections: number[];
   prerequisites: string;

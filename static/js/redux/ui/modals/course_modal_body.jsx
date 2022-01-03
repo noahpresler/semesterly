@@ -15,11 +15,9 @@ GNU General Public License for more details.
 import PropTypes from 'prop-types';
 import React from 'react';
 import isEmpty from 'lodash/isEmpty';
-import flatMap from 'lodash/flatMap';
 import Reaction from '../reaction';
 import REACTION_MAP from '../../constants/reactions';
 import MasterSlot from '../master_slot';
-import Textbook from '../textbook';
 import COLOUR_DATA from '../../constants/colours';
 import EvaluationList from '../evaluation_list';
 import CourseModalSection from '../course_modal_section';
@@ -179,7 +177,7 @@ class CourseModalBody extends React.Component {
     const integrationList = this.props.data.integrations;
     const evalInfo = this.props.data.evals;
     const relatedCourses = this.props.data.related_courses;
-    const { prerequisites, textbooks } = this.props.data;
+    const { prerequisites } = this.props.data;
     const maxColourIndex = COLOUR_DATA.length - 1;
 
     const similarCourses = relatedCourses.length === 0 ? null :
@@ -340,16 +338,6 @@ class CourseModalBody extends React.Component {
       </div>);
     }
 
-    const textbooksArray = flatMap(Object.keys(textbooks), sectionCode => textbooks[sectionCode]);
-    const textbooksDisplay = !textbooksArray || textbooksArray.length === 0 ? null :
-      (<div className="modal-module">
-        <h3 className="modal-module-header">Textbooks</h3>
-        <div className="modal-textbook-list">
-          {
-            textbooksArray.map(t => <Textbook key={t.isbn} tb={t} />)
-          }
-        </div>
-      </div>);
 
     const creditsSuffix = numCredits === 1 ? ' credit' : ' credits';
     const avgRating = evalInfo.reduce((sum, e) => sum + parseFloat(e.score), 0) / evalInfo.length;
@@ -432,8 +420,6 @@ class CourseModalBody extends React.Component {
               <h3 className="modal-module-header">Course Evaluations</h3>
               <EvaluationList evalInfo={evalInfo} />
             </div>
-            {textbooksDisplay}
-
           </div>
           <div
             id="modal-section-lists"

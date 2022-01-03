@@ -42,7 +42,6 @@ import saveCalendarModal from './save_calendar_modal_reducer';
 import termsOfServiceModal from './terms_of_service_modal_reducer';
 import termsOfServiceBanner from './terms_of_service_banner_reducer';
 import userAcquisitionModal from './slices/userAcquisitionModalSlice';
-import textbookModal from './textbook_modal_reducer';
 import registrar from './registrar_reducer';
 import entities, * as fromEntities from './entities_reducer';
 
@@ -72,7 +71,6 @@ export const reducers = {
   signupModal,
   termsOfServiceBanner,
   termsOfServiceModal,
-  textbookModal,
   timetables,
   ui,
   userAcquisitionModal,

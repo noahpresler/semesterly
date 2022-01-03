@@ -16,15 +16,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
-import uniqBy from 'lodash/uniqBy';
-import flatMap from 'lodash/flatMap';
 import MasterSlot from './master_slot';
 import TimetableNameInput from './timetable_name_input';
 import CreditTickerContainer from './containers/credit_ticker_container';
-import Textbook from './textbook';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import { getNextAvailableColour } from '../util';
-import { getTextbooksFromCourse } from '../state/entities_reducer';
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -223,30 +219,3 @@ SideBar.propTypes = {
 };
 
 export default SideBar;
-
-export const TextbookList = ({ courses }) => {
-  const tbs = flatMap(courses, getTextbooksFromCourse);
-
-  const img = (!isNaN(parseInt(courses, 0)) && (courses.length >= 5)) ? null :
-  <img src="/static/img/emptystates/textbooks.png" alt="No textbooks found." />;
-  if (tbs.length === 0) {
-    return (<div className="empty-state">
-      { img }
-      <h4>Buy & Rent Textbooks: New, Used or eBook!</h4>
-      <h3>
-        Textbooks for your classes will appear here. Click to find the lowest prices,
-        plus FREE two day shipping with Amazon Student
-      </h3>
-    </div>);
-  }
-  return (
-    <div>
-      {uniqBy(tbs, tb => tb.isbn).map(tb => <Textbook tb={tb} key={tb.isbn} />)}
-    </div>
-  );
-};
-
-TextbookList.propTypes = {
-  courses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
-};
-
