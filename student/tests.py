@@ -38,9 +38,7 @@ class UrlsTest(UrlTestCase):
 
     def test_urls_call_correct_views(self):
         # profile management
-        self.assertUrlResolvesToView(
-            "/unsubscribe/akdC@+-EI/alc:_=/", "student.views.unsubscribe"
-        )
+
         self.assertUrlResolvesToView("/user/settings/", "student.views.UserView")
 
         # timetable management
