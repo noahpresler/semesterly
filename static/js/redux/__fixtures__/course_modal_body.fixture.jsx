@@ -56,7 +56,6 @@ const courseModalBodyFixture = {
     integrations: [],
     related_courses: [],
     reactions: [],
-    textbooks: [],
     regexed_courses: {
       ECO100Y1: 'Introduction to Economics',
       ECO102H1: 'Principles of Macroeconomics',

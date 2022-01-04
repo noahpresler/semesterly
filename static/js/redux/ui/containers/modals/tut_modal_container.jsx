@@ -19,7 +19,6 @@ const mapStateToProps = state => ({
   signUpModalVisible: state.signupModal.isVisible,
   settingModalVisible: state.userInfo.overrideShow,
   courseModalVisible: state.courseInfo.id != null,
-  textbookModalVisible: state.textbookModal.isVisible,
 });
 
 const TutModalContainer = connect(

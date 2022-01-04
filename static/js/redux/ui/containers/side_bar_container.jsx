@@ -22,7 +22,6 @@ import {
 import {
   fetchCourseInfo,
   togglePeerModal,
-  triggerTextbookModal,
 } from '../../actions/modal_actions';
 import {
   addOrRemoveCourse,
@@ -61,7 +60,6 @@ const SideBarContainer = connect(
     removeCourse: addOrRemoveCourse,
     removeOptionalCourse: addOrRemoveOptionalCourse,
     launchPeerModal: togglePeerModal,
-    launchTextbookModal: triggerTextbookModal,
     duplicateTimetable,
     deleteTimetable,
     loadTimetable,

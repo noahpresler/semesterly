@@ -116,9 +116,6 @@ const handleFlows = featureFlow => (dispatch) => {
       }
       dispatch(lockTimetable(featureFlow.sharedTimetable));
       break;
-    case 'VIEW_TEXTBOOKS':
-      dispatch({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });
-      break;
     case 'SHARE_COURSE':
       dispatch(setCourseInfo(featureFlow.sharedCourse));
       dispatch(fetchCourseClassmates(featureFlow.sharedCourse.id));
