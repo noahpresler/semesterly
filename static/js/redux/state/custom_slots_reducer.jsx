@@ -23,7 +23,7 @@ import * as ActionTypes from '../constants/actionTypes';
 //   id
 //   preview: whether the slot is just a preview or has been added
 
-const customSlots = (state = [], action) => {
+const customEvents = (state = [], action) => {
   switch (action.type) {
     case ActionTypes.ADD_CUSTOM_SLOT:
       return update(state, {
@@ -69,4 +69,4 @@ const customSlots = (state = [], action) => {
   }
 };
 
-export default customSlots;
+export default customEvents;
