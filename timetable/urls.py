@@ -34,12 +34,8 @@ urlpatterns = [
     re_path(
         r"^timetables/links/(?P<slug>.+)/$", timetable.views.TimetableLinkView.as_view()
     ),
-    # maintain backwards compatibility TODO: change to
-    # redirect
-    re_path(
+    re_path(  # maintain backwards compatibility
         r"share/(?P<slug>.+)/$",
-        lambda request, slug: HttpResponseRedirect(
-            "/timetables/links/{0}/".format(slug)
-        ),
+        RedirectView.as_view(url="/timetables/links/%(slug)s/"),
     ),
 ]
