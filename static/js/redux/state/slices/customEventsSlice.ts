@@ -41,8 +41,11 @@ const customEventsSlice = createSlice({
         const newState = state.events.filter(event => event.id !== action.payload);
         state.events = newState;
       })
-      .addCase(changeActiveSavedTimetable, (state, action: PayloadAction<Timetable>) => {
-        state.events = action.payload.events;
+      .addCase(changeActiveSavedTimetable, (state, action: PayloadAction<{
+        timetable: Timetable,
+        upToDate: boolean
+      }>) => {
+        state.events = action.payload.timetable.events;
       });
   },
 });
