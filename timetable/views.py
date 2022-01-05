@@ -58,7 +58,9 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         save_analytics_timetable(
             courses, params["semester"], school, get_student(request)
         )
-        self.update_courses_and_locked_sections(params, course_ids, courses, locked_sections)
+        self.update_courses_and_locked_sections(
+            params, course_ids, courses, locked_sections
+        )
         opt_course_ids = params.get("optionCourses", [])
         max_optional = params.get("numOptionCourses", len(opt_course_ids))
         optional_courses = [Course.objects.get(id=cid) for cid in opt_course_ids]
@@ -96,7 +98,9 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         response = self.create_response(courses, locked_sections, timetables, context)
         return Response(response, status=status.HTTP_200_OK)
 
-    def update_courses_and_locked_sections(self, params, course_ids, courses, locked_sections):
+    def update_courses_and_locked_sections(
+        self, params, course_ids, courses, locked_sections
+    ):
         for updated_course in params.get("updated_courses", []):
             cid = str(updated_course["course_id"])
             locked_sections.setdefault(cid, {})
@@ -186,7 +190,11 @@ class TimetableLinkView(FeatureFlowView):
             student=student, school=school, semester=semester, has_conflict=has_conflict
         )
         shared_timetable.save()
+        self.save_courses(timetable, shared_timetable)
+        response = {"slug": hashids.encrypt(shared_timetable.id)}
+        return Response(response, status=status.HTTP_200_OK)
 
+    def save_courses(self, timetable: dict, shared_timetable: SharedTimetable):
         added_courses = set()
         for slot in timetable["slots"]:
             course_id, section_id = slot["course"], slot["section"]
@@ -200,6 +208,3 @@ class TimetableLinkView(FeatureFlowView):
             if section_obj.course.id not in added_courses:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         shared_timetable.save()
-
-        response = {"slug": hashids.encrypt(shared_timetable.id)}
-        return Response(response, status=status.HTTP_200_OK)
