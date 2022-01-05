@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
     """
     This view is responsible for responding to any requests dealing with the
-    generation of timetables and the satisfaction of constraits provided by
+    generation of timetables and the satisfaction of constraints provided by
     the frontend/user.
     """
 
@@ -50,36 +50,15 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         school = request.subdomain
         params = request.data
         student = get_student(request)
-
-        try:
-            params["semester"] = Semester.objects.get_or_create(**params["semester"])[0]
-        except TypeError:  # handle deprecated cached semesters from frontend
-            params["semester"] = (
-                Semester.objects.get(name="Fall", year="2016")
-                if params["semester"] == "F"
-                else Semester.objects.get(name="Spring", year="2017")
-            )
-
         course_ids = list(params["courseSections"].keys())
         courses = [Course.objects.get(id=cid) for cid in course_ids]
         locked_sections = params["courseSections"]
 
+        self.set_params_semester(params)
         save_analytics_timetable(
             courses, params["semester"], school, get_student(request)
         )
-
-        for updated_course in params.get("updated_courses", []):
-            cid = str(updated_course["course_id"])
-            locked_sections[cid] = locked_sections.get(cid, {})
-            if cid not in course_ids:
-                courses.append(Course.objects.get(id=int(cid)))
-
-            for locked_section in filter(bool, updated_course["section_codes"]):
-                update_locked_sections(
-                    locked_sections, cid, locked_section, params["semester"]
-                )
-
-        # temp optional course implementation
+        self.update_courses_and_locked_sections(params, course_ids, courses, locked_sections)
         opt_course_ids = params.get("optionCourses", [])
         max_optional = params.get("numOptionCourses", len(opt_course_ids))
         optional_courses = [Course.objects.get(id=cid) for cid in opt_course_ids]
@@ -88,7 +67,6 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
             for subset_size in range(max_optional, -1, -1)
             for subset in itertools.combinations(optional_courses, subset_size)
         ]
-        # TODO remove PersonalEvent row if all timetable references are deleted (Django supports Orphan removal)
         custom_events = params.get("customSlots", [])
         preferences = params["preferences"]
         with_conflicts = preferences.get("try_with_conflicts", False)
@@ -98,7 +76,6 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
             if m["selected"]
         ]
 
-        # TODO move sorting to view level so that result is sorted
         timetables = [
             timetable
             for opt_courses in optional_course_subsets
@@ -114,18 +91,46 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
             )
         ]
 
-        context = {
-            "semester": params["semester"],
-            "school": request.subdomain,
-            "student": student,
-        }
-        courses = [course for course in courses + optional_courses]
-        response = {
+        context = self.create_context(request, params, student)
+        courses = list(courses + optional_courses)
+        response = self.create_response(courses, locked_sections, timetables, context)
+        return Response(response, status=status.HTTP_200_OK)
+
+    def update_courses_and_locked_sections(self, params, course_ids, courses, locked_sections):
+        for updated_course in params.get("updated_courses", []):
+            cid = str(updated_course["course_id"])
+            locked_sections.setdefault(cid, {})
+            if cid not in course_ids:
+                courses.append(Course.objects.get(id=int(cid)))
+
+            for locked_section in filter(bool, updated_course["section_codes"]):
+                update_locked_sections(
+                    locked_sections, cid, locked_section, params["semester"]
+                )
+
+    def set_params_semester(self, params):
+        try:
+            params["semester"] = Semester.objects.get_or_create(**params["semester"])[0]
+        except TypeError:  # handle deprecated cached semesters from frontend
+            params["semester"] = (
+                Semester.objects.get(name="Fall", year="2016")
+                if params["semester"] == "F"
+                else Semester.objects.get(name="Spring", year="2017")
+            )
+
+    def create_response(self, courses, locked_sections, timetables, context):
+        return {
             "timetables": DisplayTimetableSerializer(timetables, many=True).data,
             "new_c_to_s": locked_sections,
             "courses": CourseSerializer(courses, context=context, many=True).data,
         }
-        return Response(response, status=status.HTTP_200_OK)
+
+    def create_context(self, request, params, student):
+        return {
+            "semester": params["semester"],
+            "school": request.subdomain,
+            "student": student,
+        }
 
 
 class TimetableLinkView(FeatureFlowView):
