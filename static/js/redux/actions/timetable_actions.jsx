@@ -31,8 +31,19 @@ import {
 import { autoSave, fetchClassmates, lockActiveSections, getUserSavedTimetables } from './user_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { alertsActions } from '../state/slices';
-import { updateSemester, changeActiveTimetable, receiveTimetables, alertConflict, receiveCourses } from './initActions';
+import {
+  updateSemester,
+  changeActiveTimetable,
+  receiveTimetables,
+  alertConflict,
+  receiveCourses,
+  addNewCustomEvent,
+  updateExistingEvent,
+  removeCustomEvent,
+  changeActiveSavedTimetable,
+} from './initActions';
 import { timetablesActions } from '../state/slices/timetablesSlice';
+import { customEventsAction } from '../state/slices/customEventsSlice';
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
 
@@ -88,7 +99,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         // user wasn't removing or refetching for custom events
         // (i.e. was adding a course/section), but we got no timetables back.
         // therefore course added by the user resulted in a conflict
-        dispatch({ type: ActionTypes.CLEAR_CONFLICTING_EVENTS });
+        dispatch(customEventsAction.clearConflictingEvents());
         dispatch(alertConflict());
       }
       return json;
@@ -154,19 +165,16 @@ export const loadTimetable = (
       ({ ...event, id: generateCustomEventId(), preview: false })),
   };
   if (autoLockAll) {
-    dispatch({
-      type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
+    dispatch(changeActiveSavedTimetable({
       timetable: displayTimetable,
       upToDate: !isLoadingNewTimetable,
-    });
-
+    }));
     return dispatch(lockTimetable(displayTimetable));
   }
-  return dispatch({
-    type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
+  return dispatch(changeActiveSavedTimetable({
     timetable: displayTimetable,
     upToDate: !isLoadingNewTimetable,
-  });
+  }));
 };
 
 export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) => {
@@ -179,17 +187,14 @@ export const nullifyTimetable = () => (dispatch) => {
     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
     courseSections: {},
   });
-  dispatch({
-    type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
+  dispatch(changeActiveSavedTimetable({
     timetable: { name: 'Untitled Schedule', slots: [], events: [], has_conflict: false },
     upToDate: false,
-  });
+  }));
   dispatch({
     type: ActionTypes.CLEAR_OPTIONAL_COURSES,
   });
-  dispatch({
-    type: ActionTypes.CLEAR_CUSTOM_SLOTS,
-  });
+  dispatch(customEventsAction.clearCustomEvents());
 };
 
 // get semester index of cached index into allSemesters
@@ -312,7 +317,7 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
     Object.assign(reqBody, {
       optionCourses: state.optionalCourses.courses,
       numOptionCourses: state.optionalCourses.numRequired,
-      customSlots: state.customSlots,
+      customEvents: state.customEvents,
     });
   } else { // adding a course
     dispatch(timetablesActions.updateLastCourseAdded(newCourseId));
@@ -324,7 +329,7 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
       }],
       optionCourses: state.optionalCourses.courses,
       numOptionCourses: state.optionalCourses.numRequired,
-      customSlots: state.customSlots,
+      customEvents: state.customEvents,
     });
   }
 
@@ -342,7 +347,7 @@ const refetchTimetables = () => (dispatch, getState) => {
   Object.assign(reqBody, {
     optionCourses: state.optionalCourses.courses,
     numOptionCourses: state.optionalCourses.numRequired,
-    customSlots: state.customSlots,
+    customEvents: state.customEvents,
   });
 
   dispatch(fetchTimetables(reqBody, false));
@@ -356,10 +361,7 @@ export const addLastAddedCourse = () => (dispatch, getState) => {
     return;
   }
   if (typeof state.timetables.lastSlotAdded === 'object') {
-    dispatch({
-      type: ActionTypes.RECEIVE_CUSTOM_SLOTS,
-      events: state.timetables.lastSlotAdded,
-    });
+    dispatch(customEventsAction.receiveCustomEvents(state.timetables.lastSlotAdded));
     dispatch(refetchTimetables());
   } else if (typeof state.timetables.lastSlotAdded === 'number') {
     dispatch(addOrRemoveCourse(state.timetables.lastSlotAdded));
@@ -371,32 +373,26 @@ const autoFetch = () => (dispatch, getState) => {
   clearTimeout(customEventUpdateTimer);
   customEventUpdateTimer = setTimeout(() => {
     if (getActiveTimetableCourses(state).length > 0) {
-      dispatch(timetablesActions.updateLastCourseAdded(state.customSlots));
+      dispatch(timetablesActions.updateLastCourseAdded(state.customEvents));
       dispatch(refetchTimetables());
     }
   }, 250);
 };
 
 export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
-  dispatch({
-    type: ActionTypes.ADD_CUSTOM_SLOT,
-    newCustomSlot: {
-      time_start: timeStart, // match backend slot attribute names
-      time_end: timeEnd,
-      name: 'New Custom Event', // default name for custom slot
-      day,
-      id,
-      preview,
-    },
-  });
+  dispatch(addNewCustomEvent({
+    time_start: timeStart, // match backend slot attribute names
+    time_end: timeEnd,
+    name: 'New Custom Event', // default name for custom slot
+    day,
+    id,
+    preview,
+  }));
   dispatch(autoFetch());
 };
 
 export const removeCustomSlot = id => (dispatch) => {
-  dispatch({
-    type: ActionTypes.REMOVE_CUSTOM_SLOT,
-    id,
-  });
+  dispatch(removeCustomEvent(id));
   dispatch(autoFetch());
 };
 
@@ -410,11 +406,8 @@ export const updateCustomSlot = (newValues, id) => (dispatch) => {
     onlyChangingName || (newValues.time_end !== undefined &&
     newValues.time_end <= '24:00')
   ) {
-    dispatch({
-      type: ActionTypes.UPDATE_CUSTOM_SLOT,
-      newValues,
-      id,
-    });
+    newValues.id = id;
+    dispatch(updateExistingEvent(newValues));
   }
   if (onlyChangingName) {
     dispatch(autoSave());

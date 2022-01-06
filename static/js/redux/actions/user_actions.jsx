@@ -69,7 +69,7 @@ const getSaveTimetablesRequestBody = (state) => {
   // TODO: optional courses?
   return {
     slots: tt.slots,
-    events: state.customSlots,
+    events: state.customEvents.events,
     has_conflict: tt.has_conflict,
     semester: getCurrentSemester(state),
     name: state.savingTimetable.activeTimetable.name,
@@ -150,7 +150,7 @@ export const saveTimetable = (
   const activeTimetable = getActiveTimetable(state);
 
   // if current timetable is empty or we're already in saved state, don't save this timetable
-  const numSlots = activeTimetable.slots.length + state.customSlots.length;
+  const numSlots = activeTimetable.slots.length + state.customEvents.events.length;
   if (numSlots === 0 || state.savingTimetable.upToDate) {
     return null;
   }
@@ -333,7 +333,7 @@ export const autoSave = () => (dispatch, getState) => {
   autoSaveTimer = setTimeout(() => {
     const state = getState();
     const existsSlots = getActiveTimetable(state).slots.length > 0;
-    const existsCustomEvents = state.customSlots.length > 0;
+    const existsCustomEvents = state.customEvents.events.length > 0;
     if (state.userInfo.data.isLoggedIn && (existsSlots || existsCustomEvents)) {
       dispatch(saveTimetable(true));
       clearLocalTimetable();
