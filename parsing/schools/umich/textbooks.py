@@ -24,4 +24,5 @@ class Parser(BarnesAndNoblesParser):
             "-",
             term,
             year,
-            **kwargs)
+            **kwargs
+        )

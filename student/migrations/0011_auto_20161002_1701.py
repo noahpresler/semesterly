@@ -22,13 +22,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student', '0010_student_users'),
+        ("student", "0010_student_users"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='student',
-            old_name='users',
-            new_name='integrations',
+            model_name="student",
+            old_name="users",
+            new_name="integrations",
         ),
     ]

@@ -23,17 +23,33 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student', '0015_merge'),
-        ('analytics', '0008_analyticscoursesearch_courses'),
+        ("student", "0015_merge"),
+        ("analytics", "0008_analyticscoursesearch_courses"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='DeviceCookie',
+            name="DeviceCookie",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('last_online', models.DateTimeField(auto_now_add=True)),
-                ('student', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='student.Student')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("last_online", models.DateTimeField(auto_now_add=True)),
+                (
+                    "student",
+                    models.ForeignKey(
+                        default=None,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="student.Student",
+                    ),
+                ),
             ],
         ),
     ]

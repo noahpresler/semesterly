@@ -22,21 +22,21 @@ class Parser(BaseParser):
         self.last_course = {}
         self.last_section = {}
         self.base_url = "http://ntst.umd.edu/soc/"
-        self.prereq_pattern = re.compile(r'Prerequisite:.*')
-        self.restr_pattern = re.compile(r'Restriction: :.*')
-        super(Parser, self).__init__('umd', **kwargs)
+        self.prereq_pattern = re.compile(r"Prerequisite:.*")
+        self.restr_pattern = re.compile(r"Restriction: :.*")
+        super(Parser, self).__init__("umd", **kwargs)
 
     def find_content(self, div_class, parent):
         try:
             return parent.find(class_=div_class).contents[0].strip()
         except:
-            return ''
+            return ""
 
     def find_url(self, div_class, parent):
         try:
-            return parent.find(class_=div_class)['href']
+            return parent.find(class_=div_class)["href"]
         except:
-            return ''
+            return ""
 
     def find_cores(self, tag, parent):
         try:
@@ -61,23 +61,25 @@ class Parser(BaseParser):
 
     def get_desc_from_course(self, course):
         try:
-            return course.find_all(class_='approved-course-text')[-1].contents[0].strip()
+            return (
+                course.find_all(class_="approved-course-text")[-1].contents[0].strip()
+            )
         except:
-            return ''
+            return ""
 
     def get_departments(self):
         """Get department in the specified semester in specified year."""
         # HARD CODED
-        semester_map = {'Fall': '08', 'Spring': '01'}
+        semester_map = {"Fall": "08", "Spring": "01"}
 
         soup = self.requester.get(url=self.base_url)
-        prefix_rows = soup.findAll(class_='course-prefix row')
+        prefix_rows = soup.findAll(class_="course-prefix row")
         prefix_a_tags = []
         departments = {}
         for row in prefix_rows:
-            prefix_a_tags.append(row.find('a'))
+            prefix_a_tags.append(row.find("a"))
         for link in prefix_a_tags:
-            spans = link.findAll('span')
+            spans = link.findAll("span")
             department_url = spans[0].string
             department_name = spans[1].string
             if self.semester == None or self.year == None:
@@ -89,13 +91,15 @@ class Parser(BaseParser):
         return departments
 
     def get_prerequisites(self, course):
-        prereq_match = course.find('strong', text=self.prereq_pattern)
-        prereq = ''
+        prereq_match = course.find("strong", text=self.prereq_pattern)
+        prereq = ""
         if prereq_match:
-            prereq = prereq_match.parent.get_text().strip().replace('Prerequisite:', '')
-        restr_match = course.find('strong', text=self.restr_pattern)
+            prereq = prereq_match.parent.get_text().strip().replace("Prerequisite:", "")
+        restr_match = course.find("strong", text=self.restr_pattern)
         if restr_match:
-            prereq += ' ' + restr_match.parent.get_text().strip().replace('Restriction: ', '')
+            prereq += " " + restr_match.parent.get_text().strip().replace(
+                "Restriction: ", ""
+            )
         return prereq
 
     def get_courses(self, departments):
@@ -106,7 +110,7 @@ class Parser(BaseParser):
             for c in course_div:
                 cid = self.find_content("course-id", c)
                 partial_url = self.find_url("toggle-sections-link", c)
-                if (partial_url == ''):
+                if partial_url == "":
                     continue
 
                 name = self.find_content("course-title", c)
@@ -121,16 +125,16 @@ class Parser(BaseParser):
 
                 level = re.findall(re.compile(r"^\D*(\d)"), cid)[0] + "00"
 
-                self.ingestor['cores'] = cores
-                self.ingestor['geneds'] = geneds
-                self.ingestor['level'] = level
-                self.ingestor['name'] = name
-                self.ingestor['description'] = description
-                self.ingestor['code'] = cid
-                self.ingestor['num_credits'] = credits
-                self.ingestor['department_name'] = department_name
-                self.ingestor['campus'] = 1
-                self.ingestor['prerequisites'] = self.get_prerequisites(c)
+                self.ingestor["cores"] = cores
+                self.ingestor["geneds"] = geneds
+                self.ingestor["level"] = level
+                self.ingestor["name"] = name
+                self.ingestor["description"] = description
+                self.ingestor["code"] = cid
+                self.ingestor["num_credits"] = credits
+                self.ingestor["department_name"] = department_name
+                self.ingestor["campus"] = 1
+                self.ingestor["prerequisites"] = self.get_prerequisites(c)
 
                 course_model = self.ingestor.ingest_course()
 
@@ -162,32 +166,34 @@ class Parser(BaseParser):
             open_seats = self.find_content("open-seats-count", div)
             waitlist = self.find_content("waitlist-count", div)
 
-            self.ingestor['section'] = sid
-            self.ingestor['semester'] = self.semester
-            self.ingestor['instructors'] = instructors
-            self.ingestor['capacity'] = int(total_seats)
-            self.ingestor['enrollment'] = int(total_seats) - int(open_seats)
-            self.ingestor['waitlist'] = int(waitlist)
-            self.ingestor['year'] = self.year
+            self.ingestor["section"] = sid
+            self.ingestor["semester"] = self.semester
+            self.ingestor["instructors"] = instructors
+            self.ingestor["capacity"] = int(total_seats)
+            self.ingestor["enrollment"] = int(total_seats) - int(open_seats)
+            self.ingestor["waitlist"] = int(waitlist)
+            self.ingestor["year"] = self.year
 
             section_model = self.ingestor.ingest_section(course_model)
 
-            days = day.replace('Tu', 'T').replace('Th', 'R')
+            days = day.replace("Tu", "T").replace("Th", "R")
             valid_days = set(["M", "T", "W", "R", "F", "S", "U"])
             for day in days:
                 if day not in valid_days or not start_time or not end_time:
                     continue
-                self.ingestor['day'] = day
-                self.ingestor['time_start'] = start_time
-                self.ingestor['time_end'] = end_time
-                self.ingestor['location'] = building + room
+                self.ingestor["day"] = day
+                self.ingestor["time_start"] = start_time
+                self.ingestor["time_end"] = end_time
+                self.ingestor["location"] = building + room
                 self.ingestor.ingest_meeting(section_model)
 
-    def start(self,
-              years_and_terms_filter=None,
-              departments_filter=None,
-              textbooks=True,
-              verbosity=3):
+    def start(
+        self,
+        years_and_terms_filter=None,
+        departments_filter=None,
+        textbooks=True,
+        verbosity=3,
+    ):
         """Start the parse."""
         for year, terms in years_and_terms_filter.items():
             self.year = year
