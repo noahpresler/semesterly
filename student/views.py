@@ -145,7 +145,8 @@ class UserView(RedirectToSignupMixin, APIView):
 
 
 class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
-    """Responsible for the viewing and managing of all Students'
+    """
+    Responsible for the viewing and managing of all Students'
     :obj:`PersonalTimetable`.
     """
 
