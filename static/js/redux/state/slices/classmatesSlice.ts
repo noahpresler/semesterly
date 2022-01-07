@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ClassmateSliceState {
-  courseToClassmates: {};
+  courseToClassmates: any;  // map<course_ids: string, object>
   isFetching: boolean;
 }
 
