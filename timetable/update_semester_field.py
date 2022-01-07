@@ -43,9 +43,7 @@ def update_sem_fields(table, get_school, sem_table):
     and returns the associated school, and the corresponding Semester object and
     update the semester field of each row of the input table.
     """
-    num_updated = 0
     name_year_to_semester = {}
-    bad_inputs = Counter()
     bar = progressbar.ProgressBar(
         max_value=table.objects.filter(semester__id=1).count()
     )
@@ -61,26 +59,12 @@ def update_sem_fields(table, get_school, sem_table):
                     name=name, year=year
                 )
             except:
-                bad_inputs[semester_code] += 1
                 continue
         semester = name_year_to_semester[(name, year)]
 
         row.semester = semester
         row.save()
         bar.update(i)
-        num_updated += 1
-
-    # TODO: log instead of print to stdout
-    if table.objects.count():
-        print(
-            "Updated {0}/{1} rows from table {2}".format(
-                num_updated, table.objects.count(), str(table)
-            )
-        )
-    if bad_inputs:
-        print("Ignored the following unknown semester codes:")
-        pprint(bad_inputs)
-        print()
 
 
 def code_to_name(semester_code, school):

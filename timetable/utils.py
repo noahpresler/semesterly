@@ -89,9 +89,9 @@ def courses_to_timetables(
 
 def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
     """
-    Return a list of lists of Slots. Each Slot sublist represents the list of possibilities
-    for a given course and section type, i.e. a valid timetable consists of any one slot from each
-    sublist.
+    Return a list of lists of Slots. Each Slot sublist represents the list of
+    possibilities for a given course and section type, i.e. a valid timetable consists
+    of any one slot from each sublist.
     """
     slots = []
     optional_course_ids = set(optional_course_ids)
@@ -149,7 +149,7 @@ def slots_to_timetables(slots, school, custom_events, with_conflicts):
                 add_tt = False
                 break
             current_tt.append(slots[i][j])
-        if add_tt and len(current_tt) != 0:
+        if add_tt and current_tt:
             tt_stats = get_tt_stats(current_tt, day_to_usage)
             tt_stats["num_conflicts"] = num_conflicts
             has_conflict = tt_stats["has_conflict"] = bool(num_conflicts)
@@ -202,29 +202,19 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting, school):
                 offering.time_start, offering.time_end, school
             ):
                 previous_len = max(1, len(day_to_usage[day][slot]))
-                # If two course offerings cannot even possibly conflict because the date ranges
-                # they are offered don't overlap, then conflict calculation based on the
-                # timeslots shouldn't apply. To check this we will use potential_conflict_found
-                # variable.
                 potential_conflict_found = False
-                # If the offering already has a "has_potential_conflict" flag, then we
-                # already checked the conflict condition and we can get the value from it and
-                # assign it to potential_conflict_found variable to use below when checking
-                # timeslots. Because this value based on date ranges, there is no need to check
-                # each and every time slot of a given two course offerings.
                 if hasattr(offering, "has_potential_conflict"):
                     potential_conflict_found = offering.has_potential_conflict
                 else:
                     for existing_offering in day_to_usage[day][slot]:
-                        # TODO: Check for conflicts against custom slots
-                        # I tried setting it to true, but it blew up the tt.
-                        if existing_offering == "custom_slot":
-                            break
-                        potential_conflict_found = can_potentially_conflict(
-                            existing_offering.date_start,
-                            existing_offering.date_end,
-                            offering.date_start,
-                            offering.date_end,
+                        potential_conflict_found = (
+                            existing_offering == "custom_slot"
+                            or can_potentially_conflict(
+                                existing_offering.date_start,
+                                existing_offering.date_end,
+                                offering.date_start,
+                                offering.date_end,
+                            )
                         )
                         offering.has_potential_conflict = potential_conflict_found
                         break
@@ -262,13 +252,12 @@ def can_potentially_conflict(
         or course_2_date_start is None
         or course_2_date_end is None
     ):
-        potential_conflict_found = True
+        return True
     else:
-        potential_conflict_found = (
+        return (
             course_2_date_start <= course_1_date_end
             and course_2_date_end >= course_1_date_start
         )
-    return potential_conflict_found
 
 
 def find_slots_to_fill(start, end, school):
@@ -365,11 +354,3 @@ def get_current_semesters(school):
             semesters.append({"name": term, "year": str(year)})
 
     return semesters
-
-
-# def get_old_semesters(school):
-#     semesters = old_school_to_semesters[school]
-#     # Ensure DB has all semesters.
-#     for semester in semesters:
-#         Semester.objects.update_or_create(**semester)
-#     return semesters
