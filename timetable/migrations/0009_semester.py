@@ -22,16 +22,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0008_merge'),
+        ("timetable", "0008_merge"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Semester',
+            name="Semester",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('year', models.CharField(max_length=4)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("year", models.CharField(max_length=4)),
             ],
         ),
     ]

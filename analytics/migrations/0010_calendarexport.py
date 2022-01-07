@@ -23,19 +23,35 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student', '0015_merge'),
-        ('analytics', '0009_devicecookie'),
+        ("student", "0015_merge"),
+        ("analytics", "0009_devicecookie"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CalendarExport',
+            name="CalendarExport",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('time_created', models.DateTimeField(auto_now_add=True)),
-                ('school', models.CharField(max_length=50)),
-                ('is_google_calendar', models.BooleanField(default=False)),
-                ('student', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='student.Student')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("time_created", models.DateTimeField(auto_now_add=True)),
+                ("school", models.CharField(max_length=50)),
+                ("is_google_calendar", models.BooleanField(default=False)),
+                (
+                    "student",
+                    models.ForeignKey(
+                        default=None,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="student.Student",
+                    ),
+                ),
             ],
         ),
     ]

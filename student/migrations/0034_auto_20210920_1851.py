@@ -6,38 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student', '0033_auto_20210724_1528'),
+        ("student", "0033_auto_20210724_1528"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='student',
-            name='disabilities',
+            model_name="student",
+            name="disabilities",
             field=models.BooleanField(default=False, null=True),
         ),
         migrations.AlterField(
-            model_name='student',
-            name='emails_enabled',
+            model_name="student",
+            name="emails_enabled",
             field=models.BooleanField(default=True, null=True),
         ),
         migrations.AlterField(
-            model_name='student',
-            name='pre_health',
+            model_name="student",
+            name="pre_health",
             field=models.BooleanField(default=False, null=True),
         ),
         migrations.AlterField(
-            model_name='student',
-            name='social_all',
+            model_name="student",
+            name="social_all",
             field=models.BooleanField(null=True),
         ),
         migrations.AlterField(
-            model_name='student',
-            name='social_courses',
+            model_name="student",
+            name="social_courses",
             field=models.BooleanField(null=True),
         ),
         migrations.AlterField(
-            model_name='student',
-            name='social_offerings',
+            model_name="student",
+            name="social_offerings",
             field=models.BooleanField(null=True),
         ),
     ]

@@ -23,16 +23,30 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('analytics', '0011_finalexammodalview'),
+        ("analytics", "0011_finalexammodalview"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SharedTimetableView',
+            name="SharedTimetableView",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('time_created', models.DateTimeField(auto_now_add=True)),
-                ('shared_timetable', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='analytics.SharedTimetable')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("time_created", models.DateTimeField(auto_now_add=True)),
+                (
+                    "shared_timetable",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="analytics.SharedTimetable",
+                    ),
+                ),
             ],
         ),
     ]
