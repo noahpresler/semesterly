@@ -30,7 +30,7 @@ const mapStateToProps = state => ({
 });
 
 const SaveCalendarModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     toggleSaveCalendarModal,
     // addTTtoGCal,

@@ -14,15 +14,25 @@ GNU General Public License for more details.
 
 import * as ActionTypes from '../constants/actionTypes';
 
-const userAcquisitionModal = (state = { isVisible: false }, action) => {
+const defaultState = {
+  current: -1, // semester.current indexes into semester.all
+  all: [], // semester.all is a list of {name, year} objects
+};
+
+const semester = (state = defaultState, action) => {
   switch (action.type) {
-    case ActionTypes.TOGGLE_ACQUISITION_MODAL:
-      return { isVisible: !state.isVisible };
-    case ActionTypes.TRIGGER_ACQUISITION_MODAL:
-      return { isVisible: true };
+    case ActionTypes.INIT_STATE:
+      return Object.assign({}, state, {
+        current: parseInt(action.data.currentSemester, 10),
+        all: action.data.allSemesters,
+      });
+    case 'global/updateSemester':
+      return Object.assign({}, state, { current: action.payload });
     default:
       return state;
   }
 };
 
-export default userAcquisitionModal;
+export const getCurrentSemester = state => state.all[state.current];
+
+export default semester;

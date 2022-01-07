@@ -17,12 +17,12 @@ import Calendar from '../calendar';
 import { saveTimetable } from '../../actions/user_actions';
 import { handleCreateNewTimetable } from '../../actions/timetable_actions';
 import {
-    createICalFromTimetable,
-    fetchShareTimetableLink,
-    fetchSISTimetableData,
+  createICalFromTimetable,
+  fetchShareTimetableLink,
+  fetchSISTimetableData,
 } from '../../actions/calendar_actions';
 import { togglePreferenceModal, triggerSaveCalendarModal } from '../../actions/modal_actions';
-import { getMaxEndHour } from '../../reducers';
+import { getMaxEndHour } from '../../state';
 
 const mapStateToProps = (state) => {
   const { isFetchingShareLink, shareLink, shareLinkValid } = state.calendar;
@@ -41,7 +41,7 @@ const mapStateToProps = (state) => {
 };
 
 const CalendarContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     saveTimetable,
     fetchShareTimetableLink,

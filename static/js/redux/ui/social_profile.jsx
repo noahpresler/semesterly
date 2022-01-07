@@ -73,7 +73,7 @@ class SocialProfile extends React.Component {
         </div>
       </ClickOutHandler>
 
-        );
+    );
     const loggedOut = (
       <a className="social-login" onClick={() => this.props.triggerAcquisitionModal()}>
         <h2>
@@ -81,7 +81,7 @@ class SocialProfile extends React.Component {
           <span className="mobile">Signup Login</span>
         </h2>
       </a>
-        );
+    );
 
     const social = this.props.userInfo.isLoggedIn ? loggedIn : loggedOut;
     return (

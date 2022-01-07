@@ -27,12 +27,12 @@ const savingTimetable = (state = initState, action) => {
       return { ...state, saving };
     }
 
-    case ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE:
+    case 'global/changeActiveSavedTimetable':
       return {
         ...state,
-        activeTimetable: action.timetable,
+        activeTimetable: action.payload.timetable,
         saving: false,
-        upToDate: action.upToDate,
+        upToDate: action.payload.upToDate,
       };
 
     case ActionTypes.ALERT_TIMETABLE_EXISTS:
@@ -45,10 +45,10 @@ const savingTimetable = (state = initState, action) => {
         upToDate: false,
       };
 
-    case ActionTypes.ADD_CUSTOM_SLOT:
-    case ActionTypes.UPDATE_CUSTOM_SLOT:
-    case ActionTypes.REMOVE_CUSTOM_SLOT:
-    case ActionTypes.CHANGE_ACTIVE_TIMETABLE:
+    case 'global/addNewCustomEvent':
+    case 'global/updateExistingEvent':
+    case 'global/removeCustomEvent':
+    case 'global/changeActiveTimetable':
       return Object.assign({}, state, { upToDate: false });
 
     default:

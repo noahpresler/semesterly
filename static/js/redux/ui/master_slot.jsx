@@ -94,13 +94,13 @@ const MasterSlot = (props) => {
   creditsDisplay = numCredits + creditsDisplay;
   const profDisp = props.professors === null ? null : <h3>{ prof }</h3>;
   const shareLink = shareLinkShown ?
-          (<ShareLink
-            uniqueId={`course-${props.course.id}`}
-            link={props.getShareLink(props.course.code)}
-            onClickOut={hideShareLink}
-            type="Course"
-          />) :
-          null;
+    (<ShareLink
+      uniqueId={`course-${props.course.id}`}
+      link={props.getShareLink(props.course.code)}
+      onClickOut={hideShareLink}
+      type="Course"
+    />) :
+    null;
   let waitlistOnlyFlag = null;
   if (props.course.slots !== undefined) {
     if (props.course.slots.length > 0) {

@@ -14,16 +14,16 @@ GNU General Public License for more details.
 
 import { connect } from 'react-redux';
 import TimetableExistsAlert from './timetable_exists_alert';
-import * as ActionTypes from '../../constants/actionTypes';
+import { alertsActions } from '../../state/slices';
 
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = dispatch => ({
-  dismissSelf: () => dispatch({ type: ActionTypes.DISMISS_TIMETABLE_EXISTS }),
+  dismissSelf: () => dispatch(alertsActions.dismissTimeTableExists()),
 });
 
 const TimetableExistsAlertContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps,
 )(TimetableExistsAlert);
 export default TimetableExistsAlertContainer;

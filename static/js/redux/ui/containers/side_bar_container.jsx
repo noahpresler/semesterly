@@ -18,17 +18,15 @@ import {
   getActiveTimetable,
   getCurrentSemester,
   getDenormCourseById,
-  getCoursesFromSlots } from '../../reducers';
+  getCoursesFromSlots } from '../../state';
 import {
-    fetchCourseInfo,
-    showFinalExamsModal,
-    togglePeerModal,
-    triggerTextbookModal,
+  fetchCourseInfo,
+  togglePeerModal,
 } from '../../actions/modal_actions';
 import {
-    addOrRemoveCourse,
-    addOrRemoveOptionalCourse,
-    loadTimetable,
+  addOrRemoveCourse,
+  addOrRemoveOptionalCourse,
+  loadTimetable,
 } from '../../actions/timetable_actions';
 import { deleteTimetable, duplicateTimetable } from '../../actions/user_actions';
 import { getCourseShareLink } from '../../constants/endpoints';
@@ -42,7 +40,6 @@ const mapStateToProps = (state) => {
   return {
     semester: getCurrentSemester(state),
     semesterIndex: state.semester.current,
-    examSupportedSemesters: state.semester.exams,
     coursesInTimetable,
     mandatoryCourses,
     optionalCourses,
@@ -57,16 +54,14 @@ const mapStateToProps = (state) => {
 };
 
 const SideBarContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     fetchCourseInfo,
     removeCourse: addOrRemoveCourse,
     removeOptionalCourse: addOrRemoveOptionalCourse,
     launchPeerModal: togglePeerModal,
-    launchTextbookModal: triggerTextbookModal,
     duplicateTimetable,
     deleteTimetable,
-    launchFinalExamsModal: showFinalExamsModal,
     loadTimetable,
   },
 )(SideBar);

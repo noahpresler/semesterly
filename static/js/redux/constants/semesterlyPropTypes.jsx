@@ -31,21 +31,6 @@ export const classmates = PropTypes.shape({
   past: classmatesArray,
 });
 
-export const textbook = PropTypes.shape({
-  author: PropTypes.string.isRequired,
-  image_url: PropTypes.string.isRequired,
-  isbn: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-});
-
-export const sectionToTextbookMap = (props, propName, componentName) => {
-  const textbooks = props[propName];
-  if (!Object.keys(textbooks).every(k => typeof k === 'string')) {
-    return new Error(`Keys must be section identifiers e.g. '(03)' in ${componentName}`);
-  }
-  return null;
-};
-
 export const evaluation = PropTypes.shape({
   course: PropTypes.number.isRequired,
   course_code: PropTypes.string.isRequired,
@@ -104,7 +89,6 @@ const relatedCourseFields = {
   evals: PropTypes.arrayOf(evaluation).isRequired,
   integrations: PropTypes.arrayOf(integration),
   // reactions?
-  textbooks: sectionToTextbookMap,
   // regexed courses?
   // popularity percent?
   prerequisites: PropTypes.string.isRequired,

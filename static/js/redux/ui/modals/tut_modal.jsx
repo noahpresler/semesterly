@@ -28,9 +28,9 @@ class TutModal extends React.Component {
 
   componentDidMount() {
     const tutorial = JSON.parse(localStorage.getItem('tutorial'));
-    if ((!tutorial || !tutorial.modalTutShown) && !(this.props.textbookModalVisible ||
+    if ((!tutorial || !tutorial.modalTutShown) && !(
       this.props.signUpModalVisible || this.props.courseModalVisible ||
-      this.props.settingModalVisible || this.props.finalExamModalVisible)) {
+      this.props.settingModalVisible)) {
       this.modal.show();
     }
     $(document.body).on('keydown', (e) => {
@@ -133,10 +133,8 @@ class TutModal extends React.Component {
 }
 
 TutModal.propTypes = {
-  textbookModalVisible: PropTypes.bool.isRequired,
   signUpModalVisible: PropTypes.bool.isRequired,
   courseModalVisible: PropTypes.bool.isRequired,
-  finalExamModalVisible: PropTypes.bool.isRequired,
   settingModalVisible: PropTypes.bool.isRequired,
 };
 

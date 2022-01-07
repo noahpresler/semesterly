@@ -56,7 +56,7 @@ const dragSlotTarget = {
     const endHalfhour = convertToHalfHours(timeEnd);
 
     const slotTop = $(`#${props.id}`).offset().top;
-        // number half hours from slot start
+    // number half hours from slot start
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
 
     const newStartHour = convertToHalfHours(props.time_start) + n;
@@ -83,7 +83,7 @@ const createSlotTarget = {
     let { timeStart } = monitor.getItem();
     const { id } = monitor.getItem();
 
-        // get the time that the mouse dropped on
+    // get the time that the mouse dropped on
     const slotTop = $(`#${props.id}`).offset().top;
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
     let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n);
@@ -91,7 +91,7 @@ const createSlotTarget = {
     if (timeStart > timeEnd) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
-        // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime());
+    // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime());
     props.updateCustomSlot({ preview: false }, id);
   },
   canDrop(props, monitor) { // new custom slot must start and end on the same day
@@ -102,7 +102,7 @@ const createSlotTarget = {
     let { timeStart } = monitor.getItem();
     const { id } = monitor.getItem();
 
-        // get the time that the mouse dropped on
+    // get the time that the mouse dropped on
     const slotTop = $(`#${props.id}`).offset().top;
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
     if (n === lastPreview) {
@@ -125,7 +125,6 @@ function collectCreateDrop(connect) { // inject props as drop target
 
 // TODO: set connectDragPreview or update state as preview
 class CustomSlot extends React.Component {
-
   static stopPropagation(callback, event) {
     event.stopPropagation();
     callback();
@@ -204,20 +203,20 @@ class CustomSlot extends React.Component {
 
   render() {
     const removeButton = this.state.hovered ?
-            (<i
-              className="fa fa-times"
-              onClick={event => CustomSlot.stopPropagation(this.props.removeCustomSlot, event)}
-            />) : null;
+      (<i
+        className="fa fa-times"
+        onClick={event => CustomSlot.stopPropagation(this.props.removeCustomSlot, event)}
+      />) : null;
 
     const convertedStart = this.props.uses12HrTime &&
     parseInt(this.props.time_start.split(':')[0], 10) > 12 ?
-    `${parseInt(this.props.time_start.split(':')[0], 10) - 12}:${this.props.time_start.split(':')[1]}`
-    : this.props.time_start;
+      `${parseInt(this.props.time_start.split(':')[0], 10) - 12}:${this.props.time_start.split(':')[1]}`
+      : this.props.time_start;
 
     const convertedEnd = this.props.uses12HrTime &&
     parseInt(this.props.time_end.split(':')[0], 10) > 12 ?
-    `${parseInt(this.props.time_end.split(':')[0], 10) - 12} :${this.props.time_end.split(':')[1]}`
-    : this.props.time_end;
+      `${parseInt(this.props.time_end.split(':')[0], 10) - 12} :${this.props.time_end.split(':')[1]}`
+      : this.props.time_end;
 
     return this.props.connectCreateTarget(this.props.connectDragTarget(this.props.connectDragSource(
       <div className="fc-event-container">
@@ -253,7 +252,7 @@ class CustomSlot extends React.Component {
           </div>
         </div>
       </div>,
-        )));
+    )));
   }
 }
 
@@ -276,8 +275,8 @@ CustomSlot.propTypes = {
 };
 
 export default DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(
-    DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(
-        DragSource(DRAG_TYPES.DRAG, dragSlotSource, collectDragSource)(CustomSlot),
-    ),
+  DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(
+    DragSource(DRAG_TYPES.DRAG, dragSlotSource, collectDragSource)(CustomSlot),
+  ),
 );
 

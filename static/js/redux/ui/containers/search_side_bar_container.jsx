@@ -13,10 +13,11 @@ GNU General Public License for more details.
 */
 
 import { connect } from 'react-redux';
-import { getActiveTimetable, getSearchResult } from '../../reducers';
-import { getSectionTypeToSections } from '../../reducers/entities_reducer';
+import { getActiveTimetable, getSearchResult } from '../../state';
+import { getSectionTypeToSections } from '../../state/entities_reducer';
 import SearchSideBar from '../search_side_bar';
-import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/timetable_actions';
+import { addOrRemoveCourse } from '../../actions/timetable_actions';
+import { timetablesActions } from '../../state/slices/timetablesSlice';
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
@@ -33,8 +34,8 @@ const mapStateToProps = (state) => {
         return false;
       }
       return Object.keys(courseSections[courseId]).some(
-                type => courseSections[courseId][type] === section,
-            );
+        type => courseSections[courseId][type] === section,
+      );
     },
     isSectionOnActiveTimetable: (course, section) =>
       activeTimetable.slots.some(slot => slot.course === course.id && slot.section === section.id),
@@ -42,11 +43,11 @@ const mapStateToProps = (state) => {
 };
 
 const SearchSideBarContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     addCourse: addOrRemoveCourse,
-    hoverSection,
-    unHoverSection,
+    hoverSection: timetablesActions.hoverSection,
+    unHoverSection: timetablesActions.unhoverSection,
   },
 )(SearchSideBar);
 

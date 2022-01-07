@@ -29,7 +29,7 @@ class Alert extends React.Component {
     }
   }
 
-    /**
+  /**
      * Include the given icon or use the default one
      * @return {React.Component}
      */
@@ -38,7 +38,7 @@ class Alert extends React.Component {
     return icon;
   }
 
-    /**
+  /**
      * Remove the alert after the given time
      * @return {void}
      */
@@ -48,7 +48,7 @@ class Alert extends React.Component {
     }, this.props.time);
   }
 
-    /**
+  /**
      * Emit a event to AlertContainer remove this alert from page
      * @return {void}
      */

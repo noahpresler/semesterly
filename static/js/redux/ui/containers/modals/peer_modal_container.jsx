@@ -13,15 +13,15 @@ GNU General Public License for more details.
 */
 
 import { connect } from 'react-redux';
-import { getActiveTimetableDenormCourses } from '../../../reducers';
+import { getActiveTimetableDenormCourses } from '../../../state';
 import { fetchFriends, saveSettings } from '../../../actions/user_actions';
-import { changeUserInfo } from '../../../actions';
 import PeerModal from '../../modals/peer_modal';
 import { openSignUpModal, togglePeerModal } from '../../../actions/modal_actions';
+import { userInfoActions } from '../../../state/slices';
 
 const mapStateToProps = state => ({
-    // don't want to consider courses that are shown on timetable only
-    // because of a 'HOVER_COURSE' action (i.e. fake courses)
+  // don't want to consider courses that are shown on timetable only
+  // because of a 'HOVER_COURSE' action (i.e. fake courses)
   courses: getActiveTimetableDenormCourses(state),
   courseToColourIndex: state.ui.courseToColourIndex,
   peers: state.friends.peers,
@@ -32,11 +32,11 @@ const mapStateToProps = state => ({
 
 
 const PeerModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     fetchFriends,
     saveSettings,
-    changeUserInfo,
+    changeUserInfo: userInfoActions.changeUserInfo,
     togglePeerModal,
     openSignUpModal,
   },

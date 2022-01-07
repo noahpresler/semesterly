@@ -17,25 +17,25 @@ import {
   getCurrentSemester,
   getDenormAdvancedSearchResults,
   getHoveredSlots,
-} from '../../../reducers';
+} from '../../../state';
 import ExplorationModal from '../../modals/exploration_modal';
 import {
-    clearAdvancedSearchPagination,
-    fetchAdvancedSearchResults,
-    paginateAdvancedSearchResults,
-    setAdvancedSearchResultIndex,
+  clearAdvancedSearchPagination,
+  fetchAdvancedSearchResults,
+  paginateAdvancedSearchResults,
+  setAdvancedSearchResultIndex,
 } from '../../../actions/search_actions';
 import {
-    addOrRemoveCourse,
-    addOrRemoveOptionalCourse,
-    unHoverSection,
+  addOrRemoveCourse,
+  addOrRemoveOptionalCourse,
 } from '../../../actions/timetable_actions';
 import { getSchoolSpecificInfo } from '../../../constants/schools';
 import {
-    fetchCourseClassmates,
-    hideExplorationModal,
+  fetchCourseClassmates,
+  hideExplorationModal,
 } from '../../../actions/modal_actions';
 import { getCourseShareLinkFromModal } from '../../../constants/endpoints';
+import { timetablesActions } from '../../../state/slices/timetablesSlice';
 
 
 const mapStateToProps = (state) => {
@@ -64,13 +64,13 @@ const mapStateToProps = (state) => {
 };
 
 const ExplorationModalContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     hideExplorationModal,
     fetchAdvancedSearchResults,
     fetchCourseClassmates,
     addOrRemoveOptionalCourse,
-    unHoverSection,
+    unHoverSection: timetablesActions.unhoverSection,
     addOrRemoveCourse,
     paginate: paginateAdvancedSearchResults,
     clearPagination: clearAdvancedSearchPagination,

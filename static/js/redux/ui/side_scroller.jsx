@@ -16,7 +16,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 class SideScroller extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -41,7 +40,7 @@ class SideScroller extends React.Component {
             className={`nav-item${cls}`}
             onClick={() => this.setState({ activeSlide: i })}
           >{this.props.navItems[i]}</span>,
-                );
+        );
       }
       navItems = <div className="scroll-nav">{navs}</div>;
     }

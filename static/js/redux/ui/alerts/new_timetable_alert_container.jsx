@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import { connect } from 'react-redux';
 import { createNewTimetable } from '../../actions/timetable_actions';
 import NewTimetableAlert from './new_timetable_alert';
-import * as ActionTypes from '../../constants/actionTypes';
+import { alertsActions } from '../../state/slices';
 
 
 const mapStateToProps = () => {
@@ -25,13 +25,13 @@ const mapStateToProps = () => {
   };
 };
 const mapDispatchToProps = dispatch => ({
-  dismissSelf: () => dispatch({ type: ActionTypes.DISMISS_ALERT_NEW_TIMETABLE }),
+  dismissSelf: () => dispatch(alertsActions.dismissAlertNewTimeTable()),
   createNewTimetable,
 });
 
 const NewTimetableAlertContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps,
 )(NewTimetableAlert);
 
 export default NewTimetableAlertContainer;

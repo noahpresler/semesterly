@@ -13,7 +13,6 @@ GNU General Public License for more details.
 */
 
 import range from 'lodash/range';
-import { getLogFinalExamViewEndpoint } from './constants/endpoints';
 import COLOUR_DATA from './constants/colours';
 
 export const browserSupportsLocalStorage = () => {
@@ -85,7 +84,7 @@ export const setDeclinedNotifications = (declined) => {
   if (!browserSupportsLocalStorage()) {
     return;
   }
-    // console.log("settings decline", declined);
+  // console.log("settings decline", declined);
   localStorage.setItem('declinedNotifications', declined);
 };
 export const timeLapsedGreaterThan = (time, days) => {
@@ -94,7 +93,7 @@ export const timeLapsedGreaterThan = (time, days) => {
   }
   const timeNow = new Date();
   const windowInMilli = 1000 * 60 * 60 * 24 * days;
-    // console.log(timeNow.getTime(), Number(time), windowInMilli);
+  // console.log(timeNow.getTime(), Number(time), windowInMilli);
   return ((timeNow.getTime() - Number(time)) > windowInMilli);
 };
 export const timeLapsedInDays = time =>
@@ -112,12 +111,7 @@ export const getLocalTimetable = () => {
     return {};
   }
 };
-export const logFinalExamView = () => {
-  fetch(getLogFinalExamViewEndpoint(), {
-    method: 'POST',
-    credentials: 'include',
-  });
-};
+
 export const getMaxHourBasedOnWindowHeight = () => {
   const calRow = $('.cal-row');
   const lastRowY = calRow.last().position();

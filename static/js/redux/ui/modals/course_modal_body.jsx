@@ -15,11 +15,9 @@ GNU General Public License for more details.
 import PropTypes from 'prop-types';
 import React from 'react';
 import isEmpty from 'lodash/isEmpty';
-import flatMap from 'lodash/flatMap';
 import Reaction from '../reaction';
 import REACTION_MAP from '../../constants/reactions';
 import MasterSlot from '../master_slot';
-import Textbook from '../textbook';
 import COLOUR_DATA from '../../constants/colours';
 import EvaluationList from '../evaluation_list';
 import CourseModalSection from '../course_modal_section';
@@ -89,8 +87,8 @@ class CourseModalBody extends React.Component {
         }
         lockOrUnlock={() => this.props.addOrRemoveCourse(this.props.data.id,
           section.meeting_section)}
-        hoverSection={() => this.props.hoverSection(this.props.data, section)}
-        unHoverSection={this.props.unHoverSection}
+        hoverSection={() => this.props.hoverSection({ course: this.props.data, section })}
+        unHoverSection={() => this.props.unHoverSection()}
         inRoster={this.props.inRoster}
       />),
     );
@@ -168,7 +166,7 @@ class CourseModalBody extends React.Component {
           emoji={title}
           count={reaction.count} total={totalReactions}
         />);
-      }             // noone has reacted with this emoji yet
+      } // noone has reacted with this emoji yet
       return (<Reaction
         key={title} react={() => this.sendReact(cid, title)} emoji={title} count={0}
         total={totalReactions}
@@ -179,23 +177,23 @@ class CourseModalBody extends React.Component {
     const integrationList = this.props.data.integrations;
     const evalInfo = this.props.data.evals;
     const relatedCourses = this.props.data.related_courses;
-    const { prerequisites, textbooks } = this.props.data;
+    const { prerequisites } = this.props.data;
     const maxColourIndex = COLOUR_DATA.length - 1;
 
     const similarCourses = relatedCourses.length === 0 ? null :
-            (<div className="modal-module">
-              <h3 className="modal-module-header">Students Also Take</h3>
-              {relatedCourses.map((rc, i) => (<MasterSlot
-                key={rc.id} course={rc}
-                professors={null}
-                colourIndex={Math.min(i, maxColourIndex)}
-                onTimetable
-                hideCloseButton
-                inModal
-                fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
-                getShareLink={this.props.getShareLink}
-              />))}
-            </div>);
+      (<div className="modal-module">
+        <h3 className="modal-module-header">Students Also Take</h3>
+        {relatedCourses.map((rc, i) => (<MasterSlot
+          key={rc.id} course={rc}
+          professors={null}
+          colourIndex={Math.min(i, maxColourIndex)}
+          onTimetable
+          hideCloseButton
+          inModal
+          fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
+          getShareLink={this.props.getShareLink}
+        />))}
+      </div>);
     const courseRegex = new RegExp(this.props.schoolSpecificInfo.courseRegex, 'g');
     const matchedCoursesDescription = this.props.data.description.match(courseRegex);
     const description = this.props.data.description === '' ? 'No description available' :
@@ -244,20 +242,6 @@ class CourseModalBody extends React.Component {
         <h3 className="modal-module-header">Program of Study Tags</h3>
         <p>None</p>
       </div>);
-    const pilotLogoImg = {
-      backgroundImage: 'url(/static/img/integrations/pilot.png)',
-    };
-    const pilotDisplay = integrationList.indexOf('Pilot') > -1 ?
-      (<li className="cf">
-        <span className="integration-image" style={pilotLogoImg} />
-        <h4>Pilot</h4>
-        <a href="http://academicsupport.jhu.edu/pilot-learning/" target="_blank" rel="noopener noreferrer">
-          Learn More
-        </a>
-        <p>In the PILOT program, students are organized into study teams consisting of
-          6-10 members who meet
-          weekly to work problems together.</p>
-      </li>) : null;
     const learningDenLogoImg = {
       backgroundImage: 'url(/static/img/integrations/learningDen_books.png)',
     };
@@ -275,20 +259,19 @@ class CourseModalBody extends React.Component {
           helps students to improve their understanding of course materials,
           and prepare for exams.</p>
       </li>) : null;
-    const academicSupportDisplay = integrationList.indexOf('LearningDen') > -1 || integrationList.indexOf('Pilot') > -1 ?
+    const academicSupportDisplay = integrationList.indexOf('LearningDen') > -1 ?
       (<div className="modal-module academic-support">
         <h3 className="modal-module-header">Academic Support</h3>
-        { pilotDisplay }
         { learningDenDisplay }
       </div>) : null;
     let friendCircles = (<div className="loading"><span className="img-icon"><div
       className="loader"
     /></span><p>
-            loading...</p></div>);
+      loading...</p></div>);
     let hasTakenCircles = (<div className="loading"><span className="img-icon"><div
       className="loader"
     /></span><p>
-            loading...</p></div>);
+      loading...</p></div>);
     if (!this.props.isFetchingClassmates) {
       friendCircles = this.props.classmates.current.length > 0 ?
         this.props.classmates.current.map(c =>
@@ -333,16 +316,16 @@ class CourseModalBody extends React.Component {
           className="fa fa-facebook"
           aria-hidden="true"
         />Link
-              Facebook</a>) :
-          (<a onClick={this.enableSocial}><i
-            className="fa fa-facebook" aria-hidden="true"
-          />Enable Facebook
-          </a>
-      );
+          Facebook</a>) :
+        (<a onClick={this.enableSocial}><i
+          className="fa fa-facebook" aria-hidden="true"
+        />Enable Facebook
+        </a>
+        );
       hasTakenDisplay = null;
       friendDisplay = (<div className="modal-module friends">
         <h3 className="modal-module-header">Friends In This Course or Who Have Taken This
-                    Course</h3>
+          Course</h3>
         <div id="friends-wrapper">
           <div className="friends__inner">
             <div className="conversion">
@@ -355,16 +338,6 @@ class CourseModalBody extends React.Component {
       </div>);
     }
 
-    const textbooksArray = flatMap(Object.keys(textbooks), sectionCode => textbooks[sectionCode]);
-    const textbooksDisplay = !textbooksArray || textbooksArray.length === 0 ? null :
-            (<div className="modal-module">
-              <h3 className="modal-module-header">Textbooks</h3>
-              <div className="modal-textbook-list">
-                {
-                    textbooksArray.map(t => <Textbook key={t.isbn} tb={t} />)
-                }
-              </div>
-            </div>);
 
     const creditsSuffix = numCredits === 1 ? ' credit' : ' credits';
     const avgRating = evalInfo.reduce((sum, e) => sum + parseFloat(e.score), 0) / evalInfo.length;
@@ -386,14 +359,14 @@ class CourseModalBody extends React.Component {
           </div>
         </div>
       </div>
-        );
+    );
     const capacityTracker = (
       <div className="capacity">
         <div className="capacity__tracker-text">
           <span>{parseInt(this.props.popularityPercent, 10)}% of Seats Added on Semesterly</span>
         </div>
       </div>
-        );
+    );
     return (
       <div className="modal-body">
         <div className="cf">
@@ -415,10 +388,10 @@ class CourseModalBody extends React.Component {
             </div>
             { !showCapacityAttention &&
                         capacityTracker
-                        }
+            }
             { showCapacityAttention && this.state.mobile &&
                         attentioncapacityTracker
-                        }
+            }
             { prerequisitesDisplay }
             { posTags }
             { academicSupportDisplay }
@@ -429,10 +402,10 @@ class CourseModalBody extends React.Component {
           <div className="col-8-16">
             { showCapacityAttention && !this.state.mobile &&
                         attentioncapacityTracker
-                        }
+            }
             <h3 className="modal-module-header">Reactions</h3>
             <p>Check out your classmate&apos;s reactions – click an emoji to add your own
-                            opinion!</p>
+              opinion!</p>
             <div className="reactions-wrapper">
               <div className="reactions">
                 {reactionsDisplay}
@@ -447,8 +420,6 @@ class CourseModalBody extends React.Component {
               <h3 className="modal-module-header">Course Evaluations</h3>
               <EvaluationList evalInfo={evalInfo} />
             </div>
-            {textbooksDisplay}
-
           </div>
           <div
             id="modal-section-lists"

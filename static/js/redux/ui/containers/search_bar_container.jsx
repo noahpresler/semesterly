@@ -14,11 +14,11 @@ GNU General Public License for more details.
 
 import { connect } from 'react-redux';
 import {
-    fetchSearchResults,
-    hoverSearchResult,
-    maybeSetSemester,
+  fetchSearchResults,
+  hoverSearchResult,
+  maybeSetSemester,
 } from '../../actions/search_actions';
-import { getCurrentSemester, getSearchResults, getHoveredSlots } from '../../reducers';
+import { getCurrentSemester, getSearchResults, getHoveredSlots } from '../../state';
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions';
 import SearchBar from '../search_bar';
 import { fetchCourseInfo, showExplorationModal } from '../../actions/modal_actions';
@@ -45,7 +45,7 @@ const mapStateToProps = (state) => {
 };
 
 const SearchBarContainer = connect(
-    mapStateToProps,
+  mapStateToProps,
   {
     fetchCourses: fetchSearchResults,
     addCourse: addOrRemoveCourse,
