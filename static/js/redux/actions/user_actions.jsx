@@ -40,24 +40,18 @@ import * as ActionTypes from '../constants/actionTypes';
 import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
 import { alertsActions, userInfoActions } from '../state/slices';
 import { alertTimeTableExists, receiveCourses } from './initActions';
+import { classmatesActions } from "../state/slices/classmatesSlice";
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
 
 export const receiveClassmates = json => dispatch => (
-  dispatch({
-    type: ActionTypes.CLASSMATES_RECEIVED,
-    courses: json,
-  })
+  dispatch(classmatesActions.classmatesReceived(json))
 );
 
 export const getFriends = json => ({
   type: ActionTypes.FRIENDS_RECEIVED,
   peers: json,
-});
-
-export const requestClassmates = () => ({
-  type: ActionTypes.REQUEST_CLASSMATES,
 });
 
 export const requestFriends = () => ({
@@ -127,7 +121,7 @@ export const fetchClassmates = timetable => (dispatch, getState) => {
   setTimeout(() => {
     dispatch(fetchMostClassmatesCount(timetable));
   }, 500);
-  dispatch(requestClassmates());
+  dispatch(classmatesActions.requestClassmates());
   fetch(getClassmatesEndpoint(getCurrentSemester(state), courseIds), {
     credentials: 'include',
     method: 'GET',
