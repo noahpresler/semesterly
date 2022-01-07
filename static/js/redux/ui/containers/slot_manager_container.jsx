@@ -43,7 +43,7 @@ const mapStateToProps = (state, ownProps) => ({
   socialSections: state.userInfo.data.social_offerings,
   primaryDisplayAttribute: getSchoolSpecificInfo(state.school.school).primaryDisplay,
   courseToColourIndex: state.ui.courseToColourIndex,
-  custom: state.customSlots,
+  custom: state.customEvents.events,
   isCourseOptional: cid => state.optionalCourses.courses.some(c => c === cid),
   getOptionalCourseById: cid => getDenormCourseById(state, cid),
   getClassmatesInSection: (courseId, sectionCode) => {

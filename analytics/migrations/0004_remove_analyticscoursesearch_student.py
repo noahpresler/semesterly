@@ -22,12 +22,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('analytics', '0003_analyticscoursesearch'),
+        ("analytics", "0003_analyticscoursesearch"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='analyticscoursesearch',
-            name='student',
+            model_name="analyticscoursesearch",
+            name="student",
         ),
     ]

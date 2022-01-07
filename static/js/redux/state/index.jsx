@@ -30,7 +30,7 @@ import savingTimetable from './saving_timetable_reducer';
 import classmates from './slices/classmatesSlice';
 import optionalCourses from './optional_courses_reducer';
 import explorationModal, * as fromExplorationModal from './exploration_modal_reducer';
-import customSlots from './custom_slots_reducer';
+import customEvents from './slices/customEventsSlice';
 import signupModal from './signup_modal_reducer';
 import peerModal from './peer_modal_reducer';
 import preferenceModal from './preference_modal_reducer';
@@ -51,7 +51,7 @@ export const reducers = {
   classmates,
   courseInfo,
   courseSections,
-  customSlots,
+  customEvents,
   entities,
   explorationModal,
   friends,
