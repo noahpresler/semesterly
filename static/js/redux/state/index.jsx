@@ -27,7 +27,7 @@ import alerts from './slices/alertsSlice';
 import ui from './ui_reducer';
 import userInfo, { isUserInfoIncomplete } from './slices/userInfoSlice';
 import savingTimetable from './saving_timetable_reducer';
-import classmates from './classmates_reducer';
+import classmates from './slices/classmatesSlice';
 import optionalCourses from './optional_courses_reducer';
 import explorationModal, * as fromExplorationModal from './exploration_modal_reducer';
 import customEvents from './slices/customEventsSlice';
