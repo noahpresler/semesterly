@@ -12,15 +12,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { useActions } from '../../hooks';
-import Select from 'react-select';
-import classnames from 'classnames';
-import { WaveModal } from 'boron-15';
-import majors from '../../constants/majors';
-import { isIncomplete as TOSIncomplete } from '../../util';
-import { getIsUserInfoIncomplete } from '../../state';
+import React, { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import { useActions } from "../../hooks";
+import Select from "react-select";
+import classnames from "classnames";
+import { WaveModal } from "boron-15";
+import majors from "../../constants/majors";
+import { isIncomplete as TOSIncomplete } from "../../util";
+import { getIsUserInfoIncomplete } from "../../state";
 
 const UserSettingsModal = () => {
   const {
@@ -33,14 +33,15 @@ const UserSettingsModal = () => {
     deleteUser,
   } = useActions();
 
-  const userInfo = useSelector(state => state.userInfo.data);
-  const showOverrided = useSelector(state => state.userInfo.overrideShow);
-  const hideOverrided = useSelector(state => state.userInfo.overrideHide);
-  const isUserInfoIncomplete = useSelector(state => getIsUserInfoIncomplete(state));
-  const highlightNotifs = useSelector(state => state.ui.highlightNotifs);
-  const isSigningUp
-    = useSelector(state => !state.userInfo.overrideShow && getIsUserInfoIncomplete(state));
-  const isDeleted = useSelector(state => state.userInfo.isDeleted);
+  const userInfo = useSelector((state) => state.userInfo.data);
+  const showOverrided = useSelector((state) => state.userInfo.overrideShow);
+  const hideOverrided = useSelector((state) => state.userInfo.overrideHide);
+  const isUserInfoIncomplete = useSelector((state) => getIsUserInfoIncomplete(state));
+  const highlightNotifs = useSelector((state) => state.ui.highlightNotifs);
+  const isSigningUp = useSelector(
+    (state) => !state.userInfo.overrideShow && getIsUserInfoIncomplete(state)
+  );
+  const isDeleted = useSelector((state) => state.userInfo.isDeleted);
 
   // refactor facebook settings to controlled input in order to perform checks and render alert
   const [fbSettings, setfbSettings] = useState({
@@ -55,7 +56,7 @@ const UserSettingsModal = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [fbSwitchAlertText, setFbSwitchAlertText] = useState(null);
 
-  const isIncomplete = prop => prop === undefined || prop === '';
+  const isIncomplete = (prop) => prop === undefined || prop === "";
 
   const changeForm = (obj = {}) => {
     const userSettings = { ...userInfo, ...obj };
@@ -66,20 +67,18 @@ const UserSettingsModal = () => {
   const handleChangefbSettings = (e) => {
     const name = e.target.name;
     const checked = e.target.checked;
-    if (name === 'shareClassesWithFriends') {
+    if (name === "shareClassesWithFriends") {
       if (
         !checked &&
         (fbSettings.shareSectionsWithFriends || fbSettings.findNewFriends)
       ) {
-        setFbSwitchAlertText(
-          'Please switch off "find sections with friends" first',
-        );
+        setFbSwitchAlertText('Please switch off "find sections with friends" first');
         setfbSettings({ ...fbSettings, shareClassesWithFriends: true });
       } else {
         setfbSettings({ ...fbSettings, shareClassesWithFriends: checked });
         setFbSwitchAlertText(null);
       }
-    } else if (name === 'shareSectionsWithFriends') {
+    } else if (name === "shareSectionsWithFriends") {
       if (!checked && fbSettings.findNewFriends) {
         setFbSwitchAlertText('Please switch off "find new friends" first');
         setfbSettings({ ...fbSettings, shareSectionsWithFriends: true });
@@ -94,7 +93,7 @@ const UserSettingsModal = () => {
         setfbSettings({ ...fbSettings, shareSectionsWithFriends: false });
         setFbSwitchAlertText(null);
       }
-    } else if (name === 'findNewFriends') {
+    } else if (name === "findNewFriends") {
       if (checked) {
         setfbSettings({
           shareClassesWithFriends: true,
@@ -121,9 +120,7 @@ const UserSettingsModal = () => {
   };
 
   const shouldShow = () =>
-    userInfo.isLoggedIn &&
-    !hideOverrided &&
-    (showOverrided || isUserInfoIncomplete);
+    userInfo.isLoggedIn && !hideOverrided && (showOverrided || isUserInfoIncomplete);
 
   const hide = () => {
     if (!isUserInfoIncomplete) {
@@ -135,7 +132,7 @@ const UserSettingsModal = () => {
   };
 
   const modalStyle = {
-    width: '100%',
+    width: "100%",
   };
 
   useEffect(() => {
@@ -152,8 +149,8 @@ const UserSettingsModal = () => {
 
   useEffect(() => {
     if (isDeleted) {
-      const link = document.createElement('a');
-      link.href = '/user/logout/';
+      const link = document.createElement("a");
+      link.href = "/user/logout/";
       document.body.appendChild(link);
       link.click();
     }
@@ -192,29 +189,18 @@ const UserSettingsModal = () => {
             changeUserInfo(
               Object.assign({}, userInfo, {
                 timeAcceptedTos: String(new Date()),
-              }),
+              })
             );
           }}
         />
-        <span
-          className="switch-label"
-          data-on="ACCEPTED"
-          data-off="CLICK TO ACCEPT"
-        />
+        <span className="switch-label" data-on="ACCEPTED" data-off="CLICK TO ACCEPT" />
         <span className="switch-handle" />
       </label>
       <div className="preference-wrapper">
         <h3>Accept the terms and conditions</h3>
         <p className="disclaimer">
           By agreeing, you accept our
-          <a>
-            terms and conditions
-          </a>
-          &
-          <a>
-            privacy policy
-          </a>
-          .
+          <a>terms and conditions</a>&<a>privacy policy</a>.
         </p>
       </div>
     </div>
@@ -240,8 +226,8 @@ const UserSettingsModal = () => {
         <div className="preference-wrapper">
           <h3>Would you like to find classes with friends?</h3>
           <p className="disclaimer">
-            See which Facebook friends will be your classmates! Only friends in
-            your course will see your name.
+            See which Facebook friends will be your classmates! Only friends in your
+            course will see your name.
           </p>
         </div>
       </div>
@@ -263,8 +249,8 @@ const UserSettingsModal = () => {
         <div className="preference-wrapper">
           <h3>Would you like to find sections with friends?</h3>
           <p className="disclaimer">
-            See which Facebook friends will be in your section! Only friends in
-            your section will see your name.
+            See which Facebook friends will be in your section! Only friends in your
+            section will see your name.
           </p>
         </div>
       </div>
@@ -286,8 +272,8 @@ const UserSettingsModal = () => {
         <div className="preference-wrapper">
           <h3>Find new friends in your classes!</h3>
           <p className="disclaimer">
-            Find your peers for this semester. All students in your courses will
-            be able to view your name and public Facebook profile.
+            Find your peers for this semester. All students in your courses will be able
+            to view your name and public Facebook profile.
           </p>
         </div>
       </div>
@@ -302,15 +288,14 @@ const UserSettingsModal = () => {
   const fbUpsell =
     userInfo.isLoggedIn && !userInfo.FacebookSignedUp ? (
       <div
-        className={classnames(
-          'preference welcome-modal__notifications second cf',
-          { 'preference-attn': highlightNotifs },
-        )}
+        className={classnames("preference welcome-modal__notifications second cf", {
+          "preference-attn": highlightNotifs,
+        })}
       >
         <button
           className="btn abnb-btn fb-btn"
           onClick={() => {
-            const link = document.createElement('a');
+            const link = document.createElement("a");
             link.href = `/login/facebook?student_token=${userInfo.LoginToken}&login_hash=${userInfo.LoginHash}`;
             document.body.appendChild(link);
             link.click();
@@ -322,9 +307,9 @@ const UserSettingsModal = () => {
           <span>Continue with Facebook</span>
         </button>
         <p className="disclaimer ctr">
-          Connecting your Facebook allows you to see which of your Facebook
-          friends are in your classes! Only friends in your course will see your
-          name – your information is never shared with any other party.
+          Connecting your Facebook allows you to see which of your Facebook friends are
+          in your classes! Only friends in your course will see your name – your
+          information is never shared with any other party.
         </p>
       </div>
     ) : null;
@@ -351,7 +336,7 @@ const UserSettingsModal = () => {
     </div>
   ) : (
     <h3 className="delete-link" onClick={toggleDelete}>
-      Delete my account and all related information{' '}
+      Delete my account and all related information{" "}
     </h3>
   );
 

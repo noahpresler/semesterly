@@ -1,17 +1,20 @@
-import { connect } from 'react-redux';
-import CourseModalBody from '../../modals/course_modal_body';
-import { getActiveTimetable, getCurrentSemester } from '../../../state';
-import { getSectionTypeToSections } from '../../../state/entities_reducer';
+import { connect } from "react-redux";
+import CourseModalBody from "../../modals/course_modal_body";
+import { getActiveTimetable, getCurrentSemester } from "../../../state";
+import { getSectionTypeToSections } from "../../../state/entities_reducer";
 import {
   fetchCourseInfo,
   openSignUpModal,
   react,
-} from '../../../actions/modal_actions';
-import { saveSettings } from '../../../actions/user_actions';
-import { getSchoolSpecificInfo } from '../../../constants/schools';
-import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../constants/endpoints';
-import { userInfoActions } from '../../../state/slices';
-import { timetablesActions } from '../../../state/slices/timetablesSlice';
+} from "../../../actions/modal_actions";
+import { saveSettings } from "../../../actions/user_actions";
+import { getSchoolSpecificInfo } from "../../../constants/schools";
+import {
+  getCourseShareLink,
+  getCourseShareLinkFromModal,
+} from "../../../constants/endpoints";
+import { userInfoActions } from "../../../state/slices";
+import { timetablesActions } from "../../../state/slices/timetablesSlice";
 
 const mapStateToProps = (state, ownProps) => {
   const denormCourseInfo = ownProps.data;
@@ -34,28 +37,27 @@ const mapStateToProps = (state, ownProps) => {
         return false;
       }
       return Object.keys(courseSections[courseId]).some(
-        type => courseSections[courseId][type] === section,
+        (type) => courseSections[courseId][type] === section
       );
     },
     isSectionOnActiveTimetable: (courseId, sectionId) =>
-      activeTimetable.slots.some(slot => slot.course === courseId && slot.section === sectionId),
-    getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
-    getShareLinkFromModal: courseCode =>
+      activeTimetable.slots.some(
+        (slot) => slot.course === courseId && slot.section === sectionId
+      ),
+    getShareLink: (courseCode) =>
+      getCourseShareLink(courseCode, getCurrentSemester(state)),
+    getShareLinkFromModal: (courseCode) =>
       getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
   };
 };
 
-const CourseModalBodyContainer = connect(
-  mapStateToProps,
-  {
-    openSignUpModal,
-    fetchCourseInfo,
-    hoverSection: timetablesActions.hoverSection,
-    react,
-    saveSettings,
-    changeUserInfo: userInfoActions.changeUserInfo,
-  },
-)(CourseModalBody);
+const CourseModalBodyContainer = connect(mapStateToProps, {
+  openSignUpModal,
+  fetchCourseInfo,
+  hoverSection: timetablesActions.hoverSection,
+  react,
+  saveSettings,
+  changeUserInfo: userInfoActions.changeUserInfo,
+})(CourseModalBody);
 
 export default CourseModalBodyContainer;
-

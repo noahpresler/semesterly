@@ -13,39 +13,38 @@ GNU General Public License for more details.
 */
 
 // splash page javascript here
-$(document).ready(function() {  
-    sizeitup();
+$(document).ready(function () {
+  sizeitup();
 
-    $('#schools-dropdown .mobile-nav-label').click(function(){
-        $('#schools-dropdown').toggleClass('open');
-    });
+  $("#schools-dropdown .mobile-nav-label").click(function () {
+    $("#schools-dropdown").toggleClass("open");
+  });
 
-    $('#schools-dropdown').click(function(e){
-        e.stopPropagation();
-    });
+  $("#schools-dropdown").click(function (e) {
+    e.stopPropagation();
+  });
 
-    $(document).click(function(){
-        $('#schools-dropdown').removeClass('open');
-    });
-
+  $(document).click(function () {
+    $("#schools-dropdown").removeClass("open");
+  });
 });
 
-$(window).resize(function() {
-    sizeitup();
+$(window).resize(function () {
+  sizeitup();
 });
 
 function sizeitup() {
-    var bodyh = $(window).height();
+  var bodyh = $(window).height();
 }
 
-$(window).scroll(function() {
-    var bodyh = $(window).height();
-    var pos = $(window).scrollTop();
-    if (pos > 0) {
-        $('header').removeClass('down');
-    } else {
-        $('header').addClass('down');
-    }
+$(window).scroll(function () {
+  var bodyh = $(window).height();
+  var pos = $(window).scrollTop();
+  if (pos > 0) {
+    $("header").removeClass("down");
+  } else {
+    $("header").addClass("down");
+  }
 });
 
 //SMOOTH SCROLLING

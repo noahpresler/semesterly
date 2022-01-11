@@ -1,22 +1,22 @@
-import { applyMiddleware, createStore, combineReducers } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import nock from 'nock';
-import { reducers } from '../state';
-import { maybeSetSemester } from '../actions/search_actions';
+import { applyMiddleware, createStore, combineReducers } from "redux";
+import thunkMiddleware from "redux-thunk";
+import nock from "nock";
+import { reducers } from "../state";
+import { maybeSetSemester } from "../actions/search_actions";
 import {
   loggedIn,
   timetable,
   withTimetables,
   sampleSemesters,
   entities,
-} from '../__fixtures__/state';
+} from "../__fixtures__/state";
 
+describe("maybeSetSemester", () => {
+  const backend = nock("https://localhost").defaultReplyHeaders({
+    "Content-Type": "application/json",
+  });
 
-describe('maybeSetSemester', () => {
-  const backend = nock('https://localhost')
-    .defaultReplyHeaders({ 'Content-Type': 'application/json' });
-
-  it('switches for logged in user', () => {
+  it("switches for logged in user", () => {
     const store = createStore(
       combineReducers(reducers),
       {
@@ -25,14 +25,14 @@ describe('maybeSetSemester', () => {
         semester: sampleSemesters,
         entities,
       },
-      applyMiddleware(thunkMiddleware),
+      applyMiddleware(thunkMiddleware)
     );
 
     const newSemester = 1;
     const { name, year } = sampleSemesters.all[newSemester];
 
     backend
-      .post('/user/timetables/', () => true)
+      .post("/user/timetables/", () => true)
       .reply(201, {
         saved_timetable: timetable,
         timetables: [timetable],
@@ -47,21 +47,21 @@ describe('maybeSetSemester', () => {
     });
   });
 
-  it('switches for anonymous user without timetables', () => {
+  it("switches for anonymous user without timetables", () => {
     const store = createStore(
       combineReducers(reducers),
       { semester: sampleSemesters },
-      applyMiddleware(thunkMiddleware),
+      applyMiddleware(thunkMiddleware)
     );
     store.dispatch(maybeSetSemester(1));
     expect(store.getState().semester.current).toEqual(1);
   });
 
-  it('does not switch for anonymous user with timetables', () => {
+  it("does not switch for anonymous user with timetables", () => {
     const store = createStore(
       combineReducers(reducers),
       { semester: sampleSemesters, timetables: withTimetables, entities },
-      applyMiddleware(thunkMiddleware),
+      applyMiddleware(thunkMiddleware)
     );
     store.dispatch(maybeSetSemester(1));
     const newState = store.getState();

@@ -1,18 +1,24 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { alertConflict, receiveCourses, receiveTimetables, updateSemester, changeActiveTimetable } from '../../actions/initActions';
-import { Course, Offering, Section, Timetable } from '../../constants/commonTypes';
-import { saveLocalActiveIndex } from '../../util';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  alertConflict,
+  receiveCourses,
+  receiveTimetables,
+  updateSemester,
+  changeActiveTimetable,
+} from "../../actions/initActions";
+import { Course, Offering, Section, Timetable } from "../../constants/commonTypes";
+import { saveLocalActiveIndex } from "../../util";
 
-interface TimetablesSliceState{
+interface TimetablesSliceState {
   isFetching: boolean;
   items: Timetable[];
   hovered: {
     course: Course;
-    section: Section
+    section: Section;
     offerings: Offering[];
     is_optional: boolean;
     is_locked: boolean;
-  }| null;
+  } | null;
   active: number;
   loadingCachedTT: boolean;
   lastSlotAdded: number | Object | null;
@@ -25,14 +31,12 @@ const emptyTimetable: Timetable = {
   id: null,
   avg_rating: 0,
   events: [],
-  name: '',
+  name: "",
 };
 
 const initialState: TimetablesSliceState = {
   isFetching: false,
-  items: [
-    emptyTimetable,
-  ],
+  items: [emptyTimetable],
   hovered: null,
   active: 0,
   loadingCachedTT: true,
@@ -40,7 +44,7 @@ const initialState: TimetablesSliceState = {
 };
 
 const timetablesSlice = createSlice({
-  name: 'timetables',
+  name: "timetables",
   initialState,
   reducers: {
     loadingCachedTimetable: (state) => {
@@ -52,10 +56,13 @@ const timetablesSlice = createSlice({
     requestTimetables: (state) => {
       state.isFetching = true;
     },
-    hoverSection: (state, action: PayloadAction<{
-      course: Course,
-      section: Section
-    }>) => {
+    hoverSection: (
+      state,
+      action: PayloadAction<{
+        course: Course;
+        section: Section;
+      }>
+    ) => {
       state.hovered = {
         course: action.payload.course,
         section: action.payload.section,
@@ -67,7 +74,7 @@ const timetablesSlice = createSlice({
     unhoverSection: (state) => {
       state.hovered = null;
     },
-    updateLastCourseAdded: (state, action:PayloadAction<number | Object | null>) => {
+    updateLastCourseAdded: (state, action: PayloadAction<number | Object | null>) => {
       state.lastSlotAdded = action.payload;
     },
   },
@@ -81,7 +88,8 @@ const timetablesSlice = createSlice({
       })
       .addCase(receiveTimetables, (state, action: PayloadAction<Timetable[]>) => {
         // if the array of timetables is empty, set state.items to an array with one empty timetable
-        const actionTimetables = action.payload.length > 0 ? action.payload : [emptyTimetable];
+        const actionTimetables =
+          action.payload.length > 0 ? action.payload : [emptyTimetable];
         state.isFetching = false;
         state.hovered = null;
         state.active = 0;
@@ -98,7 +106,8 @@ const timetablesSlice = createSlice({
 });
 export const getTimetables = (state: TimetablesSliceState) => state.items;
 
-export const getActiveTimetable = (state: TimetablesSliceState) => state.items[state.active];
+export const getActiveTimetable = (state: TimetablesSliceState) =>
+  state.items[state.active];
 
 export const getHoveredSlots = (state: TimetablesSliceState) => state.hovered;
 

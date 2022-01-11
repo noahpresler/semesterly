@@ -12,15 +12,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import { setDeclinedNotifications } from '../../util';
-import EnableNotificationsAlert from './enable_notifications_alert';
-import { alertsActions } from '../../state/slices';
+import { connect } from "react-redux";
+import { setDeclinedNotifications } from "../../util";
+import EnableNotificationsAlert from "./enable_notifications_alert";
+import { alertsActions } from "../../state/slices";
 
 const mapStateToProps = () => ({
-  msg: 'Get Alerts!',
+  msg: "Get Alerts!",
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   dismissSelf: () => {
     dispatch(alertsActions.dismissEnableNotifications());
   },
@@ -30,6 +30,6 @@ const mapDispatchToProps = dispatch => ({
 
 const EnableNotificationsAlertContainer = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(EnableNotificationsAlert);
 export default EnableNotificationsAlertContainer;

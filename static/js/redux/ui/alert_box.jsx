@@ -12,11 +12,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import EventEmitter from 'events';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import Alert from './alert';
+import PropTypes from "prop-types";
+import React from "react";
+import EventEmitter from "events";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import Alert from "./alert";
 
 class AlertBox extends React.Component {
   /**
@@ -44,41 +44,41 @@ class AlertBox extends React.Component {
   }
 
   /**
-     * Set the alert position on the page
-     */
+   * Set the alert position on the page
+   */
   setStyle() {
     let position = {};
     switch (this.props.position) {
-      case 'top left':
+      case "top left":
         position = {
           top: -10,
-          right: 'auto',
-          bottom: 'auto',
+          right: "auto",
+          bottom: "auto",
           left: 0,
         };
         break;
-      case 'top right':
+      case "top right":
         position = {
           top: 0,
           right: 0,
-          bottom: 'auto',
-          left: 'auto',
+          bottom: "auto",
+          left: "auto",
         };
         break;
-      case 'bottom left':
+      case "bottom left":
         position = {
-          top: 'auto',
-          right: 'auto',
+          top: "auto",
+          right: "auto",
           bottom: 0,
           left: 0,
         };
         break;
       default:
         position = {
-          top: 'auto',
+          top: "auto",
           right: 0,
           bottom: 0,
-          left: 'auto',
+          left: "auto",
         };
         break;
     }
@@ -93,30 +93,30 @@ class AlertBox extends React.Component {
   }
 
   /**
-     * Set the style of the alert based on the chosen theme
-     */
+   * Set the style of the alert based on the chosen theme
+   */
   setTheme() {
     let theme = {};
     switch (this.props.theme) {
-      case 'light':
+      case "light":
         theme = {
           alert: {
-            backgroundColor: '#fff',
-            color: '#333',
+            backgroundColor: "#fff",
+            color: "#333",
           },
           closeButton: {
-            bg: '#f3f3f3',
+            bg: "#f3f3f3",
           },
         };
         break;
       default:
         theme = {
           alert: {
-            backgroundColor: '#333',
-            color: '#fff',
+            backgroundColor: "#333",
+            color: "#fff",
           },
           closeButton: {
-            bg: '#696969',
+            bg: "#696969",
           },
         };
         break;
@@ -130,7 +130,7 @@ class AlertBox extends React.Component {
    * @return {void}
    */
   eventListeners() {
-    reactAlertEvents.on('ALERT.REMOVE', (alert) => {
+    reactAlertEvents.on("ALERT.REMOVE", (alert) => {
       this.setState({ alerts: this.removeAlert(alert) });
     });
   }
@@ -156,10 +156,9 @@ class AlertBox extends React.Component {
    */
   info(message, options = {}) {
     const newOptions = Object.assign({}, options);
-    newOptions.type = 'info';
+    newOptions.type = "info";
     this.show(message, newOptions);
   }
-
 
   /**
    * Show the alert in the page with error type
@@ -169,7 +168,7 @@ class AlertBox extends React.Component {
    */
   error(message, options = {}) {
     const newOptions = Object.assign({}, options);
-    newOptions.type = 'error';
+    newOptions.type = "error";
     this.show(message, newOptions);
   }
 
@@ -181,7 +180,7 @@ class AlertBox extends React.Component {
    */
   success(message, options = {}) {
     const newOptions = Object.assign({}, options);
-    newOptions.type = 'success';
+    newOptions.type = "success";
     this.show(message, newOptions);
   }
 
@@ -201,7 +200,7 @@ class AlertBox extends React.Component {
     const newAlert = Object.assign({}, alert);
     newAlert.uniqueKey = AlertBox.genUniqueKey();
     newAlert.style = this.theme;
-    if (!Object.prototype.hasOwnProperty.call(newAlert, 'time')) {
+    if (!Object.prototype.hasOwnProperty.call(newAlert, "time")) {
       newAlert.time = this.props.time;
     }
 
@@ -215,7 +214,7 @@ class AlertBox extends React.Component {
    * @return {void}
    */
   removeAlert(alert) {
-    return this.state.alerts.filter(a => a.uniqueKey !== alert.props.uniqueKey);
+    return this.state.alerts.filter((a) => a.uniqueKey !== alert.props.uniqueKey);
   }
 
   render() {
@@ -226,10 +225,9 @@ class AlertBox extends React.Component {
           transitionEnterTimeout={250}
           transitionLeaveTimeout={250}
         >
-          {this.state.alerts.map(alert => (<Alert
-            key={alert.uniqueKey}
-            {...alert}
-          />))}
+          {this.state.alerts.map((alert) => (
+            <Alert key={alert.uniqueKey} {...alert} />
+          ))}
         </ReactCSSTransitionGroup>
       </div>
     );
@@ -238,24 +236,18 @@ class AlertBox extends React.Component {
 
 AlertBox.defaultProps = {
   offset: 14,
-  position: 'top right',
-  theme: 'light',
+  position: "top right",
+  theme: "light",
   time: 5000,
-  transition: 'scale',
+  transition: "scale",
 };
 
 AlertBox.propTypes = {
   offset: PropTypes.number,
-  position: PropTypes.oneOf([
-    'bottom left',
-    'bottom right',
-    'top right',
-    'top left',
-  ]),
-  theme: PropTypes.oneOf(['dark', 'light']),
+  position: PropTypes.oneOf(["bottom left", "bottom right", "top right", "top left"]),
+  theme: PropTypes.oneOf(["dark", "light"]),
   time: PropTypes.number,
-  transition: PropTypes.oneOf(['scale', 'fade']),
+  transition: PropTypes.oneOf(["scale", "fade"]),
 };
 
 export default AlertBox;
-

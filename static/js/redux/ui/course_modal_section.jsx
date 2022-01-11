@@ -12,32 +12,41 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import classnames from 'classnames';
+import PropTypes from "prop-types";
+import React from "react";
+import classnames from "classnames";
 
-const CourseModalSection = ({ secName, instr, enrolment, waitlist, size, hoverSection,
-  unHoverSection, locked, lockOrUnlock,
-  isOnActiveTimetable }) => {
+const CourseModalSection = ({
+  secName,
+  instr,
+  enrolment,
+  waitlist,
+  size,
+  hoverSection,
+  unHoverSection,
+  locked,
+  lockOrUnlock,
+  isOnActiveTimetable,
+}) => {
   const seats = size - enrolment;
-  let seatStatus = waitlist > 0 ? (`${waitlist} waitlist`) : (`${seats} open`);
+  let seatStatus = waitlist > 0 ? `${waitlist} waitlist` : `${seats} open`;
   if (seats === -1 || size === -1) {
-    seatStatus = 'Unknown';
+    seatStatus = "Unknown";
   }
-  const sizeDisplay = size === -1 ? 'Unknown' : size;
-  let benchmark = 'green';
+  const sizeDisplay = size === -1 ? "Unknown" : size;
+  let benchmark = "green";
   if (waitlist > 0) {
-    benchmark = 'red';
-  } else if (seats === 0 && sizeDisplay !== 'Unknown') {
-    benchmark = 'red';
+    benchmark = "red";
+  } else if (seats === 0 && sizeDisplay !== "Unknown") {
+    benchmark = "red";
   } else if (seats < sizeDisplay / 10) {
-    benchmark = 'yellow';
+    benchmark = "yellow";
   }
   return (
     <div
-      className={classnames('modal-section', {
+      className={classnames("modal-section", {
         locked,
-        'on-active-timetable': isOnActiveTimetable,
+        "on-active-timetable": isOnActiveTimetable,
       })}
       onMouseDown={lockOrUnlock}
       onMouseEnter={hoverSection}
@@ -77,4 +86,3 @@ CourseModalSection.propTypes = {
 };
 
 export default CourseModalSection;
-

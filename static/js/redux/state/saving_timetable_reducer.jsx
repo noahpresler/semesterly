@@ -12,10 +12,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import * as ActionTypes from '../constants/actionTypes';
+import * as ActionTypes from "../constants/actionTypes";
 
 const initState = {
-  activeTimetable: { name: String('Untitled Schedule') },
+  activeTimetable: { name: String("Untitled Schedule") },
   saving: false, // true if we are currently waiting for a response from the backend
   upToDate: false,
 };
@@ -27,7 +27,7 @@ const savingTimetable = (state = initState, action) => {
       return { ...state, saving };
     }
 
-    case 'global/changeActiveSavedTimetable':
+    case "global/changeActiveSavedTimetable":
       return {
         ...state,
         activeTimetable: action.payload.timetable,
@@ -45,10 +45,10 @@ const savingTimetable = (state = initState, action) => {
         upToDate: false,
       };
 
-    case 'global/addNewCustomEvent':
-    case 'global/updateExistingEvent':
-    case 'global/removeCustomEvent':
-    case 'global/changeActiveTimetable':
+    case "global/addNewCustomEvent":
+    case "global/updateExistingEvent":
+    case "global/removeCustomEvent":
+    case "global/changeActiveTimetable":
       return Object.assign({}, state, { upToDate: false });
 
     default:

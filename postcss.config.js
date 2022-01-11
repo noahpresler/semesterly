@@ -14,6 +14,8 @@ GNU General Public License for more details.
 
 module.exports = {
   plugins: [
-    require('autoprefixer')({ /* ...options */ }),
+    require("autoprefixer")({
+      /* ...options */
+    }),
   ],
-}
+};

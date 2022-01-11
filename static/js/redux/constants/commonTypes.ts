@@ -1,7 +1,6 @@
 // This file stores typescript types used by both react and redux
 
-
-export type Day = 'M' | 'T' | 'W' | 'R' | 'F';
+export type Day = "M" | "T" | "W" | "R" | "F";
 
 export interface Semester {
   id: number;
@@ -40,7 +39,6 @@ export interface Section {
   waitlist: number;
   waitlist_size: number;
 }
-
 
 /**
  * Slot stores section and offering information regarding a course
@@ -86,8 +84,7 @@ export interface Reaction {
   reacted: boolean;
 }
 
-
-export interface Course{
+export interface Course {
   code: string;
   name: string;
   id: number;
