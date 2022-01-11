@@ -133,7 +133,7 @@ export const fetchClassmates = (timetable) => (dispatch, getState) => {
 };
 
 export const saveTimetable =
-  (isAutoSave = false, callback = null, autoLockAll = false) =>
+  (callback = null, autoLockAll = false) =>
   (dispatch, getState) => {
     const state = getState();
     if (!state.userInfo.data.isLoggedIn) {
