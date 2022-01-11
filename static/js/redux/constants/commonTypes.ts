@@ -61,6 +61,7 @@ export interface Event {
   time_end: string;
   id: number;
   preview: boolean;
+  exists_conflict?: boolean;
 }
 
 /**
