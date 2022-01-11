@@ -49,10 +49,11 @@ self.addEventListener("notificationclick", (event) => {
       .matchAll({
         type: "window",
       })
+      // eslint-disable-next-line consistent-return
       .then((clientList) => {
         for (let i = 0; i < clientList.length; i++) {
           const client = clientList[i];
-          if (client.url == "/" && "focus" in client) return client.focus();
+          if (client.url === "/" && "focus" in client) return client.focus();
         }
         // eslint-disable-next-line no-undef
         if (clients.openWindow) {
