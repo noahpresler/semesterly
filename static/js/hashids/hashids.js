@@ -31,7 +31,6 @@ GNU General Public License for more details.
 
 // eslint-disable-next-line no-unused-vars
 const Hashids = (() => {
-
   // eslint-disable-next-line no-shadow
   function Hashids(salt, minHashLength, alphabet) {
     let uniqueAlphabet;
@@ -87,9 +86,9 @@ const Hashids = (() => {
     for (i = 0, len = this.seps.length; i !== len; i++) {
       j = this.alphabet.indexOf(this.seps[i]);
       if (j === -1) {
-        this.seps = `${this.seps.substr(0, i)  } ${  this.seps.substr(i + 1)}`;
+        this.seps = `${this.seps.substr(0, i)} ${this.seps.substr(i + 1)}`;
       } else {
-        this.alphabet = `${this.alphabet.substr(0, j)  } ${  this.alphabet.substr(j + 1)}`;
+        this.alphabet = `${this.alphabet.substr(0, j)} ${this.alphabet.substr(j + 1)}`;
       }
     }
 
@@ -172,7 +171,7 @@ const Hashids = (() => {
     const numbers = str.match(/[\w\W]{1,12}/g);
 
     for (i = 0, len = numbers.length; i !== len; i++) {
-      numbers[i] = parseInt(`1${  numbers[i]}`, 16);
+      numbers[i] = parseInt(`1${numbers[i]}`, 16);
     }
 
     return this.encode.apply(this, numbers);
@@ -264,7 +263,7 @@ const Hashids = (() => {
     let len;
     let subHash;
     let buffer;
-    let r = new RegExp(`[${  this.guards  }]`, "g");
+    let r = new RegExp(`[${this.guards}]`, "g");
     let hashBreakdown = hash.replace(r, " ");
     let hashArray = hashBreakdown.split(" ");
 
@@ -277,7 +276,7 @@ const Hashids = (() => {
       lottery = hashBreakdown[0];
       hashBreakdown = hashBreakdown.substr(1);
 
-      r = new RegExp(`[${  this.seps  }]`, "g");
+      r = new RegExp(`[${this.seps}]`, "g");
       hashBreakdown = hashBreakdown.replace(r, " ");
       hashArray = hashBreakdown.split(" ");
 
