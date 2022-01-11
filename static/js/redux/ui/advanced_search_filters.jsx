@@ -12,6 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+/* eslint-disable react/prop-types */
 import PropTypes from "prop-types";
 import React from "react";
 import ClickOutHandler from "react-onclickout";
@@ -49,7 +50,7 @@ export class Filter extends React.Component {
     }
     const { filterType, schoolSpecificInfo } = this.props;
     const placeholder = schoolSpecificInfo[`${filterType}Name`];
-    const results = this.state.results.map((r, i) => (
+    const results = this.state.results.map((r) => (
       <li
         key={r}
         onClick={() => this.props.add(filterType, r)}
@@ -107,7 +108,6 @@ SelectedFilter.propTypes = {
   remove: PropTypes.func.isRequired,
 };
 
-// eslint-disable-next-line react/prop-types
 export const SelectedFilterSection = ({ name, toggle, children }) => (
   <div className="exp-filter-section open">
     <h3 className="exp-header">
