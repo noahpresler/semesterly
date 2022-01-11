@@ -16,7 +16,7 @@ GNU General Public License for more details.
 document.addEventListener("DOMContentLoaded", (event) => {
   // ssection enrolment
   const sections = document.getElementsByClassName("section");
-  for (const i = 0; i < sections.length; ++i) {
+  for (let i = 0; i < sections.length; ++i) {
     const s = sections[i];
     const waitlist = s.getAttribute("data-waitlist");
     const size = s.getAttribute("data-size");
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       } else if (waitlist > 0) {
         s.className += " red";
         txt = `<span>${waitlist} waitlist</span> / ${size} seats`;
-      } else if (left == 0) {
+      } else if (left === 0) {
         s.className += " red";
         txt = `<span>${left} open</span> / ${size} seats`;
       } else if (left < size / 10) {
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   // Course ratings
   const ratings = document.getElementsByClassName("rating-wrapper");
-  for (const i = 0; i < ratings.length; ++i) {
+  for (let i = 0; i < ratings.length; ++i) {
     const r = ratings[i];
     const score = r.getAttribute("data-score");
     const percent = `${((score / 5) * 100).toString()}%`;
