@@ -26,7 +26,7 @@ new WebpackDevServer(webpack(config), {
     poll: 1000,
   },
   historyApiFallback: true,
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
 }).listen(3000, "0.0.0.0", (err, result) => {
   if (err) {
     console.log(err);
