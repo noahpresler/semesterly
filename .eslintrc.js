@@ -50,6 +50,7 @@ module.exports = {
         ]
 	},
 	extends: [
+		"prettier",
 		"airbnb",
 		"plugin:import/errors",
     	"plugin:import/warnings",
