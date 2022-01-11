@@ -2,10 +2,9 @@ name: Semesterly CI
 
 on:
   push:
-    branches: [ prod, staging, refactor-frontend-base-branch, refactor-backend-base-branch, github-actions ]
-
+    branches: [ prod, staging, refactor-frontend-base-branch, github-actions ]
   pull_request:
-    branches: [ prod, staging, refactor-frontend-base-branch, refactor-backend-base-branch, github-actions ]
+    branches: [ prod, staging, refactor-frontend-base-branch, github-actions ]
 
 jobs:
   build:
