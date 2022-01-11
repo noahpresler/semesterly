@@ -2,6 +2,5 @@
 
 const fetch = jest.requireActual("isomorphic-fetch");
 
-module.exports = (url, config) => {
-  return fetch("https://localhost" + url, config);
-};
+module.exports = (url, config) => fetch(`https://localhost${url}`, config);
+
