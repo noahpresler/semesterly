@@ -48,11 +48,11 @@ module.exports = {
     ],
   },
   extends: [
-    "prettier",
     "airbnb",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
+    "prettier",
   ],
   settings: {
     "import/resolver": {
