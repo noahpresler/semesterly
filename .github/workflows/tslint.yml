@@ -1,0 +1,24 @@
+name: TSLint
+
+on:
+  push:
+    branches:
+      - refactor-frontend-base-branch
+  pull_request:
+    branches:
+      - refactor-frontend-base-branch
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: |
+        npm install
+        npm install -g eslint
+        npm install -g prettier
+    - name: Run ESLint
+      run: eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0
+    - name: Run Prettier
+      run: npx prettier "**/*.{js,jsx,ts,tsx}" --check 
