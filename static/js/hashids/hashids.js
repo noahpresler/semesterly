@@ -12,6 +12,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+/* eslint-disable prefer-spread */
+/* eslint-disable no-underscore-dangle */
+
 /*
 
 	Hashids
@@ -23,14 +26,20 @@ GNU General Public License for more details.
 
 */
 
-/*jslint plusplus: true, nomen: true, browser: true */
-/*global define */
+/* jslint plusplus: true, nomen: true, browser: true */
+/* global define */
 
-var Hashids = (function () {
-  "use strict";
+// eslint-disable-next-line no-unused-vars
+const Hashids = (() => {
 
+  // eslint-disable-next-line no-shadow
   function Hashids(salt, minHashLength, alphabet) {
-    var uniqueAlphabet, i, j, len, sepsLength, diff, guardCount;
+    let uniqueAlphabet;
+    let i;
+    let j;
+    let len;
+    let sepsLength;
+    let diff;
 
     this.version = "1.0.1";
 
@@ -46,7 +55,7 @@ var Hashids = (function () {
       "error: alphabet must contain at least X unique characters";
     this.errorAlphabetSpace = "error: alphabet cannot contain spaces";
 
-    /* alphabet vars */
+    /* alphabet consts */
 
     this.alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     this.seps = "cfhistuCFHISTU";
@@ -78,9 +87,9 @@ var Hashids = (function () {
     for (i = 0, len = this.seps.length; i !== len; i++) {
       j = this.alphabet.indexOf(this.seps[i]);
       if (j === -1) {
-        this.seps = this.seps.substr(0, i) + " " + this.seps.substr(i + 1);
+        this.seps = `${this.seps.substr(0, i)  } ${  this.seps.substr(i + 1)}`;
       } else {
-        this.alphabet = this.alphabet.substr(0, j) + " " + this.alphabet.substr(j + 1);
+        this.alphabet = `${this.alphabet.substr(0, j)  } ${  this.alphabet.substr(j + 1)}`;
       }
     }
 
@@ -106,7 +115,7 @@ var Hashids = (function () {
     }
 
     this.alphabet = this.consistentShuffle(this.alphabet, this.salt);
-    guardCount = Math.ceil(this.alphabet.length / this.guardDiv);
+    const guardCount = Math.ceil(this.alphabet.length / this.guardDiv);
 
     if (this.alphabet.length < 3) {
       this.guards = this.seps.substr(0, guardCount);
@@ -117,11 +126,12 @@ var Hashids = (function () {
     }
   }
 
-  Hashids.prototype.encode = function () {
-    var ret = "",
-      i,
-      len,
-      numbers = Array.prototype.slice.call(arguments);
+  Hashids.prototype.encode = () => {
+    const ret = "";
+    let i;
+    let len;
+    // eslint-disable-next-line no-undef
+    let numbers = Array.prototype.slice.call(arguments);
 
     if (!numbers.length) {
       return ret;
@@ -140,8 +150,8 @@ var Hashids = (function () {
     return this._encode(numbers);
   };
 
-  Hashids.prototype.decode = function (hash) {
-    var ret = [];
+  Hashids.prototype.decode = (hash) => {
+    const ret = [];
 
     if (!hash.length || typeof hash !== "string") {
       return ret;
@@ -150,28 +160,29 @@ var Hashids = (function () {
     return this._decode(hash, this.alphabet);
   };
 
-  Hashids.prototype.encodeHex = function (str) {
-    var i, len, numbers;
+  Hashids.prototype.encodeHex = (str) => {
+    let i;
+    let len;
 
     str = str.toString();
     if (!/^[0-9a-fA-F]+$/.test(str)) {
       return "";
     }
 
-    numbers = str.match(/[\w\W]{1,12}/g);
+    const numbers = str.match(/[\w\W]{1,12}/g);
 
     for (i = 0, len = numbers.length; i !== len; i++) {
-      numbers[i] = parseInt("1" + numbers[i], 16);
+      numbers[i] = parseInt(`1${  numbers[i]}`, 16);
     }
 
     return this.encode.apply(this, numbers);
   };
 
-  Hashids.prototype.decodeHex = function (hash) {
-    var ret = [],
-      i,
-      len,
-      numbers = this.decode(hash);
+  Hashids.prototype.decodeHex = (hash) => {
+    let ret = [];
+    let i;
+    let len;
+    const numbers = this.decode(hash);
 
     for (i = 0, len = numbers.length; i !== len; i++) {
       ret += numbers[i].toString(16).substr(1);
@@ -180,28 +191,27 @@ var Hashids = (function () {
     return ret;
   };
 
-  Hashids.prototype._encode = function (numbers) {
-    var ret,
-      lottery,
-      i,
-      len,
-      number,
-      buffer,
-      last,
-      sepsIndex,
-      guardIndex,
-      guard,
-      halfLength,
-      excess,
-      alphabet = this.alphabet,
-      numbersSize = numbers.length,
-      numbersHashInt = 0;
+  Hashids.prototype._encode = (numbers) => {
+    let ret;
+    let i;
+    let len;
+    let number;
+    let buffer;
+    let last;
+    let sepsIndex;
+    let guardIndex;
+    let guard;
+    let excess;
+    let alphabet = this.alphabet;
+    const numbersSize = numbers.length;
+    let numbersHashInt = 0;
 
     for (i = 0, len = numbers.length; i !== len; i++) {
       numbersHashInt += numbers[i] % (i + 100);
     }
 
-    lottery = ret = alphabet[numbersHashInt % alphabet.length];
+    const lottery = alphabet[numbersHashInt % alphabet.length];
+    ret = alphabet[numbersHashInt % alphabet.length];
     for (i = 0, len = numbers.length; i !== len; i++) {
       number = numbers[i];
       buffer = lottery + this.salt + alphabet;
@@ -232,7 +242,7 @@ var Hashids = (function () {
       }
     }
 
-    halfLength = parseInt(alphabet.length / 2, 10);
+    const halfLength = parseInt(alphabet.length / 2, 10);
     while (ret.length < this.minHashLength) {
       alphabet = this.consistentShuffle(alphabet, alphabet);
       ret = alphabet.substr(halfLength) + ret + alphabet.substr(0, halfLength);
@@ -246,16 +256,17 @@ var Hashids = (function () {
     return ret;
   };
 
-  Hashids.prototype._decode = function (hash, alphabet) {
-    var ret = [],
-      i = 0,
-      lottery,
-      len,
-      subHash,
-      buffer,
-      r = new RegExp("[" + this.guards + "]", "g"),
-      hashBreakdown = hash.replace(r, " "),
-      hashArray = hashBreakdown.split(" ");
+  // eslint-disable-next-line no-underscore-dangle
+  Hashids.prototype._decode = (hash, alphabet) => {
+    let ret = [];
+    let i = 0;
+    let lottery;
+    let len;
+    let subHash;
+    let buffer;
+    let r = new RegExp(`[${  this.guards  }]`, "g");
+    let hashBreakdown = hash.replace(r, " ");
+    let hashArray = hashBreakdown.split(" ");
 
     if (hashArray.length === 3 || hashArray.length === 2) {
       i = 1;
@@ -266,7 +277,7 @@ var Hashids = (function () {
       lottery = hashBreakdown[0];
       hashBreakdown = hashBreakdown.substr(1);
 
-      r = new RegExp("[" + this.seps + "]", "g");
+      r = new RegExp(`[${  this.seps  }]`, "g");
       hashBreakdown = hashBreakdown.replace(r, " ");
       hashArray = hashBreakdown.split(" ");
 
@@ -278,6 +289,7 @@ var Hashids = (function () {
         ret.push(this.unhash(subHash, alphabet));
       }
 
+      // eslint-disable-next-line no-underscore-dangle
       if (this._encode(ret) !== hash) {
         ret = [];
       }
@@ -286,8 +298,13 @@ var Hashids = (function () {
     return ret;
   };
 
-  Hashids.prototype.consistentShuffle = function (alphabet, salt) {
-    var integer, j, temp, i, v, p;
+  Hashids.prototype.consistentShuffle = (alphabet, salt) => {
+    let integer;
+    let j;
+    let temp;
+    let i;
+    let v;
+    let p;
 
     if (!salt.length) {
       return alphabet;
@@ -295,6 +312,7 @@ var Hashids = (function () {
 
     for (i = alphabet.length - 1, v = 0, p = 0; i > 0; i--, v++) {
       v %= salt.length;
+      // eslint-disable-next-line no-multi-assign
       p += integer = salt[v].charCodeAt(0);
       j = (integer + v + p) % i;
 
@@ -306,9 +324,9 @@ var Hashids = (function () {
     return alphabet;
   };
 
-  Hashids.prototype.hash = function (input, alphabet) {
-    var hash = "",
-      alphabetLength = alphabet.length;
+  Hashids.prototype.hash = (input, alphabet) => {
+    let hash = "";
+    const alphabetLength = alphabet.length;
 
     do {
       hash = alphabet[input % alphabetLength] + hash;
@@ -318,13 +336,14 @@ var Hashids = (function () {
     return hash;
   };
 
-  Hashids.prototype.unhash = function (input, alphabet) {
-    var number = 0,
-      pos,
-      i;
+  Hashids.prototype.unhash = (input, alphabet) => {
+    let number = 0;
+    let pos;
+    let i;
 
     for (i = 0; i < input.length; i++) {
       pos = alphabet.indexOf(input[i]);
+      // eslint-disable-next-line no-restricted-properties
       number += pos * Math.pow(alphabet.length, input.length - i - 1);
     }
 
@@ -334,9 +353,7 @@ var Hashids = (function () {
   /* require.js bit */
 
   if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
-    define(function () {
-      return Hashids;
-    });
+    define(() => Hashids);
   }
 
   return Hashids;
