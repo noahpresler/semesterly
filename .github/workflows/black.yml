@@ -3,9 +3,11 @@ name: Backend Linter
 on:
   push:
     branches:
+      - prod
       - refactor-backend-base-branch
   pull_request:
     branches:
+      - prod
       - refactor-backend-base-branch
 
 jobs:
