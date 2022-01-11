@@ -5,6 +5,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "autoprefixer": "^7.2.6",
@@ -128,7 +129,6 @@
   },
   "homepage": "https://github.com/rohandas/semesterly#readme",
   "devDependencies": {
-    "@testing-library/react": "^12.1.2",
     "@types/jest": "^27.0.3",
     "@types/js-cookie": "^3.0.1",
     "eslint-config-prettier": "^8.3.0",
