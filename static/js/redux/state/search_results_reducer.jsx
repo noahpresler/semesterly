@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import * as ActionTypes from '../constants/actionTypes';
+import * as ActionTypes from "../constants/actionTypes";
 
 const defaultState = {
   isFetching: false,
@@ -42,6 +42,6 @@ const searchResults = (state = defaultState, action) => {
 
 export const getSearchResultId = (state, index) => state.items[index];
 
-export const getSearchResultIds = state => state.items;
+export const getSearchResultIds = (state) => state.items;
 
 export default searchResults;

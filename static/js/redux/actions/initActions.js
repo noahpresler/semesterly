@@ -1,14 +1,14 @@
-import { createAction } from '@reduxjs/toolkit';
-import { normalize } from 'normalizr';
-import { courseSchema } from '../schema';
+import { createAction } from "@reduxjs/toolkit";
+import { normalize } from "normalizr";
+import { courseSchema } from "../schema";
 
 // the INIT_STATE action typed version
-export const initAllState = createAction('global/init');
+export const initAllState = createAction("global/init");
 
-export const alertConflict = createAction('global/alertConflict');
+export const alertConflict = createAction("global/alertConflict");
 
 // ALERT_TIMETABLE_EXISTS
-export const alertTimeTableExists = createAction('global/alertTimeTableExists');
+export const alertTimeTableExists = createAction("global/alertTimeTableExists");
 
 // course related actions
 
@@ -17,51 +17,31 @@ export const alertTimeTableExists = createAction('global/alertTimeTableExists');
  * into `offering_set`, `sections`, `courses`
  * and processed within entities reducer
  */
-export const setCourseInfo = createAction(
-  'global/setCourseInfo',
-  courseInfo => ({
-    payload: normalize(courseInfo, courseSchema),
-  }),
-);
+export const setCourseInfo = createAction("global/setCourseInfo", (courseInfo) => ({
+  payload: normalize(courseInfo, courseSchema),
+}));
 
-export const setCourseReactions = createAction(
-  'global/setCourseReactions',
-);
+export const setCourseReactions = createAction("global/setCourseReactions");
 
-export const updateSemester = createAction(
-  'global/updateSemester',
-);
+export const updateSemester = createAction("global/updateSemester");
 
-export const receiveTimetables = createAction(
-  'global/receiveTimetables',
-);
+export const receiveTimetables = createAction("global/receiveTimetables");
 
 /**
  * normalizes multiple courses
  */
-export const receiveCourses = createAction(
-  'global/receiveCourses',
-  courses => ({
-    payload: normalize(courses, [courseSchema]),
-  }),
-);
+export const receiveCourses = createAction("global/receiveCourses", (courses) => ({
+  payload: normalize(courses, [courseSchema]),
+}));
 
-export const changeActiveTimetable = createAction(
-  'global/changeActiveTimetable',
-);
+export const changeActiveTimetable = createAction("global/changeActiveTimetable");
 
-export const addNewCustomEvent = createAction(
-  'global/addNewCustomEvent',
-);
+export const addNewCustomEvent = createAction("global/addNewCustomEvent");
 
-export const updateExistingEvent = createAction(
-  'global/updateExistingEvent',
-);
+export const updateExistingEvent = createAction("global/updateExistingEvent");
 
-export const removeCustomEvent = createAction(
-  'global/removeCustomEvent',
-);
+export const removeCustomEvent = createAction("global/removeCustomEvent");
 
 export const changeActiveSavedTimetable = createAction(
-  'global/changeActiveSavedTimetable',
+  "global/changeActiveSavedTimetable"
 );

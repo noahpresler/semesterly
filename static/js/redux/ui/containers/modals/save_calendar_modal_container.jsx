@@ -12,15 +12,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import SaveCalendarModal from '../../modals/save_calendar_modal';
+import { connect } from "react-redux";
+import SaveCalendarModal from "../../modals/save_calendar_modal";
 import {
   // addTTtoGCal,
   createICalFromTimetable,
-} from '../../../actions/calendar_actions';
-import { toggleSaveCalendarModal } from '../../../actions/modal_actions';
+} from "../../../actions/calendar_actions";
+import { toggleSaveCalendarModal } from "../../../actions/modal_actions";
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isVisible: state.saveCalendarModal.isVisible,
   isDownloading: state.saveCalendarModal.isDownloading,
   isUploading: state.saveCalendarModal.isUploading,
@@ -29,13 +29,10 @@ const mapStateToProps = state => ({
   userInfo: state.userInfo.data,
 });
 
-const SaveCalendarModalContainer = connect(
-  mapStateToProps,
-  {
-    toggleSaveCalendarModal,
-    // addTTtoGCal,
-    createICalFromTimetable,
-  },
-)(SaveCalendarModal);
+const SaveCalendarModalContainer = connect(mapStateToProps, {
+  toggleSaveCalendarModal,
+  // addTTtoGCal,
+  createICalFromTimetable,
+})(SaveCalendarModal);
 
 export default SaveCalendarModalContainer;

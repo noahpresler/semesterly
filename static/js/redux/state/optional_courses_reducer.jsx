@@ -12,14 +12,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import without from 'lodash/without';
-import * as ActionTypes from '../constants/actionTypes';
+import without from "lodash/without";
+import * as ActionTypes from "../constants/actionTypes";
 
 // TODO: add UI for adjusting num required
 const optionalCourses = (state = { courses: [], numRequired: 0 }, action) => {
   switch (action.type) {
     case ActionTypes.ADD_REMOVE_OPTIONAL_COURSE: {
-      if (state.courses.find(c => c === action.newCourseId)) {
+      if (state.courses.find((c) => c === action.newCourseId)) {
         return {
           ...state,
           courses: without(state.courses, action.newCourseId),

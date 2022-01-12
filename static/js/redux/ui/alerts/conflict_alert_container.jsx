@@ -12,17 +12,17 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import ConflictAlert from './conflict_alert';
-import { addLastAddedCourse } from '../../actions/timetable_actions';
-import * as ActionTypes from '../../constants/actionTypes';
-import { alertsActions } from '../../state/slices';
+import { connect } from "react-redux";
+import ConflictAlert from "./conflict_alert";
+import { addLastAddedCourse } from "../../actions/timetable_actions";
+import * as ActionTypes from "../../constants/actionTypes";
+import { alertsActions } from "../../state/slices";
 
-const mapStateToProps = state => ({
-  message: (typeof state.timetables.lastSlotAdded === 'string') ? 'course' : 'event',
+const mapStateToProps = (state) => ({
+  message: typeof state.timetables.lastSlotAdded === "string" ? "course" : "event",
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   dismissSelf: () => dispatch(alertsActions.dismissAlertConflict()),
   turnConflictsOn: () => dispatch({ type: ActionTypes.TOGGLE_CONFLICTS }),
   addLastAddedCourse: () => dispatch(addLastAddedCourse()),
@@ -30,6 +30,6 @@ const mapDispatchToProps = dispatch => ({
 
 const ConflictAlertContainer = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ConflictAlert);
 export default ConflictAlertContainer;

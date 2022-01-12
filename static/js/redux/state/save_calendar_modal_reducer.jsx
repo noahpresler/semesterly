@@ -12,15 +12,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import * as ActionTypes from '../constants/actionTypes';
+import * as ActionTypes from "../constants/actionTypes";
 
-const saveCalendarModal = (state = {
-  isVisible: false,
-  hasDownloaded: false,
-  hasUploaded: true,
-  isDownloading: false,
-  isUploading: true,
-}, action) => {
+const saveCalendarModal = (
+  state = {
+    isVisible: false,
+    hasDownloaded: false,
+    hasUploaded: true,
+    isDownloading: false,
+    isUploading: true,
+  },
+  action
+) => {
   switch (action.type) {
     case ActionTypes.TOGGLE_SAVE_CALENDAR_MODAL:
       return { isVisible: !state.isVisible };

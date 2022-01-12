@@ -12,8 +12,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
 class NewTimetableAlert extends React.Component {
   componentWillUnmount() {
@@ -28,7 +28,7 @@ class NewTimetableAlert extends React.Component {
   render() {
     return (
       <div className="conflict-alert change-semester-alert">
-        { this.props.msg }
+        {this.props.msg}
 
         <button
           onClick={() => this.handleClick()}
@@ -36,8 +36,8 @@ class NewTimetableAlert extends React.Component {
         >
           Create Anyway
         </button>
-
-      </div>);
+      </div>
+    );
   }
 }
 
@@ -48,4 +48,3 @@ NewTimetableAlert.propTypes = {
 };
 
 export default NewTimetableAlert;
-

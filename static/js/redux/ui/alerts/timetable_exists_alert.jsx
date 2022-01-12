@@ -12,8 +12,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
 class TimetableExistsAlert extends React.Component {
   componentWillUnmount() {
@@ -28,7 +28,8 @@ class TimetableExistsAlert extends React.Component {
     return (
       <div className="timetable-exists-alert">
         You already have a timetable with that name!
-      </div>);
+      </div>
+    );
   }
 }
 
@@ -37,4 +38,3 @@ TimetableExistsAlert.propTypes = {
 };
 
 export default TimetableExistsAlert;
-

@@ -1,6 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { addNewCustomEvent, changeActiveSavedTimetable, removeCustomEvent, updateExistingEvent } from '../../actions';
-import { Event, Timetable } from '../../constants/commonTypes';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  addNewCustomEvent,
+  changeActiveSavedTimetable,
+  removeCustomEvent,
+  updateExistingEvent,
+} from "../../actions";
+import { Event, Timetable } from "../../constants/commonTypes";
 
 interface CustomEventsSlice {
   events: Event[];
@@ -9,7 +14,7 @@ interface CustomEventsSlice {
 const initialState: CustomEventsSlice = { events: [] };
 
 const customEventsSlice = createSlice({
-  name: 'customEevnts',
+  name: "customEevnts",
   initialState,
   reducers: {
     clearCustomEvents: (state) => {
@@ -18,7 +23,9 @@ const customEventsSlice = createSlice({
     clearConflictingEvents: (state) => {
       const clearedEvents = state.events.filter(
         // @ts-ignore
-        event => event.exists_conflict === undefined || event.exists_conflict === false);
+        (event) =>
+          event.exists_conflict === undefined || event.exists_conflict === false
+      );
       state.events = clearedEvents;
     },
     receiveCustomEvents: (state, action: PayloadAction<Event[]>) => {
@@ -31,22 +38,32 @@ const customEventsSlice = createSlice({
         state.events.push(action.payload);
       })
       .addCase(updateExistingEvent, (state, action: PayloadAction<Event>) => {
-        const tEventIndex = state.events.findIndex(s => s.id === action.payload.id);
+        const tEventIndex = state.events.findIndex((s) => s.id === action.payload.id);
         if (tEventIndex !== -1) {
-          const updatedEvent = Object.assign({}, state.events[tEventIndex], action.payload);
+          const updatedEvent = Object.assign(
+            {},
+            state.events[tEventIndex],
+            action.payload
+          );
           state.events[tEventIndex] = updatedEvent;
         }
       })
       .addCase(removeCustomEvent, (state, action: PayloadAction<number>) => {
-        const newState = state.events.filter(event => event.id !== action.payload);
+        const newState = state.events.filter((event) => event.id !== action.payload);
         state.events = newState;
       })
-      .addCase(changeActiveSavedTimetable, (state, action: PayloadAction<{
-        timetable: Timetable,
-        upToDate: boolean
-      }>) => {
-        state.events = action.payload.timetable.events;
-      });
+      .addCase(
+        changeActiveSavedTimetable,
+        (
+          state,
+          action: PayloadAction<{
+            timetable: Timetable;
+            upToDate: boolean;
+          }>
+        ) => {
+          state.events = action.payload.timetable.events;
+        }
+      );
   },
 });
 

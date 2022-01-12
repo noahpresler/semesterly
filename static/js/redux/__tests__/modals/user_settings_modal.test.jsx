@@ -12,14 +12,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
-import { renderWithRedux } from '../../test-utils';
-import UserSettingsModal from '../../ui/modals/user_settings_modal';
-import { unfilledFixture, filledFixture, googleFixture } from '../../__fixtures__/user_settings_modal.fixture';
+import React from "react";
+import "@testing-library/jest-dom/extend-expect";
+import { renderWithRedux } from "../../test-utils";
+import UserSettingsModal from "../../ui/modals/user_settings_modal";
+import {
+  unfilledFixture,
+  filledFixture,
+  googleFixture,
+} from "../../__fixtures__/user_settings_modal.fixture";
 
-describe('User Setting Modal Renders As Expected', () => {
-  it('VISIBLE if settings unfilled', () => {
+describe("User Setting Modal Renders As Expected", () => {
+  it("VISIBLE if settings unfilled", () => {
     const initialState = {
       userInfo: unfilledFixture.userInfo,
       notificationToken: {
@@ -33,10 +37,10 @@ describe('User Setting Modal Renders As Expected', () => {
       preloadedState: initialState,
     });
     // show options to find facebook friends
-    expect(container).toHaveTextContent('Would you like to find classes');
+    expect(container).toHaveTextContent("Would you like to find classes");
   });
 
-  it('HIDDEN if settings filled', () => {
+  it("HIDDEN if settings filled", () => {
     const initialState = {
       userInfo: filledFixture.userInfo,
       notificationToken: {
@@ -52,7 +56,7 @@ describe('User Setting Modal Renders As Expected', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('VISIBLE if settings filled but showOverrided', () => {
+  it("VISIBLE if settings filled but showOverrided", () => {
     const userInfo = filledFixture.userInfo;
     userInfo.overrideShow = true;
     const initialState = {
@@ -69,12 +73,12 @@ describe('User Setting Modal Renders As Expected', () => {
     });
 
     // should show save button
-    expect(container).toHaveTextContent('Save');
+    expect(container).toHaveTextContent("Save");
     // should NOT show button to accept the terms and conditions
-    expect(container).not.toHaveTextContent('Accept the terms and conditions');
+    expect(container).not.toHaveTextContent("Accept the terms and conditions");
   });
 
-  it('VISIBLE but reduced if signing up with Google only', () => {
+  it("VISIBLE but reduced if signing up with Google only", () => {
     const initialState = {
       userInfo: googleFixture.userInfo,
       notificationToken: {
@@ -88,6 +92,6 @@ describe('User Setting Modal Renders As Expected', () => {
       preloadedState: initialState,
     });
     // friends questions should only show up when signed in with facebook
-    expect(container).not.toHaveTextContent('Would you like to find classes');
+    expect(container).not.toHaveTextContent("Would you like to find classes");
   });
 });

@@ -12,12 +12,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import classNames from 'classnames';
-import { getSectionTypeToSections } from '../state/entities_reducer';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
-
+import PropTypes from "prop-types";
+import React from "react";
+import classNames from "classnames";
+import { getSectionTypeToSections } from "../state/entities_reducer";
+import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
 class SearchResult extends React.Component {
   constructor(props) {
@@ -43,10 +42,10 @@ class SearchResult extends React.Component {
 
   actionOver(action) {
     switch (action) {
-      case 'ADD':
+      case "ADD":
         this.setState({ hoverAdd: true });
         break;
-      case 'SAVE':
+      case "SAVE":
         this.setState({ hoverSave: true });
         break;
       default:
@@ -56,10 +55,10 @@ class SearchResult extends React.Component {
 
   actionOut(action) {
     switch (action) {
-      case 'ADD':
+      case "ADD":
         this.setState({ hoverAdd: false });
         break;
-      case 'SAVE':
+      case "SAVE":
         this.setState({ hoverSave: false });
         break;
       default:
@@ -106,74 +105,86 @@ class SearchResult extends React.Component {
 
   render() {
     const { course, inRoster, inOptionRoster } = this.props;
-    const addRemoveButton =
-      (<span
+    const addRemoveButton = (
+      <span
         title="Add this course"
-        className={classNames('search-course-add', { 'in-roster': inRoster })}
-        onMouseDown={event => this.addCourseWrapper(course, '', event)}
-        onMouseOver={() => this.actionOver('ADD')}
-        onMouseOut={() => this.actionOut('ADD')}
-      >
-        <i className={classNames('fa', { 'fa-plus': !inRoster, 'fa-check': inRoster })} />
-      </span>);
-    const addOptionalCourseButton = this.props.inRoster ? null :
-      (<span
-        title="Add this course as optional"
-        className={classNames('search-course-save', { 'in-roster': inOptionRoster })}
-        onMouseDown={event => this.addOptionalCourseWrapper(course, event)}
-        onMouseOver={() => this.actionOver('SAVE')}
-        onMouseOut={() => this.actionOut('SAVE')}
+        className={classNames("search-course-add", { "in-roster": inRoster })}
+        onMouseDown={(event) => this.addCourseWrapper(course, "", event)}
+        onMouseOver={() => this.actionOver("ADD")}
+        onMouseOut={() => this.actionOut("ADD")}
       >
         <i
-          className={classNames('fa', {
-            'fa-bookmark': !inOptionRoster,
-            'fa-check': inOptionRoster,
+          className={classNames("fa", { "fa-plus": !inRoster, "fa-check": inRoster })}
+        />
+      </span>
+    );
+    const addOptionalCourseButton = this.props.inRoster ? null : (
+      <span
+        title="Add this course as optional"
+        className={classNames("search-course-save", { "in-roster": inOptionRoster })}
+        onMouseDown={(event) => this.addOptionalCourseWrapper(course, event)}
+        onMouseOver={() => this.actionOver("SAVE")}
+        onMouseOut={() => this.actionOut("SAVE")}
+      >
+        <i
+          className={classNames("fa", {
+            "fa-bookmark": !inOptionRoster,
+            "fa-check": inOptionRoster,
           })}
         />
-      </span>);
-    let info = course.name ? course.code : '';
+      </span>
+    );
+    let info = course.name ? course.code : "";
     if (this.state.hoverSave) {
-      info = !inOptionRoster ? 'Add this as an optional course' : 'Remove this optional course';
+      info = !inOptionRoster
+        ? "Add this as an optional course"
+        : "Remove this optional course";
     } else if (this.state.hoverAdd) {
-      info = !inRoster ? 'Add this course to your timetable' :
-        'Remove this course from your timetable';
+      info = !inRoster
+        ? "Add this course to your timetable"
+        : "Remove this course from your timetable";
     }
     const learningDenLogoImg = {
-      backgroundImage: 'url(/static/img/integrations/learningDen.png)',
+      backgroundImage: "url(/static/img/integrations/learningDen.png)",
     };
-    const learningDenLogo = course.integrations.indexOf('LearningDen') > -1 ? (<div className="label integration">
-      <span className="has-den" style={learningDenLogoImg} />
-    </div>) : null;
-    const waitlistOnlyFlag = this.hasOnlyWaitlistedSections() ?
-      <h4 className="label flag">Waitlist Only</h4> : null;
+    const learningDenLogo =
+      course.integrations.indexOf("LearningDen") > -1 ? (
+        <div className="label integration">
+          <span className="has-den" style={learningDenLogoImg} />
+        </div>
+      ) : null;
+    const waitlistOnlyFlag = this.hasOnlyWaitlistedSections() ? (
+      <h4 className="label flag">Waitlist Only</h4>
+    ) : null;
     return (
       <li
         key={course.id}
-        className={classNames('search-course', {
+        className={classNames("search-course", {
           hovered: this.props.isHovered(this.props.position),
         })}
         onMouseDown={() => this.props.fetchCourseInfo(course.id)}
         onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
       >
         <h3>{course.name || course.code} </h3>
-        { addOptionalCourseButton}
-        { addRemoveButton }
+        {addOptionalCourseButton}
+        {addRemoveButton}
         <div className="search-result-labels">
           <h4
-            className={classNames('label', {
+            className={classNames("label", {
               hoverAdd: this.state.hoverAdd,
               hoverSave: this.state.hoverSave,
             })}
           >
             {info}
           </h4>
-          <h4
-            className={classNames('label', 'bubble')}
-          >{this.props.campuses[course.campus]}</h4>
-          { learningDenLogo }
-          { waitlistOnlyFlag }
+          <h4 className={classNames("label", "bubble")}>
+            {this.props.campuses[course.campus]}
+          </h4>
+          {learningDenLogo}
+          {waitlistOnlyFlag}
         </div>
-      </li>);
+      </li>
+    );
   }
 }
 
@@ -185,26 +196,35 @@ SearchResult.propTypes = {
   hoverSearchResult: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   campuses: PropTypes.shape({
-    '*': PropTypes.string,
+    "*": PropTypes.string,
   }).isRequired,
   addCourse: PropTypes.func.isRequired,
   isHovered: PropTypes.func.isRequired,
   addRemoveOptionalCourse: PropTypes.func.isRequired,
 };
 
-export const AreaBubble = ({ areas }) => (areas.length > 0 ? (<div className="areas">
-  {areas.map(area => <div className={`bubble ${area}`} key={area}>{area}</div>)}</div>) : null);
+export const AreaBubble = ({ areas }) =>
+  areas.length > 0 ? (
+    <div className="areas">
+      {areas.map((area) => (
+        <div className={`bubble ${area}`} key={area}>
+          {area}
+        </div>
+      ))}
+    </div>
+  ) : null;
 
 AreaBubble.propTypes = {
   areas: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export const WritingIntensive = ({ isWritingIntensive }) => (isWritingIntensive === 'Yes' ?
-  <div className="bubble writing">Writing Intensive</div> : null);
+export const WritingIntensive = ({ isWritingIntensive }) =>
+  isWritingIntensive === "Yes" ? (
+    <div className="bubble writing">Writing Intensive</div>
+  ) : null;
 
 WritingIntensive.propTypes = {
   isWritingIntensive: PropTypes.string.isRequired,
 };
 
 export default SearchResult;
-

@@ -12,13 +12,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import ClickOutHandler from 'react-onclickout';
-import uniq from 'lodash/uniq';
-import Clipboard from 'clipboard';
-import COLOUR_DATA from '../constants/colours';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import PropTypes from "prop-types";
+import React, { useState } from "react";
+import ClickOutHandler from "react-onclickout";
+import uniq from "lodash/uniq";
+import Clipboard from "clipboard";
+import COLOUR_DATA from "../constants/colours";
+import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
 const MasterSlot = (props) => {
   const [shareLinkShown, setShareLinkShown] = useState(false);
@@ -29,7 +29,7 @@ const MasterSlot = (props) => {
       return;
     }
     // update sibling slot colours (i.e. the slots for the same course)
-    $(`.slot-${props.course.id}`).css('background-color', colour);
+    $(`.slot-${props.course.id}`).css("background-color", colour);
   };
 
   const onMasterSlotHover = () => {
@@ -48,8 +48,8 @@ const MasterSlot = (props) => {
     setShareLinkShown(true);
     const idEventTarget = `#clipboard-btn-course-${props.course.id}`;
     const clipboard = new Clipboard(idEventTarget);
-    clipboard.on('success', () => {
-      $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
+    clipboard.on("success", () => {
+      $(idEventTarget).addClass("clipboardSuccess").text("Copied!");
     });
   };
   const hideShareLink = () => {
@@ -60,15 +60,16 @@ const MasterSlot = (props) => {
   if (props.fakeFriends) {
     friendCircles = new Array(props.fakeFriends);
     for (let i = 0; i < props.fakeFriends; i++) {
-      friendCircles[i] =
-        (<div
+      friendCircles[i] = (
+        <div
           className="ms-friend"
           key={i}
-          style={{ backgroundImage: 'url(/static/img/blank.jpg)' }}
-        />);
+          style={{ backgroundImage: "url(/static/img/blank.jpg)" }}
+        />
+      );
     }
   } else {
-    friendCircles = props.classmates.current.map(c => (
+    friendCircles = props.classmates.current.map((c) => (
       <div
         className="ms-friend"
         key={c.img_url}
@@ -77,85 +78,94 @@ const MasterSlot = (props) => {
     ));
   }
 
-  if ((props.classmates.current.length > 0 && friendCircles.length > 4)
-          || (props.fakeFriends && props.fakeFriends > 4)) {
+  if (
+    (props.classmates.current.length > 0 && friendCircles.length > 4) ||
+    (props.fakeFriends && props.fakeFriends > 4)
+  ) {
     const plusMore = `${friendCircles.length - 3}+`;
-    friendCircles = [<div
-      className="ms-friend"
-      key={4}
-    >{plusMore}</div>].concat(friendCircles.slice(0, 3));
+    friendCircles = [
+      <div className="ms-friend" key={4}>
+        {plusMore}
+      </div>,
+    ].concat(friendCircles.slice(0, 3));
   }
   let masterSlotClass = `master-slot slot-${props.course.id}`;
-  const validProfs = props.professors ? uniq(props.professors.filter(p => p)) : false;
-  const prof = !validProfs || validProfs.length === 0 || validProfs[0] === '' ? 'Professor Unlisted' : validProfs.join(', ');
+  const validProfs = props.professors ? uniq(props.professors.filter((p) => p)) : false;
+  const prof =
+    !validProfs || validProfs.length === 0 || validProfs[0] === ""
+      ? "Professor Unlisted"
+      : validProfs.join(", ");
   masterSlotClass = props.onTimetable ? masterSlotClass : `${masterSlotClass} optional`;
   const numCredits = props.course.num_credits;
-  let creditsDisplay = numCredits === 1 ? ' credit' : ' credits';
+  let creditsDisplay = numCredits === 1 ? " credit" : " credits";
   creditsDisplay = numCredits + creditsDisplay;
-  const profDisp = props.professors === null ? null : <h3>{ prof }</h3>;
-  const shareLink = shareLinkShown ?
-    (<ShareLink
+  const profDisp = props.professors === null ? null : <h3>{prof}</h3>;
+  const shareLink = shareLinkShown ? (
+    // eslint-disable-next-line no-use-before-define
+    <ShareLink
       uniqueId={`course-${props.course.id}`}
       link={props.getShareLink(props.course.code)}
       onClickOut={hideShareLink}
       type="Course"
-    />) :
-    null;
+    />
+  ) : null;
   let waitlistOnlyFlag = null;
   if (props.course.slots !== undefined) {
     if (props.course.slots.length > 0) {
       if (props.course.slots[0].is_section_filled === true) {
-        let flagValue = '';
+        let flagValue = "";
         if (props.course.is_waitlist_only === true) {
-          flagValue = 'Waitlist Only';
+          flagValue = "Waitlist Only";
         } else {
-          flagValue = 'Section Filled';
+          flagValue = "Section Filled";
         }
-        waitlistOnlyFlag = (<span
-          className="ms-flag"
-          style={{ backgroundColor: COLOUR_DATA[props.colourIndex].border }}
-        >{flagValue}</span>);
+        waitlistOnlyFlag = (
+          <span
+            className="ms-flag"
+            style={{ backgroundColor: COLOUR_DATA[props.colourIndex].border }}
+          >
+            {flagValue}
+          </span>
+        );
       }
     }
   }
-  return (<div
-    className={masterSlotClass}
-    onMouseEnter={onMasterSlotHover}
-    onMouseLeave={onMasterSlotUnhover}
-    style={{ backgroundColor: COLOUR_DATA[props.colourIndex].background }}
-    onClick={props.fetchCourseInfo}
-  >
+  return (
     <div
-      className="slot-bar"
-      style={{ backgroundColor: COLOUR_DATA[props.colourIndex].border }}
-    />
-    <div className="master-slot-content">
-      <h3>
-        <span>{ props.course.code }</span>
-        {waitlistOnlyFlag}
-      </h3>
-      <h3>{ props.course.name }</h3>
-      { profDisp }
-      <h3>{ creditsDisplay }</h3>
-    </div>
-    <div className="master-slot-actions">
-      <i
-        className="fa fa-share-alt"
-        onClick={event => stopPropagation(showShareLink, event)}
+      className={masterSlotClass}
+      onMouseEnter={onMasterSlotHover}
+      onMouseLeave={onMasterSlotUnhover}
+      style={{ backgroundColor: COLOUR_DATA[props.colourIndex].background }}
+      onClick={props.fetchCourseInfo}
+    >
+      <div
+        className="slot-bar"
+        style={{ backgroundColor: COLOUR_DATA[props.colourIndex].border }}
       />
-      {shareLink}
-      {
-        !props.hideCloseButton ?
+      <div className="master-slot-content">
+        <h3>
+          <span>{props.course.code}</span>
+          {waitlistOnlyFlag}
+        </h3>
+        <h3>{props.course.name}</h3>
+        {profDisp}
+        <h3>{creditsDisplay}</h3>
+      </div>
+      <div className="master-slot-actions">
+        <i
+          className="fa fa-share-alt"
+          onClick={(event) => stopPropagation(showShareLink, event)}
+        />
+        {shareLink}
+        {!props.hideCloseButton ? (
           <i
             className="fa fa-times"
-            onClick={event => stopPropagation(props.removeCourse, event)}
-          /> : null
-      }
+            onClick={(event) => stopPropagation(props.removeCourse, event)}
+          />
+        ) : null}
+      </div>
+      <div className="master-slot-friends">{friendCircles}</div>
     </div>
-    <div className="master-slot-friends">
-      {friendCircles}
-    </div>
-  </div>
   );
 };
 
@@ -182,9 +192,11 @@ MasterSlot.propTypes = {
     code: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     is_waitlist_only: PropTypes.bool,
-    slots: PropTypes.arrayOf(PropTypes.shape({
-      is_section_filled: PropTypes.bool.isRequired,
-    })),
+    slots: PropTypes.arrayOf(
+      PropTypes.shape({
+        is_section_filled: PropTypes.bool.isRequired,
+      })
+    ),
   }).isRequired,
   professors: PropTypes.arrayOf(PropTypes.string),
   classmates: SemesterlyPropTypes.classmates,
@@ -197,7 +209,7 @@ MasterSlot.propTypes = {
 
 export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (
   <ClickOutHandler onClickOut={onClickOut}>
-    <div className="share-course-link-wrapper" onClick={e => e.stopPropagation()}>
+    <div className="share-course-link-wrapper" onClick={(e) => e.stopPropagation()}>
       <h5>Share {type}</h5>
       <h6>Copy the link below and send it to a friend/advisor!</h6>
       <div className="tip-border" />
@@ -206,11 +218,15 @@ export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (
         className="share-course-link"
         size={link.length}
         value={link}
-        onClick={e => e.stopPropagation()}
-        onFocus={e => e.target.select()}
+        onClick={(e) => e.stopPropagation()}
+        onFocus={(e) => e.target.select()}
         readOnly
       />
-      <div className="clipboardBtn" id={`clipboard-btn-${uniqueId}`} data-clipboard-text={link}>
+      <div
+        className="clipboardBtn"
+        id={`clipboard-btn-${uniqueId}`}
+        data-clipboard-text={link}
+      >
         Copy to Clipboard
       </div>
     </div>
@@ -225,4 +241,3 @@ ShareLink.propTypes = {
 };
 
 export default MasterSlot;
-

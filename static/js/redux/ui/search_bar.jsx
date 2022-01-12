@@ -12,34 +12,34 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import ClickOutHandler from 'react-onclickout';
-import classNames from 'classnames';
-import SearchSideBarContainer from './containers/search_side_bar_container';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
-import SearchResult from './search_result';
+import PropTypes from "prop-types";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import ClickOutHandler from "react-onclickout";
+import classNames from "classnames";
+import SearchSideBarContainer from "./containers/search_side_bar_container";
+import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
+import SearchResult from "./search_result";
 
 /* eslint-disable react/no-unused-prop-types */
 
-const getSemesterName = semester => `${semester.name} ${semester.year}`;
+const getSemesterName = (semester) => `${semester.name} ${semester.year}`;
 
 const abbreviateSemesterName = (semesterName) => {
-  if (semesterName === 'Summer') {
-    return 'Su';
+  if (semesterName === "Summer") {
+    return "Su";
   }
   return semesterName[0];
 };
 
-const abbreviateYear = year => year.replace('20', "'");
+const abbreviateYear = (year) => year.replace("20", "'");
 
-const getAbbreviatedSemesterName = semester => `${abbreviateSemesterName(semester.name)}` +
-    `${abbreviateYear(semester.year)}`;
+const getAbbreviatedSemesterName = (semester) =>
+  `${abbreviateSemesterName(semester.name)}${abbreviateYear(semester.year)}`;
 
 const SearchBar = (props) => {
   const [inputFocused, setInputFocused] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const input = useRef();
 
@@ -57,7 +57,7 @@ const SearchBar = (props) => {
 
   const handleKeyDown = useCallback((e) => {
     if (
-      $('input:focus').length === 0 &&
+      $("input:focus").length === 0 &&
       !props.explorationModalIsVisible &&
       !e.ctrlKey
     ) {
@@ -69,21 +69,21 @@ const SearchBar = (props) => {
         // only focus if user inputted char or number
         input.current.focus();
       }
-    } else if ($('input:focus').length !== 0) {
+    } else if ($("input:focus").length !== 0) {
       const numSearchResults = props.searchResults.length;
-      if (e.key === 'Enter' && numSearchResults > 0 && inputFocused) {
+      if (e.key === "Enter" && numSearchResults > 0 && inputFocused) {
         // add course to timetable if user press enter on while hovering on a search result
         props.addCourse(props.searchResults[props.hoveredPosition].id);
-      } else if (e.key === 'ArrowDown') {
+      } else if (e.key === "ArrowDown") {
         // change hovered course
         props.hoverSearchResult((props.hoveredPosition + 1) % numSearchResults);
-      } else if (e.key === 'ArrowUp') {
+      } else if (e.key === "ArrowUp") {
         // change hovered course
         let newHoveredPosition = props.hoveredPosition - 1;
         newHoveredPosition =
           newHoveredPosition < 0 ? numSearchResults - 1 : newHoveredPosition;
         props.hoverSearchResult(newHoveredPosition);
-      } else if (e.key === 'Escape') {
+      } else if (e.key === "Escape") {
         // do not show resultsContainer if user pressed escape
         setInputFocused(false);
         input.current.blur();
@@ -92,9 +92,9 @@ const SearchBar = (props) => {
   });
 
   useEffect(() => {
-    $(document).on('keydown', handleKeyDown);
+    $(document).on("keydown", handleKeyDown);
     return () => {
-      $(document).off('keydown');
+      $(document).off("keydown");
     };
   }, [handleKeyDown]);
 
@@ -111,71 +111,77 @@ const SearchBar = (props) => {
     setShowDropdown(!showDropdown);
   };
 
-  const resClass = classNames({ 'search-results': true, trans50: props.hasHoveredResult });
-  const results = props.searchResults.map((c, i) => (<SearchResult
-    {...props}
-    course={c}
-    key={c.id}
-    inRoster={props.isCourseInRoster(c.id)}
-    inOptionRoster={props.isCourseOptional(c.id)}
-    position={i}
-  />));
-  const seeMore = results.length > 0 && results.length < 3 ? (
-    <div className="see-more" style={{ height: 240 - (60 * results.length) }}>
-      <div className="see-more__inner">
-        <h4>Don&#39;t see what you&#39;re looking for?</h4>
-        <p>Try switching semesters or click <i className="fa fa-compass" /> above to
-          filter by areas,
-          departments, times and more!</p>
+  const resClass = classNames({
+    "search-results": true,
+    trans50: props.hasHoveredResult,
+  });
+  const results = props.searchResults.map((c, i) => (
+    <SearchResult
+      {...props}
+      course={c}
+      key={c.id}
+      inRoster={props.isCourseInRoster(c.id)}
+      inOptionRoster={props.isCourseOptional(c.id)}
+      position={i}
+    />
+  ));
+  const seeMore =
+    results.length > 0 && results.length < 3 ? (
+      <div className="see-more" style={{ height: 240 - 60 * results.length }}>
+        <div className="see-more__inner">
+          <h4>Don&#39;t see what you&#39;re looking for?</h4>
+          <p>
+            Try switching semesters or click <i className="fa fa-compass" /> above to
+            filter by areas, departments, times and more!
+          </p>
+        </div>
       </div>
-    </div>
-  ) : null;
-  const resultContainer = !inputFocused || results.length === 0 ? null : (
-    <ul className={resClass}>
-      <div className="search-results__list-container">
-        {results}
-        {seeMore}
-      </div>
-      <SearchSideBarContainer />
-    </ul>
-  );
+    ) : null;
+  const resultContainer =
+    !inputFocused || results.length === 0 ? null : (
+      <ul className={resClass}>
+        <div className="search-results__list-container">
+          {results}
+          {seeMore}
+        </div>
+        <SearchSideBarContainer />
+      </ul>
+    );
   const availableSemesters = props.allSemesters.map((semester, index) => {
-    const name = ($(window).width() < 767) ?
-      getAbbreviatedSemesterName(semester) :
-      getSemesterName(semester);
+    const name =
+      $(window).width() < 767
+        ? getAbbreviatedSemesterName(semester)
+        : getSemesterName(semester);
     return (
       <div
         key={name}
         className="semester-option"
         onMouseDown={() => maybeSetSemester(index)}
       >
-        { name }
+        {name}
       </div>
     );
   });
-  const currSem = ($(window).width() < 767) ?
-    getAbbreviatedSemesterName(props.semester) :
-    getSemesterName(props.semester);
+  const currSem =
+    $(window).width() < 767
+      ? getAbbreviatedSemesterName(props.semester)
+      : getSemesterName(props.semester);
   const resultsShown = results.length !== 0 && inputFocused && !props.hasHoveredResult;
   return (
     <div className="search-bar no-print">
-      <div
-        className={classNames('search-bar__wrapper', { results: resultsShown })}
-      >
+      <div className={classNames("search-bar__wrapper", { results: resultsShown })}>
         <ClickOutHandler onClickOut={onClickOut}>
           <div
-            className={classNames('search-bar__semester', {
+            className={classNames("search-bar__semester", {
               results: resultsShown,
             })}
             onMouseDown={toggleDropdown}
           >
-            <span className={classNames('tip-down', { down: showDropdown })} />
+            <span className={classNames("tip-down", { down: showDropdown })} />
             {currSem}
             <span className="bar">|</span>
           </div>
-          <div
-            className={classNames('semester-picker', { down: showDropdown })}
-          >
+          <div className={classNames("semester-picker", { down: showDropdown })}>
             <div className="tip-border" />
             <div className="tip" />
             {availableSemesters}
@@ -186,11 +192,10 @@ const SearchBar = (props) => {
           <input
             ref={input}
             placeholder={`Searching ${currSem}`}
-            className={classNames(
-              props.isFetching ? 'results-loading-gif' : '',
-              { results: resultsShown },
-            )}
-            onChange={e => setSearchTerm(e.target.value)}
+            className={classNames(props.isFetching ? "results-loading-gif" : "", {
+              results: resultsShown,
+            })}
+            onChange={(e) => setSearchTerm(e.target.value)}
             onFocus={() => {
               setInputFocused(true);
               setShowDropdown(false);
@@ -198,10 +203,7 @@ const SearchBar = (props) => {
             onBlur={() => setInputFocused(false)}
           />
         </div>
-        <div
-          className="show-exploration"
-          onMouseDown={props.showExplorationModal}
-        >
+        <div className="show-exploration" onMouseDown={props.showExplorationModal}>
           <i className="fa fa-compass" />
           <span>Advanced Search</span>
         </div>
@@ -229,4 +231,3 @@ SearchBar.propTypes = {
 };
 
 export default SearchBar;
-

@@ -12,35 +12,44 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import 'babel-polyfill';
-import React from 'react';
-import store from './state';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd';
-import SemesterlyContainer from './ui/containers/semesterly_container';
-import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
+import "babel-polyfill";
+import React from "react";
+import store from "./state";
+import { render } from "react-dom";
+import { Provider } from "react-redux";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
+import SemesterlyContainer from "./ui/containers/semesterly_container";
 import {
-  handleCreateNewTimetable, loadCachedTimetable, loadTimetable,
+  fetchMostClassmatesCount,
+  handleAgreement,
+  isRegistered,
+} from "./actions/user_actions";
+import {
+  handleCreateNewTimetable,
+  loadCachedTimetable,
+  loadTimetable,
   lockTimetable,
-} from './actions/timetable_actions';
-import { fetchSchoolInfo } from './actions/school_actions';
-import { fetchCourseClassmates } from './actions/modal_actions';
-import { alertsActions, userAcquisitionModalActions, userInfoActions } from './state/slices';
-import { receiveCourses } from './actions/initActions';
+} from "./actions/timetable_actions";
+import { fetchSchoolInfo } from "./actions/school_actions";
+import { fetchCourseClassmates } from "./actions/modal_actions";
+import {
+  alertsActions,
+  userAcquisitionModalActions,
+  userInfoActions,
+} from "./state/slices";
+import { receiveCourses } from "./actions/initActions";
 import {
   browserSupportsLocalStorage,
   setFirstVisit,
   setFriendsCookie,
   timeLapsedGreaterThan,
   timeLapsedInDays,
-} from './util';
+} from "./util";
 // import { addTTtoGCal } from './actions/calendar_actions';
-import * as ActionTypes from './constants/actionTypes';
-import { initAllState, setCourseInfo } from './actions';
-import { timetablesActions } from './state/slices/timetablesSlice';
-
+import * as ActionTypes from "./constants/actionTypes";
+import { initAllState, setCourseInfo } from "./actions";
+import { timetablesActions } from "./state/slices/timetablesSlice";
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
@@ -60,26 +69,30 @@ const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatc
 const setupChromeNotifs = () => (dispatch) => {
   dispatch(isRegistered());
 
-  const declinedNotifications = localStorage.getItem('declinedNotifications');
-  const firstVisit = localStorage.getItem('firstVisit');
+  const declinedNotifications = localStorage.getItem("declinedNotifications");
+  const firstVisit = localStorage.getItem("firstVisit");
 
   const isFirstVisit = firstVisit === null;
   const isSecondVisit = declinedNotifications === null;
 
   const daysSinceFirstVisit = timeLapsedInDays(firstVisit);
-  const userHasActed = declinedNotifications === 'true' || declinedNotifications === 'false';
+  const userHasActed =
+    declinedNotifications === "true" || declinedNotifications === "false";
 
   if (isFirstVisit) {
     const time = new Date();
     setFirstVisit(time.getTime());
-  } else if ((isSecondVisit && daysSinceFirstVisit > 1) || (!isSecondVisit && !userHasActed)) {
+  } else if (
+    (isSecondVisit && daysSinceFirstVisit > 1) ||
+    (!isSecondVisit && !userHasActed)
+  ) {
     dispatch(alertsActions.alertEnableNotifications());
   }
 };
 
 // possible show friend alert based on visit pattern
 const showFriendAlert = () => (dispatch) => {
-  const friendsCookie = localStorage.getItem('friendsCookie');
+  const friendsCookie = localStorage.getItem("friendsCookie");
   const isFirstVisit = friendsCookie === null;
 
   if (isFirstVisit || timeLapsedGreaterThan(friendsCookie, 3)) {
@@ -89,25 +102,25 @@ const showFriendAlert = () => (dispatch) => {
   }
 };
 
-const handleFlows = featureFlow => (dispatch) => {
+const handleFlows = (featureFlow) => (dispatch) => {
   switch (featureFlow.name) {
-    case 'SIGNUP':
+    case "SIGNUP":
       dispatch(userAcquisitionModalActions.triggerAcquisitionModal());
       break;
-    case 'USER_ACQ':
+    case "USER_ACQ":
       dispatch(userAcquisitionModalActions.triggerAcquisitionModal());
       break;
     // case 'GCAL_CALLBACK':
-      // hide settings info modal until user is finished adding to gcal
-      // dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: true });
-      // dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
-      // dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: false });
-      // dispatch(addTTtoGCal());
-      // break;
-    case 'EXPORT_CALENDAR':
+    // hide settings info modal until user is finished adding to gcal
+    // dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: true });
+    // dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
+    // dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: false });
+    // dispatch(addTTtoGCal());
+    // break;
+    case "EXPORT_CALENDAR":
       dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
       break;
-    case 'SHARE_TIMETABLE':
+    case "SHARE_TIMETABLE":
       dispatch(timetablesActions.cachedTimetableLoaded());
       // TODO: replace course objects in userInfo with course ids after storing in entities
       dispatch(receiveCourses(featureFlow.courses));
@@ -116,14 +129,14 @@ const handleFlows = featureFlow => (dispatch) => {
       }
       dispatch(lockTimetable(featureFlow.sharedTimetable));
       break;
-    case 'SHARE_COURSE':
+    case "SHARE_COURSE":
       dispatch(setCourseInfo(featureFlow.sharedCourse));
       dispatch(fetchCourseClassmates(featureFlow.sharedCourse.id));
       break;
-    case 'FIND_FRIENDS':
+    case "FIND_FRIENDS":
       dispatch({ type: ActionTypes.TOGGLE_PEER_MODAL });
       break;
-    case 'ENABLE_NOTFIS':
+    case "ENABLE_NOTFIS":
       dispatch({ type: ActionTypes.SET_HIGHLIGHT_NOTIFS, highlightNotifs: true });
       if (!initData.currentUser.isLoggedIn) {
         dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
@@ -131,10 +144,10 @@ const handleFlows = featureFlow => (dispatch) => {
         dispatch(userInfoActions.overrideSettingsShow(true));
       }
       break;
-    case 'EXPORT_SIS_TIMETABLE':
+    case "EXPORT_SIS_TIMETABLE":
       dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
       break;
-    case 'DELETE_ACCOUNT':
+    case "DELETE_ACCOUNT":
       dispatch(userInfoActions.overrideSettingsShow(true));
       break;
     default:
@@ -149,27 +162,33 @@ const setup = () => (dispatch) => {
   dispatch({ type: ActionTypes.INIT_STATE, data: initData });
   dispatch(initAllState(initData));
   dispatch(receiveCourses(initData.currentUser.courses));
-  dispatch(setupTimetables(initData.currentUser.timetables, initData.allSemesters,
-    initData.oldSemesters));
+  dispatch(
+    setupTimetables(
+      initData.currentUser.timetables,
+      initData.allSemesters,
+      initData.oldSemesters
+    )
+  );
 
-  if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
+  if (browserSupportsLocalStorage() && "serviceWorker" in navigator) {
     dispatch(setupChromeNotifs());
   }
   dispatch(showFriendAlert());
 
   if (initData.featureFlow.name === null) {
-    dispatch(handleAgreement(
-      initData.currentUser,
-      Date.parse(initData.latestAgreement.timeUpdated)));
+    dispatch(
+      handleAgreement(
+        initData.currentUser,
+        Date.parse(initData.latestAgreement.timeUpdated)
+      )
+    );
   }
 
   dispatch(handleFlows(initData.featureFlow));
   dispatch(fetchSchoolInfo());
 };
 
-store.dispatch(
-  setup(),
-);
+store.dispatch(setup());
 
 render(
   <Provider store={store}>
@@ -177,5 +196,5 @@ render(
       <SemesterlyContainer />
     </DndProvider>
   </Provider>,
-  document.getElementsByClassName('page')[0],
+  document.getElementsByClassName("page")[0]
 );
