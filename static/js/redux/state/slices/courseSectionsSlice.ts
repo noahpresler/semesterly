@@ -12,18 +12,25 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import * as ActionTypes from "../constants/actionTypes";
+import { createSlice } from "@reduxjs/toolkit";
 
-// we need "active" (the active timetable's index) to properly save timetables.
-// so, the courseSections variable we care about is instead found in
-// state.objects
-const courseSections = (state = { objects: {} }, action) => {
-  switch (action.type) {
-    case ActionTypes.RECEIVE_COURSE_SECTIONS:
-      return Object.assign({}, state, { objects: action.courseSections });
-    default:
-      return state;
-  }
+interface CourseSectionsSliceState {
+  objects: any;
+}
+
+const initialState: CourseSectionsSliceState = {
+  objects: {},
 };
 
-export default courseSections;
+const courseSectionsSlice = createSlice({
+  name: "courseSections",
+  initialState,
+  reducers: {
+    receiveCourseSections: (state, action) => {
+      state.objects = action.payload;
+    },
+  },
+});
+
+export const courseSectionsActions = courseSectionsSlice.actions;
+export default courseSectionsSlice.reducer;
