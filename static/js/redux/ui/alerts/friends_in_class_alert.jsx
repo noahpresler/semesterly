@@ -32,6 +32,7 @@ class FriendsInClassAlert extends React.Component {
   }
 
   componentDidUpdate(nextProps) {
+    // eslint-disable-next-line react/prop-types
     if (nextProps.showFacebookAlert) {
       this.props.showNotification();
     }
