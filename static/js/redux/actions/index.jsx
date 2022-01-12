@@ -1,5 +1,3 @@
-import { createAction } from "@reduxjs/toolkit";
-
 export * from "./calendar_actions";
 export * from "./modal_actions";
 export * from "./school_actions";

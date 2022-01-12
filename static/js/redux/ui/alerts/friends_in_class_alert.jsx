@@ -12,6 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+/* eslint-disable react/forbid-prop-types */
 import PropTypes from "prop-types";
 import React from "react";
 import classnames from "classnames";
@@ -31,6 +32,7 @@ class FriendsInClassAlert extends React.Component {
   }
 
   componentDidUpdate(nextProps) {
+    // eslint-disable-next-line react/prop-types
     if (nextProps.showFacebookAlert) {
       this.props.showNotification();
     }

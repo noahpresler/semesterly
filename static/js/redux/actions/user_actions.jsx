@@ -132,6 +132,7 @@ export const fetchClassmates = (timetable) => (dispatch, getState) => {
     });
 };
 
+/* eslint-disable no-unused-vars */
 export const saveTimetable =
   (isAutoSave = false, callback = null, autoLockAll = false) =>
   (dispatch, getState) => {

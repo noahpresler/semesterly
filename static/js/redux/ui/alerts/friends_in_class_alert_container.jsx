@@ -17,7 +17,6 @@ import { getActiveTimetable } from "../../state";
 import { setDeclinedNotifications } from "../../util";
 import { logFacebookAlertView, saveSettings } from "../../actions/user_actions";
 import FriendsInClassAlert from "./friends_in_class_alert";
-import * as ActionTypes from "../../constants/actionTypes";
 import { alertsActions, userInfoActions } from "../../state/slices";
 
 const mapStateToProps = (state) => {

@@ -444,6 +444,7 @@ Calendar.propTypes = {
   shareLink: PropTypes.string,
   uses12HrTime: PropTypes.bool.isRequired,
   registrarSupported: PropTypes.bool.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
 };
 

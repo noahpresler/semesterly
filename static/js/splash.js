@@ -12,34 +12,33 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+/* eslint-disable no-use-before-define */
+
 // splash page javascript here
-$(document).ready(function () {
+$(document).ready(() => {
   sizeitup();
 
-  $("#schools-dropdown .mobile-nav-label").click(function () {
+  $("#schools-dropdown .mobile-nav-label").click(() => {
     $("#schools-dropdown").toggleClass("open");
   });
 
-  $("#schools-dropdown").click(function (e) {
+  $("#schools-dropdown").click((e) => {
     e.stopPropagation();
   });
 
-  $(document).click(function () {
+  $(document).click(() => {
     $("#schools-dropdown").removeClass("open");
   });
 });
 
-$(window).resize(function () {
+$(window).resize(() => {
   sizeitup();
 });
 
-function sizeitup() {
-  var bodyh = $(window).height();
-}
+function sizeitup() {}
 
-$(window).scroll(function () {
-  var bodyh = $(window).height();
-  var pos = $(window).scrollTop();
+$(window).scroll(() => {
+  const pos = $(window).scrollTop();
   if (pos > 0) {
     $("header").removeClass("down");
   } else {
@@ -47,7 +46,7 @@ $(window).scroll(function () {
   }
 });
 
-//SMOOTH SCROLLING
+// SMOOTH SCROLLING
 /*
 $(function() {
     $('a[href*=#]:not([href=#])').click(function() {

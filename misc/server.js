@@ -12,9 +12,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-var webpack = require("webpack");
-var WebpackDevServer = require("webpack-dev-server");
-var config = require("../webpack.config");
+const webpack = require("webpack");
+const WebpackDevServer = require("webpack-dev-server");
+const config = require("../webpack.config");
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
@@ -26,7 +26,8 @@ new WebpackDevServer(webpack(config), {
     poll: 1000,
   },
   historyApiFallback: true,
-}).listen(3000, "0.0.0.0", function (err, result) {
+  // eslint-disable-next-line no-unused-vars
+}).listen(3000, "0.0.0.0", (err, result) => {
   if (err) {
     console.log(err);
   }

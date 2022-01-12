@@ -1,6 +1,5 @@
 import merge from "lodash/merge";
 import uniq from "lodash/uniq";
-import flatMap from "lodash/flatMap";
 import * as ActionTypes from "../constants/actionTypes";
 
 const entities = (state = {}, action) => {

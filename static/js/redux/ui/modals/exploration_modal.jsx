@@ -269,6 +269,7 @@ class ExplorationModal extends React.Component {
         <p>returned {advancedSearchResults.length} Search Results</p>
       ) : null;
     const searchResults = advancedSearchResults.map((c, i) => (
+      // eslint-disable-next-line no-use-before-define
       <ExplorationSearchResult
         key={c.id}
         code={c.code}

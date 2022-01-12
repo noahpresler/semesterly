@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface ClassmateSliceState {
   courseToClassmates: any; // map<course_ids: string, object>
@@ -12,7 +12,7 @@ const initialState: ClassmateSliceState = {
 
 const classmatesSlice = createSlice({
   name: "classmates",
-  initialState: initialState,
+  initialState,
   reducers: {
     classmatesReceived: (state, action) => {
       state.courseToClassmates = action.payload;

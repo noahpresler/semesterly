@@ -31,29 +31,26 @@ class SearchSideBar extends React.Component {
   }
 
   mapSectionsToSlots(sections) {
-    return sections
-      .sort(strPropertyCmp("meeting_section"))
-      .map((section) => (
-        <SearchResultSection
-          key={this.props.hoveredResult.id + section.meeting_section}
-          section={section.meeting_section}
-          locked={this.props.isSectionLocked(
-            this.props.hoveredResult.id,
-            section.meeting_section
-          )}
-          isOnActiveTimetable={this.props.isSectionOnActiveTimetable(
-            this.props.hoveredResult,
-            section
-          )}
-          hoverSection={() =>
-            this.props.hoverSection({ course: this.props.hoveredResult, section })
-          }
-          unHoverSection={() => this.props.unHoverSection()}
-          onMouseDown={(event) =>
-            this.lockSectionWrapper(section.meeting_section, event)
-          }
-        />
-      ));
+    return sections.sort(strPropertyCmp("meeting_section")).map((section) => (
+      // eslint-disable-next-line no-use-before-define
+      <SearchResultSection
+        key={this.props.hoveredResult.id + section.meeting_section}
+        section={section.meeting_section}
+        locked={this.props.isSectionLocked(
+          this.props.hoveredResult.id,
+          section.meeting_section
+        )}
+        isOnActiveTimetable={this.props.isSectionOnActiveTimetable(
+          this.props.hoveredResult,
+          section
+        )}
+        hoverSection={() =>
+          this.props.hoverSection({ course: this.props.hoveredResult, section })
+        }
+        unHoverSection={() => this.props.unHoverSection()}
+        onMouseDown={(event) => this.lockSectionWrapper(section.meeting_section, event)}
+      />
+    ));
   }
 
   render() {

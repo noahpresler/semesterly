@@ -101,6 +101,7 @@ const MasterSlot = (props) => {
   creditsDisplay = numCredits + creditsDisplay;
   const profDisp = props.professors === null ? null : <h3>{prof}</h3>;
   const shareLink = shareLinkShown ? (
+    // eslint-disable-next-line no-use-before-define
     <ShareLink
       uniqueId={`course-${props.course.id}`}
       link={props.getShareLink(props.course.code)}

@@ -12,46 +12,48 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-document.addEventListener("DOMContentLoaded", function (event) {
+// eslint-disable-next-line no-unused-vars
+document.addEventListener("DOMContentLoaded", (event) => {
   // ssection enrolment
-  var sections = document.getElementsByClassName("section");
-  for (var i = 0; i < sections.length; ++i) {
-    var s = sections[i];
-    var waitlist = s.getAttribute("data-waitlist");
-    var size = s.getAttribute("data-size");
-    var enrolled = s.getAttribute("data-enrolment");
-    var h = s.getElementsByClassName("enrollment")[0];
-    if (waitlist == "" || size == "" || enrolled == "") {
+  const sections = document.getElementsByClassName("section");
+  for (let i = 0; i < sections.length; ++i) {
+    const s = sections[i];
+    const waitlist = s.getAttribute("data-waitlist");
+    const size = s.getAttribute("data-size");
+    const enrolled = s.getAttribute("data-enrolment");
+    const h = s.getElementsByClassName("enrollment")[0];
+    if (waitlist === "" || size === "" || enrolled === "") {
       h.innerHTML = "No enrolment info";
     } else {
-      var left = size - enrolled;
+      const left = size - enrolled;
+      let txt;
       if (size < 0) {
         s.className += "";
-        var txt = "No enrollment info";
+        txt = "No enrollment info";
       } else if (waitlist > 0) {
         s.className += " red";
-        var txt = "<span>" + waitlist + " waitlist</span> / " + size + " seats";
-      } else if (left == 0) {
+        txt = `<span>${waitlist} waitlist</span> / ${size} seats`;
+      } else if (left === 0) {
         s.className += " red";
-        var txt = "<span>" + left + " open</span> / " + size + " seats";
+        txt = `<span>${left} open</span> / ${size} seats`;
       } else if (left < size / 10) {
         s.className += " yellow";
-        var txt = "<span>" + left + " open</span> / " + size + " seats";
+        txt = `<span>${left} open</span> / ${size} seats`;
       } else {
         s.className += " green";
-        var txt = "<span>" + left + " open</span> / " + size + " seats";
+        txt = `<span>${left} open</span> / ${size} seats`;
       }
       h.innerHTML = txt;
     }
   }
 
   // Course ratings
-  var ratings = document.getElementsByClassName("rating-wrapper");
-  for (var i = 0; i < ratings.length; ++i) {
-    var r = ratings[i];
-    var score = r.getAttribute("data-score");
-    var percent = ((score / 5) * 100).toString() + "%";
-    var h = r.getElementsByClassName("rating")[0];
+  const ratings = document.getElementsByClassName("rating-wrapper");
+  for (let i = 0; i < ratings.length; ++i) {
+    const r = ratings[i];
+    const score = r.getAttribute("data-score");
+    const percent = `${((score / 5) * 100).toString()}%`;
+    const h = r.getElementsByClassName("rating")[0];
     h.style.width = percent;
   }
 });
