@@ -33,9 +33,9 @@ class RegistrationTokenView(ValidateSubdomainMixin, APIView):
         token = request.data
         school = request.subdomain
         student = get_student(request)
-        token, _ = RegistrationToken.objects.update_or_create(auth=token['auth'],
-                                                              p256dh=token['p256dh'],
-                                                              endpoint=token['endpoint'])
+        token, _ = RegistrationToken.objects.update_or_create(
+            auth=token["auth"], p256dh=token["p256dh"], endpoint=token["endpoint"]
+        )
         if student:
             token.student = student
             token.save()

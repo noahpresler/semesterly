@@ -22,13 +22,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('analytics', '0006_analyticscoursesearch_query'),
+        ("analytics", "0006_analyticscoursesearch_query"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='analyticscoursesearch',
-            name='is_advanced',
+            model_name="analyticscoursesearch",
+            name="is_advanced",
             field=models.BooleanField(default=False),
         ),
     ]

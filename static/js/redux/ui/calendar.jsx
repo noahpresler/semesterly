@@ -12,42 +12,40 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import classnames from 'classnames';
-import ReactTooltip from 'react-tooltip';
-import Clipboard from 'clipboard';
-import PaginationContainer from './containers/pagination_container';
-import SlotManagerContainer from './containers/slot_manager_container';
-import CellContainer from './containers/cell_container';
-import { DAYS } from '../constants/constants';
-import { ShareLink } from './master_slot';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import PropTypes from "prop-types";
+import React from "react";
+import classnames from "classnames";
+import ReactTooltip from "react-tooltip";
+import Clipboard from "clipboard";
+import PaginationContainer from "./containers/pagination_container";
+import SlotManagerContainer from "./containers/slot_manager_container";
+import CellContainer from "./containers/cell_container";
+import { DAYS } from "../constants/constants";
+import { ShareLink } from "./master_slot";
+import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
 const Row = (props) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
-  const dayCells = DAYS.map(day => (<CellContainer
-    day={day}
-    time={props.time}
-    key={day + props.time}
-    loggedIn={props.isLoggedIn}
-  />));
+  const dayCells = DAYS.map((day) => (
+    <CellContainer
+      day={day}
+      time={props.time}
+      key={day + props.time}
+      loggedIn={props.isLoggedIn}
+    />
+  ));
   return (
     <tr key={props.time}>
-      <td className="fc-axis fc-time fc-widget-content cal-row">
-        {timeText}
-      </td>
+      <td className="fc-axis fc-time fc-widget-content cal-row">{timeText}</td>
       <td className="fc-widget-content">
-        <div className="week-col">
-          {dayCells}
-        </div>
+        <div className="week-col">{dayCells}</div>
       </td>
     </tr>
   );
 };
 
 Row.defaultProps = {
-  displayTime: '',
+  displayTime: "",
 };
 
 Row.propTypes = {
@@ -92,30 +90,37 @@ class Calendar extends React.Component {
 
   getTimelineStyle() {
     const now = new Date();
-    if (now.getHours() > this.props.endHour ||  // if the current time is before
-        now.getHours() < 8 ||// 8am or after the schedule end
-        now.getDay() === 0 || // time or if the current day is
-        now.getDay() === 6    // Saturday or Sunday, then
-        ) { // display no line
-      return { display: 'none' };
+    if (
+      now.getHours() > this.props.endHour || // if the current time is before
+      now.getHours() < 8 || // 8am or after the schedule end
+      now.getDay() === 0 || // time or if the current day is
+      now.getDay() === 6 // Saturday or Sunday, then
+    ) {
+      // display no line
+      return { display: "none" };
     }
     const diff = Math.abs(new Date() - new Date().setHours(8, 0, 0));
-    const mins = Math.ceil((diff / 1000) / 60);
+    const mins = Math.ceil(diff / 1000 / 60);
     const top = (mins / 15.0) * 13;
     return { top, zIndex: 1 };
   }
 
   getCalendarRows() {
     const rows = [];
-    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
+    for (let i = 8; i <= this.props.endHour; i++) {
+      // one row for each hour, starting from 8am
       const hour = this.props.uses12HrTime && i > 12 ? i - 12 : i;
-      rows.push(<Row
-        displayTime={`${hour}:00`}
-        time={`${i}:00`}
-        isLoggedIn={this.props.isLoggedIn}
-        key={i}
-      />);
-      rows.push(<Row time={`${i}:30`} isLoggedIn={this.props.isLoggedIn} key={i + 0.5} />);
+      rows.push(
+        <Row
+          displayTime={`${hour}:00`}
+          time={`${i}:00`}
+          isLoggedIn={this.props.isLoggedIn}
+          key={i}
+        />
+      );
+      rows.push(
+        <Row time={`${i}:30`} isLoggedIn={this.props.isLoggedIn} key={i + 0.5} />
+      );
     }
 
     return rows;
@@ -135,22 +140,22 @@ class Calendar extends React.Component {
 
   /* eslint-disable class-methods-use-this */
   showShareLink() {
-    const idEventTarget = '#clipboard-btn-timetable';
+    const idEventTarget = "#clipboard-btn-timetable";
     const clipboard = new Clipboard(idEventTarget);
-    clipboard.on('success', () => {
-      $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
+    clipboard.on("success", () => {
+      $(idEventTarget).addClass("clipboardSuccess").text("Copied!");
     });
   }
 
   sisBtnClick() {
-    const form = document.createElement('form');
-    form.method = 'post';
-    form.action = 'https://sis.jhu.edu/sswf/go/';
-    form.encType = 'application/x-www-form-urlencoded';
+    const form = document.createElement("form");
+    form.method = "post";
+    form.action = "https://sis.jhu.edu/sswf/go/";
+    form.encType = "application/x-www-form-urlencoded";
     document.body.appendChild(form);
-    const input = document.createElement('input');
-    input.name = 'data';
-    input.type = 'hidden';
+    const input = document.createElement("input");
+    input.name = "data";
+    input.type = "hidden";
     input.value = JSON.stringify(this.props.fetchSISTimetableData());
     form.appendChild(input);
     form.submit();
@@ -161,11 +166,11 @@ class Calendar extends React.Component {
   }
 
   render() {
-    const description = this.state.hoverCustomSlot ?
-      (<h4 className="custom-instructions">
+    const description = this.state.hoverCustomSlot ? (
+      <h4 className="custom-instructions">
         Click, drag, and release to create your custom event
-      </h4>)
-      : null;
+      </h4>
+    ) : null;
     const addSISButton = this.props.registrarSupported ? (
       <div className="cal-btn-wrapper">
         <button
@@ -176,7 +181,7 @@ class Calendar extends React.Component {
           data-tip
           onClick={this.sisBtnClick}
         >
-          <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: '2px' }} />
+          <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: "2px" }} />
         </button>
         <ReactTooltip
           id="sis-btn-tooltip"
@@ -198,9 +203,11 @@ class Calendar extends React.Component {
           data-for="share-btn-tooltip"
         >
           <i
-            className={classnames('fa',
-                            { 'fa-share-alt': !this.props.isFetchingShareLink },
-                            { 'fa-spin fa-circle-o-notch': this.props.isFetchingShareLink })}
+            className={classnames(
+              "fa",
+              { "fa-share-alt": !this.props.isFetchingShareLink },
+              { "fa-spin fa-circle-o-notch": this.props.isFetchingShareLink }
+            )}
             onClick={this.showShareLink}
           />
         </button>
@@ -214,15 +221,15 @@ class Calendar extends React.Component {
           <span>Share Calendar</span>
         </ReactTooltip>
       </div>
-        );
-    const shareLink = this.state.shareLinkShown ?
-            (<ShareLink
-              link={this.props.shareLink}
-              uniqueId="timetable"
-              type="Calendar"
-              onClickOut={this.hideShareLink}
-            />) :
-            null;
+    );
+    const shareLink = this.state.shareLinkShown ? (
+      <ShareLink
+        link={this.props.shareLink}
+        uniqueId="timetable"
+        type="Calendar"
+        onClickOut={this.hideShareLink}
+      />
+    ) : null;
     const addButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -243,7 +250,7 @@ class Calendar extends React.Component {
           <span>New Timetable</span>
         </ReactTooltip>
       </div>
-        );
+    );
     const addCustomEventButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -252,7 +259,11 @@ class Calendar extends React.Component {
           data-tip
           data-for="save-btn-tooltip"
         >
-          <i className={classnames('fa fa-pencil', { addingCustomSlot: this.state.hoverCustomSlot })} />
+          <i
+            className={classnames("fa fa-pencil", {
+              addingCustomSlot: this.state.hoverCustomSlot,
+            })}
+          />
         </button>
         <ReactTooltip
           id="save-btn-tooltip"
@@ -264,7 +275,7 @@ class Calendar extends React.Component {
           <span>Add Custom Event</span>
         </ReactTooltip>
       </div>
-        );
+    );
     const saveToCalendarButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -285,7 +296,7 @@ class Calendar extends React.Component {
           <span>Save to Calendar</span>
         </ReactTooltip>
       </div>
-        );
+    );
     const preferenceButton = (
       <div className="cal-btn-wrapper">
         <button
@@ -306,56 +317,32 @@ class Calendar extends React.Component {
           <span>Preferences</span>
         </ReactTooltip>
       </div>
-        );
-
-
-    const pilotButton = (
-      <a href={'/pilot/'} className="pilot-link">
-        <img
-          alt="logo"
-          className="pilot-logo"
-          src="/static/img/pilot-logo.png"
-        /> <p className="pilot-login-desc"> Register for PILOT </p>
-      </a>
     );
-
-    const pilotLogIn = (
-      <a className="social-login-pilot">
-        <img
-          alt="logo"
-          className="pilot-logo"
-          src="/static/img/pilot-logo.png"
-        /> <p className="pilot-login-desc">  Log in to Semester.ly first to register for PILOT </p>
-      </a>
-    );
-
-    const pilot = this.props.userInfo.isLoggedIn ? pilotButton : pilotLogIn;
 
     return (
-      <div className={classnames('calendar fc fc-ltr fc-unthemed week-calendar',
-        { hoverCustomSlot: this.state.hoverCustomSlot })}
+      <div
+        className={classnames("calendar fc fc-ltr fc-unthemed week-calendar", {
+          hoverCustomSlot: this.state.hoverCustomSlot,
+        })}
       >
         <div className="fc-toolbar no-print">
-          <div className="fc-left" style={{ display: 'none' }}>
-            { !this.state.hoverCustomSlot ? <PaginationContainer /> : null }
-            { description }
-            { pilot }
+          <div className="fc-left" style={{ display: "none" }}>
+            {!this.state.hoverCustomSlot ? <PaginationContainer /> : null}
+            {description}
           </div>
           <div className="fc-right">
-            { addSISButton }
-            { addCustomEventButton }
-            { shareButton }
-            { shareLink }
-            { addButton }
-            { saveToCalendarButton }
-            { preferenceButton }
+            {addSISButton}
+            {addCustomEventButton}
+            {shareButton}
+            {shareLink}
+            {addButton}
+            {saveToCalendarButton}
+            {preferenceButton}
           </div>
           <div className="fc-center" />
           <div className="fc-clear" />
-
         </div>
-        <div className="fc-view-container" style={{ position: 'relative' }}>
-
+        <div className="fc-view-container" style={{ position: "relative" }}>
           <div className="fc-view fc-settimana-view fc-agenda-view">
             <table>
               <thead className="fc-head">
@@ -370,19 +357,19 @@ class Calendar extends React.Component {
                               style={{ width: 49 }}
                             />
                             <th className="fc-day-header fc-widget-header fc-mon">
-                                                    Mon
+                              Mon
                             </th>
                             <th className="fc-day-header fc-widget-header fc-tue">
-                                                    Tue
+                              Tue
                             </th>
                             <th className="fc-day-header fc-widget-header fc-wed">
-                                                    Wed
+                              Wed
                             </th>
                             <th className="fc-day-header fc-widget-header fc-thu">
-                                                    Thu
+                              Thu
                             </th>
                             <th className="fc-day-header fc-widget-header fc-fri">
-                                                    Fri
+                              Fri
                             </th>
                           </tr>
                         </thead>
@@ -416,21 +403,16 @@ class Calendar extends React.Component {
                         </div>
                         <div className="fc-slats">
                           <table>
-                            <tbody>
-                              {this.getCalendarRows()}
-                            </tbody>
+                            <tbody>{this.getCalendarRows()}</tbody>
                           </table>
                         </div>
-                        <div
-                          className="fc-timeline"
-                          style={this.state.timelineStyle}
-                        />
+                        <div className="fc-timeline" style={this.state.timelineStyle} />
                         <div className="fc-content-skeleton">
                           <SlotManagerContainer days={DAYS} />
                         </div>
                         <hr
                           className="fc-divider fc-widget-header"
-                          style={{ display: 'none' }}
+                          style={{ display: "none" }}
                         />
                       </div>
                     </div>
@@ -443,11 +425,10 @@ class Calendar extends React.Component {
       </div>
     );
   }
-
 }
 
 Calendar.defaultProps = {
-  shareLink: '',
+  shareLink: "",
 };
 
 Calendar.propTypes = {
@@ -463,8 +444,8 @@ Calendar.propTypes = {
   shareLink: PropTypes.string,
   uses12HrTime: PropTypes.bool.isRequired,
   registrarSupported: PropTypes.bool.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
 };
 
 export default Calendar;
-

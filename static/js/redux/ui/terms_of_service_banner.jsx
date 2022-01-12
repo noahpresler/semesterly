@@ -12,9 +12,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import React from "react";
+import PropTypes from "prop-types";
+import classnames from "classnames";
 
 class TermsOfServiceBanner extends React.Component {
   constructor(props) {
@@ -32,7 +32,7 @@ class TermsOfServiceBanner extends React.Component {
   render() {
     return (
       <div
-        className={classnames('tos-banner', {
+        className={classnames("tos-banner", {
           show: this.props.isVisible,
         })}
       >
@@ -46,7 +46,10 @@ class TermsOfServiceBanner extends React.Component {
             Privacy Policy
           </a>
         </p>
-        <div className="tos-banner__close" onClick={this.props.dismissTermsOfServiceBanner}>
+        <div
+          className="tos-banner__close"
+          onClick={this.props.dismissTermsOfServiceBanner}
+        >
           <i className="fa fa-times" />
         </div>
       </div>

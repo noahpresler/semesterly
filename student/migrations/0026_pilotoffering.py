@@ -8,24 +8,32 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student', '0025_student_pre_health'),
+        ("student", "0025_student_pre_health"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PilotOffering',
+            name="PilotOffering",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('day', models.CharField(max_length=1)),
-                ('date_start', models.CharField(max_length=15, null=True)),
-                ('date_end', models.CharField(max_length=15, null=True)),
-                ('time_start', models.CharField(max_length=15)),
-                ('time_end', models.CharField(max_length=15)),
-                ('size', models.IntegerField(default=-1)),
-                ('enrolment', models.IntegerField(default=-1)),
-                ('waitlist', models.IntegerField(default=-1)),
-                ('sections', models.ManyToManyField(to='timetable.Section')),
-                ('students', models.ManyToManyField(to='student.Student')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("day", models.CharField(max_length=1)),
+                ("date_start", models.CharField(max_length=15, null=True)),
+                ("date_end", models.CharField(max_length=15, null=True)),
+                ("time_start", models.CharField(max_length=15)),
+                ("time_end", models.CharField(max_length=15)),
+                ("size", models.IntegerField(default=-1)),
+                ("enrolment", models.IntegerField(default=-1)),
+                ("waitlist", models.IntegerField(default=-1)),
+                ("sections", models.ManyToManyField(to="timetable.Section")),
+                ("students", models.ManyToManyField(to="student.Student")),
             ],
         ),
     ]
