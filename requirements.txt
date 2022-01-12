@@ -34,7 +34,7 @@ cryptography==3.4.7
 dateparser==1.0.0
 defusedxml==0.5.0
 distlib==0.2.5
-Django==3.2.10
+Django==3.2.7
 django-cachalot==2.4.3
 django-celery==3.3.1
 django-celery-beat==1.0.0
@@ -68,7 +68,7 @@ jsonpointer==1.10
 jsonschema==3.2.0
 kombu==3.0.37
 livereload==2.5.1
-lxml==4.6.5
+lxml==4.6.3
 mccabe==0.6.1
 mock==2.0.0
 nltk==3.6.5
