@@ -12,8 +12,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
 class SideScroller extends React.Component {
   constructor(props) {
@@ -25,21 +25,24 @@ class SideScroller extends React.Component {
 
   render() {
     if (this.props.content.length <= 2) {
-      return <div style={{ marginBottom: '-30px !important' }}>{this.props.content}</div>;
+      return (
+        <div style={{ marginBottom: "-30px !important" }}>{this.props.content}</div>
+      );
     }
     let navItems = null;
     if (this.props.navItems) {
       const navs = [];
 
       for (let i = 0; i < this.props.navItems.length; i++) {
-        const cls = this.state.activeSlide === i ?
-          ' nav-item-active' : '';
+        const cls = this.state.activeSlide === i ? " nav-item-active" : "";
         navs.push(
           <span
             key={i}
             className={`nav-item${cls}`}
             onClick={() => this.setState({ activeSlide: i })}
-          >{this.props.navItems[i]}</span>,
+          >
+            {this.props.navItems[i]}
+          </span>
         );
       }
       navItems = <div className="scroll-nav">{navs}</div>;
@@ -53,12 +56,9 @@ class SideScroller extends React.Component {
   }
 }
 
-
 SideScroller.propTypes = {
   content: PropTypes.arrayOf(PropTypes.element).isRequired,
   navItems: PropTypes.arrayOf(PropTypes.element).isRequired,
 };
 
-
 export default SideScroller;
-

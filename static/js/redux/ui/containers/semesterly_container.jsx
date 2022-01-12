@@ -12,11 +12,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import Semesterly from '../semesterly';
-import { saveTimetable } from '../../actions/user_actions';
-import { setActiveTimetable } from '../../actions/timetable_actions';
-import { getTimetables, getActiveTimetableCourses } from '../../state';
+import { connect } from "react-redux";
+import Semesterly from "../semesterly";
+import { saveTimetable } from "../../actions/user_actions";
+import { setActiveTimetable } from "../../actions/timetable_actions";
+import { getTimetables, getActiveTimetableCourses } from "../../state";
 
 const mapStateToProps = (state) => {
   const timetables = getTimetables(state);
@@ -30,12 +30,14 @@ const mapStateToProps = (state) => {
     alertNewTimetable: state.alerts.alertNewTimetable,
     // some of these values are not required so this could evaluate to undefined which leads to
     // proptype warning
-    alertFacebookFriends: Boolean(state.alerts.alertFacebookFriends
-        && state.userInfo.data.FacebookSignedUp
-        && (!state.userInfo.data.social_courses || state.alerts.facebookAlertIsOn)
-        && !state.userInfo.overrideShow
-        && state.alerts.mostFriendsCount >= 2
-        && activeTTLength >= 1),
+    alertFacebookFriends: Boolean(
+      state.alerts.alertFacebookFriends &&
+        state.userInfo.data.FacebookSignedUp &&
+        (!state.userInfo.data.social_courses || state.alerts.facebookAlertIsOn) &&
+        !state.userInfo.overrideShow &&
+        state.alerts.mostFriendsCount >= 2 &&
+        activeTTLength >= 1
+    ),
     explorationModalIsVisible: state.explorationModal.isVisible,
     dataLastUpdated: state.school.dataLastUpdated,
     PgCount: timetables.length,
@@ -43,12 +45,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const SemesterlyContainer = connect(
-  mapStateToProps,
-  {
-    saveTimetable,
-    setPgActive: setActiveTimetable,
-  },
-)(Semesterly);
+const SemesterlyContainer = connect(mapStateToProps, {
+  saveTimetable,
+  setPgActive: setActiveTimetable,
+})(Semesterly);
 
 export default SemesterlyContainer;

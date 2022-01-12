@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface userAcquisitionModalState {
   isVisible: boolean;
@@ -9,7 +9,7 @@ const initialState: userAcquisitionModalState = {
 };
 
 const userAcquisitionModalSlice = createSlice({
-  name: 'userAcquisitionModal',
+  name: "userAcquisitionModal",
   initialState,
   reducers: {
     toggleAcquisitionModal: (state) => {

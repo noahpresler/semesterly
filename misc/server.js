@@ -12,24 +12,24 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-var webpack = require('webpack')
-var WebpackDevServer = require('webpack-dev-server')
-var config = require('../webpack.config')
+var webpack = require("webpack");
+var WebpackDevServer = require("webpack-dev-server");
+var config = require("../webpack.config");
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
-  disableHostCheck : true, // This is needed for SSL reverse proxy in development environment
+  disableHostCheck: true, // This is needed for SSL reverse proxy in development environment
   hot: true,
   inline: true,
   watchOptions: {
-    aggregateTimeout: 500, 
-    poll: 1000 
+    aggregateTimeout: 500,
+    poll: 1000,
   },
-  historyApiFallback: true
-}).listen(3000, '0.0.0.0', function (err, result) {
+  historyApiFallback: true,
+}).listen(3000, "0.0.0.0", function (err, result) {
   if (err) {
-    console.log(err)
+    console.log(err);
   }
 
-  console.log('Listening at 0.0.0.0:3000')
-})
+  console.log("Listening at 0.0.0.0:3000");
+});

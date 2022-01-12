@@ -12,17 +12,17 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import { getActiveTimetableCourses } from '../../state';
-import CreditTicker from '../credit_ticker';
+import { connect } from "react-redux";
+import { getActiveTimetableCourses } from "../../state";
+import CreditTicker from "../credit_ticker";
 
-const mapStateToProps = state => ({
-  numCredits: getActiveTimetableCourses(state).reduce((prev, c) => c.num_credits + prev, 0),
+const mapStateToProps = (state) => ({
+  numCredits: getActiveTimetableCourses(state).reduce(
+    (prev, c) => c.num_credits + prev,
+    0
+  ),
 });
 
-const CreditTickerContainer = connect(
-  mapStateToProps,
-  {},
-)(CreditTicker);
+const CreditTickerContainer = connect(mapStateToProps, {})(CreditTicker);
 
 export default CreditTickerContainer;

@@ -12,13 +12,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import classnames from 'classnames';
-import { LogFacebookAlertClick } from '../../actions/user_actions';
-import MasterSlot from '../master_slot';
-import COLOUR_DATA from '../../constants/colours';
-import { setDeclinedNotifications } from '../../util';
+import PropTypes from "prop-types";
+import React from "react";
+import classnames from "classnames";
+import { LogFacebookAlertClick } from "../../actions/user_actions";
+import MasterSlot from "../master_slot";
+import COLOUR_DATA from "../../constants/colours";
+import { setDeclinedNotifications } from "../../util";
 
 class FriendsInClassAlert extends React.Component {
   constructor(props) {
@@ -37,7 +37,12 @@ class FriendsInClassAlert extends React.Component {
   }
 
   componentWillUnmount() {
-    if (!(localStorage.getItem('declinedNotifications') === 'true' || localStorage.getItem('declinedNotifications') === 'false')) {
+    if (
+      !(
+        localStorage.getItem("declinedNotifications") === "true" ||
+        localStorage.getItem("declinedNotifications") === "false"
+      )
+    ) {
       const date = new Date();
       setDeclinedNotifications(date.getTime());
     }
@@ -64,35 +69,44 @@ class FriendsInClassAlert extends React.Component {
   render() {
     const maxColourIndex = COLOUR_DATA.length - 1;
     let professors = [];
-    if (this.props.mostFriendsClass.slots.length === 0
-      && this.props.mostFriendsClass.oldSlots
-      && this.props.mostFriendsClass.oldSlots.length > 0) {
-      professors = [...new Set(this.props.mostFriendsClass.oldSlots.map(s => s.instructors))];
+    if (
+      this.props.mostFriendsClass.slots.length === 0 &&
+      this.props.mostFriendsClass.oldSlots &&
+      this.props.mostFriendsClass.oldSlots.length > 0
+    ) {
+      professors = [
+        ...new Set(this.props.mostFriendsClass.oldSlots.map((s) => s.instructors)),
+      ];
     } else {
-      professors = [...new Set(this.props.mostFriendsClass.slots.map(s => s.instructors))];
+      professors = [
+        ...new Set(this.props.mostFriendsClass.slots.map((s) => s.instructors)),
+      ];
     }
 
     return (
       <div>
         <div
-          className={`${this.state.isComplete ? 'friends-in-class-show' : 'friends-in-class-hide'} enable-notification-alert friends-in-class-alert`}
+          className={`${
+            this.state.isComplete ? "friends-in-class-show" : "friends-in-class-hide"
+          } enable-notification-alert friends-in-class-alert`}
         >
           <i className="friends-in-class-done fa fa-check" />
-          <small className={'alert-extra'}>
+          <small className={"alert-extra"}>
             You can now see your friends in classes! To revert these changes, head to
             Account Settings.
           </small>
         </div>
         <div
           className={classnames({
-            'friends-in-class-hide': this.state.isComplete,
-            'enable-notification-alert': true,
-            'friends-in-class-alert': true,
+            "friends-in-class-hide": this.state.isComplete,
+            "enable-notification-alert": true,
+            "friends-in-class-alert": true,
           })}
         >
-          <h2>{ this.props.msg }</h2>
+          <h2>{this.props.msg}</h2>
           <MasterSlot
-            key={this.props.mostFriendsKey} course={this.props.mostFriendsClass}
+            key={this.props.mostFriendsKey}
+            course={this.props.mostFriendsClass}
             professors={professors}
             colourIndex={Math.min(this.props.mostFriendsKey, maxColourIndex)}
             onTimetable
@@ -104,8 +118,7 @@ class FriendsInClassAlert extends React.Component {
           />
           <small className="alert-extra">
             Plus {this.props.totalFriendsCount} more in other classes. Enable the friend
-            feature to find out
-            who!
+            feature to find out who!
           </small>
           <button
             onClick={() => {
@@ -116,7 +129,8 @@ class FriendsInClassAlert extends React.Component {
             Find Friends in Classes
           </button>
         </div>
-      </div>);
+      </div>
+    );
   }
 }
 
@@ -148,4 +162,3 @@ FriendsInClassAlert.propTypes = {
 };
 
 export default FriendsInClassAlert;
-
