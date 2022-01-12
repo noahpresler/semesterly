@@ -16,10 +16,21 @@ from parsing.schools.active import ACTIVE_SCHOOLS
 
 class SubdomainMiddleware(MiddlewareMixin):
     def process_request(self, request):
+        subdomain = self.get_subdomain(request)
+
+        # Define domain suffixes for non-prod environments
+        nonprod_suffixes = ("-dev", "-test", "-stage", "-prod")
+
+        request.subdomain = None
+        if subdomain in ACTIVE_SCHOOLS:
+            request.subdomain = subdomain
+        elif subdomain.endswith(nonprod_suffixes):
+            request.subdomain = "jhu"
+
+    def get_subdomain(self, request):
         if "HTTP_X_ORIGINAL_HOST" in request.META:
             subdomain = request.META.get("HTTP_X_ORIGINAL_HOST", "")
         else:
             subdomain = request.META.get("HTTP_HOST", "")
-
         subdomain = subdomain.split(".")[0].strip().lower()
-        request.subdomain = subdomain if subdomain in ACTIVE_SCHOOLS else None
+        return subdomain
