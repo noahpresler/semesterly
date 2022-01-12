@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels: 
       app: semesterly
-  replicas: 4
+  replicas: 3
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -46,9 +46,10 @@ spec:
         resources:
           requests:
             cpu: 500m
+            memory: 250M
           limits:
             cpu: 2048m   
-            memory: 4096M
+            memory: 2000M
         env:
             - name: DB_HOST
               valueFrom:
