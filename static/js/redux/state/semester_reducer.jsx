@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import * as ActionTypes from '../constants/actionTypes';
+import * as ActionTypes from "../constants/actionTypes";
 
 const defaultState = {
   current: -1, // semester.current indexes into semester.all
@@ -26,13 +26,13 @@ const semester = (state = defaultState, action) => {
         current: parseInt(action.data.currentSemester, 10),
         all: action.data.allSemesters,
       });
-    case ActionTypes.SET_SEMESTER:
-      return Object.assign({}, state, { current: action.semester });
+    case "global/updateSemester":
+      return Object.assign({}, state, { current: action.payload });
     default:
       return state;
   }
 };
 
-export const getCurrentSemester = state => state.all[state.current];
+export const getCurrentSemester = (state) => state.all[state.current];
 
 export default semester;

@@ -1,7 +1,6 @@
-import merge from 'lodash/merge';
-import uniq from 'lodash/uniq';
-import flatMap from 'lodash/flatMap';
-import * as ActionTypes from '../constants/actionTypes';
+import merge from "lodash/merge";
+import uniq from "lodash/uniq";
+import * as ActionTypes from "../constants/actionTypes";
 
 const entities = (state = {}, action) => {
   switch (action.type) {
@@ -9,14 +8,14 @@ const entities = (state = {}, action) => {
       if (state.id === null) {
         return state;
       }
-      return Object.assign({}, state,
-        {
-          courses: Object.assign({}, state.courses, {
-            [action.id]: { ...state.courses[action.id], reactions: action.reactions },
-          }),
-        });
+      return Object.assign({}, state, {
+        courses: Object.assign({}, state.courses, {
+          [action.id]: { ...state.courses[action.id], reactions: action.reactions },
+        }),
+      });
     // TODO: figure out all cases rely on default and explicitly state them with cases
-    case 'global/setCourseInfo':
+    case "global/setCourseInfo":
+    case "global/receiveCourses":
     default:
       if (action.payload && action.payload.entities) {
         return merge({}, state, action.payload.entities);
@@ -32,7 +31,7 @@ const getOfferingById = (state, id) => state.offering_set[id];
 const getSectionById = (state, id) => state.sections[id];
 
 const getSlotsForSection = (state, section) =>
-  section.offering_set.map(offering => getOfferingById(state, offering));
+  section.offering_set.map((offering) => getOfferingById(state, offering));
 
 // TODO use denormalize from normalizr
 const getDenormSectionById = (state, id) => {
@@ -45,11 +44,11 @@ const getDenormSectionById = (state, id) => {
 const getCourseById = (state, id) => state.courses[id];
 
 const getDenormSectionsForCourse = (state, course) =>
-  course.sections.map(sectionId => getDenormSectionById(state, sectionId));
+  course.sections.map((sectionId) => getDenormSectionById(state, sectionId));
 
 // TODO use denormalize from normalizr
 export const getDenormCourseById = (state, id) => {
-  if (!('courses' in state)) {
+  if (!("courses" in state)) {
     return {};
   }
   const course = getCourseById(state, id);
@@ -58,7 +57,8 @@ export const getDenormCourseById = (state, id) => {
 };
 
 export const getSectionTypeToSections = (denormCourse) => {
-  if (!('sections' in denormCourse)) { // empty course (only happens on inital CourseInfo state)
+  if (!("sections" in denormCourse)) {
+    // empty course (only happens on inital CourseInfo state)
     return {};
   }
   const sectionTypeToSections = {};
@@ -71,43 +71,40 @@ export const getSectionTypeToSections = (denormCourse) => {
   return sectionTypeToSections;
 };
 
-export const getTextbooksFromCourse = course =>
-  flatMap(Object.keys(course.textbooks), sectionCode => course.textbooks[sectionCode]);
-
 // TIMETABLE SELECTORS
 //    SLOT SELECTORS
 export const getDenormSlot = (state, slot) => ({
   ...slot,
   course: getCourseById(state, slot.course),
   section: getSectionById(state, slot.section),
-  offerings: slot.offerings.map(offering => getOfferingById(state, offering)),
+  offerings: slot.offerings.map((offering) => getOfferingById(state, offering)),
 });
 
-export const getCourseIdsFromSlots = slots => uniq(slots.map(slot => slot.course));
+export const getCourseIdsFromSlots = (slots) => uniq(slots.map((slot) => slot.course));
 
 export const getCoursesFromSlots = (state, slots) =>
-  getCourseIdsFromSlots(slots).map(cid => getDenormCourseById(state, cid));
+  getCourseIdsFromSlots(slots).map((cid) => getDenormCourseById(state, cid));
 
 export const getDenormTimetable = (state, timetable) => ({
   ...timetable,
-  slots: timetable.slots.map(slot => getDenormSlot(state, slot)),
+  slots: timetable.slots.map((slot) => getDenormSlot(state, slot)),
 });
 
 export const getTimetableCourses = (state, timetable) => {
-  const courseIds = uniq(timetable.slots.map(slot => slot.course));
-  return courseIds.map(courseId => getCourseById(state, courseId));
+  const courseIds = uniq(timetable.slots.map((slot) => slot.course));
+  return courseIds.map((courseId) => getCourseById(state, courseId));
 };
 
 export const getTimetableDenormCourses = (state, timetable) => {
-  const courseIds = uniq(timetable.slots.map(slot => slot.course));
-  return courseIds.map(courseId => getDenormCourseById(state, courseId));
+  const courseIds = uniq(timetable.slots.map((slot) => slot.course));
+  return courseIds.map((courseId) => getDenormCourseById(state, courseId));
 };
 
 export const getMaxEndHour = function getLatestSlotEndHourFromTimetable(timetable) {
   let maxEndHour = 17;
   timetable.slots.forEach((slot) => {
     slot.offerings.forEach((offering) => {
-      const endHour = parseInt(offering.time_end.split(':')[0], 10) + 1;
+      const endHour = parseInt(offering.time_end.split(":")[0], 10) + 1;
       maxEndHour = Math.max(maxEndHour, endHour);
     });
   });

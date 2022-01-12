@@ -78,26 +78,36 @@ class Course(models.Model):
     A course has many :obj:`Section` which a student can enroll in.
 
     Attributes:
-        school (:obj:`CharField`): the school code corresponding to the school for the course
-        code (:obj:`CharField`): the course code without indication of section (E.g. EN.600.100)
+        school (:obj:`CharField`): this course's school's code
+        code (:obj:`CharField`): the course code without indication of section
+            (e.g. EN.600.100)
         name (:obj:`CharField`): the general name of the course (E.g. Calculus I)
-        description (:obj:`TextField`): the explanation of the content of the courzse
-        notes (:obj:`TextField`, optional): usually notes pertaining to registration (e.g. Lab Fees)
+        description (:obj:`TextField`): the explanation of the content of the course
+        notes (:obj:`TextField`, optional): usually notes pertaining to registration
+            (e.g. Lab Fees)
         info (:obj:`TextField`, optional): similar to notes
-        unstopped_description (:obj:`TextField`): automatically generated description without stopwords
-        campus (:obj:`CharField`, optional): an indicator for which campus the course is taught on
-        prerequisites (:obj:`TextField`, optional): courses required before taking this course
-        corequisites (:obj:`TextField`, optional): courses required concurrently with this course
-        exclusions (:obj:`TextField`, optional): reasons why a student would not be able to take this
+        unstopped_description (:obj:`TextField`): automatically generated description
+            without stopwords
+        campus (:obj:`CharField`, optional): an indicator for which campus the course is
+            taught on
+        prerequisites (:obj:`TextField`, optional): courses required before taking this
+            course
+        corequisites (:obj:`TextField`, optional): courses required concurrently with
+            this course
+        exclusions (:obj:`TextField`, optional): reasons why a student would not be able
+            to take this
         num_credits (:obj:`FloatField`): the number of credit hours this course is worth
         areas (:obj:`Arrayfield`): list of all degree areas this course satisfies.
-        department (:obj:`CharField`): department offering course (e.g. Computer Science)
-        level (:obj:`CharField`): indicator of level of course (e.g. 100, 200, Upper, Lower, Grad)
+        department (:obj:`CharField`): department offering course
+            (e.g. Computer Science)
+        level (:obj:`CharField`): indicator of level of course
+            (e.g. 100, 200, Upper, Lower, Grad)
         cores (:obj:`CharField`): core areas satisfied by this course
         geneds (:obj:`CharField`): geneds satisfied by this course
-        related_courses (:obj:`ManyToManyField` of :obj:`Course`, optional): courses computed similar to this course
-        same_as (:obj:`ForeignKey`): If this course is the same as another course, provide Foreign key
-        vector (:obj:`PickleObjectField`): the vector representation of a course transformed from course vectorizer
+        related_courses (:obj:`ManyToManyField` of :obj:`Course`, optional): courses
+            computed similar to this course
+        same_as (:obj:`ForeignKey`): If this course is the same as another course,
+            provide Foreign key
     """
 
     school = models.CharField(db_index=True, max_length=100)
@@ -119,7 +129,6 @@ class Course(models.Model):
     geneds = models.CharField(max_length=300, null=True, blank=True)
     related_courses = models.ManyToManyField("self", blank=True)
     same_as = models.ForeignKey("self", null=True, on_delete=models.deletion.CASCADE)
-    vector = PickledObjectField(default=None, null=True)
     pos = ArrayField(models.TextField(default="", null=True), default=list)
     areas = ArrayField(models.TextField(default="", null=True), default=list)
     sub_school = models.TextField(default="", null=True)
@@ -130,7 +139,8 @@ class Course(models.Model):
 
     def get_reactions(self, student=None):
         """
-        Return a list of dicts for each type of reaction (by title) for this course. Each dict has:
+        Return a list of dicts for each type of reaction (by title) for this course.
+        Each dict has:
 
         **title**: the title of the reaction
 
@@ -146,7 +156,6 @@ class Course(models.Model):
         )
         if not student:
             return result
-        # TODO: rewrite as a single DB query
         for i, reaction in enumerate(result):
             result[i]["reacted"] = self.reaction_set.filter(
                 student=student, title=reaction["title"]
@@ -156,7 +165,7 @@ class Course(models.Model):
     def get_avg_rating(self):
         """
         Calculates the avg rating for a course, -1 if no ratings. Includes all courses
-        that are marked as the same by the self.same_as field on the model nstance.
+        that are marked as the same by the self.same_as field on the model instance.
 
         Returns:
             (:obj:`float`): the average course rating
@@ -171,7 +180,7 @@ class Course(models.Model):
     def _get_ratings_sum_count(self):
         """Return the sum and count of ratings of this course not counting equivalent courses."""
         ratings = Evaluation.objects.only("course", "score").filter(course=self)
-        return sum([rating.score for rating in ratings]), len(ratings)
+        return sum(rating.score for rating in ratings), len(ratings)
 
     def __unicode__(self):
         return u"%s" % (self.name)
@@ -179,22 +188,24 @@ class Course(models.Model):
 
 class Section(models.Model):
     """
-    Represents one (of possibly many) choice(s) for a student to enroll in a :obj:`Course`
-    for a specific semester. Since this model is specific to a semester, it contains
-    enrollment data, instructor information, textbooks, etc.
+    Represents one (of possibly many) choice(s) for a student to enroll in a
+    :obj:`Course` for a specific semester. Since this model is specific to a semester,
+    it contains enrollment data, instructor information, textbooks, etc.
 
     A section can come in different forms. For example, a lecture which is required
     for every student. However, it can also be a tutorial or practical. During
     timetable generation we allow a user to select one of each, and we can automatically
-    choose the best combonation for a user as well.
+    choose the best combination for a user as well.
 
-    A section has many offerings related to it. For example, section 1 of a :obj:`Course` could
-    have 3 offerings (one that meets each day: Monday, Wednesday, Friday). Section 2 of
-    a :obj:`Course` could have 3 other offerings (one that meets each: Tuesday, Thursday).
+    A section has many offerings related to it. For example, section 1 of a
+    :obj:`Course` could have 3 offerings (one that meets each day: Monday, Wednesday,
+    Friday). Section 2 of a :obj:`Course` could have 3 other offerings (one that meets
+    each: Tuesday, Thursday).
 
     Attributes:
         course (:obj:`Course`): The course this section belongs to
-        meeting_section (:obj:`CharField`): the name of the section (e.g. 001, L01, LAB2)
+        meeting_section (:obj:`CharField`): the name of the section
+            (e.g. 001, L01, LAB2)
         size (:obj:`IntegerField`): the capacity of the course (the enrollment cap)
         enrolment (:obj:`IntegerField`): the number of students registered so far
         waitlist (:obj:`IntegerField`): the number of students waitlisted so far
@@ -205,7 +216,8 @@ class Section(models.Model):
         semester (:obj:`ForeignKey` to :obj:`Semester`): the semester for the section
         textbooks (:obj:`ManyToManyField` of :obj:`Textbook`):
             textbooks for this section via the :obj:`TextbookLink` model
-        was_full (:obj:`BooleanField`): whether the course was full during the last parse
+        was_full (:obj:`BooleanField`): whether the course was full during the last
+            parse
     """
 
     course = models.ForeignKey(Course, on_delete=models.deletion.CASCADE)
@@ -278,14 +290,15 @@ class Evaluation(models.Model):
     A review of a course represented as a score out of 5, a summary/comment, along
     with the professor and year the review is in subject of.
 
-    course (:obj:`ForeignKey` to :obj:`Course`):
-        the course this evaluation belongs to
-
-    score (:obj:`FloatField`): score out of 5.0
-    summary (:obj:`TextField`): text with information about why the rating was given
-    professor (:obj:`CharField`): the professor(s) this review pertains to
-    year (:obj:`CharField`): the year of the review
-    course_code (:obj:`Charfield`): a string of the course code, along with section indicator
+    Attributes:
+        course (:obj:`ForeignKey` to :obj:`Course`):
+            the course this evaluation belongs to
+        score (:obj:`FloatField`): score out of 5.0
+        summary (:obj:`TextField`): text with information about why the rating was given
+        professor (:obj:`CharField`): the professor(s) this review pertains to
+        year (:obj:`CharField`): the year of the review
+        course_code (:obj:`Charfield`): a string of the course code, along with section
+            indicator
     """
 
     course = models.ForeignKey(Course, on_delete=models.deletion.CASCADE)

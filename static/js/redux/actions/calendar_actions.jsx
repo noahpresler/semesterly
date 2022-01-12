@@ -12,31 +12,32 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import ical from 'ical-generator';
-import Cookie from 'js-cookie';
-import FileSaver from 'browser-filesaver';
+import ical from "ical-generator";
+import Cookie from "js-cookie";
+import FileSaver from "browser-filesaver";
 import {
-    // getAddTTtoGCalEndpoint,
-    getLogiCalEndpoint,
-    getRequestShareTimetableLinkEndpoint,
-    getCourseShareLink,
-} from '../constants/endpoints';
-import { FULL_WEEK_LIST } from '../constants/constants';
+  // getAddTTtoGCalEndpoint,
+  getLogiCalEndpoint,
+  getRequestShareTimetableLinkEndpoint,
+  getCourseShareLink,
+} from "../constants/endpoints";
+import { FULL_WEEK_LIST } from "../constants/constants";
 import {
   getCurrentSemester,
   getActiveDenormTimetable,
-  getActiveTimetable } from '../state';
-import * as ActionTypes from '../constants/actionTypes';
-import { calendarActions } from '../state/slices';
+  getActiveTimetable,
+} from "../state";
+import * as ActionTypes from "../constants/actionTypes";
+import { calendarActions } from "../state/slices";
 
 const DAY_MAP = {
-  M: 'mo',
-  T: 'tu',
-  W: 'we',
-  R: 'th',
-  F: 'fr',
-  S: 'sa',
-  U: 'su',
+  M: "mo",
+  T: "tu",
+  W: "we",
+  R: "th",
+  F: "fr",
+  S: "sa",
+  U: "su",
 };
 
 export const getNextDayOfWeek = (date, dayOfWeek) => {
@@ -46,7 +47,7 @@ export const getNextDayOfWeek = (date, dayOfWeek) => {
   return resultDate;
 };
 
-export const receiveShareLink = shareLink => (dispatch) => {
+export const receiveShareLink = (shareLink) => (dispatch) => {
   dispatch(calendarActions.receiveShareTimetableLink(shareLink));
 };
 
@@ -62,43 +63,47 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
   }
   fetch(getRequestShareTimetableLinkEndpoint(), {
     headers: {
-      'X-CSRFToken': Cookie.get('csrftoken'),
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      "X-CSRFToken": Cookie.get("csrftoken"),
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify({
       timetable: getActiveTimetable(state),
       semester,
     }),
-    credentials: 'include',
+    credentials: "include",
   })
-  .then(response => response.json())
-  .then((ref) => {
-    dispatch(receiveShareLink(`${window.location.href.split('/')[2]}/timetables/links/${ref.slug}`));
-  });
+    .then((response) => response.json())
+    .then((ref) => {
+      dispatch(
+        receiveShareLink(
+          `${window.location.href.split("/")[2]}/timetables/links/${ref.slug}`
+        )
+      );
+    });
 };
 
-export const fetchSISTimetableData = () => (
-  (dispatch, getState) => {
-    const state = getState();
-    const tt = getActiveDenormTimetable(state);
-    const sem = getCurrentSemester(state);
-    const sections = tt.slots.map(slot => (
-      { course: slot.course.code, section: slot.section.meeting_section.replace('(', '').replace(')', ''), course_section_id: slot.section.course_section_id }
-    ));
-    const sisData = {
-      action: 'AddToCart',
-      data: {
-        year: sem.year,
-        term: sem.name,
-        sections,
-      },
-    };
-    dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
-    return sisData;
-  }
-);
+export const fetchSISTimetableData = () => (dispatch, getState) => {
+  const state = getState();
+  const tt = getActiveDenormTimetable(state);
+  const sem = getCurrentSemester(state);
+  const sections = tt.slots.map((slot) => ({
+    course: slot.course.code,
+    section: slot.section.meeting_section.replace("(", "").replace(")", ""),
+    course_section_id: slot.section.course_section_id,
+  }));
+  const sisData = {
+    action: "AddToCart",
+    data: {
+      year: sem.year,
+      term: sem.name,
+      sections,
+    },
+  };
+  dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
+  return sisData;
+};
 
 // export const addTTtoGCal = () => (dispatch, getState) => {
 //   const state = getState();
@@ -127,9 +132,12 @@ export const fetchSISTimetableData = () => (
 
 export const createICalFromTimetable = () => (dispatch, getState) => {
   const state = getState();
-  if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
+  if (
+    !state.saveCalendarModal.isDownloading &&
+    !state.saveCalendarModal.hasDownloaded
+  ) {
     dispatch({ type: ActionTypes.DOWNLOAD_CALENDAR });
-    const cal = ical({ domain: 'https://semester.ly', name: 'My Semester Schedule' });
+    const cal = ical({ domain: "https://semester.ly", name: "My Semester Schedule" });
     const tt = getActiveDenormTimetable(state);
 
     // TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
@@ -137,7 +145,7 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
     let semEnd = new Date();
     const semester = getCurrentSemester(state);
 
-    if (semester.name === 'Fall') {
+    if (semester.name === "Fall") {
       // ignore year, year is set to current year
       semStart = new Date(`August 30 ${semester.year} 00:00:00`);
       semEnd = new Date(`December 20 ${semester.year} 00:00:00`);
@@ -152,39 +160,46 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
 
     tt.slots.forEach((slot) => {
       const { course, section, offerings } = slot;
-      const description = course.description || '';
+      const description = course.description || "";
       offerings.forEach((offering) => {
-        const instructors = section.instructors && section.instructors.length > 0 ? `Taught by: ${section.instructors}\n` : '';
+        const instructors =
+          section.instructors && section.instructors.length > 0
+            ? `Taught by: ${section.instructors}\n`
+            : "";
         const start = getNextDayOfWeek(semStart, offering.day);
-        const [startHours, startMinutes] = offering.time_start.split(':');
+        const [startHours, startMinutes] = offering.time_start.split(":");
         start.setHours(parseInt(startHours, 10), parseInt(startMinutes, 10));
 
         const end = getNextDayOfWeek(semStart, offering.day);
-        const [endHours, endMinutes] = offering.time_end.split(':');
+        const [endHours, endMinutes] = offering.time_end.split(":");
         end.setHours(parseInt(endHours, 10), parseInt(endMinutes, 10));
 
         const event = cal.createEvent({
           start,
           end,
           summary: `${course.name} ${course.code}${section.meeting_section}`,
-          description: `${course.code + section.meeting_section}\n${instructors}${description}`,
+          description: `${
+            course.code + section.meeting_section
+          }\n${instructors}${description}`,
           location: offering.location,
           url: getCourseShareLink(slot.code, getCurrentSemester(state)),
         });
 
         event.repeating({
-          freq: 'WEEKLY',
+          freq: "WEEKLY",
           byDay: DAY_MAP[offering.day],
           until: getNextDayOfWeek(semEnd, offering.day),
         });
       });
     });
 
-    const file = new Blob([cal.toString()], { type: 'data:text/calendar;charset=utf8,' });
-    FileSaver.saveAs(file, 'my_semester.ics');
+    const file = new Blob([cal.toString()], {
+      type: "data:text/calendar;charset=utf8,",
+    });
+    FileSaver.saveAs(file, "my_semester.ics");
     fetch(getLogiCalEndpoint(), {
-      method: 'POST',
-      credentials: 'include',
+      method: "POST",
+      credentials: "include",
     });
     dispatch({ type: ActionTypes.CALENDAR_DOWNLOADED });
   }

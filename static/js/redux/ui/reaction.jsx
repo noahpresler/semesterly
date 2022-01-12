@@ -12,12 +12,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import twemoji from 'twemoji';
-import renderHTML from 'react-render-html';
-import classNames from 'classnames';
-import REACTION_MAP from '../constants/reactions';
+import PropTypes from "prop-types";
+import React from "react";
+import twemoji from "twemoji";
+import renderHTML from "react-render-html";
+import classNames from "classnames";
+import REACTION_MAP from "../constants/reactions";
 
 class Reaction extends React.Component {
   constructor(props) {
@@ -51,26 +51,23 @@ class Reaction extends React.Component {
   }
 
   render() {
-    const size = 20 + ((this.props.count / this.props.total) * 45);
+    const size = 20 + (this.props.count / this.props.total) * 45;
     const emojiStyle = { height: size, width: size };
     return (
       <div
         className={classNames({
           swing: true,
           reaction: true,
-          'no-animate': !this.state.animating,
+          "no-animate": !this.state.animating,
         })}
         onClick={this.toggleSelected}
       >
-        <div
-          className="emoji"
-          style={emojiStyle}
-        >
+        <div className="emoji" style={emojiStyle}>
           {renderHTML(twemoji.parse(REACTION_MAP[this.props.emoji].unicode))}
         </div>
         <div
           className={classNames({
-            'action-container': true,
+            "action-container": true,
             selected: this.state.didSelect,
           })}
         >
@@ -86,12 +83,13 @@ class Reaction extends React.Component {
           <div className="tip" />
           <span>{REACTION_MAP[this.props.emoji].name}</span>
         </div>
-      </div>);
+      </div>
+    );
   }
 }
 
 Reaction.defaultProps = {
-  emoji: '',
+  emoji: "",
   selected: false,
 };
 
@@ -110,4 +108,3 @@ Reaction.propTypes = {
 };
 
 export default Reaction;
-

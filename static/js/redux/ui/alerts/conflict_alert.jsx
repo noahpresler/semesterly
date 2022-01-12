@@ -12,8 +12,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
 class ConflictAlert extends React.Component {
   componentWillUnmount() {
@@ -30,13 +30,11 @@ class ConflictAlert extends React.Component {
     return (
       <div className="conflict-alert">
         Adding that {this.props.message} causes a conflict!
-        <button
-          onClick={() => this.handleClick()}
-          className="conflict-alert-btn"
-        >
-            Allow Conflicts!
+        <button onClick={() => this.handleClick()} className="conflict-alert-btn">
+          Allow Conflicts!
         </button>
-      </div>);
+      </div>
+    );
   }
 }
 
@@ -48,4 +46,3 @@ ConflictAlert.propTypes = {
 };
 
 export default ConflictAlert;
-

@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { alertConflict, alertTimeTableExists } from '../../actions/initActions';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { alertConflict, alertTimeTableExists } from "../../actions/initActions";
 
 interface AlertsSliceState {
   alertConflict: boolean;
@@ -30,7 +30,7 @@ const initialState: AlertsSliceState = {
 };
 
 const alertsSlice = createSlice({
-  name: 'alerts',
+  name: "alerts",
   initialState,
   reducers: {
     // dispatched when there's a conflict
@@ -72,7 +72,7 @@ const alertsSlice = createSlice({
         mostFriendsCount: number;
         mostFriendsClassId: number;
         totalFriendsCount: number;
-      }>,
+      }>
     ) => {
       state.mostFriendsCount = action.payload.mostFriendsCount;
       state.mostFriendsClassId = action.payload.mostFriendsClassId;

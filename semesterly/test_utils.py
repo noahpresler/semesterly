@@ -33,6 +33,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
 from social_django.models import UserSocialAuth
 
 from student.models import PersonalTimetable
@@ -85,7 +86,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def setUp(self):
         self.img_dir = os.path.dirname(os.path.realpath(__file__)) + "/test_failures"
         self.init_screenshot_dir()
-        self.driver = webdriver.Chrome(chrome_options=self.chrome_options)
+        self.driver = webdriver.Chrome(
+            ChromeDriverManager().install(), chrome_options=self.chrome_options
+        )
         sem = get_current_semesters("jhu")[0]
         sem, _ = Semester.objects.update_or_create(name=sem["name"], year=sem["year"])
         for section in Section.objects.filter(
