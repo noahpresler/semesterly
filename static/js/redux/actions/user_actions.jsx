@@ -133,7 +133,8 @@ export const fetchClassmates = (timetable) => (dispatch, getState) => {
 };
 
 export const saveTimetable =
-  (callback = null, autoLockAll = false) =>
+  // eslint-disable-next-line no-unused-vars
+  (isAutoSave = false, callback = null, autoLockAll = false) =>
   (dispatch, getState) => {
     const state = getState();
     if (!state.userInfo.data.isLoggedIn) {
