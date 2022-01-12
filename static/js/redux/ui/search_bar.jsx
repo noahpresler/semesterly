@@ -34,7 +34,7 @@ const abbreviateSemesterName = (semesterName) => {
 const abbreviateYear = (year) => year.replace("20", "'");
 
 const getAbbreviatedSemesterName = (semester) =>
-  `${abbreviateSemesterName(semester.name)}` + `${abbreviateYear(semester.year)}`;
+  `${abbreviateSemesterName(semester.name)}${abbreviateYear(semester.year)}`;
 
 const SearchBar = (props) => {
   const [inputFocused, setInputFocused] = useState(false);
