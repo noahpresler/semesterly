@@ -39,6 +39,7 @@ import { setTimeShownBanner, checkStatus, clearLocalTimetable } from "../util";
 import { alertsActions, userInfoActions } from "../state/slices";
 import { alertTimeTableExists, receiveCourses } from "./initActions";
 import { classmatesActions } from "../state/slices/classmatesSlice";
+import { savingTimetableActions } from "../state/slices/savingTimetableSlice";
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
@@ -149,9 +150,7 @@ export const saveTimetable =
     }
 
     // mark that we're now trying to save this timetable
-    dispatch({
-      type: ActionTypes.REQUEST_SAVE_TIMETABLE,
-    });
+    dispatch(savingTimetableActions.requestSaveTimetable());
 
     const body = getSaveTimetablesRequestBody(state);
     return fetch(getSaveTimetableEndpoint(), {
@@ -176,10 +175,6 @@ export const saveTimetable =
       })
       .catch((error) => {
         if (error.response && error.response.status === 409) {
-          // TODO: remove below after refactor done with saving_timetables_reducer
-          dispatch({
-            type: ActionTypes.ALERT_TIMETABLE_EXISTS,
-          });
           dispatch(alertTimeTableExists());
         }
         return null;
@@ -192,10 +187,7 @@ export const duplicateTimetable = (timetable) => (dispatch, getState) => {
     dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
   // mark that we're now trying to save this timetable
-  dispatch({
-    type: ActionTypes.REQUEST_SAVE_TIMETABLE,
-  });
-
+  dispatch(savingTimetableActions.requestSaveTimetable());
   fetch(getSaveTimetableEndpoint(), {
     headers: {
       "X-CSRFToken": Cookie.get("csrftoken"),
@@ -224,9 +216,7 @@ export const deleteTimetable = (timetable) => (dispatch, getState) => {
     dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
   // mark that we're now trying to save this timetable
-  dispatch({
-    type: ActionTypes.REQUEST_SAVE_TIMETABLE,
-  });
+  dispatch(savingTimetableActions.requestSaveTimetable());
   fetch(getDeleteTimetableEndpoint(getCurrentSemester(state), timetable.name), {
     headers: {
       "X-CSRFToken": Cookie.get("csrftoken"),
@@ -496,10 +486,7 @@ export const changeTimetableName = (name) => (dispatch) => {
   if (name.length === 0 || name.length > MAX_TIMETABLE_NAME_LENGTH) {
     return;
   }
-  dispatch({
-    type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE_NAME,
-    name,
-  });
+  dispatch(savingTimetableActions.changeActiveSavedTimetableName(name));
   dispatch(saveTimetable());
 };
 

@@ -1,6 +1,13 @@
-import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
-import { addNewCustomEvent, alertTimeTableExists, changeActiveSavedTimetable, changeActiveTimetable, removeCustomEvent, updateExistingEvent } from '../../actions/initActions';
-import { Timetable } from '../../constants/commonTypes';
+import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
+import {
+  addNewCustomEvent,
+  alertTimeTableExists,
+  changeActiveSavedTimetable,
+  changeActiveTimetable,
+  removeCustomEvent,
+  updateExistingEvent,
+} from "../../actions/initActions";
+import { Timetable } from "../../constants/commonTypes";
 
 interface SavingTimetableSliceState {
   activeTimetable: Timetable;
@@ -10,7 +17,7 @@ interface SavingTimetableSliceState {
 
 const initialState: SavingTimetableSliceState = {
   activeTimetable: {
-    name: 'Untitled Schedule',
+    name: "Untitled Schedule",
     id: null,
     slots: [],
     has_conflict: null,
@@ -22,7 +29,7 @@ const initialState: SavingTimetableSliceState = {
 };
 
 const savingTimetableSlice = createSlice({
-  name: 'savingTimetable',
+  name: "savingTimetable",
   initialState,
   reducers: {
     requestSaveTimetable: (state) => {
@@ -34,25 +41,34 @@ const savingTimetableSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(changeActiveSavedTimetable, (state, action: PayloadAction<{
-        timetable: Timetable,
-        upToDate: boolean
-      }>) => {
-        state.activeTimetable = action.payload.timetable;
-        state.saving = false;
-        state.upToDate = action.payload.upToDate;
-      })
+      .addCase(
+        changeActiveSavedTimetable,
+        (
+          state,
+          action: PayloadAction<{
+            timetable: Timetable;
+            upToDate: boolean;
+          }>
+        ) => {
+          state.activeTimetable = action.payload.timetable;
+          state.saving = false;
+          state.upToDate = action.payload.upToDate;
+        }
+      )
       .addCase(alertTimeTableExists, (state) => {
         state.saving = false;
       })
-      .addMatcher(isAnyOf(
-        addNewCustomEvent,
-        changeActiveTimetable,
-        removeCustomEvent,
-        updateExistingEvent,
-      ), (state) => {
-        state.upToDate = false;
-      });
+      .addMatcher(
+        isAnyOf(
+          addNewCustomEvent,
+          changeActiveTimetable,
+          removeCustomEvent,
+          updateExistingEvent
+        ),
+        (state) => {
+          state.upToDate = false;
+        }
+      );
   },
 });
 
