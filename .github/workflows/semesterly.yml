@@ -4,12 +4,12 @@ on:
   push:
     branches: 
       - prod
-      - refactor-frontend-base-branch,
+      - refactor-frontend-base-branch
       - refactor-backend-base-branch
   pull_request:
     branches: 
       - prod
-      - refactor-frontend-base-branch,
+      - refactor-frontend-base-branch
       - refactor-backend-base-branch
 
 jobs:
