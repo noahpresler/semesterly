@@ -12,6 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+/* eslint-disable no-console */
 const webpack = require("webpack");
 const WebpackDevServer = require("webpack-dev-server");
 const config = require("../webpack.config");

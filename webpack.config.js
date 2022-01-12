@@ -21,6 +21,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const isProd = process.env.NODE_ENV === "production";
 const isDev = process.env.NODE_ENV === "development";
 
+// eslint-disable-next-line no-console
 console.log(`Running Webpack for ${process.env.NODE_ENV}`);
 
 const config = {

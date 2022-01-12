@@ -12,6 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+/* eslint-disable no-console */
 console.log("Started", self);
 self.addEventListener("install", (event) => {
   self.skipWaiting();
