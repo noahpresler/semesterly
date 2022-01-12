@@ -35,8 +35,7 @@ $(window).resize(() => {
   sizeitup();
 });
 
-function sizeitup() {
-}
+function sizeitup() {}
 
 $(window).scroll(() => {
   const pos = $(window).scrollTop();

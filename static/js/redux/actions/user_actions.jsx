@@ -132,8 +132,8 @@ export const fetchClassmates = (timetable) => (dispatch, getState) => {
     });
 };
 
+/* eslint-disable no-unused-vars */
 export const saveTimetable =
-  // eslint-disable-next-line no-unused-vars
   (isAutoSave = false, callback = null, autoLockAll = false) =>
   (dispatch, getState) => {
     const state = getState();
