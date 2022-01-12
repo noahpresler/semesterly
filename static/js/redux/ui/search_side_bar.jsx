@@ -34,6 +34,7 @@ class SearchSideBar extends React.Component {
     return sections
       .sort(strPropertyCmp("meeting_section"))
       .map((section) => (
+        // eslint-disable-next-line no-use-before-define
         <SearchResultSection
           key={this.props.hoveredResult.id + section.meeting_section}
           section={section.meeting_section}
