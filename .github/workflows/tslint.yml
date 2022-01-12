@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - refactor-frontend-base-branch
+      - prod
   pull_request:
     branches:
       - refactor-frontend-base-branch
+      - prod
 
 jobs:
   lint:
