@@ -243,8 +243,10 @@ SideBar.propTypes = {
     name: PropTypes.string.isRequired,
     year: PropTypes.numberisRequired,
   }).isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   semesterIndex: PropTypes.number.isRequired,
   avgRating: PropTypes.number,
+  // eslint-disable-next-line react/no-unused-prop-types
   hasLoaded: PropTypes.bool.isRequired,
   getShareLink: PropTypes.func.isRequired,
 };
