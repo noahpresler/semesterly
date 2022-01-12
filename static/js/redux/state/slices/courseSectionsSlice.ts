@@ -24,7 +24,7 @@ const initialState: CourseSectionsSliceState = {
 
 const courseSectionsSlice = createSlice({
   name: "courseSections",
-  initialState: initialState,
+  initialState,
   reducers: {
     receiveCourseSections: (state, action) => {
       state.objects = action.payload;
