@@ -50,6 +50,7 @@ import {
 } from "./initActions";
 import { timetablesActions } from "../state/slices/timetablesSlice";
 import { customEventsAction } from "../state/slices/customEventsSlice";
+import { courseSectionsActions } from "../state/slices/courseSectionsSlice";
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
 
@@ -91,10 +92,7 @@ export const fetchTimetables =
           // receive new info into state
           dispatch(receiveCourses(json.courses));
           dispatch(receiveTimetables(json.timetables));
-          dispatch({
-            type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-            courseSections: json.new_c_to_s,
-          });
+          dispatch(courseSectionsActions.receiveCourseSections(json.new_c_to_s));
           dispatch(changeActiveTimetable(newActive));
           // cache new info into local storage
           if (!state.userInfo.data.isLoggedIn) {
@@ -152,10 +150,11 @@ export const lockTimetable = (timetable) => (dispatch, getState) => {
   if (timetable.has_conflict) {
     dispatch({ type: ActionTypes.TURN_CONFLICTS_ON });
   }
-  dispatch({
-    type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-    courseSections: lockActiveSections(getDenormTimetable(state, timetable)),
-  });
+  dispatch(
+    courseSectionsActions.receiveCourseSections(
+      lockActiveSections(getDenormTimetable(state, timetable))
+    )
+  );
   dispatch(receiveTimetables([timetable]));
   if (state.userInfo.data.isLoggedIn) {
     dispatch(fetchClassmates(timetable));
@@ -207,10 +206,7 @@ export const createNewTimetable =
 
 export const nullifyTimetable = () => (dispatch) => {
   dispatch(receiveTimetables([{ slots: [], has_conflict: false }]));
-  dispatch({
-    type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-    courseSections: {},
-  });
+  dispatch(courseSectionsActions.receiveCourseSections({}));
   dispatch(
     changeActiveSavedTimetable({
       timetable: {
@@ -291,10 +287,7 @@ export const loadCachedTimetable =
           preferences: localPreferences,
         });
         dispatch(updateSemester(matchedIndex));
-        dispatch({
-          type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-          courseSections: localCourseSections,
-        });
+        dispatch(courseSectionsActions.receiveCourseSections(localCourseSections));
         dispatch(fetchStateTimetables(localActive));
       }
     }

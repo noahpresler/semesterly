@@ -18,7 +18,7 @@ import { getMaxHourBasedOnWindowHeight } from "../util";
 import school from "./school_reducer";
 import semester, * as fromSemester from "./semester_reducer";
 import calendar from "./slices/calendarSlice";
-import courseSections from "./course_sections_reducer";
+import courseSections from "./slices/courseSectionsSlice";
 import timetables, * as fromTimetables from "./slices/timetablesSlice";
 import searchResults, * as fromSearchResults from "./search_results_reducer";
 import preferences from "./preferences_reducer";
