@@ -203,7 +203,10 @@ const SearchBar = (props) => {
             onBlur={() => setInputFocused(false)}
           />
         </div>
-        <div className="show-exploration" onMouseDown={props.showExplorationModal}>
+        <div
+          className="show-exploration"
+          onMouseDown={() => props.showExplorationModal()}
+        >
           <i className="fa fa-compass" />
           <span>Advanced Search</span>
         </div>

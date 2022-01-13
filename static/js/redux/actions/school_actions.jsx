@@ -13,8 +13,9 @@ GNU General Public License for more details.
 */
 
 import { getSchoolInfoEndpoint } from "../constants/endpoints";
-import * as ActionTypes from "../constants/actionTypes";
 import { getCurrentSemester } from "../state";
+import { explorationModalActions } from "../state/slices";
+import { receiveSchoolInfo } from "./initActions";
 
 export const getSchool = (state) => state.school.school;
 export const getSemester = (state) => {
@@ -23,13 +24,10 @@ export const getSemester = (state) => {
 };
 
 export const fetchSchoolInfo = () => (dispatch, getState) => {
-  dispatch({ type: ActionTypes.REQUEST_SCHOOL_INFO });
+  dispatch(explorationModalActions.requestSchoolInfo());
   fetch(getSchoolInfoEndpoint(getSchool(getState())))
     .then((response) => response.json())
     .then((json) => {
-      dispatch({
-        type: ActionTypes.RECEIVE_SCHOOL_INFO,
-        schoolInfo: json,
-      });
+      dispatch(receiveSchoolInfo(json));
     });
 };
