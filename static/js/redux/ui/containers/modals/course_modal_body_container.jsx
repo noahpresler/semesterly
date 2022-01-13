@@ -2,11 +2,7 @@ import { connect } from "react-redux";
 import CourseModalBody from "../../modals/course_modal_body";
 import { getActiveTimetable, getCurrentSemester } from "../../../state";
 import { getSectionTypeToSections } from "../../../state/entities_reducer";
-import {
-  fetchCourseInfo,
-  openSignUpModal,
-  react,
-} from "../../../actions/modal_actions";
+import { fetchCourseInfo, react } from "../../../actions/modal_actions";
 import { saveSettings } from "../../../actions/user_actions";
 import { getSchoolSpecificInfo } from "../../../constants/schools";
 import {
@@ -15,6 +11,7 @@ import {
 } from "../../../constants/endpoints";
 import { userInfoActions } from "../../../state/slices";
 import { timetablesActions } from "../../../state/slices/timetablesSlice";
+import { signupModalActions } from "../../../state/slices/signupModalSlice";
 
 const mapStateToProps = (state, ownProps) => {
   const denormCourseInfo = ownProps.data;
@@ -52,7 +49,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const CourseModalBodyContainer = connect(mapStateToProps, {
-  openSignUpModal,
+  openSignUpModal: signupModalActions.showSignupModal,
   fetchCourseInfo,
   hoverSection: timetablesActions.hoverSection,
   react,

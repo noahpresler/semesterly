@@ -16,6 +16,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import classnames from "classnames";
 import { useSelector } from "react-redux";
 import { useActions } from "../hooks";
+import { signupModalActions } from "../state/slices/signupModalSlice";
 
 const TimetableNameInput = () => {
   // select redux state, same as mapStateToProps
@@ -23,7 +24,7 @@ const TimetableNameInput = () => {
   const { activeTimetable, upToDate } = useSelector((state) => state.savingTimetable);
 
   // get actionCreators needed
-  const { openSignUpModal, changeTimetableName } = useActions();
+  const { changeTimetableName } = useActions();
 
   const [inputValue, setInputValue] = useState(activeTimetable.name);
   const inputRef = useRef();
@@ -57,7 +58,7 @@ const TimetableNameInput = () => {
 
   const showSignupModal = () => {
     if (!isLoggedIn) {
-      openSignUpModal();
+      signupModalActions.showSignupModal();
     }
   };
 

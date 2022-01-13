@@ -86,8 +86,6 @@ export const toggleSaveCalendarModal = () => ({
   type: ActionTypes.TOGGLE_SAVE_CALENDAR_MODAL,
 });
 
-export const openSignUpModal = () => ({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
-
 export const toggleIntegrationModal = () => ({
   type: ActionTypes.TOGGLE_INTEGRATION_MODAL,
 });
