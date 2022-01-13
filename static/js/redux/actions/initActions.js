@@ -45,3 +45,16 @@ export const removeCustomEvent = createAction("global/removeCustomEvent");
 export const changeActiveSavedTimetable = createAction(
   "global/changeActiveSavedTimetable"
 );
+
+export const receiveSchoolInfo = createAction("global/receiveSchoolInfo");
+
+/**
+ * normalizes search results as `payload` and store them in entities
+ * save unormalized one as `original`
+ */
+export const receiveAdvancedSearchResults = createAction(
+  "global/receiveAdvancedSearchResults",
+  (courses) => ({
+    payload: normalize(courses, [courseSchema]),
+  })
+);
