@@ -22,8 +22,9 @@ import { nullifyTimetable } from "./timetable_actions";
 import * as ActionTypes from "../constants/actionTypes";
 import { fetchCourseClassmates } from "./modal_actions";
 import { getSemester } from "./school_actions";
-import { alertsActions } from "../state/slices";
+import { alertsActions, explorationModalActions } from "../state/slices";
 import { updateSemester } from "./initActions";
+import { receiveAdvancedSearchResults } from ".";
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
@@ -96,17 +97,12 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
   // we'll allow small query strings if some filters
   // (departments, or breadths, or levels) are chosen.
   if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
-    dispatch({
-      type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
-      payload: { result: [] },
-    });
+    dispatch(receiveAdvancedSearchResults([]));
     return;
   }
 
   // indicate that we are now requesting courses
-  dispatch({
-    type: ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS,
-  });
+  dispatch(explorationModalActions.requestAdvancedSearchResults());
   // send a request (via fetch) to the appropriate endpoint to get courses
   const state = getState();
   fetch(getCourseSearchEndpoint(query, getSemester(getState())), {
@@ -119,16 +115,12 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
     body: JSON.stringify({
       filters,
       semester: getCurrentSemester(state),
-      page: state.explorationModal.page,
     }),
   })
     .then((response) => response.json()) // TODO(rohan): error-check the response
     .then((json) => {
       // indicate that courses have been received
-      dispatch({
-        type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
-        payload: normalize(json, [courseSchema]),
-      });
+      dispatch(receiveAdvancedSearchResults(json));
     });
 };
 
@@ -145,12 +137,7 @@ export const clearAdvancedSearchPagination = () => ({
   type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION,
 });
 
-export const setActiveAdvancedSearchResult = (idx) => ({
-  type: ActionTypes.SET_ACTIVE_ADV_SEARCH_RESULT,
-  active: idx,
-});
-
 export const setAdvancedSearchResultIndex = (idx, courseId) => (dispatch) => {
-  dispatch(setActiveAdvancedSearchResult(idx));
+  dispatch(explorationModalActions.setActiveAdvancedSearchResult(idx));
   dispatch(fetchCourseClassmates(courseId));
 };

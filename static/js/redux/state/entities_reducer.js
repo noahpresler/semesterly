@@ -1,10 +1,9 @@
 import merge from "lodash/merge";
 import uniq from "lodash/uniq";
-import * as ActionTypes from "../constants/actionTypes";
 
 const entities = (state = {}, action) => {
   switch (action.type) {
-    case ActionTypes.SET_COURSE_REACTIONS:
+    case "global/setCourseReactions":
       if (state.id === null) {
         return state;
       }
@@ -16,6 +15,7 @@ const entities = (state = {}, action) => {
     // TODO: figure out all cases rely on default and explicitly state them with cases
     case "global/setCourseInfo":
     case "global/receiveCourses":
+    case "global/receiveAdvancedSearchResults":
     default:
       if (action.payload && action.payload.entities) {
         return merge({}, state, action.payload.entities);
