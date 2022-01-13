@@ -25,7 +25,6 @@ import {
 } from "../../../actions/timetable_actions";
 import {
   fetchCourseInfo,
-  openSignUpModal,
   react,
 } from "../../../actions/modal_actions";
 import { saveSettings } from "../../../actions/user_actions";
@@ -39,6 +38,7 @@ import {
   getCourseInfoId,
 } from "../../../state/slices";
 import { timetablesActions } from "../../../state/slices/timetablesSlice";
+import { signupModalActions } from "../../../state/slices/signupModalSlice"
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
@@ -63,7 +63,7 @@ const mapStateToProps = (state) => {
 
 const CourseModalContainer = connect(mapStateToProps, {
   hideModal: () => courseInfoActions.setCourseId(null),
-  openSignUpModal,
+  openSignUpModal: signupModalActions.showSignupModal,
   fetchCourseInfo,
   unHoverSection: timetablesActions.unhoverSection,
   addOrRemoveOptionalCourse,

@@ -40,6 +40,7 @@ import { alertsActions, userInfoActions } from "../state/slices";
 import { alertTimeTableExists, receiveCourses } from "./initActions";
 import { classmatesActions } from "../state/slices/classmatesSlice";
 import { savingTimetableActions } from "../state/slices/savingTimetableSlice";
+import { signupModalActions } from "../state/slices/signupModalSlice";
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
@@ -139,7 +140,7 @@ export const saveTimetable =
   (dispatch, getState) => {
     const state = getState();
     if (!state.userInfo.data.isLoggedIn) {
-      return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
+      return dispatch(signupModalActions.showSignupModal());
     }
     const activeTimetable = getActiveTimetable(state);
 
@@ -184,7 +185,7 @@ export const saveTimetable =
 export const duplicateTimetable = (timetable) => (dispatch, getState) => {
   const state = getState();
   if (!state.userInfo.data.isLoggedIn) {
-    dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
+    dispatch(signupModalActions.showSignupModal());
   }
   // mark that we're now trying to save this timetable
   dispatch(savingTimetableActions.requestSaveTimetable());
@@ -213,7 +214,7 @@ export const duplicateTimetable = (timetable) => (dispatch, getState) => {
 export const deleteTimetable = (timetable) => (dispatch, getState) => {
   const state = getState();
   if (!state.userInfo.data.isLoggedIn) {
-    dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
+    dispatch(signupModalActions.showSignupModal());
   }
   // mark that we're now trying to save this timetable
   dispatch(savingTimetableActions.requestSaveTimetable());

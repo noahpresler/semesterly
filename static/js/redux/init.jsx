@@ -50,6 +50,7 @@ import {
 import * as ActionTypes from "./constants/actionTypes";
 import { initAllState, setCourseInfo } from "./actions";
 import { timetablesActions } from "./state/slices/timetablesSlice";
+import { signupModalActions } from "./state/slices/signupModalSlice";
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
@@ -139,7 +140,7 @@ const handleFlows = (featureFlow) => (dispatch) => {
     case "ENABLE_NOTFIS":
       dispatch({ type: ActionTypes.SET_HIGHLIGHT_NOTIFS, highlightNotifs: true });
       if (!initData.currentUser.isLoggedIn) {
-        dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
+        dispatch(signupModalActions.showSignupModal());
       } else {
         dispatch(userInfoActions.overrideSettingsShow(true));
       }

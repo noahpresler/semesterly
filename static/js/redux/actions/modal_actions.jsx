@@ -92,8 +92,6 @@ export const toggleSaveCalendarModal = () => ({
   type: ActionTypes.TOGGLE_SAVE_CALENDAR_MODAL,
 });
 
-export const openSignUpModal = () => ({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
-
 export const hideExplorationModal = () => ({
   type: ActionTypes.HIDE_EXPLORATION_MODAL,
 });
