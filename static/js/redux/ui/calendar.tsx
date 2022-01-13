@@ -67,7 +67,7 @@ const Calendar = (props: CalendarProps) => {
   const [shareLinkShown, setShareLinkShown] = useState(false);
   const [customSlotModeOn, setCustomSlotModeOn] = useState(false);
 
-  function getTimelineStyle() {
+  const getTimelineStyle = () => {
     const now = new Date();
     if (
       now.getHours() > props.endHour || // if the current time is before
