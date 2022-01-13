@@ -12,10 +12,10 @@ const signupModalSlice = createSlice({
   name: "signupModal",
   initialState,
   reducers: {
-    toggleSignupModal: (state) => {
-      state.isVisible = !state.isVisible;
+    hideSignupModal: (state) => {
+      state.isVisible = false;
     },
-    triggerSignupModal: (state) => {
+    showSignupModal: (state) => {
       state.isVisible = true;
     },
   },
