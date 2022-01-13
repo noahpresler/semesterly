@@ -3,12 +3,12 @@ name: TSLint
 on:
   push:
     branches:
-      - refactor-frontend-base-branch
       - prod
+      - enhance-custom-events
   pull_request:
     branches:
-      - refactor-frontend-base-branch
       - prod
+      - enhance-custom-events
 
 jobs:
   lint:
