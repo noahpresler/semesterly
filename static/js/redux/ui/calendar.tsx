@@ -84,7 +84,7 @@ const Calendar = (props: CalendarProps) => {
     const mins = Math.ceil(diff / 1000 / 60);
     const top = (mins / 15.0) * 13;
     return { top, zIndex: 1 };
-  }
+  };
   const [timelineStyle, setTimelineStyle] = useState(getTimelineStyle());
 
   useEffect(() => {
