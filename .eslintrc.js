@@ -47,6 +47,7 @@ module.exports = {
       },
     ],
     "react/jsx-filename-extension": [1, { extensions: [".tsx", ".jsx"] }],
+    "react/require-default-props": 0,
   },
   extends: [
     "airbnb",
