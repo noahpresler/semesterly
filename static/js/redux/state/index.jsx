@@ -31,7 +31,7 @@ import classmates from "./slices/classmatesSlice";
 import optionalCourses from "./optional_courses_reducer";
 import explorationModal, * as fromExplorationModal from "./slices/explorationModalSlice";
 import customEvents from "./slices/customEventsSlice";
-import signupModal from "./signup_modal_reducer";
+import signupModal from "./slices/signupModalSlice";
 import peerModal from "./peer_modal_reducer";
 import preferenceModal from "./preference_modal_reducer";
 import friends from "./friends_reducer";

@@ -4,13 +4,11 @@ on:
   push:
     branches: 
       - prod
-      - refactor-frontend-base-branch
-      - refactor-backend-base-branch
+      - enhance-custom-events
   pull_request:
     branches: 
       - prod
-      - refactor-frontend-base-branch
-      - refactor-backend-base-branch
+      - enhance-custom-events
 
 jobs:
   build:
