@@ -31,13 +31,13 @@ const school = (
         return Object.assign({}, state, { school: action.data.school });
       }
       return state;
-    case ActionTypes.RECEIVE_SCHOOL_INFO: {
+    case "global/receiveSchoolInfo": {
       const {
         areas,
         departments,
         levels,
         last_updated: dataLastUpdated,
-      } = action.schoolInfo;
+      } = action.payload;
       return Object.assign({}, state, { areas, departments, levels, dataLastUpdated });
     }
     default:

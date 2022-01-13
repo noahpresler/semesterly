@@ -29,7 +29,7 @@ import userInfo, { isUserInfoIncomplete } from "./slices/userInfoSlice";
 import savingTimetable from "./slices/savingTimetableSlice";
 import classmates from "./slices/classmatesSlice";
 import optionalCourses from "./optional_courses_reducer";
-import explorationModal, * as fromExplorationModal from "./exploration_modal_reducer";
+import explorationModal, * as fromExplorationModal from "./slices/explorationModalSlice";
 import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
 import peerModal from "./peer_modal_reducer";

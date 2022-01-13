@@ -30,12 +30,10 @@ import {
   addOrRemoveOptionalCourse,
 } from "../../../actions/timetable_actions";
 import { getSchoolSpecificInfo } from "../../../constants/schools";
-import {
-  fetchCourseClassmates,
-  hideExplorationModal,
-} from "../../../actions/modal_actions";
+import { fetchCourseClassmates } from "../../../actions/modal_actions";
 import { getCourseShareLinkFromModal } from "../../../constants/endpoints";
 import { timetablesActions } from "../../../state/slices/timetablesSlice";
+import { explorationModalActions } from "../../../state/slices";
 
 const mapStateToProps = (state) => {
   const { isVisible, isFetching, active, page } = state.explorationModal;
@@ -64,7 +62,7 @@ const mapStateToProps = (state) => {
 };
 
 const ExplorationModalContainer = connect(mapStateToProps, {
-  hideExplorationModal,
+  hideExplorationModal: explorationModalActions.hideExplorationModal,
   fetchAdvancedSearchResults,
   fetchCourseClassmates,
   addOrRemoveOptionalCourse,
