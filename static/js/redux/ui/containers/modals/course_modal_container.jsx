@@ -23,10 +23,7 @@ import {
   addOrRemoveCourse,
   addOrRemoveOptionalCourse,
 } from "../../../actions/timetable_actions";
-import {
-  fetchCourseInfo,
-  react,
-} from "../../../actions/modal_actions";
+import { fetchCourseInfo, react } from "../../../actions/modal_actions";
 import { saveSettings } from "../../../actions/user_actions";
 import {
   getCourseShareLink,
@@ -38,7 +35,7 @@ import {
   getCourseInfoId,
 } from "../../../state/slices";
 import { timetablesActions } from "../../../state/slices/timetablesSlice";
-import { signupModalActions } from "../../../state/slices/signupModalSlice"
+import { signupModalActions } from "../../../state/slices/signupModalSlice";
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
