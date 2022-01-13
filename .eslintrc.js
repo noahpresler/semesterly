@@ -46,6 +46,7 @@ module.exports = {
         tsx: "never",
       },
     ],
+    "react/jsx-filename-extension": [1, { extensions: [".tsx", ".jsx"] }],
   },
   extends: [
     "airbnb",
