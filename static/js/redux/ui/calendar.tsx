@@ -117,6 +117,7 @@ const Calendar = (props: CalendarProps) => {
     if (props.shareLinkValid) {
       setShareLinkShown(true);
     } else if (!props.isFetchingShareLink) {
+      setShareLinkShown(true);
       props.fetchShareTimetableLink();
     }
   };
