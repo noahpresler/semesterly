@@ -24,7 +24,13 @@ import { DAYS } from "../constants/constants";
 import { ShareLink } from "./master_slot";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
-const Row = (props) => {
+type RowProps = {
+  isLoggedIn: boolean;
+  time: string;
+  displayTime?: string;
+}
+
+const Row = (props: RowProps) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
   const dayCells = DAYS.map((day) => (
     <CellContainer
@@ -44,15 +50,6 @@ const Row = (props) => {
   );
 };
 
-Row.defaultProps = {
-  displayTime: "",
-};
-
-Row.propTypes = {
-  displayTime: PropTypes.string,
-  isLoggedIn: PropTypes.bool.isRequired,
-  time: PropTypes.string.isRequired,
-};
 
 class Calendar extends React.Component {
   constructor(props) {
