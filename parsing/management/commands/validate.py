@@ -29,7 +29,7 @@ class Command(BaseCommand):
         help (str): command help message.
     """
 
-    help = 'Validation driver.'
+    help = "Validation driver."
 
     def add_arguments(self, parser):
         """Add arguments to command parser.
@@ -47,13 +47,13 @@ class Command(BaseCommand):
             **options: Command options.
         """
         tracker = Tracker()
-        tracker.mode = 'validating'
-        if options['display_progress_bar']:
-            tracker.add_viewer(StatProgressBar('{valid}/{total}'))
+        tracker.mode = "validating"
+        if options["display_progress_bar"]:
+            tracker.add_viewer(StatProgressBar("{valid}/{total}"))
         tracker.start()
 
-        for parser_type in options['types']:
-            for school in options['schools']:
+        for parser_type in options["types"]:
+            for school in options["schools"]:
                 self.run(options, school, parser_type, tracker)
 
     def run(self, options, school, parser_type, tracker):
@@ -65,24 +65,22 @@ class Command(BaseCommand):
             parser_type (str): {'courses', 'evals', 'textbooks'}
         """
         tracker.school = school
-        logger = logging.getLogger('parsing.schools.' + school)
-        logger.debug('Command options:', options)
+        logger = logging.getLogger("parsing.schools." + school)
+        logger.debug("Command options:", options)
 
         # Load config file to dictionary.
-        if isinstance(options['config'], str):
-            with open(options['config'].format(school=school,
-                                               type=parser_type), 'r') as file:
-                options['config'] = json.load(file)
+        if isinstance(options["config"], str):
+            with open(
+                options["config"].format(school=school, type=parser_type), "r"
+            ) as file:
+                options["config"] = json.load(file)
 
         try:
-            Validator(
-                options['config'],
-                tracker=tracker
-            ).validate_self_contained(
-                options['data'].format(school=school, type=parser_type),
-                break_on_error=options.get('break_on_error'),
-                break_on_warning=options.get('break_on_warning'),
-                display_progress_bar=options['display_progress_bar']
+            Validator(options["config"], tracker=tracker).validate_self_contained(
+                options["data"].format(school=school, type=parser_type),
+                break_on_error=options.get("break_on_error"),
+                break_on_warning=options.get("break_on_warning"),
+                display_progress_bar=options["display_progress_bar"],
             )
         except Exception:
-            logger.exception('Validation failed for ' + school)
+            logger.exception("Validation failed for " + school)

@@ -11,6 +11,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
+import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
@@ -36,7 +37,7 @@ describe('TOS Modal', () => {
     const { container } = renderWithRedux(<TermsOfServiceModalContainer />, {
       preloadedState: initialState,
     });
-    expect(container).toMatchSnapshot();
+    expect(container).toHaveTextContent('Our Terms of Service and Privacy Policy have been updated');
   });
 
   it('shows welcome message for new users', () => {
@@ -49,7 +50,7 @@ describe('TOS Modal', () => {
     const { container } = renderWithRedux(<TermsOfServiceModalContainer />, {
       preloadedState: initialState,
     });
-    expect(container).toMatchSnapshot();
+    expect(container).toHaveTextContent('Welcome to Semester.ly');
   });
 
   it('is hidden when isVisible is false', () => {
@@ -60,7 +61,7 @@ describe('TOS Modal', () => {
     const { container } = renderWithRedux(<TermsOfServiceModalContainer />, {
       preloadedState: initialState,
     });
-    expect(container).toMatchSnapshot();
+    expect(container).toBeEmptyDOMElement();
   });
 });
 

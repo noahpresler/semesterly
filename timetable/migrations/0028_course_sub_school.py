@@ -9,13 +9,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0027_course_writing_intensive'),
+        ("timetable", "0027_course_writing_intensive"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='course',
-            name='sub_school',
-            field=models.TextField(default=b'', null=True),
+            model_name="course",
+            name="sub_school",
+            field=models.TextField(default=b"", null=True),
         ),
     ]

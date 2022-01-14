@@ -18,8 +18,5 @@ class Parser(BarnesAndNoblesParser):
 
     def __init__(self, **kwargs):
         super(Parser, self).__init__(
-            "65163",
-            "vanderbilt.bncollege.com",
-            "vandy",
-            "-",
-            **kwargs)
+            "65163", "vanderbilt.bncollege.com", "vandy", "-", **kwargs
+        )

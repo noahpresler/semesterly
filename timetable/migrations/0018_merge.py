@@ -8,9 +8,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0016_course_vector'),
-        ('timetable', '0017_auto_20170518_2230'),
+        ("timetable", "0016_course_vector"),
+        ("timetable", "0017_auto_20170518_2230"),
     ]
 
-    operations = [
-    ]
+    operations = []
