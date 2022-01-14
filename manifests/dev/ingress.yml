@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: semesterly-ingress
+  namespace: semesterly-dev
+spec:
+  rules:
+  - host: semesterly-dev.az.sis.jhu.edu
+    http:
+      paths:
+      - backend:
+          serviceName: semesterly-service
+          servicePort: 80
+        path: /
+        pathType: ImplementationSpecific
+  - host: "*.semesterly-dev.az.sis.jhu.edu"
+    http:
+      paths:
+      - backend:
+          serviceName: semesterly-service
+          servicePort: 80
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - semesterly-dev.az.sis.jhu.edu
+    secretName: az-wildcard-tls
