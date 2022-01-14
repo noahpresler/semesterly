@@ -335,20 +335,6 @@
   }
 }
 
-// If a course has an integration turned on
-.has-pilot {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  float: left;
-  height: 15px;
-  margin-right: 5px;
-  opacity: 1;
-  transition: visibility .3s, opacity .3s;
-  visibility: visible;
-  width: 43px;
-}
-
 // If a course has an den integration turned on
 .has-den {
   background-position: center;
@@ -428,7 +414,6 @@
     background-color: $white-transparent-9;
   }
 
-  .has-pilot,
   .has-den {
     opacity: 0;
     visibility: hidden;
