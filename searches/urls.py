@@ -11,13 +11,15 @@
 # GNU General Public License for more details.
 
 from django.conf.urls import re_path
+from django.contrib import admin
 
 import searches.views
 
 
+admin.autodiscover()
+
+
 urlpatterns = [
-    re_path(
-        r"^search/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/(?P<query>.*?)/?$",
-        searches.views.CourseSearchList.as_view(),
-    ),
+    re_path(r'^search/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/(?P<query>.*?)/?$',
+        searches.views.CourseSearchList.as_view()),
 ]

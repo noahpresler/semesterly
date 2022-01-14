@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0026_pilotoffering"),
+        ('student', '0026_pilotoffering'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="pilotoffering",
-            name="course_name",
+            model_name='pilotoffering',
+            name='course_name',
             field=models.CharField(max_length=100, null=True),
         ),
     ]

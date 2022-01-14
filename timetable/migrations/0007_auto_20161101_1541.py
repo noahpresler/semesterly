@@ -22,13 +22,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0006_merge"),
+        ('timetable', '0006_merge'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name="course",
-            name="areas",
-            field=models.CharField(default=b"", max_length=600, null=True),
+            model_name='course',
+            name='areas',
+            field=models.CharField(default=b'', max_length=600, null=True),
         ),
     ]

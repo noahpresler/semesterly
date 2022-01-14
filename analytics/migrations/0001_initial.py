@@ -25,39 +25,23 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("timetable", "0004_auto_20160520_1141"),
-        ("student", "0004_auto_20160521_2343"),
+        ('timetable', '0004_auto_20160520_1141'),
+        ('student', '0004_auto_20160521_2343'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name="SharedTimetable",
+            name='SharedTimetable',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("semester", models.CharField(max_length=2)),
-                ("school", models.CharField(max_length=50)),
-                ("name", models.CharField(max_length=100, null=True)),
-                ("has_conflict", models.BooleanField(default=False)),
-                ("time_created", models.DateTimeField(auto_now_add=True)),
-                ("courses", models.ManyToManyField(to="timetable.Course")),
-                ("sections", models.ManyToManyField(to="timetable.Section")),
-                (
-                    "student",
-                    models.ForeignKey(
-                        default=None,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="student.Student",
-                    ),
-                ),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('semester', models.CharField(max_length=2)),
+                ('school', models.CharField(max_length=50)),
+                ('name', models.CharField(max_length=100, null=True)),
+                ('has_conflict', models.BooleanField(default=False)),
+                ('time_created', models.DateTimeField(auto_now_add=True)),
+                ('courses', models.ManyToManyField(to='timetable.Course')),
+                ('sections', models.ManyToManyField(to='timetable.Section')),
+                ('student', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='student.Student')),
             ],
         ),
     ]

@@ -12,15 +12,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { WaveModal } from "boron-15";
-import React, { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { useActions } from "../../hooks";
+import { WaveModal } from 'boron-15';
+import React, { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useActions } from '../../hooks';
 
 const UserAcquisitionModal = () => {
-  const LoginToken = useSelector((state) => state.userInfo.data.LoginToken);
-  const LoginHash = useSelector((state) => state.userInfo.data.LoginHash);
-  const isVisible = useSelector((state) => state.userAcquisitionModal.isVisible);
+  const LoginToken = useSelector(state => state.userInfo.data.LoginToken);
+  const LoginHash = useSelector(state => state.userInfo.data.LoginHash);
+  const isVisible = useSelector(state => state.userAcquisitionModal.isVisible);
 
   const { toggleAcquisitionModal } = useActions();
 
@@ -41,7 +41,7 @@ const UserAcquisitionModal = () => {
   );
 
   const modalStyle = {
-    width: "100%",
+    width: '100%',
   };
 
   return (
@@ -51,7 +51,7 @@ const UserAcquisitionModal = () => {
       modalStyle={modalStyle}
       onHide={() => {
         toggleAcquisitionModal();
-        history.replaceState({}, "Semester.ly", "/");
+        history.replaceState({}, 'Semester.ly', '/');
       }}
     >
       {modalHeader}
@@ -61,7 +61,7 @@ const UserAcquisitionModal = () => {
         <button
           className="btn abnb-btn fb-btn"
           onClick={() => {
-            const link = document.createElement("a");
+            const link = document.createElement('a');
             link.href =
               `/login/facebook/?student_token=${LoginToken}` +
               `&login_hash=${LoginHash}`;
@@ -74,14 +74,16 @@ const UserAcquisitionModal = () => {
           </span>
           <span>Continue with Facebook</span>
         </button>
-        <p className="method-details">Allows the option to friends in your classes.</p>
+        <p className="method-details">
+          Allows the option to friends in your classes.
+        </p>
 
         <br />
 
         <button
           className="btn abnb-btn secondary"
           onClick={() => {
-            const link = document.createElement("a");
+            const link = document.createElement('a');
             link.href = `/login/azuread-tenant-oauth2/?student_token=${LoginToken}&login_hash=${LoginHash}`;
             document.body.appendChild(link);
             link.click();
@@ -106,7 +108,7 @@ const UserAcquisitionModal = () => {
         <button
           className="btn abnb-btn secondary"
           onClick={() => {
-            const link = document.createElement("a");
+            const link = document.createElement('a');
             link.href = `/login/google-oauth2/?student_token=${LoginToken}&login_hash=${LoginHash}`;
             document.body.appendChild(link);
             link.click();

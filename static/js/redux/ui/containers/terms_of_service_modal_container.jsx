@@ -12,15 +12,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from "react-redux";
-import TermsOfServiceModal from "../modals/terms_of_service_modal";
-import { triggerTermsOfServiceModal } from "../../actions/modal_actions";
-import { acceptTOS } from "../../actions/user_actions";
-import { getIsUserInfoIncomplete } from "../../state";
+import { connect } from 'react-redux';
+import TermsOfServiceModal from '../modals/terms_of_service_modal';
+import { triggerTermsOfServiceModal } from '../../actions/modal_actions';
+import { acceptTOS } from '../../actions/user_actions';
+import { getIsUserInfoIncomplete } from '../../reducers';
 
-const mapStateToProps = (state) => ({
-  isVisible:
-    state.termsOfServiceModal.isVisible &&
+const mapStateToProps = state => ({
+  isVisible: state.termsOfServiceModal.isVisible &&
     !(!state.userInfo.overrideShow && getIsUserInfoIncomplete(state)) &&
     !state.userInfo.isVisible,
   userInfo: state.userInfo.data,
@@ -29,9 +28,12 @@ const mapStateToProps = (state) => ({
   isUserInfoIncomplete: getIsUserInfoIncomplete(state),
 });
 
-const TermsOfServiceModalContainer = connect(mapStateToProps, {
-  triggerTermsOfServiceModal,
-  acceptTOS,
-})(TermsOfServiceModal);
+const TermsOfServiceModalContainer = connect(
+    mapStateToProps,
+  {
+    triggerTermsOfServiceModal,
+    acceptTOS,
+  },
+)(TermsOfServiceModal);
 
 export default TermsOfServiceModalContainer;

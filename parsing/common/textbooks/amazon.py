@@ -12,16 +12,17 @@
 
 from amazon.api import AmazonAPI
 from amazon.api import AsinNotFound
-
-AMAZON_ACCESS_KEY = "AKIAJGUOXN3COOYBPTHQ"
-AMAZON_SECRET_KEY = "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"
-AMAZON_ASSOC_TAG = "semesterly-20"
+AMAZON_ACCESS_KEY = 'AKIAJGUOXN3COOYBPTHQ'
+AMAZON_SECRET_KEY = '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'
+AMAZON_ASSOC_TAG = 'semesterly-20'
 amazon = AmazonAPI(AMAZON_ACCESS_KEY, AMAZON_SECRET_KEY, AMAZON_ASSOC_TAG)
 
 
 def amazon_textbook_fields(isbn):
     try:
-        product = amazon.lookup(ItemId=isbn, IdType="ISBN", SearchIndex="Books")
+        product = amazon.lookup(ItemId=isbn,
+                                IdType='ISBN',
+                                SearchIndex='Books')
     except AsinNotFound:
         return
 
@@ -29,8 +30,8 @@ def amazon_textbook_fields(isbn):
         product = product[0]
 
     return {
-        "detail_url": product.detail_page_url,
-        "image_url": product.medium_image_url,
-        "author": product.author,
-        "title": product.title,
+        'detail_url': product.detail_page_url,
+        'image_url': product.medium_image_url,
+        'author': product.author,
+        'title': product.title,
     }

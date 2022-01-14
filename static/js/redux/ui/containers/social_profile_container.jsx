@@ -12,17 +12,20 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from "react-redux";
-import SocialProfile from "../social_profile";
-import { userInfoActions, userAcquisitionModalActions } from "../../state/slices";
+import { connect } from 'react-redux';
+import SocialProfile from '../social_profile';
+import { overrideSettingsShow, triggerAcquisitionModal } from '../../actions/modal_actions';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   userInfo: state.userInfo.data,
 });
 
-const SocialProfileContainer = connect(mapStateToProps, {
-  showUserSettings: () => userInfoActions.overrideSettingsShow(true),
-  triggerAcquisitionModal: userAcquisitionModalActions.triggerAcquisitionModal,
-})(SocialProfile);
+const SocialProfileContainer = connect(
+    mapStateToProps,
+  {
+    showUserSettings: () => overrideSettingsShow(true),
+    triggerAcquisitionModal,
+  },
+)(SocialProfile);
 
 export default SocialProfileContainer;

@@ -20,15 +20,15 @@ import subprocess
 
 from parsing.library.base_parser import BaseParser
 
-
 class Parser(BaseParser):
+
     def __init__(self, **kwargs):
         """Construct NEU parser object.
 
         Args:
             **kwargs: pass-through
         """
-        super(Parser, self).__init__("neu", **kwargs)
+        super(Parser, self).__init__('neu', **kwargs)
 
     # Required to prevent the python code from writing courses.json.
     # The JS script saves the courses.json when using search neu scrapers.
@@ -37,6 +37,7 @@ class Parser(BaseParser):
 
     def start(self, **kwargs):
 
-        path = os.path.join(os.path.dirname(__file__), "main.js")
-        subprocess.call(["node", "--max_old_space_size=8192", path])
+        path = os.path.join(os.path.dirname(__file__), 'main.js')
+        subprocess.call(['node', '--max_old_space_size=8192',  path])
         print("done scraping neu")
+     

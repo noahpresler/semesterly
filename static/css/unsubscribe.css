@@ -1,0 +1,28 @@
+#unsubscribe,
+#error-404-center {
+	text-align: center;
+	position: absolute;
+	width: 100%;
+	top: 45%;
+	transform: translateY(-50%);
+}
+#unsubscribe h2,
+#error-404 h2 {
+	font-size: 32px;
+	line-height: 32px;
+	color: #aaa;
+	font-family: "Palanquin",Arial,sans-serif;
+	margin: 20px auto 0px;
+}
+#unsubscribe h3,
+#error-404 h3 {
+	margin: 20px auto auto;
+	font-size: 14px;
+}
+
+#error-404 h2 {
+	font-size: 56px;
+	line-height: 56px;
+	color: #34495e;
+	margin: 0;
+}

@@ -22,30 +22,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0006_student_time_created"),
+        ('student', '0006_student_time_created'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="student",
-            name="social_all",
+            model_name='student',
+            name='social_all',
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name="reaction",
-            name="title",
-            field=models.CharField(
-                choices=[
-                    (b"FIRE", b"FIRE"),
-                    (b"LOVE", b"LOVE"),
-                    (b"CRAP", b"CRAP"),
-                    (b"OKAY", b"OKAY"),
-                    (b"BORING", b"BORING"),
-                    (b"HARD", b"HARD"),
-                    (b"EASY", b"EASY"),
-                    (b"INTERESTING", b"INTERESTING"),
-                ],
-                max_length=50,
-            ),
+            model_name='reaction',
+            name='title',
+            field=models.CharField(choices=[(b'FIRE', b'FIRE'), (b'LOVE', b'LOVE'), (b'CRAP', b'CRAP'), (b'OKAY', b'OKAY'), (b'BORING', b'BORING'), (b'HARD', b'HARD'), (b'EASY', b'EASY'), (b'INTERESTING', b'INTERESTING')], max_length=50),
         ),
     ]

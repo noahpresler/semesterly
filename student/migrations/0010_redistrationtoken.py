@@ -22,23 +22,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0009_student_emails_enabled"),
+        ('student', '0009_student_emails_enabled'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name="RedistrationToken",
+            name='RedistrationToken',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("token", models.TextField(default=b"")),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('token', models.TextField(default=b'')),
             ],
         ),
     ]

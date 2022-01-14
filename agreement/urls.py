@@ -11,14 +11,15 @@
 # GNU General Public License for more details.
 
 from django.conf.urls import re_path
+from django.contrib import admin
 from django.views.generic import TemplateView
 
 
+admin.autodiscover()
+
 urlpatterns = [
-    re_path(
-        r"termsofservice/*$", TemplateView.as_view(template_name="termsofservice.html")
-    ),
-    re_path(
-        r"privacypolicy/*$", TemplateView.as_view(template_name="privacypolicy.html")
-    ),
+    re_path(r'termsofservice/*$',
+        TemplateView.as_view(template_name="termsofservice.html")),
+    re_path(r'privacypolicy/*$',
+        TemplateView.as_view(template_name="privacypolicy.html")),
 ]

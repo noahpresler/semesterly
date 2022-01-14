@@ -12,8 +12,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from "prop-types";
-import React from "react";
+import PropTypes from 'prop-types';
+import React from 'react';
 
 class CreditTicker extends React.Component {
   constructor(props) {
@@ -29,24 +29,18 @@ class CreditTicker extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({ actualCredits: parseFloat(nextProps.numCredits) });
-    if (
-      parseFloat(nextProps.numCredits.toFixed(2)) >
-      parseFloat(this.state.displayedCredits.toFixed(2))
-    ) {
+    if (parseFloat(nextProps.numCredits.toFixed(2)) >
+      parseFloat(this.state.displayedCredits.toFixed(2))) {
       this.interval = setInterval(this.incCredits, 8);
-    } else if (
-      parseFloat(nextProps.numCredits.toFixed(2)) <
-      parseFloat(this.state.displayedCredits.toFixed(2))
-    ) {
+    } else if (parseFloat(nextProps.numCredits.toFixed(2)) <
+      parseFloat(this.state.displayedCredits.toFixed(2))) {
       this.interval = setInterval(this.decCredits, 8);
     }
   }
 
   incCredits() {
-    if (
-      parseFloat(this.state.actualCredits.toFixed(2)) <=
-      parseFloat(this.state.displayedCredits.toFixed(2))
-    ) {
+    if (parseFloat(this.state.actualCredits.toFixed(2)) <=
+      parseFloat(this.state.displayedCredits.toFixed(2))) {
       return clearInterval(this.interval);
     }
     this.setState({ displayedCredits: this.state.displayedCredits + 0.05 });
@@ -54,10 +48,8 @@ class CreditTicker extends React.Component {
   }
 
   decCredits() {
-    if (
-      parseFloat(this.state.displayedCredits.toFixed(2)) <=
-      parseFloat(this.state.actualCredits.toFixed(2))
-    ) {
+    if (parseFloat(this.state.displayedCredits.toFixed(2)) <=
+      parseFloat(this.state.actualCredits.toFixed(2))) {
       return clearInterval(this.interval);
     }
     this.setState({ displayedCredits: this.state.displayedCredits - 0.05 });
@@ -79,3 +71,4 @@ CreditTicker.propTypes = {
 };
 
 export default CreditTicker;
+

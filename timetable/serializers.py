@@ -10,6 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+import itertools
 from rest_framework import serializers
 
 from student.models import PersonalEvent
@@ -17,14 +18,15 @@ from timetable.utils import DisplayTimetable
 
 
 class EventSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = PersonalEvent
-        exclude = ("id",)
+        exclude = ('id',)
 
 
 class SlotSerializer(serializers.Serializer):
-    course = serializers.IntegerField(source="course.id")
-    section = serializers.IntegerField(source="section.id")
+    course = serializers.IntegerField(source='course.id')
+    section = serializers.IntegerField(source='section.id')
     offerings = serializers.SerializerMethodField()
     is_optional = serializers.BooleanField()
     is_locked = serializers.BooleanField()
@@ -34,9 +36,7 @@ class SlotSerializer(serializers.Serializer):
 
 
 class DisplayTimetableSerializer(serializers.Serializer):
-    id = serializers.IntegerField(
-        allow_null=True
-    )  # should only be defined for PersonalTimetables
+    id = serializers.IntegerField(allow_null=True) # should only be defined for PersonalTimetables
     slots = SlotSerializer(many=True)
     has_conflict = serializers.BooleanField()
     name = serializers.CharField()
@@ -45,9 +45,7 @@ class DisplayTimetableSerializer(serializers.Serializer):
 
     @classmethod
     def from_model(cls, timetable, **kwargs):
-        if kwargs.get("many") is True:
+        if kwargs.get('many') is True:
             timetables = [DisplayTimetable.from_model(tt) for tt in timetable]
             return DisplayTimetableSerializer(timetables, **kwargs)
-        return DisplayTimetableSerializer(
-            DisplayTimetable.from_model(timetable), **kwargs
-        )
+        return DisplayTimetableSerializer(DisplayTimetable.from_model(timetable), **kwargs)

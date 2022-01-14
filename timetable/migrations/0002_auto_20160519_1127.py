@@ -22,20 +22,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0001_initial"),
+        ('timetable', '0001_initial'),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name="section",
-            old_name="name",
-            new_name="meeting_section",
+            model_name='section',
+            old_name='name',
+            new_name='meeting_section',
         ),
         migrations.AddField(
-            model_name="section",
-            name="textbooks",
-            field=models.ManyToManyField(
-                through="timetable.TextbookLink", to="timetable.Textbook"
-            ),
+            model_name='section',
+            name='textbooks',
+            field=models.ManyToManyField(through='timetable.TextbookLink', to='timetable.Textbook'),
         ),
     ]

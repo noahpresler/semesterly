@@ -20,26 +20,19 @@ from bs4 import BeautifulSoup
 
 
 class Requester:
+
     def __init__(self):
         self.session = requests.Session()
-        self.headers = {"User-Agent": UserAgent().random}
+        self.headers = {'User-Agent': UserAgent().random}
         self.cookies = http.cookiejar.CookieJar()  # TODO - maybe this is not needed
 
     def new_user_agent(self):
-        self.headers["User-Agent"] = UserAgent().random
+        self.headers['User-Agent'] = UserAgent().random
 
     def overwrite_header(self, new_headers):
         self.headers = new_headers
 
-    def http_request(
-        self,
-        do_http_request,
-        type,
-        parse=True,
-        quiet=True,
-        timeout=60,
-        throttle=(lambda: None),
-    ):
+    def http_request(self, do_http_request, type, parse=True, quiet=True, timeout=60, throttle=(lambda: None)):
         """Perform HTTP request.
 
         Args:
@@ -58,17 +51,16 @@ class Requester:
         response = None
         for i in range(10):
             try:
-                with interruptingcow.timeout(
-                    timeout, exception=requests.exceptions.Timeout
-                ):
+                with interruptingcow.timeout(timeout, exception=requests.exceptions.Timeout):
                     response = do_http_request()
-            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+            except (requests.exceptions.Timeout,
+                    requests.exceptions.ConnectionError):
                 if i > 1:
-                    print(
-                        "THROTTLING REQUESTER", file=sys.stderr
-                    )  # TODO - should not be stderr, maybe warning?
+                    print('THROTTLING REQUESTER', file=sys.stderr)  # TODO - should not be stderr, maybe warning?
                     throttle()
-                print("Requester error:", str(sys.exc_info()[0]), file=sys.stderr)
+                print("Requester error:",
+                      str(sys.exc_info()[0]),
+                      file=sys.stderr)
                 self.new_user_agent()
                 continue
 
@@ -76,9 +68,7 @@ class Requester:
                 break
 
             if i > 1:
-                print(
-                    "THROTTLING REQUESTER", file=sys.stderr
-                )  # TODO - should not be stderr, maybe warning?
+                print('THROTTLING REQUESTER', file=sys.stderr)  # TODO - should not be stderr, maybe warning?
                 throttle()
 
         if not quiet:
@@ -93,16 +83,13 @@ class Requester:
         else:
             return response
 
-    def get(
-        self,
-        url,
-        params="",
-        session=None,
-        cookies=None,
-        headers=None,
-        verify=True,
-        **kwargs
-    ):
+    def get(self, url,
+            params='',
+            session=None,
+            cookies=None,
+            headers=None,
+            verify=True,
+            **kwargs):
         """HTTP GET.
 
         Args:
@@ -116,7 +103,6 @@ class Requester:
         Examples:
             TODO
         """
-
         def request():
             return self.session.get(
                 url,
@@ -126,11 +112,15 @@ class Requester:
                 verify=verify,
             )
 
-        return self.http_request(request, "GET", **kwargs)
+        return self.http_request(request, 'GET', **kwargs)
 
-    def post(
-        self, url, data="", params="", cookies=None, headers=None, verify=True, **kwargs
-    ):
+    def post(self, url,
+             data='',
+             params='',
+             cookies=None,
+             headers=None,
+             verify=True,
+             **kwargs):
         """HTTP POST.
 
         Args:
@@ -142,7 +132,6 @@ class Requester:
             verify (bool, optional): Description
             **kwargs: Description
         """
-
         def request():
             return self.session.post(
                 url,
@@ -153,7 +142,7 @@ class Requester:
                 verify=verify,
             )
 
-        return self.http_request(request, "POST", **kwargs)
+        return self.http_request(request, 'POST', **kwargs)
 
     @staticmethod
     def markup(response):
@@ -165,10 +154,8 @@ class Requester:
         Returns:
             markedup response
         """
-
         def soupify(parser):
             return BeautifulSoup(response.text, parser)
-
         if response is None:
             return None
         try:
@@ -176,6 +163,6 @@ class Requester:
         except ValueError:
             pass
         if "</html>"[::-1] in response.text[::-1]:
-            return soupify("html.parser")
+            return soupify('html.parser')
         else:
-            return soupify("lxml")
+            return soupify('lxml')

@@ -12,10 +12,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import { WaveModal } from "boron-15";
-import * as SemesterlyPropTypes from "../../constants/semesterlyPropTypes";
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { WaveModal } from 'boron-15';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 /* eslint-disable react/no-unused-prop-types, no-shadow */
 
@@ -39,44 +39,45 @@ const TermsOfServiceModal = (props) => {
     if (isNewUser) {
       return (
         <h3>
-          Welcome to Semester.ly! Please take a look at our Terms of Service and Privacy
-          Policy before getting started:
+          Welcome to Semester.ly! Please take a look at our Terms of Service and
+          Privacy Policy before getting started:
         </h3>
       );
     } else if (description && url) {
       return (
         <h3>
-          <strong>{description}</strong> - you can read our announcement about it {link}
-          , and review our updated Terms of Service and Privacy Policy here:
+          <strong>{description}</strong> - you can read our announcement about
+          it {link}, and review our updated Terms of Service and Privacy Policy
+          here:
         </h3>
       );
     } else if (url) {
       return (
         <h3>
-          We have made some changes that we think you should know about - you can read
-          our announcement about it {link}, and review our updated Terms of Service and
-          Privacy Policy here:
+          We have made some changes that we think you should know about - you
+          can read our announcement about it {link}, and review our updated
+          Terms of Service and Privacy Policy here:
         </h3>
       );
     } else if (description) {
       return (
         <h3>
-          {description}. Please review our updated Terms of Service and Privacy Policy
-          here:
+          {description}. Please review our updated Terms of Service and Privacy
+          Policy here:
         </h3>
       );
     } else {
       return (
         <h3>
-          Our Terms of Service and Privacy Policy have been updated. Please review them
-          here:
+          Our Terms of Service and Privacy Policy have been updated. Please
+          review them here:
         </h3>
       );
     }
   };
 
   const modalStyle = {
-    width: "100%",
+    width: '100%',
   };
 
   return (
@@ -122,12 +123,14 @@ const TermsOfServiceModal = (props) => {
           <span>I accept the Terms of Service</span>
         </button>
         <p className="method-details">
-          You must accept the new Terms of Service to continue using Semester.ly.
+          You must accept the new Terms of Service to continue using
+          Semester.ly.
         </p>
       </div>
     </WaveModal>
   );
 };
+
 
 TermsOfServiceModal.propTypes = {
   userInfo: SemesterlyPropTypes.userInfo.isRequired,

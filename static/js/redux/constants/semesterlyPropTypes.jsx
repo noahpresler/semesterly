@@ -12,26 +12,39 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 export const semester = PropTypes.shape({
   name: PropTypes.string.isRequired,
   year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 });
 
-export const classmatesArray = PropTypes.arrayOf(
-  PropTypes.shape({
-    first_name: PropTypes.string,
-    last_name: PropTypes.string,
-    img_url: PropTypes.string,
-    sections: PropTypes.arrayOf(PropTypes.string), // section codes
-  })
-);
+export const classmatesArray = PropTypes.arrayOf(PropTypes.shape({
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  img_url: PropTypes.string,
+  sections: PropTypes.arrayOf(PropTypes.string), // section codes
+}));
 
 export const classmates = PropTypes.shape({
   current: classmatesArray,
   past: classmatesArray,
 });
+
+export const textbook = PropTypes.shape({
+  author: PropTypes.string.isRequired,
+  image_url: PropTypes.string.isRequired,
+  isbn: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+});
+
+export const sectionToTextbookMap = (props, propName, componentName) => {
+  const textbooks = props[propName];
+  if (!Object.keys(textbooks).every(k => typeof k === 'string')) {
+    return new Error(`Keys must be section identifiers e.g. '(03)' in ${componentName}`);
+  }
+  return null;
+};
 
 export const evaluation = PropTypes.shape({
   course: PropTypes.number.isRequired,
@@ -91,6 +104,7 @@ const relatedCourseFields = {
   evals: PropTypes.arrayOf(evaluation).isRequired,
   integrations: PropTypes.arrayOf(integration),
   // reactions?
+  textbooks: sectionToTextbookMap,
   // regexed courses?
   // popularity percent?
   prerequisites: PropTypes.string.isRequired,
