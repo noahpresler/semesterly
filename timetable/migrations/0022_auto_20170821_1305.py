@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0021_auto_20170820_1323"),
+        ('timetable', '0021_auto_20170820_1323'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name="course",
-            name="level",
-            field=models.CharField(default=b"", max_length=500, null=True),
+            model_name='course',
+            name='level',
+            field=models.CharField(default=b'', max_length=500, null=True),
         ),
     ]

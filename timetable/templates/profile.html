@@ -225,18 +225,22 @@
 						src="https://a0.muscache.com/airbnb/static/signinup/google_icon_2x-745c2280e5004d4c90e3ca4e60e3f677.png">
 					<p>Google</p>
 				</div>
+				{% else %}
+				<div class="list-item link">
+					<img class="google-logo"
+						src="https://a0.muscache.com/airbnb/static/signinup/google_icon_2x-745c2280e5004d4c90e3ca4e60e3f677.png">
+					<a href="signup">Signup with Google</a>
+				</div>
 				{% endif %}
 				{% if hasFacebook %}
 				<div class="list-item">
 					<i class="fa fa-facebook-official" aria-hidden="true" style="color:#3b5998;"></i>
 					<p>Facebook</p>
 				</div>
-				{% endif %}
-				{% if hasJHU %}
-				<div class="list-item">
-					<img class="jhu-logo"
-						src="/static/img/school_logos/jhu-square.png">
-					<p>JHU</p>
+				{% else %}
+				<div class="list-item link">
+					<i class="fa fa-facebook-official" aria-hidden="true" style="color:#3b5998;"></i>
+					<a href="signup">Signup with Facebook</a>
 				</div>
 				{% endif %}
 			</div>

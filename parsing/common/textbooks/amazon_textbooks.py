@@ -21,13 +21,13 @@ amazon = None
 
 def amazon_textbook_fields(isbn):
     if amazon is None:
-        amazon = AmazonAPI(
-            get_secret("AMAZON_ACCESS_KEY"),
-            get_secret("AMAZON_SECRET_KEY"),
-            get_secret("AMAZON_ASSOC_TAG"),
-        )
+        amazon = AmazonAPI(get_secret('AMAZON_ACCESS_KEY'),
+                           get_secret('AMAZON_SECRET_KEY'),
+                           get_secret('AMAZON_ASSOC_TAG'))
     try:
-        product = amazon.lookup(ItemId=isbn, IdType="ISBN", SearchIndex="Books")
+        product = amazon.lookup(ItemId=isbn,
+                                IdType='ISBN',
+                                SearchIndex='Books')
     except AsinNotFound:
         return
 
@@ -35,8 +35,8 @@ def amazon_textbook_fields(isbn):
         product = product[0]
 
     return {
-        "detail_url": product.detail_page_url,
-        "image_url": product.medium_image_url,
-        "author": product.author,
-        "title": product.title,
+        'detail_url': product.detail_page_url,
+        'image_url': product.medium_image_url,
+        'author': product.author,
+        'title': product.title,
     }

@@ -20,21 +20,21 @@ from django.db import migrations
 
 
 def create_new_semesters(apps, schema_editor):
-    Semester = apps.get_model("timetable", "Semester")
-    new_rows = [
-        Semester.objects.get_or_create(name="Fall", year="2016"),
-        Semester.objects.get_or_create(name="Spring", year="2017"),
-        Semester.objects.get_or_create(name="Winter", year="2017"),
-    ]
-    print("Created {0} new terms".format(sum(is_new for (_, is_new) in new_rows)))
+  Semester = apps.get_model('timetable', 'Semester')
+  new_rows = [
+    Semester.objects.get_or_create(name='Fall', year='2016'),
+    Semester.objects.get_or_create(name='Spring', year='2017'),
+    Semester.objects.get_or_create(name='Winter', year='2017'),
+  ]
+  print("Created {0} new terms".format(sum(is_new for (_, is_new) in new_rows)))
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0009_semester"),
+        ('timetable', '0009_semester'),
     ]
 
     operations = [
-        migrations.RunPython(create_new_semesters),
+      migrations.RunPython(create_new_semesters),
     ]

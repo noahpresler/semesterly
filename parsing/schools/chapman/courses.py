@@ -16,7 +16,7 @@ from parsing.common.peoplesoft.courses import PeoplesoftParser
 class Parser(PeoplesoftParser):
     """Chapman course parser."""
 
-    URL = "https://cs90prod.chapman.edu/psc/CS90PROD_1/EMPLOYEE/SA/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL"
+    URL = 'https://cs90prod.chapman.edu/psc/CS90PROD_1/EMPLOYEE/SA/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
 
     def __init__(self, **kwargs):
         """Construct course parser.
@@ -24,4 +24,4 @@ class Parser(PeoplesoftParser):
         Args:
             **kwargs: pass-through
         """
-        super(Parser, self).__init__("chapman", Parser.URL, **kwargs)
+        super(Parser, self).__init__('chapman', Parser.URL, **kwargs)

@@ -1,0 +1,34 @@
+{% extends "pilot/base.html" %}
+{% block content %}
+<div class="content-section">
+	<h3>Select your currently enrolled courses </h3>
+	<p class="text-muted">Take a look at the PILOT-supported courses below and select the courses you are registered for.
+		<b>Some courses are distinguished by professor.</b></p>
+	<form method="post">
+		<fieldset>
+		{% csrf_token %}
+			<div class="form-group">
+			{%for course in courses%}
+				<input type="checkbox" class="form-control" name="course_list" value="{{course.id}}" id="course_id" style="width: 25px; float:left">
+				<label for="course_id" >{{ course.name }}</label>
+			<br>
+			{%endfor%}
+			</div>
+
+
+		<input class="green-button" type="submit" value="Submit" onclick="return validateAndSend()">
+		<p id="select_text" class="errorlist"></p>
+		</fieldset>
+	</form>
+	<script>
+		function validateAndSend() {
+			if ($('input[type=checkbox]').is(":checked")) {
+				return true;
+			} else {
+				$("#select_text").text("Select a course");
+				return false;
+			}
+		}
+	</script>
+</div>
+{% endblock content %}

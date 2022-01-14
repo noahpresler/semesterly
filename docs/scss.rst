@@ -15,7 +15,8 @@ Written in plain CSS:
 
     1. Splash pages
     2. Pages for SEO
-    3. basically everything that is not the web app
+    3. Emails and unsubscribe pages
+    4. basically everything that is not the web app
 
 File Structure
 ~~~~~~~~~~~~~~

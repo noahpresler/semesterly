@@ -5,13 +5,13 @@ export const course = {
 
 export const section = {
   id: 1,
-  meeting_section: "ting",
+  meeting_section: 'ting',
   offering_set: [1],
 };
 
 export const offering = {
   id: 1,
-  day: "M",
+  day: 'M',
 };
 
 export const entities = {
@@ -41,8 +41,8 @@ export const withTimetables = {
   active: 0,
 };
 
-const fallSemester = { name: "Fall", year: "2016" };
-const springSemseter = { name: "Spring", year: "2016" };
+const fallSemester = { name: 'Fall', year: '2016' };
+const springSemseter = { name: 'Spring', year: '2016' };
 export const sampleSemesters = {
   current: 0,
   all: [fallSemester, springSemseter],

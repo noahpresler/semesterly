@@ -12,11 +12,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from "prop-types";
-import React, { useEffect } from "react";
-import twemoji from "twemoji";
-import { WaveModal } from "boron-15";
-import renderHTML from "react-render-html";
+import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+import twemoji from 'twemoji';
+import { WaveModal } from 'boron-15';
+import renderHTML from 'react-render-html';
 
 const SignupModal = (props) => {
   let modal = null;
@@ -28,7 +28,7 @@ const SignupModal = (props) => {
   }, [props.isVisible]);
 
   const hide = () => {
-    history.replaceState({}, "Semester.ly", "/");
+    history.replaceState({}, 'Semester.ly', '/');
     props.toggleSignupModal();
   };
 
@@ -37,14 +37,14 @@ const SignupModal = (props) => {
       <div className="modal-header">
         <div
           className="pro-pic"
-          style={{ backgroundImage: "url(/static/img/blank.jpg)" }}
+          style={{ backgroundImage: 'url(/static/img/blank.jpg)' }}
         />
         <h1>That feature requires an account...</h1>
       </div>
     </div>
   );
   const modalStyle = {
-    width: "100%",
+    width: '100%',
   };
 
   return (
@@ -65,7 +65,11 @@ const SignupModal = (props) => {
                 <i className="fa fa-check" />
               </div>
               Find classes with friends
-              <img className="sample-slot" alt="" src="/static/img/sample_slot.png" />
+              <img
+                className="sample-slot"
+                alt=""
+                src="/static/img/sample_slot.png"
+              />
             </div>
             <div className="col-1-2">
               <div className="emoji">
@@ -92,7 +96,9 @@ const SignupModal = (props) => {
               />
             </div>
             <div className="col-1-2">
-              <div className="emoji">{renderHTML(twemoji.parse("\uD83D\uDD25"))}</div>
+              <div className="emoji">
+                {renderHTML(twemoji.parse('\uD83D\uDD25'))}
+              </div>
               It&#39;s all free
               <h1>More Burritos!</h1>
             </div>
@@ -100,8 +106,8 @@ const SignupModal = (props) => {
         </div>
         <div className="call-to-action">
           <div className="disclaimer">
-            Semester.ly will NEVER post to your timeline. Your course selections will
-            not be shared with any other user without your permission.
+            Semester.ly will NEVER post to your timeline. Your course selections
+            will not be shared with any other user without your permission.
           </div>
           <a href="/login/facebook/">
             <div className="signup-button">Signup!</div>

@@ -14,4 +14,4 @@ from django.apps import AppConfig
 
 
 class AgreementConfig(AppConfig):
-    name = "agreement"
+    name = 'agreement'

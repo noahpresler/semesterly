@@ -21,16 +21,17 @@ def add_hopkinsIT_agreement(apps, schema_editor):
 
     agreement, created = Agreement.objects.get_or_create(
         url="\\notice",
-        last_updated="2019-03-08 05:58:01.704254",
-        description="We are now partnering with the Johns Hopkins IT department",
+        last_updated='2019-03-08 05:58:01.704254',
+        description="We are now partnering with the Johns Hopkins IT department"
     )
     agreement.save()
-
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("agreement", "0005_auto_20190121_1152"),
+        ('agreement', '0005_auto_20190121_1152'),
     ]
 
-    operations = [migrations.RunPython(add_hopkinsIT_agreement)]
+    operations = [
+        migrations.RunPython(add_hopkinsIT_agreement)
+    ]

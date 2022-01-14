@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels: 
       app: semesterly
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -35,10 +35,10 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 250M
+            memory: 2000M
           limits:
             cpu: 250m   
-            memory: 500M
+            memory: 4000M
       - name: pgbouncer
         image: uisacr.azurecr.io/pgbouncer:latest
         ports:

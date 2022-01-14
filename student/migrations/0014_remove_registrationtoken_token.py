@@ -22,12 +22,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0013_auto_20161022_2317"),
+        ('student', '0013_auto_20161022_2317'),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name="registrationtoken",
-            name="token",
+            model_name='registrationtoken',
+            name='token',
         ),
     ]

@@ -18,4 +18,4 @@ from timetable.models import CourseIntegration
 class CourseIntegrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseIntegration
-        fields = "__all__"
+        fields = '__all__'

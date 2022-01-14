@@ -12,21 +12,21 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from "react-redux";
-import TermsOfServiceBanner from "../terms_of_service_banner";
-import {
-  triggerTermsOfServiceBanner,
-  dismissTermsOfServiceBanner,
-} from "../../actions/modal_actions";
+import { connect } from 'react-redux';
+import TermsOfServiceBanner from '../terms_of_service_banner';
+import { triggerTermsOfServiceBanner, dismissTermsOfServiceBanner } from '../../actions/modal_actions';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   isVisible: state.termsOfServiceBanner.isVisible,
   userInfo: state.userInfo.data,
 });
 
-const TermsOfServiceBannerContainer = connect(mapStateToProps, {
-  triggerTermsOfServiceBanner,
-  dismissTermsOfServiceBanner,
-})(TermsOfServiceBanner);
+const TermsOfServiceBannerContainer = connect(
+    mapStateToProps,
+  {
+    triggerTermsOfServiceBanner,
+    dismissTermsOfServiceBanner,
+  },
+)(TermsOfServiceBanner);
 
 export default TermsOfServiceBannerContainer;

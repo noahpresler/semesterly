@@ -22,13 +22,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0015_merge"),
+        ('student', '0015_merge'),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name="personaltimetable",
-            old_name="semester",
-            new_name="_semester",
+            model_name='personaltimetable',
+            old_name='semester',
+            new_name='_semester',
         ),
     ]

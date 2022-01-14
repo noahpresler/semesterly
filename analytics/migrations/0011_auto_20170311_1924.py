@@ -22,23 +22,23 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("analytics", "0010_calendarexport"),
+        ('analytics', '0010_calendarexport'),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name="analyticscoursesearch",
-            old_name="semester",
-            new_name="_semester",
+            model_name='analyticscoursesearch',
+            old_name='semester',
+            new_name='_semester',
         ),
         migrations.RenameField(
-            model_name="analyticstimetable",
-            old_name="semester",
-            new_name="_semester",
+            model_name='analyticstimetable',
+            old_name='semester',
+            new_name='_semester',
         ),
         migrations.RenameField(
-            model_name="sharedtimetable",
-            old_name="semester",
-            new_name="_semester",
+            model_name='sharedtimetable',
+            old_name='semester',
+            new_name='_semester',
         ),
     ]

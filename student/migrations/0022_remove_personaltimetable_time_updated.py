@@ -8,12 +8,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0021_remove_personaltimetable__semester"),
+        ('student', '0021_remove_personaltimetable__semester'),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name="personaltimetable",
-            name="time_updated",
+            model_name='personaltimetable',
+            name='time_updated',
         ),
     ]

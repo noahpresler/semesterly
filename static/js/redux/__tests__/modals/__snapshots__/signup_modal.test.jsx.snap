@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Signup Modal is hidden when isVisible is false 1`] = `<div />`;
+
+exports[`Signup Modal shows when isVisible is true 1`] = `
+<div>
+  <span>
+    <div
+      style="z-index: 1050; position: fixed; width: 100%; top: 50%; left: 50%;"
+      class="signup-modal max-modal"
+    >
+      <div
+        tabindex="-1"
+        style="margin: 0px; background-color: white;"
+      >
+        <div
+          class="modal-content"
+        >
+          <div
+            class="modal-header"
+          >
+            <div
+              class="pro-pic"
+              style="background-image: url(/static/img/blank.jpg);"
+            />
+            <h1>
+              That feature requires an account...
+            </h1>
+          </div>
+        </div>
+        <div
+          class="features"
+        >
+          <div
+            class="feature-highlight"
+          >
+            <div
+              class="row"
+            >
+              <div
+                class="col-1-2"
+              >
+                <div
+                  class="emoji"
+                >
+                  <i
+                    class="fa fa-check"
+                  />
+                </div>
+                Find classes with friends
+                <img
+                  class="sample-slot"
+                  alt=""
+                  src="/static/img/sample_slot.png"
+                />
+              </div>
+              <div
+                class="col-1-2"
+              >
+                <div
+                  class="emoji"
+                >
+                  <i
+                    class="fa fa-check"
+                  />
+                </div>
+                Save & name multiple timetables
+                <img
+                  class="sample-slot"
+                  alt=""
+                  src="/static/img/multi_tt_sample.png"
+                />
+              </div>
+            </div>
+            <div
+              class="row"
+            >
+              <div
+                class="col-1-2"
+              >
+                <div
+                  class="emoji"
+                >
+                  <i
+                    class="fa fa-check"
+                  />
+                </div>
+                Create custom events
+                <img
+                  alt=""
+                  class="sample-slot"
+                  src="/static/img/sample_custom_slot_grey.png"
+                />
+              </div>
+              <div
+                class="col-1-2"
+              >
+                <div
+                  class="emoji"
+                >
+                  <img
+                    class="emoji"
+                    draggable="false"
+                    alt="🔥"
+                    src="https://twemoji.maxcdn.com/2/72x72/1f525.png"
+                  />
+                </div>
+                It's all free
+                <h1>
+                  More Burritos!
+                </h1>
+              </div>
+            </div>
+          </div>
+          <div
+            class="call-to-action"
+          >
+            <div
+              class="disclaimer"
+            >
+              Semester.ly will NEVER post to your timeline. Your course selections will not be shared with any other user without your permission.
+            </div>
+            <a
+              href="/login/facebook/"
+            >
+              <div
+                class="signup-button"
+              >
+                Signup!
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      style="position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 1040; background-color: rgb(55, 58, 71);"
+    />
+  </span>
+</div>
+`;

@@ -15,16 +15,16 @@ GNU General Public License for more details.
 export const HALF_HOUR_HEIGHT = 25;
 export const MAX_TIMETABLE_NAME_LENGTH = 30; // Length of "This is my fucking timetable!!"
 
-export const DAYS = ["M", "T", "W", "R", "F"];
+export const DAYS = ['M', 'T', 'W', 'R', 'F'];
 
-export const FULL_WEEK_LIST = ["U", "M", "T", "W", "R", "F", "S"];
+export const FULL_WEEK_LIST = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
 
-export const VERBOSE_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+export const VERBOSE_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 export const DRAG_TYPES = {
-  DRAG: "drag", // drag a custom slot to a new location
-  EXTEND: "extend", // extend the length of a custom slot
-  CREATE: "create", // create a new custom slot
+  DRAG: 'drag', // drag a custom slot to a new location
+  EXTEND: 'extend', // extend the length of a custom slot
+  CREATE: 'create', // create a new custom slot
 };
 
 // dictionary representing the order in which semesters occur

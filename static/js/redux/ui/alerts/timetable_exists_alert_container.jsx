@@ -12,17 +12,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from "react-redux";
-import TimetableExistsAlert from "./timetable_exists_alert";
-import { alertsActions } from "../../state/slices";
+import { connect } from 'react-redux';
+import TimetableExistsAlert from './timetable_exists_alert';
+import * as ActionTypes from '../../constants/actionTypes';
+
 
 const mapStateToProps = () => ({});
-const mapDispatchToProps = (dispatch) => ({
-  dismissSelf: () => dispatch(alertsActions.dismissTimeTableExists()),
+const mapDispatchToProps = dispatch => ({
+  dismissSelf: () => dispatch({ type: ActionTypes.DISMISS_TIMETABLE_EXISTS }),
 });
 
 const TimetableExistsAlertContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps,
 )(TimetableExistsAlert);
 export default TimetableExistsAlertContainer;

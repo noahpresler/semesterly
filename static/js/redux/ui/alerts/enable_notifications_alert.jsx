@@ -12,19 +12,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from "prop-types";
-import React from "react";
-import { setARegistrationToken } from "../../actions/user_actions";
-import { setDeclinedNotifications } from "../../util";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { setARegistrationToken } from '../../actions/user_actions';
+import { setDeclinedNotifications } from '../../util';
 
 class EnableNotificationsAlert extends React.Component {
+
   componentWillUnmount() {
-    if (
-      !(
-        localStorage.getItem("declinedNotifications") === "true" ||
-        localStorage.getItem("declinedNotifications") === "false"
-      )
-    ) {
+    if (!(localStorage.getItem('declinedNotifications') === 'true' || localStorage.getItem('declinedNotifications') === 'false')) {
       const date = new Date();
       setDeclinedNotifications(date.getTime());
     }
@@ -47,7 +43,7 @@ class EnableNotificationsAlert extends React.Component {
   render() {
     return (
       <div className="enable-notification-alert change-semester-alert">
-        <h2>{this.props.msg}</h2>
+        <h2>{ this.props.msg }</h2>
         <button
           onClick={() => this.clickEnable()}
           className="conflict-alert-btn change-semester-btn"
@@ -55,14 +51,12 @@ class EnableNotificationsAlert extends React.Component {
           Enable Notifications
         </button>
         <small className="alert-extra">
-          Enable notifications for a heads up when classes are released and course
-          changes occur!
+          Enable notifications for a heads up when classes are released and course changes
+          occur!
         </small>
-        <a className="decline-notifications" onClick={() => this.clickDecline()}>
-          Don&apos;t ask me again.
-        </a>
-      </div>
-    );
+        <a className="decline-notifications" onClick={() => this.clickDecline()}>Don&apos;t ask
+                    me again.</a>
+      </div>);
   }
 }
 
@@ -74,3 +68,4 @@ EnableNotificationsAlert.propTypes = {
 };
 
 export default EnableNotificationsAlert;
+

@@ -8,28 +8,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0020_delete_updates"),
+        ('timetable', '0020_delete_updates'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name="textbook",
-            name="author",
+            model_name='textbook',
+            name='author',
             field=models.CharField(max_length=500, null=True),
         ),
         migrations.AlterField(
-            model_name="textbook",
-            name="detail_url",
+            model_name='textbook',
+            name='detail_url',
             field=models.URLField(max_length=1000, null=True),
         ),
         migrations.AlterField(
-            model_name="textbook",
-            name="image_url",
+            model_name='textbook',
+            name='image_url',
             field=models.URLField(max_length=1000, null=True),
         ),
         migrations.AlterField(
-            model_name="textbook",
-            name="title",
+            model_name='textbook',
+            name='title',
             field=models.CharField(max_length=1500, null=True),
         ),
     ]

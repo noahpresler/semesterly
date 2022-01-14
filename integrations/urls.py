@@ -11,12 +11,13 @@
 # GNU General Public License for more details.
 
 from django.conf.urls import re_path
+from django.contrib import admin
 
 import integrations.views
 
+admin.autodiscover()
+
 urlpatterns = [
-    re_path(
-        r"^integrations/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/$",
-        integrations.views.IntegrationsView.as_view(),
-    )
+    re_path(r'^integrations/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/$',
+        integrations.views.IntegrationsView.as_view())
 ]

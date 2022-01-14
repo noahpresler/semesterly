@@ -6,50 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0032_auto_20210710_1608"),
+        ('student', '0032_auto_20210710_1608'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name="reaction",
-            name="title",
-            field=models.CharField(
-                choices=[
-                    ("FIRE", "FIRE"),
-                    ("LOVE", "LOVE"),
-                    ("CRAP", "CRAP"),
-                    ("OKAY", "OKAY"),
-                    ("BORING", "BORING"),
-                    ("HARD", "HARD"),
-                    ("EASY", "EASY"),
-                    ("INTERESTING", "INTERESTING"),
-                ],
-                max_length=50,
-            ),
+            model_name='reaction',
+            name='title',
+            field=models.CharField(choices=[('FIRE', 'FIRE'), ('LOVE', 'LOVE'), ('CRAP', 'CRAP'), ('OKAY', 'OKAY'), ('BORING', 'BORING'), ('HARD', 'HARD'), ('EASY', 'EASY'), ('INTERESTING', 'INTERESTING')], max_length=50),
         ),
         migrations.AlterField(
-            model_name="registrationtoken",
-            name="auth",
-            field=models.TextField(default=""),
+            model_name='registrationtoken',
+            name='auth',
+            field=models.TextField(default=''),
         ),
         migrations.AlterField(
-            model_name="registrationtoken",
-            name="endpoint",
-            field=models.TextField(default=""),
+            model_name='registrationtoken',
+            name='endpoint',
+            field=models.TextField(default=''),
         ),
         migrations.AlterField(
-            model_name="registrationtoken",
-            name="p256dh",
-            field=models.TextField(default=""),
+            model_name='registrationtoken',
+            name='p256dh',
+            field=models.TextField(default=''),
         ),
         migrations.AlterField(
-            model_name="student",
-            name="fbook_uid",
-            field=models.CharField(default="", max_length=255),
+            model_name='student',
+            name='fbook_uid',
+            field=models.CharField(default='', max_length=255),
         ),
         migrations.AlterField(
-            model_name="student",
-            name="major",
-            field=models.CharField(default="", max_length=255),
+            model_name='student',
+            name='major',
+            field=models.CharField(default='', max_length=255),
         ),
     ]

@@ -12,10 +12,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from "prop-types";
-import React from "react";
-import { WaveModal } from "boron-15";
-import { addIntegration, delIntegration } from "../../actions/user_actions";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { WaveModal } from 'boron-15';
+import { addIntegration, delIntegration } from '../../actions/user_actions';
 
 class IntegrationModal extends React.Component {
   constructor(props) {
@@ -27,10 +27,7 @@ class IntegrationModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      this.props.isVisible !== nextProps.isVisible &&
-      this.state.enabled !== this.props.enabled
-    ) {
+    if (this.props.isVisible !== nextProps.isVisible && this.state.enabled !== this.props.enabled) {
       this.setState({ enabled: this.props.enabled });
     }
   }
@@ -47,17 +44,15 @@ class IntegrationModal extends React.Component {
 
   render() {
     const modalStyle = {
-      width: "100%",
-      top: "40%",
+      width: '100%',
+      top: '40%',
     };
     const integrationLogo = {
-      backgroundImage: "url(/static/img/integrations/pilotLogo.png)",
+      backgroundImage: 'url(/static/img/integrations/pilotLogo.png)',
     };
     return (
       <WaveModal
-        ref={(c) => {
-          this.modal = c;
-        }}
+        ref={(c) => { this.modal = c; }}
         className="integration-modal narrow-modal"
         modalStyle={modalStyle}
         onHide={this.props.toggleIntegrationModal}
@@ -67,11 +62,8 @@ class IntegrationModal extends React.Component {
           <div className="preference cf">
             <label className="switch switch-slide" htmlFor="enable-integration">
               <input
-                className="switch-input"
-                type="checkbox"
-                id="enable-integration"
-                checked={this.state.enabled}
-                onChange={this.changeForm}
+                className="switch-input" type="checkbox" id="enable-integration"
+                checked={this.state.enabled} onChange={this.changeForm}
               />
               <span className="switch-label" data-on="Yes" data-off="No" />
               <span className="switch-handle" />
@@ -82,17 +74,15 @@ class IntegrationModal extends React.Component {
           </div>
           <div className="button-wrapper">
             <button
-              className="signup-button"
-              onClick={() => {
+              className="signup-button" onClick={() => {
                 if (!this.state.enabled) {
                   delIntegration(1, this.props.course_id);
                 } else {
-                  addIntegration(1, this.props.course_id, "");
+                  addIntegration(1, this.props.course_id, '');
                 }
                 this.modal.hide();
               }}
-            >
-              Save
+            >Save
             </button>
           </div>
         </div>
@@ -113,3 +103,4 @@ IntegrationModal.propTypes = {
 };
 
 export default IntegrationModal;
+
