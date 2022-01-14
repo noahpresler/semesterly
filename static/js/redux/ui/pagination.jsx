@@ -12,16 +12,17 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from "prop-types";
+import React from "react";
 
-const Bubble = ({ index, active, setActive }) =>
-  (<li
+const Bubble = ({ index, active, setActive }) => (
+  <li
     onClick={() => setActive(index)}
-    className={active ? 'sem-page active' : 'sem-page'}
+    className={active ? "sem-page active" : "sem-page"}
   >
     <span>{index + 1}</span>
-  </li>);
+  </li>
+);
 
 Bubble.propTypes = {
   index: PropTypes.number.isRequired,
@@ -30,7 +31,6 @@ Bubble.propTypes = {
 };
 
 class Pagination extends React.Component {
-
   static getNumBubbles() {
     const bubbles = $(window).width() > 700 ? 10 : 4;
     return bubbles;
@@ -45,11 +45,11 @@ class Pagination extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.resetBubbles);
+    window.addEventListener("resize", this.resetBubbles);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.resetBubbles);
+    window.removeEventListener("resize", this.resetBubbles);
   }
 
   resetBubbles() {
@@ -86,25 +86,17 @@ class Pagination extends React.Component {
           index={i}
           active={this.props.active === i}
           setActive={this.props.setActive}
-        />,
-            );
+        />
+      );
     }
 
     return (
       <div className="sem-pagination">
-        <div
-          className="sem-pagination-nav"
-          onClick={this.prev}
-        >
+        <div className="sem-pagination-nav" onClick={this.prev}>
           <i className="fa fa-angle-left sem-pagination-prev sem-pagination-icon" />
         </div>
-        <ol className="sem-pages">
-          {options}
-        </ol>
-        <div
-          className="sem-pagination-nav"
-          onClick={this.next}
-        >
+        <ol className="sem-pages">{options}</ol>
+        <div className="sem-pagination-nav" onClick={this.next}>
           <i className="fa fa-angle-right sem-pagination-next sem-pagination-icon" />
         </div>
       </div>
@@ -119,4 +111,3 @@ Pagination.propTypes = {
 };
 
 export default Pagination;
-

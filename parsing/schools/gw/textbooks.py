@@ -25,5 +25,5 @@ class Parser(BkstrDotComParser):
         Args:
             **kwargs: pass-through
         """
-        store_id = '10370'
-        super(Parser, self).__init__('gw', store_id, **kwargs)
+        store_id = "10370"
+        super(Parser, self).__init__("gw", store_id, **kwargs)

@@ -8,18 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0030_add_pilot_s19'),
+        ("timetable", "0030_add_pilot_s19"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='offering',
-            name='date_end',
+            model_name="offering",
+            name="date_end",
             field=models.CharField(max_length=15, null=True),
         ),
         migrations.AddField(
-            model_name='offering',
-            name='date_start',
+            model_name="offering",
+            name="date_start",
             field=models.CharField(max_length=15, null=True),
         ),
     ]

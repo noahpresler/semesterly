@@ -12,16 +12,17 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import { getActiveTimetableDenormCourses } from '../../../reducers';
-import { fetchFriends, saveSettings } from '../../../actions/user_actions';
-import { changeUserInfo } from '../../../actions';
-import PeerModal from '../../modals/peer_modal';
-import { openSignUpModal, togglePeerModal } from '../../../actions/modal_actions';
+import { connect } from "react-redux";
+import { getActiveTimetableDenormCourses } from "../../../state";
+import { fetchFriends, saveSettings } from "../../../actions/user_actions";
+import PeerModal from "../../modals/peer_modal";
+import { togglePeerModal } from "../../../actions/modal_actions";
+import { userInfoActions } from "../../../state/slices";
+import { signupModalActions } from "../../../state/slices/signupModalSlice";
 
-const mapStateToProps = state => ({
-    // don't want to consider courses that are shown on timetable only
-    // because of a 'HOVER_COURSE' action (i.e. fake courses)
+const mapStateToProps = (state) => ({
+  // don't want to consider courses that are shown on timetable only
+  // because of a 'HOVER_COURSE' action (i.e. fake courses)
   courses: getActiveTimetableDenormCourses(state),
   courseToColourIndex: state.ui.courseToColourIndex,
   peers: state.friends.peers,
@@ -30,16 +31,12 @@ const mapStateToProps = state => ({
   isLoading: state.peerModal.isLoading,
 });
 
-
-const PeerModalContainer = connect(
-    mapStateToProps,
-  {
-    fetchFriends,
-    saveSettings,
-    changeUserInfo,
-    togglePeerModal,
-    openSignUpModal,
-  },
-)(PeerModal);
+const PeerModalContainer = connect(mapStateToProps, {
+  fetchFriends,
+  saveSettings,
+  changeUserInfo: userInfoActions.changeUserInfo,
+  togglePeerModal,
+  openSignUpModal: signupModalActions.showSignupModal,
+})(PeerModal);
 
 export default PeerModalContainer;

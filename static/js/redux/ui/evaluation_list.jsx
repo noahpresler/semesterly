@@ -12,23 +12,21 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import Evaluation from './evaluation';
-import SideScroller from './side_scroller';
-import { SEMESTER_RANKS } from '../constants/constants';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
-
+import PropTypes from "prop-types";
+import React from "react";
+import Evaluation from "./evaluation";
+import SideScroller from "./side_scroller";
+import { SEMESTER_RANKS } from "../constants/constants";
+import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
 class EvaluationList extends React.Component {
-
   static evalCompare(e1, e2) {
     // Note that Evaluation.year is a string composing of both a semester
     // and a numerical year (e.g "Spring:2015", "Fall:2013"). We first
     // obtain the numerical year, and compare those values.
-    const yearComparison =
-      e1.year.substr(e1.year.length - 4)
-        .localeCompare(e2.year.substr(e2.year.length - 4));
+    const yearComparison = e1.year
+      .substr(e1.year.length - 4)
+      .localeCompare(e2.year.substr(e2.year.length - 4));
 
     // If one year is greater than another, then we return the year
     // comparison in descending lexigraphical order (i.e. "2015" < "2014").
@@ -53,37 +51,34 @@ class EvaluationList extends React.Component {
     const { evalInfo } = this.props;
 
     const navs = evalInfo
-            .sort((e1, e2) => EvaluationList.evalCompare(e1, e2))
-            .map(e => (<Evaluation evalData={e} key={e.id} mini />));
+      .sort((e1, e2) => EvaluationList.evalCompare(e1, e2))
+      .map((e) => <Evaluation evalData={e} key={e.id} mini />);
 
     const evals = evalInfo
-            .sort((e1, e2) => EvaluationList.evalCompare(e1, e2))
-            .map(e => (<Evaluation evalData={e} key={e.id} />));
+      .sort((e1, e2) => EvaluationList.evalCompare(e1, e2))
+      .map((e) => <Evaluation evalData={e} key={e.id} />);
 
-        // console.log(navs, evals);
+    // console.log(navs, evals);
 
     let evaluationScroller = (
-      <p className="empty-intro">
-        No course evaluations for this course yet.
-      </p>
+      <p className="empty-intro">No course evaluations for this course yet.</p>
     );
 
-    let customClass = '';
+    let customClass = "";
     if (evals.length > 0) {
-      evaluationScroller = (<SideScroller
-        navItems={navs}
-        content={evals}
-        id={'evaluations-carousel'}
-      />);
-      customClass = 'spacious-entry';
+      evaluationScroller = (
+        <SideScroller navItems={navs} content={evals} id={"evaluations-carousel"} />
+      );
+      customClass = "spacious-entry";
     }
 
-        // console.log(evaluationScroller)
+    // console.log(evaluationScroller)
 
     return (
       <div className={`modal-entry course-evaluations ${customClass}`}>
         {evaluationScroller}
-      </div>);
+      </div>
+    );
   }
 }
 
@@ -92,4 +87,3 @@ EvaluationList.propTypes = {
 };
 
 export default EvaluationList;
-
