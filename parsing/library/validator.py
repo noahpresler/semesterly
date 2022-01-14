@@ -56,17 +56,17 @@ class Validator:
     """
 
     KINDS = {
-        'config',
-        'datalist',
-        'course',
-        'section',
-        'meeting',
-        'directory',
-        'eval',
-        'instructor',
-        'final_exam',
-        'textbook',
-        'textbook_link',
+        "config",
+        "datalist",
+        "course",
+        "section",
+        "meeting",
+        "directory",
+        "eval",
+        "instructor",
+        "final_exam",
+        "textbook",
+        "textbook_link",
     }
 
     def __init__(self, config, tracker=None, relative=True):
@@ -80,8 +80,9 @@ class Validator:
         Validator.load_schemas()
 
         self.kind_to_validation_function = {
-            kind: getattr(self, 'validate_' + kind)
-            if hasattr(self, 'validate_' + kind) else lambda *_, **__: None
+            kind: getattr(self, "validate_" + kind)
+            if hasattr(self, "validate_" + kind)
+            else lambda *_, **__: None
             for kind in Validator.KINDS
         }
 
@@ -89,7 +90,7 @@ class Validator:
         self.seen = {}
 
         self.config = DotDict(config)
-        self.config['kind'] = 'config'
+        self.config["kind"] = "config"
         self.validate(self.config)
 
         self.course_code_regex = re.compile(self.config.course_code_regex)
@@ -98,7 +99,7 @@ class Validator:
         if tracker is None:  # Used during self-contained validation.
             self.tracker = Tracker()
             self.tracker.school = self.config.school.code
-            self.tracker.mode = 'validating'
+            self.tracker.mode = "validating"
             self.tracker.start()
         else:
             self.tracker = tracker
@@ -113,28 +114,22 @@ class Validator:
         Args:
             schema_path (None, str, optional): Override default schema_path
         """
-        if hasattr(cls, 'SCHEMAS') and schema_path is None:
+        if hasattr(cls, "SCHEMAS") and schema_path is None:
             return
 
         if schema_path is None:
-            schema_path = '{}/{}/library/schemas'.format(
-                settings.BASE_DIR,
-                settings.PARSING_MODULE
+            schema_path = "{}/{}/library/schemas".format(
+                settings.BASE_DIR, settings.PARSING_MODULE
             )
 
         def load(kind):
-            filepath = '{}/{}.json'.format(schema_path, kind)
-            with open(filepath, 'r') as file:
+            filepath = "{}/{}.json".format(schema_path, kind)
+            with open(filepath, "r") as file:
                 schema = json.load(file)
-            resolved = jsonschema.RefResolver(
-                'file://{}/'.format(schema_path),
-                schema
-            )
+            resolved = jsonschema.RefResolver("file://{}/".format(schema_path), schema)
             return (schema, resolved)
 
-        cls.SCHEMAS = DotDict({
-            kind: load(kind) for kind in cls.KINDS
-        })
+        cls.SCHEMAS = DotDict({kind: load(kind) for kind in cls.KINDS})
         # TODO - make into a namedtuple instead
 
     @staticmethod
@@ -150,8 +145,7 @@ class Validator:
             jsonschema.exceptions.ValidationError: Invalid object.
         """
         try:
-            jsonschema.Draft4Validator(schema,
-                                       resolver=resolver).validate(data)
+            jsonschema.Draft4Validator(schema, resolver=resolver).validate(data)
         except jsonschema.exceptions.ValidationError as e:
             raise ValidationError(data, *e.args)
         # TODO - Create iter_errors from jsonschema validator
@@ -170,6 +164,7 @@ class Validator:
         Returns:
             dict: JSON-compliant dictionary.
         """
+
         def raise_on_duplicates(ordered_pairs):
             """Reject duplicate keys in dictionary."""
             d = {}
@@ -179,7 +174,7 @@ class Validator:
                 d[k] = v
             return d
 
-        with open(path, 'r') as f:
+        with open(path, "r") as f:
             if allow_duplicates:
                 return json.load(f)
             return json.load(f, object_pairs_hook=raise_on_duplicates)
@@ -198,14 +193,19 @@ class Validator:
         self.kind_to_validation_function[data.kind](data)
 
         if transact and self.transaction.key:
-            self.seen.setdefault(self.transaction.key, set()).update(self.transaction.values)
+            self.seen.setdefault(self.transaction.key, set()).update(
+                self.transaction.values
+            )
 
-    def validate_self_contained(self, data_path,
-                                break_on_error=True,
-                                break_on_warning=False,
-                                output_error=None,
-                                display_progress_bar=True,
-                                master_log_path=None):
+    def validate_self_contained(
+        self,
+        data_path,
+        break_on_error=True,
+        break_on_warning=False,
+        output_error=None,
+        display_progress_bar=True,
+        master_log_path=None,
+    ):
         """Validate JSON file as without ingestor.
 
         Args:
@@ -222,21 +222,21 @@ class Validator:
         Raises:
             ValidationError: Description
         """
-        data = Validator.file_to_json(data_path)['$data']
+        data = Validator.file_to_json(data_path)["$data"]
         # Validator.schema_validate(data, *Validator.SCHEMAS.datalist)
 
         for obj in map(DotDict, data):
             try:
                 self.validate(obj)
-                self.tracker.stats = dict(kind=obj.kind, status='valid')
+                self.tracker.stats = dict(kind=obj.kind, status="valid")
             except ValidationError as e:
-                logging.exception('Validation error')
+                logging.exception("Validation error")
                 if break_on_error:
                     raise ValidationError(*e.args)
             except ValidationWarning as e:
                 logging.warn(e)
                 # warnings.warn('', e, stacklevel=2)
-            self.tracker.stats = dict(kind=obj.kind, status='total')
+            self.tracker.stats = dict(kind=obj.kind, status="total")
 
         # TODO - this should be handled by caller
         self.tracker.end()
@@ -252,39 +252,38 @@ class Validator:
                 same session.
             ValidationError: Invalid course.
         """
-        if 'kind' in course and course.kind != 'course':
-            raise ValidationError(course,
-                                  'course object must be of kind course')
+        if "kind" in course and course.kind != "course":
+            raise ValidationError(course, "course object must be of kind course")
 
-        if ('school' in course and
-                course.school.code != self.config.school.code):
-            raise ValidationError(course,
-                                  'course schools does not match config')
+        if "school" in course and course.school.code != self.config.school.code:
+            raise ValidationError(course, "course schools does not match config")
 
         if self.course_code_regex.match(course.code) is None:
             raise ValidationError(
                 course,
                 "course code {} does not match r'{}'".format(
-                    course.code,
-                    self.config.course_code_regex
-                )
+                    course.code, self.config.course_code_regex
+                ),
             )
 
-        if ('department' in course and
-                'code' in course.department and
-                'departments' in self.config):
+        if (
+            "department" in course
+            and "code" in course.department
+            and "departments" in self.config
+        ):
             department_codes = {d.code for d in self.config.departments}
             if course.department.code not in department_codes:
                 raise ValidationError(
                     course,
-                    'department {} is not in config.json departments'.format(
-                        course.department)
+                    "department {} is not in config.json departments".format(
+                        course.department
+                    ),
                 )
 
-        if 'homepage' in course:
+        if "homepage" in course:
             self.validate_website(course.homepage)
 
-        for sa in course.get('same_as', []):
+        for sa in course.get("same_as", []):
             if self.course_code_regex.match(sa) is not None:
                 continue
             # FIXME -- should still do this check but it breaks due to the course not being written
@@ -299,25 +298,22 @@ class Validator:
         if self.relative:
             if course.code in self.seen:
                 raise MultipleDefinitionsWarning(
-                    course,
-                    'multiple definitions of course {}'.format(course.code)
+                    course, "multiple definitions of course {}".format(course.code)
                 )
             self.transaction.key = course.code
 
-        for section in course.get('sections', []):
-            if ('course' in section and
-                    section['course']['code'] != course.code):
+        for section in course.get("sections", []):
+            if "course" in section and section["course"]["code"] != course.code:
                 raise ValidationError(
                     course,
-                    'nested {} does not match parent {}'.format(
-                        section['course']['code'],
-                        course.code
-                    )
+                    "nested {} does not match parent {}".format(
+                        section["course"]["code"], course.code
+                    ),
                 )
 
             # NOTE: mutating dictionary
-            section['course'] = {'code': course.code}
-            section['kind'] = 'section'
+            section["course"] = {"code": course.code}
+            section["kind"] = "section"
             self.validate(DotDict(section), transact=False)
 
     def validate_section(self, section):
@@ -330,125 +326,123 @@ class Validator:
             MultipleDefinitionsWarning: Invalid section.
             ValidationError: Description
         """
-        if 'course' not in section:
-            raise ValidationError(section,
-                                  'section doesnt define a parent course')
+        if "course" not in section:
+            raise ValidationError(section, "section doesnt define a parent course")
 
-        if 'kind' in section and section.kind != 'section':
-            raise ValidationError(section,
-                                  'section must be of kind section')
+        if "kind" in section and section.kind != "section":
+            raise ValidationError(section, "section must be of kind section")
 
-        if ('course' in section and
-                self.course_code_regex.match(section.course.code) is None):
+        if (
+            "course" in section
+            and self.course_code_regex.match(section.course.code) is None
+        ):
             raise ValidationError(
                 section,
-                'course code {} does not match r\'{}\''.format(
-                    section.course.code,
-                    self.config.course_code_regex
-                )
+                "course code {} does not match r'{}'".format(
+                    section.course.code, self.config.course_code_regex
+                ),
             )
 
-        if 'term' in section and section.term not in self.config.terms:
+        if "term" in section and section.term not in self.config.terms:
             raise ValidationError(
-                section,
-                'term {} not in config.json term list'.format(section.term)
+                section, "term {} not in config.json term list".format(section.term)
             )
 
-        if 'instructors' in section:
+        if "instructors" in section:
             db_instructor_textfield_max_size = 500
-            instructor_textfield = ''
-            for instructor in section.get('instructors', []):
+            instructor_textfield = ""
+            for instructor in section.get("instructors", []):
                 instructor = DotDict(instructor)
                 if isinstance(instructor.name, str):
                     instructor_textfield += instructor.name
                 elif isinstance(instructor.name, dict):
-                    instructor_textfield += '{} {}'.format(instructor.name.first,
-                                                           instructor.name.last)
+                    instructor_textfield += "{} {}".format(
+                        instructor.name.first, instructor.name.last
+                    )
             db_instructor_textfield_size = len(instructor_textfield)
             if db_instructor_textfield_size > db_instructor_textfield_max_size:
                 raise ValidationError(
-                    section,
-                    'db field too small for comma-joined instructor names'
+                    section, "db field too small for comma-joined instructor names"
                 )
 
-        for instructor in section.get('instructors', []):
+        for instructor in section.get("instructors", []):
             self.validate_instructor(instructor)
 
-        if 'final_exam' in section:
-            if ('course' in section.final_exam and
-                    section.final_exam.course.code != section.course.code):
+        if "final_exam" in section:
+            if (
+                "course" in section.final_exam
+                and section.final_exam.course.code != section.course.code
+            ):
                 raise ValidationError(
                     section,
-                    'final exam course {} doesnt match course code {}'.format(
-                        section.final_exam.course.code,
-                        section.course.code
-                    )
+                    "final exam course {} doesnt match course code {}".format(
+                        section.final_exam.course.code, section.course.code
+                    ),
                 )
-            if ('section' in section.final_exam and
-                    section.final_exam.section.code != section.code):
+            if (
+                "section" in section.final_exam
+                and section.final_exam.section.code != section.code
+            ):
                 raise ValidationError(
                     section,
-                    'final exam section {} doesnt match section {}'.format(
-                        section.final_exam.section.code,
-                        section.code
-                    )
+                    "final exam section {} doesnt match section {}".format(
+                        section.final_exam.section.code, section.code
+                    ),
                 )
             # final_exam['course'] = section.course
             # final_exam['section'] = {'code': section.code}
             # self.validate_final_exam(section.final_exam)
 
         if self.relative:
-            if section.course.code not in self.seen and self.transaction.key != section.course.code:
+            if (
+                section.course.code not in self.seen
+                and self.transaction.key != section.course.code
+            ):
                 raise ValidationError(
-                    'course code {} isnt defined'.format(section.course.code),
-                    section
+                    "course code {} isnt defined".format(section.course.code), section
                 )
-            elif ((section.code, section.year, section.term)
-                    in self.seen.get(section.course.code, set()) | self.transaction.values):
+            elif (section.code, section.year, section.term) in self.seen.get(
+                section.course.code, set()
+            ) | self.transaction.values:
                 raise MultipleDefinitionsWarning(
                     section,
-                    'multiple defs for {} {} - {} already defined'.format(
-                        section.course.code,
-                        section.code,
-                        section.year
-                    )
+                    "multiple defs for {} {} - {} already defined".format(
+                        section.course.code, section.code, section.year
+                    ),
                 )
             self.transaction.key = section.course.code
             self.transaction.values.add((section.code, section.year, section.term))
 
-        for meeting in section.get('meetings', []):
+        for meeting in section.get("meetings", []):
             meeting = DotDict(meeting)
-            if ('course' in meeting and
-                    meeting.course.code != section.course.code):
+            if "course" in meeting and meeting.course.code != section.course.code:
                 raise ValidationError(
                     section,
-                    'course code {} in meeting doesnt match parent section \
-                     course code {}'.format(
-                        meeting.course.code,
-                        section.course.code
-                    )
+                    "course code {} in meeting doesnt match parent section \
+                     course code {}".format(
+                        meeting.course.code, section.course.code
+                    ),
                 )
-            if 'section' in meeting and meeting.section.code != section.code:
+            if "section" in meeting and meeting.section.code != section.code:
                 raise ValidationError(
                     section,
-                    'section code {} in nested meeting doesnt match parent \
-                     section code {}'.format(
-                        meeting.section.code,
-                        section.code
-                    )
+                    "section code {} in nested meeting doesnt match parent \
+                     section code {}".format(
+                        meeting.section.code, section.code
+                    ),
                 )
 
             # NOTE: mutating obj
-            meeting['course'] = section.course
-            meeting['section'] = {
-                'code': section.code,
-                'year': section.year,
-                'term': section.term
+            meeting["course"] = section.course
+            meeting["section"] = {
+                "code": section.code,
+                "year": section.year,
+                "term": section.term,
             }
-            meeting['kind'] = 'meeting'
+            meeting["kind"] = "meeting"
             self.validate(DotDict(meeting), transact=False)
 
-        if 'textbooks' in section:
+        if "textbooks" in section:
             for textbook in section.textbooks:
                 self.validate_textbook_link(textbook)
 
@@ -462,53 +456,57 @@ class Validator:
             ValidationError: Invalid meeting.
             ValidationWarning: Description
         """
-        if 'kind' in meeting and meeting.kind != 'meeting':
-            raise ValidationError(meeting,
-                                  'meeting object must be kind instructor')
-        if ('course' in meeting and
-                self.course_code_regex.match(meeting.course.code) is None):
+        if "kind" in meeting and meeting.kind != "meeting":
+            raise ValidationError(meeting, "meeting object must be kind instructor")
+        if (
+            "course" in meeting
+            and self.course_code_regex.match(meeting.course.code) is None
+        ):
             raise ValidationError(
                 meeting,
-                'course code {} does not match regex \'{}\''.format(
-                    meeting.course.code,
-                    self.config.course_code_regex
-                )
+                "course code {} does not match regex '{}'".format(
+                    meeting.course.code, self.config.course_code_regex
+                ),
             )
-        if 'time' in meeting:
+        if "time" in meeting:
             try:
                 self.validate_time_range(meeting.time.start, meeting.time.end)
             except (ValidationError, ValidationWarning) as e:
-                message = 'meeting for {} {}, '.format(
-                    meeting.course.code,
-                    meeting.section.code
+                message = "meeting for {} {}, ".format(
+                    meeting.course.code, meeting.section.code
                 )
                 if isinstance(e, ValidationError):
                     raise ValidationError(message, *e.args)
                 raise ValidationWarning(message, *e.args)
-        if 'location' in meeting:
+        if "location" in meeting:
             try:
                 self.validate_location(meeting.location)
             except ValidationError as e:
-                message = 'meeting for {} {}, '.format(
-                    meeting.course.code,
-                    meeting.section.code
+                message = "meeting for {} {}, ".format(
+                    meeting.course.code, meeting.section.code
                 )
                 raise ValidationError(message, *e.args)
 
         if not self.relative:
             return
 
-        if 'course' in meeting and meeting.course.code not in self.seen and self.transaction is None:
+        if (
+            "course" in meeting
+            and meeting.course.code not in self.seen
+            and self.transaction is None
+        ):
             raise ValidationError(
-                meeting,
-                'course code {} isnt defined'.format(meeting.course.code)
+                meeting, "course code {} isnt defined".format(meeting.course.code)
             )
-        if 'section' not in meeting:
+        if "section" not in meeting:
             return
-        if (meeting.section.code, meeting.section.year, meeting.section.term) not in self.seen.get(meeting.course.code, set()) | self.transaction.values:
+        if (
+            meeting.section.code,
+            meeting.section.year,
+            meeting.section.term,
+        ) not in self.seen.get(meeting.course.code, set()) | self.transaction.values:
             raise ValidationError(
-                meeting,
-                'section {} isnt defined'.format(meeting.section.code)
+                meeting, "section {} isnt defined".format(meeting.section.code)
             )
 
     def validate_eval(self, course_eval):
@@ -524,9 +522,8 @@ class Validator:
             raise ValidationError(
                 course_eval,
                 "course code {} does not match r'{}'".format(
-                    course_eval.course.code,
-                    self.config.course_code_regex
-                )
+                    course_eval.course.code, self.config.course_code_regex
+                ),
             )
 
     def validate_instructor(self, instructor):
@@ -538,48 +535,48 @@ class Validator:
         Raises:
             ValidationError: Invalid instructor.
         """
-        if 'kind' in instructor and instructor.kind != 'instructor':
+        if "kind" in instructor and instructor.kind != "instructor":
             raise ValidationError(
-                instructor,
-                'instructor object must be of kind instructor'
+                instructor, "instructor object must be of kind instructor"
             )
 
-        for class_ in instructor.get('classes', []):
-            if ('course' in class_ and
-                    self.course_code_regex.match(class_.course.code) is None):
+        for class_ in instructor.get("classes", []):
+            if (
+                "course" in class_
+                and self.course_code_regex.match(class_.course.code) is None
+            ):
                 raise ValidationError(
                     instructor,
-                    'course code {} does not match given regex {}'.format(
-                        class_.course.code,
-                        self.config.course_code_regex
-                    )
+                    "course code {} does not match given regex {}".format(
+                        class_.course.code, self.config.course_code_regex
+                    ),
                 )
 
-        if 'department' in instructor and 'departments' in self.config:
+        if "department" in instructor and "departments" in self.config:
             dept_codes = {d.code for d in self.config.departments}
             if instructor.department not in dept_codes:
                 raise ValidationError(
                     instructor,
-                    'department {} not listed in config.json'.format(
+                    "department {} not listed in config.json".format(
                         instructor.department
-                    )
+                    ),
                 )
 
-        if 'homepage' in instructor:
+        if "homepage" in instructor:
             try:
                 self.validate_homepage(instructor.homepage)
             except ValidationError as e:
-                message = 'instructor {} office, {}'.format(instructor.name)
+                message = "instructor {} office, {}".format(instructor.name)
                 raise ValidationError(message, *e.args)
 
-        if 'office' in instructor:
+        if "office" in instructor:
             try:
-                if 'location' in instructor.office:
+                if "location" in instructor.office:
                     self.validate_location(instructor.office.location)
-                for office_hour in instructor.office.get('hours', []):
+                for office_hour in instructor.office.get("hours", []):
                     self.validate_meeting(office_hour)
             except ValidationError as e:
-                message = 'instructor {} office, {}'.format(instructor.name)
+                message = "instructor {} office, {}".format(instructor.name)
                 raise ValidationError(message, *e.args)
 
     def validate_final_exam(self, final_exam):
@@ -593,10 +590,9 @@ class Validator:
         Raises:
             ValidationError: Invalid final exam.
         """
-        if 'kind' in final_exam and final_exam.kind != 'final_exam':
+        if "kind" in final_exam and final_exam.kind != "final_exam":
             raise ValidationError(
-                final_exam,
-                'final_exam object must be of kind "final_exam"'
+                final_exam, 'final_exam object must be of kind "final_exam"'
             )
         try:
             self.validate_meeting(final_exam.meeting)
@@ -612,13 +608,12 @@ class Validator:
         Raises:
             ValidationError: Invalid textbook link.
         """
-        if 'course' not in textbook_link:
+        if "course" not in textbook_link:
             return
         if self.course_code_regex.match(textbook_link.course.code) is not None:
             return
         raise ValidationError(
-            textbook_link,
-            'textbook_link course code doent match course code regex'
+            textbook_link, "textbook_link course code doent match course code regex"
         )
 
     def validate_location(self, location):
@@ -630,17 +625,17 @@ class Validator:
         Raises:
             ValidationWarning: Invalid location.
         """
-        if 'campus' in location and 'campuses' in self.config:
+        if "campus" in location and "campuses" in self.config:
             if location.campus not in self.config.campuses:
                 raise ValidationWarning(
                     location,
-                    'campus {} not in config'.format(location.campus),
+                    "campus {} not in config".format(location.campus),
                 )
-        if 'building' in location and 'buildings' in self.config:
+        if "building" in location and "buildings" in self.config:
             if location.building not in self.config.buildings:
                 raise ValidationWarning(
                     location,
-                    'building {} not in config'.format(location.building),
+                    "building {} not in config".format(location.building),
                 )
 
     @staticmethod
@@ -654,7 +649,7 @@ class Validator:
             ValidationError: URL is invalid.
         """
         c = http.client.HTTPConnection(url)
-        c.request('HEAD', '')
+        c.request("HEAD", "")
         # NOTE: 200 - good status
         #       301 - redirected
         if c.getresponse().status == 200 or c.getresponse().status == 301:
@@ -676,11 +671,10 @@ class Validator:
         try:
             start, end = list(map(dparser.parse, [start, end]))
         except ValueError:
-            raise ValidationError('invalid time format {}-{}'.format(start,
-                                                                     end))
+            raise ValidationError("invalid time format {}-{}".format(start, end))
 
         if start > end:
-            raise ValidationError('start {} > end {}'.format(start, end))
+            raise ValidationError("start {} > end {}".format(start, end))
         elif start == end:
             pass  # TODO - this should be reported
             # raise ValidationWarning('start {} = end {}'.format(start, end))
@@ -700,7 +694,7 @@ class Validator:
             try:
                 name = directory
                 directory = dir_to_dict(directory)
-                directory['name'] = name
+                directory["name"] = name
             except IOError as e:
                 raise ValidationError(str(e))
         Validator.schema_validate(directory, *Validator.SCHEMAS.directory)

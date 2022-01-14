@@ -22,23 +22,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student', '0012_student_school'),
+        ("student", "0012_student_school"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='registrationtoken',
-            name='auth',
-            field=models.TextField(default=b''),
+            model_name="registrationtoken",
+            name="auth",
+            field=models.TextField(default=b""),
         ),
         migrations.AddField(
-            model_name='registrationtoken',
-            name='endpoint',
-            field=models.TextField(default=b''),
+            model_name="registrationtoken",
+            name="endpoint",
+            field=models.TextField(default=b""),
         ),
         migrations.AddField(
-            model_name='registrationtoken',
-            name='p256dh',
-            field=models.TextField(default=b''),
+            model_name="registrationtoken",
+            name="p256dh",
+            field=models.TextField(default=b""),
         ),
     ]

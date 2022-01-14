@@ -22,19 +22,20 @@ from django.db import migrations
 from timetable.update_semester_field import get_update_operation
 
 tables_to_update = [
-  'SharedTimetable',
-  'AnalyticsTimetable',
-  'AnalyticsCourseSearch',
+    "SharedTimetable",
+    "AnalyticsTimetable",
+    "AnalyticsCourseSearch",
 ]
+
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('analytics', '0012_auto_20170311_1924'),
+        ("analytics", "0012_auto_20170311_1924"),
     ]
 
     operations = [
-      migrations.RunPython(get_update_operation('analytics', 
-                                                tables_to_update,
-                                                attrgetter('school'))),
+        migrations.RunPython(
+            get_update_operation("analytics", tables_to_update, attrgetter("school"))
+        ),
     ]

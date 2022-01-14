@@ -15,7 +15,11 @@ from parsing.schools.active import ACTIVE_SCHOOLS
 
 
 class SubdomainMiddleware(MiddlewareMixin):
-	def process_request(self, request):
+    def process_request(self, request):
+        if "HTTP_X_ORIGINAL_HOST" in request.META:
+            subdomain = request.META.get("HTTP_X_ORIGINAL_HOST", "")
+        else:
+            subdomain = request.META.get("HTTP_HOST", "")
 
 		# Define domain suffixes for non-prod environments
 		nonprod_suffixes = ("-dev","-test","-stage","-prod","sem")

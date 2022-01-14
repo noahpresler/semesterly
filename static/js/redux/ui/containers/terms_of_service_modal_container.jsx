@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import TermsOfServiceModal from '../modals/terms_of_service_modal';
 import { triggerTermsOfServiceModal } from '../../actions/modal_actions';
 import { acceptTOS } from '../../actions/user_actions';
-import { getIsUserInfoIncomplete } from '../../reducers';
+import { getIsUserInfoIncomplete } from '../../state';
 
 const mapStateToProps = state => ({
   isVisible: state.termsOfServiceModal.isVisible &&

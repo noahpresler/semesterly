@@ -11,4 +11,5 @@
 # GNU General Public License for more details.
 
 from parsing.schools import load_school_logger
-load_school_logger('jhu')
+
+load_school_logger("jhu")

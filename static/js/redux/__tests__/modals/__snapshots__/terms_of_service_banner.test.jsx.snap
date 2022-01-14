@@ -9,16 +9,16 @@ exports[`TOS Banner Renders As Expected fully if isVisible 1`] = `
       By using Semester.ly you agree to our
       <a
         href="/termsofservice"
-        target="_blank"
         rel="noopener noreferrer"
+        target="_blank"
       >
         Terms of Service
       </a>
       and
       <a
         href="/privacypolicy"
-        target="_blank"
         rel="noopener noreferrer"
+        target="_blank"
       >
         Privacy Policy
       </a>
@@ -43,16 +43,16 @@ exports[`TOS Banner Renders As Expected null if not isVisible 1`] = `
       By using Semester.ly you agree to our
       <a
         href="/termsofservice"
-        target="_blank"
         rel="noopener noreferrer"
+        target="_blank"
       >
         Terms of Service
       </a>
       and
       <a
         href="/privacypolicy"
-        target="_blank"
         rel="noopener noreferrer"
+        target="_blank"
       >
         Privacy Policy
       </a>

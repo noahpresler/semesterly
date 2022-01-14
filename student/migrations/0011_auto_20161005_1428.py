@@ -23,19 +23,35 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student', '0010_redistrationtoken'),
+        ("student", "0010_redistrationtoken"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='RegistrationToken',
+            name="RegistrationToken",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('token', models.TextField(default=b'')),
-                ('student', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='student.Student')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("token", models.TextField(default=b"")),
+                (
+                    "student",
+                    models.ForeignKey(
+                        default=None,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="student.Student",
+                    ),
+                ),
             ],
         ),
         migrations.DeleteModel(
-            name='RedistrationToken',
+            name="RedistrationToken",
         ),
     ]
