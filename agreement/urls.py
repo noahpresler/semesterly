@@ -18,8 +18,10 @@ from django.views.generic import TemplateView
 admin.autodiscover()
 
 urlpatterns = [
-    re_path(r'termsofservice/*$',
-        TemplateView.as_view(template_name="termsofservice.html")),
-    re_path(r'privacypolicy/*$',
-        TemplateView.as_view(template_name="privacypolicy.html")),
+    re_path(
+        r"termsofservice/*$", TemplateView.as_view(template_name="termsofservice.html")
+    ),
+    re_path(
+        r"privacypolicy/*$", TemplateView.as_view(template_name="privacypolicy.html")
+    ),
 ]

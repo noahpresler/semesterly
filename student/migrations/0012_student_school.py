@@ -22,13 +22,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student', '0011_auto_20161005_1428'),
+        ("student", "0011_auto_20161005_1428"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='student',
-            name='school',
+            model_name="student",
+            name="school",
             field=models.CharField(max_length=100, null=True),
         ),
     ]

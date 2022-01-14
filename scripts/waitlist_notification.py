@@ -11,6 +11,7 @@
 # GNU General Public License for more details.
 
 import django, os, sys
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from student.models import *
@@ -32,11 +33,18 @@ for section in sections:
         section.was_full = True
         section.save()
         try:
-            timetables = PersonalTimetable.objects.filter(sections__id__contains=section.id, semester=semester)
+            timetables = PersonalTimetable.objects.filter(
+                sections__id__contains=section.id, semester=semester
+            )
         except:
             print(("Problem with getting section with id = " + str(section.id)))
         for student, timetable in zip([t.student for t in timetables], timetables):
-            if timetable != student.personaltimetable_set.filter(semester=semester).order_by('last_updated').last():
+            if (
+                timetable
+                != student.personaltimetable_set.filter(semester=semester)
+                .order_by("last_updated")
+                .last()
+            ):
                 # Only applies for the student's last modified schedule.
                 continue
             # NOTIFIY STUDENT
@@ -49,7 +57,12 @@ for section in sections:
         section.save()
 
 for student, sections in list(d.items()):
-    client.send_mail(student, "Course Waitlist Notification from Semester.ly", "email_waitlist.html", {'sections': sections})
+    client.send_mail(
+        student,
+        "Course Waitlist Notification from Semester.ly",
+        "email_waitlist.html",
+        {"sections": sections},
+    )
 
 
 client.cleanup()

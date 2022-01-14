@@ -20,7 +20,7 @@ import classnames from 'classnames';
 import { WaveModal } from 'boron-15';
 import majors from '../../constants/majors';
 import { isIncomplete as TOSIncomplete } from '../../util';
-import { getIsUserInfoIncomplete } from '../../reducers';
+import { getIsUserInfoIncomplete } from '../../state';
 
 const UserSettingsModal = () => {
   const {

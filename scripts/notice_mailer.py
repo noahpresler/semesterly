@@ -12,26 +12,39 @@
 
 import django, os, json
 import sys
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from student.models import *
 from scripts import jhu_smtp_mailer
 
-school = 'jhu'
-client = jhu_smtp_mailer.JHUSMTPMailer() # TODO: Use AWS Mailer in prod
+school = "jhu"
+client = jhu_smtp_mailer.JHUSMTPMailer()  # TODO: Use AWS Mailer in prod
 
 # JHU EMAIL
 ############
-students = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct()
+students = (
+    PersonalTimetable.objects.filter(school=school)
+    .values_list("student", flat=True)
+    .distinct()
+)
 for student_id in students:
     student = Student.objects.get(id=student_id)
-    client.send_mail(student, "Exciting news from Semester.ly!", "email_notice.html", {'data': None})
+    client.send_mail(
+        student, "Exciting news from Semester.ly!", "email_notice.html", {"data": None}
+    )
 client.cleanup()
 
 # NON-JHU EMAIL
 ################
-students = PersonalTimetable.objects.exclude(school=school).values_list("student", flat=True).distinct()
+students = (
+    PersonalTimetable.objects.exclude(school=school)
+    .values_list("student", flat=True)
+    .distinct()
+)
 for student_id in students:
     student = Student.objects.get(id=student_id)
-    client.send_mail(student, "Update from Semester.ly!", "email_nonjhu_notice.html", {'data': None})
+    client.send_mail(
+        student, "Update from Semester.ly!", "email_nonjhu_notice.html", {"data": None}
+    )
 client.cleanup()

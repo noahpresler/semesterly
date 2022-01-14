@@ -16,8 +16,7 @@ import simplejson as json
 from django.core.management.base import BaseCommand
 
 from parsing.management.commands.arguments import digest_args
-from parsing.library.validator import Validator, ValidationError, \
-    ValidationWarning
+from parsing.library.validator import Validator, ValidationError, ValidationWarning
 from parsing.library.digestor import Digestor
 from parsing.library.exceptions import PipelineException
 from parsing.library.digestor import DigestionError
@@ -34,7 +33,7 @@ class Command(BaseCommand):
         help (str): command help message.
     """
 
-    help = 'Digestion driver'
+    help = "Digestion driver"
 
     def add_arguments(self, parser):
         """Add arguments to command parser.
@@ -54,11 +53,11 @@ class Command(BaseCommand):
         tracker = Tracker()
         self.stat_view = StatView()
         tracker.add_viewer(self.stat_view)
-        tracker.mode = 'digesting'
+        tracker.mode = "digesting"
         tracker.start()
 
-        for data_type in options['types']:
-            for school in options['schools']:
+        for data_type in options["types"]:
+            for school in options["schools"]:
                 self.run(tracker, school, data_type, options)
 
         tracker.end()
@@ -66,59 +65,56 @@ class Command(BaseCommand):
     def run(self, tracker, school, data_type, options):
         """Run the command."""
         tracker.school = school
-        tracker.mode = 'validating'
-        if options['display_progress_bar']:
+        tracker.mode = "validating"
+        if options["display_progress_bar"]:
             tracker.add_viewer(
-                StatProgressBar('{valid}/{total}', statistics=self.stat_view),
-                name='progressbar'
+                StatProgressBar("{valid}/{total}", statistics=self.stat_view),
+                name="progressbar",
             )
-        logger = logging.getLogger('parsing.schools.' + school)
-        logger.debug('Digest command options:' + str(options))
+        logger = logging.getLogger("parsing.schools." + school)
+        logger.debug("Digest command options:" + str(options))
 
         # Load config file to dictionary.
-        if isinstance(options['config'], str):
-            with open(options['config'].format(school=school,
-                                               type=data_type), 'r') as file:
-                options['config'] = json.load(file)
+        if isinstance(options["config"], str):
+            with open(
+                options["config"].format(school=school, type=data_type), "r"
+            ) as file:
+                options["config"] = json.load(file)
 
         try:
-            Validator(
-                options['config'],
-                tracker=tracker
-            ).validate_self_contained(
-                options['data'].format(school=school, type=data_type),
+            Validator(options["config"], tracker=tracker).validate_self_contained(
+                options["data"].format(school=school, type=data_type),
                 break_on_error=True,
-                break_on_warning=options.get('break_on_warning'),
-                display_progress_bar=options['display_progress_bar']
+                break_on_warning=options.get("break_on_warning"),
+                display_progress_bar=options["display_progress_bar"],
             )
         except (ValidationError, ValidationWarning, Exception):
-            logging.exception('Failed validation before digestion')
+            logging.exception("Failed validation before digestion")
             return  # Skip digestion for this school.
 
-        if options['display_progress_bar']:
-            tracker.remove_viewer('progressbar')
-            tracker.add_viewer(ETAProgressBar(), name='progressbar')
-        tracker.mode = 'digesting'
+        if options["display_progress_bar"]:
+            tracker.remove_viewer("progressbar")
+            tracker.add_viewer(ETAProgressBar(), name="progressbar")
+        tracker.mode = "digesting"
 
-        with open(options['data'].format(school=school, type=data_type), 'r') as file:
+        with open(options["data"].format(school=school, type=data_type), "r") as file:
             data = json.load(file)
 
         try:
-            Digestor(
-                school,
-                meta=data['$meta'],
-                tracker=tracker
-            ).digest(data['$data'],
-                     diff=options['diff'],
-                     load=options['load'],
-                     output=options['output_diff'].format(school=school,
-                                                          type=data_type))
+            Digestor(school, meta=data["$meta"], tracker=tracker).digest(
+                data["$data"],
+                diff=options["diff"],
+                load=options["load"],
+                output=options["output_diff"].format(school=school, type=data_type),
+            )
 
         except DigestionError:
-            logging.exception('Failed digestion')
+            logging.exception("Failed digestion")
         except PipelineException:
-            logging.expection('Failed digestion w/in pipeline')
+            logging.expection("Failed digestion w/in pipeline")
         except Exception:
-            logging.exception('Failed digestion with uncaught exception')
+            logging.exception("Failed digestion with uncaught exception")
 
-        logging.info('Digestion overview for ' + school + ': ' + str(self.stat_view.report()))
+        logging.info(
+            "Digestion overview for " + school + ": " + str(self.stat_view.report())
+        )
