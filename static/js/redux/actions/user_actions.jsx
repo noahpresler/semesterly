@@ -223,8 +223,6 @@ export const duplicateTimetable = timetable => (dispatch, getState) => {
       dispatch(loadTimetable(json.saved_timetable));
       dispatch(userInfoActions.receiveSavedTimeTables(json.timetables));
       return json;
-    });
-    return json;
   });
 };
 
