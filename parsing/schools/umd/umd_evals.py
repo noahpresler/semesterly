@@ -20,12 +20,10 @@ import re
 import datetime
 import django
 import os
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
 django.setup()
-
 
 class Professor:
     def __init__(self, name, rank, average_rating, num_reviews):
@@ -37,13 +35,8 @@ class Professor:
 
     def __str__(self):
         ret = (
-            "Name: "
-            + self.name
-            + ", average rating: "
-            + self.average_rating
-            + ", number of reviews: "
-            + self.num_reviews
-            + "reviews:\n"
+            "Name: " + self.name + ", average rating: " + self.average_rating
+            + ", number of reviews: " + self.num_reviews + "reviews:\n"
         )
 
         for review in self.reviews:
@@ -71,8 +64,7 @@ class Review:
                 summary=text,
                 course_code=course,
                 professor=professor,
-                year=year,
-            )
+                year=year)
             if created:
                 print("Evaluation Object CREATED for: " + course)
             else:
@@ -80,25 +72,19 @@ class Review:
 
     def __str__(self):
         return (
-            "reviewer: "
-            + self.reviewer
-            + ", rating: "
-            + str(self.rating)
-            + ", course: "
-            + self.course
-            + ", year: "
-            + self.year
-            + "\ntext: "
-            + self.text
-            + "\n"
+            "reviewer: " + self.reviewer + ", rating: " + str(self.rating) + ", course: "
+            + self.course + ", year: " + self.year + "\ntext: " + self.text + "\n"
         )
 
 
 class umdReview:
+
     def __init__(self):
         self.s = requests.Session()
         self.cookies = http.cookiejar.CookieJar()
-        self.headers = {"User-Agent": "My User Agent 1.0"}
+        self.headers = {
+            'User-Agent': 'My User Agent 1.0'
+        }
         self.base_url = "http://www.ourumd.com/"
         self.professors = []
 
@@ -106,16 +92,17 @@ class umdReview:
         html = None
         while html is None:
             try:
-                r = self.s.get(url, cookies=self.cookies, headers=self.headers)
+                r = self.s.get(url,cookies=self.cookies,headers=self.headers)
                 if r.status_code == 200:
                     html = r.text
-            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+            except (requests.exceptions.Timeout,
+                    requests.exceptions.ConnectionError):
                 continue
-        return html.encode("utf-8")
+        return html.encode('utf-8')
 
     def get_reviews(self, url, name):
         html = self.get_html(self.base_url + url)
-        soup = BeautifulSoup(html, "html.parser")
+        soup = BeautifulSoup(html,"html.parser")
         content = soup.find("div", {"id": "body"})
         table = content.find("table")
         for row in table.findAll("tr"):
@@ -164,7 +151,7 @@ class umdReview:
             text = ""
 
             for paragraph in right_col:
-                text += str(paragraph.encode("utf-8").decode("ascii", "ignore"))
+                text += str(paragraph.encode('utf-8').decode('ascii', 'ignore'))
 
             text = text.replace("<br/>", "")
             if course:
@@ -172,7 +159,7 @@ class umdReview:
 
     def get_professors(self, url):
         html = self.get_html(self.base_url + url)
-        soup = BeautifulSoup(html, "html.parser")
+        soup = BeautifulSoup(html,"html.parser")
         content = soup.find("div", {"id": "body"})
         table = content.find("table")
         for row in table.findAll("tr"):
@@ -185,7 +172,7 @@ class umdReview:
 
             rank = prof[0][:-1]
 
-            name = re.sub(" +", " ", prof[1].contents[0])
+            name = re.sub(' +',' ',prof[1].contents[0])
 
             review_url = prof[1].get("href")
 

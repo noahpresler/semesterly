@@ -11,7 +11,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
-import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { renderWithRedux } from '../../test-utils';
 import SignupModalContainer from '../../ui/containers/modals/signup_modal_container';
@@ -25,8 +24,7 @@ describe('Signup Modal', () => {
     const { container } = renderWithRedux(<SignupModalContainer />, {
       preloadedState: initialState,
     });
-    expect(container).not.toBeEmptyDOMElement();
-    expect(container).toHaveTextContent('That feature requires an account...');
+    expect(container).toMatchSnapshot();
   });
 
   it('is hidden when isVisible is false', () => {
@@ -37,6 +35,6 @@ describe('Signup Modal', () => {
       preloadedState: initialState,
     },
     );
-    expect(container).toBeEmptyDOMElement();
+    expect(container).toMatchSnapshot();
   });
 });

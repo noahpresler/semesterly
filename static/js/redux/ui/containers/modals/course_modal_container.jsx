@@ -17,21 +17,23 @@ import CourseModal from '../../modals/course_modal';
 import {
   getCurrentSemester,
   getDenormCourseById,
+  getCourseInfoId,
   getHoveredSlots,
-} from '../../../state';
+} from '../../../reducers';
 import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
     unHoverSection,
 } from '../../../actions/timetable_actions';
 import {
-  fetchCourseInfo,
-  openSignUpModal,
-  react,
+    changeUserInfo,
+    fetchCourseInfo,
+    openSignUpModal,
+    react,
+    setCourseId,
 } from '../../../actions/modal_actions';
 import { saveSettings } from '../../../actions/user_actions';
 import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../constants/endpoints';
-import { userInfoActions, courseInfoActions, getCourseInfoId } from '../../../state/slices';
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
@@ -54,7 +56,7 @@ const mapStateToProps = (state) => {
 const CourseModalContainer = connect(
     mapStateToProps,
   {
-    hideModal: () => courseInfoActions.setCourseId(null),
+    hideModal: () => setCourseId(null),
     openSignUpModal,
     fetchCourseInfo,
     unHoverSection,
@@ -62,7 +64,7 @@ const CourseModalContainer = connect(
     addOrRemoveCourse,
     react,
     saveSettings,
-    changeUserInfo: userInfoActions.changeUserInfo,
+    changeUserInfo,
   },
 )(CourseModal);
 

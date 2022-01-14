@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import { connect } from 'react-redux';
 import { setSemester } from '../../actions/search_actions';
 import ChangeSemesterAlert from './change_semester_alert';
-import { alertsActions } from '../../state/slices';
+import * as ActionTypes from '../../constants/actionTypes';
 
 
 const mapStateToProps = (state) => {
@@ -26,7 +26,7 @@ const mapStateToProps = (state) => {
   };
 };
 const mapDispatchToProps = dispatch => ({
-  dismissSelf: () => dispatch(alertsActions.dismissAlertChangeSemester()),
+  dismissSelf: () => dispatch({ type: ActionTypes.DISMISS_ALERT_CHANGE_SEMESTER }),
   setSemester: semester => dispatch(setSemester(semester)),
 });
 

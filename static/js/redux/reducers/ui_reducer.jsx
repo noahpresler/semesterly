@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import * as ActionTypes from '../constants/actionTypes';
 import { getNextAvailableColour } from '../util';
-import { getCourseIdsFromSlots } from './entities_reducer';
+import { getCourseIdsFromSlots } from '../reducers/entities_reducer';
 
 const initialState = {
   searchHover: 0,

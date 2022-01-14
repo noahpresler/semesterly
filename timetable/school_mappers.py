@@ -18,27 +18,30 @@ from parsing.library.utils import DotDict
 from parsing.schools.active import ACTIVE_SCHOOLS
 
 _school_attrs = [
-    "code",
-    "name",
-    "active_semesters",
-    "granularity",
-    "ampm",
-    "full_academic_year_registration",
-    "single_access",
-    "final_exams parsers",
-    "registrar",
-    "short_course_weeks_limit",
+    'code',
+    'name',
+    'active_semesters',
+    'granularity',
+    'ampm',
+    'full_academic_year_registration',
+    'single_access',
+    'final_exams parsers',
+    'registrar',
+    'short_course_weeks_limit'
 ]
 
-School = namedtuple("School", " ".join(_school_attrs))
+School = namedtuple(
+    'School',
+    ' '.join(_school_attrs)
+)
 
 
 def load_school(school):
     from django.conf import settings
 
-    config_file = "{}/{}/schools/{}/config.json".format(
-        settings.BASE_DIR, settings.PARSING_MODULE, school
-    )
+    config_file = '{}/{}/schools/{}/config.json'.format(settings.BASE_DIR,
+                                                        settings.PARSING_MODULE,
+                                                        school)
     with open(config_file) as f:
         config = DotDict(json.load(f))
 
@@ -46,24 +49,22 @@ def load_school(school):
         sorted(list(config.active_semesters.items()), key=lambda x: x[0])
     )
 
-    return School(
-        code=config.school.code,
-        name=config.school.name,
-        active_semesters=active_semesters,
-        granularity=config.granularity,
-        ampm=config.ampm,
-        full_academic_year_registration=config.full_academic_year_registration,
-        single_access=config.single_access,
-        final_exams=config.get("final_exams"),
-        parsers=load_parsers(school),
-        registrar=config.get("registrar"),
-        short_course_weeks_limit=config.get("short_course_weeks_limit"),
-    )
+    return School(code=config.school.code,
+                  name=config.school.name,
+                  active_semesters=active_semesters,
+                  granularity=config.granularity,
+                  ampm=config.ampm,
+                  full_academic_year_registration=config.full_academic_year_registration,
+                  single_access=config.single_access,
+                  final_exams=config.get('final_exams'),
+                  parsers=load_parsers(school),
+                  registrar=config.get('registrar'),
+                  short_course_weeks_limit=config.get('short_course_weeks_limit'))
 
 
 def load_parsers(school):
     parsers = {}
-    for parser_type in ["courses", "evals", "textbooks"]:
+    for parser_type in ['courses', 'evals', 'textbooks']:
         pass
         # try:
         #     # parser = None  # Binding below in exec.

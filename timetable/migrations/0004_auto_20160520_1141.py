@@ -22,48 +22,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0003_auto_20160519_1920"),
+        ('timetable', '0003_auto_20160519_1920'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="section",
-            name="waitlist_size",
+            model_name='section',
+            name='waitlist_size',
             field=models.IntegerField(default=-1),
         ),
         migrations.AlterField(
-            model_name="course",
-            name="campus",
-            field=models.CharField(default=b"", max_length=300),
+            model_name='course',
+            name='campus',
+            field=models.CharField(default=b'', max_length=300),
         ),
         migrations.AlterField(
-            model_name="course",
-            name="description",
-            field=models.TextField(default=b""),
+            model_name='course',
+            name='description',
+            field=models.TextField(default=b''),
         ),
         migrations.AlterField(
-            model_name="course",
-            name="exclusions",
-            field=models.TextField(default=b""),
+            model_name='course',
+            name='exclusions',
+            field=models.TextField(default=b''),
         ),
         migrations.AlterField(
-            model_name="course",
-            name="prerequisites",
-            field=models.TextField(default=b""),
+            model_name='course',
+            name='prerequisites',
+            field=models.TextField(default=b''),
         ),
         migrations.AlterField(
-            model_name="course",
-            name="unstopped_description",
-            field=models.TextField(default=b""),
+            model_name='course',
+            name='unstopped_description',
+            field=models.TextField(default=b''),
         ),
         migrations.AlterField(
-            model_name="evaluation",
-            name="summary",
+            model_name='evaluation',
+            name='summary',
             field=models.TextField(),
         ),
         migrations.AlterField(
-            model_name="section",
-            name="waitlist",
+            model_name='section',
+            name='waitlist',
             field=models.IntegerField(default=-1),
         ),
     ]

@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0028_course_sub_school"),
+        ('timetable', '0028_course_sub_school'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="courseintegration",
-            name="semester",
-            field=models.ManyToManyField(to="timetable.Semester"),
+            model_name='courseintegration',
+            name='semester',
+            field=models.ManyToManyField(to='timetable.Semester'),
         ),
     ]

@@ -15,14 +15,14 @@ GNU General Public License for more details.
 import { connect } from 'react-redux';
 import { setDeclinedNotifications } from '../../util';
 import EnableNotificationsAlert from './enable_notifications_alert';
-import { alertsActions } from '../../state/slices';
+import * as ActionTypes from '../../constants/actionTypes';
 
 const mapStateToProps = () => ({
   msg: 'Get Alerts!',
 });
 const mapDispatchToProps = dispatch => ({
   dismissSelf: () => {
-    dispatch(alertsActions.dismissEnableNotifications());
+    dispatch({ type: ActionTypes.DISMISS_ENABLE_NOTIFICATIONS });
   },
   declineNotifications: () => setDeclinedNotifications(true),
   enableNotifications: () => setDeclinedNotifications(false),

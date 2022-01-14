@@ -43,15 +43,17 @@ class Viewer(metaclass=ABCMeta):
         """
 
 
-class Timer(
-    progressbar.widgets.FormatLabel, progressbar.widgets.TimeSensitiveWidgetBase
-):
+class Timer(progressbar.widgets.FormatLabel,
+            progressbar.widgets.TimeSensitiveWidgetBase):
     """Custom timer created to take away 'Elapsed Time' string."""
 
-    def __init__(self, format="%(elapsed)s", **kwargs):
+    def __init__(self, format='%(elapsed)s', **kwargs):
         """Contruct Timer instance."""
-        progressbar.widgets.FormatLabel.__init__(self, format=format, **kwargs)
-        progressbar.widgets.TimeSensitiveWidgetBase.__init__(self, **kwargs)
+        progressbar.widgets.FormatLabel.__init__(self,
+                                                 format=format,
+                                                 **kwargs)
+        progressbar.widgets.TimeSensitiveWidgetBase.__init__(self,
+                                                             **kwargs)
 
 
 class StatProgressBar(Viewer):
@@ -59,68 +61,67 @@ class StatProgressBar(Viewer):
 
     SWITCH_SIZE = 100
 
-    def __init__(self, stat_format="", statistics=None):
+    def __init__(self, stat_format='', statistics=None):
         """Construct instance of data pipeline progress bar."""
         self.statistics = statistics or StatView()
         self.stat_format = stat_format
 
         self.format_custom_text = progressbar.FormatCustomText(
-            "(%(school)s) ==%(mode)s== %(stats)s",
+            '(%(school)s) ==%(mode)s== %(stats)s',
         )
 
         self.bar = progressbar.ProgressBar(
             redirect_stdout=True,
             # max_value=progressbar.UnknownLength,
             widgets=[
-                " [",
-                Timer(),
-                "] ",
+                ' [', Timer(), '] ',
                 self.format_custom_text,
-            ],
-        )
+            ])
 
     def receive(self, tracker, broadcast_type):
         """Incremental update to progress bar."""
         self.statistics.receive(tracker, broadcast_type)
 
-        if (
-            broadcast_type != "SCHOOL"
-            and broadcast_type != "TERM"
-            and broadcast_type != "DEPARTMENT"
-            and broadcast_type != "STATS"
-        ):
+        if (broadcast_type != 'SCHOOL' and
+                broadcast_type != 'TERM' and
+                broadcast_type != 'DEPARTMENT' and
+                broadcast_type != 'STATS'):
             return
 
         counters = self.statistics.stats
-        formatted_string = ""
+        formatted_string = ''
         if progressbar.utils.get_terminal_size()[0] > StatProgressBar.SWITCH_SIZE:
-            attrs = ["year", "term", "department"]
+            attrs = ['year', 'term', 'department']
             for attr in attrs:
                 if not hasattr(tracker, attr):
                     continue
-                if attr == "department":
-                    if "code" in tracker.department:
-                        formatted_string += " | {}".format(tracker.department["code"])
+                if attr == 'department':
+                    if 'code' in tracker.department:
+                        formatted_string += ' | {}'.format(
+                            tracker.department['code']
+                        )
                     else:
-                        formatted_string += " | {}".format(tracker.department["name"])
+                        formatted_string += ' | {}'.format(
+                            tracker.department['name']
+                        )
                     continue
-                formatted_string += " | {}".format(getattr(tracker, attr))
+                formatted_string += ' | {}'.format(getattr(tracker, attr))
         for data_type, counter in list(counters.items()):
-            if counter["total"] == 0:
+            if counter['total'] == 0:
                 continue
-            formatted_string += " | {label}: {stat}".format(
+            formatted_string += ' | {label}: {stat}'.format(
                 label=data_type[:3].title(),
                 stat=self.stat_format.format(
-                    new=counter["new"],
-                    valid=counter["valid"],
-                    total=counter["total"],
-                    created=counter["created"],
-                    updated=counter["updated"],
-                ),
+                    new=counter['new'],
+                    valid=counter['valid'],
+                    total=counter['total'],
+                    created=counter['created'],
+                    updated=counter['updated']
+                )
             )
-        self.format_custom_text.update_mapping(
-            school=tracker.school, mode=tracker.mode.upper(), stats=formatted_string
-        )
+        self.format_custom_text.update_mapping(school=tracker.school,
+                                               mode=tracker.mode.upper(),
+                                               stats=formatted_string)
         self.bar.update()
 
     def report(self, tracker):
@@ -131,30 +132,24 @@ class ETAProgressBar(Viewer):
     def __init__(self):
 
         self.format_custom_text = progressbar.FormatCustomText(
-            "(%(school)s) ==%(mode)s== ",
+            '(%(school)s) ==%(mode)s== ',
         )
 
         self.bar = progressbar.ProgressBar(
             redirect_stdout=True,
             max_value=progressbar.UnknownLength,
             widgets=[
-                " [",
-                Timer(),
-                "] ",
+                ' [', Timer(), '] ',
                 self.format_custom_text,
                 progressbar.Bar(),
-                "(",
-                progressbar.ETA(),
-                ")",
-            ],
-        )
+                '(', progressbar.ETA(), ')',
+            ])
 
     def receive(self, tracker, broadcast_type):
-        if broadcast_type != "SCHOOL" and broadcast_type != "MODE":
+        if broadcast_type != 'SCHOOL' and broadcast_type != 'MODE':
             return
-        self.format_custom_text.update_mapping(
-            school=tracker.school, mode=tracker.mode.upper()
-        )
+        self.format_custom_text.update_mapping(school=tracker.school,
+                                               mode=tracker.mode.upper())
 
     def report(self, tracker):
         """Do nothing."""
@@ -172,22 +167,24 @@ class StatView(Viewer):
 
     # TODO - move to central location w/Validator/schema kinds
     KINDS = (
-        "course",
-        "section",
-        "meeting",
-        "textbook",
-        "evaluation",
-        "offering",
-        "textbook_link",
-        "eval",
+        'course',
+        'section',
+        'meeting',
+        'textbook',
+        'evaluation',
+        'offering',
+        'textbook_link',
+        'eval',
     )
 
-    LABELS = ("valid", "created", "new", "updated", "total")
+    LABELS = ('valid', 'created', 'new', 'updated', 'total')
 
     def __init__(self):
         """Construct StatView instance."""
         self.stats = {
-            subject: {stat: 0 for stat in StatView.LABELS} for subject in StatView.KINDS
+            subject: {
+                stat: 0 for stat in StatView.LABELS
+            } for subject in StatView.KINDS
         }
 
     def __iter__(self):
@@ -219,9 +216,9 @@ class StatView(Viewer):
                 Tracker receiving update from.
             broadcast_type (str): Broadcast message from tracker.
         """
-        if broadcast_type != "STATS":
+        if broadcast_type != 'STATS':
             return
-        self._increment(tracker.stats["kind"], tracker.stats["status"])
+        self._increment(tracker.stats['kind'], tracker.stats['status'])
 
     def report(self, tracker=None):
         """Dump stats."""
@@ -243,7 +240,10 @@ class TimeDistributionView(Viewer):
 
     def __init__(self):
         """Construct TimeDistributionView."""
-        self.distribution = {12: 0, 24: 0}
+        self.distribution = {
+            12: 0,
+            24: 0
+        }
 
         self.granularity = 60
 
@@ -257,12 +257,12 @@ class TimeDistributionView(Viewer):
                 Tracker receiving update from.
             broadcast_type (str): Broadcast message from tracker.
         """
-        if broadcast_type != "TIME":
+        if broadcast_type != 'TIME':
             return
 
         time = dateutil.parser.parse(getattr(tracker, broadcast_type.lower()))
 
-        if time > dateutil.parser.parse("12:00pm"):
+        if time > dateutil.parser.parse('12:00pm'):
             self.time_distribution[24] += 1
         else:
             self.time_distribution[12] += 1
@@ -310,7 +310,7 @@ class Hoarder(Viewer):
                 Tracker receiving update from.
             broadcast_type (str): Broadcast message from tracker.
         """
-        if broadcast_type == "TERM":
+        if broadcast_type == 'TERM':
             try:
                 semesters = self.schools.setdefault(tracker.school, {})
                 terms = semesters.setdefault(tracker.year, [])

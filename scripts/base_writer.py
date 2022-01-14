@@ -15,103 +15,100 @@ import json
 
 
 class BaseWriter(metaclass=abc.ABCMeta):
-    def __init__(self, semester=None):
-        self.semester = semester
+  def __init__(self, semester=None):
+    self.semester = semester
 
-    def write_courses(self, filename):
-        """Update database with courses and offerings for given semester."""
-        f = open(filename, "w").close()  # clear current contents
-        with open(filename, "a") as outfile:
-            for i, course_element in enumerate(self.get_course_elements()):
-                outfile.write(self.get_course_writable(course_element) + "\n")
+  def write_courses(self, filename):
+    """Update database with courses and offerings for given semester."""
+    f = open(filename, 'w').close() # clear current contents
+    with open(filename, 'a') as outfile:
+      for i, course_element in enumerate(self.get_course_elements()):
+        outfile.write(self.get_course_writable(course_element) + '\n')
 
-    def get_course_writable(self, course_element):
-        """
-        Update database with new course and its offerings corresponding to the given
-        bs4 element.
-        """
-        course_code, course_data = self.parse_course_element(course_element)
+  def get_course_writable(self, course_element):
+    """
+    Update database with new course and its offerings corresponding to the given
+    bs4 element.
+    """
+    course_code, course_data = self.parse_course_element(course_element)
 
-        section_writables = list(
-            map(self.get_section_writable, self.get_section_elements(course_element))
-        )
+    section_writables = list(map(self.get_section_writable, 
+                            self.get_section_elements(course_element)))
 
-        course_writable = {
-            "course_code": course_code,
-            "course_data": course_data,
-            "sections": section_writables,
-        }
-        return json.dumps(course_writable)
+    course_writable = {
+      'course_code': course_code,
+      'course_data': course_data,
+      'sections': section_writables
+    }
+    return json.dumps(course_writable)
 
-    def get_section_writable(self, section_element):
-        section_code, section_data = self.parse_section_element(section_element)
-        section_data["semester"] = section_data.get("semester", self.semester)
+  def get_section_writable(self, section_element):
+    section_code, section_data = self.parse_section_element(section_element)
+    section_data['semester'] = section_data.get('semester', self.semester)
 
-        meeting_writables = list(
-            map(self.get_meeting_writable, self.get_meeting_elements(section_element))
-        )
+    meeting_writables = list(map(self.get_meeting_writable,
+                            self.get_meeting_elements(section_element)))
 
-        section_writable = {
-            "section_code": section_code,
-            "section_data": section_data,
-            "meetings": meeting_writables,
-        }
-        return section_writable
+    section_writable = {
+      'section_code': section_code,
+      'section_data': section_data,
+      'meetings': meeting_writables
+    }
+    return section_writable
 
-    def get_meeting_writable(self, meeting_element):
-        return self.parse_meeting_element(meeting_element)
+  def get_meeting_writable(self, meeting_element):
+    return self.parse_meeting_element(meeting_element)
 
-    @abc.abstractmethod
-    def get_course_elements(self):
-        """
-        Return a generator of bs4 elements each corresponding to a single course.
-        Optionally, set self.num_courses to the number of courses to be parsed
-        (if known before hand) to enable progress bar display.
-        """
+  @abc.abstractmethod
+  def get_course_elements(self):
+    """
+    Return a generator of bs4 elements each corresponding to a single course.
+    Optionally, set self.num_courses to the number of courses to be parsed
+    (if known before hand) to enable progress bar display.
+    """
 
-    @abc.abstractmethod
-    def parse_course_element(self, course_element):
-        """
-        Take a bs4 element corresponding to a course, and return the course code
-        for the course, and a dictionary of any other attributes to be writed from
-        that course. The keys of the dictionary should match the column names in
-        the model for the course (e.g. name, description). If invalid data, return
-        None, None
-        """
+  @abc.abstractmethod
+  def parse_course_element(self, course_element):
+    """
+    Take a bs4 element corresponding to a course, and return the course code
+    for the course, and a dictionary of any other attributes to be writed from
+    that course. The keys of the dictionary should match the column names in
+    the model for the course (e.g. name, description). If invalid data, return
+    None, None
+    """
 
-    @abc.abstractmethod
-    def get_section_elements(self, course_element):
-        """
-        Return a generator of bs4 elements corresponding to the sections of the
-        given course.
-        """
+  @abc.abstractmethod
+  def get_section_elements(self, course_element):
+    """
+    Return a generator of bs4 elements corresponding to the sections of the
+    given course.
+    """
 
-    @abc.abstractmethod
-    def parse_section_element(self, section_element):
-        """
-        Take a bs4 element corresponding to a section, and return the section code
-        for the section, and a dictionary of any other attributes to be saved from
-        that section. The keys of the dictionary should match the column names in
-        the model for the section (e.g. instructors, section_type). If invalid
-        data, return None, None
-        """
+  @abc.abstractmethod
+  def parse_section_element(self, section_element):
+    """
+    Take a bs4 element corresponding to a section, and return the section code
+    for the section, and a dictionary of any other attributes to be saved from
+    that section. The keys of the dictionary should match the column names in
+    the model for the section (e.g. instructors, section_type). If invalid
+    data, return None, None
+    """
 
-    @abc.abstractmethod
-    def get_meeting_elements(self, section_element):
-        """
-        Return a generator of bs4 elements corresponding to the meetings of the
-        given section.
-        """
+  @abc.abstractmethod
+  def get_meeting_elements(self, section_element):
+    """
+    Return a generator of bs4 elements corresponding to the meetings of the
+    given section.
+    """
 
-    @abc.abstractmethod
-    def parse_meeting_element(self, meeting_element):
-        """
-        Take a bs4 element corresponding to a meeting, and return a dictionary
-        of attributes to be saved from that meeting. The keys of the dictionary
-        should match the column names in the model for the section (e.g. day,
-        time_start, time_end, location, etc.). If invalid data, return None.
-        """
-
+  @abc.abstractmethod
+  def parse_meeting_element(self, meeting_element):
+    """
+    Take a bs4 element corresponding to a meeting, and return a dictionary 
+    of attributes to be saved from that meeting. The keys of the dictionary 
+    should match the column names in the model for the section (e.g. day, 
+    time_start, time_end, location, etc.). If invalid data, return None.
+    """
 
 # TEMPLATE FOR BASEPARSER SUBCLASS:
 """
@@ -180,3 +177,4 @@ class SchoolParser(BaseParser):
     }
     return meeting_data
 """
+

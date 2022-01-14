@@ -32,18 +32,17 @@ import {
 } from '../constants/endpoints';
 import {
   getActiveTimetable,
-  getCurrentSemester } from '../state';
+  getCurrentSemester } from '../reducers';
 import { fetchCourseClassmates } from './modal_actions';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { receiveCourses } from './search_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
-import { alertsActions, userInfoActions } from '../state/slices';
-import { alertTimeTableExists } from './initActions';
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
+
 
 export const receiveClassmates = json => dispatch => (
   dispatch({
@@ -108,14 +107,15 @@ export const fetchMostClassmatesCount = timetable => (dispatch, getState) => {
     credentials: 'include',
     method: 'GET',
   })
-    .then(response => response.json())
-    .then((json) => {
-      dispatch(alertsActions.changeMostFriendsClass({
-        mostFriendsCount: json.count,
-        mostFriendsClassId: json.id,
-        totalFriendsCount: json.total_count,
-      }));
-    });
+      .then(response => response.json())
+      .then((json) => {
+        dispatch({
+          type: ActionTypes.CHANGE_MOST_FRIENDS_CLASS,
+          classId: json.id,
+          count: json.count,
+          total: json.total_count,
+        });
+      });
 };
 
 export const fetchClassmates = timetable => (dispatch, getState) => {
@@ -176,7 +176,10 @@ export const saveTimetable = (
     .then(response => response.json())
     .then((json) => {
       dispatch(loadTimetable(json.saved_timetable, false, autoLockAll));
-      dispatch(userInfoActions.receiveSavedTimeTables(json.timetables));
+      dispatch({
+        type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+        timetables: json.timetables,
+      });
       if (callback !== null) {
         callback();
       }
@@ -184,11 +187,9 @@ export const saveTimetable = (
     })
     .catch((error) => {
       if (error.response && error.response.status === 409) {
-        // TODO: remove below after refactor done with saving_timetables_reducer
         dispatch({
           type: ActionTypes.ALERT_TIMETABLE_EXISTS,
         });
-        dispatch(alertTimeTableExists());
       }
       return null;
     });
@@ -218,11 +219,14 @@ export const duplicateTimetable = timetable => (dispatch, getState) => {
     }),
     credentials: 'include',
   })
-    .then(response => response.json())
-    .then((json) => {
-      dispatch(loadTimetable(json.saved_timetable));
-      dispatch(userInfoActions.receiveSavedTimeTables(json.timetables));
-      return json;
+  .then(response => response.json())
+  .then((json) => {
+    dispatch(loadTimetable(json.saved_timetable));
+    dispatch({
+      type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+      timetables: json.timetables,
+    });
+    return json;
   });
 };
 
@@ -247,7 +251,10 @@ export const deleteTimetable = timetable => (dispatch, getState) => {
   })
     .then(response => response.json())
     .then((json) => {
-      dispatch(userInfoActions.receiveSavedTimeTables(json.timetables));
+      dispatch({
+        type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+        timetables: json.timetables,
+      });
       if (json.timetables.length > 0) {
         dispatch(loadTimetable(json.timetables[0]));
       } else {
@@ -257,38 +264,44 @@ export const deleteTimetable = timetable => (dispatch, getState) => {
     });
 };
 
-export const saveSettings = callback => async (dispatch, getState) => {
-  dispatch(userInfoActions.requestSaveUserInfo());
-  // TODO: refactor all fetch promise logic to async/await axios
-  try {
-    await fetch(getSaveSettingsEndpoint(), {
-      headers: {
-        'X-CSRFToken': Cookie.get('csrftoken'),
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'PATCH',
-      body: JSON.stringify(getState().userInfo.data),
-      credentials: 'include',
+export const saveSettings = callback => (dispatch, getState) => {
+  dispatch({
+    type: ActionTypes.REQUEST_SAVE_USER_INFO,
+  });
+  fetch(getSaveSettingsEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'PATCH',
+    body: JSON.stringify(getState().userInfo.data),
+    credentials: 'include',
+  })
+    .then((response) => {
+      const state = getState();
+      if (state.userInfo.data.social_courses) {
+        dispatch(fetchClassmates(getActiveTimetable(state)));
+        if (state.courseInfo.id) {
+          dispatch(fetchCourseClassmates(state.courseInfo.id));
+        }
+      }
+      dispatch({
+        type: ActionTypes.RECEIVE_USER_INFO_SAVED,
+      });
+      return response;
+    })
+    .then(() => {
+      if (callback) {
+        callback();
+      }
     });
-  } catch (err) {
-    // TODO: do alert
-  }
-  const state = getState();
-  if (state.userInfo.data.social_courses) {
-    dispatch(fetchClassmates(getActiveTimetable(state)));
-    if (state.courseInfo.id) {
-      dispatch(fetchCourseClassmates(state.courseInfo.id));
-    }
-  }
-  dispatch(userInfoActions.requestSaveUserInfo());
-  if (callback) {
-    callback();
-  }
 };
 
 export const getUserSavedTimetables = semester => (dispatch) => {
-  dispatch(userInfoActions.requestSaveUserInfo());
+  dispatch({
+    type: ActionTypes.REQUEST_SAVE_USER_INFO,
+  });
   fetch(getLoadSavedTimetablesEndpoint(semester), {
     credentials: 'include',
   })
@@ -296,7 +309,10 @@ export const getUserSavedTimetables = semester => (dispatch) => {
     .then((json) => {
       const { timetables, courses } = json;
       dispatch(receiveCourses(courses));
-      dispatch(userInfoActions.receiveSavedTimeTables(json.timetables));
+      dispatch({
+        type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+        timetables,
+      });
       if (timetables[0]) {
         dispatch(loadTimetable(timetables[0]));
       } else {
@@ -449,8 +465,11 @@ export const deleteUser = () => (dispatch) => {
     method: 'DELETE',
     credentials: 'include',
   })
-    .then(() => {
-      dispatch(userInfoActions.deleteAccount());
+    .then((response) => {
+      dispatch({
+        type: ActionTypes.DELETED_ACCOUNT,
+        status: response.status,
+      });
     });
 };
 

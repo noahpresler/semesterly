@@ -12,20 +12,19 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { configureStore } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { getMaxHourBasedOnWindowHeight } from '../util';
 import school from './school_reducer';
 import semester, * as fromSemester from './semester_reducer';
-import calendar from './slices/calendarSlice';
+import calendar from './calendar_reducer';
 import courseSections from './course_sections_reducer';
 import timetables, * as fromTimetables from './timetables_reducer';
 import searchResults, * as fromSearchResults from './search_results_reducer';
 import preferences from './preferences_reducer';
-import courseInfo from './slices/courseInfoSlice';
-import alerts from './slices/alertsSlice';
+import courseInfo, * as fromCourseInfo from './course_info_reducer';
+import alerts from './alerts_reducer';
 import ui from './ui_reducer';
-import userInfo, { isUserInfoIncomplete } from './slices/userInfoSlice';
+import userInfo, * as fromUserInfo from './user_info_reducer';
 import savingTimetable from './saving_timetable_reducer';
 import classmates from './classmates_reducer';
 import optionalCourses from './optional_courses_reducer';
@@ -41,12 +40,12 @@ import integrations from './integrations_reducer';
 import saveCalendarModal from './save_calendar_modal_reducer';
 import termsOfServiceModal from './terms_of_service_modal_reducer';
 import termsOfServiceBanner from './terms_of_service_banner_reducer';
-import userAcquisitionModal from './slices/userAcquisitionModalSlice';
+import userAcquisitionModal from './user_acquisition_modal_reducer';
 import textbookModal from './textbook_modal_reducer';
 import registrar from './registrar_reducer';
 import entities, * as fromEntities from './entities_reducer';
 
-export const reducers = {
+const reducers = {
   alerts,
   calendar,
   classmates,
@@ -78,8 +77,6 @@ export const reducers = {
   userAcquisitionModal,
   userInfo,
 };
-
-const store = configureStore({ reducer: reducers });
 
 // timetable/entity selectors
 export const getTimetables = state => fromTimetables.getTimetables(state.timetables);
@@ -132,7 +129,9 @@ export const getDenormAdvancedSearchResults = state =>
     getDenormCourseById(state, id));
 
 // modal selectors
-export const getIsUserInfoIncomplete = state =>
-  isUserInfoIncomplete(state.userInfo);
+export const getCourseInfoId = state => fromCourseInfo.getCourseInfoId(state.courseInfo);
 
-export default store;
+export const getIsUserInfoIncomplete = state =>
+  fromUserInfo.isUserInfoIncomplete(state.userInfo);
+
+export default reducers;

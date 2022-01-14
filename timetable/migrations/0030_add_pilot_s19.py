@@ -17,7 +17,7 @@ from timetable.models import Integration, CourseIntegration, Course, Semester
 
 
 def add_pilot_s19(apps, schema_editor):
-    """PILOT classes for Spring 2019"""
+    """ PILOT classes for Spring 2019"""
     pilot_codes = [
         "AS.110.106",
         "AS.110.107",
@@ -36,7 +36,7 @@ def add_pilot_s19(apps, schema_editor):
         "AS.171.101",
         "AS.171.102",
         "AS.171.104",
-        "AS.171.108",
+        "AS.171.108"
     ]
 
     integration, created = Integration.objects.get_or_create(name="Pilot")
@@ -45,11 +45,9 @@ def add_pilot_s19(apps, schema_editor):
     if Semester.objects.filter(year="2019", name="Spring").exists():
         s19 = Semester.objects.get(year="2019", name="Spring")
         for code in pilot_codes:
-            if Course.objects.filter(school="jhu", code=code).exists():
-                course = Course.objects.filter(school="jhu", code=code)
-                courseIntegration, created = CourseIntegration.objects.get_or_create(
-                    course=course[0], integration=integration, json=""
-                )
+            if Course.objects.filter(school="jhu",code=code).exists():
+                course = Course.objects.filter(school="jhu",code=code)
+                courseIntegration, created = CourseIntegration.objects.get_or_create(course=course[0],integration=integration,json='')
                 if not created:
                     courseIntegration.save()
                 courseIntegration.semester.add(s19)
@@ -57,11 +55,12 @@ def add_pilot_s19(apps, schema_editor):
             else:
                 print("Course doesn't exist " + str(code))
 
-
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0029_courseintegration_semester"),
+        ('timetable', '0029_courseintegration_semester'),
     ]
 
-    operations = [migrations.RunPython(add_pilot_s19)]
+    operations = [
+        migrations.RunPython(add_pilot_s19)
+    ]

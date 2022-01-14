@@ -20,5 +20,10 @@ class Parser(BarnesAndNoblesParser):
 
     def __init__(self, term="Fall", year=2017, **kwargs):
         super(Parser, self).__init__(
-            "18053", "johns-hopkins.bncollege.com", "jhu", ".", term, year, **kwargs
-        )
+            "18053",
+            "johns-hopkins.bncollege.com",
+            "jhu",
+            ".",
+            term,
+            year,
+            **kwargs)

@@ -11,7 +11,6 @@
 # GNU General Public License for more details.
 
 import os, sys, django, pickle, progressbar, argparse
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 import numpy as np
@@ -25,7 +24,6 @@ from timetable.models import *
 from recommender import Recommender
 import random
 from operator import itemgetter
-
 
 def score(recommender, course_ids, similarities, num_remove):
     removed = list(np.random.choice(course_ids, num_remove, replace=False))
@@ -49,27 +47,19 @@ def score(recommender, course_ids, similarities, num_remove):
                 scores[i] = similarities[recs[0]][keys.index(c)][1]
     return scores
 
-
 def main(args):
     start_time = time.time()
-    simfcn = "cosine"
+    simfcn = 'cosine'
     similarities = pickle.load(open("jhu.recommended.model", "rb"))
     recommender = Recommender(args.school, simfcn)
 
     ptts = []
     if args.action == "all":
-        ptts = PersonalTimetable.objects.filter(
-            school=args.school,
-            semester=Semester.objects.filter(name=args.semester, year=args.year),
-        )
+        ptts = PersonalTimetable.objects.filter(school=args.school, semester=Semester.objects.filter(name=args.semester, year=args.year))
     else:
         print((args.action))
         major_students = Student.objects.filter(major=args.action)
-        ptts = PersonalTimetable.objects.filter(
-            school=args.school,
-            semester=Semester.objects.filter(name=args.semester, year=args.year),
-            student__in=major_students,
-        )
+        ptts = PersonalTimetable.objects.filter(school=args.school, semester=Semester.objects.filter(name=args.semester, year=args.year), student__in=major_students)
     scores = {}
     num_timetables = {}
     for ptt in ptts:
@@ -84,26 +74,20 @@ def main(args):
         scores[length] += s
         num_timetables[length] += 1
     print(num_timetables)
-
+    
     for length in scores:
         scores[length] /= float(num_timetables[length])
     print(scores)
-    pickle.dump(scores, open("recommender." + args.school + ".scores", "wb"))
-
+    pickle.dump(scores, open('recommender.' + args.school + '.scores', "wb"))
 
 def get_args():
-    parser = argparse.ArgumentParser(description="Recommender evaluation system")
-    parser.add_argument("--action", dest="action", required=True, type=str)
-    parser.add_argument(
-        "--school", dest="school", required=True, help="School is required", type=str
-    )
-    parser.add_argument("--semester", dest="semester", required=True, help="", type=str)
-    parser.add_argument("--year", dest="year", required=True, help="", type=str)
-    parser.add_argument(
-        "--num_remove", dest="num_remove", required=True, help="", type=int
-    )
+    parser = argparse.ArgumentParser(description='Recommender evaluation system')
+    parser.add_argument('--action', dest='action', required=True, type=str)
+    parser.add_argument('--school', dest='school', required=True, help="School is required", type=str)
+    parser.add_argument('--semester', dest='semester', required=True, help="", type=str)
+    parser.add_argument('--year', dest='year', required=True, help="", type=str)
+    parser.add_argument('--num_remove', dest='num_remove', required=True, help="", type=int)
     return parser.parse_args()
-
 
 if __name__ == "__main__":
     args = get_args()

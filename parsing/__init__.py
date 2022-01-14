@@ -26,10 +26,9 @@ def qualify(filename):
     """
     return os.path.join(os.path.dirname(__file__), filename)
 
-
-with open(qualify("logging.yaml"), "r") as f:
+with open(qualify('logging.yaml'), 'r') as f:
     config = f.read().format(
-        error_filename=qualify("logs/errors.log"),
-        master_filename=qualify("logs/master.log"),
+        error_filename=qualify('logs/errors.log'),
+        master_filename=qualify('logs/master.log')
     )
 logging.config.dictConfig(yaml.safe_load(config))
