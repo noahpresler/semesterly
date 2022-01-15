@@ -1,18 +1,33 @@
-apiVersion: apps/v1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: semesterly-ingress
   namespace: semesterly-dev
 spec:
-  tls:
-  - hosts:
-    - semesterly-dev.az.sis.jhu.edu
-    secretName: az-wildcard-tls
+  ingressClassName: nginx
   rules:
   - host: semesterly-dev.az.sis.jhu.edu
     http:
       paths:
-      - backend:
-          serviceName: semesterly-service
-          servicePort: 80
-        path: /
+        - path: /
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: semesterly-service
+              port:
+                number: 80
+  - host: "*.semesterly-dev.az.sis.jhu.edu"
+    http:
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: semesterly-service
+              port:
+                number: 80
+  tls:
+  - hosts:
+    - semesterly-dev.az.sis.jhu.edu
+    - "*.semesterly-dev.az.sis.jhu.edu"
+    secretName: az-wildcard-tls
