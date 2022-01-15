@@ -7,7 +7,8 @@ Javascript/Typescript Style Guide
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. We follow the ESLint style guideline as configured in our ``.eslintrc.js`` file.
 
-2. We format our frontend code using Prettier.
+2. We format our frontend code using Prettier. Line length is configured to 88, like the
+   backend.
 
 3. Use PascalCase for React components, camelCase for everything else.
 
