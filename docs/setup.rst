@@ -62,6 +62,7 @@ Cloning your Semester.ly fork will create a directory with all of the code requi
 
 Setting up Docker
 ~~~~~~~~~~~~~~~~~
+
 Steps are below on getting your local development environment running:
 
 1. **Download and install docker** for your environment (Windows/Mac/Linux are supported)
@@ -142,6 +143,20 @@ Steps are below on getting your local development environment running:
 
     Open a browser and visit http://jhu.sem.ly:8000 to verify you have
     Semester.ly running.
+    
+    .. note::
+        
+        In order to log in on your local running version of Semester.ly, you will need
+        access to auth keys. Please ask one of the current developers for access to
+        these keys if you require use of login authentication for development. 
+        Furthermore, some logins require use of https, so ensure that you are on 
+        https://jhu.sem.ly instead of http://jhu.sem.ly:8000 in these cases.
+
+
+.. tip::
+
+    If you ever need to hard reset Docker, use the command ``docker system prune -a``. 
+    You can then follow up with ``docker-compose build && docker-compose up``.
 
 Setting up Postgres
 ~~~~~~~~~~~~~~~~~~~
@@ -173,20 +188,3 @@ several tables. Right clicking any of these tables gives you options to select
 If this is your first time running Semester.ly, you will want to populate your 
 database with courses. Before you continue to :ref:`parsing`, please read the
 following additional tips for working with Docker and Postgres.
-
-Additional Tips
-~~~~~~~~~~~~~~~
-
-You may also need to run Postgres commands beyond what running queries are
-capable of. In this case, open a terminal in the postgres container and run
-``psql -U postgres``. You should now be in the postgres shell.
-
-If you ever need to hard reset Docker, use the command ``docker system prune
--a``. You can then follow up with ``docker-compose build`` and ``docker-compose
-up``.
-
-In order to log in on your local running version of Semester.ly, you will need
-access to auth keys. Please ask one of the current developers for access to
-these keys if you require use of login authentication for development. 
-Furthermore, some logins require use of https, so ensure that you are on 
-https://jhu.sem.ly instead of http://jhu.sem.ly:8000 in these cases.

@@ -53,3 +53,9 @@ For example, you can use the term and year flags to parse only a specific term.
     python manage.py ingest [SCHOOLCODE] --term Fall --years 2021
 
 If you are developing a parser or contributing to the pipeline design, you will more than likely need to learn more. Checkout :ref:`pipeline` or :ref:`addaschool`
+
+.. tip::
+
+    You may need to run Postgres commands beyond what running queries through the
+    Postgres extension is capable of. In this case, attach a shell to the postgres
+    container and run ``psql -U postgres``. You should now be in the postgres shell.
