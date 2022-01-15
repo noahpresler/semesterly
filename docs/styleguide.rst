@@ -13,7 +13,7 @@ Javascript/Typescript Style Guide
 
 4. When creating new components, make them **functional** components.
 
-5. When adding Redux state, make them **slices**
+5. When adding Redux state, make them **slices**.
 
 As you can see, we are shifting towards using functional React components and Redux
 Toolkit with TypeScript. As such, all new features are expected to use these
@@ -29,7 +29,7 @@ max-line-length is 88 instead of 79. This is to comply with the default settings
 autoformatter black.
 
 2. Use snake_case for variable names and functions. Use PascalCase for classes. Use
-f-strings over ``%s`` strings or ``.format()``
+f-strings over ``%s`` strings or ``.format()``.
 
 3. Use type annotations when the type of a variable is ambiguous.
 
