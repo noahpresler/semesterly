@@ -5,84 +5,102 @@ How to Contribute
 
 Contributing to Semester.ly follows the following simple workflow:
 
-    1. `Fork the Repository`_
-    2. `Make Changes (fix a bug, create a feature)`_
-    3. `Open a Pull Request (and see your code go live!)`_
+    1. `Branching Off Develop`_
+    2. `Make Changes`_
+    3. `Clean Up Changes`_
    
 
-Fork the Repository
-~~~~~~~~~~~~~~~~~~~
-Follow the instructions in the installation portion of the documentation, see :ref:`setup`
+Branching Off Develop
+~~~~~~~~~~~~~~~~~~~~~
 
-Make Changes (fix a bug, create a feature)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Make sure you have followed all of the instructions in :ref:`setup` to set up your local
+repository and upstream remote.
 
-Add the Upstream Repo
-#####################
+To stay up to date with ``upstream/develop``, you'll want to ``git pull`` whenever you're
+starting a new branch. You may need to ``git fetch upstream`` first.
 
-    You're going to want to add the original project repo as an upstream repo in your forked project:
+.. code-block:: bash
+
+    git checkout develop
+    git pull upstream
+
+Then, you'll want to create a new branch.
+
+.. code-block:: bash
+
+    git checkout -b <your-branch-name>
+
+
+Make Changes
+~~~~~~~~~~~~
+
+After you've made edits, git add your files, then commit. One way to do this: 
+
+.. code-block:: bash
+
+    git add <path_to_file>
+    git commit -m "Topic: Message"
+    git push --set-upstream origin your-branch-name
+
+From here, you should be prompted to create a new pull request (PR). Ctrl + Left Click to
+open the link. From there, make sure to rebase the PR to ``develop`` (it defaults to
+``prod``), add a short description and create the PR. If your PR is ready for review,
+add a reviewer as well.
+
+.. note:: 
+    **What If Upstream Has Changed?** If merging upstream into your branch does not 
+    cause any conflicts, using rebase is a good option.
 
     .. code-block:: bash
 
-        git remote add upstream git@github.com:jhuopensource/semesterly.git
+        git pull --rebase upstream develop
+        git push origin your-branch-name
 
-    This way you can push to your fork as "origin" and the main repo as "upstream". You'll only ever do this once.
-
-Syncing With Upstream
-#####################
-    To stay up to date with upstream/master, you'll consistently want to checkout the master branch, fetch the upstream changes. Merge these into your local master branch and push that merge. These lines do exactly that:
-
-    .. code-block:: bash
-
-        git checkout master
-        git fetch upstream
-        git merge upstream/master
-        git push origin master
-
-Create a Working Branch
-#######################
-    Now you'll want to checkout a branch off master to work on. This is the branch you will merge into upstream when you are done. Just do: 
+    However, if there are merge conflicts, I suggest creating an alternate branch off of 
+    your branch and then merging upstream, fixing any conflicts, and then merging back
+    into your branch. Although more complicated, this saves you from messing up the work
+    on your branch if the merge conflicts aren't easily resolved, or you make a mistake
+    while resolving the conflicts.
 
     .. code-block:: bash
 
-        git checkout -b mybranchname
+        git checkout develop
+        git pull upstream
+        git checkout your-branch-name
+        git checkout -b merge-develop
+        git merge develop
+        (Fix merge conflicts, git add + git commit)
+        git checkout your-branch-name
+        git merge merge-develop
+        git push
 
-Make Some Changes, Add and Commit
-#################################
-    After you've made edits, git add your files, then commit. One way to do this: 
 
-    .. code-block:: bash
+Clean Up Changes
+~~~~~~~~~~~~~~~~
+We have GitHub workflows that check your changes and run them against our automated
+tests. While the workflow is building, we have a few other workflows that check the
+style and formatting of your code, and they will run more quickly than the build flows.
+Take this time to fix any formatting or linting issues should these tests fail. Refer to
+the :ref:`styleguide` to learn more about our code guidelines.
 
-        git commit -a
-        git push origin mybranchname
-
-    .. note:: 
-        **What If Upstream Has Changed?** Just pull and rebase onto those changes and push. You may find conflicts, that's to be expected!
-
-        .. code-block:: bash
-
-            git pull --rebase upstream master
-            git push origin mybranchname
-
-Open a Pull Request (and see your code go live!)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-So you've made your changes, and you've pushed them to your branch. To open a PR, simply head over to your fork at: https://github.com/YOURGITHUBUSERNAME/semesterly. Click on "Pull Request", choose the upstream repo "master" as the destination, and your forked repo's branch (the one you've been working on) as the source, and pick the merge and squash option!
-
-Awesome! You've made a PR. Once it's merged, your code will be a part of the Semester.ly open source GitHub repository and will be deployed for tens of thousands of students to use/benefit from. 
 
 .. note:: A PR must pass a few checks before it can be merged.
 
-    ✅ **LGTM:** Before your PR is merged, you'll need to pass a peer review to ensure that all the changes are clean and high quality. Usually, you'll get an "lgtm" (the comment which triggers this check to pass) or a few minor edits will be requested. This helps us maintain a quality code base and helps contrbutors learn and grow as engineers! 
+    ✅ **LGTM:** Before your PR is merged, you'll need to pass a peer review to ensure
+    that all the changes are clean and high quality. Usually, you'll get an "LGTM" or a
+    few minor edits will be requested. This helps us maintain a quality code base and
+    helps contributors learn and grow as engineers! 
 
-    ✅ **PR Body:** Your pull request should reference a git issue if a related issue has been created. Additionally, it must provide an in depth description of why the changes were made, what they do, and how they do it. This message can be formatted as *"WHY: ...., WHAT:....., HOW:....."*, but it can take any form if this does not suit your case.
+    ✅ **PR Body:** Your pull request should reference a git issue if a related issue has
+    been created. Additionally, it must provide an in depth description of why the
+    changes were made, what they do, and how they do it. 
 
-    ✅ **Tests & Builds Pass:** All tests and builds, as run by TravisCI must pass.
+    ✅ **Tests & Builds Pass:** All tests and builds, as run by Github Actions, must pass.
 
-    ✅ **Linting Satisfied:** All files must successfully pass our code style checks. You can check that your code has no errors by running:
+    ✅ **Linting Satisfied:** All files must successfully pass our code style checks.
 
     .. code-block:: bash
 
-        npm run lint
-    
-    You can learn more about how lint checking is done by reading :ref:`learning`.
+        npx prettier "**/*.{js,jsx,ts,tsx}" --write 
+        eslint . --ext .js,.jsx,.ts,.tsx --fix
+        black .
