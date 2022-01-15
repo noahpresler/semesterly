@@ -35,10 +35,9 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 2000M
           limits:
             cpu: 250m   
-            memory: 4000M
+            memory: 2048M
       - name: pgbouncer
         image: uisacr.azurecr.io/pgbouncer:latest
         ports:
