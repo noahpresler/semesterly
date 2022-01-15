@@ -1,4 +1,5 @@
 apiVersion: batch/v1
+kind: CronJob
 metadata:
   name: semesterly-parsing
   namespace: semesterly-stage
