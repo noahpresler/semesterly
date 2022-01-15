@@ -244,6 +244,20 @@ class CourseModalBody extends React.Component {
         <h3 className="modal-module-header">Program of Study Tags</h3>
         <p>None</p>
       </div>);
+    const pilotLogoImg = {
+      backgroundImage: 'url(/static/img/integrations/pilot.png)',
+    };
+    const pilotDisplay = integrationList.indexOf('Pilot') > -1 ?
+      (<li className="cf">
+        <span className="integration-image" style={pilotLogoImg} />
+        <h4>Pilot</h4>
+        <a href="http://academicsupport.jhu.edu/pilot-learning/" target="_blank" rel="noopener noreferrer">
+          Learn More
+        </a>
+        <p>In the PILOT program, students are organized into study teams consisting of
+          6-10 members who meet
+          weekly to work problems together.</p>
+      </li>) : null;
     const learningDenLogoImg = {
       backgroundImage: 'url(/static/img/integrations/learningDen_books.png)',
     };
@@ -261,9 +275,10 @@ class CourseModalBody extends React.Component {
           helps students to improve their understanding of course materials,
           and prepare for exams.</p>
       </li>) : null;
-    const academicSupportDisplay = integrationList.indexOf('LearningDen') > -1 ?
+    const academicSupportDisplay = integrationList.indexOf('LearningDen') > -1 || integrationList.indexOf('Pilot') > -1 ?
       (<div className="modal-module academic-support">
         <h3 className="modal-module-header">Academic Support</h3>
+        { pilotDisplay }
         { learningDenDisplay }
       </div>) : null;
     let friendCircles = (<div className="loading"><span className="img-icon"><div

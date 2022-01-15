@@ -105,6 +105,8 @@ export const hideExplorationModal = () => ({ type: ActionTypes.HIDE_EXPLORATION_
 
 export const showExplorationModal = () => ({ type: ActionTypes.SHOW_EXPLORATION_MODAL });
 
+export const hideFinalExamsModal = () => ({ type: ActionTypes.HIDE_FINAL_EXAMS_MODAL });
+
 export const triggerAcquisitionModal = () => ({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
 
 export const toggleAcquisitionModal = () => ({ type: ActionTypes.TOGGLE_ACQUISITION_MODAL });
@@ -114,6 +116,8 @@ export const toggleIntegrationModal = () => ({ type: ActionTypes.TOGGLE_INTEGRAT
 export const togglePeerModal = () => ({ type: ActionTypes.TOGGLE_PEER_MODAL });
 
 export const triggerTextbookModal = () => ({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });
+
+export const showFinalExamsModal = () => ({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
 
 export const overrideSettingsShow = data => ({
   type: ActionTypes.OVERRIDE_SETTINGS_SHOW,
