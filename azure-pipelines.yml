@@ -2,8 +2,7 @@ trigger:
   branches:
     include:
     - develop
-pr:
-  enabled: false
+pr: none # will disable pr builds
 resources:
   repositories:
   - repository: self
