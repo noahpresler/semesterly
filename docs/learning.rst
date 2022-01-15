@@ -10,9 +10,9 @@ Our Stack
 =================== =========== ================= =====================================================================================================================================
 Component           Technology  Style/Methodology Tutorials
 =================== =========== ================= =====================================================================================================================================
-Database            PostgreSQL  Django ORM        `Making Queries with Django <https://docs.djangoproject.com/en/2.2/topics/db/queries/>`_
-Backend Framework   Django      PEP8              `Writing your first Django app <https://docs.djangoproject.com/en/2.2/intro/tutorial01/>`_
-Frontend Framework  React       Redux/Airbnb      `React Basics <https://github.com/noahpresler/React-Tutorial>`_, `React <https://egghead.io/courses/react-fundamentals>`_, `Redux <https://egghead.io/courses/getting-started-with-redux>`_.
+Database            PostgreSQL  Django ORM        `Making Queries with Django <https://docs.djangoproject.com/en/3.2/topics/db/queries/>`_
+Backend Framework   Django      PEP8              `Writing your first Django app <https://docs.djangoproject.com/en/3.2/intro/tutorial01/>`_
+Frontend Framework  React       Redux/TypeScript  `React Basics <https://reactjs.org/docs/hello-world.html>`_, `React Hooks <https://reactjs.org/docs/hooks-intro.html>`_, `Redux & Redux Toolkit <https://redux.js.org/tutorials/index>`_ `TypeScript <https://www.typescriptlang.org/docs/>`.
 CSS Framework       SCSS        BEM/Airbnb        `CSS Basics <https://www.w3schools.com/css/>`_, `SCSS <http://sass-lang.com/guide>`_, `BEM <http://getbem.com/introduction/>`_
 =================== =========== ================= =====================================================================================================================================
 
@@ -22,22 +22,42 @@ Tutorials and Resources
 Learning the Backend
 ####################
 
-**Django** is a Python Web framework that provides a huge number of tools for web developers to quickly write scalable code with minimal configuration. It is used all over the tech industry by companies like Spotify, Instagram, YouTube, and DropBox!
+**Django** is a Python Web framework that provides a huge number of tools for web
+developers to quickly write scalable code with minimal configuration. It is used all
+over the tech industry by companies like Spotify, Instagram, YouTube, and DropBox!
 
-`Writing your first Django app <https://docs.djangoproject.com/en/2.2/intro/tutorial01/>`_ is the official Django tutorial. It is top notch! The official documentation can be found at the same url and provides high quality information about how to build with this modern web framework.
+`Writing your first Django app
+<https://docs.djangoproject.com/en/3.2/intro/tutorial01/>`_ is the official Django
+tutorial. It is top notch! The official documentation can be found at the same url and
+provides high quality information about how to build with this modern web framework.
+
 
 Learning React/Redux
 ####################
 
-React is a Javascript library created by Facebook for "building user interfaces". It allows developers to make encapsulated components that can be written once and used anywhere. 
+React is a Javascript library created by Facebook for building user interfaces. It
+allows developers to make encapsulated components that can be written once and used
+anywhere. 
 
 Redux is state container that makes React development easier to manage long term! 
 
-If you're a beginner, `we've created a React tutorial <https://github.com/noahpresler/React-Tutorial>`_ that will teach you the basics of developing a React app all via codepen. This is a great way to get started! 
+The official docs are the go-to: `React Basics
+<https://reactjs.org/docs/hello-world.html>`_, `React Hooks
+<https://reactjs.org/docs/hooks-intro.html>`_, `Redux & Redux Toolkit
+<https://redux.js.org/tutorials/index>`_, and `TypeScript
+<https://www.typescriptlang.org/docs/>`_. We suggest going through the step-by-step
+React tutorial rather than the practical tutorial because the practical tutorial is done
+with class-based components rather than functional components, which we are trying to
+shift towards.
 
-We highly recommend continuing with React via `EggHead's React Fundamentals video <https://egghead.io/courses/react-fundamentals>`_ which teaches you everything you'll need to know.
+If you're looking for something more structured, one suggestion is this `Udemy
+course <https://www.udemy.com/course/react-the-complete-guide-incl-redux/>`_, which
+covers functional React, Redux concepts, TypeScript, and more.
 
-Finally, finish off with `EggHead's Redux tutorial <https://egghead.io/courses/getting-started-with-redux>`_. You'll be a pro after that! 
+Ultimately, the best practice will be to create a small project using ``npx
+create-react-app my-app --template redux-typescript`` and going from there. You will
+become much more familiar with all of the concepts when you try to work through it
+yourself.
 
 Learning CSS/SCSS
 #################
@@ -46,10 +66,11 @@ The most important step is to `learn the CSS basics <https://www.w3schools.com/c
 
 With that, you can `dive into SCSS <http://sass-lang.com/guide>`_, a css preprocesor.
 
-For development, we use the BEM methedology (`learn about BEM here!  <http://getbem.com/introduction/>`_) and the `Airbnb style guide <https://github.com/airbnb/css>`_. 
+For development, we use the BEM methedology (`learn about BEM here!
+<http://getbem.com/introduction/>`_) and the `Airbnb style guide
+<https://github.com/airbnb/css>`_. 
 
 Learning Scraping/Parsing
 #########################
 
-Here's one `insightful article <https://codeburst.io/making-a-web-scraping-application-with-python-celery-and-django-23162397c0b6>`_.
-And here's another `article <https://realpython.com/beautiful-soup-web-scraper-python/>`_!
+Coming soon!
