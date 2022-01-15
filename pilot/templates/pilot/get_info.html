@@ -1,0 +1,106 @@
+{% extends "pilot/base.html" %}
+{% block content %}
+<div class="content-section">
+	<h3>Tell us about yourself</h3>
+	<p class="text-muted">Please enter your JHU information below. </p>
+	<form method="post">
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="id_first">First Name:</label>
+			<input value="{{student.first_name}}" type="text" class="form-control" name="first_name" required id="id_first">
+		</div>
+		<div class="form-group">
+			<label for="id_last">Last Name:</label>
+			<input value="{{student.last_name}}" type="text" class="form-control" name="last_name" required id="id_last">
+		</div>
+		<div class="form-group">
+			<label for="id_hopid">HopID:</label>
+			<input value="{{student.hopid}}" type="text" class="form-control" placeholder="Tip: Your HopID can be found in the top right of SIS." name="hopid" required id="id_hopid">
+		</div>
+		<div class="form-group">
+			<label for="id_jhed">JHED:</label>
+			<input value="{{student.jhed}}" type="text" class="form-control" name="jhed" required id="id_jhed">
+		</div>
+		<div class="form-group">
+			<label for="id_major">Major:</label>
+			<select class="form-control" name="major" required id="id_major">
+				<option value="Undecided">Undecided</option>
+				<option value="Africana Studies">Africana Studies</option>
+				<option value="Anthropology">Anthropology</option>
+				<option value="Applied Mathematics &amp; Statistics">Applied Mathematics &amp; Statistics</option>
+				<option value="Archaeology">Archaeology</option>
+				<option value="Behavioral Biology">Behavioral Biology</option>
+				<option value="Biology">Biology</option>
+				<option value="Biomedical Engineering">Biomedical Engineering</option>
+				<option value="Biophysics">Biophysics</option>
+				<option value="Chemical &amp; Biomolecular Engineering">Chemical &amp; Biomolecular Engineering</option>
+				<option value="Chemistry">Chemistry</option>
+				<option value="Civil Engineering">Civil Engineering</option>
+				<option value="Classics">Classics</option>
+				<option value="Cognitive Science">Cognitive Science</option>
+				<option value="Computer Engineering">Computer Engineering</option>
+				<option value="Computer Science">Computer Science</option>
+				<option value="Earth &amp; Planetary Sciences">Earth &amp; Planetary Sciences</option>
+				<option value="East Asian Studies">East Asian Studies</option>
+				<option value="Economics">Economics</option>
+				<option value="Electrical Engineering">Electrical Engineering</option>
+				<option value="Engineering Mechanics">Engineering Mechanics</option>
+				<option value="English">English</option>
+				<option value="Environmental Engineering">Environmental Engineering</option>
+				<option value="Environmental Science">Environmental Science</option>
+				<option value="Film &amp; Media Studies">Film &amp; Media Studies</option>
+				<option value="French">French</option>
+				<option value="General Engineering">General Engineering</option>
+				<option value="German">German</option>
+				<option value="History">History</option>
+				<option value="History of Art">History of Art</option>
+				<option value="History of Science, Medicine &amp; Technology">History of Science, Medicine &amp; Technology</option>
+				<option value="Interdisciplinary Studies">Interdisciplinary Studies</option>
+				<option value="International Studies">International Studies</option>
+				<option value="Italian">Italian</option>
+				<option value="Materials Science &amp; Engineering">Materials Science &amp; Engineering</option>
+				<option value="Mathematics">Mathematics</option>
+				<option value="Mechanical Engineering">Mechanical Engineering</option>
+				<option value="Medicine, Science &amp; the Humanities">Medicine, Science &amp; the Humanities</option>
+				<option value="Molecular &amp; Cellular Biology">Molecular &amp; Cellular Biology</option>
+				<option value="Natural Sciences">Natural Sciences</option>
+				<option value="Near Eastern Studies">Near Eastern Studies</option>
+				<option value="Neuroscience">Neuroscience</option>
+				<option value="Philosophy">Philosophy</option>
+				<option value="Physics">Physics</option>
+				<option value="Political Science">Political Science</option>
+				<option value="Psychology">Psychology</option>
+				<option value="Public Health Studies">Public Health Studies</option>
+				<option value="Romance Languages">Romance Languages</option>
+				<option value="Sociology">Sociology</option>
+				<option value="Spanish">Spanish</option>
+				<option value="Writing Seminars">Writing Seminars</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="id_grad_year">Graduation Year:</label>
+			<select class="form-control" name="class_year" required id="id_grad_year">
+				<option value="2023">2023</option>
+				<option value="2022">2022</option>
+				<option value="2021">2021</option>
+				<option value="2020">2020</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="id_pre_health">Pre Health:</label>
+			<select class="form-control" name="pre_health" required id="id_pre_health">
+				<option value="True">Yes</option>
+				<option value="False">No</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="id_dis">Do you require disability accommodations?</label>
+			<select class="form-control" name="diss" required id="id_dis">
+				<option value="True">Yes</option>
+				<option value="False">No</option>
+			</select>
+		</div>
+		<input type="submit" value="Submit" formmethod="post">
+	</form>
+</div>
+{% endblock content %}

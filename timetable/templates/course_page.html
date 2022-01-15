@@ -187,30 +187,32 @@
 						<div class="section-group cf">
 							<h3>Lecture Sections</h3>
 							{% for l in lectures %}
-							<div class="section" data-waitlist="{{ l.waitlist }}" data-enrolment="{{ l.enrolment }}"
-								data-size="{{ l.size }}" a>
-								{% if l.meeting_section %}
-								<h4>{{ l.meeting_section }}</h4>
+							{% if l %}
+							<div class="section" data-waitlist="{{ l.0.waitlist }}" data-enrolment="{{ l.0.enrolment }}"
+								data-size="{{ l.0.size }}" a>
+								{% if l.0.meeting_section %}
+								<h4>{{ l.0.meeting_section }}</h4>
 								{% else %}
 								<h4>No section number</h4>
 								{% endif %}
-								{% if l.location %}
-								<h5>{{ l.location }}</h5>
+								{% if l.0.location %}
+								<h5>{{ l.0.location }}</h5>
 								{% else %}
 								<h5>No location info</h5>
 								{% endif %}
-								{% if l.instructors %}
-								<h5>{{ l.instructors }}</h5>
+								{% if l.0.instructors %}
+								<h5>{{ l.0.instructors }}</h5>
 								{% else %}
 								<h5>No instructor info</h5>
 								{% endif %}
-								{% if l.offering_set.0.time_start %}
-								<h5>{{ l.offering_set.0.time_start }} - {{ l.offering_set.0.time_end }}</h5>
+								{% if l.0.time_start %}
+								<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
 								{% else %}
 								<h5>No class times info</h5>
 								{% endif %}
 								<h5 class="enrollment"></h5>
 							</div>
+							{% endif %}
 							{% endfor %}
 						</div>
 						{% endif %}
@@ -218,17 +220,17 @@
 						<div class="section-group cf">
 							<h3>Tutorial Sections</h3>
 							{% for t in tutorials %}
-							<div class="section" data-waitlist="{{ t.waitlist }}" data-enrolment="{{ t.0.enrolment }}"
-								data-size="{{ t.size }}">
-								<h4>{{ t.meeting_section }}</h4>
-								<h5>{{ t.location }}</h5>
-								{% if t.instructors %}
-								<h5>{{ t.instructors }}</h5>
+							<div class="section" data-waitlist="{{ t.0.waitlist }}" data-enrolment="{{ t.0.enrolment }}"
+								data-size="{{ t.0.size }}">
+								<h4>{{ t.0.meeting_section }}</h4>
+								<h5>{{ t.0.location }}</h5>
+								{% if t.0.instructors %}
+								<h5>{{ t.0.instructors }}</h5>
 								{% else %}
 								<h5>No instructor info</h5>
 								{% endif %}
-								{% if t.offering_set.0.time_start %}
-								<h5>{{ t.offering_set.0.time_start }} - {{ t.offering_set.0.time_end }}</h5>
+								{% if t.0.time_start %}
+								<h5>{{ t.0.time_start }} - {{ t.0.time_end }}</h5>
 								{% else %}
 								<h5>No class times info</h5>
 								{% endif %}
@@ -241,17 +243,17 @@
 						<div class="section-group cf">
 							<h3>Lab/Practical Sections</h3>
 							{% for p in practicals %}
-							<div class="section" data-waitlist="{{ p.waitlist }}" data-enrolment="{{ p.0.enrolment }}"
-								data-size="{{ p.size }}">
-								<h4>{{ p.meeting_section }}</h4>
-								<h5>{{ p.location }}</h5>
-								{% if p.instructors %}
-								<h5>{{ p.instructors }}</h5>
+							<div class="section" data-waitlist="{{ p.0.waitlist }}" data-enrolment="{{ p.0.enrolment }}"
+								data-size="{{ p.0.size }}">
+								<h4>{{ p.0.meeting_section }}</h4>
+								<h5>{{ p.0.location }}</h5>
+								{% if p.0.instructors %}
+								<h5>{{ p.0.instructors }}</h5>
 								{% else %}
 								<h5>No instructor info</h5>
 								{% endif %}
-								{% if p.offering_set.0.time_start %}
-								<h5>{{ p.offering_set.0.time_start }} - {{ p.offering_set.0.time_end }}</h5>
+								{% if p.0.time_start %}
+								<h5>{{ p.0.time_start }} - {{ p.0.time_end }}</h5>
 								{% else %}
 								<h5>No class times info</h5>
 								{% endif %}

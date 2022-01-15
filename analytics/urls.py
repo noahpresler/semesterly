@@ -27,4 +27,6 @@ urlpatterns = [
     re_path(r'^user/log_fb_alert_view/*$',
         analytics.views.log_facebook_alert_view),
     re_path(r'^user/log_ical/*$', student.views.log_ical_export),
+    re_path(r'^user/log_final_exam/*$',
+        analytics.views.log_final_exam_view)
 ]
