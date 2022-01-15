@@ -13,10 +13,11 @@ GNU General Public License for more details.
 */
 
 import { connect } from 'react-redux';
-import { getActiveTimetableDenormCourses } from '../../../reducers/root_reducer';
-import { changeUserInfo, fetchFriends, saveSettings } from '../../../actions/user_actions';
+import { getActiveTimetableDenormCourses } from '../../../state';
+import { fetchFriends, saveSettings } from '../../../actions/user_actions';
 import PeerModal from '../../modals/peer_modal';
 import { openSignUpModal, togglePeerModal } from '../../../actions/modal_actions';
+import { userInfoActions } from '../../../state/slices';
 
 const mapStateToProps = state => ({
     // don't want to consider courses that are shown on timetable only
@@ -35,7 +36,7 @@ const PeerModalContainer = connect(
   {
     fetchFriends,
     saveSettings,
-    changeUserInfo,
+    changeUserInfo: userInfoActions.changeUserInfo,
     togglePeerModal,
     openSignUpModal,
   },

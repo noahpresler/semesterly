@@ -1,4 +1,5 @@
-FROM semesterly.azurecr.io/semesterly-base-py3:latest
+ARG BASE_IMAGE=jhuopensource/semesterly-base-py3
+FROM $BASE_IMAGE
 # sgerli/horariotec-base:
 RUN mkdir /code
 WORKDIR /code
@@ -24,8 +25,6 @@ COPY ./build/local_settings.py /code/semesterly/local_settings.py
 COPY ./build/run_parser.sh /code/run_parser.sh
 
 RUN pip3 install -r /code/requirements.txt
-# This is needed on newer ubuntu
-RUN pip3 install psycopg2-binary==2.8.6
 
 # Install package.json dependencies
 RUN npm install

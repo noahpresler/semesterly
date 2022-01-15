@@ -141,7 +141,7 @@ class SlotManager extends React.Component {
 
     // custom slots
     for (let i = 0; i < this.props.custom.length; i++) {
-      const customSlot = this.props.custom[i];
+      const customSlot = Object.assign({}, this.props.custom[i]);
       customSlot.custom = true;
       customSlot.key = customSlot.id;
       slotsByDay[customSlot.day].push(customSlot);

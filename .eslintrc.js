@@ -28,7 +28,33 @@ module.exports = {
 		"no-plusplus": 0,
 	    "jsx-a11y/no-static-element-interactions": 0,
 		"jsx-a11y/no-noninteractive-element-interactions": 0,
-		"react/jsx-max-props-per-line": 0
+		"react/jsx-max-props-per-line": 0,
+		"import/first": 0,
+		// disable for redux toolkit
+		"no-param-reassign": 0,
+		"import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+				"ts": "never",
+				"jsx": "never",
+				"js": "never",
+				"tsx": "never"
+            }
+        ]
 	},
-	extends: "airbnb",
+	extends: [
+		"airbnb",
+		"plugin:import/errors",
+    	"plugin:import/warnings",
+    	"plugin:import/typescript"
+	],
+	settings: {
+		"import/resolver": {
+			node: {
+				extensions: [".js", ".jsx", ".ts", ".tsx"],
+				moduleDirectory: ['node_modules', 'static/js/redux/'],
+			}
+		}
+	},
 };

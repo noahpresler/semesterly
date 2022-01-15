@@ -19,12 +19,12 @@ import ClickOutHandler from 'react-onclickout';
 import uniqBy from 'lodash/uniqBy';
 import flatMap from 'lodash/flatMap';
 import MasterSlot from './master_slot';
-import TimetableNameInputContainer from './containers/timetable_name_input_container';
+import TimetableNameInput from './timetable_name_input';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import Textbook from './textbook';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import { getNextAvailableColour } from '../util';
-import { getTextbooksFromCourse } from '../reducers/entities_reducer';
+import { getTextbooksFromCourse } from '../state/entities_reducer';
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -135,21 +135,10 @@ class SideBar extends React.Component {
             possible, automatically</h3>
         </div>);
     }
-    const finalScheduleLink = (masterSlots.length > 0 &&
-      this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0
-      && this.props.hasLoaded) ?
-            (<div
-              className="final-schedule-link"
-              onClick={this.props.launchFinalExamsModal}
-            >
-              <i className="fa fa-calendar" aria-hidden="true" />
-                See Finals Schedule
-            </div>)
-            : null;
     return (
       <div className="side-bar no-print">
         <div className="sb-name">
-          <TimetableNameInputContainer />
+          <TimetableNameInput />
           <ClickOutHandler onClickOut={this.hideDropdown}>
             {dropItDown}
             <div
@@ -178,7 +167,8 @@ class SideBar extends React.Component {
           <h4 className="sb-header">
             Current Courses
             <div className="sb-header-link">
-              <i className="fa fa-users" />&nbsp;Find new friends
+              <i className="fa fa-users" />
+              &nbsp;Find new friends
             </div>
           </h4>
         </a>
@@ -187,11 +177,10 @@ class SideBar extends React.Component {
           to lock a section in place.
         </h4>
         <div className="sb-master-slots">
-          { masterSlots }
-          { finalScheduleLink }
+          {masterSlots}
         </div>
-        { optionalSlotsHeader }
-        { optionalSlots }
+        {optionalSlotsHeader}
+        {optionalSlots}
         <div id="sb-optional-slots" />
       </div>
     );
@@ -221,7 +210,6 @@ SideBar.propTypes = {
   duplicateTimetable: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   removeCourse: PropTypes.func.isRequired,
-  launchFinalExamsModal: PropTypes.func.isRequired,
   removeOptionalCourse: PropTypes.func.isRequired,
   launchPeerModal: PropTypes.func.isRequired,
   semester: PropTypes.shape({
@@ -230,7 +218,6 @@ SideBar.propTypes = {
   }).isRequired,
   semesterIndex: PropTypes.number.isRequired,
   avgRating: PropTypes.number,
-  examSupportedSemesters: PropTypes.arrayOf(PropTypes.number).isRequired,
   hasLoaded: PropTypes.bool.isRequired,
   getShareLink: PropTypes.func.isRequired,
 };

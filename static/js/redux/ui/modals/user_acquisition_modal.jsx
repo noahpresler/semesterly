@@ -12,19 +12,25 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
 import { WaveModal } from 'boron-15';
-import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
+import React, { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useActions } from '../../hooks';
 
-const UserAcquisitionModal = (props) => {
-  let modal = null;
+const UserAcquisitionModal = () => {
+  const LoginToken = useSelector(state => state.userInfo.data.LoginToken);
+  const LoginHash = useSelector(state => state.userInfo.data.LoginHash);
+  const isVisible = useSelector(state => state.userAcquisitionModal.isVisible);
+
+  const { toggleAcquisitionModal } = useActions();
+
+  const modal = useRef();
 
   useEffect(() => {
-    if (modal && props.isVisible) {
-      modal.show();
+    if (modal && isVisible) {
+      modal.current.show();
     }
-  }, [props.isVisible]);
+  }, [isVisible]);
 
   const modalHeader = (
     <div className="modal-content">
@@ -40,13 +46,11 @@ const UserAcquisitionModal = (props) => {
 
   return (
     <WaveModal
-      ref={(c) => {
-        modal = c;
-      }}
+      ref={modal}
       className="user-acquisition-modal abnb-modal max-modal"
       modalStyle={modalStyle}
       onHide={() => {
-        props.toggleUserAcquisitionModal();
+        toggleAcquisitionModal();
         history.replaceState({}, 'Semester.ly', '/');
       }}
     >
@@ -59,8 +63,8 @@ const UserAcquisitionModal = (props) => {
           onClick={() => {
             const link = document.createElement('a');
             link.href =
-              `/login/facebook/?student_token=${props.userInfo.LoginToken}` +
-              `&login_hash=${props.userInfo.LoginHash}`;
+              `/login/facebook/?student_token=${LoginToken}` +
+              `&login_hash=${LoginHash}`;
             document.body.appendChild(link);
             link.click();
           }}
@@ -80,7 +84,7 @@ const UserAcquisitionModal = (props) => {
           className="btn abnb-btn secondary"
           onClick={() => {
             const link = document.createElement('a');
-            link.href = `/login/azuread-tenant-oauth2/?student_token=${props.userInfo.LoginToken}&login_hash=${props.userInfo.LoginHash}`;
+            link.href = `/login/azuread-tenant-oauth2/?student_token=${LoginToken}&login_hash=${LoginHash}`;
             document.body.appendChild(link);
             link.click();
           }}
@@ -105,7 +109,7 @@ const UserAcquisitionModal = (props) => {
           className="btn abnb-btn secondary"
           onClick={() => {
             const link = document.createElement('a');
-            link.href = `/login/google-oauth2/?student_token=${props.userInfo.LoginToken}&login_hash=${props.userInfo.LoginHash}`;
+            link.href = `/login/google-oauth2/?student_token=${LoginToken}&login_hash=${LoginHash}`;
             document.body.appendChild(link);
             link.click();
           }}
@@ -133,12 +137,6 @@ const UserAcquisitionModal = (props) => {
       </div>
     </WaveModal>
   );
-};
-
-UserAcquisitionModal.propTypes = {
-  isVisible: PropTypes.bool.isRequired,
-  toggleUserAcquisitionModal: PropTypes.func.isRequired,
-  userInfo: SemesterlyPropTypes.userInfo.isRequired,
 };
 
 export default UserAcquisitionModal;

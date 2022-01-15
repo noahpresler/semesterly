@@ -9,13 +9,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0023_add_learning_den'),
+        ("timetable", "0023_add_learning_den"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='course',
-            name='pos',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.TextField(default=b'', null=True), default=list, size=None),
+            model_name="course",
+            name="pos",
+            field=django.contrib.postgres.fields.ArrayField(
+                base_field=models.TextField(default=b"", null=True),
+                default=list,
+                size=None,
+            ),
         ),
     ]

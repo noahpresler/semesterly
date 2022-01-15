@@ -17,7 +17,7 @@ import {
   getCurrentSemester,
   getDenormAdvancedSearchResults,
   getHoveredSlots,
-} from '../../../reducers/root_reducer';
+} from '../../../state';
 import ExplorationModal from '../../modals/exploration_modal';
 import {
     clearAdvancedSearchPagination,

@@ -23,41 +23,41 @@ from oauth2client.client import GoogleCredentials
 import timetable.models as timetable_models
 from semesterly.settings import get_secret
 
-hashids = Hashids(salt=get_secret('HASHING_SALT'))
+hashids = Hashids(salt=get_secret("HASHING_SALT"))
 
 
 class Student(models.Model):
-    """ Database object representing a student.
+    """Database object representing a student.
 
-        A student is the core user of the app. Thus, a student will have a
-        class year, major, friends, etc. An object is only created for the
-        user if they have signed up (that is, signed out users are not
-        represented by Student objects).
+    A student is the core user of the app. Thus, a student will have a
+    class year, major, friends, etc. An object is only created for the
+    user if they have signed up (that is, signed out users are not
+    represented by Student objects).
     """
-    FRESHMAN = 'FR'
-    SOPHOMORE = 'SO'
-    JUNIOR = 'JR'
-    SENIOR = 'SR'
+
+    FRESHMAN = "FR"
+    SOPHOMORE = "SO"
+    JUNIOR = "JR"
+    SENIOR = "SR"
     class_year = models.IntegerField(blank=True, null=True)
     user = models.OneToOneField(User, on_delete=models.deletion.CASCADE)
     img_url = models.CharField(max_length=300, default=-1)
     friends = models.ManyToManyField("self", blank=True)
-    fbook_uid = models.CharField(max_length=255, default='')
-    major = models.CharField(max_length=255, default='')
+    fbook_uid = models.CharField(max_length=255, default="")
+    major = models.CharField(max_length=255, default="")
     social_courses = models.BooleanField(null=True)
     social_offerings = models.BooleanField(null=True)
     social_all = models.BooleanField(null=True)
     emails_enabled = models.BooleanField(null=True, default=True)
-    integrations = models.ManyToManyField(timetable_models.Integration,
-                                          blank=True)
+    integrations = models.ManyToManyField(timetable_models.Integration, blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=100, null=True)
     time_accepted_tos = models.DateTimeField(null=True)
-    hopid = models.CharField(max_length=10, null=True, default='')
-    jhed = models.CharField(max_length=10, null=True, default='')
+    hopid = models.CharField(max_length=10, null=True, default="")
+    jhed = models.CharField(max_length=255, null=True, default="")
     pre_health = models.BooleanField(null=True, default=False)
-    first_name = models.CharField(max_length=255, default='', null=True)
-    last_name = models.CharField(max_length=255, default='', null=True)
+    first_name = models.CharField(max_length=255, default="", null=True)
+    last_name = models.CharField(max_length=255, default="", null=True)
     disabilities = models.BooleanField(null=True, default=False)
 
     def __str__(self):
@@ -67,16 +67,16 @@ class Student(models.Model):
         return "%s" % (self.jhed)
 
     def get_token(self):
-        return TimestampSigner().sign(self.id).split(':', 1)[1]
+        return TimestampSigner().sign(self.id).split(":", 1)[1]
 
     def get_hash(self):
         return hashids.encrypt(self.id)
 
     def is_signed_up_through_fb(self):
-        return self.provider_exists('facebook')
+        return self.provider_exists("facebook")
 
     def is_signed_up_through_google(self):
-        return self.provider_exists('google-oauth2')
+        return self.provider_exists("google-oauth2")
 
     def provider_exists(self, provider):
         return self.user.social_auth.filter(provider=provider).exists()
@@ -86,35 +86,42 @@ class Student(models.Model):
         return credentials is not None and (not credentials.invalid)
 
     def get_google_credentials(self):
-        social_user = self.user.social_auth.filter(provider='google-oauth2').first()
+        social_user = self.user.social_auth.filter(provider="google-oauth2").first()
         if social_user is None:
             return None
         access_token = social_user.extra_data["access_token"]
         refresh_token = social_user.extra_data.get("refresh_token")
         expires_at = social_user.extra_data["expires"]
-        return GoogleCredentials(access_token, get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY'),
-                                 get_secret('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'), refresh_token,
-                                 expires_at,
-                                 "https://accounts.google.com/o/oauth2/token", 'my-user-agent/1.0')
+        return GoogleCredentials(
+            access_token,
+            get_secret("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY"),
+            get_secret("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET"),
+            refresh_token,
+            expires_at,
+            "https://accounts.google.com/o/oauth2/token",
+            "my-user-agent/1.0",
+        )
 
 
 class Reaction(models.Model):
-    """ Database object representing a reaction to a course.
+    """Database object representing a reaction to a course.
 
-        A Reaction is performed by a Student on a Course, and can be one of
-        REACTION_CHOICES below. The reaction itself is represented by its
-        `title` field.
+    A Reaction is performed by a Student on a Course, and can be one of
+    REACTION_CHOICES below. The reaction itself is represented by its
+    `title` field.
     """
+
     REACTION_CHOICES = (
-        ('FIRE', 'FIRE'),
-        ('LOVE', 'LOVE'),
-        ('CRAP', 'CRAP'),
-        ('OKAY', 'OKAY'),
-        ('BORING', 'BORING'),
-        ('HARD', 'HARD'),
-        ('EASY', 'EASY'),
-        ('INTERESTING', 'INTERESTING'))
-    student = models.ForeignKey('student.Student', on_delete=models.deletion.CASCADE)
+        ("FIRE", "FIRE"),
+        ("LOVE", "LOVE"),
+        ("CRAP", "CRAP"),
+        ("OKAY", "OKAY"),
+        ("BORING", "BORING"),
+        ("HARD", "HARD"),
+        ("EASY", "EASY"),
+        ("INTERESTING", "INTERESTING"),
+    )
+    student = models.ForeignKey("student.Student", on_delete=models.deletion.CASCADE)
     course = models.ManyToManyField(timetable_models.Course)
     title = models.CharField(max_length=50, choices=REACTION_CHOICES)
     time_created = models.DateTimeField(auto_now_add=True)
@@ -124,9 +131,15 @@ class PersonalEvent(models.Model):
     """
     A custom event that has been saved to a user's PersonalTimetable
     so that it persists across refresh, device, and session. Marks
-    when a user is not free. Courses are scheduled around it.abs
-
+    when a user is not free. Courses are scheduled around it.
     """
+
+    timetable = models.ForeignKey(
+        "PersonalTimetable",
+        related_name="events",
+        on_delete=models.deletion.CASCADE,
+        null=True,
+    )
     name = models.CharField(max_length=50)
     day = models.CharField(max_length=1)
     time_start = models.CharField(max_length=15)
@@ -134,16 +147,15 @@ class PersonalEvent(models.Model):
 
 
 class PersonalTimetable(timetable_models.Timetable):
-    """ Database object representing a timetable created (and saved) by a user.
+    """Database object representing a timetable created (and saved) by a user.
 
-        A PersonalTimetable belongs to a Student, and contains a list of
-        Courses and Sections that it represents.
+    A PersonalTimetable belongs to a Student, and contains a list of
+    Courses and Sections that it represents.
     """
+
     name = models.CharField(max_length=100)
     student = models.ForeignKey(Student, on_delete=models.deletion.CASCADE)
     last_updated = models.DateTimeField(auto_now=True)
-    # TODO: change to foreign key from personal event -> personal timetable
-    events = models.ManyToManyField(PersonalEvent)
     has_conflict = models.BooleanField(blank=True, default=False)
 
 
@@ -152,27 +164,10 @@ class RegistrationToken(models.Model):
     A push notification token for Chrome noitification via
     Google Cloud Messaging
     """
-    auth = models.TextField(default='')
-    p256dh = models.TextField(default='')
-    endpoint = models.TextField(default='')
-    student = models.ForeignKey(Student, null=True, default=None, on_delete=models.deletion.CASCADE)
 
-class PilotOffering(models.Model):
-    sections = models.ManyToManyField(timetable_models.Section)
-    day = models.CharField(max_length=2)
-    date_start = models.CharField(max_length=15, null=True)
-    date_end = models.CharField(max_length=15, null=True)
-    time_start = models.CharField(max_length=15)
-    time_end = models.CharField(max_length=15)
-    size = models.IntegerField(default=10)
-    enrolment = models.IntegerField(default=0)
-    waitlist = models.IntegerField(default=0)
-    students = models.ManyToManyField(Student, related_name="enrolled_students")
-    wait_students = models.ManyToManyField(Student, related_name="waitlisted_students")
-    course_name = models.CharField(max_length=100, null=True)
-
-    def __str__(self):
-        return "Course: {0}, Day: {0}, Time: {0} - {0}".format(self.course_name, self.day, self.time_start, self.time_end)
-
-    def __unicode__(self):
-        return "Course: %s, Day: %s, Time: %s - %s" % (self.course_name, self.day, self.time_start, self.time_end)
+    auth = models.TextField(default="")
+    p256dh = models.TextField(default="")
+    endpoint = models.TextField(default="")
+    student = models.ForeignKey(
+        Student, null=True, default=None, on_delete=models.deletion.CASCADE
+    )

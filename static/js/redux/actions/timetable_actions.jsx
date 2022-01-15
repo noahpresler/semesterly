@@ -18,7 +18,7 @@ import {
   getActiveTimetable,
   getActiveTimetableCourses,
   getCurrentSemester,
-  getDenormTimetable } from '../reducers/root_reducer';
+  getDenormTimetable } from '../state';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
     browserSupportsLocalStorage,
@@ -31,10 +31,10 @@ import {
 import { autoSave, fetchClassmates, lockActiveSections, getUserSavedTimetables } from './user_actions';
 import { receiveCourses } from './search_actions';
 import * as ActionTypes from '../constants/actionTypes';
+import { alertsActions } from '../state/slices';
+import { NEW_changeActiveTimeTable, NEW_receiveTimetables, alertConflict } from './initActions';
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
-
-export const alertConflict = () => ({ type: ActionTypes.ALERT_CONFLICT });
 
 export const receiveTimetables = timetables => ({
   type: ActionTypes.RECEIVE_TIMETABLES,
@@ -48,6 +48,7 @@ export const changeActiveTimetable = newActive => ({
 
 export const setActiveTimetable = newActive => (dispatch) => {
   dispatch(changeActiveTimetable(newActive));
+  dispatch(NEW_changeActiveTimeTable(newActive));
   dispatch(autoSave());
 };
 
@@ -84,12 +85,13 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         // receive new info into state
         dispatch(receiveCourses(json.courses));
         dispatch(receiveTimetables(json.timetables));
+        dispatch(NEW_receiveTimetables(json.timetables));
         dispatch({
           type: ActionTypes.RECEIVE_COURSE_SECTIONS,
           courseSections: json.new_c_to_s,
         });
         dispatch(changeActiveTimetable(newActive));
-
+        dispatch(NEW_changeActiveTimeTable(newActive));
         // cache new info into local storage
         if (!state.userInfo.data.isLoggedIn) {
           saveLocalCourseSections(json.new_c_to_s);
@@ -102,7 +104,10 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         // (i.e. was adding a course/section), but we got no timetables back.
         // therefore course added by the user resulted in a conflict
         dispatch({ type: ActionTypes.CLEAR_CONFLICTING_EVENTS });
+
+        // TODO: remove second ALERT_CONFLICT
         dispatch(alertConflict());
+        dispatch({ type: ActionTypes.ALERT_CONFLICT });
       }
       return json;
     })
@@ -111,6 +116,8 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
       if (userData.isLoggedIn && json.timetables.length > 0 && userData.social_courses !== null) {
         dispatch(fetchClassmates(json.timetables[0]));
       }
+      // dispatch only after this promise resolves
+      dispatch(autoSave());
     });
 };
 
@@ -143,6 +150,7 @@ export const lockTimetable = timetable => (dispatch, getState) => {
     courseSections: lockActiveSections(getDenormTimetable(state, timetable)),
   });
   dispatch(receiveTimetables([timetable]));
+  dispatch(NEW_receiveTimetables([timetable]));
   if (state.userInfo.data.isLoggedIn) {
     dispatch(fetchClassmates(timetable));
   }
@@ -186,6 +194,7 @@ export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) =
 
 export const nullifyTimetable = () => (dispatch) => {
   dispatch(receiveTimetables([{ slots: [], has_conflict: false }]));
+  dispatch(NEW_receiveTimetables([{ slots: [], has_conflict: false }]));
   dispatch({
     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
     courseSections: {},
@@ -287,7 +296,7 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
   }
 
   if (getActiveTimetable(state).slots.length > 0 && !state.savingTimetable.upToDate) {
-    return dispatch({ type: ActionTypes.ALERT_NEW_TIMETABLE });
+    return dispatch(alertsActions.alertNewTimeTable());
   }
 
   return dispatch(createNewTimetable(getNumberedName('Untitled Schedule',
@@ -359,7 +368,6 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
   // and they're not trying to lock a new section).
   // otherwise, they're adding it
   dispatch(fetchTimetables(reqBody, removing));
-  dispatch(autoSave());
 };
 
 // fetch timetables with same courses, but updated optional courses/custom slots
@@ -432,18 +440,21 @@ export const removeCustomSlot = id => (dispatch) => {
 };
 
 export const updateCustomSlot = (newValues, id) => (dispatch) => {
+  const changedProps = Object.keys(newValues);
+  const onlyChangingName = changedProps.length === 1 && changedProps[0] === 'name';
   if (newValues.time_start !== undefined && newValues.time_start === newValues.time_end) {
     dispatch(removeCustomSlot(id));
     // For some reason, students can drag and drop past midnight
-  } else if (newValues.time_end !== undefined && newValues.time_end <= '24:00') {
+  } else if (
+    onlyChangingName || (newValues.time_end !== undefined &&
+    newValues.time_end <= '24:00')
+  ) {
     dispatch({
       type: ActionTypes.UPDATE_CUSTOM_SLOT,
       newValues,
       id,
     });
   }
-  const changedProps = Object.keys(newValues);
-  const onlyChangingName = changedProps.length === 1 && changedProps[0] === 'name';
   if (onlyChangingName) {
     dispatch(autoSave());
   } else { // only refetch if we are changing the slot time

@@ -25,8 +25,9 @@ import { FULL_WEEK_LIST } from '../constants/constants';
 import {
   getCurrentSemester,
   getActiveDenormTimetable,
-  getActiveTimetable } from '../reducers/root_reducer';
+  getActiveTimetable } from '../state';
 import * as ActionTypes from '../constants/actionTypes';
+import { calendarActions } from '../state/slices';
 
 const DAY_MAP = {
   M: 'mo',
@@ -46,10 +47,7 @@ export const getNextDayOfWeek = (date, dayOfWeek) => {
 };
 
 export const receiveShareLink = shareLink => (dispatch) => {
-  dispatch({
-    type: ActionTypes.RECEIVE_SHARE_TIMETABLE_LINK,
-    shareLink,
-  });
+  dispatch(calendarActions.receiveShareTimetableLink(shareLink));
 };
 
 export const fetchShareTimetableLink = () => (dispatch, getState) => {
@@ -57,9 +55,7 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
 
   const semester = getCurrentSemester(state);
   const { shareLink, shareLinkValid } = state.calendar;
-  dispatch({
-    type: ActionTypes.REQUEST_SHARE_TIMETABLE_LINK,
-  });
+  dispatch(calendarActions.requestShareTimetableLink());
   if (shareLinkValid) {
     receiveShareLink(shareLink);
     return;

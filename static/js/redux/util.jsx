@@ -13,7 +13,6 @@ GNU General Public License for more details.
 */
 
 import range from 'lodash/range';
-import { getLogFinalExamViewEndpoint } from './constants/endpoints';
 import COLOUR_DATA from './constants/colours';
 
 export const browserSupportsLocalStorage = () => {
@@ -112,12 +111,7 @@ export const getLocalTimetable = () => {
     return {};
   }
 };
-export const logFinalExamView = () => {
-  fetch(getLogFinalExamViewEndpoint(), {
-    method: 'POST',
-    credentials: 'include',
-  });
-};
+
 export const getMaxHourBasedOnWindowHeight = () => {
   const calRow = $('.cal-row');
   const lastRowY = calRow.last().position();

@@ -13,8 +13,8 @@ GNU General Public License for more details.
 */
 
 import { connect } from 'react-redux';
-import { getActiveTimetable, getSearchResult } from '../../reducers/root_reducer';
-import { getSectionTypeToSections } from '../../reducers/entities_reducer';
+import { getActiveTimetable, getSearchResult } from '../../state';
+import { getSectionTypeToSections } from '../../state/entities_reducer';
 import SearchSideBar from '../search_side_bar';
 import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/timetable_actions';
 

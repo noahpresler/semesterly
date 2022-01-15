@@ -18,12 +18,11 @@ import {
   getActiveTimetable,
   getCurrentSemester,
   getDenormCourseById,
-  getCoursesFromSlots } from '../../reducers/root_reducer';
+  getCoursesFromSlots } from '../../state';
 import {
-    fetchCourseInfo,
-    showFinalExamsModal,
-    togglePeerModal,
-    triggerTextbookModal,
+  fetchCourseInfo,
+  togglePeerModal,
+  triggerTextbookModal,
 } from '../../actions/modal_actions';
 import {
     addOrRemoveCourse,
@@ -42,7 +41,6 @@ const mapStateToProps = (state) => {
   return {
     semester: getCurrentSemester(state),
     semesterIndex: state.semester.current,
-    examSupportedSemesters: state.semester.exams,
     coursesInTimetable,
     mandatoryCourses,
     optionalCourses,
@@ -66,7 +64,6 @@ const SideBarContainer = connect(
     launchTextbookModal: triggerTextbookModal,
     duplicateTimetable,
     deleteTimetable,
-    launchFinalExamsModal: showFinalExamsModal,
     loadTimetable,
   },
 )(SideBar);
