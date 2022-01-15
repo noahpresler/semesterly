@@ -125,8 +125,7 @@ Steps are below on getting your local development environment running:
 
     .. code-block:: bash
 
-        docker-compose build
-        docker-compose up
+        docker-compose build && docker-compose up
 
     The **build** command creates a local database and build of your source code.
     The **up** command runs everything. Be careful not to build when you don't need to as this will destroy your entire database and you'll need to ingest/digest again to get your course data (which takes about 30 minutes).
