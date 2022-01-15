@@ -176,13 +176,6 @@ following additional tips for working with Docker and Postgres.
 
 Additional Tips
 ~~~~~~~~~~~~~~~
-You will often have to run commands within the Docker containers. For
-example, the next section requires you to run something similiar to ``python 
-manage.py ingest jhu --term Fall --years 2021`` in the semesterly container. To
-access containers, open the Docker explorer on the left pane. There should be
-three containers named jhuopensource/semesterly, semesterly, and postgres:12.1.
-Right clicking any of these should give you the option ``Attach Shell``, which
-will open a terminal into the corresponding container.
 
 You may also need to run Postgres commands beyond what running queries are
 capable of. In this case, open a terminal in the postgres container and run
