@@ -4,7 +4,7 @@ ARG djangoImage=semesterly.azurecr.io/semesterly:$djangoTag
 # This is just to create an alias
 FROM $djangoImage as latestDjango
 
-FROM nginx:latest
+FROM nginx:1.20.2
 
 
 # Need curl for health checks
