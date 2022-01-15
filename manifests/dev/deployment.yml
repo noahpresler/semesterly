@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels: 
       app: semesterly
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -28,12 +28,15 @@ spec:
             path: /
             port: 80
           initialDelaySeconds: 3
-          periodSeconds: 3
+          periodSeconds: 60
+          successThreshold: 1
+          failureThreshold: 3
+          timeoutSeconds: 60
         resources:
           requests:
-            cpu: 250m
+            cpu: 100m
           limits:
-            cpu: 750m   
+            cpu: 250m   
             memory: 2048M
       - name: pgbouncer
         image: uisacr.azurecr.io/pgbouncer:latest
@@ -41,10 +44,11 @@ spec:
         - containerPort: 5432
         resources:
           requests:
-            cpu: 500m
+            cpu: 100m
+            memory: 250M
           limits:
-            cpu: 2048m   
-            memory: 4096M
+            cpu: 250m   
+            memory: 2000M
         env:
             - name: DB_HOST
               valueFrom:
@@ -75,13 +79,37 @@ spec:
               value: plain
             - name: SERVER_TLS_SSLMODE
               value: verify-ca
+            - name: MAX_CLIENT_CONN
+              value: "10000"
+            - name: DEFAULT_POOL_SIZE
+              value: "100"
+            - name: MAX_DB_CONNECTIONS
+              value: "100"
+            - name: MAX_USER_CONNECTIONS
+              value: "100"
       - name: gunicorn
         image: semesterly.azurecr.io/semesterly:Version
         command: ["bash"]
-        args: ["-c","python manage.py migrate; gunicorn wsgi:application --bind=0.0.0.0:8000 --workers=3 --access-logfile - --error-logfile - --log-level info"]        
+        args: ["-c","python manage.py migrate; gunicorn semesterly.wsgi wsgi:application --bind=0.0.0.0:8000 --preload --workers=16 --max-requests=16384 --access-logfile - --error-logfile - --log-level info"]  
         workingDir: /code
         ports:
         - containerPort: 8000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 3
+          periodSeconds: 60
+          successThreshold: 1
+          failureThreshold: 5
+          timeoutSeconds: 5
+        resources:
+          requests:
+            cpu: "2"
+            memory: 2000M
+          limits:
+            cpu: "4"
+            memory: 4000M
         env:
             - name: NODE_ENV
               value: stage
@@ -122,12 +150,12 @@ spec:
                 secretKeyRef:
                   name: semesterly-secrets
                   key: SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
-            - name: SOCIAL_AUTH_FACEBOOK_OAUTH2_KEY
+            - name: SOCIAL_AUTH_FACEBOOK_KEY
               valueFrom:
                 secretKeyRef:
                   name: semesterly-secrets
                   key: SOCIAL_AUTH_FACEBOOK_OAUTH2_KEY
-            - name: SOCIAL_AUTH_FACEBOOK_OAUTH2_SECRET
+            - name: SOCIAL_AUTH_FACEBOOK_SECRET
               valueFrom:
                 secretKeyRef:
                   name: semesterly-secrets
@@ -152,9 +180,3 @@ spec:
                 secretKeyRef:
                   name: semesterly-secrets
                   key: JHU_JWT_AUTH_SECRET
-        resources:
-          requests:
-            cpu: 250m
-          limits:
-            cpu: 2000m
-            memory: 2048M
