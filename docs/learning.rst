@@ -7,14 +7,14 @@ Learning The Stack
 
 Our Stack
 ~~~~~~~~~~
-=================== =========== ================= =====================================================================================================================================
-Component           Technology  Style/Methodology Tutorials
-=================== =========== ================= =====================================================================================================================================
-Database            PostgreSQL  Django ORM        `Making Queries with Django <https://docs.djangoproject.com/en/3.2/topics/db/queries/>`_
-Backend Framework   Django      PEP8              `Writing your first Django app <https://docs.djangoproject.com/en/3.2/intro/tutorial01/>`_
-Frontend Framework  React       Redux/TypeScript  `React Basics <https://reactjs.org/docs/hello-world.html>`_, `React Hooks <https://reactjs.org/docs/hooks-intro.html>`_, `Redux & Redux Toolkit <https://redux.js.org/tutorials/index>`_ `TypeScript <https://www.typescriptlang.org/docs/>`.
-CSS Framework       SCSS        BEM/Airbnb        `CSS Basics <https://www.w3schools.com/css/>`_, `SCSS <http://sass-lang.com/guide>`_, `BEM <http://getbem.com/introduction/>`_
-=================== =========== ================= =====================================================================================================================================
+=================== =========== =================
+Component           Technology  Style/Methodology
+=================== =========== =================
+Database            PostgreSQL  Django ORM       
+Backend Framework   Django      pycodestyle/Black            
+Frontend Framework  React/Redux ESLint/Prettier 
+CSS Framework       SCSS        BEM/Airbnb       
+=================== =========== =================
 
 Tutorials and Resources
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -29,7 +29,9 @@ over the tech industry by companies like Spotify, Instagram, YouTube, and DropBo
 `Writing your first Django app
 <https://docs.djangoproject.com/en/3.2/intro/tutorial01/>`_ is the official Django
 tutorial. It is top notch! The official documentation can be found at the same url and
-provides high quality information about how to build with this modern web framework.
+provides high quality information about how to build with this modern web framework. For
+example, here's the documentation on `making queries with Django
+<https://docs.djangoproject.com/en/3.2/topics/db/queries/>`_ 
 
 
 Learning React/Redux
