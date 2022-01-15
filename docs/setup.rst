@@ -3,7 +3,10 @@
 Installation
 =============
 
-This guide will bring you through the steps of creating a local Semester.ly server and development environment. It will walk through the setup of the core ecosystems we work within: Django/Python and React/Node/JS. It will additionally require the setup of a PostgreSQL database.
+This guide will bring you through the steps of creating a local Semester.ly server and
+development environment. It will walk through the setup of the core ecosystems we work
+within: Django/Python and React/Node/JS. It will additionally require the setup of a
+PostgreSQL database.
 
 Setting up Visual Studio Code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -25,7 +28,10 @@ subsystem. Press ``Ctrl+Shift+P`` and select the option ``Remote-WSL: New WSL
 Window``.
 
 2. Install the `Docker extension by Microsoft 
-<https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker>`_
+<https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker>`_, the
+`remote containers extension by
+Microsoft
+<https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers>`_
 and the `Postgres extension by Chris Kolkman 
 <https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres>`_.
 
