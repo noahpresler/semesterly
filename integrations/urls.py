@@ -18,8 +18,6 @@ import integrations.views
 admin.autodiscover()
 
 urlpatterns = [
-    re_path(
-        r"^integrations/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/$",
-        integrations.views.IntegrationsView.as_view(),
-    )
+    re_path(r'^integrations/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/$',
+        integrations.views.IntegrationsView.as_view())
 ]

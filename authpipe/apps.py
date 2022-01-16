@@ -14,5 +14,4 @@ from django.apps import AppConfig
 
 
 class AuthpipeConfig(AppConfig):
-    name = "authpipe"
-    verbose_name = "Authentication Pipeline"
+    name = 'authpipe'

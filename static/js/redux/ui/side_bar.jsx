@@ -135,6 +135,17 @@ class SideBar extends React.Component {
             possible, automatically</h3>
         </div>);
     }
+    const finalScheduleLink = (masterSlots.length > 0 &&
+      this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0
+      && this.props.hasLoaded) ?
+            (<div
+              className="final-schedule-link"
+              onClick={this.props.launchFinalExamsModal}
+            >
+              <i className="fa fa-calendar" aria-hidden="true" />
+                See Finals Schedule
+            </div>)
+            : null;
     return (
       <div className="side-bar no-print">
         <div className="sb-name">
@@ -178,6 +189,7 @@ class SideBar extends React.Component {
         </h4>
         <div className="sb-master-slots">
           {masterSlots}
+          {finalScheduleLink}
         </div>
         {optionalSlotsHeader}
         {optionalSlots}
@@ -210,6 +222,7 @@ SideBar.propTypes = {
   duplicateTimetable: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   removeCourse: PropTypes.func.isRequired,
+  launchFinalExamsModal: PropTypes.func.isRequired,
   removeOptionalCourse: PropTypes.func.isRequired,
   launchPeerModal: PropTypes.func.isRequired,
   semester: PropTypes.shape({
@@ -218,6 +231,7 @@ SideBar.propTypes = {
   }).isRequired,
   semesterIndex: PropTypes.number.isRequired,
   avgRating: PropTypes.number,
+  examSupportedSemesters: PropTypes.arrayOf(PropTypes.number).isRequired,
   hasLoaded: PropTypes.bool.isRequired,
   getShareLink: PropTypes.func.isRequired,
 };
