@@ -21,7 +21,6 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404
 
-from analytics.models import FinalExamModalView
 from student.models import Student
 
 from student.utils import get_student
@@ -64,8 +63,6 @@ def view_analytics_dashboard(request):
         ics_calendar_exports = total_calendar_exports - google_calendar_exports
         unique_users_calendar_exports = number_timetables(Timetable=CalendarExport, distinct="student")
 
-        total_final_exam_views = number_timetables(Timetable=FinalExamModalView)
-        unique_users_final_exam_views = number_timetables(Timetable=FinalExamModalView, distinct="student")
         total_shared_timetable_views = number_timetables(Timetable=SharedTimetableView)
         total_shared_course_views = number_timetables(Timetable=SharedCourseView)
 
@@ -92,8 +89,6 @@ def view_analytics_dashboard(request):
                 "google_calendar_exports": google_calendar_exports,
                 "ics_calendar_exports": ics_calendar_exports,
                 "unique_users_calendar_exports": unique_users_calendar_exports,
-                "total_final_exam_views": total_final_exam_views,
-                "unique_users_final_exam_views": unique_users_final_exam_views,
                 "fb_alert_views": fb_alert_views,
                 "unique_users_fb_alert_views": unique_users_fb_alert_views,
                 "fb_alert_clicks": fb_alert_clicks,
@@ -256,13 +251,3 @@ def log_facebook_alert_click(request):
     school=request.subdomain
   ).save()
   return HttpResponse(json.dumps({}), content_type="application/json")
-
-
-@csrf_exempt
-def log_final_exam_view(request):
-    student = get_object_or_404(Student, user=request.user)
-    FinalExamModalView.objects.create(
-        student=student,
-        school=request.subdomain
-    ).save()
-    return HttpResponse(json.dumps({}), content_type="application/json")

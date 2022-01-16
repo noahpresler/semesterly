@@ -88,7 +88,7 @@ class Course(models.Model):
         corequisites (:obj:`TextField`, optional): courses required concurrently with this course
         exclusions (:obj:`TextField`, optional): reasons why a student would not be able to take this
         num_credits (:obj:`FloatField`): the number of credit hours this course is worth
-        areas (:obj:`CharField`): comma seperated list of all degree areas this course satisfies
+        areas (:obj:`Arrayfield`): list of all degree areas this course satisfies.
         department (:obj:`CharField`): department offering course (e.g. Computer Science)
         level (:obj:`CharField`): indicator of level of course (e.g. 100, 200, Upper, Lower, Grad)
         cores (:obj:`CharField`): core areas satisfied by this course
