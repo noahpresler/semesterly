@@ -33,7 +33,6 @@ Students know best
    howitworks   
    learning
    contributing
-   styleguide
    addaschool
    testing   
    documentation

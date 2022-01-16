@@ -172,6 +172,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'authpipe',
     'timetable',
+    'exams',
     'integrations',
     'searches',
     'courses',
@@ -185,6 +186,7 @@ INSTALLED_APPS = (
     'djcelery',
     'agreement',
     'parsing',
+    'pilot',
 )
 
 REST_FRAMEWORK ={

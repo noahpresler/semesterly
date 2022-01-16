@@ -115,6 +115,14 @@ const handleFlows = featureFlow => (dispatch) => {
       }
       dispatch(lockTimetable(featureFlow.sharedTimetable));
       break;
+    case 'SHARE_EXAM':
+      dispatch({ type: ActionTypes.SET_FINAL_EXAMS_SHARED });
+      dispatch({
+        type: ActionTypes.RECEIVE_FINAL_EXAMS,
+        json: featureFlow.exam,
+      });
+      dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
+      break;
     case 'VIEW_TEXTBOOKS':
       dispatch({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });
       break;
@@ -135,6 +143,9 @@ const handleFlows = featureFlow => (dispatch) => {
           data: true,
         });
       }
+      break;
+    case 'FINAL_EXAMS':
+      dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
       break;
     case 'EXPORT_SIS_TIMETABLE':
       dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
