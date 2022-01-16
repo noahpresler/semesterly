@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "rootDir": "./static",
+      "outDir": "./static/bundles/",
+      "noImplicitAny": true,
+      "sourceMap": true,
+      "module": "es6",
+      "target": "es5",
+      "jsx": "react",
+      "allowJs": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "lib": [ "es2015", "DOM" ]
+    }
+  }
