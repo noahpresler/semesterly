@@ -8,18 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('agreement', '0004_merge'),
+        ("agreement", "0004_merge"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='agreement',
-            name='description',
-            field=models.CharField(blank=True, default='', max_length=200),
+            model_name="agreement",
+            name="description",
+            field=models.CharField(blank=True, default="", max_length=200),
         ),
         migrations.AddField(
-            model_name='agreement',
-            name='url',
-            field=models.CharField(blank=True, default='', max_length=50),
+            model_name="agreement",
+            name="url",
+            field=models.CharField(blank=True, default="", max_length=50),
         ),
     ]

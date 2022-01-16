@@ -22,9 +22,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('analytics', '0011_finalexammodalview'),
-        ('analytics', '0013_update_semester_field'),
+        ("analytics", "0011_finalexammodalview"),
+        ("analytics", "0013_update_semester_field"),
     ]
 
-    operations = [
-    ]
+    operations = []

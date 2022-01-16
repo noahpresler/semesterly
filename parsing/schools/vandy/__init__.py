@@ -11,4 +11,5 @@
 # GNU General Public License for more details.
 
 from parsing.schools import load_school_logger
-load_school_logger('vandy')
+
+load_school_logger("vandy")
