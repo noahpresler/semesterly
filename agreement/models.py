@@ -14,14 +14,13 @@ from django.db import models
 
 
 class Agreement(models.Model):
-    """Database object representing updates to the ToS/privacy policy."""
-
+    """ Database object representing updates to the ToS/privacy policy. """
     # time of the update
     last_updated = models.DateTimeField()
     # short description of what the change is
-    description = models.CharField(max_length=200, blank=True, default="")
+    description = models.CharField(max_length=200, blank=True, default='')
     # url to the announcement page, if any. should be a local path (e.g. /notice)
-    url = models.CharField(max_length=50, blank=True, default="")
+    url = models.CharField(max_length=50, blank=True, default='')
 
     class Meta:
         get_latest_by = "last_updated"

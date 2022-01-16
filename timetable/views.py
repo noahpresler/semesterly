@@ -26,15 +26,11 @@ from courses.serializers import CourseSerializer
 from student.utils import get_student
 from timetable.serializers import DisplayTimetableSerializer
 from timetable.models import Semester, Course, Section
-from timetable.utils import (
-    update_locked_sections,
-    courses_to_timetables,
-    DisplayTimetable,
-)
+from timetable.utils import update_locked_sections, courses_to_timetables, DisplayTimetable
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMixin
 from semesterly.settings import get_secret
 
-hashids = Hashids(salt=get_secret("HASHING_SALT"))
+hashids = Hashids(salt=get_secret('HASHING_SALT'))
 logger = logging.getLogger(__name__)
 
 
@@ -44,7 +40,6 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
     generation of timetables and the satisfaction of constraits provided by
     the frontend/user.
     """
-
     def post(self, request):
         """Generate best timetables given the user's selected courses"""
         school = request.subdomain
@@ -52,78 +47,58 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         student = get_student(request)
 
         try:
-            params["semester"] = Semester.objects.get_or_create(**params["semester"])[0]
-        except TypeError:  # handle deprecated cached semesters from frontend
-            params["semester"] = (
-                Semester.objects.get(name="Fall", year="2016")
-                if params["semester"] == "F"
+            params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
+        except TypeError: # handle deprecated cached semesters from frontend
+            params['semester'] = Semester.objects.get(name="Fall", year="2016") \
+                if params['semester'] == "F" \
                 else Semester.objects.get(name="Spring", year="2017")
-            )
 
-        course_ids = list(params["courseSections"].keys())
+        course_ids = list(params['courseSections'].keys())
         courses = [Course.objects.get(id=cid) for cid in course_ids]
-        locked_sections = params["courseSections"]
+        locked_sections = params['courseSections']
 
-        save_analytics_timetable(
-            courses, params["semester"], school, get_student(request)
-        )
+        save_analytics_timetable(courses, params['semester'], school, get_student(request))
 
-        for updated_course in params.get("updated_courses", []):
-            cid = str(updated_course["course_id"])
+        for updated_course in params.get('updated_courses', []):
+            cid = str(updated_course['course_id'])
             locked_sections[cid] = locked_sections.get(cid, {})
             if cid not in course_ids:
                 courses.append(Course.objects.get(id=int(cid)))
 
-            for locked_section in filter(bool, updated_course["section_codes"]):
-                update_locked_sections(
-                    locked_sections, cid, locked_section, params["semester"]
-                )
+            for locked_section in filter(bool, updated_course['section_codes']):
+                update_locked_sections(locked_sections, cid, locked_section, params['semester'])
 
         # temp optional course implementation
-        opt_course_ids = params.get("optionCourses", [])
-        max_optional = params.get("numOptionCourses", len(opt_course_ids))
+        opt_course_ids = params.get('optionCourses', [])
+        max_optional = params.get('numOptionCourses', len(opt_course_ids))
         optional_courses = [Course.objects.get(id=cid) for cid in opt_course_ids]
-        optional_course_subsets = [
-            subset
-            for subset_size in range(max_optional, -1, -1)
-            for subset in itertools.combinations(optional_courses, subset_size)
-        ]
+        optional_course_subsets = [subset for subset_size in range(max_optional, -1, -1)
+                                   for subset in itertools.combinations(optional_courses,
+                                                                        subset_size)]
         # TODO remove PersonalEvent row if all timetable references are deleted (Django supports Orphan removal)
-        custom_events = params.get("customSlots", [])
-        preferences = params["preferences"]
-        with_conflicts = preferences.get("try_with_conflicts", False)
-        sort_metrics = [
-            (m["metric"], m["order"])
-            for m in preferences.get("sort_metrics", [])
-            if m["selected"]
-        ]
+        custom_events = params.get('customSlots', [])
+        preferences = params['preferences']
+        with_conflicts = preferences.get('try_with_conflicts', False)
+        sort_metrics = [(m['metric'], m['order']) for m in preferences.get('sort_metrics', [])
+                        if m['selected']]
 
         # TODO move sorting to view level so that result is sorted
-        timetables = [
-            timetable
-            for opt_courses in optional_course_subsets
-            for timetable in courses_to_timetables(
-                courses + list(opt_courses),
-                locked_sections,
-                params["semester"],
-                sort_metrics,
-                params["school"],
-                custom_events,
-                with_conflicts,
-                opt_course_ids,
-            )
-        ]
+        timetables = [timetable for opt_courses in optional_course_subsets
+                                for timetable in courses_to_timetables(courses + list(opt_courses),
+                                                                       locked_sections,
+                                                                       params['semester'],
+                                                                       sort_metrics,
+                                                                       params['school'],
+                                                                       custom_events,
+                                                                       with_conflicts,
+                                                                       opt_course_ids)]
 
-        context = {
-            "semester": params["semester"],
-            "school": request.subdomain,
-            "student": student,
-        }
+        context = {'semester': params['semester'], 'school': request.subdomain, 'student': student}
         courses = [course for course in courses + optional_courses]
         response = {
-            "timetables": DisplayTimetableSerializer(timetables, many=True).data,
-            "new_c_to_s": locked_sections,
-            "courses": CourseSerializer(courses, context=context, many=True).data,
+            'timetables': DisplayTimetableSerializer(timetables, many=True).data,
+            'new_c_to_s': locked_sections,
+            'courses': CourseSerializer(courses, context=context, many=True).data
         }
         return Response(response, status=status.HTTP_200_OK)
 
@@ -140,7 +115,7 @@ class TimetableLinkView(FeatureFlowView):
     shared timetables.
     """
 
-    feature_name = "SHARE_TIMETABLE"
+    feature_name = 'SHARE_TIMETABLE'
 
     def get_feature_flow(self, request, slug):
         """
@@ -149,22 +124,15 @@ class TimetableLinkView(FeatureFlowView):
         timetable or hits a 404.
         """
         timetable_id = hashids.decrypt(slug)[0]
-        shared_timetable = get_object_or_404(
-            SharedTimetable, id=timetable_id, school=request.subdomain
-        )
-        context = {
-            "semester": shared_timetable.semester,
-            "school": request.subdomain,
-            "student": get_student(request),
-        }
+        shared_timetable = get_object_or_404(SharedTimetable,
+                                             id=timetable_id,
+                                             school=request.subdomain)
+        context = {'semester': shared_timetable.semester, 'school': request.subdomain,
+                   'student': get_student(request)}
         return {
-            "semester": shared_timetable.semester,
-            "courses": CourseSerializer(
-                shared_timetable.courses, context=context, many=True
-            ).data,
-            "sharedTimetable": DisplayTimetableSerializer.from_model(
-                shared_timetable
-            ).data,
+            'semester': shared_timetable.semester,
+            'courses': CourseSerializer(shared_timetable.courses, context=context, many=True).data,
+            'sharedTimetable': DisplayTimetableSerializer.from_model(shared_timetable).data
         }
 
     def post(self, request):
@@ -173,18 +141,18 @@ class TimetableLinkView(FeatureFlowView):
         as the slug for the url which students then share and access.
         """
         school = request.subdomain
-        timetable = request.data["timetable"]
-        has_conflict = timetable.get("has_conflict", False)
-        semester, _ = Semester.objects.get_or_create(**request.data["semester"])
+        timetable = request.data['timetable']
+        has_conflict = timetable.get('has_conflict', False)
+        semester, _ = Semester.objects.get_or_create(**request.data['semester'])
         student = get_student(request)
         shared_timetable = SharedTimetable.objects.create(
-            student=student, school=school, semester=semester, has_conflict=has_conflict
-        )
+            student=student, school=school, semester=semester,
+            has_conflict=has_conflict)
         shared_timetable.save()
 
         added_courses = set()
-        for slot in timetable["slots"]:
-            course_id, section_id = slot["course"], slot["section"]
+        for slot in timetable['slots']:
+            course_id, section_id = slot['course'], slot['section']
             if course_id not in added_courses:
                 course_obj = Course.objects.get(id=course_id)
                 shared_timetable.courses.add(course_obj)
@@ -196,5 +164,5 @@ class TimetableLinkView(FeatureFlowView):
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         shared_timetable.save()
 
-        response = {"slug": hashids.encrypt(shared_timetable.id)}
+        response = {'slug': hashids.encrypt(shared_timetable.id)}
         return Response(response, status=status.HTTP_200_OK)

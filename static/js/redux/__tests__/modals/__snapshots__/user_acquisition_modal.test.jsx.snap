@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`User Aquisition Modal is hidden when isVisible is false 1`] = `<div />`;
+
+exports[`User Aquisition Modal shows when isVisible is true 1`] = `
+<div>
+  <span>
+    <div
+      style="z-index: 1050; position: fixed; width: 100%; top: 50%; left: 50%;"
+      class="user-acquisition-modal abnb-modal max-modal"
+    >
+      <div
+        tabindex="-1"
+        style="margin: 0px; background-color: white;"
+      >
+        <div
+          class="modal-content"
+        >
+          <div
+            class="modal-header"
+          >
+            <h1>
+              Login/Signup
+            </h1>
+          </div>
+        </div>
+        <div
+          class="user-acquisition-modal__container"
+        >
+          <h3>
+            Recommended:
+          </h3>
+          <button
+            class="btn abnb-btn fb-btn"
+          >
+            <span
+              class="img-icon"
+            >
+              <i
+                class="fa fa-facebook"
+              />
+            </span>
+            <span>
+              Continue with Facebook
+            </span>
+          </button>
+          <p
+            class="method-details"
+          >
+            Allows the option to friends in your classes.
+          </p>
+          <br />
+          <button
+            class="btn abnb-btn secondary"
+          >
+            <span
+              class="img-icon"
+            >
+              <img
+                alt="JHU"
+                class="jhu-square"
+                src="/static/img/school_logos/jhu-square.png"
+              />
+            </span>
+            <span>
+              Continue with JHED*
+            </span>
+          </button>
+          <p
+            class="method-details"
+          >
+            * Exclusive to JHU students & faculty.
+          </p>
+          <div
+            class="or-separator"
+          >
+            <span
+              class="h6 or-separator--text"
+            >
+              or
+            </span>
+            <hr />
+          </div>
+          <button
+            class="btn abnb-btn secondary"
+          >
+            <span
+              class="img-icon"
+            >
+              <img
+                alt="Google"
+                class="google-logo"
+                src="https://a0.muscache.com/airbnb/static/signinup/google_icon_2x-745c2280e5004d4c90e3ca4e60e3f677.png"
+              />
+            </span>
+            <span>
+              Continue with Google
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      style="position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 1040; background-color: rgb(55, 58, 71);"
+    />
+  </span>
+</div>
+`;

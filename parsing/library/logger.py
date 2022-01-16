@@ -63,8 +63,8 @@ class JSONStreamWriter:
     """
 
     BRACES = {
-        list: ("[", "]"),
-        dict: ("{", "}"),
+        list: ('[', ']'),
+        dict: ('{', '}'),
     }
 
     def __init__(self, obj, type_=list, level=0):
@@ -75,11 +75,11 @@ class JSONStreamWriter:
         """
         self.first = True
         self.level = level
-        if hasattr(obj, "read") and hasattr(obj, "write"):
+        if (hasattr(obj, 'read') and hasattr(obj, 'write')):
             self.file = obj
             self.close_file = False
         else:
-            self.file = open(obj, "w")
+            self.file = open(obj, 'w')
             self.close_file = True
         self.open, self.close = JSONStreamWriter.BRACES[type_]
         self.type_ = type_
@@ -104,7 +104,7 @@ class JSONStreamWriter:
         elif self.type_ == dict:
             return self.write_key_value(*args, **kwargs)
         else:
-            raise ValueError("type_ must be `list` or `dict`")
+            raise ValueError('type_ must be `list` or `dict`')
 
     def enter(self):
         """Wrapper for self.__enter__."""
@@ -116,7 +116,7 @@ class JSONStreamWriter:
 
     def __enter__(self):
         """Open JSON list."""
-        print("  " * self.level, self.open, file=self.file, sep="")
+        print('  ' * self.level, self.open, file=self.file, sep='')
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -124,13 +124,12 @@ class JSONStreamWriter:
 
         Will not close stdout or stderr.
         """
-        print("\n", "  " * self.level, self.close, file=self.file, sep="", end="")
-        if (
-            self.file == sys.stdout
-            or self.file == sys.stderr
-            or self.level > 0
-            or not self.close_file
-        ):
+        print('\n', '  ' * self.level, self.close,
+              file=self.file,
+              sep='',
+              end='')
+        if (self.file == sys.stdout or self.file == sys.stderr or
+                self.level > 0 or not self.close_file):
             return
         self.file.close()
 
@@ -150,26 +149,28 @@ class JSONStreamWriter:
         if self.first:
             self.first = False
         else:
-            print(",", file=self.file)
+            print(',', file=self.file)
 
         if value is None:
-            print(
-                "  " * (self.level + 1),
-                '"{}":'.format(key),
-                file=self.file,
-                sep="",
-                end="\n",
-            )
-            return JSONStreamWriter(self.file, type_=type_, level=self.level + 1)
+            print('  ' * (self.level + 1), '"{}":'.format(key),
+                  file=self.file,
+                  sep='',
+                  end='\n')
+            return JSONStreamWriter(self.file,
+                                    type_=type_,
+                                    level=self.level + 1)
 
         if isinstance(value, dict) or isinstance(value, list):
-            tabbing = "\n" + "  " * (self.level + 1)
+            tabbing = '\n' + '  ' * (self.level + 1)
             value = tabbing.join(pretty_json(value).splitlines())
         elif isinstance(value, str):
             value = '"{}"'.format(value)
 
-        tabbing = "  " * (self.level + 1)
-        print(tabbing, '"{}": {}'.format(key, value), file=self.file, sep="", end="")
+        tabbing = '  ' * (self.level + 1)
+        print(tabbing, '"{}": {}'.format(key, value),
+              file=self.file,
+              sep='',
+              end='')
 
     def write_obj(self, obj):
         """Write obj as JSON to file.
@@ -180,20 +181,17 @@ class JSONStreamWriter:
         if self.first:
             self.first = False
         else:
-            print(",", file=self.file)
+            print(',', file=self.file)
 
-        tabbing = "  " * (self.level + 1)
-        print(
-            tabbing + ("\n" + tabbing).join(pretty_json(obj).splitlines()),
-            file=self.file,
-            sep="\n",
-            end="",
-        )
+        tabbing = '  ' * (self.level + 1)
+        print(tabbing + ('\n' + tabbing).join(pretty_json(obj).splitlines()),
+              file=self.file,
+              sep='\n',
+              end='')
 
 
 class JSONFormatter(logging.Formatter):
     """Simple JSON extension of Python logging.Formatter."""
-
     def format(self, record):
         """Format record message.
 
@@ -206,7 +204,7 @@ class JSONFormatter(logging.Formatter):
         if isinstance(record.args, dict):
             try:
                 prettified = pretty_json(record.args)
-                record.msg += "\n" + prettified
+                record.msg += '\n' + prettified
             except TypeError:
                 pass
         return super(JSONFormatter, self).format(record)
@@ -214,10 +212,10 @@ class JSONFormatter(logging.Formatter):
 
 def colored_json(j):
     lexer = lexers.JsonLexer()
-    lexer.add_filter("whitespace")
-    colorful_json = highlight(
-        str(pretty_json(j), "UTF-8"), lexer, formatters.TerminalFormatter()
-    )
+    lexer.add_filter('whitespace')
+    colorful_json = highlight(str(pretty_json(j), 'UTF-8'),
+                              lexer,
+                              formatters.TerminalFormatter())
     return colorful_json
 
 
@@ -226,7 +224,7 @@ class JSONColoredFormatter(logging.Formatter):
         if isinstance(record.args, dict):
             try:
                 prettified = colored_json(record.args)
-                record.msg += "\n" + prettified
+                record.msg += '\n' + prettified
             except TypeError:
                 pass
         return super(JSONColoredFormatter, self).format(record)

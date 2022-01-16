@@ -18,7 +18,7 @@ import {
   getActiveTimetable,
   getCurrentSemester,
   getDenormCourseById,
-  getCoursesFromSlots } from '../../state';
+  getCoursesFromSlots } from '../../reducers';
 import {
   fetchCourseInfo,
   togglePeerModal,

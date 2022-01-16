@@ -8,12 +8,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0024_course_pos"),
+        ('timetable', '0024_course_pos'),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name="course",
-            name="areas",
+            model_name='course',
+            name='areas',
         ),
     ]

@@ -13,7 +13,6 @@ GNU General Public License for more details.
 */
 
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
 import { renderWithRedux } from '../../test-utils';
 import UserSettingsModal from '../../ui/modals/user_settings_modal';
 import { unfilledFixture, filledFixture, googleFixture } from '../../__fixtures__/user_settings_modal.fixture';
@@ -32,8 +31,7 @@ describe('User Setting Modal Renders As Expected', () => {
     const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,
     });
-    // show options to find facebook friends
-    expect(container).toHaveTextContent('Would you like to find classes');
+    expect(container).toMatchSnapshot();
   });
 
   it('HIDDEN if settings filled', () => {
@@ -49,7 +47,7 @@ describe('User Setting Modal Renders As Expected', () => {
     const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,
     });
-    expect(container).toBeEmptyDOMElement();
+    expect(container).toMatchSnapshot();
   });
 
   it('VISIBLE if settings filled but showOverrided', () => {
@@ -67,11 +65,7 @@ describe('User Setting Modal Renders As Expected', () => {
     const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,
     });
-
-    // should show save button
-    expect(container).toHaveTextContent('Save');
-    // should NOT show button to accept the terms and conditions
-    expect(container).not.toHaveTextContent('Accept the terms and conditions');
+    expect(container).toMatchSnapshot();
   });
 
   it('VISIBLE but reduced if signing up with Google only', () => {
@@ -87,7 +81,6 @@ describe('User Setting Modal Renders As Expected', () => {
     const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,
     });
-    // friends questions should only show up when signed in with facebook
-    expect(container).not.toHaveTextContent('Would you like to find classes');
+    expect(container).toMatchSnapshot();
   });
 });

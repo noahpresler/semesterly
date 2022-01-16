@@ -23,36 +23,20 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0005_reaction_time_created"),
-        ("timetable", "0004_auto_20160520_1141"),
-        ("analytics", "0002_analyticstimetable"),
+        ('student', '0005_reaction_time_created'),
+        ('timetable', '0004_auto_20160520_1141'),
+        ('analytics', '0002_analyticstimetable'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name="AnalyticsCourseSearch",
+            name='AnalyticsCourseSearch',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("semester", models.CharField(max_length=2)),
-                ("school", models.CharField(max_length=50)),
-                ("courses", models.ManyToManyField(to="timetable.Course")),
-                (
-                    "student",
-                    models.ForeignKey(
-                        default=None,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="student.Student",
-                    ),
-                ),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('semester', models.CharField(max_length=2)),
+                ('school', models.CharField(max_length=50)),
+                ('courses', models.ManyToManyField(to='timetable.Course')),
+                ('student', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='student.Student')),
             ],
         ),
     ]

@@ -22,13 +22,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0008_merge"),
+        ('timetable', '0008_merge'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="section",
-            name="was_full",
+            model_name='section',
+            name='was_full',
             field=models.BooleanField(default=False),
         ),
     ]

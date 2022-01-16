@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0031_add_date_start_end"),
+        ('timetable', '0031_add_date_start_end'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="offering",
-            name="is_short_course",
+            model_name='offering',
+            name='is_short_course',
             field=models.BooleanField(default=False),
         ),
     ]

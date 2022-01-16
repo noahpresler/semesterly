@@ -23,34 +23,18 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0015_merge"),
-        ("analytics", "0010_calendarexport"),
+        ('student', '0015_merge'),
+        ('analytics', '0010_calendarexport'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name="FinalExamModalView",
+            name='FinalExamModalView',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("time_created", models.DateTimeField(auto_now_add=True)),
-                ("school", models.CharField(max_length=50)),
-                (
-                    "student",
-                    models.ForeignKey(
-                        default=None,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="student.Student",
-                    ),
-                ),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('time_created', models.DateTimeField(auto_now_add=True)),
+                ('school', models.CharField(max_length=50)),
+                ('student', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='student.Student')),
             ],
         ),
     ]

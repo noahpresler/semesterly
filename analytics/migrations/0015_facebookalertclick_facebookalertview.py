@@ -23,59 +23,27 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0018_update_semester_field"),
-        ("analytics", "0014_merge"),
+        ('student', '0018_update_semester_field'),
+        ('analytics', '0014_merge'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name="FacebookAlertClick",
+            name='FacebookAlertClick',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("time_created", models.DateTimeField(auto_now_add=True)),
-                ("school", models.CharField(max_length=50)),
-                (
-                    "student",
-                    models.ForeignKey(
-                        default=None,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="student.Student",
-                    ),
-                ),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('time_created', models.DateTimeField(auto_now_add=True)),
+                ('school', models.CharField(max_length=50)),
+                ('student', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='student.Student')),
             ],
         ),
         migrations.CreateModel(
-            name="FacebookAlertView",
+            name='FacebookAlertView',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("time_created", models.DateTimeField(auto_now_add=True)),
-                ("school", models.CharField(max_length=50)),
-                (
-                    "student",
-                    models.ForeignKey(
-                        default=None,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="student.Student",
-                    ),
-                ),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('time_created', models.DateTimeField(auto_now_add=True)),
+                ('school', models.CharField(max_length=50)),
+                ('student', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='student.Student')),
             ],
         ),
     ]

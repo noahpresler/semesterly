@@ -36,21 +36,21 @@ class DataUpdate(models.Model):
         TEXTBOOKS (str): Update type.
     """
 
-    COURSES = "C"
-    TEXTBOOKS = "T"
-    EVALUATIONS = "E"
-    MISCELLANEOUS = "M"
+    COURSES = 'C'
+    TEXTBOOKS = 'T'
+    EVALUATIONS = 'E'
+    MISCELLANEOUS = 'M'
     UPDATE_TYPE = (
-        (COURSES, "courses"),
-        (TEXTBOOKS, "textbooks"),
-        (EVALUATIONS, "evaluations"),
-        (MISCELLANEOUS, "miscellaneous"),
+        (COURSES, 'courses'),
+        (TEXTBOOKS, 'textbooks'),
+        (EVALUATIONS, 'evaluations'),
+        (MISCELLANEOUS, 'miscellaneous'),
     )
 
     school = models.CharField(max_length=100)
     semester = models.ForeignKey(Semester, on_delete=models.deletion.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
-    reason = models.CharField(max_length=200, default="Scheduled Update")
-    update_type = models.CharField(
-        max_length=1, choices=UPDATE_TYPE, default=MISCELLANEOUS
-    )
+    reason = models.CharField(max_length=200, default='Scheduled Update')
+    update_type = models.CharField(max_length=1,
+                                   choices=UPDATE_TYPE,
+                                   default=MISCELLANEOUS)

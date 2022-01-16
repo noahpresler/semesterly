@@ -23,41 +23,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0008_merge"),
-        ("student", "0015_merge"),
-        ("analytics", "0012_sharedtimetableview"),
+        ('timetable', '0008_merge'),
+        ('student', '0015_merge'),
+        ('analytics', '0012_sharedtimetableview'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name="SharedCourseView",
+            name='SharedCourseView',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("time_created", models.DateTimeField(auto_now_add=True)),
-                (
-                    "shared_course",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="timetable.Course",
-                    ),
-                ),
-                (
-                    "student",
-                    models.ForeignKey(
-                        default=None,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="student.Student",
-                    ),
-                ),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('time_created', models.DateTimeField(auto_now_add=True)),
+                ('shared_course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='timetable.Course')),
+                ('student', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='student.Student')),
             ],
         ),
     ]

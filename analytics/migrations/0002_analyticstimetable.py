@@ -23,38 +23,22 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0004_auto_20160520_1141"),
-        ("student", "0004_auto_20160521_2343"),
-        ("analytics", "0001_initial"),
+        ('timetable', '0004_auto_20160520_1141'),
+        ('student', '0004_auto_20160521_2343'),
+        ('analytics', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name="AnalyticsTimetable",
+            name='AnalyticsTimetable',
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("semester", models.CharField(max_length=2)),
-                ("school", models.CharField(max_length=50)),
-                ("has_conflict", models.BooleanField(default=False)),
-                ("time_created", models.DateTimeField(auto_now_add=True)),
-                ("courses", models.ManyToManyField(to="timetable.Course")),
-                (
-                    "student",
-                    models.ForeignKey(
-                        default=None,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="student.Student",
-                    ),
-                ),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('semester', models.CharField(max_length=2)),
+                ('school', models.CharField(max_length=50)),
+                ('has_conflict', models.BooleanField(default=False)),
+                ('time_created', models.DateTimeField(auto_now_add=True)),
+                ('courses', models.ManyToManyField(to='timetable.Course')),
+                ('student', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='student.Student')),
             ],
         ),
     ]

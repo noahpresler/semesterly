@@ -22,20 +22,18 @@ from django.db import migrations
 from timetable.update_semester_field import get_update_operation
 
 tables_to_update = [
-    "Section",
+  'Section',
 ]
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("timetable", "0012_section_semester"),
+        ('timetable', '0012_section_semester'),
     ]
 
     operations = [
-        migrations.RunPython(
-            get_update_operation(
-                "timetable", tables_to_update, attrgetter("course.school")
-            )
-        ),
+      migrations.RunPython(get_update_operation('timetable', 
+                                                tables_to_update,
+                                                attrgetter('course.school'))),      
     ]

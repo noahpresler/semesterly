@@ -11,7 +11,6 @@
 # GNU General Public License for more details.
 
 import django, os, json, traceback, sys, smtplib
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import Course

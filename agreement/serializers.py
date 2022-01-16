@@ -14,16 +14,15 @@ from rest_framework import serializers
 
 from agreement.models import Agreement
 
-
 class AgreementSerializer(serializers.ModelSerializer):
-    timeUpdated = serializers.DateTimeField(source="last_updated")
+    timeUpdated = serializers.DateTimeField(source='last_updated')
     description = serializers.CharField()
     url = serializers.CharField()
 
     class Meta:
         model = Agreement
         fields = (
-            "timeUpdated",
-            "description",
-            "url",
+            'timeUpdated',
+            'description',
+            'url',
         )

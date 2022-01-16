@@ -1,7 +1,7 @@
 import {
   getSectionTypeToSections,
   getMaxEndHour,
-} from '../state/entities_reducer';
+} from '../reducers/entities_reducer';
 
 describe('course selectors', () => {
   describe('section type to sections selector', () => {

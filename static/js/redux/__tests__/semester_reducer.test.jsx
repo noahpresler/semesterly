@@ -1,4 +1,4 @@
-import semester from '../state/semester_reducer';
+import semester from '../reducers/semester_reducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 describe('Semester reducer', () => {

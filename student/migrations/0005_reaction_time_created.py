@@ -23,17 +23,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0004_auto_20160521_2343"),
+        ('student', '0004_auto_20160521_2343'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="reaction",
-            name="time_created",
-            field=models.DateTimeField(
-                auto_now_add=True,
-                default=datetime.datetime(2016, 6, 1, 10, 7, 48, 768592),
-            ),
+            model_name='reaction',
+            name='time_created',
+            field=models.DateTimeField(auto_now_add=True, default=datetime.datetime(2016, 6, 1, 10, 7, 48, 768592)),
             preserve_default=False,
         ),
     ]

@@ -8,13 +8,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("parsing", "0001_initial"),
+        ('parsing', '0001_initial'),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name="dataupdate",
-            old_name="last_updated",
-            new_name="timestamp",
+            model_name='dataupdate',
+            old_name='last_updated',
+            new_name='timestamp',
         ),
     ]

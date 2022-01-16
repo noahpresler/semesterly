@@ -27,7 +27,7 @@ const searchResults = (state = defaultState, action) => {
       return {
         ...state,
         isFetching: false,
-        items: action.payload.result,
+        items: action.response.result,
       };
     case ActionTypes.REQUEST_COURSES:
       return {

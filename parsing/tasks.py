@@ -21,16 +21,15 @@ from parsing.schools.active import ACTIVE_PARSING_SCHOOLS as ACTIVE_SCHOOLS
 
 logger = get_task_logger(__name__)
 
-
 @periodic_task(
     run_every=(crontab(hour=00, minute=00)),
     name="task_parse_current_registration_period",
-    ignore_result=True,
+    ignore_result=True
 )
 def task_parse_current_registration_period(schools=None, textbooks=False):
     """
     Parse semesters in current registration period.
-
+    
     Args:
         school (str, optional): School to parse.
         textbooks (bool, optional): Flag to parse textbooks.
@@ -52,12 +51,16 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
                     year: SCHOOLS_MAP[school].active_semesters[year][0]
                     for year in years
                 }
-                task_parse_school.delay(school, years_and_terms)
+                task_parse_school.delay(
+                    school,
+                    years_and_terms
+                )
                 continue
 
         # Create individual parsing tasks.
         for year, terms in years:
-            task_parse_school.delay(school, {year: [terms[0]]}, textbooks=textbooks)
+            task_parse_school.delay(school, {year: [terms[0]]},
+                                    textbooks=textbooks)
 
 
 @task()
@@ -72,18 +75,22 @@ def task_parse_active(schools=None, textbooks=False):
     schools = set(schools or ACTIVE_SCHOOLS)
     for school in set(SCHOOLS_MAP) & schools:
         if SCHOOLS_MAP[school].singe_access:
-            task_parse_school.delay(school, SCHOOLS_MAP[school].active_semesters)
+            task_parse_school.delay(
+                school,
+                SCHOOLS_MAP[school].active_semesters
+            )
             continue
 
         for year, terms in list(SCHOOLS_MAP[school].active_semesters.items()):
             for term in terms:
-                task_parse_school.delay(school, {year: [term]}, textbooks=textbooks)
+                task_parse_school.delay(school, {year: [term]},
+                                        textbooks=textbooks)
 
 
 @periodic_task(
-    run_every=(crontab(day_of_week="sun", hour=12, minute=00)),
+    run_every=(crontab(day_of_week='sun', hour=12, minute=00)),
     name="task_parse_textbooks",
-    ignore_result=True,
+    ignore_result=True
 )
 def task_parse_textbooks(schools=None, all=False):
     """
@@ -107,31 +114,27 @@ def task_parse_school(school, years_and_terms, textbooks=False):
         years_and_terms (dict): Years and terms dictionary.
         textbooks (bool, optional): Flag to parse textbooks.
     """
-    logger.info("Starting parse for " + school + " " + str(years_and_terms))
-    filename = "{}/schools/{}/data/courses_{}.json".format(
+    logger.info('Starting parse for ' + school + ' ' + str(years_and_terms))
+    filename = '{}/schools/{}/data/courses_{}.json'.format(
         settings.PARSING_MODULE,
         school,
-        "-".join(
-            "{}{}".format(year, "".join(terms))
-            for year, terms in list(years_and_terms.items())
-        ),
+        '-'.join(
+            '{}{}'.format(
+                year,
+                ''.join(terms)
+            ) for year, terms in list(years_and_terms.items())
+        )
     )
 
-    management.call_command(
-        "ingest",
-        school,
-        years_and_terms=years_and_terms,
-        textbooks=textbooks,
-        display_progress_bar=False,
-        verbosity=0,
-        output=filename,
-    )
-    management.call_command(
-        "digest",
-        school,
-        textbooks=textbooks,
-        display_progress_bar=False,
-        verbosity=0,
-        data=filename,
-    )
-    logger.info("Finished parse for " + school + " " + str(years_and_terms))
+    management.call_command('ingest', school,
+                            years_and_terms=years_and_terms,
+                            textbooks=textbooks,
+                            display_progress_bar=False,
+                            verbosity=0,
+                            output=filename)
+    management.call_command('digest', school,
+                            textbooks=textbooks,
+                            display_progress_bar=False,
+                            verbosity=0,
+                            data=filename)
+    logger.info('Finished parse for ' + school + ' ' + str(years_and_terms))

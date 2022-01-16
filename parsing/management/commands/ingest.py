@@ -29,7 +29,7 @@ class Command(BaseCommand):
         help (str): command help message.
     """
 
-    help = "Ingestion driver."
+    help = 'Ingestion driver.'
 
     def add_arguments(self, parser):
         """Add arguments to command parser.
@@ -47,33 +47,38 @@ class Command(BaseCommand):
             **options: Command options.
         """
         tracker = Tracker()
-        tracker.mode = "ingesting"
+        tracker.mode = 'ingesting'
         self.stat_view = StatView()
         tracker.add_viewer(self.stat_view)
-        if options["display_progress_bar"]:
-            tracker.add_viewer(
-                StatProgressBar("{valid}/{total}", statistics=self.stat_view)
-            )
+        if options['display_progress_bar']:
+            tracker.add_viewer(StatProgressBar('{valid}/{total}',
+                                               statistics=self.stat_view))
         tracker.start()
 
-        for parser_type in options["types"]:
-            for school in options["schools"]:
+        for parser_type in options['types']:
+            for school in options['schools']:
                 tracker.school = school
 
                 try:
                     parsing = __import__(
-                        "parsing.schools.{school}.{parser_type}".format(
-                            school=school, parser_type=parser_type
+                        'parsing.schools.{school}.{parser_type}'.format(
+                            school=school,
+                            parser_type=parser_type
                         )
                     )
                     parser = eval(
-                        "parsing.schools.{school}.{parser_type}.Parser".format(
-                            school=school, parser_type=parser_type
+                        'parsing.schools.{school}.{parser_type}.Parser'.format(
+                            school=school,
+                            parser_type=parser_type
                         )
                     )
-                    self.run(parser, tracker, options, parser_type, school)
+                    self.run(parser,
+                             tracker,
+                             options,
+                             parser_type,
+                             school)
                 except ImportError:
-                    logging.exception("Invalid parser")
+                    logging.exception('Invalid parser')
                     continue
 
         tracker.end()
@@ -89,60 +94,59 @@ class Command(BaseCommand):
             school (str): School to parse.
         """
         # Load config file to dictionary.
-        if isinstance(options["config"], str):
-            with open(
-                options["config"].format(school=school, type=parser_type), "r"
-            ) as file:
-                options["config"] = json.load(file)
+        if isinstance(options['config'], str):
+            with open(options['config'].format(school=school,
+                                               type=parser_type), 'r') as file:
+                options['config'] = json.load(file)
 
-        logger = logging.getLogger(parser.__module__ + "." + parser.__name__)
-        logger.debug("Ingest command options:" + str(options))
+        logger = logging.getLogger(parser.__module__ + '.' + parser.__name__)
+        logger.debug('Ingest command options:' + str(options))
         try:
             p = parser(
-                config=options["config"],
-                output_path=options["output"].format(school=school, type=parser_type),
+                config=options['config'],
+                output_path=options['output'].format(school=school, type=parser_type),
                 # output_error_path=options['output_error'].format(
                 #     school=school,
                 #     type=parser_type
                 # ),
-                break_on_error=options["break_on_error"],
-                break_on_warning=options["break_on_warning"],
-                display_progress_bar=options["display_progress_bar"],
-                validate=options["validate"],
-                tracker=tracker,
+                break_on_error=options['break_on_error'],
+                break_on_warning=options['break_on_warning'],
+                display_progress_bar=options['display_progress_bar'],
+                validate=options['validate'],
+                tracker=tracker
             )
 
             p.start(
-                verbosity=options["verbosity"],
-                textbooks=parser_type == "textbook",
-                departments_filter=options.get("departments"),
-                years_and_terms_filter=Command._resolve_years_and_terms(options),
+                verbosity=options['verbosity'],
+                textbooks=parser_type == 'textbook',
+                departments_filter=options.get('departments'),
+                years_and_terms_filter=Command._resolve_years_and_terms(
+                    options
+                )
             )
 
             p.end()
 
         except PipelineException:
-            logger.exception("Ingestion failed for " + school + " " + parser_type)
+            logger.exception('Ingestion failed for ' + school + ' ' + parser_type)
             try:
-                logger.debug("Ingestor dump for " + school, p.ingestor)
+                logger.debug('Ingestor dump for ' + school, p.ingestor)
             except UnboundLocalError:
                 pass
         except Exception:
-            logger.exception("Ingestion failed for " + school + " " + parser_type)
+            logger.exception('Ingestion failed for ' + school + ' ' + parser_type)
 
-        logger.info(
-            "Ingestion overview for " + school + ": " + str(self.stat_view.report())
-        )
+        logger.info('Ingestion overview for ' + school + ': ' + str(self.stat_view.report()))
 
     @staticmethod
     def _resolve_years_and_terms(options):
-        if options.get("years_and_terms") is not None:
-            return options["years_and_terms"]
+        if options.get('years_and_terms') is not None:
+            return options['years_and_terms']
 
         # Construct years and terms dictionary
         years_and_terms = {}
-        for year in options["years"]:
+        for year in options['years']:
             year = years_and_terms.setdefault(year, [])
-            for term in options["terms"]:
+            for term in options['terms']:
                 year.append(term)
         return years_and_terms

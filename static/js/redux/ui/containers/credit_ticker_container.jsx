@@ -13,7 +13,7 @@ GNU General Public License for more details.
 */
 
 import { connect } from 'react-redux';
-import { getActiveTimetableCourses } from '../../state';
+import { getActiveTimetableCourses } from '../../reducers';
 import CreditTicker from '../credit_ticker';
 
 const mapStateToProps = state => ({
