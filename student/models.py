@@ -131,15 +131,10 @@ class PersonalEvent(models.Model):
     """
     A custom event that has been saved to a user's PersonalTimetable
     so that it persists across refresh, device, and session. Marks
-    when a user is not free. Courses are scheduled around it.
+    when a user is not free. Courses are scheduled around it.abs
+
     """
 
-    timetable = models.ForeignKey(
-        "PersonalTimetable",
-        related_name="events",
-        on_delete=models.deletion.CASCADE,
-        null=True,
-    )
     name = models.CharField(max_length=50)
     day = models.CharField(max_length=1)
     time_start = models.CharField(max_length=15)
@@ -156,6 +151,8 @@ class PersonalTimetable(timetable_models.Timetable):
     name = models.CharField(max_length=100)
     student = models.ForeignKey(Student, on_delete=models.deletion.CASCADE)
     last_updated = models.DateTimeField(auto_now=True)
+    # TODO: change to foreign key from personal event -> personal timetable
+    events = models.ManyToManyField(PersonalEvent)
     has_conflict = models.BooleanField(blank=True, default=False)
 
 
