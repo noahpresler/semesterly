@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("student", "0039_remove_personaltimetable_events"),
+        ("student", "0039_auto_20220116_2050"),
     ]
 
     operations = [
