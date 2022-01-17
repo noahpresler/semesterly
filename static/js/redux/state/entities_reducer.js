@@ -15,9 +15,11 @@ const entities = (state = {}, action) => {
             [action.id]: { ...state.courses[action.id], reactions: action.reactions },
           }),
         });
+    // TODO: figure out all cases rely on default and explicitly state them with cases
+    case 'global/setCourseInfo':
     default:
-      if (action.response && action.response.entities) {
-        return merge({}, state, action.response.entities);
+      if (action.payload && action.payload.entities) {
+        return merge({}, state, action.payload.entities);
       }
       return state;
   }

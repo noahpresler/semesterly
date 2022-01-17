@@ -12,9 +12,6 @@
 
 """ Models pertaining to Students. """
 
-import json
-
-from django.conf import settings
 from django.core.signing import TimestampSigner
 from django.db import models
 from django.contrib.auth.models import User
@@ -53,12 +50,7 @@ class Student(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=100, null=True)
     time_accepted_tos = models.DateTimeField(null=True)
-    hopid = models.CharField(max_length=10, null=True, default="")
     jhed = models.CharField(max_length=255, null=True, default="")
-    pre_health = models.BooleanField(null=True, default=False)
-    first_name = models.CharField(max_length=255, default="", null=True)
-    last_name = models.CharField(max_length=255, default="", null=True)
-    disabilities = models.BooleanField(null=True, default=False)
 
     def __str__(self):
         return "{0}".format(self.jhed)
@@ -77,6 +69,9 @@ class Student(models.Model):
 
     def is_signed_up_through_google(self):
         return self.provider_exists("google-oauth2")
+
+    def is_signed_up_through_jhu(self):
+        return self.provider_exists("azuread-tenant-oauth2")
 
     def provider_exists(self, provider):
         return self.user.social_auth.filter(provider=provider).exists()
@@ -106,9 +101,8 @@ class Student(models.Model):
 class Reaction(models.Model):
     """Database object representing a reaction to a course.
 
-    A Reaction is performed by a Student on a Course, and can be one of
-    REACTION_CHOICES below. The reaction itself is represented by its
-    `title` field.
+    A Reaction is performed by a Student on a Course, and can be one of REACTION_CHOICES
+    below. The reaction itself is represented by its `title` field.
     """
 
     REACTION_CHOICES = (
@@ -129,10 +123,9 @@ class Reaction(models.Model):
 
 class PersonalEvent(models.Model):
     """
-    A custom event that has been saved to a user's PersonalTimetable
-    so that it persists across refresh, device, and session. Marks
-    when a user is not free. Courses are scheduled around it.abs
-
+    A custom event that has been saved to a user's PersonalTimetable so that it persists
+    across refresh, device, and session. Marks when a user is not free. Courses are
+    scheduled around it.
     """
 
     timetable = models.ForeignKey(
@@ -150,8 +143,8 @@ class PersonalEvent(models.Model):
 class PersonalTimetable(timetable_models.Timetable):
     """Database object representing a timetable created (and saved) by a user.
 
-    A PersonalTimetable belongs to a Student, and contains a list of
-    Courses and Sections that it represents.
+    A PersonalTimetable belongs to a Student, and contains a list of Courses and
+    Sections that it represents.
     """
 
     name = models.CharField(max_length=100)
@@ -161,10 +154,7 @@ class PersonalTimetable(timetable_models.Timetable):
 
 
 class RegistrationToken(models.Model):
-    """
-    A push notification token for Chrome noitification via
-    Google Cloud Messaging
-    """
+    """A push notification token for Chrome notification via Google Cloud Messaging"""
 
     auth = models.TextField(default="")
     p256dh = models.TextField(default="")

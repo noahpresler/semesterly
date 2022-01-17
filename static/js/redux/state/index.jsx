@@ -22,7 +22,7 @@ import courseSections from './course_sections_reducer';
 import timetables, * as fromTimetables from './timetables_reducer';
 import searchResults, * as fromSearchResults from './search_results_reducer';
 import preferences from './preferences_reducer';
-import courseInfo, * as fromCourseInfo from './course_info_reducer';
+import courseInfo from './slices/courseInfoSlice';
 import alerts from './slices/alertsSlice';
 import ui from './ui_reducer';
 import userInfo, { isUserInfoIncomplete } from './slices/userInfoSlice';
@@ -132,8 +132,6 @@ export const getDenormAdvancedSearchResults = state =>
     getDenormCourseById(state, id));
 
 // modal selectors
-export const getCourseInfoId = state => fromCourseInfo.getCourseInfoId(state.courseInfo);
-
 export const getIsUserInfoIncomplete = state =>
   isUserInfoIncomplete(state.userInfo);
 

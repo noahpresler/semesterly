@@ -26,7 +26,7 @@ import {
   lockTimetable,
 } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
-import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
+import { fetchCourseClassmates } from './actions/modal_actions';
 import { alertsActions, userAcquisitionModalActions, userInfoActions } from './state/slices';
 import { receiveCourses } from './actions/search_actions';
 import {
@@ -38,7 +38,7 @@ import {
 } from './util';
 // import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
-import { initAllState } from './actions';
+import { initAllState, setCourseInfo } from './actions';
 
 
 // load initial timetable from user data if logged in or local storage
