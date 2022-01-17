@@ -51,6 +51,7 @@ import {
 import { timetablesActions } from "../state/slices/timetablesSlice";
 import { customEventsAction } from "../state/slices/customEventsSlice";
 import { courseSectionsActions } from "../state/slices/courseSectionsSlice";
+import { signupModalActions } from "../state/slices/signupModalSlice";
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
 
@@ -168,7 +169,7 @@ export const loadTimetable =
     const state = getState();
     const isLoggedIn = state.userInfo.data.isLoggedIn;
     if (!isLoggedIn) {
-      return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
+      return dispatch(signupModalActions.showSignupModal());
     }
 
     const displayTimetable = {
@@ -314,7 +315,7 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
   const state = getState();
   const isLoggedIn = state.userInfo.data.isLoggedIn;
   if (!isLoggedIn) {
-    return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
+    return dispatch(signupModalActions.showSignupModal());
   }
 
   if (getActiveTimetable(state).slots.length > 0 && !state.savingTimetable.upToDate) {

@@ -64,12 +64,6 @@ export const react = (cid, title) => (dispatch) => {
     .then((response) => response.json())
     .then((json) => {
       if (!json.error) {
-        // TODO: remove below
-        dispatch({
-          id: cid,
-          type: ActionTypes.SET_COURSE_REACTIONS,
-          reactions: json.reactions,
-        });
         dispatch(
           setCourseReactions({
             id: cid,
@@ -90,16 +84,6 @@ export const triggerSaveCalendarModal = () => ({
 
 export const toggleSaveCalendarModal = () => ({
   type: ActionTypes.TOGGLE_SAVE_CALENDAR_MODAL,
-});
-
-export const openSignUpModal = () => ({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
-
-export const hideExplorationModal = () => ({
-  type: ActionTypes.HIDE_EXPLORATION_MODAL,
-});
-
-export const showExplorationModal = () => ({
-  type: ActionTypes.SHOW_EXPLORATION_MODAL,
 });
 
 export const toggleIntegrationModal = () => ({

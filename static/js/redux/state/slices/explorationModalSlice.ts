@@ -1,0 +1,75 @@
+/*
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+*/
+
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  receiveSchoolInfo,
+  receiveAdvancedSearchResults,
+} from "../../actions/initActions";
+
+interface ExplorationModalSliceState {
+  isVisible: boolean;
+  advancedSearchResults: number[];
+  isFetching: boolean;
+  active: number;
+  schoolInfoLoaded: boolean;
+}
+
+const initialState: ExplorationModalSliceState = {
+  isVisible: false,
+  advancedSearchResults: [],
+  isFetching: false,
+  active: 0,
+  schoolInfoLoaded: false,
+};
+
+const explorationModalSlice = createSlice({
+  name: "explorationModal",
+  initialState,
+  reducers: {
+    showExplorationModal: (state) => {
+      state.isVisible = true;
+    },
+    hideExplorationModal: (state) => {
+      state.isVisible = false;
+    },
+    requestAdvancedSearchResults: (state) => {
+      state.isFetching = true;
+    },
+    setActiveAdvancedSearchResult: (state, action: PayloadAction<number>) => {
+      state.active = action.payload;
+    },
+    requestSchoolInfo: (state) => {
+      state.schoolInfoLoaded = false;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(receiveAdvancedSearchResults, (state, action) => {
+        state.advancedSearchResults = action.payload.result;
+        state.isFetching = false;
+        state.active = 0;
+      })
+      .addCase(receiveSchoolInfo, (state) => {
+        state.schoolInfoLoaded = true;
+      });
+  },
+});
+
+export const getAdvancedSearchResultIds = (state: ExplorationModalSliceState) =>
+  state.advancedSearchResults;
+
+export const explorationModalActions = explorationModalSlice.actions;
+
+export default explorationModalSlice.reducer;

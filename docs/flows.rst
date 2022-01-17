@@ -121,13 +121,13 @@ and act accordingly. In practice, this is done by switching on the name of the f
         const handleFlows = featureFlow => (dispatch) => {
             switch (featureFlow.name) {
                 case 'SIGNUP':
-                    dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
+                    dispatch(signupModalActions.showSignupModal());
                     break;
                 case 'USER_ACQ':
-                    dispatch({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
+                    dispatch(userAcquisitionModalActions.triggerAcquisitionModal());
                     break;
                 case 'SHARE_TIMETABLE':
-                    dispatch({ type: ActionTypes.CACHED_TT_LOADED });
+                    dispatch(timetablesActions.cachedTimetableLoaded());
                     dispatch(lockTimetable(featureFlow.sharedTimetable, true, initData.currentUser.isLoggedIn));
                     break;
                 // ... etc.
