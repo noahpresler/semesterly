@@ -3,12 +3,12 @@ name: TSLint
 on:
   push:
     branches:
-      - refactor-frontend-base-branch
       - prod
+      - develop
   pull_request:
     branches:
-      - refactor-frontend-base-branch
       - prod
+      - develop
 
 jobs:
   lint:
