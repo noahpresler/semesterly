@@ -3,7 +3,12 @@
 Learning The Stack
 ==================
 
-.. note:: Learning a new thing can be scary. Especially when all you have are some docs and a massive code base to learn from. That's why we are here to help you learn, build, and contribute. Ask us questions at contact@semester.ly or on `Discord <https://discord.gg/txYbphsAV7>`_!
+.. note:: 
+  
+    Learning a new thing can be scary, especially when all you have are some docs and a 
+    massive code base to learn from. That's why we are here to help you learn, build, 
+    and contribute. Ask us questions at our `Discord <https://discord.gg/txYbphsAV7>`_!
+
 
 Our Stack
 ~~~~~~~~~~
@@ -49,8 +54,7 @@ The official docs are the go-to: `React Basics
 <https://redux.js.org/tutorials/index>`_, and `TypeScript
 <https://www.typescriptlang.org/docs/>`_. We suggest going through the step-by-step
 React tutorial rather than the practical tutorial because the practical tutorial is done
-with class-based components rather than functional components, which we are trying to
-shift towards.
+with class-based components, but we prefer functional components.
 
 If you're looking for something more structured, one suggestion is this `Udemy
 course <https://www.udemy.com/course/react-the-complete-guide-incl-redux/>`_, which
