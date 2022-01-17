@@ -348,6 +348,7 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         to_delete.delete()
         for event in events:
             event_obj = PersonalEvent.objects.create(
+                timetable=tt,
                 name=event["name"],
                 time_start=event["time_start"],
                 time_end=event["time_end"],
