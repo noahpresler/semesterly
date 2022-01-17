@@ -51,9 +51,8 @@ After you've made edits, git add your files, then commit. One way to do this:
     git push --set-upstream origin your-branch-name
 
 From here, you should be prompted to create a new pull request (PR). Ctrl + Left Click to
-open the link. From there, make sure to rebase the PR to ``develop`` (it defaults to
-``prod``), add a short description and create the PR. If your PR is ready for review,
-add a reviewer as well.
+open the link. From there, add a short description on what your PR does and how/why you
+did it, and then create the PR. If your PR is ready for review, add a reviewer as well.
 
 .. note:: 
     **What If Upstream Has Changed?** If merging upstream into your branch does not 
