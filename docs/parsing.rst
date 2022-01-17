@@ -58,4 +58,5 @@ If you are developing a parser or contributing to the pipeline design, you will 
 
     You may need to run Postgres commands beyond what running queries through the
     Postgres extension is capable of. In this case, attach a shell to the postgres
-    container and run ``psql -U postgres``. You should now be in the postgres shell.
+    container and run ``psql -U postgres``. You should now be in the postgres shell. You
+    can use ``\q`` to leave it.
