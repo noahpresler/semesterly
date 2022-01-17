@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NEW_changeActiveTimeTable, NEW_receiveTimetables } from '../../actions/initActions';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { changeActiveTimetable, receiveTimetables } from "../../actions/initActions";
 
 interface CalendarSliceState {
   shareLink: null | String;
@@ -14,7 +14,7 @@ const initialState: CalendarSliceState = {
 };
 
 const calendarSlice = createSlice({
-  name: 'calendar',
+  name: "calendar",
   initialState,
   reducers: {
     requestShareTimetableLink: (state) => {
@@ -28,10 +28,10 @@ const calendarSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(NEW_changeActiveTimeTable, (state) => {
+      .addCase(changeActiveTimetable, (state) => {
         state.shareLinkValid = false;
       })
-      .addCase(NEW_receiveTimetables, (state) => {
+      .addCase(receiveTimetables, (state) => {
         state.shareLinkValid = false;
       });
   },

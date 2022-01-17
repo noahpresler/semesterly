@@ -12,21 +12,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import Pagination from '../pagination';
-import { getTimetables } from '../../state';
-import { setActiveTimetable } from '../../actions/timetable_actions';
+import { connect } from "react-redux";
+import Pagination from "../pagination";
+import { getTimetables } from "../../state";
+import { setActiveTimetable } from "../../actions/timetable_actions";
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   count: getTimetables(state).length,
   active: state.timetables.active,
 });
 
-const PaginationContainer = connect(
-    mapStateToProps,
-  {
-    setActive: setActiveTimetable,
-  },
-)(Pagination);
+const PaginationContainer = connect(mapStateToProps, {
+  setActive: setActiveTimetable,
+})(Pagination);
 
 export default PaginationContainer;

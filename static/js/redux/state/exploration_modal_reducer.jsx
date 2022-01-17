@@ -12,16 +12,19 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import * as ActionTypes from '../constants/actionTypes';
+import * as ActionTypes from "../constants/actionTypes";
 
-const explorationModal = (state = {
-  isVisible: false,
-  advancedSearchResults: [],
-  isFetching: false,
-  active: 0,
-  schoolInfoLoaded: false,
-  page: 1,
-}, action) => {
+const explorationModal = (
+  state = {
+    isVisible: false,
+    advancedSearchResults: [],
+    isFetching: false,
+    active: 0,
+    schoolInfoLoaded: false,
+    page: 1,
+  },
+  action
+) => {
   switch (action.type) {
     case ActionTypes.SHOW_EXPLORATION_MODAL:
       return Object.assign({}, state, { isVisible: true });
@@ -69,6 +72,6 @@ const explorationModal = (state = {
   }
 };
 
-export const getAdvancedSearchResultIds = state => state.advancedSearchResults;
+export const getAdvancedSearchResultIds = (state) => state.advancedSearchResults;
 
 export default explorationModal;

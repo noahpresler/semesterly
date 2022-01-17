@@ -5,6 +5,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "autoprefixer": "^7.2.6",
@@ -113,10 +114,8 @@
     "test:watch": "npm test -- --watch",
     "build": "./node_modules/.bin/webpack --config ./webpack.config.js --progress",
     "watch": "node misc/server.js",
-    "lint-staged": "lint-staged",
     "lint": "./node_modules/.bin/eslint \"static/js/redux/**\"; ./node_modules/.bin/sass-lint -c .sass-lint.yml 'static/css/timetable/*.scss, static/css/timetable/**/*.scss' -v -q",
     "lint-fix": "./node_modules/.bin/eslint --fix \"static/js/redux/**\" ",
-    "lint-scss-staged": "./node_modules/.bin/sass-lint -c .sass-lint-precommit.yml -v -q",
     "validate": "npm ls"
   },
   "repository": {
@@ -129,32 +128,21 @@
     "url": "https://github.com/rohandas/semesterly/issues"
   },
   "homepage": "https://github.com/rohandas/semesterly#readme",
-  "pre-commit": [
-    "lint-staged"
-  ],
   "devDependencies": {
-    "@testing-library/react": "^12.1.2",
     "@types/jest": "^27.0.3",
     "@types/js-cookie": "^3.0.1",
+    "eslint-config-prettier": "^8.3.0",
     "jest": "^27.2.5",
     "jest-environment-jsdom": "^27.4.4",
-    "lint-staged": "^3.6.1",
     "nock": "^13.2.1",
     "node-sass": "^4.5.2",
-    "precommit-hook": "^3.0.0",
+    "prettier": "2.5.1",
     "react-test-utils": "0.0.1",
     "regenerator-runtime": "^0.10.5",
     "sass-loader": "^6.0.7",
     "ts-jest": "^27.1.1",
     "ts-loader": "^3.5.0",
     "typescript": "^4.5.3"
-  },
-  "lint-staged": {
-    "*.jsx?": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.scss": "lint-scss-staged"
   },
   "sasslintConfig": "sass-lint"
 }

@@ -12,9 +12,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import * as ActionTypes from '../constants/actionTypes';
-import { getNextAvailableColour } from '../util';
-import { getCourseIdsFromSlots } from './entities_reducer';
+import * as ActionTypes from "../constants/actionTypes";
+import { getNextAvailableColour } from "../util";
+import { getCourseIdsFromSlots } from "./entities_reducer";
 
 const initialState = {
   searchHover: 0,
@@ -29,16 +29,18 @@ const ui = (state = initialState, action) => {
       return { ...state, uses12HrTime: action.data.uses12HrTime };
     case ActionTypes.HOVER_SEARCH_RESULT:
       return { ...state, searchHover: action.position };
-    case ActionTypes.RECEIVE_TIMETABLES: {
-      const courses = action.timetables.length > 0 ?
-        getCourseIdsFromSlots(action.timetables[0].slots) : [];
+    case "global/receiveTimetables": {
+      const courses =
+        action.payload.length > 0 ? getCourseIdsFromSlots(action.payload[0].slots) : [];
 
       const courseToColourIndex = {};
 
       courses.forEach((courseId) => {
         // if this course already had a colour, use that. Otherwise get a new one
-        courseToColourIndex[courseId] = (courseId in state.courseToColourIndex) ?
-          state.courseToColourIndex[courseId] : getNextAvailableColour(courseToColourIndex);
+        courseToColourIndex[courseId] =
+          courseId in state.courseToColourIndex
+            ? state.courseToColourIndex[courseId]
+            : getNextAvailableColour(courseToColourIndex);
       });
 
       return { ...state, courseToColourIndex };

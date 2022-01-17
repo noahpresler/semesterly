@@ -12,17 +12,25 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import * as ActionTypes from '../constants/actionTypes';
+import { createSlice } from "@reduxjs/toolkit";
 
-const textbookModal = (state = { isVisible: false }, action) => {
-  switch (action.type) {
-    case ActionTypes.TOGGLE_TEXTBOOK_MODAL:
-      return { isVisible: !state.isVisible };
-    case ActionTypes.TRIGGER_TEXTBOOK_MODAL:
-      return { isVisible: true };
-    default:
-      return state;
-  }
+interface CourseSectionsSliceState {
+  objects: any;
+}
+
+const initialState: CourseSectionsSliceState = {
+  objects: {},
 };
 
-export default textbookModal;
+const courseSectionsSlice = createSlice({
+  name: "courseSections",
+  initialState,
+  reducers: {
+    receiveCourseSections: (state, action) => {
+      state.objects = action.payload;
+    },
+  },
+});
+
+export const courseSectionsActions = courseSectionsSlice.actions;
+export default courseSectionsSlice.reducer;

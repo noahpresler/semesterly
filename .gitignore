@@ -10,6 +10,7 @@ docs/build/
 .DS_Store
 env/
 github-request-body
+htmlcov/
 .idea/
 *.log
 *.log

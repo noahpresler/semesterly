@@ -661,7 +661,6 @@ class Vommit(DigestionStrategy):
             "_course_cache",
             "semester_id",
             "_semester",
-            "vector",
         }
 
         def prune(d):

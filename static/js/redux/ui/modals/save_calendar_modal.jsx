@@ -12,9 +12,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import { WaveModal } from 'boron-15';
+import PropTypes from "prop-types";
+import React from "react";
+import { WaveModal } from "boron-15";
 // import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 class SaveCalendarModal extends React.Component {
@@ -31,26 +31,31 @@ class SaveCalendarModal extends React.Component {
   }
 
   render() {
-    const modalHeader =
-            (<div className="modal-content">
-              <div className="modal-header">
-                <div
-                  className="header-pic"
-                  style={{ backgroundImage: 'url(/static/img/addtocalendarfeature.png)' }}
-                />
-                <h1>Export calendar</h1>
-                <div className="modal-close" onClick={() => this.modal.hide()}>
-                  <i className="fa fa-times" />
-                </div>
-              </div>
-            </div>);
+    const modalHeader = (
+      <div className="modal-content">
+        <div className="modal-header">
+          <div
+            className="header-pic"
+            style={{ backgroundImage: "url(/static/img/addtocalendarfeature.png)" }}
+          />
+          <h1>Export calendar</h1>
+          <div className="modal-close" onClick={() => this.modal.hide()}>
+            <i className="fa fa-times" />
+          </div>
+        </div>
+      </div>
+    );
     const modalStyle = {
-      width: '100%',
+      width: "100%",
     };
 
     let DownloadIcon = <i className="fa fa-download" />;
     DownloadIcon = this.props.isDownloading ? <div className="loader" /> : DownloadIcon;
-    DownloadIcon = this.props.hasDownloaded ? <i className="done fa fa-check" /> : DownloadIcon;
+    DownloadIcon = this.props.hasDownloaded ? (
+      <i className="done fa fa-check" />
+    ) : (
+      DownloadIcon
+    );
     // let UploadIcon = (<img
     //   alt="google-login"
     //   className="google-logo"
@@ -66,56 +71,58 @@ class SaveCalendarModal extends React.Component {
 
     return (
       <WaveModal
-        ref={(c) => { this.modal = c; }}
+        ref={(c) => {
+          this.modal = c;
+        }}
         className="save-calendar-modal abnb-modal max-modal"
         modalStyle={modalStyle}
         onHide={() => {
           this.props.toggleSaveCalendarModal();
-          history.replaceState({}, 'Semester.ly', '/');
+          history.replaceState({}, "Semester.ly", "/");
         }}
       >
         {modalHeader}
         <div className="save-calendar-modal__container">
-          {/* <button*/}
-          {/*  className="btn abnb-btn" onClick={() => {*/}
-          {/*    if (!this.props.userInfo.isLoggedIn || !this.props.userInfo.GoogleSignedUp ||*/}
-          {/*      !this.props.userInfo.GoogleLoggedIn) {*/}
-          {/*      const link = document.createElement('a');*/}
-          {/*      link.href = `/login/google-oauth2/?next=${location.protocol}//${location.host}*/}
-          {/*      /callback/google_calendar&student_token=${this.props.userInfo.LoginToken}*/}
-          {/*      &login_hash=${this.props.userInfo.LoginHash}`;*/}
-          {/*      document.body.appendChild(link);*/}
-          {/*      link.click();*/}
-          {/*    } else {*/}
-          {/*      this.props.addTTtoGCal();*/}
-          {/*    }*/}
-          {/*  }}*/}
-          {/* >*/}
-          {/*  <span className="img-icon">*/}
-          {/*    { UploadIcon }*/}
-          {/*  </span>*/}
-          {/*  <span>{ DownloadText }</span>*/}
-          {/* </button>*/}
-          {/* <p className="method-details">Add to your Google Calendar in just one click, no*/}
-          {/*              downloads. No*/}
-          {/*              importing.</p>*/}
-          {/* <div className="or-separator">*/}
-          {/*  <span className="h6 or-separator--text">or</span>*/}
-          {/*  <hr />*/}
-          {/* </div>*/}
+          {/* <button */}
+          {/*  className="btn abnb-btn" onClick={() => { */}
+          {/*    if (!this.props.userInfo.isLoggedIn || !this.props.userInfo.GoogleSignedUp || */}
+          {/*      !this.props.userInfo.GoogleLoggedIn) { */}
+          {/*      const link = document.createElement('a'); */}
+          {/*      link.href = `/login/google-oauth2/?next=${location.protocol}//${location.host} */}
+          {/*      /callback/google_calendar&student_token=${this.props.userInfo.LoginToken} */}
+          {/*      &login_hash=${this.props.userInfo.LoginHash}`; */}
+          {/*      document.body.appendChild(link); */}
+          {/*      link.click(); */}
+          {/*    } else { */}
+          {/*      this.props.addTTtoGCal(); */}
+          {/*    } */}
+          {/*  }} */}
+          {/* > */}
+          {/*  <span className="img-icon"> */}
+          {/*    { UploadIcon } */}
+          {/*  </span> */}
+          {/*  <span>{ DownloadText }</span> */}
+          {/* </button> */}
+          {/* <p className="method-details">Add to your Google Calendar in just one click, no */}
+          {/*              downloads. No */}
+          {/*              importing.</p> */}
+          {/* <div className="or-separator"> */}
+          {/*  <span className="h6 or-separator--text">or</span> */}
+          {/*  <hr /> */}
+          {/* </div> */}
           <button
-            className="btn abnb-btn secondary" onClick={() => {
+            className="btn abnb-btn secondary"
+            onClick={() => {
               this.props.createICalFromTimetable();
             }}
           >
-            <span className="img-icon">
-              { DownloadIcon }
-            </span>
+            <span className="img-icon">{DownloadIcon}</span>
             <span>Download Calendar</span>
           </button>
-          <p className="method-details">Downloads a .ics file which can be uploaded to
-                        Google Calendar, loaded
-                        in to iCal., or any other calendar application.</p>
+          <p className="method-details">
+            Downloads a .ics file which can be uploaded to Google Calendar, loaded in to
+            iCal., or any other calendar application.
+          </p>
         </div>
       </WaveModal>
     );
@@ -135,4 +142,3 @@ SaveCalendarModal.propTypes = {
 };
 
 export default SaveCalendarModal;
-
