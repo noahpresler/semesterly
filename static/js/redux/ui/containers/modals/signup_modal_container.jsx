@@ -21,7 +21,7 @@ const mapStateToProps = (state) => ({
 });
 
 const SignupModalContainer = connect(mapStateToProps, {
-  toggleSignupModal: signupModalActions.showSignupModal,
+  toggleSignupModal: signupModalActions.hideSignupModal,
 })(SignupModal);
 
 export default SignupModalContainer;

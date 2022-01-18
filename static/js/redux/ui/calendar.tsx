@@ -13,6 +13,7 @@ GNU General Public License for more details.
 */
 
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import classnames from "classnames";
 import ReactTooltip from "react-tooltip";
 import Clipboard from "clipboard";
@@ -21,6 +22,7 @@ import SlotManagerContainer from "./containers/slot_manager_container";
 import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
 import { ShareLink } from "./master_slot";
+import { signupModalActions } from "../state/slices/signupModalSlice";
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -93,8 +95,6 @@ const Calendar = (props: CalendarProps) => {
     }, 60 * 1000);
   }, []);
 
-  // TODO : Test share link shows properly
-
   const getCalendarRows = () => {
     const rows = [];
     for (let i = 8; i <= props.endHour; i++) {
@@ -144,8 +144,13 @@ const Calendar = (props: CalendarProps) => {
     form.submit();
   };
 
+  const dispatch = useDispatch();
   const customEventModeButtonClicked = () => {
-    setCustomSlotModeOn((previous) => !previous);
+    if (props.isLoggedIn) {
+      setCustomSlotModeOn((previous) => !previous);
+    } else {
+      dispatch(signupModalActions.showSignupModal());
+    }
   };
 
   const description = customSlotModeOn ? (
