@@ -13,14 +13,15 @@ GNU General Public License for more details.
 */
 
 // @ts-ignore
-import { WaveModal } from "boron-15";
-import React, { useEffect, useRef } from "react";
+import { DropModal } from "boron-15";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { customEventsActions } from "../../state/slices/customEventsSlice";
 
 const CustomEventModal = () => {
   const isVisible = useAppSelector((state) => state.customEvents.isModalVisible);
-  const modal = useRef<WaveModal>();
+  const modal = useRef<DropModal>();
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (isVisible && modal.current) {
@@ -42,18 +43,65 @@ const CustomEventModal = () => {
 
   const dispatch = useAppDispatch();
 
+  const createLabel = (name: string, label: string) => (
+    <label htmlFor={name}>{label}</label>
+  );
+
+  const createTextInput = (
+    name: string,
+    value: string,
+    validator?: (newValue: string) => boolean,
+    messageIfInvalid?: string
+  ) => (
+    <div className="input-text-field">
+      <input
+        id={name}
+        type="text"
+        value={value}
+        onChange={(e) => {
+          if (validator && !validator(e.target.value)) {
+            setErrorMessage(messageIfInvalid || "Invalid input");
+          }
+        }}
+      />
+    </div>
+  );
+
+  const editCustomEventForm = (
+    <form className="edit-custom-event-form">
+      <div className="event-form-items">
+        <div className="event-labels">
+          {createLabel("event-name", "Event Name:")}
+          {createLabel("event-location", "Location:")}
+          {createLabel("event-color", "Color:")}
+          {createLabel("event-start-time", "Start Time:")}
+          {createLabel("event-end-time", "End Time:")}
+        </div>
+        <div className="event-text-inputs">
+          {createTextInput("event-name", "New Custom Event")}
+          {createTextInput("event-location", "")}
+          {createTextInput("event-color", "#F8F6F7")}
+          {createTextInput("event-start-time", "08:30")}
+          {createTextInput("event-end-time", "09:30")}
+        </div>
+      </div>
+      <p>{errorMessage}</p>
+      <button className="btn btn-primary">Save</button>
+    </form>
+  );
+
   return (
-    <WaveModal
+    <DropModal
       ref={modal}
-      className="custom-event-modal abnb-modal max-modal"
+      className="custom-event-modal"
       modalStyle={modalStyle}
       onHide={() => {
         dispatch(customEventsActions.hideCustomEventsModal());
       }}
     >
       {modalHeader}
-      <h1>Hello World!</h1>
-    </WaveModal>
+      {editCustomEventForm}
+    </DropModal>
   );
 };
 
