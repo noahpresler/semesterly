@@ -76,7 +76,7 @@ const createSource = {
     };
   },
   canDrag(props) {
-    return props.loggedIn;
+    return props.loggedIn && props.customEventModeOn;
   },
 };
 
