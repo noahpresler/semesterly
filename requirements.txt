@@ -39,6 +39,7 @@ python-memcached==1.59
 python-social-auth==0.2.21
 pytz==2017.2
 pywebpush==1.4.0
+PyJWT[crypto]==2.3.0
 PyYAML==6.0
 requests==2.25.1
 rollbar==0.16.1
