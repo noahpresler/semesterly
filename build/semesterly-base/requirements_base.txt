@@ -35,6 +35,7 @@ pycodestyle==2.6.0
 python-dateutil==2.6.1
 social-auth-core==4.0.3
 social-auth-app-django==4.0.0
+python-memcached==1.59
 python-social-auth==0.2.21
 pytz==2017.2
 pywebpush==1.4.0
