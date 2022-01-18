@@ -37,6 +37,7 @@ social-auth-app-django==4.0.0
 python-social-auth==0.2.21
 pytz==2017.2
 pywebpush==1.4.0
+pyyaml==6.0
 requests==2.25.1
 rollbar==0.16.1
 scipy==1.7.0
