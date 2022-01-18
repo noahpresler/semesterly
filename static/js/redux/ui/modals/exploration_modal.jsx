@@ -89,7 +89,7 @@ class ExplorationModal extends React.Component {
       times: prevState.times,
       levels: prevState.levels,
     };
-    if (!isEqual(filters, prevFilters) && this.props.page > 1) {
+    if (!isEqual(filters, prevFilters)) {
       this.props.clearPagination();
     }
     $(".exp-search-results").scroll(() => {
@@ -445,7 +445,7 @@ class ExplorationModal extends React.Component {
             onClickOut={this.hideAll}
             schoolSpecificInfo={this.props.schoolSpecificInfo}
           />
-          {this.props.isFetching && this.props.page === 1 ? null : (
+          {this.props.isFetching ? null : (
             <div className="col-7-16 exp-modal">{courseModal}</div>
           )}
         </div>
@@ -500,7 +500,6 @@ ExplorationModal.propTypes = {
   paginate: PropTypes.func.isRequired,
   isVisible: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
-  page: PropTypes.number.isRequired,
   hideExplorationModal: PropTypes.func.isRequired,
   schoolSpecificInfo: SemesterlyPropTypes.schoolSpecificInfo.isRequired,
   unHoverSection: PropTypes.func.isRequired,
