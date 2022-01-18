@@ -11,6 +11,7 @@ coverage==4.4.1
 dateparser==1.0.0
 Django==3.2.11
 django-cachalot==2.4.3
+django-extensions==3.1.5
 django-picklefield==3.0.1
 django-webpack-loader==0.7.0
 djangorestframework==3.12.2
@@ -37,7 +38,7 @@ social-auth-app-django==4.0.0
 python-social-auth==0.2.21
 pytz==2017.2
 pywebpush==1.4.0
-pyyaml==6.0
+PyYAML==6.0
 requests==2.25.1
 rollbar==0.16.1
 scipy==1.7.0
