@@ -36,6 +36,7 @@ import UserAcquisitionModal from "./modals/user_acquisition_modal";
 import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_container";
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
 import UserSettingsModal from "./modals/user_settings_modal";
+import CustomEventModal from "./modals/custom_event_modal";
 
 class Semesterly extends React.Component {
   constructor(props) {
@@ -179,6 +180,7 @@ class Semesterly extends React.Component {
         <TutModalContainer />
         <PeerModalContainer />
         <SaveCalendarModalContainer />
+        <CustomEventModal />
         <UserAcquisitionModal />
         <TermsOfServiceModalContainer />
         <TermsOfServiceBannerContainer />

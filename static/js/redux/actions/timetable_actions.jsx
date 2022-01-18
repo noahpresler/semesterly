@@ -49,7 +49,7 @@ import {
   changeActiveSavedTimetable,
 } from "./initActions";
 import { timetablesActions } from "../state/slices/timetablesSlice";
-import { customEventsAction } from "../state/slices/customEventsSlice";
+import { customEventsActions } from "../state/slices/customEventsSlice";
 import { courseSectionsActions } from "../state/slices/courseSectionsSlice";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 
@@ -106,7 +106,7 @@ export const fetchTimetables =
           // user wasn't removing or refetching for custom events
           // (i.e. was adding a course/section), but we got no timetables back.
           // therefore course added by the user resulted in a conflict
-          dispatch(customEventsAction.clearConflictingEvents());
+          dispatch(customEventsActions.clearConflictingEvents());
           dispatch(alertConflict());
         }
         return json;
@@ -222,7 +222,7 @@ export const nullifyTimetable = () => (dispatch) => {
   dispatch({
     type: ActionTypes.CLEAR_OPTIONAL_COURSES,
   });
-  dispatch(customEventsAction.clearCustomEvents());
+  dispatch(customEventsActions.clearCustomEvents());
 };
 
 // get semester index of cached index into allSemesters
@@ -408,7 +408,7 @@ export const addLastAddedCourse = () => (dispatch, getState) => {
     return;
   }
   if (typeof state.timetables.lastSlotAdded === "object") {
-    dispatch(customEventsAction.receiveCustomEvents(state.timetables.lastSlotAdded));
+    dispatch(customEventsActions.receiveCustomEvents(state.timetables.lastSlotAdded));
     dispatch(refetchTimetables());
   } else if (typeof state.timetables.lastSlotAdded === "number") {
     dispatch(addOrRemoveCourse(state.timetables.lastSlotAdded));
