@@ -15,6 +15,8 @@ GNU General Public License for more details.
 import React, { useEffect, useState } from "react";
 import { DragSource, DropTarget } from "react-dnd";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
+import { useAppDispatch } from "../hooks";
+import { customEventsActions } from "../state/slices/customEventsSlice";
 
 type CustomSlotProps = {
   connectDragSource: Function;
@@ -28,7 +30,6 @@ type CustomSlotProps = {
   id: number;
   uses12HrTime: boolean;
   preview: boolean;
-  updateCustomSlot: Function;
   removeCustomSlot: Function;
   connectCreateTarget: Function;
 };
@@ -206,10 +207,6 @@ const CustomSlot = (props: CustomSlotProps) => {
     props.removeCustomSlot();
   };
 
-  const updateName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.updateCustomSlot({ name: event.target.value }, props.id);
-  };
-
   const removeButton = hovered ? (
     <i className="fa fa-times" onClick={(event) => removeCustomButtonClicked(event)} />
   ) : null;
@@ -228,14 +225,14 @@ const CustomSlot = (props: CustomSlotProps) => {
         }`
       : props.time_end;
 
+  const dispatch = useAppDispatch();
   const customSlot = (
     <div
       className={"fc-time-grid-event fc-event slot"}
       style={getSlotStyles()}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      // @ts-ignore
-      onClick={() => $(`#${props.id} .fc-time input`).select()}
+      onClick={() => dispatch(customEventsActions.showCustomEventsModal())}
       id={`${props.id}`}
     >
       <div className="slot-bar" style={{ backgroundColor: "#aaa" }} />
@@ -247,9 +244,7 @@ const CustomSlot = (props: CustomSlotProps) => {
           </span>
         </div>
         <div className="fc-time">
-          <input
-            type="text"
-            name="eventName"
+          <span
             style={{
               backgroundColor: "#F8F6F7",
               borderStyle: "none",
@@ -257,9 +252,9 @@ const CustomSlot = (props: CustomSlotProps) => {
               outlineWidth: "2px",
               width: "95%",
             }}
-            value={props.name}
-            onChange={(event) => updateName(event)}
-          />
+          >
+            {props.name}
+          </span>
         </div>
       </div>
     </div>
