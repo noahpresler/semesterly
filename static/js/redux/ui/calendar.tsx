@@ -153,7 +153,7 @@ const Calendar = (props: CalendarProps) => {
     }
   };
 
-  const description = customSlotModeOn ? (
+  const customEventDescription = customSlotModeOn ? (
     <h4 className="custom-instructions">
       Click, drag, and release to create your custom event
     </h4>
@@ -319,9 +319,9 @@ const Calendar = (props: CalendarProps) => {
       })}
     >
       <div className="fc-toolbar no-print">
-        <div className="fc-left" style={{ display: "none" }}>
+        <div className="fc-left">
           {!customSlotModeOn ? <PaginationContainer /> : null}
-          {description}
+          {customEventDescription}
         </div>
         <div className="fc-right">
           {addSISButton}
