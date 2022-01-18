@@ -1,0 +1,32 @@
+.custom-event-modal {
+  max-height: 900px;
+  max-width: 600px;
+}
+
+.edit-custom-event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.event-form-items {
+  display: flex;
+  flex-direction: horizontal;
+  gap: 1em;
+}
+
+.event-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  label {
+    display: block;
+  }
+}
+
+.event-text-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
