@@ -38,11 +38,10 @@ const dragSlotSource = {
   endDrag() {},
 };
 
-function collectDragSource(connect, monitor) {
+function collectDragSource(connect) {
   return {
     connectDragSource: connect.dragSource(),
     connectDragPreview: connect.dragPreview(),
-    isDragging: monitor.isDragging(),
   };
 }
 
@@ -200,7 +199,6 @@ class CustomSlot extends React.Component {
       width: `${slotWidthPercentage}%`,
       left: `${pushLeft}%`,
       zIndex: 10 * this.props.depth_level,
-      opacity: this.props.isDragging ? 0 : 1, // hide while dragging
     };
   }
 
@@ -232,46 +230,48 @@ class CustomSlot extends React.Component {
           }`
         : this.props.time_end;
 
-    return this.props.connectCreateTarget(
-      this.props.connectDragTarget(
-        this.props.connectDragSource(
-          <div className="fc-event-container">
-            <div
-              className={"fc-time-grid-event fc-event slot"}
-              style={this.getSlotStyles()}
-              onMouseEnter={this.onSlotHover}
-              onMouseLeave={this.onSlotUnhover}
-              onClick={() => $(`#${this.props.id} .fc-time input`).select()}
-              id={this.props.id}
-            >
-              <div className="slot-bar" style={{ backgroundColor: "#aaa" }} />
-              {removeButton}
-              <div className="fc-content">
-                <div className="fc-time">
-                  <span>
-                    {convertedStart} – {convertedEnd}
-                  </span>
-                </div>
-                <div className="fc-time">
-                  <input
-                    type="text"
-                    name="eventName"
-                    style={{
-                      backgroundColor: "#F8F6F7",
-                      borderStyle: "none",
-                      outlineColor: "#aaa",
-                      outlineWidth: "2px",
-                      width: "95%",
-                    }}
-                    value={this.props.name}
-                    onChange={(event) => this.updateName(event)}
-                  />
-                </div>
-              </div>
-            </div>
+    const slot = (
+      <div
+        className={"fc-time-grid-event fc-event slot"}
+        style={this.getSlotStyles()}
+        onMouseEnter={this.onSlotHover}
+        onMouseLeave={this.onSlotUnhover}
+        onClick={() => $(`#${this.props.id} .fc-time input`).select()}
+        id={this.props.id}
+      >
+        <div className="slot-bar" style={{ backgroundColor: "#aaa" }} />
+        {removeButton}
+        <div className="fc-content">
+          <div className="fc-time">
+            <span>
+              {convertedStart} – {convertedEnd}
+            </span>
           </div>
-        )
-      )
+          <div className="fc-time">
+            <input
+              type="text"
+              name="eventName"
+              style={{
+                backgroundColor: "#F8F6F7",
+                borderStyle: "none",
+                outlineColor: "#aaa",
+                outlineWidth: "2px",
+                width: "95%",
+              }}
+              value={this.props.name}
+              onChange={(event) => this.updateName(event)}
+            />
+          </div>
+        </div>
+      </div>
+    );
+
+    return (
+      <div className="fc-event-container">
+        {this.props.connectCreateTarget(
+          this.props.connectDragTarget(this.props.connectDragSource(slot))
+        )}
+      </div>
     );
   }
 }
@@ -279,7 +279,6 @@ class CustomSlot extends React.Component {
 CustomSlot.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   connectDragTarget: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired,
   time_start: PropTypes.string.isRequired,
   time_end: PropTypes.string.isRequired,
   depth_level: PropTypes.number.isRequired,
