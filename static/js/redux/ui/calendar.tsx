@@ -13,7 +13,7 @@ GNU General Public License for more details.
 */
 
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux"
+import { useDispatch } from "react-redux";
 import classnames from "classnames";
 import ReactTooltip from "react-tooltip";
 import Clipboard from "clipboard";
