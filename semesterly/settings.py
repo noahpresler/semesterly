@@ -20,7 +20,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-import djcelery
 import os
 import yaml
 
@@ -171,7 +170,6 @@ INSTALLED_APPS = (
     "rest_framework",
     "drf_yasg",
     "webpack_loader",
-    "djcelery",
     "agreement",
     "parsing",
 )
@@ -335,28 +333,3 @@ if not DEBUG:
     import rollbar
 
     rollbar.init(**ROLLBAR)
-
-
-# Begin Celery stuff.
-djcelery.setup_loader()
-
-BROKER_URL = "redis://localhost:6379/0"
-CELERY_ACCEPT_CONTENT = ["json"]
-CELERY_TASK_SERIALIZER = "json"
-CELERY_RESULT_SERIALIZER = "json"
-CELERY_RESULT_BACKEND = "djcelery.backends.database:DatabaseBackend"
-CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-CELERY_TIMEZONE = "America/New_York"
-
-# App instance to use
-CELERY_APP = "semesterly"
-
-# Where to chdir at start.
-CELERYBEAT_CHDIR = BASE_DIR
-CELERYD_CHDIR = BASE_DIR
-
-# # Can set up cron like scheduling here.
-# from celery.schedules import crontab
-# CELERYBEAT_SCHEDULE = {}
-
-# End Celery stuff.
