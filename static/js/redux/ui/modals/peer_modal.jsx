@@ -97,7 +97,7 @@ class PeerModal extends React.Component {
     const proPicStyle = !this.props.userInfo.isLoggedIn
       ? { backgroundImage: 'url("/static/img/blank.jpg")' }
       : {
-          backgroundImage: `url(http://graph.facebook.com/${this.props.userInfo.fbook_uid}/picture?width=700&height=700)`,
+          backgroundImage: `url(https://graph.facebook.com/${this.props.userInfo.fbook_uid}/picture?width=700&height=700)`,
         };
     const sideBar = (
       <div className="pm-side-bar">
