@@ -55,10 +55,13 @@ export interface Slot {
  * Event refers to a custom event created by user
  */
 export interface Event {
-  name: string;
   day: Day;
+  name: string;
+  location: string;
+  color: string;
   time_start: string;
   time_end: string;
+  credits: number;
   id: number;
   preview: boolean;
   exists_conflict?: boolean;
