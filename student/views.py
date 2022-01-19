@@ -20,9 +20,11 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from hashids import Hashids
+from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from decimal import Decimal
 
 from authpipe.utils import check_student_token
 from analytics.models import CalendarExport
@@ -282,12 +284,21 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         tt.events.clear()
         to_delete.delete()
         for event in events:
+            # validate credit
+            credit = Decimal(event["credit"])
+            if credit % Decimal(0.5) != 0:
+                raise serializers.ValidationError(
+                    "Field credit must be multiples 0f 0.5"
+                )
             event_obj = PersonalEvent.objects.create(
                 timetable=tt,
                 name=event["name"],
                 time_start=event["time_start"],
                 time_end=event["time_end"],
                 day=event["day"],
+                color=event["color"],
+                location=event["location"],
+                credit=credit,
             )
             tt.events.add(event_obj)
         tt.save()
