@@ -430,7 +430,7 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
       day,
       name: "New Custom Event", // default name for custom slot
       location: "",
-      color: "F8F6F7",
+      color: "#F8F6F7",
       time_start: timeStart, // match backend slot attribute names
       time_end: timeEnd,
       credits: 0.0,
@@ -447,25 +447,15 @@ export const removeCustomSlot = (id) => (dispatch) => {
 };
 
 export const updateCustomSlot = (newValues, id) => (dispatch) => {
-  const changedProps = Object.keys(newValues);
-  const onlyChangingName = changedProps.length === 1 && changedProps[0] === "name";
   if (
     newValues.time_start !== undefined &&
     newValues.time_start === newValues.time_end
   ) {
     dispatch(removeCustomSlot(id));
     // For some reason, students can drag and drop past midnight
-  } else if (
-    onlyChangingName ||
-    (newValues.time_end !== undefined && newValues.time_end <= "24:00")
-  ) {
+  } else if (newValues.time_end !== undefined && newValues.time_end <= "24:00") {
     newValues.id = id;
     dispatch(updateExistingEvent(newValues));
-  }
-  if (onlyChangingName) {
-    dispatch(autoSave());
-  } else {
-    // only refetch if we are changing the slot time
     dispatch(autoFetch());
   }
 };
