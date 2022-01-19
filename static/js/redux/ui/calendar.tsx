@@ -111,7 +111,14 @@ const Calendar = (props: CalendarProps) => {
           customEventModeOn={customEventModeOn}
         />
       );
-      rows.push(<Row time={`${i}:30`} isLoggedIn={props.isLoggedIn} key={i + 0.5} customEventModeOn={customEventModeOn} />);
+      rows.push(
+        <Row
+          key={i + 0.5}
+          isLoggedIn={props.isLoggedIn}
+          time={`${i}:30`}
+          customEventModeOn={customEventModeOn}
+        />
+      );
     }
     return rows;
   };
