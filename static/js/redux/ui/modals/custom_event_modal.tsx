@@ -42,11 +42,11 @@ const CustomEventModal = () => {
   useEffect(() => {
     if (selectedEvent) {
       setEventName(selectedEvent.name);
-      setEventLocation(""); // TODO: Set when credits are added to the backend
-      setEventColor("#E7E6E8"); // TODO: Set when credits are added to the backend
+      setEventLocation(selectedEvent.location);
+      setEventColor(selectedEvent.color);
       setEventStartTime(selectedEvent.time_start);
       setEventEndTime(selectedEvent.time_end);
-      setEventCredits("0"); // TODO: Set when credits are added to the backend
+      setEventCredits(`${selectedEvent.credits}`);
     }
   }, [selectedEvent]);
 
@@ -128,14 +128,19 @@ const CustomEventModal = () => {
   const onCustomEventSave = (event: FormEvent) => {
     event.preventDefault();
     if (selectedEvent && isValid()) {
-      dispatch(updateCustomSlot({
-        name: eventName,
-        location: eventLocation,
-        color: eventColor,
-        time_start: eventStartTime,
-        time_end: eventEndTime,
-        credits: eventCredits,
-      }, selectedEvent.id));
+      dispatch(
+        updateCustomSlot(
+          {
+            name: eventName,
+            location: eventLocation,
+            color: eventColor,
+            time_start: eventStartTime,
+            time_end: eventEndTime,
+            credits: eventCredits,
+          },
+          selectedEvent.id
+        )
+      );
     }
     dispatch(customEventsActions.hideCustomEventsModal());
   };
