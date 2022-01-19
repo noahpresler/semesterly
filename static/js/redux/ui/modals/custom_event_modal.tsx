@@ -27,7 +27,7 @@ const CustomEventModal = () => {
   const [eventStartTime, setEventStartTime] = useState("08:30");
   const [eventEndTime, setEventEndTime] = useState("09:30");
   const [eventCredits, setEventCredits] = useState("0");
-  const [errorMessage, setErrorMessage] = useState("Error message");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (isVisible && modal.current) {
@@ -42,10 +42,6 @@ const CustomEventModal = () => {
       </div>
     </div>
   );
-
-  const modalStyle = {
-    width: "100%",
-  };
 
   const dispatch = useAppDispatch();
 
@@ -70,9 +66,10 @@ const CustomEventModal = () => {
         onChange={(e) => {
           if (validator && !validator(e.target.value)) {
             setErrorMessage(messageIfInvalid || "Invalid input");
+          } else {
+            setErrorMessage("");
           }
           setter(e.target.value);
-          setErrorMessage("")
         }}
       />
     </div>
@@ -151,8 +148,6 @@ const CustomEventModal = () => {
   return (
     <DropModal
       ref={modal}
-      className="custom-event-modal"
-      modalStyle={modalStyle}
       onHide={() => {
         dispatch(customEventsActions.hideCustomEventsModal());
       }}
