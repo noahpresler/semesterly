@@ -232,7 +232,7 @@ const CustomSlot = (props: CustomSlotProps) => {
       style={getSlotStyles()}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => dispatch(customEventsActions.showCustomEventsModal())}
+      onClick={() => dispatch(customEventsActions.showCustomEventsModal(props.id))}
       id={`${props.id}`}
     >
       <div className="slot-bar" style={{ backgroundColor: "#aaa" }} />

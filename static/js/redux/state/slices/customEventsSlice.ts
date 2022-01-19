@@ -10,9 +10,14 @@ import { Event, Timetable } from "../../constants/commonTypes";
 interface CustomEventsSlice {
   events: Event[];
   isModalVisible: boolean;
+  selectedEventId: number | null;
 }
 
-const initialState: CustomEventsSlice = { events: [], isModalVisible: false };
+const initialState: CustomEventsSlice = {
+  events: [],
+  isModalVisible: false,
+  selectedEventId: null,
+};
 
 const customEventsSlice = createSlice({
   name: "customEevnts",
@@ -32,12 +37,14 @@ const customEventsSlice = createSlice({
     receiveCustomEvents: (state, action: PayloadAction<Event[]>) => {
       state.events = action.payload;
     },
-    showCustomEventsModal: (state) => {
+    showCustomEventsModal: (state, action: PayloadAction<number>) => {
+      state.selectedEventId = action.payload;
       state.isModalVisible = true;
     },
     hideCustomEventsModal: (state) => {
       state.isModalVisible = false;
-    }
+      state.selectedEventId = null;
+    },
   },
   extraReducers: (builder) => {
     builder

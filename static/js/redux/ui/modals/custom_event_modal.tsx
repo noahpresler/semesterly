@@ -20,14 +20,34 @@ import { customEventsActions } from "../../state/slices/customEventsSlice";
 
 const CustomEventModal = () => {
   const isVisible = useAppSelector((state) => state.customEvents.isModalVisible);
+
   const modal = useRef<DropModal>();
-  const [eventName, setEventName] = useState("New Custom Event");
+  const [eventName, setEventName] = useState("");
   const [eventLocation, setEventLocation] = useState("");
-  const [eventColor, setEventColor] = useState("#F8F6F7");
-  const [eventStartTime, setEventStartTime] = useState("08:30");
-  const [eventEndTime, setEventEndTime] = useState("09:30");
-  const [eventCredits, setEventCredits] = useState("0");
+  const [eventColor, setEventColor] = useState("");
+  const [eventStartTime, setEventStartTime] = useState("");
+  const [eventEndTime, setEventEndTime] = useState("");
+  const [eventCredits, setEventCredits] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const getSelectedEvent = () => {
+    const events = useAppSelector((state) => state.customEvents.events);
+    const selectedEventId = useAppSelector(
+      (state) => state.customEvents.selectedEventId
+    );
+    return events.find((event) => event.id === selectedEventId);
+  };
+  const selectedEvent = getSelectedEvent();
+  useEffect(() => {
+    if (selectedEvent) {
+      setEventName(selectedEvent.name);
+      setEventLocation(selectedEvent.location);
+      setEventColor(selectedEvent.color);
+      setEventStartTime(selectedEvent.time_start);
+      setEventEndTime(selectedEvent.time_end);
+      setEventCredits(`${selectedEvent.credits}`);
+    }
+  }, [selectedEvent]);
 
   useEffect(() => {
     if (isVisible && modal.current) {
