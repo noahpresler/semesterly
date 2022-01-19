@@ -140,7 +140,7 @@ class PersonalEvent(models.Model):
     time_end = models.CharField(max_length=15)
     color = models.CharField(max_length=7, default="#F8F6F7")
     location = models.CharField(max_length=50, null=True, blank=True)
-    credit = models.DecimalField(
+    credits = models.DecimalField(
         max_digits=3, decimal_places=1, default=0.0, null=True, blank=True
     )
 
