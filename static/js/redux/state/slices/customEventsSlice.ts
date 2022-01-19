@@ -7,7 +7,7 @@ import {
 } from "../../actions";
 import { Event, Timetable } from "../../constants/commonTypes";
 
-interface CustomEventsSlice {
+export interface CustomEventsSlice {
   events: Event[];
   isModalVisible: boolean;
   selectedEventId: number | null;
