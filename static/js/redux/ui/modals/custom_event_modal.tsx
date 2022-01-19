@@ -58,7 +58,7 @@ const CustomEventModal = () => {
   const createTextInput = (
     name: string,
     value: string,
-    size?: number,
+    setter: (newValue: string) => void,
     validator?: (newValue: string) => boolean,
     messageIfInvalid?: string
   ) => (
@@ -66,16 +66,24 @@ const CustomEventModal = () => {
       <input
         id={name}
         type="text"
-        size={size}
         value={value}
         onChange={(e) => {
           if (validator && !validator(e.target.value)) {
             setErrorMessage(messageIfInvalid || "Invalid input");
           }
+          setter(e.target.value);
+          setErrorMessage("")
         }}
       />
     </div>
   );
+
+  const eventNameValidator = (newValue: string) => newValue.length <= 50;
+  const eventLocationValidator = (newValue: string) => newValue.length <= 50;
+  const eventColorValidator = (newValue: string) => /^#[0-9A-F]{6}$/i.test(newValue);
+  const eventTimeValidator = (newValue: string) => /^[0-9]{2}:[0-9]{2}$/.test(newValue);
+  const eventCreditsValidator = (newValue: string) =>
+    /^[0-9]{1,2}(.5)?$/.test(newValue);
 
   const editCustomEventForm = (
     <form className="edit-custom-event-form">
@@ -89,16 +97,54 @@ const CustomEventModal = () => {
           {createLabel("event-credits", "Credits:")}
         </div>
         <div className="event-text-inputs">
-          {createTextInput("event-name", eventName)}
-          {createTextInput("event-location", eventLocation)}
-          {createTextInput("event-color", eventColor, 30)}
-          {createTextInput("event-start-time", eventStartTime)}
-          {createTextInput("event-end-time", eventEndTime)}
-          {createTextInput("event-credits", eventCredits)}
+          {createTextInput(
+            "event-name",
+            eventName,
+            setEventName,
+            eventNameValidator,
+            "Event name must be less than or equal to 50 characters"
+          )}
+          {createTextInput(
+            "event-location",
+            eventLocation,
+            setEventLocation,
+            eventLocationValidator,
+            "Event location must be less than or equal to 50 characters"
+          )}
+          {createTextInput(
+            "event-color",
+            eventColor,
+            setEventColor,
+            eventColorValidator,
+            "Event color must be a valid hex color"
+          )}
+          {createTextInput(
+            "event-start-time",
+            eventStartTime,
+            setEventStartTime,
+            eventTimeValidator,
+            "Event start time must be in the format HH:MM"
+          )}
+          {createTextInput(
+            "event-end-time",
+            eventEndTime,
+            setEventEndTime,
+            eventTimeValidator,
+            "Event end time must be in the format HH:MM"
+          )}
+          {createTextInput(
+            "event-credits",
+            eventCredits,
+            setEventCredits,
+            eventCreditsValidator,
+            "Event credits must be a number between 0 and 99.5"
+          )}
         </div>
       </div>
       <p>{errorMessage}</p>
-      <button className="btn btn-primary save-button"><span>Save</span></button>
+      <button className="btn btn-primary save-button">
+        <span>Save</span>
+      </button>
     </form>
   );
 
