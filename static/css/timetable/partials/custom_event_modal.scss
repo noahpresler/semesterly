@@ -1,32 +1,66 @@
 .custom-event-modal {
-  max-height: 900px;
+  max-height: 800px;
   max-width: 600px;
+}
+
+.modal-header {
+  padding-left: 2em;
 }
 
 .edit-custom-event-form {
   display: flex;
   flex-direction: column;
   gap: 1em;
+
+  p {
+    padding: 0 2em;
+    margin: 0;
+    text-align: center;
+    color: red;
+  }
 }
 
 .event-form-items {
   display: flex;
-  flex-direction: horizontal;
+  flex-direction: row;
+  justify-content: left;
+  padding: 2em 3em 0 2em;
   gap: 1em;
 }
 
 .event-labels {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 1em;
 
   label {
     display: block;
+    margin: 0;
   }
 }
 
 .event-text-inputs {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
   gap: 1em;
+
+  input {
+    height: 1em;
+    width: 100%;
+    padding: 15px 5px;
+  }
+}
+
+.save-button {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1em;
+
+  span {
+    font-size: 1.5em;
+  }
 }

@@ -21,7 +21,13 @@ import { customEventsActions } from "../../state/slices/customEventsSlice";
 const CustomEventModal = () => {
   const isVisible = useAppSelector((state) => state.customEvents.isModalVisible);
   const modal = useRef<DropModal>();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [eventName, setEventName] = useState("New Custom Event");
+  const [eventLocation, setEventLocation] = useState("");
+  const [eventColor, setEventColor] = useState("#F8F6F7");
+  const [eventStartTime, setEventStartTime] = useState("08:30");
+  const [eventEndTime, setEventEndTime] = useState("09:30");
+  const [eventCredits, setEventCredits] = useState("0");
+  const [errorMessage, setErrorMessage] = useState("Error message");
 
   useEffect(() => {
     if (isVisible && modal.current) {
@@ -44,12 +50,15 @@ const CustomEventModal = () => {
   const dispatch = useAppDispatch();
 
   const createLabel = (name: string, label: string) => (
-    <label htmlFor={name}>{label}</label>
+    <label htmlFor={name}>
+      <span>{label}</span>
+    </label>
   );
 
   const createTextInput = (
     name: string,
     value: string,
+    size?: number,
     validator?: (newValue: string) => boolean,
     messageIfInvalid?: string
   ) => (
@@ -57,6 +66,7 @@ const CustomEventModal = () => {
       <input
         id={name}
         type="text"
+        size={size}
         value={value}
         onChange={(e) => {
           if (validator && !validator(e.target.value)) {
@@ -71,22 +81,24 @@ const CustomEventModal = () => {
     <form className="edit-custom-event-form">
       <div className="event-form-items">
         <div className="event-labels">
-          {createLabel("event-name", "Event Name:")}
+          {createLabel("event-name", "Name:")}
           {createLabel("event-location", "Location:")}
           {createLabel("event-color", "Color:")}
           {createLabel("event-start-time", "Start Time:")}
           {createLabel("event-end-time", "End Time:")}
+          {createLabel("event-credits", "Credits:")}
         </div>
         <div className="event-text-inputs">
-          {createTextInput("event-name", "New Custom Event")}
-          {createTextInput("event-location", "")}
-          {createTextInput("event-color", "#F8F6F7")}
-          {createTextInput("event-start-time", "08:30")}
-          {createTextInput("event-end-time", "09:30")}
+          {createTextInput("event-name", eventName)}
+          {createTextInput("event-location", eventLocation)}
+          {createTextInput("event-color", eventColor, 30)}
+          {createTextInput("event-start-time", eventStartTime)}
+          {createTextInput("event-end-time", eventEndTime)}
+          {createTextInput("event-credits", eventCredits)}
         </div>
       </div>
       <p>{errorMessage}</p>
-      <button className="btn btn-primary">Save</button>
+      <button className="btn btn-primary save-button"><span>Save</span></button>
     </form>
   );
 
