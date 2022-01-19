@@ -14,7 +14,8 @@ GNU General Public License for more details.
 
 // @ts-ignore
 import { DropModal } from "boron-15";
-import React, { useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
+import { updateCustomSlot } from "../../actions";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { customEventsActions } from "../../state/slices/customEventsSlice";
 
@@ -41,17 +42,21 @@ const CustomEventModal = () => {
   useEffect(() => {
     if (selectedEvent) {
       setEventName(selectedEvent.name);
-      setEventLocation(selectedEvent.location);
-      setEventColor(selectedEvent.color);
+      setEventLocation(""); // TODO: Set when credits are added to the backend
+      setEventColor("#E7E6E8"); // TODO: Set when credits are added to the backend
       setEventStartTime(selectedEvent.time_start);
       setEventEndTime(selectedEvent.time_end);
-      setEventCredits(`${selectedEvent.credits}`);
+      setEventCredits("0"); // TODO: Set when credits are added to the backend
     }
   }, [selectedEvent]);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (isVisible && modal.current) {
       modal.current.show();
+    } else if (!isVisible && modal.current) {
+      modal.current.hide();
     }
   }, [isVisible]);
 
@@ -62,8 +67,6 @@ const CustomEventModal = () => {
       </div>
     </div>
   );
-
-  const dispatch = useAppDispatch();
 
   const createLabel = (name: string, label: string) => (
     <label htmlFor={name}>
@@ -95,15 +98,50 @@ const CustomEventModal = () => {
     </div>
   );
 
-  const eventNameValidator = (newValue: string) => newValue.length <= 50;
-  const eventLocationValidator = (newValue: string) => newValue.length <= 50;
+  const eventNameValidator = (newValue: string) =>
+    newValue ? newValue.length <= 50 : true;
+  const eventLocationValidator = (newValue: string) =>
+    newValue ? newValue.length <= 50 : true;
   const eventColorValidator = (newValue: string) => /^#[0-9A-F]{6}$/i.test(newValue);
-  const eventTimeValidator = (newValue: string) => /^[0-9]{2}:[0-9]{2}$/.test(newValue);
+  const eventTimeValidator = (newValue: string) =>
+    /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(newValue);
   const eventCreditsValidator = (newValue: string) =>
     /^[0-9]{1,2}(.5)?$/.test(newValue);
 
+  const doesTimeStartBeforeEnd = (startTime: string, endTime: string) => {
+    const startHour = parseInt(startTime.split(":")[0], 10);
+    const startMinutes = parseInt(startTime.split(":")[1], 10);
+    const endHour = parseInt(endTime.split(":")[0], 10);
+    const endMinutes = parseInt(endTime.split(":")[1], 10);
+    return startHour < endHour || (startHour === endHour && startMinutes < endMinutes);
+  };
+
+  const isValid = () =>
+    eventNameValidator(eventName) &&
+    eventLocationValidator(eventLocation) &&
+    eventColorValidator(eventColor) &&
+    eventTimeValidator(eventStartTime) &&
+    eventTimeValidator(eventEndTime) &&
+    doesTimeStartBeforeEnd(eventStartTime, eventEndTime) &&
+    eventCreditsValidator(eventCredits);
+
+  const onCustomEventSave = (event: FormEvent) => {
+    event.preventDefault();
+    if (selectedEvent && isValid()) {
+      dispatch(updateCustomSlot({
+        name: eventName,
+        location: eventLocation,
+        color: eventColor,
+        time_start: eventStartTime,
+        time_end: eventEndTime,
+        credits: eventCredits,
+      }, selectedEvent.id));
+    }
+    dispatch(customEventsActions.hideCustomEventsModal());
+  };
+
   const editCustomEventForm = (
-    <form className="edit-custom-event-form">
+    <form className="edit-custom-event-form" onSubmit={onCustomEventSave}>
       <div className="event-form-items">
         <div className="event-labels">
           {createLabel("event-name", "Name:")}
@@ -159,7 +197,7 @@ const CustomEventModal = () => {
         </div>
       </div>
       <p>{errorMessage}</p>
-      <button className="btn btn-primary save-button">
+      <button type="submit" className="btn btn-primary save-button">
         <span>Save</span>
       </button>
     </form>

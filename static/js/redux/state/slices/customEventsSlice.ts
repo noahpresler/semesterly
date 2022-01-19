@@ -20,7 +20,7 @@ const initialState: CustomEventsSlice = {
 };
 
 const customEventsSlice = createSlice({
-  name: "customEevnts",
+  name: "customEvents",
   initialState,
   reducers: {
     clearCustomEvents: (state) => {
