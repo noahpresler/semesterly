@@ -100,13 +100,24 @@ const CustomEventModal = () => {
 
   const eventNameValidator = (newValue: string) =>
     newValue ? newValue.length <= 50 : true;
+  const eventNameErrorMessage = "Name must be less than or equal to 50 characters";
+
   const eventLocationValidator = (newValue: string) =>
     newValue ? newValue.length <= 50 : true;
+  const eventLocationErrorMessage =
+    "Location must be less than or equal to 50 characters";
+
   const eventColorValidator = (newValue: string) => /^#[0-9A-F]{6}$/i.test(newValue);
+  const eventColorErrorMessage = "Color must be a valid hex color";
+
   const eventTimeValidator = (newValue: string) =>
     /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(newValue);
+  const eventTimeErrorMessage = "Time must be in the format HH:MM";
+
   const eventCreditsValidator = (newValue: string) =>
-    /^[0-9]{1,2}(.5)?$/.test(newValue);
+    /^([01]?[0-9](.0|.5)?|20(.0)?)$/.test(newValue);
+  const eventCreditsErrorMessage =
+    "Credits must be a number between 0 and 20 in increments of 0.5";
 
   const doesTimeStartBeforeEnd = (startTime: string, endTime: string) => {
     const startHour = parseInt(startTime.split(":")[0], 10);
@@ -115,19 +126,43 @@ const CustomEventModal = () => {
     const endMinutes = parseInt(endTime.split(":")[1], 10);
     return startHour < endHour || (startHour === endHour && startMinutes < endMinutes);
   };
+  const eventStartEndErrorMessage = "Start time must be before end time";
 
-  const isValid = () =>
-    eventNameValidator(eventName) &&
-    eventLocationValidator(eventLocation) &&
-    eventColorValidator(eventColor) &&
-    eventTimeValidator(eventStartTime) &&
-    eventTimeValidator(eventEndTime) &&
-    doesTimeStartBeforeEnd(eventStartTime, eventEndTime) &&
-    eventCreditsValidator(eventCredits);
+  const checkIsValid = () => {
+    if (!eventNameValidator(eventName)) {
+      setErrorMessage(eventNameErrorMessage);
+      return false;
+    }
+    if (!eventLocationValidator(eventLocation)) {
+      setErrorMessage(eventLocationErrorMessage);
+      return false;
+    }
+    if (!eventColorValidator(eventColor)) {
+      setErrorMessage(eventColorErrorMessage);
+      return false;
+    }
+    if (!eventTimeValidator(eventStartTime)) {
+      setErrorMessage(eventTimeErrorMessage);
+      return false;
+    }
+    if (!eventTimeValidator(eventEndTime)) {
+      setErrorMessage(eventTimeErrorMessage);
+      return false;
+    }
+    if (!doesTimeStartBeforeEnd(eventStartTime, eventEndTime)) {
+      setErrorMessage(eventStartEndErrorMessage);
+      return false;
+    }
+    if (!eventCreditsValidator(eventCredits)) {
+      setErrorMessage(eventCreditsErrorMessage);
+      return false;
+    }
+    return true;
+  };
 
   const onCustomEventSave = (event: FormEvent) => {
     event.preventDefault();
-    if (selectedEvent && isValid()) {
+    if (selectedEvent && checkIsValid()) {
       dispatch(
         updateCustomSlot(
           {
@@ -141,8 +176,8 @@ const CustomEventModal = () => {
           selectedEvent.id
         )
       );
+      dispatch(customEventsActions.hideCustomEventsModal());
     }
-    dispatch(customEventsActions.hideCustomEventsModal());
   };
 
   const editCustomEventForm = (
@@ -162,42 +197,42 @@ const CustomEventModal = () => {
             eventName,
             setEventName,
             eventNameValidator,
-            "Event name must be less than or equal to 50 characters"
+            eventNameErrorMessage
           )}
           {createTextInput(
             "event-location",
             eventLocation,
             setEventLocation,
             eventLocationValidator,
-            "Event location must be less than or equal to 50 characters"
+            eventLocationErrorMessage
           )}
           {createTextInput(
             "event-color",
             eventColor,
             setEventColor,
             eventColorValidator,
-            "Event color must be a valid hex color"
+            eventColorErrorMessage
           )}
           {createTextInput(
             "event-start-time",
             eventStartTime,
             setEventStartTime,
             eventTimeValidator,
-            "Event start time must be in the format HH:MM"
+            eventTimeErrorMessage
           )}
           {createTextInput(
             "event-end-time",
             eventEndTime,
             setEventEndTime,
             eventTimeValidator,
-            "Event end time must be in the format HH:MM"
+            eventTimeErrorMessage
           )}
           {createTextInput(
             "event-credits",
             eventCredits,
             setEventCredits,
             eventCreditsValidator,
-            "Event credits must be a number between 0 and 99.5"
+            eventCreditsErrorMessage
           )}
         </div>
       </div>
