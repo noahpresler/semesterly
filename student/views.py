@@ -290,6 +290,10 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                 raise serializers.ValidationError(
                     "Field credit must be multiples 0f 0.5"
                 )
+            if credits < 0 or credits > 20:
+                raise serializers.ValidationError(
+                    "Field credit must be between 0 and 20"
+                )
             event_obj = PersonalEvent.objects.create(
                 timetable=tt,
                 name=event["name"],
