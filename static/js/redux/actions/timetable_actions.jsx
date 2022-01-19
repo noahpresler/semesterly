@@ -429,10 +429,13 @@ const autoFetch = () => (dispatch, getState) => {
 export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
   dispatch(
     addNewCustomEvent({
+      day,
+      name: "New Custom Event", // default name for custom slot
+      location: "",
+      color: "F8F6F7",
       time_start: timeStart, // match backend slot attribute names
       time_end: timeEnd,
-      name: "New Custom Event", // default name for custom slot
-      day,
+      credits: 0.0,
       id,
       preview,
     })
