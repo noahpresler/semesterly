@@ -419,10 +419,8 @@ const autoFetch = () => (dispatch, getState) => {
   const state = getState();
   clearTimeout(customEventUpdateTimer);
   customEventUpdateTimer = setTimeout(() => {
-    if (getActiveTimetableCourses(state).length > 0) {
-      dispatch(timetablesActions.updateLastCourseAdded(state.customEvents));
-      dispatch(refetchTimetables());
-    }
+    dispatch(timetablesActions.updateLastCourseAdded(state.customEvents));
+    dispatch(refetchTimetables());
   }, 250);
 };
 
