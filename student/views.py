@@ -427,25 +427,8 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         social_users = self.count_social_users(
             student, current_tt, current_tt_courses, matching_tts
         )
+        print(social_users)
         return Response(social_users, status=status.HTTP_200_OK)
-
-    def count_social_users(self, student, current_tt, current_tt_courses, matching_tts):
-        social_users = []
-        for matching_tt in matching_tts:
-            friend = matching_tt.student
-            sections_in_common = matching_tt.sections.all() & current_tt.sections.all()
-            courses_in_common = matching_tt.courses.all() & current_tt_courses
-            shared_courses = [
-                self.create_shared_course(sections_in_common, course)
-                for course in courses_in_common
-            ]
-            social_users.append(
-                self.create_social_user_dict(student, friend, shared_courses)
-            )
-        social_users.sort(
-            key=lambda friend: len(friend["shared_courses"]), reverse=True
-        )
-        return social_users
 
     def get_current_tt(self, school, student, semester):
         return (
@@ -468,6 +451,24 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             .distinct("student")
         )
 
+    def count_social_users(self, student, current_tt, current_tt_courses, matching_tts):
+        social_users = []
+        for matching_tt in matching_tts:
+            friend = matching_tt.student
+            sections_in_common = matching_tt.sections.all() & current_tt.sections.all()
+            courses_in_common = matching_tt.courses.all() & current_tt_courses
+            shared_courses = [
+                self.create_shared_course(sections_in_common, course)
+                for course in courses_in_common
+            ]
+            social_users.append(
+                self.create_social_user_dict(student, friend, shared_courses)
+            )
+        social_users.sort(
+            key=lambda friend: len(friend["shared_courses"]), reverse=True
+        )
+        return social_users
+
     def create_shared_course(self, sections_in_common, course):
         return {
             "course": model_to_dict(
@@ -476,6 +477,7 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                     "unstopped_description",
                     "description",
                     "credits",
+                    "related_courses",
                 ],
             ),
             # is there a section for this course that is in both timetables?
