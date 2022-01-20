@@ -18,6 +18,11 @@ import tinycolor from "tinycolor2";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
 import { useAppDispatch } from "../hooks";
 import { customEventsActions } from "../state/slices/customEventsSlice";
+import {
+  convertHalfHoursToStr,
+  convertToHalfHours,
+  getNewSlotValues,
+} from "./slotUtils";
 
 type CustomSlotProps = {
   connectDragSource: Function;
@@ -56,23 +61,10 @@ function collectDragSource(connect: any) {
   };
 }
 
-function convertToHalfHours(time: string) {
-  const start = parseInt(time.split(":")[0], 10);
-  return time.split(":")[1] === "30" ? start * 2 + 1 : start * 2;
-}
-
-function convertToStr(halfHours: number) {
-  const numHours = Math.floor(halfHours / 2);
-  return halfHours % 2 ? `${numHours}:30` : `${numHours}:00`;
-}
-
 const dragSlotTarget = {
   drop(props: any, monitor: any) {
     // move it to current location on drop
     const { timeStart, timeEnd, id } = monitor.getItem();
-
-    const startHalfhour = convertToHalfHours(timeStart);
-    const endHalfhour = convertToHalfHours(timeEnd);
 
     // @ts-ignore
     const slotTop = $(`#${props.id}`).offset().top;
@@ -80,13 +72,7 @@ const dragSlotTarget = {
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
 
     const newStartHour = convertToHalfHours(props.time_start) + n;
-    const newEndHour = newStartHour + (endHalfhour - startHalfhour);
-
-    const newValues = {
-      time_start: convertToStr(newStartHour),
-      time_end: convertToStr(newEndHour),
-      day: props.day,
-    };
+    const newValues = getNewSlotValues(timeStart, timeEnd, newStartHour, props.day);
     props.updateCustomSlot(newValues, id);
   },
 };
@@ -108,12 +94,11 @@ const createSlotTarget = {
     // @ts-ignore get the time that the mouse dropped on
     const slotTop = $(`#${props.id}`).offset().top;
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
-    let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n);
+    let timeEnd = convertHalfHoursToStr(convertToHalfHours(props.time_start) + n);
 
     if (timeStart > timeEnd) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
-    // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime());
     props.updateCustomSlot({ preview: false }, id);
   },
   canDrop(props: any, monitor: any) {
@@ -131,7 +116,7 @@ const createSlotTarget = {
     if (n === lastPreview) {
       return;
     }
-    let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n);
+    let timeEnd = convertHalfHoursToStr(convertToHalfHours(props.time_start) + n);
     if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }

@@ -17,16 +17,10 @@ import React from "react";
 import { DragSource, DropTarget } from "react-dnd";
 import { DRAG_TYPES } from "../constants/constants";
 import { generateCustomEventId } from "../util";
-
-function convertToHalfHours(str) {
-  const start = parseInt(str.split(":")[0], 10);
-  return str.split(":")[1] === "30" ? start * 2 + 1 : start * 2;
-}
-
-function convertToStr(halfHours) {
-  const numHour = Math.floor(halfHours / 2);
-  return halfHours % 2 ? `${numHour}:30` : `${numHour}:00`;
-}
+import {
+  convertToHalfHours,
+  getNewSlotValues,
+} from "./slotUtils";
 
 // ---------------  drag target:
 const dragTarget = {
@@ -34,17 +28,8 @@ const dragTarget = {
     // move it to current location on drop
     const { timeStart, timeEnd, id } = monitor.getItem();
 
-    const startHalfhour = convertToHalfHours(timeStart);
-    const endHalfhour = convertToHalfHours(timeEnd);
-
     const newStartHour = convertToHalfHours(props.time);
-    const newEndHour = newStartHour + (endHalfhour - startHalfhour);
-
-    const newValues = {
-      time_start: props.time,
-      time_end: convertToStr(newEndHour),
-      day: props.day,
-    };
+    const newValues = getNewSlotValues(timeStart, timeEnd, newStartHour, props.day);
     props.updateCustomSlot(newValues, id);
   },
   canDrop(props, monitor) {
@@ -112,6 +97,7 @@ const createTarget = {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
     lastPreview = props.time;
+    // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime());
     props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
   },
 };

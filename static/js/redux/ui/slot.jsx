@@ -19,15 +19,14 @@ import { DropTarget } from "react-dnd";
 import COLOUR_DATA from "../constants/colours";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
+import {
+  convertHalfHoursToStr,
+  getNewSlotValues,
+} from "./slotUtils";
 
 function convertToHalfHours(str) {
   const start = parseInt(str.split(":")[0], 10);
   return str.split(":")[1] === "30" ? start * 2 + 1 : start * 2;
-}
-
-function convertToStr(halfHours) {
-  const numHours = Math.floor(halfHours / 2);
-  return halfHours % 2 ? `${numHours}:30` : `${numHours}:00`;
 }
 
 const dragSlotTarget = {
@@ -35,20 +34,12 @@ const dragSlotTarget = {
     // move it to current location on drop
     const { timeStart, timeEnd, id } = monitor.getItem();
 
-    const startHalfhour = convertToHalfHours(timeStart);
-    const endHalfhour = convertToHalfHours(timeEnd);
-
     const slotTop = $(`#${props.id}`).offset().top;
     // number half hours from slot start
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
 
     const newStartHour = convertToHalfHours(props.time_start) + n;
-    const newEndHour = newStartHour + (endHalfhour - startHalfhour);
-    const newValues = {
-      time_start: convertToStr(newStartHour),
-      time_end: convertToStr(newEndHour),
-      day: props.day,
-    };
+    const newValues = getNewSlotValues(timeStart, timeEnd, newStartHour, props.day);
     props.updateCustomSlot(newValues, id);
   },
 };
@@ -70,7 +61,7 @@ const createSlotTarget = {
     // get the time that the mouse dropped on
     const slotTop = $(`#${props.id}`).offset().top;
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
-    let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n);
+    let timeEnd = convertHalfHoursToStr(convertToHalfHours(props.time_start) + n);
 
     if (timeStart > timeEnd) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
@@ -87,7 +78,7 @@ const createSlotTarget = {
     if (n === lastPreview) {
       return;
     }
-    let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n);
+    let timeEnd = convertHalfHoursToStr(convertToHalfHours(props.time_start) + n);
     if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
