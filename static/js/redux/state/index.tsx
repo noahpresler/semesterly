@@ -84,7 +84,8 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 // timetable/entity selectors
-export const getTimetables = (state: RootState) => fromTimetables.getTimetables(state.timetables);
+export const getTimetables = (state: RootState) =>
+  fromTimetables.getTimetables(state.timetables);
 
 export const getDenormCourseById = (state: RootState, id: number) =>
   fromEntities.getDenormCourseById(state.entities, id);
@@ -133,7 +134,9 @@ export const getSearchResult = (state: RootState, index: number) =>
   getDenormCourseById(state, getSearchResultId(state, index));
 
 export const getSearchResults = (state: RootState) =>
-  getSearchResultIds(state).map((resultId: number) => getDenormCourseById(state, resultId));
+  getSearchResultIds(state).map((resultId: number) =>
+    getDenormCourseById(state, resultId)
+  );
 
 export const getDenormAdvancedSearchResults = (state: RootState) =>
   fromExplorationModal
@@ -141,6 +144,7 @@ export const getDenormAdvancedSearchResults = (state: RootState) =>
     .map((id) => getDenormCourseById(state, id));
 
 // modal selectors
-export const getIsUserInfoIncomplete = (state: RootState) => isUserInfoIncomplete(state.userInfo);
+export const getIsUserInfoIncomplete = (state: RootState) =>
+  isUserInfoIncomplete(state.userInfo);
 
 export default store;
