@@ -14,6 +14,7 @@ GNU General Public License for more details.
 
 // @ts-ignore
 import { DropModal } from "boron-15";
+import { HexColorPicker } from "react-colorful";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { updateCustomSlot } from "../../actions";
 import { useAppDispatch, useAppSelector } from "../../hooks";
@@ -31,6 +32,7 @@ const CustomEventModal = () => {
   const [eventEndTime, setEventEndTime] = useState("");
   const [eventCredits, setEventCredits] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isPickingColor, setIsPickingColor] = useState(false);
 
   const getSelectedEvent = () => {
     const events = useAppSelector((state) => state.customEvents.events);
@@ -70,6 +72,15 @@ const CustomEventModal = () => {
         <h1>Edit Custom Event</h1>
       </div>
     </div>
+  );
+
+  const createColorButton = (color: string) => (
+    <button
+      key={color}
+      type="button"
+      onClick={() => setEventColor(color)}
+      style={{ backgroundColor: color }}
+    />
   );
 
   const createDayButton = (day: string, label?: string) => (
@@ -197,6 +208,26 @@ const CustomEventModal = () => {
     }
   };
 
+  const eventColorPresets = (
+    <div className="event-color-presets">
+      <div className="event-color-preset-buttons">
+        {["#FD7473", "#5CCCF2", "#36DEBB", "#FFD467", "#C585DE"].map(createColorButton)}
+      </div>
+      <div className="event-color-preset-buttons">
+        {["#53E997", "#E7F76D", "#A3F5F2", "#7499A2", "#C8F7C5"].map(createColorButton)}
+      </div>
+    </div>
+  );
+
+  const eventColorBlock = (
+    <button
+      className="event-color-block"
+      type="button"
+      style={{ backgroundColor: eventColor }}
+      onClick={() => setIsPickingColor((previous) => !previous)}
+    />
+  );
+
   const editCustomEventForm = (
     <form className="edit-custom-event-form" onSubmit={onCustomEventSave}>
       <div className="event-form-items">
@@ -205,6 +236,7 @@ const CustomEventModal = () => {
           {createLabel("event-name", "Name:")}
           {createLabel("event-location", "Location:")}
           {createLabel("event-color", "Color:")}
+          {eventColorPresets}
           {createLabel("event-start-time", "Start Time:")}
           {createLabel("event-end-time", "End Time:")}
           {createLabel("event-credits", "Credits:")}
@@ -236,6 +268,7 @@ const CustomEventModal = () => {
             eventColorValidator,
             eventColorErrorMessage
           )}
+          {eventColorBlock}
           {createTextInput(
             "event-start-time",
             eventStartTime,
@@ -266,6 +299,12 @@ const CustomEventModal = () => {
     </form>
   );
 
+  const colorPicker = (
+    <div className="event-color-picker">
+      <HexColorPicker color={eventColor} onChange={setEventColor} />
+    </div>
+  );
+
   return (
     <DropModal
       ref={modal}
@@ -275,6 +314,7 @@ const CustomEventModal = () => {
     >
       {modalHeader}
       {editCustomEventForm}
+      {isPickingColor && colorPicker}
     </DropModal>
   );
 };

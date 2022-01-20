@@ -195,7 +195,7 @@ const CustomSlot = (props: CustomSlotProps) => {
     if (pushLeft === 50) {
       pushLeft += 0.5;
     }
-    const color = tinycolor(props.color).isLight() ? "#222222" : "#DDDDDD";
+    const color = tinycolor(props.color).isLight() ? "#222222" : "#FFFFFF";
     return {
       top,
       bottom: -bottom,

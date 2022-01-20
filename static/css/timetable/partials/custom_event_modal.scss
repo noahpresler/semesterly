@@ -22,8 +22,8 @@
   gap: 1em;
 
   button {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     border-width: 1px;
   }
@@ -69,7 +69,41 @@
     height: 1em;
     width: 100%;
     padding: 15px 5px;
+    border-radius: 5px;
   }
+}
+
+.event-color-presets {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.event-color-preset-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 5px;
+
+  button {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border-width: 0;
+  }
+}
+
+.event-color-block {
+  width: 100%;
+  height: 45px;
+  border-radius: 5px;
+}
+
+.event-color-picker .react-colorful {
+  position: absolute;
+  width: 290px;
+  top: 85px;
+  left: 174px;
 }
 
 .save-button {
