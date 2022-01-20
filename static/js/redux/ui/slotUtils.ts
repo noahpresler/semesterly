@@ -8,7 +8,7 @@ export function convertHalfHoursToStr(halfHours: number) {
   return halfHours % 2 ? `${numHours}:30` : `${numHours}:00`;
 }
 
-function convertToMinutes(time: string) {
+export function convertToMinutes(time: string) {
   const start = parseInt(time.split(":")[0], 10);
   const end = parseInt(time.split(":")[1], 10);
   return start * 60 + end;

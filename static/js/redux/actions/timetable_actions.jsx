@@ -14,12 +14,7 @@ GNU General Public License for more details.
 
 import fetch from "isomorphic-fetch";
 import Cookie from "js-cookie";
-import {
-  getActiveTimetable,
-  getActiveTimetableCourses,
-  getCurrentSemester,
-  getDenormTimetable,
-} from "../state";
+import { getActiveTimetable, getCurrentSemester, getDenormTimetable } from "../state";
 import { getTimetablesEndpoint } from "../constants/endpoints";
 import {
   browserSupportsLocalStorage,
@@ -52,6 +47,7 @@ import { timetablesActions } from "../state/slices/timetablesSlice";
 import { customEventsActions } from "../state/slices/customEventsSlice";
 import { courseSectionsActions } from "../state/slices/courseSectionsSlice";
 import { signupModalActions } from "../state/slices/signupModalSlice";
+import { convertToMinutes } from "../ui/slotUtils";
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
 
@@ -446,11 +442,15 @@ export const removeCustomSlot = (id) => (dispatch) => {
   dispatch(autoFetch());
 };
 
+function isNewTimeLessThan10Minutes(timeStart, timeEnd) {
+  if (timeStart && timeEnd) {
+    return convertToMinutes(timeEnd) - convertToMinutes(timeStart) < 10;
+  }
+  return false;
+}
+
 export const updateCustomSlot = (newValues, id) => (dispatch) => {
-  if (
-    newValues.time_start !== undefined &&
-    newValues.time_start === newValues.time_end
-  ) {
+  if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
     dispatch(removeCustomSlot(id));
     // For some reason, students can drag and drop past midnight
   } else if (newValues.time_end !== undefined && newValues.time_end <= "24:00") {
