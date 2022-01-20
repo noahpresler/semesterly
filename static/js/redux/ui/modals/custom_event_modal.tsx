@@ -53,12 +53,14 @@ const CustomEventModal = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (isVisible && modal.current) {
-      modal.current.show();
-    } else if (!isVisible && modal.current) {
-      modal.current.hide();
+    if (modal.current) {
+      if (!isVisible || !selectedEvent) {
+        modal.current.hide();
+      } else {
+        modal.current.show();
+      }
     }
-  }, [isVisible]);
+  }, [isVisible, selectedEvent]);
 
   const modalHeader = (
     <div className="modal-content">
