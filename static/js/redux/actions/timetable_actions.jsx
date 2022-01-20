@@ -98,7 +98,7 @@ export const fetchTimetables =
             saveLocalPreferences(requestBody.preferences);
             saveLocalSemester(getCurrentSemester(state));
           }
-        } else {
+        } else if (json.courses.length !== 0) { // moving event when no courses okay
           // user wasn't removing or refetching for custom events
           // (i.e. was adding a course/section), but we got no timetables back.
           // therefore course added by the user resulted in a conflict
