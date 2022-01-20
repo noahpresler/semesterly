@@ -14,6 +14,7 @@ GNU General Public License for more details.
 
 import React, { useEffect, useState } from "react";
 import { DragSource, DropTarget } from "react-dnd";
+import tinycolor from "tinycolor2";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
 import { useAppDispatch } from "../hooks";
 import { customEventsActions } from "../state/slices/customEventsSlice";
@@ -21,12 +22,15 @@ import { customEventsActions } from "../state/slices/customEventsSlice";
 type CustomSlotProps = {
   connectDragSource: Function;
   connectDragTarget: Function;
-  time_start: string;
-  time_end: string;
   depth_level: number;
   num_conflicts: number;
   shift_index: number;
   name: string;
+  location: string;
+  color: string;
+  time_start: string;
+  time_end: string;
+  credits: number;
   id: number;
   uses12HrTime: boolean;
   preview: boolean;
@@ -191,11 +195,13 @@ const CustomSlot = (props: CustomSlotProps) => {
     if (pushLeft === 50) {
       pushLeft += 0.5;
     }
+    const color = tinycolor(props.color).isLight() ? "#222222" : "#DDDDDD";
     return {
       top,
       bottom: -bottom,
       right: "0%",
-      backgroundColor: "#F8F6F7",
+      color,
+      backgroundColor: props.color,
       width: `${slotWidthPercentage}%`,
       left: `${pushLeft}%`,
       zIndex: 10 * props.depth_level,
@@ -235,7 +241,10 @@ const CustomSlot = (props: CustomSlotProps) => {
       onClick={() => dispatch(customEventsActions.showCustomEventsModal(props.id))}
       id={`${props.id}`}
     >
-      <div className="slot-bar" style={{ backgroundColor: "#aaa" }} />
+      <div
+        className="slot-bar"
+        style={{ backgroundColor: tinycolor(props.color).darken(20).toString() }}
+      />
       {removeButton}
       <div className="fc-content">
         <div className="fc-time">
