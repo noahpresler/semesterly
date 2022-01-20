@@ -427,7 +427,6 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         social_users = self.count_social_users(
             student, current_tt, current_tt_courses, matching_tts
         )
-        print(social_users)
         return Response(social_users, status=status.HTTP_200_OK)
 
     def get_current_tt(self, school, student, semester):
