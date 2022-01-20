@@ -61,7 +61,7 @@ export interface Event {
   color: string;
   time_start: string;
   time_end: string;
-  credits: number;
+  credits: string;
   id: number;
   preview: boolean;
   exists_conflict?: boolean;
@@ -94,7 +94,7 @@ export interface Course {
   id: number;
   description: string;
   department: string;
-  num_credits: string;
+  num_credits: number;
   areas: string[];
   campus: string;
   evals: any;

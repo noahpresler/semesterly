@@ -259,7 +259,7 @@ const CustomSlot = (props: CustomSlotProps) => {
           <span>{props.location}</span>
         </div>
         <div className="fc-time">
-          {parseInt(props.credits, 10) !== 0 && (
+          {parseFloat(props.credits) !== 0 && (
             <span>{`Credits: ${props.credits}`}</span>
           )}
         </div>
