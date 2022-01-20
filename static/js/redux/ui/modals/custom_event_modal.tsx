@@ -23,6 +23,7 @@ const CustomEventModal = () => {
   const isVisible = useAppSelector((state) => state.customEvents.isModalVisible);
 
   const modal = useRef<DropModal>();
+  const [eventDay, setEventDay] = useState("");
   const [eventName, setEventName] = useState("");
   const [eventLocation, setEventLocation] = useState("");
   const [eventColor, setEventColor] = useState("");
@@ -41,6 +42,7 @@ const CustomEventModal = () => {
   const selectedEvent = getSelectedEvent();
   useEffect(() => {
     if (selectedEvent) {
+      setEventDay(selectedEvent.day);
       setEventName(selectedEvent.name);
       setEventLocation(selectedEvent.location);
       setEventColor(selectedEvent.color);
@@ -68,6 +70,17 @@ const CustomEventModal = () => {
         <h1>Edit Custom Event</h1>
       </div>
     </div>
+  );
+
+  const createDayButton = (day: string, label?: string) => (
+    <button
+      type="button"
+      name={day}
+      className={eventDay === day ? "active" : "inactive"}
+      onClick={() => setEventDay(day)}
+    >
+      <span>{label || day}</span>
+    </button>
   );
 
   const createLabel = (name: string, label: string) => (
@@ -168,6 +181,7 @@ const CustomEventModal = () => {
       dispatch(
         updateCustomSlot(
           {
+            day: eventDay,
             name: eventName,
             location: eventLocation,
             color: eventColor,
@@ -186,6 +200,7 @@ const CustomEventModal = () => {
     <form className="edit-custom-event-form" onSubmit={onCustomEventSave}>
       <div className="event-form-items">
         <div className="event-labels">
+          {createLabel("event-days", "Day:")}
           {createLabel("event-name", "Name:")}
           {createLabel("event-location", "Location:")}
           {createLabel("event-color", "Color:")}
@@ -194,6 +209,11 @@ const CustomEventModal = () => {
           {createLabel("event-credits", "Credits:")}
         </div>
         <div className="event-text-inputs">
+          <div className="event-days">
+            {["M", "T", "W", "R", "F"].map((day) =>
+              day !== "R" ? createDayButton(day) : createDayButton(day, "Th")
+            )}
+          </div>
           {createTextInput(
             "event-name",
             eventName,

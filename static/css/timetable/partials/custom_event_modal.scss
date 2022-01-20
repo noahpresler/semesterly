@@ -15,11 +15,34 @@
   }
 }
 
+.event-days {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 1em;
+
+  button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border-width: 1px;
+  }
+
+  .active {
+    color: white;
+    background-color: #222;
+  }
+
+  .inactive {
+    background-color: #f3f3f3;
+  }
+}
+
 .event-form-items {
   display: flex;
   flex-direction: row;
   justify-content: left;
-  padding: 2em 3em 0 2em;
+  padding: 1em 2em;
   gap: 1em;
 }
 
