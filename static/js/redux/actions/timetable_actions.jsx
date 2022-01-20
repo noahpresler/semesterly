@@ -14,12 +14,7 @@ GNU General Public License for more details.
 
 import fetch from "isomorphic-fetch";
 import Cookie from "js-cookie";
-import {
-  getActiveTimetable,
-  getActiveTimetableCourses,
-  getCurrentSemester,
-  getDenormTimetable,
-} from "../state";
+import { getActiveTimetable, getCurrentSemester, getDenormTimetable } from "../state";
 import { getTimetablesEndpoint } from "../constants/endpoints";
 import {
   browserSupportsLocalStorage,
@@ -49,9 +44,10 @@ import {
   changeActiveSavedTimetable,
 } from "./initActions";
 import { timetablesActions } from "../state/slices/timetablesSlice";
-import { customEventsAction } from "../state/slices/customEventsSlice";
+import { customEventsActions } from "../state/slices/customEventsSlice";
 import { courseSectionsActions } from "../state/slices/courseSectionsSlice";
 import { signupModalActions } from "../state/slices/signupModalSlice";
+import { convertToMinutes } from "../ui/slotUtils";
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
 
@@ -102,11 +98,12 @@ export const fetchTimetables =
             saveLocalPreferences(requestBody.preferences);
             saveLocalSemester(getCurrentSemester(state));
           }
-        } else {
+        } else if (json.courses.length !== 0) {
+          // moving event when no courses okay
           // user wasn't removing or refetching for custom events
           // (i.e. was adding a course/section), but we got no timetables back.
           // therefore course added by the user resulted in a conflict
-          dispatch(customEventsAction.clearConflictingEvents());
+          dispatch(customEventsActions.clearConflictingEvents());
           dispatch(alertConflict());
         }
         return json;
@@ -222,7 +219,7 @@ export const nullifyTimetable = () => (dispatch) => {
   dispatch({
     type: ActionTypes.CLEAR_OPTIONAL_COURSES,
   });
-  dispatch(customEventsAction.clearCustomEvents());
+  dispatch(customEventsActions.clearCustomEvents());
 };
 
 // get semester index of cached index into allSemesters
@@ -408,7 +405,7 @@ export const addLastAddedCourse = () => (dispatch, getState) => {
     return;
   }
   if (typeof state.timetables.lastSlotAdded === "object") {
-    dispatch(customEventsAction.receiveCustomEvents(state.timetables.lastSlotAdded));
+    dispatch(customEventsActions.receiveCustomEvents(state.timetables.lastSlotAdded));
     dispatch(refetchTimetables());
   } else if (typeof state.timetables.lastSlotAdded === "number") {
     dispatch(addOrRemoveCourse(state.timetables.lastSlotAdded));
@@ -419,20 +416,21 @@ const autoFetch = () => (dispatch, getState) => {
   const state = getState();
   clearTimeout(customEventUpdateTimer);
   customEventUpdateTimer = setTimeout(() => {
-    if (getActiveTimetableCourses(state).length > 0) {
-      dispatch(timetablesActions.updateLastCourseAdded(state.customEvents));
-      dispatch(refetchTimetables());
-    }
+    dispatch(timetablesActions.updateLastCourseAdded(state.customEvents));
+    dispatch(refetchTimetables());
   }, 250);
 };
 
 export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
   dispatch(
     addNewCustomEvent({
+      day,
+      name: "New Custom Event", // default name for custom slot
+      location: "",
+      color: "#F8F6F7",
       time_start: timeStart, // match backend slot attribute names
       time_end: timeEnd,
-      name: "New Custom Event", // default name for custom slot
-      day,
+      credits: 0.0,
       id,
       preview,
     })
@@ -445,27 +443,28 @@ export const removeCustomSlot = (id) => (dispatch) => {
   dispatch(autoFetch());
 };
 
+function isNewTimeLessThan10Minutes(timeStart, timeEnd) {
+  if (timeStart && timeEnd) {
+    return convertToMinutes(timeEnd) - convertToMinutes(timeStart) < 10;
+  }
+  return false;
+}
+
+function goesPastMidnight(timeEnd) {
+  if (timeEnd) {
+    return convertToMinutes(timeEnd) > convertToMinutes("23:59");
+  }
+  return false;
+}
+
 export const updateCustomSlot = (newValues, id) => (dispatch) => {
-  const changedProps = Object.keys(newValues);
-  const onlyChangingName = changedProps.length === 1 && changedProps[0] === "name";
-  if (
-    newValues.time_start !== undefined &&
-    newValues.time_start === newValues.time_end
-  ) {
+  if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
     dispatch(removeCustomSlot(id));
     // For some reason, students can drag and drop past midnight
-  } else if (
-    onlyChangingName ||
-    (newValues.time_end !== undefined && newValues.time_end <= "24:00")
-  ) {
+  } else if (!goesPastMidnight(newValues.timeEnd)) {
     newValues.id = id;
     dispatch(updateExistingEvent(newValues));
-  }
-  if (onlyChangingName) {
     dispatch(autoSave());
-  } else {
-    // only refetch if we are changing the slot time
-    dispatch(autoFetch());
   }
 };
 

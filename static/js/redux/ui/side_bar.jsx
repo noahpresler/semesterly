@@ -18,7 +18,7 @@ import classNames from "classnames";
 import ClickOutHandler from "react-onclickout";
 import MasterSlot from "./master_slot";
 import TimetableNameInput from "./timetable_name_input";
-import CreditTickerContainer from "./containers/credit_ticker_container";
+import CreditTicker from "./credit_ticker";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 import { getNextAvailableColour } from "../util";
 
@@ -175,7 +175,7 @@ class SideBar extends React.Component {
             </div>
           </ClickOutHandler>
         </div>
-        <CreditTickerContainer />
+        <CreditTicker />
         <div className="col-2-3 sb-rating">
           <h3>Average Course Rating</h3>
           <div className="sub-rating-wrapper">

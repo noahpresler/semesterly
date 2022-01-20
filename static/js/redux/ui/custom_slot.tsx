@@ -14,21 +14,31 @@ GNU General Public License for more details.
 
 import React, { useEffect, useState } from "react";
 import { DragSource, DropTarget } from "react-dnd";
+import tinycolor from "tinycolor2";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
+import { useAppDispatch } from "../hooks";
+import { customEventsActions } from "../state/slices/customEventsSlice";
+import {
+  convertHalfHoursToStr,
+  convertToHalfHours,
+  getNewSlotValues,
+} from "./slotUtils";
 
 type CustomSlotProps = {
   connectDragSource: Function;
   connectDragTarget: Function;
-  time_start: string;
-  time_end: string;
   depth_level: number;
   num_conflicts: number;
   shift_index: number;
   name: string;
+  location: string;
+  color: string;
+  time_start: string;
+  time_end: string;
+  credits: string;
   id: number;
   uses12HrTime: boolean;
   preview: boolean;
-  updateCustomSlot: Function;
   removeCustomSlot: Function;
   connectCreateTarget: Function;
 };
@@ -51,23 +61,10 @@ function collectDragSource(connect: any) {
   };
 }
 
-function convertToHalfHours(time: string) {
-  const start = parseInt(time.split(":")[0], 10);
-  return time.split(":")[1] === "30" ? start * 2 + 1 : start * 2;
-}
-
-function convertToStr(halfHours: number) {
-  const numHours = Math.floor(halfHours / 2);
-  return halfHours % 2 ? `${numHours}:30` : `${numHours}:00`;
-}
-
 const dragSlotTarget = {
   drop(props: any, monitor: any) {
     // move it to current location on drop
     const { timeStart, timeEnd, id } = monitor.getItem();
-
-    const startHalfhour = convertToHalfHours(timeStart);
-    const endHalfhour = convertToHalfHours(timeEnd);
 
     // @ts-ignore
     const slotTop = $(`#${props.id}`).offset().top;
@@ -75,13 +72,7 @@ const dragSlotTarget = {
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
 
     const newStartHour = convertToHalfHours(props.time_start) + n;
-    const newEndHour = newStartHour + (endHalfhour - startHalfhour);
-
-    const newValues = {
-      time_start: convertToStr(newStartHour),
-      time_end: convertToStr(newEndHour),
-      day: props.day,
-    };
+    const newValues = getNewSlotValues(timeStart, timeEnd, newStartHour, props.day);
     props.updateCustomSlot(newValues, id);
   },
 };
@@ -103,12 +94,11 @@ const createSlotTarget = {
     // @ts-ignore get the time that the mouse dropped on
     const slotTop = $(`#${props.id}`).offset().top;
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
-    let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n);
+    let timeEnd = convertHalfHoursToStr(convertToHalfHours(props.time_start) + n);
 
     if (timeStart > timeEnd) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
-    // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime());
     props.updateCustomSlot({ preview: false }, id);
   },
   canDrop(props: any, monitor: any) {
@@ -126,7 +116,7 @@ const createSlotTarget = {
     if (n === lastPreview) {
       return;
     }
-    let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n);
+    let timeEnd = convertHalfHoursToStr(convertToHalfHours(props.time_start) + n);
     if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
@@ -190,11 +180,13 @@ const CustomSlot = (props: CustomSlotProps) => {
     if (pushLeft === 50) {
       pushLeft += 0.5;
     }
+    const color = tinycolor(props.color).isLight() ? "#222222" : "#FFFFFF";
     return {
       top,
       bottom: -bottom,
       right: "0%",
-      backgroundColor: "#F8F6F7",
+      color,
+      backgroundColor: props.color,
       width: `${slotWidthPercentage}%`,
       left: `${pushLeft}%`,
       zIndex: 10 * props.depth_level,
@@ -204,10 +196,6 @@ const CustomSlot = (props: CustomSlotProps) => {
   const removeCustomButtonClicked = (event: any) => {
     event.stopPropagation();
     props.removeCustomSlot();
-  };
-
-  const updateName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.updateCustomSlot({ name: event.target.value }, props.id);
   };
 
   const removeButton = hovered ? (
@@ -228,38 +216,37 @@ const CustomSlot = (props: CustomSlotProps) => {
         }`
       : props.time_end;
 
+  const dispatch = useAppDispatch();
   const customSlot = (
     <div
       className={"fc-time-grid-event fc-event slot"}
       style={getSlotStyles()}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      // @ts-ignore
-      onClick={() => $(`#${props.id} .fc-time input`).select()}
+      onClick={() => dispatch(customEventsActions.showCustomEventsModal(props.id))}
       id={`${props.id}`}
     >
-      <div className="slot-bar" style={{ backgroundColor: "#aaa" }} />
+      <div
+        className="slot-bar"
+        style={{ backgroundColor: tinycolor(props.color).darken(20).toString() }}
+      />
       {removeButton}
       <div className="fc-content">
+        <div className="fc-time">
+          <span>{props.name}</span>
+        </div>
         <div className="fc-time">
           <span>
             {convertedStart} – {convertedEnd}
           </span>
         </div>
         <div className="fc-time">
-          <input
-            type="text"
-            name="eventName"
-            style={{
-              backgroundColor: "#F8F6F7",
-              borderStyle: "none",
-              outlineColor: "#aaa",
-              outlineWidth: "2px",
-              width: "95%",
-            }}
-            value={props.name}
-            onChange={(event) => updateName(event)}
-          />
+          <span>{props.location}</span>
+        </div>
+        <div className="fc-time">
+          {parseFloat(props.credits) !== 0 && (
+            <span>{`Credits: ${props.credits}`}</span>
+          )}
         </div>
       </div>
     </div>

@@ -7,14 +7,20 @@ import {
 } from "../../actions";
 import { Event, Timetable } from "../../constants/commonTypes";
 
-interface CustomEventsSlice {
+export interface CustomEventsSlice {
   events: Event[];
+  isModalVisible: boolean;
+  selectedEventId: number | null;
 }
 
-const initialState: CustomEventsSlice = { events: [] };
+const initialState: CustomEventsSlice = {
+  events: [],
+  isModalVisible: false,
+  selectedEventId: null,
+};
 
 const customEventsSlice = createSlice({
-  name: "customEevnts",
+  name: "customEvents",
   initialState,
   reducers: {
     clearCustomEvents: (state) => {
@@ -30,6 +36,14 @@ const customEventsSlice = createSlice({
     },
     receiveCustomEvents: (state, action: PayloadAction<Event[]>) => {
       state.events = action.payload;
+    },
+    showCustomEventsModal: (state, action: PayloadAction<number>) => {
+      state.selectedEventId = action.payload;
+      state.isModalVisible = true;
+    },
+    hideCustomEventsModal: (state) => {
+      state.isModalVisible = false;
+      state.selectedEventId = null;
     },
   },
   extraReducers: (builder) => {
@@ -67,6 +81,6 @@ const customEventsSlice = createSlice({
   },
 });
 
-export const customEventsAction = customEventsSlice.actions;
+export const customEventsActions = customEventsSlice.actions;
 
 export default customEventsSlice.reducer;
