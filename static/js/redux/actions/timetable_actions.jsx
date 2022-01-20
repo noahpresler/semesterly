@@ -449,11 +449,18 @@ function isNewTimeLessThan10Minutes(timeStart, timeEnd) {
   return false;
 }
 
+function goesPastMidnight(timeEnd) {
+  if (timeEnd) {
+    return convertToMinutes(timeEnd) > convertToMinutes("23:59");
+  }
+  return false;
+}
+
 export const updateCustomSlot = (newValues, id) => (dispatch) => {
   if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
     dispatch(removeCustomSlot(id));
     // For some reason, students can drag and drop past midnight
-  } else if (newValues.time_end !== undefined && newValues.time_end <= "24:00") {
+  } else if (!goesPastMidnight(newValues.timeEnd)) {
     newValues.id = id;
     dispatch(updateExistingEvent(newValues));
     dispatch(autoFetch());
