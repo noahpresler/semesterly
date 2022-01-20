@@ -463,7 +463,7 @@ export const updateCustomSlot = (newValues, id) => (dispatch) => {
   } else if (!goesPastMidnight(newValues.timeEnd)) {
     newValues.id = id;
     dispatch(updateExistingEvent(newValues));
-    dispatch(autoFetch());
+    dispatch(autoSave());
   }
 };
 
