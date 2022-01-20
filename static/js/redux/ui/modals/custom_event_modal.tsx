@@ -75,6 +75,7 @@ const CustomEventModal = () => {
   const createDayButton = (day: string, label?: string) => (
     <button
       type="button"
+      key={day}
       name={day}
       className={eventDay === day ? "active" : "inactive"}
       onClick={() => setEventDay(day)}

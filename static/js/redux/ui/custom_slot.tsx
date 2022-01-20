@@ -30,7 +30,7 @@ type CustomSlotProps = {
   color: string;
   time_start: string;
   time_end: string;
-  credits: number;
+  credits: string;
   id: number;
   uses12HrTime: boolean;
   preview: boolean;
@@ -248,22 +248,18 @@ const CustomSlot = (props: CustomSlotProps) => {
       {removeButton}
       <div className="fc-content">
         <div className="fc-time">
+          <span>{props.name}</span>
+        </div>
+        <div className="fc-time">
           <span>
             {convertedStart} – {convertedEnd}
           </span>
         </div>
         <div className="fc-time">
-          <span
-            style={{
-              backgroundColor: "#F8F6F7",
-              borderStyle: "none",
-              outlineColor: "#aaa",
-              outlineWidth: "2px",
-              width: "95%",
-            }}
-          >
-            {props.name}
-          </span>
+          <span>{props.location}</span>
+        </div>
+        <div className="fc-time">
+          {props.credits !== "0.0" && <span>{`Credits: ${props.credits}`}</span>}
         </div>
       </div>
     </div>

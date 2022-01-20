@@ -299,12 +299,6 @@ class Slot extends React.Component {
                 {removeButton}
                 {lockButton}
                 <div className="fc-content">
-                  <div className="fc-time">
-                    <span>
-                      {convertedStart} – {convertedEnd}
-                    </span>
-                    {shortCourseIndicator}
-                  </div>
                   <div
                     ref={(c) => {
                       this.courseDiv = c;
@@ -328,6 +322,12 @@ class Slot extends React.Component {
                     >
                       {this.props.meeting_section}
                     </span>
+                  </div>
+                  <div className="fc-time">
+                    <span>
+                      {convertedStart} – {convertedEnd}
+                    </span>
+                    {shortCourseIndicator}
                   </div>
                   <div className="fc-time">
                     {friends}
