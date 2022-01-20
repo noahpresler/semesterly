@@ -207,14 +207,13 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting, school):
                     potential_conflict_found = offering.has_potential_conflict
                 else:
                     for existing_offering in day_to_usage[day][slot]:
-                        potential_conflict_found = (
-                            existing_offering == "custom_slot"
-                            or can_potentially_conflict(
-                                existing_offering.date_start,
-                                existing_offering.date_end,
-                                offering.date_start,
-                                offering.date_end,
-                            )
+                        if existing_offering == "custom_slot":
+                            break
+                        potential_conflict_found = can_potentially_conflict(
+                            existing_offering.date_start,
+                            existing_offering.date_end,
+                            offering.date_start,
+                            offering.date_end,
                         )
                         offering.has_potential_conflict = potential_conflict_found
                         break

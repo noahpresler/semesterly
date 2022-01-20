@@ -44,6 +44,7 @@ import termsOfServiceBanner from "./terms_of_service_banner_reducer";
 import userAcquisitionModal from "./slices/userAcquisitionModalSlice";
 import registrar from "./registrar_reducer";
 import entities, * as fromEntities from "./entities_reducer";
+import { Slot, Timetable } from "../constants/commonTypes";
 
 export const reducers = {
   alerts,
@@ -79,31 +80,35 @@ export const reducers = {
 
 const store = configureStore({ reducer: reducers });
 
-// timetable/entity selectors
-export const getTimetables = (state) => fromTimetables.getTimetables(state.timetables);
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-export const getDenormCourseById = (state, id) =>
+// timetable/entity selectors
+export const getTimetables = (state: RootState) =>
+  fromTimetables.getTimetables(state.timetables);
+
+export const getDenormCourseById = (state: RootState, id: number) =>
   fromEntities.getDenormCourseById(state.entities, id);
 
-export const getCurrentSemester = (state) =>
+export const getCurrentSemester = (state: RootState) =>
   fromSemester.getCurrentSemester(state.semester);
 
-export const getActiveTimetable = (state) =>
+export const getActiveTimetable = (state: RootState) =>
   fromTimetables.getActiveTimetable(state.timetables);
 
-export const getDenormTimetable = (state, timetable) =>
+export const getDenormTimetable = (state: RootState, timetable: Timetable) =>
   fromEntities.getDenormTimetable(state.entities, timetable);
 
-export const getActiveDenormTimetable = (state) =>
+export const getActiveDenormTimetable = (state: RootState) =>
   getDenormTimetable(state, getActiveTimetable(state));
 
-export const getActiveTimetableCourses = (state) =>
+export const getActiveTimetableCourses = (state: RootState) =>
   fromEntities.getTimetableCourses(state.entities, getActiveTimetable(state));
 
-export const getActiveTimetableDenormCourses = (state) =>
+export const getActiveTimetableDenormCourses = (state: RootState) =>
   fromEntities.getTimetableDenormCourses(state.entities, getActiveTimetable(state));
 
-export const getCoursesFromSlots = (state, slots) =>
+export const getCoursesFromSlots = (state: RootState, slots: Slot[]) =>
   fromEntities.getCoursesFromSlots(state.entities, slots);
 
 export const getMaxTTEndHour = createSelector(
@@ -111,32 +116,35 @@ export const getMaxTTEndHour = createSelector(
   fromEntities.getMaxEndHour
 );
 
-export const getHoveredSlots = (state) =>
+export const getHoveredSlots = (state: RootState) =>
   fromTimetables.getHoveredSlots(state.timetables);
 
 // Don't use createSelector to memoize getMaxEndHour
-export const getMaxEndHour = (state) =>
+export const getMaxEndHour = (state: RootState) =>
   Math.max(getMaxTTEndHour(state), getMaxHourBasedOnWindowHeight());
 
 // search selectors
-const getSearchResultId = (state, index) =>
+const getSearchResultId = (state: RootState, index: number) =>
   fromSearchResults.getSearchResultId(state.searchResults, index);
 
-const getSearchResultIds = (state) =>
+const getSearchResultIds = (state: RootState) =>
   fromSearchResults.getSearchResultIds(state.searchResults);
 
-export const getSearchResult = (state, index) =>
+export const getSearchResult = (state: RootState, index: number) =>
   getDenormCourseById(state, getSearchResultId(state, index));
 
-export const getSearchResults = (state) =>
-  getSearchResultIds(state).map((resultId) => getDenormCourseById(state, resultId));
+export const getSearchResults = (state: RootState) =>
+  getSearchResultIds(state).map((resultId: number) =>
+    getDenormCourseById(state, resultId)
+  );
 
-export const getDenormAdvancedSearchResults = (state) =>
+export const getDenormAdvancedSearchResults = (state: RootState) =>
   fromExplorationModal
     .getAdvancedSearchResultIds(state.explorationModal)
     .map((id) => getDenormCourseById(state, id));
 
 // modal selectors
-export const getIsUserInfoIncomplete = (state) => isUserInfoIncomplete(state.userInfo);
+export const getIsUserInfoIncomplete = (state: RootState) =>
+  isUserInfoIncomplete(state.userInfo);
 
 export default store;

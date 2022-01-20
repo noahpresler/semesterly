@@ -13,6 +13,7 @@ GNU General Public License for more details.
 */
 
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import classnames from "classnames";
 import ReactTooltip from "react-tooltip";
 import Clipboard from "clipboard";
@@ -21,11 +22,13 @@ import SlotManagerContainer from "./containers/slot_manager_container";
 import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
 import { ShareLink } from "./master_slot";
+import { signupModalActions } from "../state/slices/signupModalSlice";
 
 type RowProps = {
   isLoggedIn: boolean;
   time: string;
   displayTime?: string;
+  customEventModeOn: boolean;
 };
 
 const Row = (props: RowProps) => {
@@ -36,6 +39,7 @@ const Row = (props: RowProps) => {
       time={props.time}
       key={day + props.time}
       loggedIn={props.isLoggedIn}
+      customEventModeOn={props.customEventModeOn}
     />
   ));
   return (
@@ -65,7 +69,7 @@ type CalendarProps = {
 
 const Calendar = (props: CalendarProps) => {
   const [shareLinkShown, setShareLinkShown] = useState(false);
-  const [customSlotModeOn, setCustomSlotModeOn] = useState(false);
+  const [customEventModeOn, setCustomEventModeOn] = useState(false);
 
   const getTimelineStyle = () => {
     const now = new Date();
@@ -93,8 +97,6 @@ const Calendar = (props: CalendarProps) => {
     }, 60 * 1000);
   }, []);
 
-  // TODO : Test share link shows properly
-
   const getCalendarRows = () => {
     const rows = [];
     for (let i = 8; i <= props.endHour; i++) {
@@ -102,13 +104,21 @@ const Calendar = (props: CalendarProps) => {
       const hour = props.uses12HrTime && i > 12 ? i - 12 : i;
       rows.push(
         <Row
-          displayTime={`${hour}:00`}
-          time={`${i}:00`}
-          isLoggedIn={props.isLoggedIn}
           key={i}
+          isLoggedIn={props.isLoggedIn}
+          time={`${i}:00`}
+          displayTime={`${hour}:00`}
+          customEventModeOn={customEventModeOn}
         />
       );
-      rows.push(<Row time={`${i}:30`} isLoggedIn={props.isLoggedIn} key={i + 0.5} />);
+      rows.push(
+        <Row
+          key={i + 0.5}
+          isLoggedIn={props.isLoggedIn}
+          time={`${i}:30`}
+          customEventModeOn={customEventModeOn}
+        />
+      );
     }
     return rows;
   };
@@ -144,11 +154,16 @@ const Calendar = (props: CalendarProps) => {
     form.submit();
   };
 
+  const dispatch = useDispatch();
   const customEventModeButtonClicked = () => {
-    setCustomSlotModeOn((previous) => !previous);
+    if (props.isLoggedIn) {
+      setCustomEventModeOn((previous) => !previous);
+    } else {
+      dispatch(signupModalActions.showSignupModal());
+    }
   };
 
-  const description = customSlotModeOn ? (
+  const customEventDescription = customEventModeOn ? (
     <h4 className="custom-instructions">
       Click, drag, and release to create your custom event
     </h4>
@@ -248,7 +263,7 @@ const Calendar = (props: CalendarProps) => {
       >
         <i
           className={classnames("fa fa-pencil", {
-            addingCustomSlot: customSlotModeOn,
+            addingCustomSlot: customEventModeOn,
           })}
         />
       </button>
@@ -310,13 +325,13 @@ const Calendar = (props: CalendarProps) => {
   return (
     <div
       className={classnames("calendar fc fc-ltr fc-unthemed week-calendar", {
-        hoverCustomSlot: customSlotModeOn,
+        hoverCustomSlot: customEventModeOn,
       })}
     >
       <div className="fc-toolbar no-print">
-        <div className="fc-left" style={{ display: "none" }}>
-          {!customSlotModeOn ? <PaginationContainer /> : null}
-          {description}
+        <div className="fc-left">
+          {!customEventModeOn ? <PaginationContainer /> : null}
+          {customEventDescription}
         </div>
         <div className="fc-right">
           {addSISButton}
