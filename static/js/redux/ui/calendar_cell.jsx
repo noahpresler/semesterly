@@ -17,10 +17,7 @@ import React from "react";
 import { DragSource, DropTarget } from "react-dnd";
 import { DRAG_TYPES } from "../constants/constants";
 import { generateCustomEventId } from "../util";
-import {
-  convertToHalfHours,
-  getNewSlotValues,
-} from "./slotUtils";
+import { convertToHalfHours, getNewSlotValues } from "./slotUtils";
 
 // ---------------  drag target:
 const dragTarget = {

@@ -19,10 +19,7 @@ import { DropTarget } from "react-dnd";
 import COLOUR_DATA from "../constants/colours";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
-import {
-  convertHalfHoursToStr,
-  getNewSlotValues,
-} from "./slotUtils";
+import { convertHalfHoursToStr, getNewSlotValues } from "./slotUtils";
 
 function convertToHalfHours(str) {
   const start = parseInt(str.split(":")[0], 10);
