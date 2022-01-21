@@ -48,7 +48,7 @@ class EvaluationList extends React.Component {
   }
 
   render() {
-    const evalInfo = [ ...this.props.evalInfo ];
+    const evalInfo = [...this.props.evalInfo];
 
     const navs = evalInfo
       .sort((e1, e2) => EvaluationList.evalCompare(e1, e2))
