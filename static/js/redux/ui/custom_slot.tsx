@@ -249,7 +249,7 @@ const CustomSlot = (props: CustomSlotProps) => {
               props.credits.toString().endsWith(".0")
                 ? parseInt(props.credits, 10)
                 : props.credits
-            } credits`}</span>
+            } credit${parseFloat(props.credits) !== 1 ? "s" : ""}`}</span>
           )}
         </div>
       </div>
