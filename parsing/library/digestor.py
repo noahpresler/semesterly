@@ -564,7 +564,7 @@ class DigestionAdapter:
         if evaluation.instructors is not None:
             for instructor in evaluation.instructors:
                 instructor = DotDict(instructor)
-                if isinstance(instructor.name, basestring):
+                if isinstance(instructor.name, str):
                     if professor != "":
                         professor += ", "
                     professor += instructor.name
