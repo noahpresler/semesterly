@@ -3,7 +3,10 @@
 Installation
 =============
 
-This guide will bring you through the steps of creating a local Semester.ly server and development environment. It will walk through the setup of the core ecosystems we work within: Django/Python and React/Node/JS. It will additionally require the setup of a PostgreSQL database.
+This guide will bring you through the steps of creating a local Semester.ly server and
+development environment. It will walk through the setup of the core ecosystems we work
+within: Django/Python and React/Node/JS. It will additionally require the setup of a
+PostgreSQL database.
 
 Setting up Visual Studio Code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -25,7 +28,10 @@ subsystem. Press ``Ctrl+Shift+P`` and select the option ``Remote-WSL: New WSL
 Window``.
 
 2. Install the `Docker extension by Microsoft 
-<https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker>`_
+<https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker>`_, the
+`remote containers extension by
+Microsoft
+<https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers>`_
 and the `Postgres extension by Chris Kolkman 
 <https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres>`_.
 
@@ -56,6 +62,7 @@ Cloning your Semester.ly fork will create a directory with all of the code requi
 
 Setting up Docker
 ~~~~~~~~~~~~~~~~~
+
 Steps are below on getting your local development environment running:
 
 1. **Download and install docker** for your environment (Windows/Mac/Linux are supported)
@@ -119,8 +126,7 @@ Steps are below on getting your local development environment running:
 
     .. code-block:: bash
 
-        docker-compose build
-        docker-compose up
+        docker-compose build && docker-compose up
 
     The **build** command creates a local database and build of your source code.
     The **up** command runs everything. Be careful not to build when you don't need to as this will destroy your entire database and you'll need to ingest/digest again to get your course data (which takes about 30 minutes).
@@ -137,6 +143,20 @@ Steps are below on getting your local development environment running:
 
     Open a browser and visit http://jhu.sem.ly:8000 to verify you have
     Semester.ly running.
+    
+    .. note::
+        
+        In order to log in on your local running version of Semester.ly, you will need
+        access to auth keys. Please ask one of the current developers for access to
+        these keys if you require use of login authentication for development. 
+        Furthermore, some logins require use of https, so ensure that you are on 
+        https://jhu.sem.ly instead of http://jhu.sem.ly:8000 in these cases.
+
+
+.. tip::
+
+    If you ever need to hard reset Docker, use the command ``docker system prune -a``. 
+    You can then follow up with ``docker-compose build && docker-compose up``.
 
 Setting up Postgres
 ~~~~~~~~~~~~~~~~~~~
@@ -168,27 +188,3 @@ several tables. Right clicking any of these tables gives you options to select
 If this is your first time running Semester.ly, you will want to populate your 
 database with courses. Before you continue to :ref:`parsing`, please read the
 following additional tips for working with Docker and Postgres.
-
-Additional Tips
-~~~~~~~~~~~~~~~
-You will often have to run commands within the Docker containers. For
-example, the next section requires you to run something similiar to ``python 
-manage.py ingest jhu --term Fall --years 2021`` in the semesterly container. To
-access containers, open the Docker explorer on the left pane. There should be
-three containers named jhuopensource/semesterly, semesterly, and postgres:12.1.
-Right clicking any of these should give you the option ``Attach Shell``, which
-will open a terminal into the corresponding container.
-
-You may also need to run Postgres commands beyond what running queries are
-capable of. In this case, open a terminal in the postgres container and run
-``psql -U postgres``. You should now be in the postgres shell.
-
-If you ever need to hard reset Docker, use the command ``docker system prune
--a``. You can then follow up with ``docker-compose build`` and ``docker-compose
-up``.
-
-In order to log in on your local running version of Semester.ly, you will need
-access to auth keys. Please ask one of the current developers for access to
-these keys if you require use of login authentication for development. 
-Furthermore, some logins require use of https, so ensure that you are on 
-https://jhu.sem.ly instead of http://jhu.sem.ly:8000 in these cases.

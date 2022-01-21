@@ -5,10 +5,19 @@ Loading the Database
 
 To load the database you must ingest (create the course JSON), validate (make sure the data makes sense), and digest (load the JSON into the database). You can do so using the following commands:
 
+.. tip::
+
+    You will often have to run commands within the Docker containers. To access
+    containers, open the Docker explorer on the left pane. There should be three
+    containers named ``jhuopensource/semesterly``, ``semesterly``, and
+    ``postgres:12.1``. Right clicking any of these should give you the option ``Attach
+    Shell``, which will open a terminal into the corresponding container. For this
+    section, attach the shell to the ``semesterly`` container.
+
 Ingest
 ######
 
-.. note:: If you have ingested before and still have the JSON file on your device, you may skip ingesting and simply digest the old data. This is useful if you are resetting your database during development and wish to quickly reload course data.
+.. note:: To parse JHU data, you will need to acquire an API access key from `SIS <https://sis.jhu.edu/api>`_. Add the key to ``dev_credentials.py`` in the ``semesterly/`` directory. Also, note that the [SCHOOLCODE] is ``jhu``.
 
 .. code-block:: bash
 
@@ -16,7 +25,7 @@ Ingest
 
 You may leave out the school code to parse all schools. This will run for a substantial amount of time and is not recommended.
 
-.. note:: To parse JHU data, you will need to acquire an API access key from `SIS <https://sis.jhu.edu/api>`_. Add the key to ``dev_credentials.py`` in the ``semesterly/`` directory. Also, note that the [SCHOOLCODE] is ``jhu``.
+.. note:: If you have ingested before and still have the JSON file on your device, you may skip ingesting and simply digest the old data. This is useful if you are resetting your database during development and wish to quickly reload course data.
 
 Digest
 ######
@@ -37,10 +46,17 @@ There are advanced methods for using these tools. Detailed options can be viewed
 
 	python manage.py [command] --help
 
-For example, you can use the term and year flags to parse only a specific term
+For example, you can use the term and year flags to parse only a specific term.
 
 .. code-block:: bash
 
     python manage.py ingest [SCHOOLCODE] --term Fall --years 2021
 
 If you are developing a parser or contributing to the pipeline design, you will more than likely need to learn more. Checkout :ref:`pipeline` or :ref:`addaschool`
+
+.. tip::
+
+    You may need to run Postgres commands beyond what running queries through the
+    Postgres extension is capable of. In this case, attach a shell to the postgres
+    container and run ``psql -U postgres``. You should now be in the postgres shell. You
+    can use ``\q`` to leave it.

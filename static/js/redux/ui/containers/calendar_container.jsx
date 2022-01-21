@@ -12,17 +12,20 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import Calendar from '../calendar';
-import { saveTimetable } from '../../actions/user_actions';
-import { handleCreateNewTimetable } from '../../actions/timetable_actions';
+import { connect } from "react-redux";
+import Calendar from "../calendar";
+import { saveTimetable } from "../../actions/user_actions";
+import { handleCreateNewTimetable } from "../../actions/timetable_actions";
 import {
-    createICalFromTimetable,
-    fetchShareTimetableLink,
-    fetchSISTimetableData,
-} from '../../actions/calendar_actions';
-import { togglePreferenceModal, triggerSaveCalendarModal } from '../../actions/modal_actions';
-import { getMaxEndHour } from '../../reducers';
+  createICalFromTimetable,
+  fetchShareTimetableLink,
+  fetchSISTimetableData,
+} from "../../actions/calendar_actions";
+import {
+  togglePreferenceModal,
+  triggerSaveCalendarModal,
+} from "../../actions/modal_actions";
+import { getMaxEndHour } from "../../state";
 
 const mapStateToProps = (state) => {
   const { isFetchingShareLink, shareLink, shareLinkValid } = state.calendar;
@@ -40,17 +43,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-const CalendarContainer = connect(
-    mapStateToProps,
-  {
-    saveTimetable,
-    fetchShareTimetableLink,
-    togglePreferenceModal,
-    triggerSaveCalendarModal,
-    createICalFromTimetable,
-    handleCreateNewTimetable,
-    fetchSISTimetableData,
-  },
-)(Calendar);
+const CalendarContainer = connect(mapStateToProps, {
+  saveTimetable,
+  fetchShareTimetableLink,
+  togglePreferenceModal,
+  triggerSaveCalendarModal,
+  createICalFromTimetable,
+  handleCreateNewTimetable,
+  fetchSISTimetableData,
+})(Calendar);
 
 export default CalendarContainer;

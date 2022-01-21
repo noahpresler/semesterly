@@ -8,18 +8,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('parsing', '0002_auto_20170803_2329'),
+        ("parsing", "0002_auto_20170803_2329"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='dataupdate',
-            name='reason',
-            field=models.CharField(default='Scheduled Update', max_length=200),
+            model_name="dataupdate",
+            name="reason",
+            field=models.CharField(default="Scheduled Update", max_length=200),
         ),
         migrations.AlterField(
-            model_name='dataupdate',
-            name='update_type',
-            field=models.CharField(choices=[('C', 'courses'), ('T', 'textbooks'), ('E', 'evaluations'), ('M', 'miscellaneous')], default='M', max_length=1),
+            model_name="dataupdate",
+            name="update_type",
+            field=models.CharField(
+                choices=[
+                    ("C", "courses"),
+                    ("T", "textbooks"),
+                    ("E", "evaluations"),
+                    ("M", "miscellaneous"),
+                ],
+                default="M",
+                max_length=1,
+            ),
         ),
     ]

@@ -2,7 +2,7 @@
 
 About Semester.ly
 =================
-**Built for students by students.** Semester.ly is a web platform created to bring modern technology to the most difficult and archaic parts of higher education. It all started with one problem, universal across all college campuses: course registration is a pain. Spreadsheets, sticky notes, PDFs of course evaluations, and an outdated registration platform....it is all too much in the heat of classes and exams. We set out with the mission to make college more collaborative and more stress free.
+**Built for students by students.** Semester.ly is an open source web platform created to bring modern technology to the most difficult and archaic parts of higher education. It all started with one problem, universal across all college campuses: course registration is a pain. Spreadsheets, sticky notes, PDFs of course evaluations, and an outdated registration platform....it is all too much in the heat of classes and exams. We set out with the mission to make college more collaborative and more stress free.
 
 What We Believe In
 ------------------
@@ -19,7 +19,7 @@ Education should be collaborative
 
 Students know best
 ~~~~~~~~~~~~~~~~~~
-    Universities can't keep up with technology. Most university systems aren't even mobile responsive! Forget about using social media. That's why Semester.ly is built by students, and always will be. That's why we're open source! Oh, and it's why we use emojis 🙂.
+    Universities can't keep up with technology. Most university systems aren't even mobile responsive! Forget about using social media. That's why Semester.ly is built by students, and always will be.
 
 
 .. toctree::
@@ -33,6 +33,7 @@ Students know best
    howitworks   
    learning
    contributing
+   styleguide
    addaschool
    testing   
    documentation

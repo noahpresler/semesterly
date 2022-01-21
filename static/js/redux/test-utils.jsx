@@ -1,8 +1,8 @@
-import React from 'react';
-import { render as rtlRender } from '@testing-library/react';
-import { configureStore } from '@reduxjs/toolkit';
-import { Provider } from 'react-redux';
-import reducers from './reducers';
+import React from "react";
+import { render as rtlRender } from "@testing-library/react";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import { reducers } from "./state";
 /* eslint-disable import/prefer-default-export, react/prop-types */
 
 function renderWithRedux(
@@ -11,7 +11,7 @@ function renderWithRedux(
     preloadedState,
     store = configureStore({ reducer: reducers, preloadedState }),
     ...renderOptions
-  } = {},
+  } = {}
 ) {
   function Wrapper({ children }) {
     return <Provider store={store}>{children}</Provider>;

@@ -9,13 +9,15 @@ import picklefield.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0015_merge'),
+        ("timetable", "0015_merge"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='course',
-            name='vector',
-            field=picklefield.fields.PickledObjectField(default=None, editable=False, null=True),
+            model_name="course",
+            name="vector",
+            field=picklefield.fields.PickledObjectField(
+                default=None, editable=False, null=True
+            ),
         ),
     ]
