@@ -56,9 +56,7 @@ class Parser(BaseParser):
             term, year = os.path.splitext(fn)[0].split("_")
             eval_file_path = "{}/{}".format(directory, fn)
             with open(eval_file_path, mode="r") as f:
-                soup = BeautifulSoup(
-                    f.read(), "html.parser"
-                )
+                soup = BeautifulSoup(f.read(), "html.parser")
                 self._process_soup(soup, term, year)
 
     def _process_soup(self, soup, term, year):
