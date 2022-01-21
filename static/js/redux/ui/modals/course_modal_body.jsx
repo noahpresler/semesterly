@@ -252,7 +252,7 @@ class CourseModalBody extends React.Component {
               );
             }
             return (
-              <span className="textItem" key={`textItem${t.id}`}>
+              <span className="textItem" key={t}>
                 {t}
               </span>
             );
