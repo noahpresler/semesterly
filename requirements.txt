@@ -8,6 +8,7 @@ black==21.12b0
 bs4==0.0.1
 celery==5.2.2
 coverage==4.4.1
+cryptography==36.0.1
 dateparser==1.0.0
 Django==3.2.11
 django-cachalot==2.4.3
