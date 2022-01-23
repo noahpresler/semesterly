@@ -43,6 +43,7 @@ class ExplorationModal extends React.Component {
       addedDays: [],
       shareLinkShown: false,
       hasUpdatedCourses: false,
+      selected: 0,
     };
     this.toggle = this.toggle.bind(this);
     this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
@@ -274,7 +275,11 @@ class ExplorationModal extends React.Component {
         key={c.id}
         code={c.code}
         name={c.name}
-        onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
+        isSelected={this.state.selected === i}
+        onClick={() => {
+          this.props.setAdvancedSearchResultIndex(i, c.id);
+          this.setState({ selected: i });
+        }}
       />
     ));
     let courseModal = null;
@@ -468,10 +473,14 @@ class ExplorationModal extends React.Component {
   }
 }
 
-const ExplorationSearchResult = ({ name, code, onClick }) => (
-  <div className="exp-s-result" onClick={onClick}>
-    <h4>{name} </h4>
-    <h5> {code}</h5>
+const ExplorationSearchResult = ({ name, code, onClick, isSelected }) => (
+  <div
+    className="exp-s-result"
+    onClick={onClick}
+    style={{ backgroundColor: isSelected ? "#eeeeee" : undefined }}
+  >
+    <h4>{name}</h4>
+    <h5>{code}</h5>
   </div>
 );
 
@@ -479,6 +488,7 @@ ExplorationSearchResult.propTypes = {
   name: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
 };
 
 ExplorationModal.defaultProps = {
