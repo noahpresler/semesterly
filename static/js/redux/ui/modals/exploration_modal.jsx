@@ -188,6 +188,7 @@ class ExplorationModal extends React.Component {
     this.fetchAdvancedSearchResults(
       Object.assign({}, this.state, { [filterType]: updatedFilter })
     );
+    this.setState({ addedDays: [] });
     this.setState({ [filterType]: updatedFilter });
   }
 
@@ -433,6 +434,10 @@ class ExplorationModal extends React.Component {
               name={"Day/Times"}
               toggle={this.toggle("times")}
               type={"times"}
+              removeAll={() => {
+                console.log(this.state);
+                this.removeFilter("times");
+              }}
             >
               {timeFilters}
             </SelectedFilterSection>
