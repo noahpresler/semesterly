@@ -196,7 +196,9 @@
   position: absolute;
   top: 0;
   width: 100%;
-
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   p {
     color: $g777;
     font-size: 12px;
@@ -234,6 +236,13 @@
 
     &:hover {
       color: #7e88dc;
+    }
+
+    &.clear-all {
+      margin-right: 6px;
+      font-style: normal;
+      display: flex;
+      align-items: center;
     }
   }
 }

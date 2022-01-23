@@ -123,11 +123,14 @@ SelectedFilter.propTypes = {
   remove: PropTypes.func.isRequired,
 };
 
-export const SelectedFilterSection = ({ name, toggle, children, type }) => (
+export const SelectedFilterSection = ({ name, toggle, children, type, removeAll }) => (
   <div className="exp-filter-section open">
     <h3 className="exp-header">
       <span>{name.substring(0, name.length - 1)} Filter</span>
       <i className="fa fa-plus" onClick={toggle} />
+      <i className="clear-all">
+        <div onClick={removeAll}>Clear All</div>
+      </i>
     </h3>
     {children.length > 0 ? (
       <div

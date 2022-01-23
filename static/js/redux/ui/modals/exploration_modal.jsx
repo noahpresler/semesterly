@@ -180,11 +180,12 @@ class ExplorationModal extends React.Component {
     this.setState({ [filterType]: updatedFilter });
   }
 
-  removeFilter(filterType, filter) {
+  removeFilter(filterType, filter = undefined) {
     if (this.props.isFetching) {
       return;
     }
-    const updatedFilter = this.state[filterType].filter((f) => f !== filter);
+    const updatedFilter =
+      filter === undefined ? [] : this.state[filterType].filter((f) => f !== filter);
     this.fetchAdvancedSearchResults(
       Object.assign({}, this.state, { [filterType]: updatedFilter })
     );
@@ -376,6 +377,7 @@ class ExplorationModal extends React.Component {
           name={name}
           type={filterType}
           toggle={this.toggle(filterType)}
+          removeAll={() => this.removeFilter(filterType)}
         >
           {selectedItems}
         </SelectedFilterSection>
