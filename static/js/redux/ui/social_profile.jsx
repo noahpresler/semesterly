@@ -12,11 +12,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import classNames from 'classnames';
-import ClickOutHandler from 'react-onclickout';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import PropTypes from "prop-types";
+import React from "react";
+import classNames from "classnames";
+import ClickOutHandler from "react-onclickout";
+import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
 class SocialProfile extends React.Component {
   constructor(props) {
@@ -40,12 +40,17 @@ class SocialProfile extends React.Component {
       <ClickOutHandler onClickOut={this.hideDropDown}>
         <div>
           <div onMouseDown={this.toggleDropdown}>
-            <div className="social-pro-pic" style={{ backgroundImage: `url(${this.props.userInfo.img_url})` }} />
+            <div
+              className="social-pro-pic"
+              style={{ backgroundImage: `url(${this.props.userInfo.img_url})` }}
+            />
             <h2>{this.props.userInfo.userFirstNam}</h2>
-            <span className={classNames('tip-down', { down: this.state.showDropdown })} />
+            <span
+              className={classNames("tip-down", { down: this.state.showDropdown })}
+            />
           </div>
           <div
-            className={classNames('social-dropdown', { down: this.state.showDropdown })}
+            className={classNames("social-dropdown", { down: this.state.showDropdown })}
           >
             <div className="tip-border" />
             <div className="tip" />
@@ -72,8 +77,7 @@ class SocialProfile extends React.Component {
           </div>
         </div>
       </ClickOutHandler>
-
-        );
+    );
     const loggedOut = (
       <a className="social-login" onClick={() => this.props.triggerAcquisitionModal()}>
         <h2>
@@ -81,12 +85,16 @@ class SocialProfile extends React.Component {
           <span className="mobile">Signup Login</span>
         </h2>
       </a>
-        );
+    );
 
     const social = this.props.userInfo.isLoggedIn ? loggedIn : loggedOut;
     return (
       <div
-        className={classNames('social', { 'logged-in': this.props.userInfo.isLoggedIn }, 'no-print')}
+        className={classNames(
+          "social",
+          { "logged-in": this.props.userInfo.isLoggedIn },
+          "no-print"
+        )}
       >
         {social}
       </div>
@@ -101,4 +109,3 @@ SocialProfile.propTypes = {
 };
 
 export default SocialProfile;
-

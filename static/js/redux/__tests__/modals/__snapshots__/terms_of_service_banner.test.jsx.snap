@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TOS Banner Renders As Expected fully if isVisible 1`] = `
+<div>
+  <div
+    class="tos-banner show"
+  >
+    <p>
+      By using Semester.ly you agree to our
+      <a
+        href="/termsofservice"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Terms of Service
+      </a>
+      and
+      <a
+        href="/privacypolicy"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Privacy Policy
+      </a>
+    </p>
+    <div
+      class="tos-banner__close"
+    >
+      <i
+        class="fa fa-times"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`TOS Banner Renders As Expected null if not isVisible 1`] = `
+<div>
+  <div
+    class="tos-banner"
+  >
+    <p>
+      By using Semester.ly you agree to our
+      <a
+        href="/termsofservice"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Terms of Service
+      </a>
+      and
+      <a
+        href="/privacypolicy"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Privacy Policy
+      </a>
+    </p>
+    <div
+      class="tos-banner__close"
+    >
+      <i
+        class="fa fa-times"
+      />
+    </div>
+  </div>
+</div>
+`;

@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="https://travis-ci.com/jhuopensource/semesterly"><img src="https://api.travis-ci.com/jhuopensource/semesterly.svg?branch=master"></a>
+  <a href="https://github.com/jhuopensource/semesterly/actions"><img src="https://github.com/jhuopensource/semesterly/actions/workflows/semesterly.yml/badge.svg?branch=prod"/></a>
   <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg"/></a>
   <a href="https://github.com/jhuopensource/semesterly/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"/></a>
   <a href='https://semesterly-v2.readthedocs.io/en/latest/?badge=latest' target="_blank"><img src='https://readthedocs.org/projects/semesterly-v2/badge/?version=latest' alt='Documentation Status' /></a>

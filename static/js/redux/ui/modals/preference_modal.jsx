@@ -12,10 +12,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import { FadeModal } from 'boron-15';
-import SortMenuContainer from '../containers/sort_menu_container';
+import PropTypes from "prop-types";
+import React from "react";
+import { FadeModal } from "boron-15";
+import SortMenuContainer from "../containers/sort_menu_container";
 
 class PreferenceModal extends React.Component {
   componentDidUpdate() {
@@ -25,18 +25,21 @@ class PreferenceModal extends React.Component {
   }
 
   render() {
-    const modalHeader =
-            (<div className="modal-content">
-              <div className="modal-header">
-                <h1>Timetable Preferences</h1>
-              </div>
-            </div>);
+    const modalHeader = (
+      <div className="modal-content">
+        <div className="modal-header">
+          <h1>Timetable Preferences</h1>
+        </div>
+      </div>
+    );
     const modalStyle = {
-      width: '100%',
+      width: "100%",
     };
     return (
       <FadeModal
-        ref={(c) => { this.modal = c; }}
+        ref={(c) => {
+          this.modal = c;
+        }}
         className="pref-modal max-modal"
         modalStyle={modalStyle}
         onHide={this.props.togglePreferenceModal}
@@ -44,10 +47,10 @@ class PreferenceModal extends React.Component {
         <div id="perf-modal-wrapper">
           {modalHeader}
           <div className="conflict-row">
-            <div style={{ marginRight: 'auto', marginLeft: '15%' }}>
+            <div style={{ marginRight: "auto", marginLeft: "15%" }}>
               <p style={{ margin: 0 }}>Conflicts: </p>
             </div>
-            <div style={{ marginLeft: 'auto', marginRight: '10%' }}>
+            <div style={{ marginLeft: "auto", marginRight: "10%" }}>
               <label className="switch switch-slide" htmlFor="with-conflicts">
                 <input
                   id="with-conflicts"
@@ -56,20 +59,17 @@ class PreferenceModal extends React.Component {
                   checked={this.props.withConflicts}
                   onChange={this.props.toggleConflicts}
                 />
-                <span
-                  className="switch-label" data-on="Enabled"
-                  data-off="Disabled"
-                />
+                <span className="switch-label" data-on="Enabled" data-off="Disabled" />
                 <span className="switch-handle" />
               </label>
             </div>
           </div>
-          <hr style={{ marginTop: 0, width: '80%' }} />
+          <hr style={{ marginTop: 0, width: "80%" }} />
           <SortMenuContainer />
           <div className="preference-footer">
             <button
               className="btn btn-primary"
-              style={{ marginLeft: 'auto', marginRight: '10%' }}
+              style={{ marginLeft: "auto", marginRight: "10%" }}
               onClick={() => this.modal.hide()}
             >
               Save and Close
@@ -89,4 +89,3 @@ PreferenceModal.propTypes = {
 };
 
 export default PreferenceModal;
-

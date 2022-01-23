@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('timetable', '0032_offering_is_short_course'),
+        ("timetable", "0032_offering_is_short_course"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='section',
-            name='course_section_id',
+            model_name="section",
+            name="course_section_id",
             field=models.IntegerField(default=0),
         ),
     ]

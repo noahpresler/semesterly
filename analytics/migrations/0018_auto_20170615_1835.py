@@ -8,20 +8,20 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('analytics', '0017_remove_sharedtimetable_name'),
+        ("analytics", "0017_remove_sharedtimetable_name"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='analyticscoursesearch',
-            name='_semester',
+            model_name="analyticscoursesearch",
+            name="_semester",
         ),
         migrations.RemoveField(
-            model_name='analyticstimetable',
-            name='_semester',
+            model_name="analyticstimetable",
+            name="_semester",
         ),
         migrations.RemoveField(
-            model_name='sharedtimetable',
-            name='_semester',
+            model_name="sharedtimetable",
+            name="_semester",
         ),
     ]

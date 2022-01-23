@@ -12,50 +12,49 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import { getActiveTimetable } from '../../reducers';
-import { setDeclinedNotifications } from '../../util';
-import { logFacebookAlertView, saveSettings } from '../../actions/user_actions';
-import FriendsInClassAlert from './friends_in_class_alert';
-import * as ActionTypes from '../../constants/actionTypes';
+import { connect } from "react-redux";
+import { getActiveTimetable } from "../../state";
+import { setDeclinedNotifications } from "../../util";
+import { logFacebookAlertView, saveSettings } from "../../actions/user_actions";
+import FriendsInClassAlert from "./friends_in_class_alert";
+import { alertsActions, userInfoActions } from "../../state/slices";
 
 const mapStateToProps = (state) => {
   const activeTT = getActiveTimetable(state);
   const msg = `${state.alerts.mostFriendsCount} friends are also taking this class!`;
   return {
     msg,
-    mostFriendsClass: activeTT.slots.find(slot =>
-      slot.course.id === state.alerts.mostFriendsClassId),
+    mostFriendsClass: activeTT.slots.find(
+      (slot) => slot.course.id === state.alerts.mostFriendsClassId
+    ),
     mostFriendsCount: state.alerts.mostFriendsCount,
     mostFriendsKey: state.ui.courseToColourIndex[state.alerts.mostFriendsClassId],
     totalFriendsCount: state.alerts.totalFriendsCount,
     userInfo: state.userInfo.data,
-    alertFacebookFriends: state.alerts.alertFacebookFriends
-        && state.userInfo.data.FacebookSignedUp
-        && (!state.userInfo.data.social_courses || state.alerts.facebookAlertIsOn)
-        && !state.userInfo.overrideShow
-        && state.alerts.mostFriendsCount >= 2,
+    alertFacebookFriends:
+      state.alerts.alertFacebookFriends &&
+      state.userInfo.data.FacebookSignedUp &&
+      (!state.userInfo.data.social_courses || state.alerts.facebookAlertIsOn) &&
+      !state.userInfo.overrideShow &&
+      state.alerts.mostFriendsCount >= 2,
   };
 };
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   dismissSelf: () => {
-    dispatch({ type: ActionTypes.DISMISS_FACEBOOK_FRIENDS });
+    dispatch(alertsActions.dismissFacebookFriends());
   },
   showNotification: () => {
     logFacebookAlertView();
-    dispatch({ type: ActionTypes.SHOW_FACEBOOK_ALERT });
+    dispatch(alertsActions.showFacebookAlert());
   },
   declineNotifications: () => setDeclinedNotifications(true),
   enableNotifications: () => setDeclinedNotifications(false),
   saveSettings: () => dispatch(saveSettings()),
-  changeUserInfo: info => dispatch({
-    type: ActionTypes.CHANGE_USER_INFO,
-    data: info,
-  }),
+  changeUserInfo: (info) => dispatch(userInfoActions.changeUserInfo(info)),
 });
 
 const FriendsInClassAlertContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps
 )(FriendsInClassAlert);
 export default FriendsInClassAlertContainer;

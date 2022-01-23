@@ -12,40 +12,38 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import classnames from 'classnames';
-import Swipeable from 'react-swipeable';
-import PaginationContainer from './containers/pagination_container';
-import SlotManagerContainer from './containers/slot_manager_container';
-import CellContainer from './containers/cell_container';
-import { DAYS } from '../constants/constants';
-import { ShareLink } from './master_slot';
+import PropTypes from "prop-types";
+import React from "react";
+import classnames from "classnames";
+import Swipeable from "react-swipeable";
+import PaginationContainer from "./containers/pagination_container";
+import SlotManagerContainer from "./containers/slot_manager_container";
+import CellContainer from "./containers/cell_container";
+import { DAYS } from "../constants/constants";
+import { ShareLink } from "./master_slot";
 
 const Row = (props) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
-  const dayCells = props.days.map(day => (<CellContainer
-    day={day}
-    time={props.time}
-    key={day + props.time}
-    loggedIn={props.isLoggedIn}
-  />));
+  const dayCells = props.days.map((day) => (
+    <CellContainer
+      day={day}
+      time={props.time}
+      key={day + props.time}
+      loggedIn={props.isLoggedIn}
+    />
+  ));
   return (
     <tr key={props.time}>
-      <td className="fc-axis fc-time fc-widget-content cal-row">
-        {timeText}
-      </td>
+      <td className="fc-axis fc-time fc-widget-content cal-row">{timeText}</td>
       <td className="fc-widget-content">
-        <div className="week-col">
-          {dayCells}
-        </div>
+        <div className="week-col">{dayCells}</div>
       </td>
     </tr>
   );
 };
 
 Row.defaultProps = {
-  displayTime: '',
+  displayTime: "",
 };
 
 Row.propTypes = {
@@ -58,8 +56,9 @@ Row.propTypes = {
 class DayCalendar extends React.Component {
   constructor(props) {
     super(props);
-    let d = (new Date()).getDay();
-    if (d === 0 || d === 6) { // Sunday or Saturday, respectively
+    let d = new Date().getDay();
+    if (d === 0 || d === 6) {
+      // Sunday or Saturday, respectively
       d = 1; // Show Monday
     }
     const day = d - 1;
@@ -72,14 +71,14 @@ class DayCalendar extends React.Component {
   }
 
   componentDidMount() {
-    $('.all-cols').scroll(() => {
-      const pos = $('.all-cols').scrollTop();
+    $(".all-cols").scroll(() => {
+      const pos = $(".all-cols").scrollTop();
       if (pos > 30) {
-        $('.fc-toolbar').addClass('up');
-        $('#calendar').addClass('up');
+        $(".fc-toolbar").addClass("up");
+        $("#calendar").addClass("up");
       } else {
-        $('.fc-toolbar').removeClass('up');
-        $('#calendar').removeClass('up');
+        $(".fc-toolbar").removeClass("up");
+        $("#calendar").removeClass("up");
       }
     });
   }
@@ -94,31 +93,36 @@ class DayCalendar extends React.Component {
     const now = new Date();
     // don't show line if the current time is before 8am or after the schedule end
     if (now.getHours() > this.props.endHour || now.getHours() < 8) {
-      return { display: 'none' };
+      return { display: "none" };
     }
     const diff = Math.abs(new Date() - new Date().setHours(8, 0, 0));
-    const mins = Math.ceil((diff / 1000) / 60);
+    const mins = Math.ceil(diff / 1000 / 60);
     const top = (mins / 15.0) * 13;
     return { top, zIndex: 1 };
   }
 
   getCalendarRows() {
     const rows = [];
-    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
+    for (let i = 8; i <= this.props.endHour; i++) {
+      // one row for each hour, starting from 8am
       const hour = this.props.uses12HrTime && i > 12 ? i - 12 : i;
-      rows.push(<Row
-        displayTime={`${hour}:00`}
-        time={`${i}:00`}
-        isLoggedIn={this.props.isLoggedIn}
-        key={i}
-        days={[DAYS[this.state.day]]}
-      />);
-      rows.push(<Row
-        time={`${i}:30`}
-        isLoggedIn={this.props.isLoggedIn}
-        key={i + 0.5}
-        days={[DAYS[this.state.day]]}
-      />);
+      rows.push(
+        <Row
+          displayTime={`${hour}:00`}
+          time={`${i}:00`}
+          isLoggedIn={this.props.isLoggedIn}
+          key={i}
+          days={[DAYS[this.state.day]]}
+        />
+      );
+      rows.push(
+        <Row
+          time={`${i}:30`}
+          isLoggedIn={this.props.isLoggedIn}
+          key={i + 0.5}
+          days={[DAYS[this.state.day]]}
+        />
+      );
     }
 
     return rows;
@@ -126,7 +130,8 @@ class DayCalendar extends React.Component {
 
   swipedLeft() {
     let d = this.state.day + 1;
-    if (d === -1 || d === 5) { // Sunday or Saturday, respectively
+    if (d === -1 || d === 5) {
+      // Sunday or Saturday, respectively
       d = 0; // Show Monday
     }
     this.setState({ day: d });
@@ -134,12 +139,12 @@ class DayCalendar extends React.Component {
 
   swipedRight() {
     let d = this.state.day - 1;
-    if (d === -1 || d === 5) { // Sunday or Saturday, respectively
+    if (d === -1 || d === 5) {
+      // Sunday or Saturday, respectively
       d = 4; // Show Friday
     }
     this.setState({ day: d });
   }
-
 
   fetchShareTimetableLink() {
     if (this.props.shareLinkValid) {
@@ -155,8 +160,11 @@ class DayCalendar extends React.Component {
   }
 
   render() {
-    const saveIcon = this.props.saving ? <i className="fa fa-spin fa-circle-o-notch" /> :
-    <i className="fa fa-floppy-o" />;
+    const saveIcon = this.props.saving ? (
+      <i className="fa fa-spin fa-circle-o-notch" />
+    ) : (
+      <i className="fa fa-floppy-o" />
+    );
 
     const shareButton = (
       <button
@@ -164,18 +172,17 @@ class DayCalendar extends React.Component {
         className="save-timetable add-button"
       >
         <i
-          className={classnames('fa',
-                        { 'fa-share-alt': !this.props.isFetchingShareLink },
-                        { 'fa-spin fa-circle-o-notch': this.props.isFetchingShareLink })}
+          className={classnames(
+            "fa",
+            { "fa-share-alt": !this.props.isFetchingShareLink },
+            { "fa-spin fa-circle-o-notch": this.props.isFetchingShareLink }
+          )}
         />
       </button>
-        );
-    const shareLink = this.state.shareLinkShown ?
-            (<ShareLink
-              link={this.props.shareLink}
-              onClickOut={this.hideShareLink}
-            />) :
-            null;
+    );
+    const shareLink = this.state.shareLinkShown ? (
+      <ShareLink link={this.props.shareLink} onClickOut={this.hideShareLink} />
+    ) : null;
     const addButton = (
       <button
         onClick={this.props.handleCreateNewTimetable}
@@ -183,29 +190,27 @@ class DayCalendar extends React.Component {
       >
         <i className="fa fa-plus" />
       </button>
-        );
+    );
     const saveButton = (
-      <button className="save-timetable add-button" onMouseDown={this.props.saveTimetable}>
+      <button
+        className="save-timetable add-button"
+        onMouseDown={this.props.saveTimetable}
+      >
         {saveIcon}
       </button>
-        );
+    );
     const preferenceButton = (
-      <button
-        onClick={this.props.togglePreferenceModal}
-        className="save-timetable"
-      >
+      <button onClick={this.props.togglePreferenceModal} className="save-timetable">
         <i className="fa fa-cog" />
       </button>
-        );
-    const dayPills = DAYS.map((day, i) => (<div
-      key={day}
-      className="day-pill"
-      onClick={() => this.setState({ day: i })}
-    >
-      <div className={classnames('day-circle', { selected: i === this.state.day })}>
-        {day === 'R' ? 'T' : day}
+    );
+    const dayPills = DAYS.map((day, i) => (
+      <div key={day} className="day-pill" onClick={() => this.setState({ day: i })}>
+        <div className={classnames("day-circle", { selected: i === this.state.day })}>
+          {day === "R" ? "T" : day}
+        </div>
       </div>
-    </div>));
+    ));
     const saveToCalendarButton = (
       <button
         onClick={() => this.props.triggerSaveCalendarModal()}
@@ -213,7 +218,7 @@ class DayCalendar extends React.Component {
       >
         <img alt="add" src="static/img/addtocalendar.png" />
       </button>
-        );
+    );
     return (
       <div className="calendar fc fc-ltr fc-unthemed day-calendar">
         <div className="fc-toolbar no-print">
@@ -221,26 +226,21 @@ class DayCalendar extends React.Component {
             <PaginationContainer />
           </div>
           <div className="fc-right">
-            { shareButton }
-            { shareLink }
-            { addButton }
-            { saveButton }
-            { preferenceButton }
-            { saveToCalendarButton }
+            {shareButton}
+            {shareLink}
+            {addButton}
+            {saveButton}
+            {preferenceButton}
+            {saveToCalendarButton}
           </div>
           <div className="fc-center" />
           <div className="fc-clear cf">
             <div className="day-pills">
-              <div className="day-pills__wrapper">
-                {dayPills}
-              </div>
+              <div className="day-pills__wrapper">{dayPills}</div>
             </div>
           </div>
         </div>
-        <Swipeable
-          onSwipedRight={this.swipedRight}
-          onSwipedLeft={this.swipedLeft}
-        >
+        <Swipeable onSwipedRight={this.swipedRight} onSwipedLeft={this.swipedLeft}>
           <div className="fc-view-container" style={{}}>
             <div className="fc-view fc-settimana-view fc-agenda-view">
               <table>
@@ -265,20 +265,19 @@ class DayCalendar extends React.Component {
                           </div>
                           <div className="fc-slats">
                             <table>
-                              <tbody>
-                                {this.getCalendarRows()}
-                              </tbody>
+                              <tbody>{this.getCalendarRows()}</tbody>
                             </table>
                           </div>
-                          <div className="fc-timeline" style={this.getTimelineStyle()} />
+                          <div
+                            className="fc-timeline"
+                            style={this.getTimelineStyle()}
+                          />
                           <div className="fc-content-skeleton">
-                            <SlotManagerContainer
-                              days={[DAYS[this.state.day]]}
-                            />
+                            <SlotManagerContainer days={[DAYS[this.state.day]]} />
                           </div>
                           <hr
                             className="fc-divider fc-widget-header"
-                            style={{ display: 'none' }}
+                            style={{ display: "none" }}
                           />
                         </div>
                       </div>
@@ -295,7 +294,7 @@ class DayCalendar extends React.Component {
 }
 
 DayCalendar.defaultProps = {
-  shareLink: '',
+  shareLink: "",
 };
 
 DayCalendar.propTypes = {
@@ -314,4 +313,3 @@ DayCalendar.propTypes = {
 };
 
 export default DayCalendar;
-
