@@ -439,7 +439,7 @@ class ExplorationModal extends React.Component {
             </SelectedFilterSection>
           </div>
           <div className="col-5-16 exp-search-results">
-            <div id="exp-search-list" style={{ height: "100%" }}>
+            <div id="exp-search-list" style={{ height: "calc(100% - 20px)" }}>
               {numSearchResults}
               {this.state.didSearch &&
                 (searchResults.length ? (
