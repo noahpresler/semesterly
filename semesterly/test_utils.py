@@ -398,6 +398,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         # Some versions of chrome don't like if url does not start with http
         if not str(url).startswith("http"):
             url = "%s%s" % ("http://", url)
+        print(url)
         self.driver.execute_script("window.open()")
         self.driver.switch_to_window(self.driver.window_handles[1])
         self.driver.get(url)
@@ -412,6 +413,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         url = self.find(
             (By.CLASS_NAME, "share-course-link"), root=modal_header
         ).get_attribute("value")
+        print(url)
         self.follow_and_validate_url(url, self.validate_course_modal)
 
     def follow_share_link_from_slot(self):
