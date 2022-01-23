@@ -148,8 +148,7 @@ class ExplorationModal extends React.Component {
       times,
       levels,
     });
-    if (query) this.setState({ didSearch: true });
-    else this.setState({ didSearch: false });
+    this.setState({ didSearch: true });
   }
 
   fetchAdvancedSearchResultsWrapper() {
@@ -271,7 +270,7 @@ class ExplorationModal extends React.Component {
     };
     const { advancedSearchResults, active, inRoster } = this.props;
     const numSearchResults =
-      advancedSearchResults.length > 0 ? (
+      !this.props.isFetching && advancedSearchResults.length > 0 ? (
         <p>returned {advancedSearchResults.length} Search Results</p>
       ) : null;
     const searchResults = advancedSearchResults.map((c, i) => (
@@ -442,6 +441,7 @@ class ExplorationModal extends React.Component {
             <div id="exp-search-list" style={{ height: "calc(100% - 20px)" }}>
               {numSearchResults}
               {this.state.didSearch &&
+                !this.props.isFetching &&
                 (searchResults.length ? (
                   searchResults
                 ) : (
