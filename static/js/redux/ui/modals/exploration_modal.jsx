@@ -435,7 +435,6 @@ class ExplorationModal extends React.Component {
               toggle={this.toggle("times")}
               type={"times"}
               removeAll={() => {
-                console.log(this.state);
                 this.removeFilter("times");
               }}
             >
