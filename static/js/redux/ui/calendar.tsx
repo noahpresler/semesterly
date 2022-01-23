@@ -225,7 +225,6 @@ const Calendar = (props: CalendarProps) => {
   const shareLink = shareLinkShown ? (
     <ShareLink
       link={props.shareLink ? props.shareLink : ""}
-      uniqueId="timetable"
       type="Calendar"
       onClickOut={() => setShareLinkShown(false)}
     />
