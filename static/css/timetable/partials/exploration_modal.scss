@@ -8,13 +8,13 @@
     height: 100%;
     outline: none;
     width: 100%;
-	}
+  }
 
   + div {
     // using important to override boron default style
     // can't declare in javascript either, cuz need hover
     background-color: $black-transparent-8 !important;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
   }
 
   &.trans + div {
@@ -74,9 +74,9 @@
 .trans .modal-module,
 .trans h3.modal-module-header,
 .trans h3.modal-module-header:after {
-	color: transparent;
-	background-color: transparent;
-	border-color: transparent;
+  color: transparent;
+  background-color: transparent;
+  border-color: transparent;
 }
 
 .trans .exp-search-results,
@@ -84,8 +84,8 @@
 .trans .time-selector,
 .trans .modal-body .rating-module,
 .trans .modal-body .modal-module-header {
-	opacity: 0;
-	visibility: hidden;
+  opacity: 0;
+  visibility: hidden;
 }
 
 // Exploration Header
@@ -117,12 +117,14 @@
       line-height: 30px;
     }
 
-    &:-ms-input-placeholder { // IE 10+
+    &:-ms-input-placeholder {
+      // IE 10+
       font-size: 14px;
       line-height: 30px;
     }
 
-    &:-moz-placeholder { // Firefox 18-
+    &:-moz-placeholder {
+      // Firefox 18-
       font-size: 14px;
       line-height: 30px;
     }
@@ -156,7 +158,7 @@
   position: absolute;
   right: 10px;
   top: 5px;
-  transition: color .3s, transform .3s;
+  transition: color 0.3s, transform 0.3s;
   width: 20px;
 
   &:hover {
@@ -228,10 +230,10 @@
     color: $g999;
     cursor: pointer;
     float: right;
-    transition: color .3s;
+    transition: color 0.3s;
 
     &:hover {
-      color: #7E88DC;
+      color: #7e88dc;
     }
   }
 }
@@ -254,16 +256,21 @@
       font-size: 14px;
       margin-left: -5px;
       margin-right: 3px;
-      transition: transform .3s, color .3s;
+      transition: transform 0.3s, color 0.3s;
     }
   }
 
   .time-selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    height: auto;
     i {
       cursor: pointer;
       font-size: 14px;
       margin-right: 10px;
-      transition: transform .3s, color .3s;
+      transition: transform 0.3s, color 0.3s;
     }
   }
 
@@ -280,12 +287,9 @@
   }
 }
 
-
-
 .exp-filter-section {
   padding: 0 0 20px;
 }
-
 
 // Filter Out Pop
 .filter-pop-out {
@@ -329,7 +333,7 @@
     list-style-type: none;
     padding: 0 5px 0 45px;
     position: relative;
-    transition: background-color .3s;
+    transition: background-color 0.3s;
 
     &:hover {
       background-color: $geee;
@@ -358,7 +362,6 @@
   }
 }
 
-
 // Exploration Search Results
 .exp-search-results {
   height: 100%;
@@ -377,7 +380,7 @@
   cursor: pointer;
   padding: 10px;
   position: relative;
-  transition: background-color .3s;
+  transition: background-color 0.3s;
 
   &:hover {
     background-color: $geee;
@@ -446,7 +449,7 @@
     position: absolute;
     top: auto;
     transform: translateX(-50%);
-    transition: background-color .3s;
+    transition: background-color 0.3s;
     width: 60px;
     z-index: 1;
 
@@ -467,7 +470,7 @@
     left: 25%;
 
     &:hover {
-      background-color: #5B99CE;
+      background-color: #5b99ce;
     }
   }
 
@@ -475,7 +478,7 @@
     left: 50%;
 
     &:hover {
-      background-color: #5BCE84;
+      background-color: #5bce84;
     }
   }
 
@@ -483,14 +486,14 @@
     left: 75%;
 
     &:hover {
-      background-color: #1858BB;
+      background-color: #1858bb;
     }
 
     &.on-active-timetable {
-      background-color: #2DD6B5;
+      background-color: #2dd6b5;
 
       &:hover {
-        background-color: #56ECCF;
+        background-color: #56eccf;
       }
     }
   }

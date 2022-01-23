@@ -27,11 +27,6 @@ class TimeSelector extends React.Component {
     const { day, value, onChange, onChangeComplete, remove } = this.props;
     return (
       <div className="time-selector">
-        <span className="time-selector-day">
-          {" "}
-          <i className="fa fa-times" onClick={() => remove(day)} />
-          {day.slice(0, 3)}{" "}
-        </span>
         <InputRange
           day={day}
           maxValue={24}
@@ -40,6 +35,10 @@ class TimeSelector extends React.Component {
           onChange={onChange}
           onChangeComplete={onChangeComplete}
         />
+        <div className="time-selector-day">
+          <div style={{ marginRight: "2px" }}>{day.slice(0, 3)}</div>
+          <i className="fa fa-times" onClick={() => remove(day)} />
+        </div>
       </div>
     );
   }

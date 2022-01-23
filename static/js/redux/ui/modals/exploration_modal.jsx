@@ -44,6 +44,7 @@ class ExplorationModal extends React.Component {
       shareLinkShown: false,
       hasUpdatedCourses: false,
       selected: 0,
+      didSearch: false,
     };
     this.toggle = this.toggle.bind(this);
     this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
@@ -140,12 +141,15 @@ class ExplorationModal extends React.Component {
     }
     const query = this.input.value;
     const { areas, departments, times, levels } = filters;
+    this.setState({ didSearch: false });
     this.props.fetchAdvancedSearchResults(query, {
       areas,
       departments,
       times,
       levels,
     });
+    if (query) this.setState({ didSearch: true });
+    else this.setState({ didSearch: false });
   }
 
   fetchAdvancedSearchResultsWrapper() {
@@ -370,6 +374,7 @@ class ExplorationModal extends React.Component {
         <SelectedFilterSection
           key={filterType}
           name={name}
+          type={filterType}
           toggle={this.toggle(filterType)}
         >
           {selectedItems}
@@ -391,9 +396,7 @@ class ExplorationModal extends React.Component {
         />
       );
     });
-    const explorationLoader = this.props.isFetching ? (
-      <i className="fa fa-spin fa-refresh" />
-    ) : null;
+    const explorationLoader = <i className="fa fa-spin fa-refresh" />;
     const content = (
       <div
         className={classNames("exploration-content", {
@@ -428,15 +431,33 @@ class ExplorationModal extends React.Component {
               key={"times"}
               name={"Day/Times"}
               toggle={this.toggle("times")}
+              type={"times"}
             >
               {timeFilters}
             </SelectedFilterSection>
           </div>
           <div className="col-5-16 exp-search-results">
-            <div id="exp-search-list">
+            <div id="exp-search-list" style={{ height: "100%" }}>
               {numSearchResults}
-              {searchResults}
-              {explorationLoader}
+              {this.state.didSearch &&
+                (searchResults.length ? (
+                  searchResults
+                ) : (
+                  <p>No courses have been found</p>
+                ))}
+              {this.props.isFetching ? (
+                <div
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {explorationLoader}
+                </div>
+              ) : null}
             </div>
           </div>
           {filters}
