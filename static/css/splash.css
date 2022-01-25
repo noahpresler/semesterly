@@ -295,7 +295,7 @@ header nav a:last-child{
 .tutorial {
 	padding: 120px 0;
 	font-size: 0;
-	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #ddd;
 	position: relative;
 }
 .tutorial:last-child {
@@ -372,6 +372,14 @@ header nav a:last-child{
 .tutorial .center h4 {
 	margin: 10px auto 0;
 	max-width: 700px;
+}
+.tutorial-btn {
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: 400;
+	color: #777;
+	padding: 5px 40px;
+	margin: 10px 0 0 0;
 }
 #mobile {
 	background-color: #ddd;
