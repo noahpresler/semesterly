@@ -13,10 +13,11 @@ GNU General Public License for more details.
 */
 
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ClickOutHandler from "react-onclickout";
 import uniq from "lodash/uniq";
 import Clipboard from "clipboard";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import COLOUR_DATA from "../constants/colours";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
@@ -103,7 +104,6 @@ const MasterSlot = (props) => {
   const shareLink = shareLinkShown ? (
     // eslint-disable-next-line no-use-before-define
     <ShareLink
-      uniqueId={`course-${props.course.id}`}
       link={props.getShareLink(props.course.code)}
       onClickOut={hideShareLink}
       type="Course"
@@ -207,37 +207,46 @@ MasterSlot.propTypes = {
   getShareLink: PropTypes.func.isRequired,
 };
 
-export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (
-  <ClickOutHandler onClickOut={onClickOut}>
-    <div className="share-course-link-wrapper" onClick={(e) => e.stopPropagation()}>
-      <h5>Share {type}</h5>
-      <h6>Copy the link below and send it to a friend/advisor!</h6>
-      <div className="tip-border" />
-      <div className="tip" />
-      <input
-        className="share-course-link"
-        size={link.length}
-        value={link}
-        onClick={(e) => e.stopPropagation()}
-        onFocus={(e) => e.target.select()}
-        readOnly
-      />
-      <div
-        className="clipboardBtn"
-        id={`clipboard-btn-${uniqueId}`}
-        data-clipboard-text={link}
-      >
-        Copy to Clipboard
+export const ShareLink = ({ link, onClickOut, type }) => {
+  const [shareBtnText, setShareBtnText] = useState("Copy to Clipboard");
+  useEffect(() => {
+    if (shareBtnText === "Copied!") {
+      setTimeout(() => setShareBtnText("Copy to Clipboard"), 2000);
+    }
+  }, [shareBtnText]);
+
+  return (
+    <ClickOutHandler onClickOut={onClickOut}>
+      <div className="share-course-link-wrapper" onClick={(e) => e.stopPropagation()}>
+        <h5>Share {type}</h5>
+        <h6>Copy the link below and send it to a friend/advisor!</h6>
+        <div className="tip-border" />
+        <div className="tip" />
+        <input
+          className="share-course-link"
+          size={link.length}
+          value={location.host + link}
+          onClick={(e) => e.stopPropagation()}
+          onFocus={(e) => e.target.select()}
+          readOnly
+        />
+        <CopyToClipboard text={location.host + link}>
+          <div className="clipboardBtn" onClick={() => setShareBtnText("Copied!")}>
+            {shareBtnText}
+          </div>
+        </CopyToClipboard>
+        {/* <div className="clipboardBtn" id={`clipboard-btn-${uniqueId}`} data-clipboard-text={link}>
+          Copy to Clipboard
+        </div> */}
       </div>
-    </div>
-  </ClickOutHandler>
-);
+    </ClickOutHandler>
+  );
+};
 
 ShareLink.propTypes = {
   link: PropTypes.string.isRequired,
   onClickOut: PropTypes.func.isRequired,
-  uniqueId: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
 };
 
 export default MasterSlot;
