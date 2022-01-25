@@ -53,12 +53,11 @@ class Parser(BaseParser):
             os.getcwd(), settings.PARSING_MODULE
         )
         for fn in os.listdir(directory):
-            term, year = os.path.splitext(fn)[0].split(":")
+            term, year = os.path.splitext(fn)[0].split("_")
             eval_file_path = "{}/{}".format(directory, fn)
-            soup = BeautifulSoup(
-                urllib.request.urlopen(eval_file_path).read(), "html.parser"
-            )
-            self._process_soup(soup, term, year)
+            with open(eval_file_path, mode="r") as f:
+                soup = BeautifulSoup(f.read(), "html.parser")
+                self._process_soup(soup, term, year)
 
     def _process_soup(self, soup, term, year):
         course_codes = list(set(soup.find_all("b", text=Parser.CODE_PATTERN)))

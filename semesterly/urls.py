@@ -19,8 +19,6 @@ from django.views.generic import TemplateView
 import helpers.mixins
 import semesterly.views
 
-admin.autodiscover()
-
 urlpatterns = [
     re_path(r"^$", helpers.mixins.FeatureFlowView.as_view(), name="home"),
     re_path(r"about/?", TemplateView.as_view(template_name="about.html")),

@@ -12,19 +12,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import TopBar from '../top_bar';
-import { getCurrentSemester } from '../../state';
+import { connect } from "react-redux";
+import TopBar from "../top_bar";
+import { getCurrentSemester } from "../../state";
 
-
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userInfo: state.userInfo.data,
-  currentSemester:
-    getCurrentSemester(state),
+  currentSemester: getCurrentSemester(state),
 });
 
-const TopBarContainer = connect(
-    mapStateToProps,
-)(TopBar);
+const TopBarContainer = connect(mapStateToProps)(TopBar);
 
 export default TopBarContainer;

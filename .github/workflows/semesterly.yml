@@ -2,9 +2,15 @@ name: Semesterly CI
 
 on:
   push:
-    branches: [ prod, staging, refactor-frontend-base-branch, github-actions ]
+    branches: 
+      - prod
+      - develop
+      - feature/enhance-custom-events
   pull_request:
-    branches: [ prod, staging, refactor-frontend-base-branch, github-actions ]
+    branches: 
+      - prod
+      - develop
+      - feature/enhance-custom-events
 
 jobs:
   build:

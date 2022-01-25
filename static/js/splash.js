@@ -12,43 +12,41 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+/* eslint-disable no-use-before-define */
+
 // splash page javascript here
-$(document).ready(function() {  
-    sizeitup();
+$(document).ready(() => {
+  sizeitup();
 
-    $('#schools-dropdown .mobile-nav-label').click(function(){
-        $('#schools-dropdown').toggleClass('open');
-    });
+  $("#schools-dropdown .mobile-nav-label").click(() => {
+    $("#schools-dropdown").toggleClass("open");
+  });
 
-    $('#schools-dropdown').click(function(e){
-        e.stopPropagation();
-    });
+  $("#schools-dropdown").click((e) => {
+    e.stopPropagation();
+  });
 
-    $(document).click(function(){
-        $('#schools-dropdown').removeClass('open');
-    });
-
+  $(document).click(() => {
+    $("#schools-dropdown").removeClass("open");
+  });
 });
 
-$(window).resize(function() {
-    sizeitup();
+$(window).resize(() => {
+  sizeitup();
 });
 
-function sizeitup() {
-    var bodyh = $(window).height();
-}
+function sizeitup() {}
 
-$(window).scroll(function() {
-    var bodyh = $(window).height();
-    var pos = $(window).scrollTop();
-    if (pos > 0) {
-        $('header').removeClass('down');
-    } else {
-        $('header').addClass('down');
-    }
+$(window).scroll(() => {
+  const pos = $(window).scrollTop();
+  if (pos > 0) {
+    $("header").removeClass("down");
+  } else {
+    $("header").addClass("down");
+  }
 });
 
-//SMOOTH SCROLLING
+// SMOOTH SCROLLING
 /*
 $(function() {
     $('a[href*=#]:not([href=#])').click(function() {

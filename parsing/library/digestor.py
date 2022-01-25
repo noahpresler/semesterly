@@ -564,7 +564,7 @@ class DigestionAdapter:
         if evaluation.instructors is not None:
             for instructor in evaluation.instructors:
                 instructor = DotDict(instructor)
-                if isinstance(instructor.name, basestring):
+                if isinstance(instructor.name, str):
                     if professor != "":
                         professor += ", "
                     professor += instructor.name
@@ -661,7 +661,6 @@ class Vommit(DigestionStrategy):
             "_course_cache",
             "semester_id",
             "_semester",
-            "vector",
         }
 
         def prune(d):

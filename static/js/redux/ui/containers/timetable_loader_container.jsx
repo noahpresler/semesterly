@@ -12,14 +12,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import TimetableLoader from '../timetable_loader';
+import { connect } from "react-redux";
+import TimetableLoader from "../timetable_loader";
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   loading: state.timetables.isFetching,
 });
-const TimetableLoaderContainer = connect(
-    mapStateToProps,
-)(TimetableLoader);
+const TimetableLoaderContainer = connect(mapStateToProps)(TimetableLoader);
 
 export default TimetableLoaderContainer;

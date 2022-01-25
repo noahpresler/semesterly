@@ -38,10 +38,6 @@ SECRETS = {
     "VANDY_USER": None,
     "VANDY_PASS": None,
     # Not essential for testing, but can be filled in for advanced mailing usage
-    "MAILER_SERVER": None,
-    "MAILER_USER": None,
-    "MAILER_PASSWORD": None,
-    "MAILER_SENDER": None,
     "EMAIL_HOST_USER": None,
     "EMAIL_HOST_PASSWORD": None,
     "EMAIL_PASSWORD": None,

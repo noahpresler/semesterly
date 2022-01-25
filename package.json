@@ -5,6 +5,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "autoprefixer": "^7.2.6",
@@ -24,7 +25,7 @@
     "browserify": "^14.5.0",
     "chromedriver": "^2.46.0",
     "classnames": "^2.3.1",
-    "clipboard": "^1.7.1",
+    "clipboard": "^2.0.8",
     "css-loader": "^0.28.11",
     "es6-promise": "^4.2.8",
     "eslint": "^8.4.1",
@@ -38,6 +39,7 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "fbjs": "^0.8.18",
     "file-loader": "^0.11.1",
+    "follow-redirects": "^1.14.7",
     "ical-generator": "^0.2.10",
     "immutability-helper": "^3.1.1",
     "isomorphic-fetch": "^2.2.1",
@@ -60,6 +62,7 @@
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-shallow-compare": "^15.6.3",
     "react-alert": "^2.4.0",
+    "react-colorful": "^5.5.1",
     "react-date-picker": "^5.3.28",
     "react-dnd": "^14.0.4",
     "react-dnd-html5-backend": "^14.0.2",
@@ -74,7 +77,7 @@
     "react-select": "^1.3.0",
     "react-swipeable": "^4.3.2",
     "react-test-renderer": "^16.14.0",
-    "react-tooltip": "^3.11.6",
+    "react-tooltip": "^4.2.21",
     "reactify": "^1.1.1",
     "redux": "^4.1.2",
     "redux-devtools-extension": "^2.13.9",
@@ -86,7 +89,9 @@
     "static-interval-tree": "^1.3.0",
     "streamify": "^0.2.9",
     "style-loader": "^0.17.0",
+    "tinycolor2": "^1.4.2",
     "twemoji": "^2.5.1",
+    "ua-parser-js": "^1.0.2",
     "url-loader": "^0.5.8",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^1.1.2",
@@ -113,10 +118,8 @@
     "test:watch": "npm test -- --watch",
     "build": "./node_modules/.bin/webpack --config ./webpack.config.js --progress",
     "watch": "node misc/server.js",
-    "lint-staged": "lint-staged",
     "lint": "./node_modules/.bin/eslint \"static/js/redux/**\"; ./node_modules/.bin/sass-lint -c .sass-lint.yml 'static/css/timetable/*.scss, static/css/timetable/**/*.scss' -v -q",
     "lint-fix": "./node_modules/.bin/eslint --fix \"static/js/redux/**\" ",
-    "lint-scss-staged": "./node_modules/.bin/sass-lint -c .sass-lint-precommit.yml -v -q",
     "validate": "npm ls"
   },
   "repository": {
@@ -129,32 +132,24 @@
     "url": "https://github.com/rohandas/semesterly/issues"
   },
   "homepage": "https://github.com/rohandas/semesterly#readme",
-  "pre-commit": [
-    "lint-staged"
-  ],
   "devDependencies": {
-    "@testing-library/react": "^12.1.2",
+    "@types/clipboard": "^2.0.7",
     "@types/jest": "^27.0.3",
     "@types/js-cookie": "^3.0.1",
+    "@types/react-tooltip": "^4.2.4",
+    "@types/tinycolor2": "^1.4.3",
+    "eslint-config-prettier": "^8.3.0",
     "jest": "^27.2.5",
     "jest-environment-jsdom": "^27.4.4",
-    "lint-staged": "^3.6.1",
     "nock": "^13.2.1",
     "node-sass": "^4.5.2",
-    "precommit-hook": "^3.0.0",
+    "prettier": "2.5.1",
     "react-test-utils": "0.0.1",
     "regenerator-runtime": "^0.10.5",
     "sass-loader": "^6.0.7",
     "ts-jest": "^27.1.1",
     "ts-loader": "^3.5.0",
     "typescript": "^4.5.3"
-  },
-  "lint-staged": {
-    "*.jsx?": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.scss": "lint-scss-staged"
   },
   "sasslintConfig": "sass-lint"
 }

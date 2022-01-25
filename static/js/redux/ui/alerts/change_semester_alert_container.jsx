@@ -12,26 +12,25 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { connect } from 'react-redux';
-import { setSemester } from '../../actions/search_actions';
-import ChangeSemesterAlert from './change_semester_alert';
-import { alertsActions } from '../../state/slices';
-
+import { connect } from "react-redux";
+import { setSemester } from "../../actions/search_actions";
+import ChangeSemesterAlert from "./change_semester_alert";
+import { alertsActions } from "../../state/slices";
 
 const mapStateToProps = (state) => {
-  const msg = 'Switching semesters will clear your current timetable!';
+  const msg = "Switching semesters will clear your current timetable!";
   return {
     desiredSemester: state.alerts.desiredSemester,
     msg,
   };
 };
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   dismissSelf: () => dispatch(alertsActions.dismissAlertChangeSemester()),
-  setSemester: semester => dispatch(setSemester(semester)),
+  setSemester: (semester) => dispatch(setSemester(semester)),
 });
 
 const ChangeSemesterAlertContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps
 )(ChangeSemesterAlert);
 export default ChangeSemesterAlertContainer;
