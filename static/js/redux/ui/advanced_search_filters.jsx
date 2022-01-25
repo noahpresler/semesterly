@@ -97,10 +97,25 @@ Filter.propTypes = {
 
 // eslint-disable-next-line react/prop-types
 export const SelectedFilter = ({ name, remove }) => (
-  <h6>
+  <div
+    style={{
+      borderStyle: "solid",
+      borderWidth: "1px",
+      borderColor: "black",
+      borderRadius: "5px",
+      padding: "0 5px 0 5px",
+      margin: "0 0 3px 5px",
+      width: "auto",
+      display: "flex",
+      flexWrap: "wrap",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    }}
+  >
+    <span style={{ marginRight: "2px" }}>{name}</span>
     <i className="fa fa-times" onClick={() => remove()} />
-    <span>{name}</span>
-  </h6>
+  </div>
 );
 
 SelectedFilter.propTypes = {
@@ -108,13 +123,28 @@ SelectedFilter.propTypes = {
   remove: PropTypes.func.isRequired,
 };
 
-export const SelectedFilterSection = ({ name, toggle, children }) => (
+export const SelectedFilterSection = ({ name, toggle, children, type, removeAll }) => (
   <div className="exp-filter-section open">
     <h3 className="exp-header">
       <span>{name.substring(0, name.length - 1)} Filter</span>
       <i className="fa fa-plus" onClick={toggle} />
+      <i className="clear-all">
+        <div onClick={removeAll}>Clear All</div>
+      </i>
     </h3>
-    {children.length > 0 ? children : <h6 className="none-selected">None Selected</h6>}
+    {children.length > 0 ? (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: type === "times" ? "column" : "row",
+          flexWrap: "wrap",
+        }}
+      >
+        {children}
+      </div>
+    ) : (
+      <h6 className="none-selected">None Selected</h6>
+    )}
   </div>
 );
 
