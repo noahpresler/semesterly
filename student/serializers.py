@@ -61,6 +61,7 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = (
+            "preferred_name",
             "class_year",
             "img_url",
             "fbook_uid",
