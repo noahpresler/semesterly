@@ -78,15 +78,15 @@ stages:
       artifact: manifests
       
 
-- stage: DeployStage
-  displayName: DeployStage
+- stage: Deployment
+  displayName: Deployment
   dependsOn: Build
 
 # Deploy to dev environment
   jobs:
-  - deployment: DeployStage
+  - deployment: Deployment
     condition: and(succeeded(), not(startsWith(variables['Build.SourceBranch'], 'refs/pull/'))) 
-    displayName: DeployStage
+    displayName: Deployment
     pool:
       vmImage: $(vmImageName)
     environment: 'uis-prod.semesterly-dev'
