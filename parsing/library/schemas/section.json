@@ -115,28 +115,6 @@
       },
       "additionalProperties": false
     },
-    "textbooks": {
-      "type": "array",
-      "items": {
-        "allOf": [
-          {
-            "$ref": "textbook.json#/"
-          }
-        ],
-        "properties": {
-          "kind": {},
-          "isbn": {},
-          "title": {},
-          "author": {},
-          "required": {}
-        },
-        "additionalProperties": false,
-        "required": [
-          "kind",
-          "isbn"
-        ]
-      }
-    },
     "meetings": {
       "type": "array",
       "items": {
