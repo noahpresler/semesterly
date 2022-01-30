@@ -96,7 +96,7 @@ class UserView(RedirectToSignupMixin, APIView):
             else student.img_url.replace("sz=50", "sz=700")
         )
         context = {
-            "name": student.user,
+            "name": f"{student.user.first_name} {student.user.last_name}",
             "major": student.major,
             "class": student.class_year,
             "student": student,
@@ -107,6 +107,9 @@ class UserView(RedirectToSignupMixin, APIView):
             "hasJHU": student.is_signed_up_through_jhu(),
             "notifications": RegistrationToken.objects.filter(student=student).exists(),
         }
+        if student.preferred_name:
+            context["name"] = student.preferred_name
+
         self.add_reactions(context, student)
         return render(request, "profile.html", context)
 
