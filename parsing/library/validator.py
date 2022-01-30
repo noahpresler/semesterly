@@ -65,8 +65,6 @@ class Validator:
         "eval",
         "instructor",
         "final_exam",
-        "textbook",
-        "textbook_link",
     }
 
     def __init__(self, config, tracker=None, relative=True):
@@ -442,10 +440,6 @@ class Validator:
             meeting["kind"] = "meeting"
             self.validate(DotDict(meeting), transact=False)
 
-        if "textbooks" in section:
-            for textbook in section.textbooks:
-                self.validate_textbook_link(textbook)
-
     def validate_meeting(self, meeting):
         """Validate meeting object.
 
@@ -598,23 +592,6 @@ class Validator:
             self.validate_meeting(final_exam.meeting)
         except ValidationError as e:
             raise ValidationError(final_exam, *e.args)
-
-    def validate_textbook_link(self, textbook_link):
-        """Validate textbook link.
-
-        Args:
-            textbook_link (DotDict): Textbook link object to validate.
-
-        Raises:
-            ValidationError: Invalid textbook link.
-        """
-        if "course" not in textbook_link:
-            return
-        if self.course_code_regex.match(textbook_link.course.code) is not None:
-            return
-        raise ValidationError(
-            textbook_link, "textbook_link course code doent match course code regex"
-        )
 
     def validate_location(self, location):
         """Validate location.

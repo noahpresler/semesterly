@@ -98,7 +98,6 @@ The reducers directory follows this structure::
     ├── signup_modal_reducer.jsx
     ├── terms_of_service_banner_reducer.jsx
     ├── terms_of_service_modal_reducer.jsx
-    ├── textbook_modal_reducer.jsx
     ├── timetables_reducer.jsx
     ├── ui_reducer.jsx
     ├── user_acquisition_modal_reducer.jsx
@@ -142,8 +141,6 @@ Modals
 |``save_calendar_modal.jsx``    | .. image:: components/save_calendar_modal.png    |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``signup_modal.jsx``           | .. image:: components/signup_modal.png           |                          |
-+-------------------------------+--------------------------------------------------+--------------------------+
-|``textbook_modal.jsx``         | .. image:: components/textbook_modal.png         |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``tut_modal.jsx``              | .. image:: components/tut_modal.png              |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+

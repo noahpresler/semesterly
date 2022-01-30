@@ -73,7 +73,6 @@ class Parser(BaseParser):
     def start(
         self,
         verbosity=3,
-        textbooks=True,
         departments_filter=None,
         years_and_terms_filter=None,
     ):

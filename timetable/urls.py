@@ -20,7 +20,6 @@ from helpers.mixins import FeatureFlowView
 urlpatterns = [
     re_path(r"^signin/*$", FeatureFlowView.as_view(feature_name="USER_ACQ")),
     re_path(r"^signup/*$", FeatureFlowView.as_view(feature_name="SIGNUP")),
-    re_path(r"^textbooks/*$", FeatureFlowView.as_view(feature_name="VIEW_TEXTBOOKS")),
     re_path(
         r"^export_calendar/*$", FeatureFlowView.as_view(feature_name="EXPORT_CALENDAR")
     ),
