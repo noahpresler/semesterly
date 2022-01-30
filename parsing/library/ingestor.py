@@ -63,7 +63,6 @@ class Ingestor(dict):
         "school_subdivision_name",
         "kind",
         "department",
-        "dept",
         "department_name",
         "department_code",
         "dept_name",
@@ -136,13 +135,6 @@ class Ingestor(dict):
         "credits",
         "num_credits",
         "campus",  # TODO - not really
-        "textbooks",
-        "isbn",
-        "required",
-        "detail_url",
-        "image_url",
-        "author",
-        "title",
         "score",
         "summary",
         "same_as",
@@ -231,7 +223,6 @@ class Ingestor(dict):
             or "dept_name" in self
             or "dept_code" in self
         ):
-            # if not isinstance(self._get('department', 'dept'), dict):
             department = {
                 "name": titlize(self._get("department_name", "dept_name")),
                 "code": self._get("department_code", "dept_code"),
@@ -240,22 +231,19 @@ class Ingestor(dict):
 
     def _resolve_instructors(self):
         instructors = None
-        instr_keys = (
-            set(
-                [
-                    "instructors",
-                    "instructor",
-                    "instr",
-                    "instrs",
-                    "instr_name",
-                    "instr_names",
-                    "instructor",
-                    "instructor_name",
-                    "instructors",
-                ]
-            )
-            & set(self)
-        )
+        instr_keys = set(
+            [
+                "instructors",
+                "instructor",
+                "instr",
+                "instrs",
+                "instr_name",
+                "instr_names",
+                "instructor",
+                "instructor_name",
+                "instructors",
+            ]
+        ) & set(self)
 
         if len(instr_keys) == 1:
             instructors = self[list(instr_keys)[0]]
@@ -369,7 +357,6 @@ class Ingestor(dict):
             "type": self._get("type", "section_type"),
             "fees": safe_cast(self._get("fees", "fee", "cost"), float),
             "final_exam": self._get("final_exam"),
-            "textbooks": self._get("textbooks"),
             "meetings": self._get("offerings", "meetings"),
             "course_section_id": safe_cast(self._get("course_section_id"), int),
         }
@@ -419,56 +406,6 @@ class Ingestor(dict):
             self.tracker.time = meeting["time"]["start"]
             self.tracker.time = meeting["time"]["end"]
         return meeting
-
-    def ingest_textbook_link(self, section=None):
-        """Create textbook link json object.
-
-        Args:
-            section (None, :obj:`dict`, optional): Description
-        Returns:
-            dict: textbook link.
-        """
-        textbook_link = {
-            "kind": "textbook_link",
-            "school": {"code": self._get("school", "school_code")},
-            "course": {"code": self._get("course_code")},
-            "section": {
-                "code": self._get("section_code"),
-                "year": str(self._get("year")),
-                "term": self._get("term", "semester"),
-            },
-            "isbn": self._get("isbn"),
-            "required": self._get("required"),
-        }
-
-        textbook_link = clean(textbook_link)
-        self._validate_and_log(textbook_link)
-        self.tracker.year = textbook_link["section"]["year"]
-        self.tracker.term = textbook_link["section"]["term"]
-        if "department" in self:
-            self.tracker.department = self["department"]
-        return textbook_link
-
-    def ingest_textbook(self):
-        """Create textbook json object.
-
-        Returns:
-            dict: textbook
-        """
-        textbook = {
-            "kind": "textbook",
-            "isbn": self._get("isbn"),
-            "detail_url": self._get("detail_url"),
-            "image_url": self._get("image_url"),
-            "author": self._get("author"),
-            "title": self._get("title"),
-        }
-
-        textbook = clean(textbook)
-        self._validate_and_log(textbook)
-        if "department" in self:
-            self.tracker.department = self["department"]
-        return textbook
 
     def ingest_eval(self):
         """Create evaluation json object.

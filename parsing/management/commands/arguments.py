@@ -184,7 +184,7 @@ def _parser_type_arg(parser):
         "--types",
         default=["courses"],
         nargs="+",
-        choices=["courses", "textbooks", "evals"],
+        choices=["courses", "evals"],
         help="default: %(default)s",
     )
 

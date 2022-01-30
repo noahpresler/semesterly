@@ -224,7 +224,6 @@ class Parser(BaseParser):
     def start(
         self,
         verbosity=3,
-        textbooks=False,
         departments_filter=None,
         years_and_terms_filter=None,
     ):

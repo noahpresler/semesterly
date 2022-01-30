@@ -85,7 +85,7 @@ class Command(BaseCommand):
             parser (parsing.library.base_parser.BaseParser)
             tracker (parsing.library.tracker.Tracker)
             options (dict): Command line options for arg parser.
-            parser_type (str): {'courses', 'evals', 'textbooks'}
+            parser_type (str): {'courses', 'evals'}
             school (str): School to parse.
         """
         # Load config file to dictionary.
@@ -114,7 +114,6 @@ class Command(BaseCommand):
 
             p.start(
                 verbosity=options["verbosity"],
-                textbooks=parser_type == "textbook",
                 departments_filter=options.get("departments"),
                 years_and_terms_filter=Command._resolve_years_and_terms(options),
             )

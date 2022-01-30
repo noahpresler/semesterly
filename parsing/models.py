@@ -33,16 +33,13 @@ class DataUpdate(models.Model):
         COURSES (str): Update type.
         EVALUATIONS (str): Update type.
         MISCELLANEOUS (str): Update type.
-        TEXTBOOKS (str): Update type.
     """
 
     COURSES = "C"
-    TEXTBOOKS = "T"
     EVALUATIONS = "E"
     MISCELLANEOUS = "M"
     UPDATE_TYPE = (
         (COURSES, "courses"),
-        (TEXTBOOKS, "textbooks"),
         (EVALUATIONS, "evaluations"),
         (MISCELLANEOUS, "miscellaneous"),
     )

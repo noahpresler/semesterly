@@ -22,8 +22,6 @@ from timetable.models import (
     Course,
     Section,
     Offering,
-    Textbook,
-    TextbookLink,
     Evaluation,
     Semester,
 )
@@ -58,8 +56,6 @@ class Digestor:
         "course": Course,
         "section": Section,
         "offering": Offering,
-        "textbook": Textbook,
-        "textbook_link": TextbookLink,
         "evaluation": Evaluation,
         "semester": Semester,
     }
@@ -111,8 +107,6 @@ class Digestor:
             "course": lambda x: self.digest_course(x),
             "section": lambda x: self.digest_section(x),
             "meeting": lambda x: self.digest_meeting(x),
-            "textbook": lambda x: self.digest_textbook(x),
-            "textbook_link": lambda x: self.digest_textbook_link(x),
             "eval": lambda x: self.digest_eval(x),
         }
         if self.tracker.has_viewer("progressbar"):
@@ -169,10 +163,6 @@ class Digestor:
             self.cache.section = section_model
             for meeting in section.get("meetings", []):
                 self.digest_meeting(DotDict(meeting), section_model)
-            for textbook_link in section.get("textbooks", []):
-                self.digest_textbook_link(
-                    DotDict(textbook_link), section_model=section_model
-                )
         self._update_progress("section", bool(section_model))
 
         return section_model
@@ -194,35 +184,6 @@ class Digestor:
             offering_models.append(offering_model)
             self._update_progress("offering", bool(offering_model))
         return offering_models
-
-    def digest_textbook(self, textbook):
-        """Digest textbook.
-
-        Args:
-            textbook (dict)
-        """
-        textbook_model = self.strategy.digest_textbook(
-            self.adapter.adapt_textbook(textbook)
-        )
-        self._update_progress("textbook", bool(textbook_model))
-
-    def digest_textbook_link(self, textbook_link, textbook_obj=None, section_obj=None):
-        """Digest textbook link.
-
-        Args:
-            textbook_link (dict): Description
-            textbook_obj (Textbook, None, optional)
-            section_obj (Section, None, optional)
-        """
-        # NOTE: currently only support per section digestion.
-        textbook_link_model = self.strategy.digest_textbook_link(
-            list(
-                self.adapter.adapt_textbook_link(
-                    textbook_link, textbook_obj=textbook_obj, section_obj=section_obj
-                )
-            )[0]
-        )
-        self._update_progress("textbook_link", bool(textbook_link_model))
 
     def digest_eval(self, evaluation):
         """Digest evaluation.
@@ -489,68 +450,6 @@ class DigestionAdapter:
             }
             yield offering
 
-    def adapt_textbook(self, textbook):
-        """Adapt textbook to model dictionary.
-
-        Args:
-            textbook (dict): validated textbook.
-
-        Returns:
-            dict: Description
-        """
-        textbook = {
-            "isbn": textbook.isbn,
-            "defaults": {
-                "detail_url": textbook.detail_url,
-                "image_url": textbook.image_url,
-                "author": textbook.author,
-                "title": textbook.title,
-            },
-        }
-        for key in textbook["defaults"]:
-            if textbook["defaults"][key] is None:
-                textbook["defaults"][key] = "Cannot be found"
-        return textbook
-
-    def adapt_textbook_link(
-        self, textbook_link, textbook_model=None, section_model=None
-    ):
-        """Adapt textbook link to model dictionary.
-
-        Args:
-            textbook_link (dict): validated
-            textbook_model (model, None, optional)
-            section_model (model, None, optional)
-
-        Yields:
-            dict: model compliant
-        """
-        sections = [section_model]
-        if section_model is None:
-            if "section" not in textbook_link:
-                sections = Section.objects.filter(
-                    course=textbook_link.course.code,
-                )
-            else:
-                sections = Section.objects.filter(
-                    course=textbook_link.course.code,
-                    meeting_section=textbook_link.section.code,
-                )
-            sections = Section.objects.filter(course=textbook_link.course.code)
-        if textbook_model is None:
-            textbook_model = Textbook.objects.filter(isbn=textbook_link.isbn).first()
-        if "required" not in textbook_link:
-            textbook_link.required = (
-                True  # TODO - optional required field in db and frontend
-            )
-        for section in sections:
-            yield {
-                "section": section,
-                "is_required": textbook_link.required,
-                "textbook": textbook_model,
-            }
-        # NOTE: no current usage of course linked textbooks (listified yield will always be length 1)
-
     def adapt_evaluation(self, evaluation):
         """Adapt evaluation to model dictionary.
 
@@ -641,7 +540,7 @@ class Vommit(DigestionStrategy):
             # Transform django object to dictionary.
             dbmodel = dbmodel.__dict__
 
-        context = {"section", "course", "semester", "textbook", "evaluation"}
+        context = {"section", "course", "semester", "evaluation"}
 
         whats = {}
         for k, v in inmodel.items():
@@ -714,8 +613,6 @@ class Vommit(DigestionStrategy):
             "course": Course,
             "section": Section,
             "offering": Offering,
-            "textbook": Textbook,
-            "textbook_link": TextbookLink,
             "evaluation": Evaluation,
         }
 

@@ -48,7 +48,6 @@ class CourseSerializer(serializers.ModelSerializer):
     integrations = serializers.SerializerMethodField()
     related_courses = serializers.SerializerMethodField()
     reactions = serializers.SerializerMethodField()
-    textbooks = serializers.SerializerMethodField()
     regexed_courses = serializers.SerializerMethodField()
     popularity_percent = serializers.SerializerMethodField()
     is_waitlist_only = serializers.SerializerMethodField()
@@ -97,12 +96,6 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_reactions(self, course):
         return course.get_reactions(self.context.get("student"))
-
-    def get_textbooks(self, course):
-        sections = course.section_set.filter(semester=self.context["semester"])
-        return {
-            section.meeting_section: section.get_textbooks() for section in sections
-        }
 
     def get_regexed_courses(self, course):
         """
@@ -173,7 +166,6 @@ class CourseSerializer(serializers.ModelSerializer):
             "integrations",
             "related_courses",
             "reactions",
-            "textbooks",
             "regexed_courses",
             "popularity_percent",
             "sections",

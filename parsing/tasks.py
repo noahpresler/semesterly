@@ -27,13 +27,12 @@ logger = get_task_logger(__name__)
     name="task_parse_current_registration_period",
     ignore_result=True,
 )
-def task_parse_current_registration_period(schools=None, textbooks=False):
+def task_parse_current_registration_period(schools=None):
     """
     Parse semesters in current registration period.
 
     Args:
         school (str, optional): School to parse.
-        textbooks (bool, optional): Flag to parse textbooks.
     """
     schools = set(schools or ACTIVE_SCHOOLS)
     for school in set(SCHOOLS_MAP) & schools:
@@ -57,17 +56,16 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
 
         # Create individual parsing tasks.
         for year, terms in years:
-            task_parse_school.delay(school, {year: [terms[0]]}, textbooks=textbooks)
+            task_parse_school.delay(school, {year: [terms[0]]})
 
 
 @task()
-def task_parse_active(schools=None, textbooks=False):
+def task_parse_active(schools=None):
     """
     Parse all semesters displayed to users (i.e. active semesters).
 
     Args:
         school (str, optional): School to parse.
-        textbooks (bool, optional): Flag to parse textbooks.
     """
     schools = set(schools or ACTIVE_SCHOOLS)
     for school in set(SCHOOLS_MAP) & schools:
@@ -77,35 +75,17 @@ def task_parse_active(schools=None, textbooks=False):
 
         for year, terms in list(SCHOOLS_MAP[school].active_semesters.items()):
             for term in terms:
-                task_parse_school.delay(school, {year: [term]}, textbooks=textbooks)
-
-
-@periodic_task(
-    run_every=(crontab(day_of_week="sun", hour=12, minute=00)),
-    name="task_parse_textbooks",
-    ignore_result=True,
-)
-def task_parse_textbooks(schools=None, all=False):
-    """
-    Parse textbooks for morst recent academic period.
-
-    Note that in some instances parsers parse textbooks
-    and courses at the same time.
-    """
-    if all:
-        return task_parse_active(schools, textbooks=True)
-    return task_parse_current_registration_period(schools, textbooks=True)
+                task_parse_school.delay(school, {year: [term]})
 
 
 @task()
-def task_parse_school(school, years_and_terms, textbooks=False):
+def task_parse_school(school, years_and_terms):
     """
     Call the django management commands to start parse.
 
     Args:
         school (str): School to parse.
         years_and_terms (dict): Years and terms dictionary.
-        textbooks (bool, optional): Flag to parse textbooks.
     """
     logger.info("Starting parse for " + school + " " + str(years_and_terms))
     filename = "{}/schools/{}/data/courses_{}.json".format(
@@ -121,7 +101,6 @@ def task_parse_school(school, years_and_terms, textbooks=False):
         "ingest",
         school,
         years_and_terms=years_and_terms,
-        textbooks=textbooks,
         display_progress_bar=False,
         verbosity=0,
         output=filename,
@@ -129,7 +108,6 @@ def task_parse_school(school, years_and_terms, textbooks=False):
     management.call_command(
         "digest",
         school,
-        textbooks=textbooks,
         display_progress_bar=False,
         verbosity=0,
         data=filename,
