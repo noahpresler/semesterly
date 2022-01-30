@@ -37,7 +37,7 @@ class Student(models.Model):
     JUNIOR = "JR"
     SENIOR = "SR"
 
-    preferred_name = models.CharField(max_length=50, blank=True, null=True)
+    preferred_name = models.CharField(max_length=150, blank=True, null=True)
     class_year = models.IntegerField(blank=True, null=True)
     user = models.OneToOneField(User, on_delete=models.deletion.CASCADE)
     img_url = models.CharField(max_length=300, default=-1)
