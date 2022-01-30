@@ -109,7 +109,7 @@ class UserView(RedirectToSignupMixin, APIView):
         }
         if student.preferred_name:
             context["name"] = student.preferred_name
-        
+
         self.add_reactions(context, student)
         return render(request, "profile.html", context)
 
