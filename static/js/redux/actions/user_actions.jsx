@@ -41,6 +41,7 @@ import { alertTimeTableExists, receiveCourses } from "./initActions";
 import { classmatesActions } from "../state/slices/classmatesSlice";
 import { savingTimetableActions } from "../state/slices/savingTimetableSlice";
 import { signupModalActions } from "../state/slices/signupModalSlice";
+import { triggerTermsOfServiceBanner } from "../state/slices/termOfServiceBannerSlice";
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
@@ -522,7 +523,7 @@ export const handleAgreement = (currentUser, timeUpdatedTos) => (dispatch) => {
     const timeShownBanner = localStorage.getItem("timeShownBanner");
     if (!timeShownBanner || timeShownBanner < timeUpdatedTos) {
       setTimeShownBanner(Date.now());
-      dispatch({ type: ActionTypes.TRIGGER_TOS_BANNER });
+      dispatch(triggerTermsOfServiceBanner());
     }
   }
 };

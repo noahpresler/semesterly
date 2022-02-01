@@ -40,7 +40,7 @@ import integrationModal from "./integration_modal_reducer";
 import integrations from "./integrations_reducer";
 import saveCalendarModal from "./slices/saveCalendarModalSlice";
 import termsOfServiceModal from "./terms_of_service_modal_reducer";
-import termsOfServiceBanner from "./terms_of_service_banner_reducer";
+import termsOfServiceBanner from "./slices/termOfServiceBannerSlice";
 import userAcquisitionModal from "./slices/userAcquisitionModalSlice";
 import registrar from "./registrar_reducer";
 import entities, * as fromEntities from "./entities_reducer";
