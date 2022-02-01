@@ -21,6 +21,7 @@ import { handleAgreement } from "../../actions/user_actions";
 import * as ActionTypes from "../../constants/actionTypes";
 import TermsOfServiceBannerContainer from "../../ui/containers/terms_of_service_banner_container";
 import LocalStorageMock from "../../__test_utils__/local_storage_mock";
+import { triggerTermsOfServiceBanner } from "../../state/slices/termOfServiceBannerSlice";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -72,7 +73,7 @@ describe("TOS Banner is correctly triggered by handleAgreement", () => {
 
     store.dispatch(handleAgreement(currentUser, Date.now()));
     const expectedActions = store.getActions();
-    expect(expectedActions[0]).toEqual({ type: ActionTypes.TRIGGER_TOS_BANNER });
+    expect(expectedActions[0].type).toEqual(triggerTermsOfServiceBanner.type);
   });
 
   it("NOT if cookie is present and current", () => {
@@ -112,6 +113,6 @@ describe("TOS Banner is correctly triggered by handleAgreement", () => {
 
     store.dispatch(handleAgreement(currentUser, timeAccepted + 1));
     const expectedActions = store.getActions();
-    expect(expectedActions[0]).toEqual({ type: ActionTypes.TRIGGER_TOS_BANNER });
+    expect(expectedActions[0].type).toEqual(triggerTermsOfServiceBanner.type);
   });
 });
