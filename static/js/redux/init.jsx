@@ -51,6 +51,7 @@ import * as ActionTypes from "./constants/actionTypes";
 import { initAllState, setCourseInfo } from "./actions";
 import { timetablesActions } from "./state/slices/timetablesSlice";
 import { signupModalActions } from "./state/slices/signupModalSlice";
+import { saveCalendarModalActions } from "./state/slices/saveCalendarModalSlice";
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
@@ -114,12 +115,12 @@ const handleFlows = (featureFlow) => (dispatch) => {
     // case 'GCAL_CALLBACK':
     // hide settings info modal until user is finished adding to gcal
     // dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: true });
-    // dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
+    // dispatch(saveCalendarModalActions.triggerSaveCalendarModal());
     // dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: false });
     // dispatch(addTTtoGCal());
     // break;
     case "EXPORT_CALENDAR":
-      dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
+      dispatch(saveCalendarModalActions.triggerSaveCalendarModal());
       break;
     case "SHARE_TIMETABLE":
       dispatch(timetablesActions.cachedTimetableLoaded());

@@ -78,14 +78,6 @@ export const togglePreferenceModal = () => ({
   type: ActionTypes.TOGGLE_PREFERENCE_MODAL,
 });
 
-export const triggerSaveCalendarModal = () => ({
-  type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL,
-});
-
-export const toggleSaveCalendarModal = () => ({
-  type: ActionTypes.TOGGLE_SAVE_CALENDAR_MODAL,
-});
-
 export const toggleIntegrationModal = () => ({
   type: ActionTypes.TOGGLE_INTEGRATION_MODAL,
 });

@@ -38,7 +38,7 @@ import friends from "./friends_reducer";
 import notificationToken from "./notification_token_reducer";
 import integrationModal from "./integration_modal_reducer";
 import integrations from "./integrations_reducer";
-import saveCalendarModal from "./save_calendar_modal_reducer";
+import saveCalendarModal from "./slices/saveCalendarModalSlice";
 import termsOfServiceModal from "./terms_of_service_modal_reducer";
 import termsOfServiceBanner from "./terms_of_service_banner_reducer";
 import userAcquisitionModal from "./slices/userAcquisitionModalSlice";

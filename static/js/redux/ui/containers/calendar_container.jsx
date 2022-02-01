@@ -21,11 +21,9 @@ import {
   fetchShareTimetableLink,
   fetchSISTimetableData,
 } from "../../actions/calendar_actions";
-import {
-  togglePreferenceModal,
-  triggerSaveCalendarModal,
-} from "../../actions/modal_actions";
+import { togglePreferenceModal } from "../../actions/modal_actions";
 import { getMaxEndHour } from "../../state";
+import { saveCalendarModalActions } from "../../state/slices/saveCalendarModalSlice";
 
 const mapStateToProps = (state) => {
   const { isFetchingShareLink, shareLink, shareLinkValid } = state.calendar;
@@ -47,7 +45,7 @@ const CalendarContainer = connect(mapStateToProps, {
   saveTimetable,
   fetchShareTimetableLink,
   togglePreferenceModal,
-  triggerSaveCalendarModal,
+  triggerSaveCalendarModal: saveCalendarModalActions.triggerSaveCalendarModal,
   createICalFromTimetable,
   handleCreateNewTimetable,
   fetchSISTimetableData,
