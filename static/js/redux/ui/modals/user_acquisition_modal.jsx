@@ -67,7 +67,8 @@ const UserAcquisitionModal = () => {
               `&login_hash=${LoginHash}`;
             document.body.appendChild(link);
             link.click();
-          }} disabled
+          }}
+          disabled
           // TODO: remove "disable" and p tag below once FB issue is resolved
         >
           <span className="img-icon">
@@ -76,7 +77,9 @@ const UserAcquisitionModal = () => {
           <span>Continue with Facebook</span>
         </button>
         {/* <p className="method-details">Allows the option to friends in your classes.</p> */}
-        <p className="method-details">Temporarily Unavailable. Please use JHED Login until further notice.</p>
+        <p className="method-details">
+          Temporarily Unavailable. Please use JHED Login until further notice.
+        </p>
         <br />
 
         <button
