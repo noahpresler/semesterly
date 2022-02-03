@@ -20,9 +20,11 @@ We follow the `Gitflow workflow
 <https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow>`_; our
 main branch is ``prod``, and our develop branch is ``develop``. The general gist is that
 for anything new, you want to branch off of ``develop`` and name your branch
-``feature/your-branch-name``. In the case you need to fix something that was just
-released, and it needs to go straight to production, then branch off of ``prod`` and
-name your branch ``hotfix/your-branch-name``.
+``feature/your-branch-name``. Two other conventions we have is for bug fixes we use
+``fix/your-branch-name``, and for refactoring we use ``refactor/your-branch-name``. In
+the case you need to fix something that was just released, and it needs to go straight
+to production, then branch off of ``prod`` and name your branch
+``hotfix/your-branch-name``.
 
 To stay up to date with ``upstream/develop``, you'll want to ``git pull`` whenever you're
 starting a new branch. You may need to ``git fetch upstream`` first.
