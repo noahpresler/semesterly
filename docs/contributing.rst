@@ -52,6 +52,15 @@ After you've made edits, git add your files, then commit. One way to do this:
     git commit -m "Topic: Message"
     git push --set-upstream origin your-branch-name
 
+.. note::
+    It is preferred that you follow the commit message convention of "Topic: Message". 
+    This helps when we are browsing through commits so we can quickly identify what each
+    commit was about. 
+    **Messages should be in the imperative mood**, as if you're telling someone what to
+    do. If it helps, you are encouraged to include the how/why - 
+    *"Evaluation list: Duplicate state to avoid modifying redux state"*.
+    Furthermore, try to keep commits to "one" change at a time and commit often. 
+
 From here, you should be prompted to create a new pull request (PR). Ctrl + Left Click to
 open the link. From there, add a short description on what your PR does and how/why you
 did it, and then create the PR. If your PR is ready for review, add a reviewer as well.
