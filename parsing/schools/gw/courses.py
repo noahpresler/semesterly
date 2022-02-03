@@ -65,7 +65,6 @@ class Parser(BaseParser):
         years_and_terms_filter=None,
         departments_filter=None,
         verbosity=3,
-        textbooks=None,
     ):
         """Start parse."""
         self._login()

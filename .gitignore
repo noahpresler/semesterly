@@ -46,7 +46,6 @@ static/robots.txt
 static/sitemap.txt
 *.swp
 */test_failures/
-TextbookParserOutput.txt
 timetable/courses_json/*.json
 *.timetable.features
 timetable.features

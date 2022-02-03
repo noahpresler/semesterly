@@ -96,7 +96,6 @@ class UrlsTest(UrlTestCase):
         # marketing urls
         self.assertUrlResolvesToView("/signin/", "helpers.mixins.FeatureFlowView")
         self.assertUrlResolvesToView("/signup/", "helpers.mixins.FeatureFlowView")
-        self.assertUrlResolvesToView("/textbooks/", "helpers.mixins.FeatureFlowView")
         self.assertUrlResolvesToView(
             "/export_calendar/", "helpers.mixins.FeatureFlowView"
         )

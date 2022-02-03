@@ -11,7 +11,7 @@
 		content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU).">
 	<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder">
 
-	<title>Semester.ly: Course Scheduling, Textbooks, Social & More</title>
+	<title>Semester.ly: Course Scheduling, Social & More</title>
 	<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
 
 	<!-- Facebook thumbnail info -->
@@ -93,7 +93,7 @@
 		<div id="profile-banner" style="background-image: url({% static 'img/school_bgs/jhu_bg2.jpg'%});">
 			<div id="filter"></div>
 			<div id="profile-banner-content">
-				<h1>{{ name.first_name }} {{ name.last_name }}</h1>
+				<h1>{{ name }}</h1>
 				<h2>{{ major }}, Class of {{ class }}</h2>
 			</div>
 			<div id="profile-image">
@@ -300,7 +300,7 @@
 						</a></li>
 				</ul>
 			</div>
-			<h6>COPYRIGHT © 2017-2021 SEMESTERLY TECHNOLOGIES, LLC.</h6>
+			<h6>COPYRIGHT © 2017-2022 SEMESTERLY TECHNOLOGIES, LLC.</h6>
 		</div>
 	</footer>
 </body>

@@ -191,7 +191,6 @@ class Parser(BaseParser):
         self,
         years_and_terms_filter=None,
         departments_filter=None,
-        textbooks=True,
         verbosity=3,
     ):
         """Start the parse."""

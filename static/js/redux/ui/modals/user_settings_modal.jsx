@@ -340,6 +340,12 @@ const UserSettingsModal = () => {
     </h3>
   );
 
+  const greetings = userInfo.preferred_name ? (
+    <div className="name-greeting">Welcome, {userInfo.preferred_name}!</div>
+  ) : (
+    <h1>Welcome!</h1>
+  );
+
   return (
     <WaveModal
       ref={modal}
@@ -354,7 +360,7 @@ const UserSettingsModal = () => {
             className="pro-pic"
             style={{ backgroundImage: `url(${userInfo.img_url})` }}
           />
-          <h1>Welcome!</h1>
+          {greetings}
           {!isSigningUp ? cancelButton : null}
         </div>
         <div className="modal-body">

@@ -322,21 +322,6 @@ class ValidationTest(SimpleTestCase):
             validator.validate(invalid)
         validator.validate(meeting)
 
-        textbook_link = {
-            "kind": "textbook_link",
-            "school": {"code": "test"},
-            "course": {"code": "ABC"},
-            "section": {"code": "001", "year": "2017", "term": "Bar"},
-            "isbn": "9780262033848",
-            "required": True,
-        }
-
-        with self.assertRaises(ValidationError):
-            invalid = deepcopy(textbook_link)
-            invalid["course"]["code"] = "abc"
-            validator.validate(invalid)
-        validator.validate(textbook_link)
-
     def test_validator_nested(self):
         validator = Validator(ValidationTest.config)
         nested_course = {

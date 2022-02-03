@@ -16,6 +16,13 @@
     text-align: left;
   }
 
+  .name-greeting {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    text-align: left;
+  }
+
   .pro-pic {
     border: 2px solid $gddd;
     box-shadow: 0 2px 2px $g188-transparent-4;
@@ -54,7 +61,10 @@
       text-align: left;
     }
 
-    button, input, select, textarea {
+    button,
+    input,
+    select,
+    textarea {
       font-family: inherit;
       font-size: inherit;
       margin-right: 20px;

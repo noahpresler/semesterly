@@ -62,7 +62,7 @@ class Command(BaseCommand):
         Args:
             options (dict): Command line options for arg parser.
             school (str): School to parse.
-            parser_type (str): {'courses', 'evals', 'textbooks'}
+            parser_type (str): {'courses', 'evals'}
         """
         tracker.school = school
         logger = logging.getLogger("parsing.schools." + school)

@@ -41,30 +41,6 @@ class Semester(models.Model):
         return "{} {}".format(self.name, self.year)
 
 
-class Textbook(models.Model):
-    """
-    A textbook which is associated with sections of courses. Stores
-    information from the Amazon product API including a detail url
-    and ISBN.
-
-    Attributes:
-        isbn (BigIntegerField): the primary (unique) key ISBN number
-        detail_url (URLField): url to the detail page on Amazon.com
-        image_url (URLField): url to product image hosted on Amazon.com
-        author (CharField): authors first and last name
-        title (CharField): the title of the book
-    """
-
-    isbn = models.BigIntegerField(primary_key=True)
-    detail_url = models.URLField(max_length=1000, null=True)
-    image_url = models.URLField(max_length=1000, null=True)
-    author = models.CharField(max_length=500, null=True)
-    title = models.CharField(max_length=1500, null=True)
-
-    def get_info(self):
-        return model_to_dict(self)
-
-
 class Course(models.Model):
     """
     Represents a course at a school, made unique by its course code.
@@ -183,14 +159,14 @@ class Course(models.Model):
         return sum(rating.score for rating in ratings), len(ratings)
 
     def __unicode__(self):
-        return u"%s" % (self.name)
+        return "%s" % (self.name)
 
 
 class Section(models.Model):
     """
     Represents one (of possibly many) choice(s) for a student to enroll in a
     :obj:`Course` for a specific semester. Since this model is specific to a semester,
-    it contains enrollment data, instructor information, textbooks, etc.
+    it contains enrollment data, instructor information, etc.
 
     A section can come in different forms. For example, a lecture which is required
     for every student. However, it can also be a tutorial or practical. During
@@ -214,8 +190,6 @@ class Section(models.Model):
             the section type, example 'L' is lecture, 'T' is tutorial, `P` is practical
         instructors (:obj:`CharField`): comma seperated list of instructors
         semester (:obj:`ForeignKey` to :obj:`Semester`): the semester for the section
-        textbooks (:obj:`ManyToManyField` of :obj:`Textbook`):
-            textbooks for this section via the :obj:`TextbookLink` model
         was_full (:obj:`BooleanField`): whether the course was full during the last
             parse
     """
@@ -229,13 +203,8 @@ class Section(models.Model):
     section_type = models.CharField(max_length=50, default="L")
     instructors = models.CharField(max_length=500, default="TBA")
     semester = models.ForeignKey(Semester, on_delete=models.deletion.CASCADE)
-    textbooks = models.ManyToManyField(Textbook, through="TextbookLink")
     was_full = models.BooleanField(default=False)
     course_section_id = models.IntegerField(default=0)
-
-    def get_textbooks(self):
-        """Returns the textbook info using `tb.get_info()` for each textbook"""
-        return [tb.get_info() for tb in self.textbooks.all()]
 
     def is_full(self):
         return self.enrolment >= 0 and self.size >= 0 and self.enrolment >= self.size
@@ -307,25 +276,6 @@ class Evaluation(models.Model):
     professor = models.CharField(max_length=255)
     course_code = models.CharField(max_length=20)
     year = models.CharField(max_length=200)
-
-
-class TextbookLink(models.Model):
-    """
-    This model serves as a ManyToMany link betwen a :obj:`Section`
-    anda textbook. The reason for this additional model is because
-    the edge that connects a :obj:`Section` has a label which is
-    whether that textbook is required. Thus, a seperate model/table
-    exists to link the two with this label.abs
-
-    Attributes:
-        textbook (:obj:`ForeignKey` to :obj:`Textbook`): the textbook
-        is_required (:obj:`BooleanField`): whether or not the textbook is required
-        section (:obj:`Section`): the section the textbook is linked to
-    """
-
-    textbook = models.ForeignKey(Textbook, on_delete=models.deletion.CASCADE)
-    is_required = models.BooleanField(default=False)
-    section = models.ForeignKey(Section, on_delete=models.deletion.CASCADE)
 
 
 class Integration(models.Model):

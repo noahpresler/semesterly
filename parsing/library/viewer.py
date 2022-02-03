@@ -175,10 +175,8 @@ class StatView(Viewer):
         "course",
         "section",
         "meeting",
-        "textbook",
         "evaluation",
         "offering",
-        "textbook_link",
         "eval",
     )
 

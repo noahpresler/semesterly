@@ -15,7 +15,6 @@ import sys
 
 from abc import ABCMeta
 
-from parsing.common.textbooks.amazon_textbooks import amazon_textbook_fields
 from parsing.library.base_parser import BaseParser
 from parsing.library.exceptions import ParseError
 from parsing.library.utils import dict_filter_by_dict, dict_filter_by_list
@@ -64,14 +63,12 @@ class PeoplesoftParser(BaseParser, metaclass=ABCMeta):
     def parse(
         self,
         verbosity=3,
-        textbooks=True,
         years_and_terms_filter=None,
         departments_filter=None,
         department_name_regex=None,
     ):
         """Do parse."""
         self.verbosity = verbosity
-        self.textbooks = textbooks
         self._empty_ingestor_lists()
 
         # NOTE: umich will do nothing and return an empty dict
@@ -261,9 +258,6 @@ class PeoplesoftParser(BaseParser, metaclass=ABCMeta):
         instrs = soup.find_all("span", id=re.compile(r"MTG_INSTR\$\d*"))
         dates = soup.find_all("span", id=re.compile(r"MTG_DATE\$\d*"))
 
-        # parse textbooks
-        self._parse_textbooks(soup)
-
         rtitle = re.match(r"(.+?\s*\w+) - (\w+)\s*(\S.+)", title)
         self.ingestor["section_type"] = subtitle.split("|")[2].strip()
 
@@ -335,55 +329,6 @@ class PeoplesoftParser(BaseParser, metaclass=ABCMeta):
 
         self._empty_ingestor_lists()
 
-    def _parse_textbooks(self, soup):
-        # BUG: gaurantee with regex match order and textbook status...?
-        textbooks = list(
-            zip(
-                soup.find_all(
-                    "span", id=re.compile(r"DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*")
-                ),
-                soup.find_all(
-                    "span", id=re.compile(r"DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*")
-                ),
-            )
-        )
-
-        # Remove extra characters from isbn and tranform Required into boolean.
-        for i in range(len(textbooks)):
-            textbooks[i] = {
-                "isbn": [x for x in textbooks[i][0].text if x.isdigit()],
-                "required": textbooks[i][1].text[0].upper() == "R",
-            }
-
-        # Create textbooks.
-        if self.textbooks:
-            for textbook in textbooks:
-                if not textbook["isbn"] or (
-                    len(textbook["isbn"]) != 10 and len(textbook["isbn"]) != 13
-                ):
-                    continue  # NOTE: might skip some malformed-isbn values
-                amazon_fields = amazon_textbook_fields(textbook["isbn"])
-                if amazon_fields is not None:
-                    textbook.update(amazon_fields)
-                else:  # Make sure to clear ingestor from prev (temp fix)
-                    textbook.update(
-                        {
-                            "detail_url": None,
-                            "image_url": None,
-                            "author": None,
-                            "title": None,
-                        }
-                    )
-                self.ingestor.update(textbook)
-                self.ingestor.ingest_textbook()
-                self.ingestor.setdefault("textbooks", []).append(
-                    {
-                        "kind": "textbook_link",
-                        "isbn": textbook["isbn"],
-                        "required": textbook["required"],
-                    }
-                )
-
     def _empty_ingestor_lists(self):
         """
         Hard set optional ingestor fields.
@@ -400,7 +345,6 @@ class PeoplesoftParser(BaseParser, metaclass=ABCMeta):
         self.ingestor["coreqs"] = []
         self.ingestor["geneds"] = []
         self.ingestor["fees"] = []
-        self.ingestor["textbooks"] = []
 
     @staticmethod
     def _hidden_params(soup, params=None, ajax=False):

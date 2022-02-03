@@ -6,12 +6,12 @@
   cursor: pointer;
   display: block;
   height: 1rem;
-  margin-left: -.5rem;
-  margin-top: -.65rem;
+  margin-left: -0.5rem;
+  margin-top: -0.65rem;
   outline: none;
   position: absolute;
   top: 50%;
-  transition: transform .3s ease-out, box-shadow .3s ease-out;
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
   width: 1rem;
 
   &:active {
@@ -47,13 +47,13 @@
 }
 
 .input-range__slider-container {
-  transition: left .3s ease-out;
+  transition: left 0.3s ease-out;
 }
 
 .input-range__label {
   color: $gaaa;
   font-family: $font-primary;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 .input-range__label--min,
@@ -97,16 +97,16 @@
 
 .input-range__track {
   background: $geee;
-  border-radius: .3rem;
+  border-radius: 0.3rem;
   display: block;
-  height: .3rem;
+  height: 0.3rem;
   position: relative;
-  transition: left .3s ease-out, width .3s ease-out;
+  transition: left 0.3s ease-out, width 0.3s ease-out;
 }
 
 .input-range__track--container {
   left: 0;
-  margin-top: -.15rem;
+  margin-top: -0.15rem;
   position: absolute;
   right: 0;
   top: 50%;
@@ -118,7 +118,10 @@
 
 .time-selector {
   > .time-selector-day {
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     font-size: 14px;
     width: 30px;
   }

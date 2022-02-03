@@ -24,6 +24,7 @@ interface UserData {
   timetables: any[]; // temporarily mark as any
   userFirstName: string;
   userLastName: string;
+  preferred_name: string | null;
 }
 
 interface UserInfoReducerState {

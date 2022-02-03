@@ -132,6 +132,7 @@ def update_facebook_friends(student, friends):
 
 def update_student_jhed(student, response):
     student.jhed = response["unique_name"]
+    student.preferred_name = response["name"]
 
 
 def update_student_google(student, social_user, hasFacebook):

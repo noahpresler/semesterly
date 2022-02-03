@@ -43,6 +43,8 @@ class ExplorationModal extends React.Component {
       addedDays: [],
       shareLinkShown: false,
       hasUpdatedCourses: false,
+      selected: 0,
+      didSearch: false,
     };
     this.toggle = this.toggle.bind(this);
     this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
@@ -139,12 +141,14 @@ class ExplorationModal extends React.Component {
     }
     const query = this.input.value;
     const { areas, departments, times, levels } = filters;
+    this.setState({ didSearch: false });
     this.props.fetchAdvancedSearchResults(query, {
       areas,
       departments,
       times,
       levels,
     });
+    this.setState({ didSearch: true });
   }
 
   fetchAdvancedSearchResultsWrapper() {
@@ -175,14 +179,16 @@ class ExplorationModal extends React.Component {
     this.setState({ [filterType]: updatedFilter });
   }
 
-  removeFilter(filterType, filter) {
+  removeFilter(filterType, filter = undefined) {
     if (this.props.isFetching) {
       return;
     }
-    const updatedFilter = this.state[filterType].filter((f) => f !== filter);
+    const updatedFilter =
+      filter === undefined ? [] : this.state[filterType].filter((f) => f !== filter);
     this.fetchAdvancedSearchResults(
       Object.assign({}, this.state, { [filterType]: updatedFilter })
     );
+    this.setState({ addedDays: [] });
     this.setState({ [filterType]: updatedFilter });
   }
 
@@ -265,7 +271,7 @@ class ExplorationModal extends React.Component {
     };
     const { advancedSearchResults, active, inRoster } = this.props;
     const numSearchResults =
-      advancedSearchResults.length > 0 ? (
+      !this.props.isFetching && advancedSearchResults.length > 0 ? (
         <p>returned {advancedSearchResults.length} Search Results</p>
       ) : null;
     const searchResults = advancedSearchResults.map((c, i) => (
@@ -274,7 +280,11 @@ class ExplorationModal extends React.Component {
         key={c.id}
         code={c.code}
         name={c.name}
-        onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
+        isSelected={this.state.selected === i}
+        onClick={() => {
+          this.props.setAdvancedSearchResultIndex(i, c.id);
+          this.setState({ selected: i });
+        }}
       />
     ));
     let courseModal = null;
@@ -365,7 +375,9 @@ class ExplorationModal extends React.Component {
         <SelectedFilterSection
           key={filterType}
           name={name}
+          type={filterType}
           toggle={this.toggle(filterType)}
+          removeAll={() => this.removeFilter(filterType)}
         >
           {selectedItems}
         </SelectedFilterSection>
@@ -386,9 +398,7 @@ class ExplorationModal extends React.Component {
         />
       );
     });
-    const explorationLoader = this.props.isFetching ? (
-      <i className="fa fa-spin fa-refresh" />
-    ) : null;
+    const explorationLoader = <i className="fa fa-spin fa-refresh" />;
     const content = (
       <div
         className={classNames("exploration-content", {
@@ -423,15 +433,37 @@ class ExplorationModal extends React.Component {
               key={"times"}
               name={"Day/Times"}
               toggle={this.toggle("times")}
+              type={"times"}
+              removeAll={() => {
+                this.removeFilter("times");
+              }}
             >
               {timeFilters}
             </SelectedFilterSection>
           </div>
           <div className="col-5-16 exp-search-results">
-            <div id="exp-search-list">
+            <div id="exp-search-list" style={{ height: "calc(100% - 20px)" }}>
               {numSearchResults}
-              {searchResults}
-              {explorationLoader}
+              {this.state.didSearch &&
+                !this.props.isFetching &&
+                (searchResults.length ? (
+                  searchResults
+                ) : (
+                  <p>No courses have been found</p>
+                ))}
+              {this.props.isFetching ? (
+                <div
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {explorationLoader}
+                </div>
+              ) : null}
             </div>
           </div>
           {filters}
@@ -468,10 +500,14 @@ class ExplorationModal extends React.Component {
   }
 }
 
-const ExplorationSearchResult = ({ name, code, onClick }) => (
-  <div className="exp-s-result" onClick={onClick}>
-    <h4>{name} </h4>
-    <h5> {code}</h5>
+const ExplorationSearchResult = ({ name, code, onClick, isSelected }) => (
+  <div
+    className="exp-s-result"
+    onClick={onClick}
+    style={{ backgroundColor: isSelected ? "#eeeeee" : undefined }}
+  >
+    <h4>{name}</h4>
+    <h5>{code}</h5>
   </div>
 );
 
@@ -479,6 +515,7 @@ ExplorationSearchResult.propTypes = {
   name: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
 };
 
 ExplorationModal.defaultProps = {
