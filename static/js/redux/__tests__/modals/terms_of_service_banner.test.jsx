@@ -18,7 +18,6 @@ import configureMockStore from "redux-mock-store";
 import { renderWithRedux } from "../../test-utils";
 import { userInfoFixture } from "../../__fixtures__/terms_of_service_modal.fixture";
 import { handleAgreement } from "../../actions/user_actions";
-import * as ActionTypes from "../../constants/actionTypes";
 import TermsOfServiceBannerContainer from "../../ui/containers/terms_of_service_banner_container";
 import LocalStorageMock from "../../__test_utils__/local_storage_mock";
 import { triggerTermsOfServiceBanner } from "../../state/slices/termOfServiceBannerSlice";
