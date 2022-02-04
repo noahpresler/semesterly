@@ -111,3 +111,9 @@ export interface Course {
   writing_intensive: string;
   sub_school: string;
 }
+
+export interface TermOfServiceAgreement {
+  timeUpdated: string;
+  description: string;
+  url: string;
+}
