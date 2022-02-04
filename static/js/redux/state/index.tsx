@@ -16,7 +16,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { getMaxHourBasedOnWindowHeight } from "../util";
 import school from "./school_reducer";
-import semester, * as fromSemester from "./semester_reducer";
+import semester, * as fromSemester from "../state/slices/semesterSlice";
 import calendar from "./slices/calendarSlice";
 import courseSections from "./slices/courseSectionsSlice";
 import timetables, * as fromTimetables from "./slices/timetablesSlice";
