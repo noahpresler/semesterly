@@ -42,6 +42,10 @@ import { classmatesActions } from "../state/slices/classmatesSlice";
 import { savingTimetableActions } from "../state/slices/savingTimetableSlice";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { triggerTermsOfServiceBanner } from "../state/slices/termOfServiceBannerSlice";
+import {
+  closeTermsOfServiceModal,
+  triggerTermsOfServiceModal,
+} from "../state/slices/termsOfServiceModalSlice";
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
@@ -504,9 +508,7 @@ export const acceptTOS = () => (dispatch) => {
     body: "",
   }).then((response) => {
     if (response.status === 204) {
-      dispatch({
-        type: ActionTypes.CLOSE_TOS_MODAL,
-      });
+      dispatch(closeTermsOfServiceModal());
     }
   });
 };
@@ -517,7 +519,7 @@ export const handleAgreement = (currentUser, timeUpdatedTos) => (dispatch) => {
   if (currentUser.isLoggedIn) {
     const timeAcceptedTos = currentUser.timeAcceptedTos;
     if (!timeAcceptedTos || Date.parse(timeAcceptedTos) < timeUpdatedTos) {
-      dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
+      dispatch(triggerTermsOfServiceModal());
     }
   } else {
     const timeShownBanner = localStorage.getItem("timeShownBanner");

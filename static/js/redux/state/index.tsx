@@ -39,7 +39,7 @@ import notificationToken from "./notification_token_reducer";
 import integrationModal from "./integration_modal_reducer";
 import integrations from "./integrations_reducer";
 import saveCalendarModal from "./slices/saveCalendarModalSlice";
-import termsOfServiceModal from "./terms_of_service_modal_reducer";
+import termsOfServiceModal from "./slices/termsOfServiceModalSlice";
 import termsOfServiceBanner from "./slices/termOfServiceBannerSlice";
 import userAcquisitionModal from "./slices/userAcquisitionModalSlice";
 import registrar from "./registrar_reducer";

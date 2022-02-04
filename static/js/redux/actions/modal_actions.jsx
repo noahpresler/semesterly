@@ -83,7 +83,3 @@ export const toggleIntegrationModal = () => ({
 });
 
 export const togglePeerModal = () => ({ type: ActionTypes.TOGGLE_PEER_MODAL });
-
-export const triggerTermsOfServiceModal = () => ({
-  type: ActionTypes.TRIGGER_TOS_MODAL,
-});
