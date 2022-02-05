@@ -58,3 +58,5 @@ export const receiveAdvancedSearchResults = createAction(
     payload: normalize(courses, [courseSchema]),
   })
 );
+
+export const requestCourses = createAction("global/requestCourses");
