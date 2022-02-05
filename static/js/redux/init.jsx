@@ -52,6 +52,7 @@ import { initAllState, setCourseInfo } from "./actions";
 import { timetablesActions } from "./state/slices/timetablesSlice";
 import { signupModalActions } from "./state/slices/signupModalSlice";
 import { saveCalendarModalActions } from "./state/slices/saveCalendarModalSlice";
+import { setHighlightNotifs } from "./state/slices/uiSlice";
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
@@ -139,7 +140,7 @@ const handleFlows = (featureFlow) => (dispatch) => {
       dispatch({ type: ActionTypes.TOGGLE_PEER_MODAL });
       break;
     case "ENABLE_NOTFIS":
-      dispatch({ type: ActionTypes.SET_HIGHLIGHT_NOTIFS, highlightNotifs: true });
+      dispatch(setHighlightNotifs(true));
       if (!initData.currentUser.isLoggedIn) {
         dispatch(signupModalActions.showSignupModal());
       } else {

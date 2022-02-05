@@ -13,11 +13,7 @@ GNU General Public License for more details.
 */
 
 import { connect } from "react-redux";
-import {
-  fetchSearchResults,
-  hoverSearchResult,
-  maybeSetSemester,
-} from "../../actions/search_actions";
+import { fetchSearchResults, maybeSetSemester } from "../../actions/search_actions";
 import { getCurrentSemester, getSearchResults, getHoveredSlots } from "../../state";
 import {
   addOrRemoveCourse,
@@ -27,6 +23,7 @@ import SearchBar from "../search_bar";
 import { fetchCourseInfo } from "../../actions/modal_actions";
 import { getSchoolSpecificInfo } from "../../constants/schools";
 import { explorationModalActions } from "../../state/slices";
+import { hoverSearchResult } from "../../state/slices/uiSlice";
 
 const mapStateToProps = (state) => {
   const { isVisible } = state.explorationModal;

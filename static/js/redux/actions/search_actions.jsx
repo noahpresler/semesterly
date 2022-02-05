@@ -23,10 +23,11 @@ import * as ActionTypes from "../constants/actionTypes";
 import { fetchCourseClassmates } from "./modal_actions";
 import { getSemester } from "./school_actions";
 import { alertsActions, explorationModalActions } from "../state/slices";
-import { updateSemester } from "./initActions";
-import { receiveAdvancedSearchResults } from ".";
-
-export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
+import {
+  receiveAdvancedSearchResults,
+  requestCourses,
+  updateSemester,
+} from "./initActions";
 
 export const receiveSearchResults = (courses) => ({
   type: ActionTypes.RECEIVE_SEARCH_RESULTS,
@@ -123,11 +124,6 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
       dispatch(receiveAdvancedSearchResults(json));
     });
 };
-
-export const hoverSearchResult = (position) => ({
-  type: ActionTypes.HOVER_SEARCH_RESULT,
-  position,
-});
 
 export const paginateAdvancedSearchResults = () => ({
   type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS,

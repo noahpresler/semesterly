@@ -24,7 +24,7 @@ import searchResults, * as fromSearchResults from "./search_results_reducer";
 import preferences from "./preferences_reducer";
 import courseInfo from "./slices/courseInfoSlice";
 import alerts from "./slices/alertsSlice";
-import ui from "./ui_reducer";
+import ui from "./slices/uiSlice";
 import userInfo, { isUserInfoIncomplete } from "./slices/userInfoSlice";
 import savingTimetable from "./slices/savingTimetableSlice";
 import classmates from "./slices/classmatesSlice";

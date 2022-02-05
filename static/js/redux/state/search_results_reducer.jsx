@@ -29,7 +29,7 @@ const searchResults = (state = defaultState, action) => {
         isFetching: false,
         items: action.payload.result,
       };
-    case ActionTypes.REQUEST_COURSES:
+    case "global/requestCourses":
       return {
         isFetching: true,
         items: state.items,
