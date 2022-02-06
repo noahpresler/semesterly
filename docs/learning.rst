@@ -36,7 +36,7 @@ over the tech industry by companies like Spotify, Instagram, YouTube, and DropBo
 tutorial. It is top notch! The official documentation can be found at the same url and
 provides high quality information about how to build with this modern web framework. For
 example, here's the documentation on `making queries with Django
-<https://docs.djangoproject.com/en/3.2/topics/db/queries/>`_ 
+<https://docs.djangoproject.com/en/3.2/topics/db/queries/>`_.
 
 
 Learning React/Redux
