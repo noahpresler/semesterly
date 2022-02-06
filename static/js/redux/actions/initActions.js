@@ -52,6 +52,13 @@ export const receiveSchoolInfo = createAction("global/receiveSchoolInfo");
  * normalizes search results as `payload` and store them in entities
  * save unormalized one as `original`
  */
+export const receiveSearchResults = createAction(
+  "global/receiveSearchResults",
+  (courses) => ({
+    payload: normalize(courses, [courseSchema]),
+  })
+);
+
 export const receiveAdvancedSearchResults = createAction(
   "global/receiveAdvancedSearchResults",
   (courses) => ({
