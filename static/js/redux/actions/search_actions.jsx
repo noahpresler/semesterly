@@ -13,8 +13,6 @@ GNU General Public License for more details.
 */
 
 import fetch from "isomorphic-fetch";
-import { normalize } from "normalizr";
-import { courseSchema } from "../schema";
 import { getActiveTimetableCourses, getCurrentSemester } from "../state";
 import { getCourseSearchEndpoint } from "../constants/endpoints";
 import { getUserSavedTimetables, saveTimetable } from "./user_actions";
@@ -27,12 +25,8 @@ import {
   receiveAdvancedSearchResults,
   requestCourses,
   updateSemester,
+  receiveSearchResults,
 } from "./initActions";
-
-export const receiveSearchResults = (courses) => ({
-  type: ActionTypes.RECEIVE_SEARCH_RESULTS,
-  payload: normalize(courses, [courseSchema]),
-});
 
 export const setSemester = (semester) => (dispatch, getState) => {
   const state = getState();

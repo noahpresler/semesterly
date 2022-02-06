@@ -20,7 +20,7 @@ import semester, * as fromSemester from "../state/slices/semesterSlice";
 import calendar from "./slices/calendarSlice";
 import courseSections from "./slices/courseSectionsSlice";
 import timetables, * as fromTimetables from "./slices/timetablesSlice";
-import searchResults, * as fromSearchResults from "./search_results_reducer";
+import searchResults, * as fromSearchResults from "./slices/searchResultsSlice";
 import preferences from "./preferences_reducer";
 import courseInfo from "./slices/courseInfoSlice";
 import alerts from "./slices/alertsSlice";
