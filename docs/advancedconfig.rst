@@ -24,18 +24,37 @@ With this extension, you can set your default formatter (black) and default lint
 (pycodestyle). If you choose to set pycodestyle as your linter, be sure to change
 max-line-length to 88.
 
-2. `ESLint <https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint>`_.
+2. `JavaScript + TypeScript
+<https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-next>`_.
+TypeScript support for development.
+
+3. `ESLint <https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint>`_.
 As one of our checks requires ESLint to be satisfied, this will save you some time.
 
-3. `Prettier <https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode>`_.
+4. `Prettier <https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode>`_.
 Formats JS/TS for you. You will want to set Prettier as your default formatter, and
 we suggest you set Format Document On Save to be on in your VSCode preferences.
 
-4. `IntelliCode <https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode>`_.
+5. `IntelliCode <https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode>`_.
 Provides useful suggestions.
 
-5. `GitHub Copilot <https://marketplace.visualstudio.com/items?itemName=GitHub.copilot>`_.
-Can often write your code for you, but be sure to double check it.
+6. `GitHub Copilot
+<https://marketplace.visualstudio.com/items?itemName=GitHub.copilot>`_. Can often
+write your code for you, but be sure to double check it.
+
+7. `Bookmarks
+<https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks>`_. Lets
+you mark places in code that you want to revisit.
+
+8. `Rewrap <https://marketplace.visualstudio.com/items?itemName=stkb.rewrap>`_. It helps
+with wrapping text for you when editing documentation or code comments.
+
+9. `Sourcery <https://marketplace.visualstudio.com/items?itemName=sourcery.sourcery>`_.
+Sometimes will help you write cleaner Python code.
+
+10. `SpellChecker 
+<https://marketplace.visualstudio.com/items?itemName=swyphcosmo.spellchecker>`_.
+Helps you find typos in documentation.
 
 
 Overriding/Setting Secrets
