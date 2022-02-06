@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import { configureStore } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { getMaxHourBasedOnWindowHeight } from "../util";
-import school from "./school_reducer";
+import school from "./slices/schoolSlice";
 import semester, * as fromSemester from "../state/slices/semesterSlice";
 import calendar from "./slices/calendarSlice";
 import courseSections from "./slices/courseSectionsSlice";
