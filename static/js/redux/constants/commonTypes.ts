@@ -65,6 +65,8 @@ export interface Event {
   id: number;
   preview: boolean;
   exists_conflict?: boolean;
+  custom?: boolean;
+  key?: number;
 }
 
 /**
@@ -110,4 +112,45 @@ export interface Course {
   pos: string[];
   writing_intensive: string;
   sub_school: string;
+}
+
+export interface RelatedCourse {
+  code: string;
+  name: string;
+  id: number;
+  description: string;
+  department: string;
+  num_credits: number;
+  areas: string[];
+  campus: string;
+  evals: any;
+  integrations: any;
+  prerequisites: string;
+  exclusions: string;
+  corequisites: string; 
+}
+
+export interface NormalizedCourse extends RelatedCourse {
+  related_courses: RelatedCourse[];
+}
+
+export interface NormalizedSection {
+  id: number;
+  meeting_section: string;
+  size: number;
+  enrolment: number;
+  waitlist: number;
+  waitlist_size: number;
+  section_type: string;
+  instructors: string;
+  semseter: Semester;
+  custom?: boolean;
+}
+
+export interface DenormalizedSlot {
+  course: NormalizedCourse;
+  section: NormalizedSection;
+  offerings: Offering[];
+  is_optional: boolean;
+  is_locked: boolean;
 }
