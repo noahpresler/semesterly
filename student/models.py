@@ -15,6 +15,7 @@
 from django.core.signing import TimestampSigner
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import model_to_dict
 from hashids import Hashids
 from oauth2client.client import GoogleCredentials
 import timetable.models as timetable_models
@@ -145,6 +146,9 @@ class PersonalEvent(models.Model):
     credits = models.DecimalField(
         max_digits=3, decimal_places=1, default=0.0, null=True, blank=True
     )
+
+    def __repr__(self):
+        return repr(model_to_dict(self))
 
 
 class PersonalTimetable(timetable_models.Timetable):
