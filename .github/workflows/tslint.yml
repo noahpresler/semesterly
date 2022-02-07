@@ -5,12 +5,12 @@ on:
     branches:
       - prod
       - develop
-      - feature/enhance-custom-events
+      - fix/custom-event-save
   pull_request:
     branches:
       - prod
       - develop
-      - feature/enhance-custom-events
+      - fix/custom-event-save
 
 jobs:
   lint:
