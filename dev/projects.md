@@ -17,6 +17,9 @@
 
 ## Creating a Feature Branch
 
+**Note:** You do not have to do this if you are the only one working on the branch. Just
+create your own local branch and create a PR there.
+
 1. Make sure you are on the `develop` branch in the [Github
    repository](https://github.com/jhuopensource/semesterly). Click on the dropdown where
    you can search or create a branch, and create a branch from here called
