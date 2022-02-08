@@ -3,11 +3,13 @@ import { SearchMetrics } from "../../constants/commonTypes";
 
 interface PreferencesSliceState {
   try_with_conflicts: boolean;
+  isModalVisible: boolean;
   sort_metrics: { metric: SearchMetrics; selected: boolean; order: "least" | "most" }[];
 }
 
 const initialState: PreferencesSliceState = {
   try_with_conflicts: false,
+  isModalVisible: false,
   sort_metrics: [
     // {metric: 'sections with friends', selected: false, order: 'most'},
     { metric: "days with class", selected: false, order: "least" },
@@ -21,6 +23,9 @@ const preferencesSlice = createSlice({
   name: "preferences",
   initialState,
   reducers: {
+    togglePreferenceModal: (state) => {
+      state.isModalVisible = !state.isModalVisible;
+    },
     toggleConflicts: (state) => {
       state.try_with_conflicts = !state.try_with_conflicts;
     },
