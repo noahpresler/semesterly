@@ -40,7 +40,6 @@ class DisplayTimetableSerializer(serializers.Serializer):
     slots = SlotSerializer(many=True)
     has_conflict = serializers.BooleanField()
     name = serializers.CharField()
-    avg_rating = serializers.FloatField()
     events = EventSerializer(many=True)
 
     @classmethod
