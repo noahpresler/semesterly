@@ -166,4 +166,3 @@ export type SearchMetrics =
   | "number of conflicts"
   | "time on campus"
   | "course rating stars";
-
