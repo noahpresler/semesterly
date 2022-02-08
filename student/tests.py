@@ -447,6 +447,19 @@ class PersonalEventTest(APITestCase):
         self.event.refresh_from_db()
         self.assertDictContainsSubset(EventSerializer(self.event).data, event_data)
 
+    def test_update_event_partial_data(self):
+        event_data = {
+            "id": 1875,
+            "day": "R",
+            "time_start": "19:00",
+            "time_end": "21:00",
+        }
+        request = self.factory.post("/user/events/", event_data, format="json")
+        response = get_auth_response(request, self.user, "/user/events/")
+        self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.event.refresh_from_db()
+        self.assertDictContainsSubset(EventSerializer(self.event).data, event_data)
+
     def test_nonexistent_event_doesnt_create_event(self):
         request = self.factory.post("/user/events/", {"id": 1876}, format="json")
         response = get_auth_response(request, self.user, "/user/events/")
