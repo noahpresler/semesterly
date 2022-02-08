@@ -15,7 +15,7 @@ import json
 from django.urls import reverse
 from django.db.models import Q, Count
 from django.forms.models import model_to_dict
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
@@ -39,10 +39,11 @@ from student.models import (
 from student.utils import (
     get_classmates_from_course_id,
     get_friend_count_from_course_id,
+    get_student,
     get_student_tts,
 )
 from timetable.models import Semester, Course, Section
-from timetable.serializers import DisplayTimetableSerializer
+from timetable.serializers import DisplayTimetableSerializer, EventSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
 from semesterly.settings import get_secret
@@ -304,13 +305,9 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
     def validate_credits(self, event):
         credits = Decimal(event["credits"])
         if credits % Decimal(0.5) != 0:
-            raise serializers.ValidationError(
-                    "Field credit must be multiples 0f 0.5"
-                )
+            raise serializers.ValidationError("Field credit must be multiples 0f 0.5")
         if credits < 0 or credits > 20:
-            raise serializers.ValidationError(
-                    "Field credit must be between 0 and 20"
-                )
+            raise serializers.ValidationError("Field credit must be between 0 and 20")
         return credits
 
     def delete(self, request, sem_name, year, tt_name):
@@ -539,3 +536,20 @@ class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         reaction = course.reaction_set.get(title=title, student=student)
         course.reaction_set.remove(reaction)
         reaction.delete()
+
+
+class PersonalEventView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
+    def post(self, request: HttpRequest):
+        try:
+            event = PersonalEvent.objects.get(id=request.data["id"])
+        except PersonalEvent.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if event.timetable.student != get_student(request):
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        serializer = EventSerializer(event, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
