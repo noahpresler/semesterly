@@ -448,3 +448,9 @@ class PersonalEventTest(APITestCase):
         self.assertEquals(request.status_code, status.HTTP_204_NO_CONTENT)
         event = PersonalEvent.objects.get(id=1875)
         self.assertDictContainsSubset(EventSerializer(event).data, event_data)
+
+    def test_nonexistent_event_doesnt_create_event(self):
+        request = self.client.post("/user/events/", {"id": 1876}, format="json")
+        self.assertEquals(request.status_code, status.HTTP_404_NOT_FOUND)
+        with self.assertRaises(PersonalEvent.DoesNotExist):
+            PersonalEvent.objects.get(id=1876)
