@@ -33,7 +33,6 @@ import explorationModal, * as fromExplorationModal from "./slices/explorationMod
 import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
 import peerModal from "./peer_modal_reducer";
-import preferenceModal from "./preference_modal_reducer";
 import friends from "./friends_reducer";
 import notificationToken from "./notification_token_reducer";
 import integrationModal from "./integration_modal_reducer";
@@ -61,7 +60,6 @@ export const reducers = {
   notificationToken,
   optionalCourses,
   peerModal,
-  preferenceModal,
   preferences,
   registrar,
   saveCalendarModal,
