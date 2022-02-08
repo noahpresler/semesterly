@@ -67,7 +67,7 @@ class PreferenceModal extends React.Component {
           <div className="preference-footer">
             <button
               className="btn btn-primary"
-              style={{ marginLeft: "auto", marginRight: "10%" }}
+              style={{ marginLeft: "auto", marginRight: "auto" }}
               onClick={() => this.modal.hide()}
             >
               Save and Close
