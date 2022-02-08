@@ -19,7 +19,7 @@ from timetable.utils import DisplayTimetable
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersonalEvent
-        exclude = ("id",)
+        fields = "__all__"
 
 
 class SlotSerializer(serializers.Serializer):
