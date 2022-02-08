@@ -48,6 +48,7 @@ import { customEventsActions } from "../state/slices/customEventsSlice";
 import { courseSectionsActions } from "../state/slices/courseSectionsSlice";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { convertToMinutes } from "../ui/slotUtils";
+import { preferencesActions } from "../state/slices/preferencesSlice";
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
 
@@ -146,7 +147,7 @@ export const lockTimetable = (timetable) => (dispatch, getState) => {
   const state = getState();
 
   if (timetable.has_conflict) {
-    dispatch({ type: ActionTypes.TURN_CONFLICTS_ON });
+    dispatch(preferencesActions.turnConflictsOn());
   }
   dispatch(
     courseSectionsActions.receiveCourseSections(
@@ -280,10 +281,7 @@ export const loadCachedTimetable =
       }
       if (!personalTimetablesExist) {
         // if no personal TTs and local storage data is valid, load cached timetable
-        dispatch({
-          type: ActionTypes.SET_ALL_PREFERENCES,
-          preferences: localPreferences,
-        });
+        dispatch(preferencesActions.setAllPreferences(localPreferences));
         dispatch(updateSemester(matchedIndex));
         dispatch(courseSectionsActions.receiveCourseSections(localCourseSections));
         dispatch(fetchStateTimetables(localActive));
@@ -490,20 +488,3 @@ export const addOrRemoveOptionalCourse = (course) => (dispatch, getState) => {
   });
   dispatch(fetchTimetables(reqBody, removing));
 };
-
-export const toggleConflicts = () => ({ type: ActionTypes.TOGGLE_CONFLICTS });
-
-export const addMetric = (metric) => ({ type: ActionTypes.ADD_METRIC, metric });
-
-export const removeMetric = (metric) => ({ type: ActionTypes.REMOVE_METRIC, metric });
-
-export const changeMetric = (add, del) => ({
-  type: ActionTypes.SWITCH_METRIC,
-  add,
-  del,
-});
-
-export const toggleMetricOrder = (metric) => ({
-  type: ActionTypes.TOGGLE_METRIC_ORDER,
-  metric,
-});

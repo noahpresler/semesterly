@@ -18,7 +18,7 @@ import {
   // addTTtoGCal,
   createICalFromTimetable,
 } from "../../../actions/calendar_actions";
-import { toggleSaveCalendarModal } from "../../../actions/modal_actions";
+import { saveCalendarModalActions } from "../../../state/slices/saveCalendarModalSlice";
 
 const mapStateToProps = (state) => ({
   isVisible: state.saveCalendarModal.isVisible,
@@ -30,7 +30,7 @@ const mapStateToProps = (state) => ({
 });
 
 const SaveCalendarModalContainer = connect(mapStateToProps, {
-  toggleSaveCalendarModal,
+  toggleSaveCalendarModal: saveCalendarModalActions.toggleSaveCalendarModal,
   // addTTtoGCal,
   createICalFromTimetable,
 })(SaveCalendarModal);

@@ -20,11 +20,9 @@ import {
   createICalFromTimetable,
   fetchShareTimetableLink,
 } from "../../actions/calendar_actions";
-import {
-  togglePreferenceModal,
-  triggerSaveCalendarModal,
-} from "../../actions/modal_actions";
 import { getMaxEndHour } from "../../state";
+import { preferencesActions } from "../../state/slices/preferencesSlice";
+import { saveCalendarModalActions } from "../../state/slices/saveCalendarModalSlice";
 
 const mapStateToProps = (state) => {
   const { isFetchingShareLink, shareLink, shareLinkValid } = state.calendar;
@@ -44,8 +42,8 @@ const DayCalendarContainer = connect(mapStateToProps, {
   // NOTE: uses this syntax to avoid onClick accidentally passing a callback
   saveTimetable: () => saveTimetable(),
   fetchShareTimetableLink,
-  togglePreferenceModal,
-  triggerSaveCalendarModal,
+  togglePreferenceModal: preferencesActions.togglePreferenceModal,
+  triggerSaveCalendarModal: saveCalendarModalActions.toggleSaveCalendarModal,
   createICalFromTimetable,
   handleCreateNewTimetable,
 })(DayCalendar);

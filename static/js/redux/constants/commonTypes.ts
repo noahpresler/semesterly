@@ -111,3 +111,15 @@ export interface Course {
   writing_intensive: string;
   sub_school: string;
 }
+
+export interface TermOfServiceAgreement {
+  timeUpdated: string;
+  description: string;
+  url: string;
+}
+
+export type SearchMetrics =
+  | "days with class"
+  | "number of conflicts"
+  | "time on campus"
+  | "course rating stars";

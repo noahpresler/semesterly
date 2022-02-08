@@ -42,7 +42,7 @@ class PreferenceModal extends React.Component {
         }}
         className="pref-modal max-modal"
         modalStyle={modalStyle}
-        onHide={this.props.togglePreferenceModal}
+        onHide={() => this.props.togglePreferenceModal()}
       >
         <div id="perf-modal-wrapper">
           {modalHeader}
@@ -57,7 +57,7 @@ class PreferenceModal extends React.Component {
                   className="switch-input"
                   type="checkbox"
                   checked={this.props.withConflicts}
-                  onChange={this.props.toggleConflicts}
+                  onChange={() => this.props.toggleConflicts()}
                 />
                 <span className="switch-label" data-on="Enabled" data-off="Disabled" />
                 <span className="switch-handle" />
