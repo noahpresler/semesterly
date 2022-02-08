@@ -548,7 +548,7 @@ class PersonalEventView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         if event.timetable.student != get_student(request):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
-        serializer = EventSerializer(event, data=request.data)
+        serializer = EventSerializer(event, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
