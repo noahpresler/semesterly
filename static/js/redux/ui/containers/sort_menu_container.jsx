@@ -14,22 +14,17 @@ GNU General Public License for more details.
 
 import { connect } from "react-redux";
 import SortMenu from "../sort_menu";
-import {
-  addMetric,
-  changeMetric,
-  removeMetric,
-  toggleMetricOrder,
-} from "../../actions/timetable_actions";
+import { preferencesActions } from "../../state/slices/preferencesSlice";
 
 const mapStateToProps = (state) => ({
   metrics: state.preferences.sort_metrics,
 });
 
 const SortMenuContainer = connect(mapStateToProps, {
-  addMetric,
-  removeMetric,
-  changeMetric,
-  toggleMetricOrder,
+  addMetric: preferencesActions.addMetric,
+  removeMetric: preferencesActions.removeMetric,
+  changeMetric: preferencesActions.switchMetric,
+  toggleMetricOrder: preferencesActions.toggleMetricOrder,
 })(SortMenu);
 
 export default SortMenuContainer;

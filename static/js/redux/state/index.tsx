@@ -21,7 +21,7 @@ import calendar from "./slices/calendarSlice";
 import courseSections from "./slices/courseSectionsSlice";
 import timetables, * as fromTimetables from "./slices/timetablesSlice";
 import searchResults, * as fromSearchResults from "./slices/searchResultsSlice";
-import preferences from "./preferences_reducer";
+import preferences from "./slices/preferencesSlice";
 import courseInfo from "./slices/courseInfoSlice";
 import alerts from "./slices/alertsSlice";
 import ui from "./slices/uiSlice";

@@ -57,7 +57,7 @@ class PreferenceModal extends React.Component {
                   className="switch-input"
                   type="checkbox"
                   checked={this.props.withConflicts}
-                  onChange={this.props.toggleConflicts}
+                  onChange={() => this.props.toggleConflicts()}
                 />
                 <span className="switch-label" data-on="Enabled" data-off="Disabled" />
                 <span className="switch-handle" />
