@@ -117,3 +117,9 @@ export interface TermOfServiceAgreement {
   description: string;
   url: string;
 }
+
+export type SearchMetrics =
+  | "days with class"
+  | "number of conflicts"
+  | "time on campus"
+  | "course rating stars";
