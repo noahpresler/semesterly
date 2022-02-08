@@ -154,3 +154,16 @@ export interface DenormalizedSlot {
   is_optional: boolean;
   is_locked: boolean;
 }
+
+export interface TermOfServiceAgreement {
+  timeUpdated: string;
+  description: string;
+  url: string;
+}
+
+export type SearchMetrics =
+  | "days with class"
+  | "number of conflicts"
+  | "time on campus"
+  | "course rating stars";
+

@@ -4,7 +4,7 @@ import {
   changeActiveSavedTimetable,
   removeCustomEvent,
   updateExistingEvent,
-} from "../../actions";
+} from "../../actions/initActions";
 import { Event, Timetable } from "../../constants/commonTypes";
 
 export interface CustomEventsSlice {

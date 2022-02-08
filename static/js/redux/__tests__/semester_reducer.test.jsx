@@ -1,4 +1,4 @@
-import semester from "../state/semester_reducer";
+import semester from "../state/slices/semesterSlice";
 
 describe("Semester reducer", () => {
   it("updates semester correctly", () => {

@@ -200,7 +200,10 @@ class DayCalendar extends React.Component {
       </button>
     );
     const preferenceButton = (
-      <button onClick={this.props.togglePreferenceModal} className="save-timetable">
+      <button
+        onClick={() => this.props.togglePreferenceModal()}
+        className="save-timetable"
+      >
         <i className="fa fa-cog" />
       </button>
     );

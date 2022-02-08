@@ -38,7 +38,9 @@ const SortRow = (props) => (
         name="metric"
         className="form-control select select-primary select-block"
         value={props.chosenMetric.metric}
-        onChange={(e) => props.changeMetric(e.target.value, props.chosenMetric.metric)}
+        onChange={(e) =>
+          props.changeMetric({ add: e.target.value, del: props.chosenMetric.metric })
+        }
       >
         <option value={props.chosenMetric.metric}>{props.chosenMetric.metric}</option>
         {props.availMetrics.slice(1).map((m) => (
