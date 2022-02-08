@@ -14,18 +14,16 @@ GNU General Public License for more details.
 
 import { connect } from "react-redux";
 import PreferenceModal from "../../modals/preference_modal";
-import { togglePreferenceModal } from "../../../actions/modal_actions";
 import { preferencesActions } from "../../../state/slices/preferencesSlice";
 
 const mapStateToProps = (state) => ({
-  isVisible: state.preferenceModal.isVisible,
+  isVisible: state.preferences.isModalVisible,
   withConflicts: state.preferences.try_with_conflicts,
 });
 
 const PreferenceModalContainer = connect(mapStateToProps, {
-  togglePreferenceModal,
+  togglePreferenceModal: preferencesActions.togglePreferenceModal,
   toggleConflicts: preferencesActions.toggleConflicts,
-  applyPreferences: togglePreferenceModal,
 })(PreferenceModal);
 
 export default PreferenceModalContainer;

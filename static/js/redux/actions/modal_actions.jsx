@@ -74,10 +74,6 @@ export const react = (cid, title) => (dispatch) => {
     });
 };
 
-export const togglePreferenceModal = () => ({
-  type: ActionTypes.TOGGLE_PREFERENCE_MODAL,
-});
-
 export const toggleIntegrationModal = () => ({
   type: ActionTypes.TOGGLE_INTEGRATION_MODAL,
 });

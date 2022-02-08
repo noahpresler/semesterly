@@ -42,7 +42,7 @@ class PreferenceModal extends React.Component {
         }}
         className="pref-modal max-modal"
         modalStyle={modalStyle}
-        onHide={this.props.togglePreferenceModal}
+        onHide={() => this.props.togglePreferenceModal()}
       >
         <div id="perf-modal-wrapper">
           {modalHeader}
