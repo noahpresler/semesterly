@@ -14,13 +14,7 @@ from django.contrib.auth.models import User
 from django.urls import resolve
 from django.forms.models import model_to_dict
 from rest_framework import status
-from rest_framework.test import (
-    APITestCase,
-    APIRequestFactory,
-    force_authenticate,
-    APIClient,
-)
-
+from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
 from student.models import (
     Student,
     PersonalTimetable,
@@ -71,6 +65,7 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView(
             "/delete_account/", "helpers.mixins.FeatureFlowView"
         )
+        self.assertUrlResolvesToView("/user/events/", "student.views.PersonalEventView")
 
 
 class UserViewTest(APITestCase):
@@ -415,7 +410,9 @@ class ReactionTest(APITestCase):
 class PersonalEventTest(APITestCase):
     def setUp(self):
         self.user = create_user(username="james", password="wang")
+        self.user2 = create_user(username="alan", password="zhang")
         self.student = create_student(user=self.user)
+        self.student2 = create_student(user=self.user2)
         self.sem = Semester.objects.create(name="Spring", year="2022")
         self.tt = PersonalTimetable.objects.create(
             id=5, name="tt", school="jhu", semester=self.sem, student=self.student
@@ -429,7 +426,7 @@ class PersonalEventTest(APITestCase):
             time_end="10:00",
         )
         self.tt.save()
-        self.client = APIClient()
+        self.factory = APIRequestFactory()
 
     def test_update_event(self):
         event_data = {
@@ -444,13 +441,28 @@ class PersonalEventTest(APITestCase):
             "timetable": 5,
             "preview": False,
         }
-        request = self.client.post("/user/events/", event_data, format="json")
-        self.assertEquals(request.status_code, status.HTTP_204_NO_CONTENT)
-        event = PersonalEvent.objects.get(id=1875)
-        self.assertDictContainsSubset(EventSerializer(event).data, event_data)
+        request = self.factory.post("/user/events/", event_data, format="json")
+        response = get_auth_response(request, self.user, "/user/events/")
+        self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.event.refresh_from_db()
+        self.assertDictContainsSubset(EventSerializer(self.event).data, event_data)
 
     def test_nonexistent_event_doesnt_create_event(self):
-        request = self.client.post("/user/events/", {"id": 1876}, format="json")
-        self.assertEquals(request.status_code, status.HTTP_404_NOT_FOUND)
+        request = self.factory.post("/user/events/", {"id": 1876}, format="json")
+        response = get_auth_response(request, self.user, "/user/events/")
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
         with self.assertRaises(PersonalEvent.DoesNotExist):
             PersonalEvent.objects.get(id=1876)
+
+    def test_wrong_student_cant_update_event(self):
+        request = self.factory.post("/user/events/", {"id": 1875}, format="json")
+        response = get_auth_response(request, self.user2, "/user/events/")
+        self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEquals(PersonalEvent.objects.count(), 1)
+
+    def test_bad_event_data(self):
+        request = self.factory.post(
+            "/user/events/", {"id": 1875, "stan": "fromis_9"}, format="json"
+        )
+        response = get_auth_response(request, self.user, "/user/events/")
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
