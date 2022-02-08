@@ -14,7 +14,12 @@ from django.contrib.auth.models import User
 from django.urls import resolve
 from django.forms.models import model_to_dict
 from rest_framework import status
-from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
+from rest_framework.test import (
+    APITestCase,
+    APIRequestFactory,
+    force_authenticate,
+    APIClient,
+)
 
 from student.models import (
     Student,
@@ -31,6 +36,7 @@ from helpers.test.utils import (
     get_auth_response,
 )
 from helpers.test.test_cases import UrlTestCase
+from timetable.serializers import EventSerializer
 
 
 class UrlsTest(UrlTestCase):
@@ -404,3 +410,41 @@ class ReactionTest(APITestCase):
         self.assertTrue("reactions" in response.data)
         Reaction.objects.get(student=self.student, title=self.title)
         self.assertGreater(Course.objects.get(id=1).reaction_set.count(), 0)
+
+
+class PersonalEventTest(APITestCase):
+    def setUp(self):
+        self.user = create_user(username="james", password="wang")
+        self.student = create_student(user=self.user)
+        self.sem = Semester.objects.create(name="Spring", year="2022")
+        self.tt = PersonalTimetable.objects.create(
+            id=5, name="tt", school="jhu", semester=self.sem, student=self.student
+        )
+        self.event = PersonalEvent.objects.create(
+            id=1875,
+            timetable=self.tt,
+            name="event",
+            day="T",
+            time_start="08:00",
+            time_end="10:00",
+        )
+        self.tt.save()
+        self.client = APIClient()
+
+    def test_update_event(self):
+        event_data = {
+            "id": 1875,
+            "name": "New Custom Event",
+            "day": "W",
+            "time_start": "19:00",
+            "time_end": "21:00",
+            "color": "#93d9a4",
+            "location": "",
+            "credits": "0.0",
+            "timetable": 5,
+            "preview": False,
+        }
+        request = self.client.post("/user/events/", event_data, format="json")
+        self.assertEquals(request.status_code, status.HTTP_204_NO_CONTENT)
+        event = PersonalEvent.objects.get(id=1875)
+        self.assertDictContainsSubset(EventSerializer(event).data, event_data)
