@@ -10,6 +10,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+from attr import Attribute
 from django.contrib.auth.models import User
 from django.urls import resolve
 from django.forms.models import model_to_dict
@@ -458,7 +459,7 @@ class PersonalEventTest(APITestCase):
         response = get_auth_response(request, self.user, "/user/events/")
         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
         self.event.refresh_from_db()
-        self.assertDictContainsSubset(EventSerializer(self.event).data, event_data)
+        self.assertDictContainsSubset(event_data, EventSerializer(self.event).data)
 
     def test_nonexistent_event_doesnt_create_event(self):
         request = self.factory.post("/user/events/", {"id": 1876}, format="json")
@@ -473,9 +474,12 @@ class PersonalEventTest(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEquals(PersonalEvent.objects.count(), 1)
 
-    def test_bad_event_data(self):
+    def test_bad_event_data_ignored(self):
         request = self.factory.post(
             "/user/events/", {"id": 1875, "stan": "fromis_9"}, format="json"
         )
         response = get_auth_response(request, self.user, "/user/events/")
-        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.event.refresh_from_db()
+        self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
+        with self.assertRaises(AttributeError):
+            self.assertNotEquals(self.event.stan, "fromis_9")
