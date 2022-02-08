@@ -470,7 +470,7 @@ export const updateCustomSlot = (newValues, id) => (dispatch) => {
       method: "POST",
       body: JSON.stringify(newValues),
       credentials: "include",
-    })
+    });
     dispatch(updateExistingEvent(newValues));
   }
 };

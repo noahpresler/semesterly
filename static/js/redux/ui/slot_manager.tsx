@@ -16,7 +16,7 @@ import React from "react";
 import {
   index as IntervalTree,
   matches01 as getIntersections,
-// @ts-ignore
+  // @ts-ignore
 } from "static-interval-tree";
 import Slot from "./slot";
 import CustomSlot from "./custom_slot";
@@ -133,7 +133,7 @@ type SlotManagerProps = {
   hoveredSlot?: DenormalizedSlot;
   courseToColourIndex: any;
   getClassmatesInSection: Function;
-  custom: Event[],
+  custom: Event[];
   primaryDisplayAttribute: string;
   socialSections?: boolean;
   uses12HrTime: boolean;

@@ -127,7 +127,7 @@ export interface RelatedCourse {
   integrations: any;
   prerequisites: string;
   exclusions: string;
-  corequisites: string; 
+  corequisites: string;
 }
 
 export interface NormalizedCourse extends RelatedCourse {
