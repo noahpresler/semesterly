@@ -18,7 +18,6 @@ import { getActiveTimetable, getCurrentSemester, getDenormTimetable } from "../s
 import { getTimetablesEndpoint } from "../constants/endpoints";
 import {
   browserSupportsLocalStorage,
-  generateCustomEventId,
   saveLocalActiveIndex,
   saveLocalCourseSections,
   saveLocalPreferences,
@@ -173,7 +172,6 @@ export const loadTimetable =
       ...timetable,
       events: timetable.events.map((event) => ({
         ...event,
-        id: generateCustomEventId(),
         preview: false,
       })),
     };
