@@ -37,6 +37,7 @@ const savingTimetableSlice = createSlice({
     },
     changeActiveSavedTimetableName: (state, action: PayloadAction<string>) => {
       state.activeTimetable.name = action.payload;
+      state.upToDate = false;
     },
   },
   extraReducers: (builder) => {
