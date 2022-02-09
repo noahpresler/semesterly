@@ -19,12 +19,6 @@ def get_default_tt_request():
         "optionCourses": [],
         "preferences": {
             "try_with_conflicts": False,
-            "sort_metrics": [
-                {"metric": "days with class", "selected": False, "order": "least"},
-                {"metric": "number of conflicts", "selected": False, "order": "least"},
-                {"metric": "time on campus", "selected": False, "order": "least"},
-                {"metric": "course rating stars", "selected": False, "order": "most"},
-            ],
         },
         "try_with_conflicts": False,
         "school": "uoft",

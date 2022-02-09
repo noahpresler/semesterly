@@ -16,13 +16,6 @@ from collections import namedtuple
 from courses.utils import get_sections_by_section_type
 from timetable.models import Section, Semester
 from timetable.school_mappers import SCHOOLS_MAP
-from timetable.scoring import (
-    get_tt_cost,
-    get_num_days,
-    get_avg_day_length,
-    get_num_friends,
-    get_avg_rating,
-)
 from student.models import PersonalTimetable
 from parsing.library.utils import short_date
 
@@ -40,7 +33,6 @@ class DisplayTimetable:
         self.slots = slots
         self.has_conflict = has_conflict
         self.name = name
-        self.avg_rating = get_avg_rating(slots)
         self.events = events or []
         self.id = id
 
@@ -71,7 +63,6 @@ def courses_to_timetables(
     courses,
     locked_sections,
     semester,
-    sort_metrics,
     school,
     custom_events,
     with_conflicts,
@@ -83,8 +74,7 @@ def courses_to_timetables(
     timetable_gen = slots_to_timetables(
         all_offerings, school, custom_events, with_conflicts
     )
-    timetables = itertools.islice(timetable_gen, MAX_RETURN)
-    return sorted(timetables, key=lambda tt: get_tt_cost(tt, sort_metrics))
+    return itertools.islice(timetable_gen, MAX_RETURN)
 
 
 def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
@@ -150,11 +140,8 @@ def slots_to_timetables(slots, school, custom_events, with_conflicts):
                 break
             current_tt.append(slots[i][j])
         if add_tt and current_tt:
-            tt_stats = get_tt_stats(current_tt, day_to_usage)
-            tt_stats["num_conflicts"] = num_conflicts
-            has_conflict = tt_stats["has_conflict"] = bool(num_conflicts)
+            has_conflict = bool(num_conflicts)
             current_tt = DisplayTimetable(current_tt, has_conflict)
-            current_tt.stats = tt_stats
             yield current_tt
 
 
@@ -310,15 +297,6 @@ def get_hour_from_string_time(time_string):
 def get_minute_from_string_time(time_string):
     """Get minute as an int from time as a string."""
     return int(time_string[time_string.index(":") + 1 :] if ":" in time_string else 0)
-
-
-def get_tt_stats(timetable, day_to_usage):
-    return {
-        "days_with_class": get_num_days(day_to_usage),
-        "time_on_campus": get_avg_day_length(day_to_usage),
-        "num_friends": get_num_friends(timetable),
-        "avg_rating": get_avg_rating(timetable),
-    }
 
 
 def get_day_to_usage(custom_events, school):
