@@ -13,8 +13,6 @@ GNU General Public License for more details.
 */
 
 import fetch from "isomorphic-fetch";
-import { normalize } from "normalizr";
-import { courseSchema } from "../schema";
 import { getActiveTimetableCourses, getCurrentSemester } from "../state";
 import { getCourseSearchEndpoint } from "../constants/endpoints";
 import { getUserSavedTimetables, saveTimetable } from "./user_actions";
@@ -23,15 +21,12 @@ import * as ActionTypes from "../constants/actionTypes";
 import { fetchCourseClassmates } from "./modal_actions";
 import { getSemester } from "./school_actions";
 import { alertsActions, explorationModalActions } from "../state/slices";
-import { updateSemester } from "./initActions";
-import { receiveAdvancedSearchResults } from ".";
-
-export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
-
-export const receiveSearchResults = (courses) => ({
-  type: ActionTypes.RECEIVE_SEARCH_RESULTS,
-  payload: normalize(courses, [courseSchema]),
-});
+import {
+  receiveAdvancedSearchResults,
+  requestCourses,
+  updateSemester,
+  receiveSearchResults,
+} from "./initActions";
 
 export const setSemester = (semester) => (dispatch, getState) => {
   const state = getState();
@@ -123,11 +118,6 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
       dispatch(receiveAdvancedSearchResults(json));
     });
 };
-
-export const hoverSearchResult = (position) => ({
-  type: ActionTypes.HOVER_SEARCH_RESULT,
-  position,
-});
 
 export const paginateAdvancedSearchResults = () => ({
   type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS,

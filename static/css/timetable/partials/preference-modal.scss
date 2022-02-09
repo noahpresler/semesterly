@@ -48,13 +48,9 @@
   padding: 2% 0;
 }
 
-.sort-menu {
-  display: block;
-}
-
 .preference-footer {
   display: flex;
-  padding-bottom: 40px;
+  padding-bottom: 10px;
 }
 
 // overwrite flat UI select stuff
@@ -63,56 +59,6 @@
   min-width: 0 !important;
   width: 100% !important;
 }
-
-.sort-row {
-  border-radius: 10px;
-  border-width: 2px;
-  display: flex;
-  height: 50px;
-  margin: auto;
-  margin-bottom: 10px;
-  width: 80%;
-
-  select {
-    cursor: pointer;
-  }
-}
-
-
-.sort-close {
-  padding: 2% 0;
-  width: 10%;
-
-  .fa-times {
-    cursor: pointer;
-    transition: color .3s, transform .3s;
-
-    &:hover {
-      color: $red;
-      transform: scale(1.2);
-    }
-  }
-}
-
-.sort-text {
-  padding: 2% 0;
-  width: 20%;
-}
-
-.sort-order-dropdown {
-  padding: 2%;
-  width: 22%;
-}
-
-.sort-metric-dropdown {
-  padding: 2%;
-  width: 48%;
-}
-
-.metric-row {
-  border-style: solid;
-}
-
 .footer-row {
   border-style: dashed;
   cursor: pointer;
@@ -125,10 +71,6 @@
 }
 
 @media (max-width: 460px) {
-  .sort-menu {
-    font-size: 12px;
-  }
-
   .select {
     // overwrite flat-ui on mobile
     font-size: 12px !important;

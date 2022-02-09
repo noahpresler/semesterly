@@ -15,8 +15,8 @@ GNU General Public License for more details.
 import { connect } from "react-redux";
 import ConflictAlert from "./conflict_alert";
 import { addLastAddedCourse } from "../../actions/timetable_actions";
-import * as ActionTypes from "../../constants/actionTypes";
 import { alertsActions } from "../../state/slices";
+import { preferencesActions } from "../../state/slices/preferencesSlice";
 
 const mapStateToProps = (state) => ({
   message: typeof state.timetables.lastSlotAdded === "string" ? "course" : "event",
@@ -24,7 +24,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   dismissSelf: () => dispatch(alertsActions.dismissAlertConflict()),
-  turnConflictsOn: () => dispatch({ type: ActionTypes.TOGGLE_CONFLICTS }),
+  turnConflictsOn: () => dispatch(preferencesActions.toggleConflicts()),
   addLastAddedCourse: () => dispatch(addLastAddedCourse()),
 });
 

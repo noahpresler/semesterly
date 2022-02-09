@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import { connect } from "react-redux";
 import TermsOfServiceModal from "../modals/terms_of_service_modal";
-import { triggerTermsOfServiceModal } from "../../actions/modal_actions";
+import { triggerTermsOfServiceModal } from "../../state/slices/termsOfServiceModalSlice";
 import { acceptTOS } from "../../actions/user_actions";
 import { getIsUserInfoIncomplete } from "../../state";
 

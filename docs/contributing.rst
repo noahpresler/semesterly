@@ -20,9 +20,11 @@ We follow the `Gitflow workflow
 <https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow>`_; our
 main branch is ``prod``, and our develop branch is ``develop``. The general gist is that
 for anything new, you want to branch off of ``develop`` and name your branch
-``feature/your-branch-name``. In the case you need to fix something that was just
-released, and it needs to go straight to production, then branch off of ``prod`` and
-name your branch ``hotfix/your-branch-name``.
+``feature/your-branch-name``. Two other conventions we have is for bug fixes we use
+``fix/your-branch-name``, and for refactoring we use ``refactor/your-branch-name``. In
+the case you need to fix something that was just released, and it needs to go straight
+to production, then branch off of ``prod`` and name your branch
+``hotfix/your-branch-name``.
 
 To stay up to date with ``upstream/develop``, you'll want to ``git pull`` whenever you're
 starting a new branch. You may need to ``git fetch upstream`` first.
@@ -49,6 +51,15 @@ After you've made edits, git add your files, then commit. One way to do this:
     git add <path_to_file>
     git commit -m "Topic: Message"
     git push --set-upstream origin your-branch-name
+
+.. note::
+    It is preferred that you follow the commit message convention of "Topic: Message". 
+    This helps when we are browsing through commits so we can quickly identify what each
+    commit was about. 
+    **Messages should be in the imperative mood**, as if you're telling someone what to
+    do. If it helps, you are encouraged to include the how/why - 
+    *"Evaluation list: Duplicate state to avoid modifying redux state"*.
+    Furthermore, try to keep commits to "one" change at a time and commit often. 
 
 From here, you should be prompted to create a new pull request (PR). Ctrl + Left Click to
 open the link. From there, add a short description on what your PR does and how/why you
