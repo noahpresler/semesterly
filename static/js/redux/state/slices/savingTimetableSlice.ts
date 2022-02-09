@@ -64,7 +64,6 @@ const savingTimetableSlice = createSlice({
           addNewCustomEvent,
           changeActiveTimetable,
           removeCustomEvent,
-          updateExistingEvent
         ),
         (state) => {
           state.upToDate = false;
