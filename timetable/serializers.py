@@ -17,9 +17,20 @@ from timetable.utils import DisplayTimetable
 
 
 class EventSerializer(serializers.ModelSerializer):
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get("name", instance.name)
+        instance.day = validated_data.get("day", instance.day)
+        instance.time_start = validated_data.get("time_start", instance.time_start)
+        instance.time_end = validated_data.get("time_end", instance.time_end)
+        instance.color = validated_data.get("color", instance.color)
+        instance.location = validated_data.get("location", instance.location)
+        instance.credits = validated_data.get("credits", instance.credits)
+        instance.save()
+        return instance
+
     class Meta:
         model = PersonalEvent
-        exclude = ("id",)
+        fields = "__all__"
 
 
 class SlotSerializer(serializers.Serializer):

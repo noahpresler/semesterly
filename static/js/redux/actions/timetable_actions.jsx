@@ -15,10 +15,9 @@ GNU General Public License for more details.
 import fetch from "isomorphic-fetch";
 import Cookie from "js-cookie";
 import { getActiveTimetable, getCurrentSemester, getDenormTimetable } from "../state";
-import { getTimetablesEndpoint } from "../constants/endpoints";
+import { getTimetablesEndpoint, getUpdateEventEndpoint } from "../constants/endpoints";
 import {
   browserSupportsLocalStorage,
-  generateCustomEventId,
   saveLocalActiveIndex,
   saveLocalCourseSections,
   saveLocalPreferences,
@@ -174,7 +173,6 @@ export const loadTimetable =
       ...timetable,
       events: timetable.events.map((event) => ({
         ...event,
-        id: generateCustomEventId(),
         preview: false,
       })),
     };
@@ -461,8 +459,17 @@ export const updateCustomSlot = (newValues, id) => (dispatch) => {
     // For some reason, students can drag and drop past midnight
   } else if (!goesPastMidnight(newValues.timeEnd)) {
     newValues.id = id;
+    fetch(getUpdateEventEndpoint(), {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken"),
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(newValues),
+      credentials: "include",
+    });
     dispatch(updateExistingEvent(newValues));
-    dispatch(autoSave());
   }
 };
 
