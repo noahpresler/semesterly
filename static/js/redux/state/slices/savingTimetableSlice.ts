@@ -60,11 +60,7 @@ const savingTimetableSlice = createSlice({
         state.saving = false;
       })
       .addMatcher(
-        isAnyOf(
-          addNewCustomEvent,
-          changeActiveTimetable,
-          removeCustomEvent,
-        ),
+        isAnyOf(addNewCustomEvent, changeActiveTimetable, removeCustomEvent),
         (state) => {
           state.upToDate = false;
         }
