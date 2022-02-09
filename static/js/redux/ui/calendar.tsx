@@ -363,6 +363,8 @@ const Calendar = (props: CalendarProps) => {
                           <th className="fc-day-header fc-widget-header fc-wed">Wed</th>
                           <th className="fc-day-header fc-widget-header fc-thu">Thu</th>
                           <th className="fc-day-header fc-widget-header fc-fri">Fri</th>
+                          <th className="fc-day-header fc-widget-header fc-sat">Sat</th>
+                          <th className="fc-day-header fc-widget-header fc-sun">Sun</th>
                         </tr>
                       </thead>
                     </table>
@@ -389,6 +391,8 @@ const Calendar = (props: CalendarProps) => {
                               <td className="fc-day fc-widget-content fc-wed" />
                               <td className="fc-day fc-widget-content fc-thu" />
                               <td className="fc-day fc-widget-content fc-fri" />
+                              <td className="fc-day fc-widget-content fc-sat" />
+                              <td className="fc-day fc-widget-content fc-sun" />
                             </tr>
                           </tbody>
                         </table>

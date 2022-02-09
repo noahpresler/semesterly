@@ -305,7 +305,7 @@ def get_day_to_usage(custom_events, school):
         # This really should be 24 * 60, but for some reason the timetable is
         # capped at starting at 8am, so 8am-12am is 16 hours.
         day: [set() for _ in range(int(16 * 60 / SCHOOLS_MAP[school].granularity))]
-        for day in ["M", "T", "W", "R", "F"]
+        for day in ["M", "T", "W", "R", "F", "S", "U"]
     }
 
     for event in custom_events:
