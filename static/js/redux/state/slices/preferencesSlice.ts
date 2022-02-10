@@ -9,7 +9,7 @@ interface PreferencesSliceState {
 
 const initialState: PreferencesSliceState = {
   tryWithConflicts: false,
-  showWeekend: false,
+  showWeekend: true,
   isModalVisible: false,
 };
 
@@ -31,6 +31,7 @@ const preferencesSlice = createSlice({
     },
     setAllPreferences: (state, { payload }: PayloadAction<PreferencesSliceState>) => {
       state.tryWithConflicts = payload.tryWithConflicts;
+      state.showWeekend = payload.showWeekend;
     },
   },
 });
