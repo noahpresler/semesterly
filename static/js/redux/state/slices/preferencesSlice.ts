@@ -9,7 +9,7 @@ interface PreferencesSliceState {
 
 const initialState: PreferencesSliceState = {
   tryWithConflicts: false,
-  showWeekend: true,
+  showWeekend: false,
   isModalVisible: false,
 };
 

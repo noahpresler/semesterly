@@ -209,8 +209,14 @@ const DayCalendar = (props: DayCalendarProps) => {
     </button>
   );
 
-  const dayPills = DAYS.map((day, i) => (
-    <div key={day} className="day-pill" onClick={() => setCurrentDay(i)}>
+  const days = showWeekend ? DAYS : DAYS.slice(0, 5);
+  const dayPills = days.map((day, i) => (
+    <div
+      key={day}
+      className="day-pill"
+      onClick={() => setCurrentDay(i)}
+      style={{ width: showWeekend ? "14%" : "20%" }}
+    >
       <div className={classnames("day-circle", { selected: i === currentDay })}>
         {day === "R" && "Th"}
         {day === "U" && "Su"}
