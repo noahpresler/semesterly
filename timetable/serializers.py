@@ -50,6 +50,7 @@ class DisplayTimetableSerializer(serializers.Serializer):
     )  # should only be defined for PersonalTimetables
     slots = SlotSerializer(many=True)
     has_conflict = serializers.BooleanField()
+    show_weekend = serializers.BooleanField()
     name = serializers.CharField()
     events = EventSerializer(many=True)
 

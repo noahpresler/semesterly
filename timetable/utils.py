@@ -29,10 +29,11 @@ Timetable = namedtuple("Timetable", "courses sections has_conflict")
 class DisplayTimetable:
     """Object that represents the frontend's interpretation of a timetable."""
 
-    def __init__(self, slots, has_conflict, name="", events=None, id=None):
+    def __init__(self, slots, has_conflict, show_weekend, name="", events=None, id=None):
         self.slots = slots
         self.has_conflict = has_conflict
         self.name = name
+        self.show_weekend = show_weekend
         self.events = events or []
         self.id = id
 
@@ -53,6 +54,7 @@ class DisplayTimetable:
         return DisplayTimetable(
             slots,
             timetable.has_conflict,
+            timetable.show_weekend,
             getattr(timetable, "name", ""),
             getattr(timetable, "events", []),
             id,
