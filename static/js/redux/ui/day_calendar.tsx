@@ -179,7 +179,11 @@ const DayCalendar = (props: DayCalendarProps) => {
   );
 
   const shareLink = shareLinkShown ? (
-    <ShareLink link={props.shareLink} onClickOut={() => setShareLinkShown(false)} />
+    <ShareLink
+      link={props.shareLink ? props.shareLink : ""}
+      type="Calendar"
+      onClickOut={() => setShareLinkShown(false)}
+    />
   ) : null;
   const addButton = (
     <button
