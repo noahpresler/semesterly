@@ -2,12 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SearchMetrics } from "../../constants/commonTypes";
 
 interface PreferencesSliceState {
-  try_with_conflicts: boolean;
+  tryWithConflicts: boolean;
+  showWeekend: boolean;
   isModalVisible: boolean;
 }
 
 const initialState: PreferencesSliceState = {
-  try_with_conflicts: false,
+  tryWithConflicts: false,
+  showWeekend: true,
   isModalVisible: false,
 };
 
@@ -19,13 +21,16 @@ const preferencesSlice = createSlice({
       state.isModalVisible = !state.isModalVisible;
     },
     toggleConflicts: (state) => {
-      state.try_with_conflicts = !state.try_with_conflicts;
+      state.tryWithConflicts = !state.tryWithConflicts;
     },
     turnConflictsOn: (state) => {
-      state.try_with_conflicts = true;
+      state.tryWithConflicts = true;
+    },
+    toggleShowWeekend: (state) => {
+      state.showWeekend = !state.showWeekend;
     },
     setAllPreferences: (state, { payload }: PayloadAction<PreferencesSliceState>) => {
-      state.try_with_conflicts = payload.try_with_conflicts;
+      state.tryWithConflicts = payload.tryWithConflicts;
     },
   },
 });
