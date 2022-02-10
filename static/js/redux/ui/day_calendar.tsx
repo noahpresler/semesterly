@@ -21,6 +21,7 @@ import SlotManagerContainer from "./containers/slot_manager_container";
 import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
 import { ShareLink } from "./master_slot";
+import { useAppSelector } from "../hooks";
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -128,9 +129,11 @@ const DayCalendar = (props: DayCalendarProps) => {
     return rows;
   };
 
+  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
+
   const swipedLeft = () => {
     setCurrentDay((prev) => {
-      if (prev === 6) {
+      if ((showWeekend && prev === 6) || (!showWeekend && prev === 4)) {
         return 0;
       }
       return prev + 1;
@@ -139,8 +142,10 @@ const DayCalendar = (props: DayCalendarProps) => {
 
   const swipedRight = () => {
     setCurrentDay((prev) => {
-      if (prev === 0) {
+      if (showWeekend && prev === 0) {
         return 6;
+      } else if (!showWeekend && prev === 0) {
+        return 4;
       }
       return prev - 1;
     });
