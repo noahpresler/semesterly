@@ -88,6 +88,30 @@ const DayCalendar = (props: DayCalendarProps) => {
     });
   }, []);
 
+  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
+
+  useEffect(() => {
+    if (currentDay === 5 && !showWeekend) {
+      setCurrentDay(4);
+    } else if (currentDay == 6 && !showWeekend) {
+      setCurrentDay(0);
+    }
+  }, [currentDay, showWeekend])
+
+  const mod = (n: number, m: number) => ((n % m) + m) % m;
+
+  const swipedLeft = () => {
+    setCurrentDay((prev) => {
+      return showWeekend ? mod(prev + 1, 7) : mod(prev + 1, 5);
+    });
+  };
+
+  const swipedRight = () => {
+    setCurrentDay((prev) => {
+      return showWeekend ? mod(prev - 1, 7) : mod(prev - 1, 5);
+    });
+  };
+
   const getTimelineStyle = () => {
     const now = new Date();
     // don't show line if the current time is before 8am or after the schedule end
@@ -127,28 +151,6 @@ const DayCalendar = (props: DayCalendarProps) => {
     }
 
     return rows;
-  };
-
-  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
-
-  const swipedLeft = () => {
-    setCurrentDay((prev) => {
-      if ((showWeekend && prev === 6) || (!showWeekend && prev === 4)) {
-        return 0;
-      }
-      return prev + 1;
-    });
-  };
-
-  const swipedRight = () => {
-    setCurrentDay((prev) => {
-      if (showWeekend && prev === 0) {
-        return 6;
-      } else if (!showWeekend && prev === 0) {
-        return 4;
-      }
-      return prev - 1;
-    });
   };
 
   const fetchShareTimetableLink = () => {
