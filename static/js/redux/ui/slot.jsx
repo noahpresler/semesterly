@@ -266,67 +266,69 @@ class Slot extends React.Component {
           }`
         : this.props.time_end;
 
-    return this.props.connectCreateTarget(
+    const slot = this.props.connectCreateTarget(
       this.props.connectDragTarget(
-        <div>
-          <StyleRoot>
-            <div className="fc-event-container">
-              <div
-                className={`fc-time-grid-event fc-event slot slot-${this.props.courseId}`}
-                style={this.getSlotStyles()}
-                onClick={this.props.fetchCourseInfo}
-                onMouseEnter={this.onSlotHover}
-                onMouseLeave={this.onSlotUnhover}
-                id={this.props.id}
+        <div
+          className={`fc-time-grid-event fc-event slot slot-${this.props.courseId}`}
+          style={this.getSlotStyles()}
+          onClick={this.props.fetchCourseInfo}
+          onMouseEnter={this.onSlotHover}
+          onMouseLeave={this.onSlotUnhover}
+          id={this.props.id}
+        >
+          {shortCourseDatesPanel}
+          <div
+            className="slot-bar"
+            style={{ backgroundColor: COLOUR_DATA[this.props.colourId].border }}
+          />
+          {removeButton}
+          {lockButton}
+          <div className="fc-content">
+            <div
+              ref={(c) => {
+                this.courseDiv = c;
+              }}
+              className="fc-time"
+            >
+              <span
+                ref={(c) => {
+                  this.courseSpan = c;
+                }}
+                className={`fc-time-name${this.state.overflow ? "-overflow" : ""}`}
               >
-                {shortCourseDatesPanel}
-                <div
-                  className="slot-bar"
-                  style={{ backgroundColor: COLOUR_DATA[this.props.colourId].border }}
-                />
-                {removeButton}
-                {lockButton}
-                <div className="fc-content">
-                  <div
-                    ref={(c) => {
-                      this.courseDiv = c;
-                    }}
-                    className="fc-time"
-                  >
-                    <span
-                      ref={(c) => {
-                        this.courseSpan = c;
-                      }}
-                      className={`fc-time-name${
-                        this.state.overflow ? "-overflow" : ""
-                      }`}
-                    >
-                      {`${this.props[this.props.primaryDisplayAttribute]} `}
-                    </span>
-                    <span
-                      ref={(c) => {
-                        this.courseNum = c;
-                      }}
-                    >
-                      {this.props.meeting_section}
-                    </span>
-                  </div>
-                  <div className="fc-time">
-                    <span>
-                      {convertedStart} – {convertedEnd}
-                    </span>
-                    {shortCourseIndicator}
-                  </div>
-                  <div className="fc-time">
-                    {friends}
-                    {this.props.location}
-                  </div>
-                </div>
-              </div>
+                {`${this.props[this.props.primaryDisplayAttribute]} `}
+              </span>
+              <span
+                ref={(c) => {
+                  this.courseNum = c;
+                }}
+              >
+                {this.props.meeting_section}
+              </span>
             </div>
-          </StyleRoot>
+            <div className="fc-time">
+              <span>
+                {convertedStart} – {convertedEnd}
+              </span>
+              {shortCourseIndicator}
+            </div>
+            <div className="fc-time">
+              {friends}
+              {this.props.location}
+            </div>
+          </div>
         </div>
       )
+    );
+
+    return (
+      <div>
+        <StyleRoot>
+          <div className="fc-event-container">
+            {slot}
+          </div>
+        </StyleRoot>
+      </div>
     );
   }
 }
