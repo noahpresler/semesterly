@@ -228,24 +228,33 @@ const CustomEventModal = () => {
     />
   );
 
+  const eventLabels = (
+    <div className="event-labels">
+      {createLabel("event-days", "Day:")}
+      {createLabel("event-name", "Name:")}
+      {createLabel("event-location", "Location:")}
+      {createLabel("event-color", "Color:")}
+      {eventColorPresets}
+      {createLabel("event-start-time", "Start Time:")}
+      {createLabel("event-end-time", "End Time:")}
+      {createLabel("event-credits", "Credits:")}
+    </div>
+  );
+
   const editCustomEventForm = (
     <form className="edit-custom-event-form" onSubmit={onCustomEventSave}>
       <div className="event-form-items">
-        <div className="event-labels">
-          {createLabel("event-days", "Day:")}
-          {createLabel("event-name", "Name:")}
-          {createLabel("event-location", "Location:")}
-          {createLabel("event-color", "Color:")}
-          {eventColorPresets}
-          {createLabel("event-start-time", "Start Time:")}
-          {createLabel("event-end-time", "End Time:")}
-          {createLabel("event-credits", "Credits:")}
-        </div>
+        {window.innerWidth > 600 ? eventLabels : null}
         <div className="event-text-inputs">
           <div className="event-days">
-            {["M", "T", "W", "R", "F"].map((day) =>
-              day !== "R" ? createDayButton(day) : createDayButton(day, "Th")
-            )}
+            {["M", "T", "W", "R", "F", "S", "U"].map((day) => {
+              if (day === "R") {
+                return createDayButton(day, "Th");
+              } else if (day === "U") {
+                return createDayButton(day, "Su");
+              }
+              return createDayButton(day);
+            })}
           </div>
           {createTextInput(
             "event-name",
@@ -311,6 +320,7 @@ const CustomEventModal = () => {
       onHide={() => {
         dispatch(customEventsActions.hideCustomEventsModal());
       }}
+      modalStyle={{ width: "100%", maxWidth: "600px" }}
     >
       {modalHeader}
       {editCustomEventForm}
