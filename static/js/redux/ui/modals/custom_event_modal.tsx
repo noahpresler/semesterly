@@ -243,8 +243,14 @@ const CustomEventModal = () => {
         </div>
         <div className="event-text-inputs">
           <div className="event-days">
-            {["M", "T", "W", "R", "F"].map((day) =>
-              day !== "R" ? createDayButton(day) : createDayButton(day, "Th")
+            {["M", "T", "W", "R", "F", "S", "U"].map((day) => {
+              if (day === "R") {
+                return createDayButton(day, "Th")
+              } else if (day === "U") {
+                return createDayButton(day, "Su")
+              }
+              return createDayButton(day)
+            }
             )}
           </div>
           {createTextInput(
@@ -311,6 +317,7 @@ const CustomEventModal = () => {
       onHide={() => {
         dispatch(customEventsActions.hideCustomEventsModal());
       }}
+      modalStyle={{"width": "600px"}}
     >
       {modalHeader}
       {editCustomEventForm}
