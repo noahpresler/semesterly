@@ -36,6 +36,10 @@ urlpatterns = [
         r"^user/timetables/(?P<sem_name>.+)/(?P<year>[0-9]{4})/(?P<tt_name>.+)/$",
         student.views.UserTimetableView.as_view(),
     ),
+    re_path(
+        r"^user/timetables/(?P<pk>.+)/preferences/$",
+        student.views.UserTimetablePreferenceView.as_view(),
+    ),
     re_path(r"^user/events/?$", student.views.PersonalEventView.as_view()),
     # social
     re_path(

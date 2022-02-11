@@ -20,10 +20,12 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from hashids import Hashids
+from rest_framework.generics import GenericAPIView
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.mixins import UpdateModelMixin
 from decimal import Decimal
 
 from authpipe.utils import check_student_token
@@ -43,7 +45,7 @@ from student.utils import (
     get_student_tts,
 )
 from timetable.models import Semester, Course, Section
-from timetable.serializers import DisplayTimetableSerializer, EventSerializer
+from timetable.serializers import DisplayTimetableSerializer, EventSerializer, PersonalTimeTablePreferencesSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
 from semesterly.settings import get_secret
@@ -330,7 +332,15 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         )
 
 
-class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
+class UserTimetablePreferenceView(ValidateSubdomainMixin, RedirectToSignupMixin, GenericAPIView, UpdateModelMixin):
+    queryset = PersonalTimetable.objects.all()
+    serializer_class = PersonalTimeTablePreferencesSerializer
+
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+
+class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, GenericAPIView, UpdateModelMixin):
     """
     Handles the computation of classmates for a given course, timetable, or simply
     the count of all classmates for a given timetable.

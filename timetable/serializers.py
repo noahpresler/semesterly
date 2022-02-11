@@ -12,7 +12,7 @@
 
 from rest_framework import serializers
 
-from student.models import PersonalEvent
+from student.models import PersonalEvent, PersonalTimetable
 from timetable.utils import DisplayTimetable
 
 
@@ -62,3 +62,9 @@ class DisplayTimetableSerializer(serializers.Serializer):
         return DisplayTimetableSerializer(
             DisplayTimetable.from_model(timetable), **kwargs
         )
+
+
+class PersonalTimeTablePreferencesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PersonalTimetable
+        fields = ["show_weekend", "has_conflict"]
