@@ -333,8 +333,14 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
 
 class UserTimetablePreferenceView(ValidateSubdomainMixin, RedirectToSignupMixin, GenericAPIView, UpdateModelMixin):
-    queryset = PersonalTimetable.objects.all()
+    """
+    Used to update timetable preferences
+    """
+
     serializer_class = PersonalTimeTablePreferencesSerializer
+
+    def get_queryset(self):
+        return PersonalTimetable.objects.filter(student__user=self.request.user)
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
