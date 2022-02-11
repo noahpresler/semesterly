@@ -340,7 +340,7 @@ class UserTimetablePreferenceView(ValidateSubdomainMixin, RedirectToSignupMixin,
         return self.partial_update(request, *args, **kwargs)
 
 
-class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, GenericAPIView, UpdateModelMixin):
+class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
     """
     Handles the computation of classmates for a given course, timetable, or simply
     the count of all classmates for a given timetable.
