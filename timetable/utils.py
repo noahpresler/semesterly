@@ -71,12 +71,13 @@ def courses_to_timetables(
     custom_events,
     with_conflicts,
     optional_course_ids,
+    show_weekend
 ):
     all_offerings = courses_to_slots(
         courses, locked_sections, semester, optional_course_ids
     )
     timetable_gen = slots_to_timetables(
-        all_offerings, school, custom_events, with_conflicts
+        all_offerings, school, custom_events, with_conflicts, show_weekend
     )
     return itertools.islice(timetable_gen, MAX_RETURN)
 
@@ -124,7 +125,7 @@ def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
     return slots
 
 
-def slots_to_timetables(slots, school, custom_events, with_conflicts):
+def slots_to_timetables(slots, school, custom_events, with_conflicts, show_weekend):
     """Generate timetables in a depth-first manner based on a list of slots."""
     num_offerings, num_permutations_remaining = get_xproduct_indicies(slots)
     total_num_permutations = num_permutations_remaining.pop(0)
@@ -145,7 +146,7 @@ def slots_to_timetables(slots, school, custom_events, with_conflicts):
             current_tt.append(slots[i][j])
         if add_tt and current_tt:
             has_conflict = bool(num_conflicts)
-            current_tt = DisplayTimetable(current_tt, has_conflict)
+            current_tt = DisplayTimetable(current_tt, has_conflict, show_weekend)
             yield current_tt
 
 
