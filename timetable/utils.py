@@ -51,10 +51,12 @@ class DisplayTimetable:
             for section in timetable.sections.all()
         ]
         id = timetable.id if isinstance(timetable, PersonalTimetable) else None
+        # set show_weekend to False if timetable is not a PersonalTimetable (ex: SharedTimetable)
+        show_weekend = timetable.show_weekend if isinstance(timetable, PersonalTimetable) else False
         return DisplayTimetable(
             slots,
             timetable.has_conflict,
-            timetable.show_weekend,
+            show_weekend,
             getattr(timetable, "name", ""),
             getattr(timetable, "events", []),
             id,
