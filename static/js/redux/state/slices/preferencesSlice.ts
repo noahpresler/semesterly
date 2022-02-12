@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SearchMetrics } from "../../constants/commonTypes";
+import { changeActiveSavedTimetable } from "../../actions";
+import { Timetable } from "../../constants/commonTypes";
 
 interface PreferencesSliceState {
   tryWithConflicts: boolean;
@@ -34,6 +35,16 @@ const preferencesSlice = createSlice({
       state.showWeekend = payload.showWeekend;
     },
   },
+  extraReducers: (builder) => {
+      builder.
+        addCase(changeActiveSavedTimetable, (state, action: PayloadAction<{
+        timetable: Timetable;
+        upToDate: boolean;
+      }>) => {
+        state.tryWithConflicts = action.payload.timetable.has_conflict;
+        state.showWeekend = action.payload.timetable.show_weekend;
+      });
+    }
 });
 export const preferencesActions = preferencesSlice.actions;
 

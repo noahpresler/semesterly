@@ -529,3 +529,7 @@ export const handleAgreement = (currentUser, timeUpdatedTos) => (dispatch) => {
     }
   }
 };
+
+export const savePreferences = (dispatch, getState) => {
+  
+}
