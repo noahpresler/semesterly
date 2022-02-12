@@ -46,12 +46,17 @@ const PreferenceModal = () => {
 
   const dispatch = useAppDispatch();
 
+  const onSave = () => {
+    dispatch(savePreferences);
+    dispatch(preferencesActions.hidePreferenceModal());
+  };
+
   return (
     <FadeModal
       ref={modal}
       className="pref-modal max-modal"
       modalStyle={modalStyle}
-      onHide={() => dispatch(preferencesActions.togglePreferenceModal())}
+      onHide={() => dispatch(preferencesActions.hidePreferenceModal())}
     >
       <div id="perf-modal-wrapper">
         {modalHeader}

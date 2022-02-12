@@ -14,12 +14,34 @@ const initialState: PreferencesSliceState = {
   isModalVisible: false,
 };
 
+export const savePreferences = (_dispatch: AppDispatch, getState: () => RootState) => {
+  const state = getState();
+  const activeTimetable = getActiveTimetable(state);
+  const preferences = state.preferences;
+  fetch(getTimetablePreferencesEndpoint(activeTimetable.id), {
+    headers: {
+      "X-CSRFToken": Cookie.get("csrftoken"),
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+    body: JSON.stringify({
+      has_conflict: preferences.tryWithConflicts,
+      show_weekend: preferences.showWeekend,
+    }),
+    credentials: "include",
+  });
+};
+
 const preferencesSlice = createSlice({
   name: "preferences",
   initialState,
   reducers: {
-    togglePreferenceModal: (state) => {
-      state.isModalVisible = !state.isModalVisible;
+    showPreferenceModal: (state) => {
+      state.isModalVisible = true;
+    },
+    hidePreferenceModal: (state) => {
+      state.isModalVisible = false;
     },
     toggleConflicts: (state) => {
       state.tryWithConflicts = !state.tryWithConflicts;
