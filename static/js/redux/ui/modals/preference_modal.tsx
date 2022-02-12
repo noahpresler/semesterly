@@ -61,6 +61,32 @@ const PreferenceModal = () => {
     dispatch(preferencesActions.hidePreferenceModal());
   };
 
+  const createPreferenceRow = (
+    label: string,
+    name: string,
+    checked: boolean,
+    onChange: () => void
+  ) => (
+    <div className="preference-row">
+      <div style={{ marginRight: "auto", marginLeft: "15%" }}>
+        <p style={{ margin: 0 }}>{label}</p>
+      </div>
+      <div style={{ marginLeft: "auto", marginRight: "10%" }}>
+        <label className="switch switch-slide" htmlFor={name}>
+          <input
+            id={name}
+            className="switch-input"
+            type="checkbox"
+            checked={checked}
+            onChange={() => onChange()}
+          />
+          <span className="switch-label" data-on="Enabled" data-off="Disabled" />
+          <span className="switch-handle" />
+        </label>
+      </div>
+    </div>
+  );
+
   return (
     <FadeModal
       ref={modal}
@@ -70,52 +96,22 @@ const PreferenceModal = () => {
     >
       <div id="perf-modal-wrapper">
         {modalHeader}
-        <div className="conflict-row">
-          <div style={{ marginRight: "auto", marginLeft: "15%" }}>
-            <p style={{ margin: 0 }}>Conflicts: </p>
-          </div>
-          <div style={{ marginLeft: "auto", marginRight: "10%" }}>
-            <label className="switch switch-slide" htmlFor="with-conflicts">
-              <input
-                id="with-conflicts"
-                className="switch-input"
-                type="checkbox"
-                checked={tryWithConflicts}
-                onChange={() => dispatch(preferencesActions.toggleConflicts())}
-              />
-              <span className="switch-label" data-on="Enabled" data-off="Disabled" />
-              <span className="switch-handle" />
-            </label>
-          </div>
-        </div>
-        <div className="conflict-row">
-          <div style={{ marginRight: "auto", marginLeft: "15%" }}>
-            <p style={{ margin: 0 }}>Show Weekends: </p>
-          </div>
-          <div style={{ marginLeft: "auto", marginRight: "10%" }}>
-            <label className="switch switch-slide" htmlFor="show-weekend">
-              <input
-                id="show-weekend"
-                className="switch-input"
-                type="checkbox"
-                checked={showWeekend}
-                onChange={() => dispatch(preferencesActions.toggleShowWeekend())}
-              />
-              <span className="switch-label" data-on="Enabled" data-off="Disabled" />
-              <span className="switch-handle" />
-            </label>
-          </div>
-        </div>
-        <hr style={{ marginTop: 0, width: "80%" }} />
-        <div className="preference-footer">
-          <button
-            className="btn btn-primary"
-            style={{ marginLeft: "auto", marginRight: "auto" }}
-            onClick={onSave}
-          >
-            Save and Close
-          </button>
-        </div>
+        {createPreferenceRow("Conflicts:", "with-conflicts", tryWithConflicts, () => {
+          dispatch(preferencesActions.toggleConflicts());
+        })}
+        {createPreferenceRow("Show Weekends:", "show-weekends", showWeekend, () => {
+          dispatch(preferencesActions.toggleShowWeekend());
+        })}
+      </div>
+      <hr style={{ marginTop: 0, width: "80%" }} />
+      <div className="preference-footer">
+        <button
+          className="btn btn-primary"
+          style={{ marginLeft: "auto", marginRight: "auto" }}
+          onClick={onSave}
+        >
+          Save and Close
+        </button>
       </div>
     </FadeModal>
   );
