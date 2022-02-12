@@ -20,6 +20,7 @@ import {
   preferencesActions,
   savePreferences,
 } from "../../state/slices/preferencesSlice";
+import { saveLocalPreferences } from "../../util";
 
 const PreferenceModal = () => {
   const { tryWithConflicts, showWeekend, isModalVisible } = useAppSelector(
@@ -47,10 +48,16 @@ const PreferenceModal = () => {
     width: "100%",
   };
 
+  const isLoggedIn = useAppSelector((state) => state.userInfo.data.isLoggedIn);
+
   const dispatch = useAppDispatch();
 
   const onSave = () => {
-    dispatch(savePreferences);
+    if (isLoggedIn) {
+      dispatch(savePreferences);
+    } else {
+      saveLocalPreferences({ tryWithConflicts, showWeekend });
+    }
     dispatch(preferencesActions.hidePreferenceModal());
   };
 
