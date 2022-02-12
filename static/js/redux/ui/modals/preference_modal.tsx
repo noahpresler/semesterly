@@ -96,9 +96,14 @@ const PreferenceModal = () => {
     >
       <div id="perf-modal-wrapper">
         {modalHeader}
-        {createPreferenceRow("Conflicts:", "with-conflicts", tryWithConflicts, () => {
-          dispatch(preferencesActions.toggleConflicts());
-        })}
+        {createPreferenceRow(
+          "Allow Conflicts:",
+          "with-conflicts",
+          tryWithConflicts,
+          () => {
+            dispatch(preferencesActions.toggleConflicts());
+          }
+        )}
         {createPreferenceRow("Show Weekends:", "show-weekends", showWeekend, () => {
           dispatch(preferencesActions.toggleShowWeekend());
         })}
