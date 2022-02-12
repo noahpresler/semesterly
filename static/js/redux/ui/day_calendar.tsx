@@ -96,7 +96,7 @@ const DayCalendar = (props: DayCalendarProps) => {
     } else if (currentDay == 6 && !showWeekend) {
       setCurrentDay(0);
     }
-  }, [currentDay, showWeekend])
+  }, [currentDay, showWeekend]);
 
   const mod = (n: number, m: number) => ((n % m) + m) % m;
 

@@ -19,7 +19,15 @@ export const DAYS = ["M", "T", "W", "R", "F", "S", "U"];
 
 export const FULL_WEEK_LIST = ["U", "M", "T", "W", "R", "F", "S"];
 
-export const VERBOSE_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+export const VERBOSE_DAYS = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 export const DRAG_TYPES = {
   DRAG: "drag", // drag a custom slot to a new location
