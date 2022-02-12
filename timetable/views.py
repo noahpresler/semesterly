@@ -71,12 +71,6 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         custom_events = params.get("customSlots", [])
         preferences = params["preferences"]
         with_conflicts = preferences.get("try_with_conflicts", False)
-        sort_metrics = [
-            (m["metric"], m["order"])
-            for m in preferences.get("sort_metrics", [])
-            if m["selected"]
-        ]
-
         timetables = [
             timetable
             for opt_courses in optional_course_subsets
@@ -84,7 +78,6 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                 courses + list(opt_courses),
                 locked_sections,
                 params["semester"],
-                sort_metrics,
                 params["school"],
                 custom_events,
                 with_conflicts,

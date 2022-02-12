@@ -17,7 +17,7 @@ import TermsOfServiceBanner from "../terms_of_service_banner";
 import {
   triggerTermsOfServiceBanner,
   dismissTermsOfServiceBanner,
-} from "../../actions/modal_actions";
+} from "../../state/slices/termOfServiceBannerSlice";
 
 const mapStateToProps = (state) => ({
   isVisible: state.termsOfServiceBanner.isVisible,

@@ -15,16 +15,16 @@ GNU General Public License for more details.
 import { configureStore } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { getMaxHourBasedOnWindowHeight } from "../util";
-import school from "./school_reducer";
-import semester, * as fromSemester from "./semester_reducer";
+import school from "./slices/schoolSlice";
+import semester, * as fromSemester from "../state/slices/semesterSlice";
 import calendar from "./slices/calendarSlice";
 import courseSections from "./slices/courseSectionsSlice";
 import timetables, * as fromTimetables from "./slices/timetablesSlice";
-import searchResults, * as fromSearchResults from "./search_results_reducer";
-import preferences from "./preferences_reducer";
+import searchResults, * as fromSearchResults from "./slices/searchResultsSlice";
+import preferences from "./slices/preferencesSlice";
 import courseInfo from "./slices/courseInfoSlice";
 import alerts from "./slices/alertsSlice";
-import ui from "./ui_reducer";
+import ui from "./slices/uiSlice";
 import userInfo, { isUserInfoIncomplete } from "./slices/userInfoSlice";
 import savingTimetable from "./slices/savingTimetableSlice";
 import classmates from "./slices/classmatesSlice";
@@ -33,16 +33,15 @@ import explorationModal, * as fromExplorationModal from "./slices/explorationMod
 import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
 import peerModal from "./peer_modal_reducer";
-import preferenceModal from "./preference_modal_reducer";
 import friends from "./friends_reducer";
 import notificationToken from "./notification_token_reducer";
 import integrationModal from "./integration_modal_reducer";
 import integrations from "./integrations_reducer";
-import saveCalendarModal from "./save_calendar_modal_reducer";
-import termsOfServiceModal from "./terms_of_service_modal_reducer";
-import termsOfServiceBanner from "./terms_of_service_banner_reducer";
+import saveCalendarModal from "./slices/saveCalendarModalSlice";
+import termsOfServiceModal from "./slices/termsOfServiceModalSlice";
+import termsOfServiceBanner from "./slices/termOfServiceBannerSlice";
 import userAcquisitionModal from "./slices/userAcquisitionModalSlice";
-import registrar from "./registrar_reducer";
+import registrar from "./slices/registrarSlice";
 import entities, * as fromEntities from "./entities_reducer";
 import { Slot, Timetable } from "../constants/commonTypes";
 
@@ -61,7 +60,6 @@ export const reducers = {
   notificationToken,
   optionalCourses,
   peerModal,
-  preferenceModal,
   preferences,
   registrar,
   saveCalendarModal,

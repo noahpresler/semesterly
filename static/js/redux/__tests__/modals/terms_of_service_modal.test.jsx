@@ -21,8 +21,8 @@ import {
   userInfoFixture,
 } from "../../__fixtures__/terms_of_service_modal.fixture";
 import { handleAgreement } from "../../actions/user_actions";
-import * as ActionTypes from "../../constants/actionTypes";
 import TermsOfServiceModalContainer from "../../ui/containers/terms_of_service_modal_container";
+import { triggerTermsOfServiceModal } from "../../state/slices/termsOfServiceModalSlice";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -81,7 +81,7 @@ describe("HandleAgreement correctly triggers tosMODAL", () => {
 
     store.dispatch(handleAgreement(currentUser, Date.now()));
     const expectedActions = store.getActions();
-    expect(expectedActions[0]).toEqual({ type: ActionTypes.TRIGGER_TOS_MODAL });
+    expect(expectedActions[0].type).toEqual(triggerTermsOfServiceModal.type);
   });
 
   it("if accepted but outdated", () => {
@@ -97,7 +97,7 @@ describe("HandleAgreement correctly triggers tosMODAL", () => {
 
     store.dispatch(handleAgreement(currentUser, Date.parse(1)));
     const expectedActions = store.getActions();
-    expect(expectedActions[0]).toEqual({ type: ActionTypes.TRIGGER_TOS_MODAL });
+    expect(expectedActions[0].type).toEqual(triggerTermsOfServiceModal.type);
   });
 
   it("empty if logged in and accepted", () => {

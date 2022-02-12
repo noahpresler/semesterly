@@ -15,7 +15,6 @@ GNU General Public License for more details.
 import PropTypes from "prop-types";
 import React from "react";
 import { FadeModal } from "boron-15";
-import SortMenuContainer from "../containers/sort_menu_container";
 
 class PreferenceModal extends React.Component {
   componentDidUpdate() {
@@ -42,7 +41,7 @@ class PreferenceModal extends React.Component {
         }}
         className="pref-modal max-modal"
         modalStyle={modalStyle}
-        onHide={this.props.togglePreferenceModal}
+        onHide={() => this.props.togglePreferenceModal()}
       >
         <div id="perf-modal-wrapper">
           {modalHeader}
@@ -57,7 +56,7 @@ class PreferenceModal extends React.Component {
                   className="switch-input"
                   type="checkbox"
                   checked={this.props.withConflicts}
-                  onChange={this.props.toggleConflicts}
+                  onChange={() => this.props.toggleConflicts()}
                 />
                 <span className="switch-label" data-on="Enabled" data-off="Disabled" />
                 <span className="switch-handle" />
@@ -65,11 +64,10 @@ class PreferenceModal extends React.Component {
             </div>
           </div>
           <hr style={{ marginTop: 0, width: "80%" }} />
-          <SortMenuContainer />
           <div className="preference-footer">
             <button
               className="btn btn-primary"
-              style={{ marginLeft: "auto", marginRight: "10%" }}
+              style={{ marginLeft: "auto", marginRight: "auto" }}
               onClick={() => this.modal.hide()}
             >
               Save and Close

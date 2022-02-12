@@ -29,6 +29,7 @@ import {
 } from "../state";
 import * as ActionTypes from "../constants/actionTypes";
 import { calendarActions } from "../state/slices";
+import { saveCalendarModalActions } from "../state/slices/saveCalendarModalSlice";
 
 const DAY_MAP = {
   M: "mo",
@@ -132,7 +133,7 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
     !state.saveCalendarModal.isDownloading &&
     !state.saveCalendarModal.hasDownloaded
   ) {
-    dispatch({ type: ActionTypes.DOWNLOAD_CALENDAR });
+    dispatch(saveCalendarModalActions.downloadCalendar());
     const cal = ical({ domain: "https://semester.ly", name: "My Semester Schedule" });
     const tt = getActiveDenormTimetable(state);
 
@@ -197,6 +198,6 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
       method: "POST",
       credentials: "include",
     });
-    dispatch({ type: ActionTypes.CALENDAR_DOWNLOADED });
+    dispatch(saveCalendarModalActions.calendarDownloaded());
   }
 };

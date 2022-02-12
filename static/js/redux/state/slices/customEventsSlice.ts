@@ -4,7 +4,7 @@ import {
   changeActiveSavedTimetable,
   removeCustomEvent,
   updateExistingEvent,
-} from "../../actions";
+} from "../../actions/initActions";
 import { Event, Timetable } from "../../constants/commonTypes";
 
 export interface CustomEventsSlice {
@@ -27,12 +27,10 @@ const customEventsSlice = createSlice({
       state.events = [];
     },
     clearConflictingEvents: (state) => {
-      const clearedEvents = state.events.filter(
-        // @ts-ignore
-        (event) =>
+      state.events = state.events.filter(
+        (event: Event) =>
           event.exists_conflict === undefined || event.exists_conflict === false
       );
-      state.events = clearedEvents;
     },
     receiveCustomEvents: (state, action: PayloadAction<Event[]>) => {
       state.events = action.payload;

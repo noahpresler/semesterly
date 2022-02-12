@@ -37,6 +37,7 @@ const savingTimetableSlice = createSlice({
     },
     changeActiveSavedTimetableName: (state, action: PayloadAction<string>) => {
       state.activeTimetable.name = action.payload;
+      state.upToDate = false;
     },
   },
   extraReducers: (builder) => {
@@ -59,12 +60,7 @@ const savingTimetableSlice = createSlice({
         state.saving = false;
       })
       .addMatcher(
-        isAnyOf(
-          addNewCustomEvent,
-          changeActiveTimetable,
-          removeCustomEvent,
-          updateExistingEvent
-        ),
+        isAnyOf(addNewCustomEvent, changeActiveTimetable, removeCustomEvent),
         (state) => {
           state.upToDate = false;
         }
