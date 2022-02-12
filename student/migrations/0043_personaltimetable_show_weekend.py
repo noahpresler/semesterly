@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student', '0042_student_preferred_name'),
+        ("student", "0042_student_preferred_name"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='personaltimetable',
-            name='show_weekend',
+            model_name="personaltimetable",
+            name="show_weekend",
             field=models.BooleanField(blank=True, default=True),
         ),
     ]

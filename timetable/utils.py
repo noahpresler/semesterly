@@ -29,7 +29,9 @@ Timetable = namedtuple("Timetable", "courses sections has_conflict")
 class DisplayTimetable:
     """Object that represents the frontend's interpretation of a timetable."""
 
-    def __init__(self, slots, has_conflict, show_weekend, name="", events=None, id=None):
+    def __init__(
+        self, slots, has_conflict, show_weekend, name="", events=None, id=None
+    ):
         self.slots = slots
         self.has_conflict = has_conflict
         self.name = name
@@ -52,7 +54,11 @@ class DisplayTimetable:
         ]
         id = timetable.id if isinstance(timetable, PersonalTimetable) else None
         # set show_weekend to False if timetable is not a PersonalTimetable (ex: SharedTimetable)
-        show_weekend = timetable.show_weekend if isinstance(timetable, PersonalTimetable) else False
+        show_weekend = (
+            timetable.show_weekend
+            if isinstance(timetable, PersonalTimetable)
+            else False
+        )
         return DisplayTimetable(
             slots,
             timetable.has_conflict,
@@ -71,7 +77,7 @@ def courses_to_timetables(
     custom_events,
     with_conflicts,
     optional_course_ids,
-    show_weekend
+    show_weekend,
 ):
     all_offerings = courses_to_slots(
         courses, locked_sections, semester, optional_course_ids

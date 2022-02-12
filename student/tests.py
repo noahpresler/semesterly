@@ -67,7 +67,10 @@ class UrlsTest(UrlTestCase):
             "/delete_account/", "helpers.mixins.FeatureFlowView"
         )
         self.assertUrlResolvesToView("/user/events/", "student.views.PersonalEventView")
-        self.assertUrlResolvesToView("/user/timetables/6/preferences/", "student.views.UserTimetablePreferenceView")
+        self.assertUrlResolvesToView(
+            "/user/timetables/6/preferences/",
+            "student.views.UserTimetablePreferenceView",
+        )
 
 
 class UserViewTest(APITestCase):
@@ -270,12 +273,9 @@ class UserTimetableViewTest(APITestCase):
             semester=self.sem,
             student=self.student,
             show_weekend=True,
-            has_conflict=True
+            has_conflict=True,
         )
-        data = {
-            "show_weekend": False,
-            "has_conflict": False
-        }
+        data = {"show_weekend": False, "has_conflict": False}
         endpoint = f"/user/timetables/{timetable.id}/preferences/"
         request = self.factory.put(endpoint, data, format="json")
         get_auth_response(request, self.user, endpoint, pk=timetable.id)

@@ -164,6 +164,7 @@ class PersonalTimetable(timetable_models.Timetable):
     has_conflict = models.BooleanField(blank=True, default=False)
     show_weekend = models.BooleanField(blank=True, default=True)
 
+
 class RegistrationToken(models.Model):
     """A push notification token for Chrome notification via Google Cloud Messaging"""
 
