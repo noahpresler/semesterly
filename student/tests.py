@@ -67,6 +67,7 @@ class UrlsTest(UrlTestCase):
             "/delete_account/", "helpers.mixins.FeatureFlowView"
         )
         self.assertUrlResolvesToView("/user/events/", "student.views.PersonalEventView")
+        self.assertUrlResolvesToView("/user/timetables/6/preferences/", "student.views.UserTimetablePreferenceView")
 
 
 class UserViewTest(APITestCase):
@@ -260,6 +261,27 @@ class UserTimetableViewTest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(PersonalTimetable.objects.filter(id=20).exists())
+
+    def test_update_timetable_preference(self):
+        timetable = PersonalTimetable.objects.create(
+            id=20,
+            name="todelete",
+            school="uoft",
+            semester=self.sem,
+            student=self.student,
+            show_weekend=True,
+            has_conflict=True
+        )
+        data = {
+            "show_weekend": False,
+            "has_conflict": False
+        }
+        endpoint = f"/user/timetables/{timetable.id}/preferences/"
+        request = self.factory.put(endpoint, data, format="json")
+        get_auth_response(request, self.user, endpoint, pk=timetable.id)
+        modified_timetable = PersonalTimetable.objects.get(id=timetable.id)
+        self.assertEqual(modified_timetable.has_conflict, False)
+        self.assertEqual(modified_timetable.show_weekend, False)
 
 
 class ClassmateViewTest(APITestCase):

@@ -20,10 +20,12 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from hashids import Hashids
+from rest_framework.generics import GenericAPIView
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.mixins import UpdateModelMixin
 from decimal import Decimal
 
 from authpipe.utils import check_student_token
@@ -43,7 +45,7 @@ from student.utils import (
     get_student_tts,
 )
 from timetable.models import Semester, Course, Section
-from timetable.serializers import DisplayTimetableSerializer, EventSerializer
+from timetable.serializers import DisplayTimetableSerializer, EventSerializer, PersonalTimeTablePreferencesSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
 from semesterly.settings import get_secret
@@ -328,6 +330,20 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             {"timetables": get_student_tts(student, school, semester)},
             status=status.HTTP_200_OK,
         )
+
+
+class UserTimetablePreferenceView(ValidateSubdomainMixin, RedirectToSignupMixin, GenericAPIView, UpdateModelMixin):
+    """
+    Used to update timetable preferences
+    """
+
+    serializer_class = PersonalTimeTablePreferencesSerializer
+
+    def get_queryset(self):
+        return PersonalTimetable.objects.filter(student__user=self.request.user)
+
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
 
 
 class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
