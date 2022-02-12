@@ -211,7 +211,7 @@ export const createNewTimetable =
   };
 
 export const nullifyTimetable = () => (dispatch) => {
-  dispatch(receiveTimetables([{ slots: []}]));
+  dispatch(receiveTimetables([{ slots: [] }]));
   dispatch(courseSectionsActions.receiveCourseSections({}));
   dispatch(
     changeActiveSavedTimetable({
