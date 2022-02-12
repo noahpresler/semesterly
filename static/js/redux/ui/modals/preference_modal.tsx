@@ -16,7 +16,10 @@ import React, { useEffect, useRef } from "react";
 // @ts-ignore
 import { FadeModal } from "boron-15";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { preferencesActions } from "../../state/slices/preferencesSlice";
+import {
+  preferencesActions,
+  savePreferences,
+} from "../../state/slices/preferencesSlice";
 
 const PreferenceModal = () => {
   const { tryWithConflicts, showWeekend, isModalVisible } = useAppSelector(
@@ -101,7 +104,7 @@ const PreferenceModal = () => {
           <button
             className="btn btn-primary"
             style={{ marginLeft: "auto", marginRight: "auto" }}
-            onClick={() => modal.current.hide()}
+            onClick={onSave}
           >
             Save and Close
           </button>
