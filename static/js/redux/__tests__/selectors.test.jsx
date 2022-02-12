@@ -20,6 +20,7 @@ describe("timetable selectors", () => {
   const timetable = {
     name: "tt_name",
     has_conflict: false,
+    show_weekend: true,
     slots: [
       {
         course: {

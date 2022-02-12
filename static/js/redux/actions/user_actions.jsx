@@ -69,6 +69,7 @@ const getSaveTimetablesRequestBody = (state) => {
     slots: tt.slots,
     events: state.customEvents.events,
     has_conflict: tt.has_conflict,
+    show_weekend: tt.show_weekend,
     semester: getCurrentSemester(state),
     name: state.savingTimetable.activeTimetable.name,
     id: state.savingTimetable.activeTimetable.id,
