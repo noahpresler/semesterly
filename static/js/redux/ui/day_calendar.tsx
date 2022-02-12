@@ -101,15 +101,11 @@ const DayCalendar = (props: DayCalendarProps) => {
   const mod = (n: number, m: number) => ((n % m) + m) % m;
 
   const swipedLeft = () => {
-    setCurrentDay((prev) => 
-      showWeekend ? mod(prev + 1, 7) : mod(prev + 1, 5);
-    );
+    setCurrentDay((prev) => (showWeekend ? mod(prev + 1, 7) : mod(prev + 1, 5)));
   };
 
   const swipedRight = () => {
-    setCurrentDay((prev) =>
-      showWeekend ? mod(prev - 1, 7) : mod(prev - 1, 5);
-    );
+    setCurrentDay((prev) => (showWeekend ? mod(prev - 1, 7) : mod(prev - 1, 5)));
   };
 
   const getTimelineStyle = () => {
