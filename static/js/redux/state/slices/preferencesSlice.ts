@@ -1,32 +1,79 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SearchMetrics } from "../../constants/commonTypes";
+import { AppDispatch, getActiveTimetable, RootState } from "..";
+import { changeActiveSavedTimetable } from "../../actions";
+import { Timetable } from "../../constants/commonTypes";
+import { getTimetablePreferencesEndpoint } from "../../constants/endpoints";
+import Cookie from "js-cookie";
 
 interface PreferencesSliceState {
-  try_with_conflicts: boolean;
+  tryWithConflicts: boolean;
+  showWeekend: boolean;
   isModalVisible: boolean;
 }
 
 const initialState: PreferencesSliceState = {
-  try_with_conflicts: false,
+  tryWithConflicts: false,
+  showWeekend: true,
   isModalVisible: false,
+};
+
+export const savePreferences = (_dispatch: AppDispatch, getState: () => RootState) => {
+  const state = getState();
+  const activeTimetable = getActiveTimetable(state);
+  const preferences = state.preferences;
+  fetch(getTimetablePreferencesEndpoint(activeTimetable.id), {
+    headers: {
+      "X-CSRFToken": Cookie.get("csrftoken"),
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+    body: JSON.stringify({
+      has_conflict: preferences.tryWithConflicts,
+      show_weekend: preferences.showWeekend,
+    }),
+    credentials: "include",
+  });
 };
 
 const preferencesSlice = createSlice({
   name: "preferences",
   initialState,
   reducers: {
-    togglePreferenceModal: (state) => {
-      state.isModalVisible = !state.isModalVisible;
+    showPreferenceModal: (state) => {
+      state.isModalVisible = true;
+    },
+    hidePreferenceModal: (state) => {
+      state.isModalVisible = false;
     },
     toggleConflicts: (state) => {
-      state.try_with_conflicts = !state.try_with_conflicts;
+      state.tryWithConflicts = !state.tryWithConflicts;
     },
     turnConflictsOn: (state) => {
-      state.try_with_conflicts = true;
+      state.tryWithConflicts = true;
+    },
+    toggleShowWeekend: (state) => {
+      state.showWeekend = !state.showWeekend;
     },
     setAllPreferences: (state, { payload }: PayloadAction<PreferencesSliceState>) => {
-      state.try_with_conflicts = payload.try_with_conflicts;
+      state.tryWithConflicts = payload.tryWithConflicts;
+      state.showWeekend = payload.showWeekend;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      changeActiveSavedTimetable,
+      (
+        state,
+        action: PayloadAction<{
+          timetable: Timetable;
+          upToDate: boolean;
+        }>
+      ) => {
+        state.tryWithConflicts = action.payload.timetable.has_conflict;
+        state.showWeekend = action.payload.timetable.show_weekend;
+      }
+    );
   },
 });
 export const preferencesActions = preferencesSlice.actions;

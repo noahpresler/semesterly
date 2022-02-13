@@ -23,6 +23,7 @@ import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
 import { ShareLink } from "./master_slot";
 import { signupModalActions } from "../state/slices/signupModalSlice";
+import { useAppSelector } from "../hooks";
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -32,8 +33,10 @@ type RowProps = {
 };
 
 const Row = (props: RowProps) => {
+  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
+  const days = showWeekend ? DAYS : DAYS.slice(0, 5);
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
-  const dayCells = DAYS.map((day) => (
+  const dayCells = days.map((day) => (
     <CellContainer
       day={day}
       time={props.time}
@@ -53,7 +56,7 @@ const Row = (props: RowProps) => {
 };
 
 type CalendarProps = {
-  togglePreferenceModal: Function;
+  showPreferenceModal: Function;
   triggerSaveCalendarModal: Function;
   isFetchingShareLink: boolean;
   endHour: number;
@@ -303,7 +306,7 @@ const Calendar = (props: CalendarProps) => {
   const preferenceButton = (
     <div className="cal-btn-wrapper">
       <button
-        onClick={() => props.togglePreferenceModal()}
+        onClick={() => props.showPreferenceModal()}
         className="save-timetable"
         data-tip
         data-for="pref-btn-tooltip"
@@ -321,6 +324,9 @@ const Calendar = (props: CalendarProps) => {
       </ReactTooltip>
     </div>
   );
+
+  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
+
   return (
     <div
       className={classnames("calendar fc fc-ltr fc-unthemed week-calendar", {
@@ -363,6 +369,16 @@ const Calendar = (props: CalendarProps) => {
                           <th className="fc-day-header fc-widget-header fc-wed">Wed</th>
                           <th className="fc-day-header fc-widget-header fc-thu">Thu</th>
                           <th className="fc-day-header fc-widget-header fc-fri">Fri</th>
+                          {showWeekend && (
+                            <th className="fc-day-header fc-widget-header fc-sat">
+                              Sat
+                            </th>
+                          )}
+                          {showWeekend && (
+                            <th className="fc-day-header fc-widget-header fc-sun">
+                              Sun
+                            </th>
+                          )}
                         </tr>
                       </thead>
                     </table>
@@ -389,6 +405,12 @@ const Calendar = (props: CalendarProps) => {
                               <td className="fc-day fc-widget-content fc-wed" />
                               <td className="fc-day fc-widget-content fc-thu" />
                               <td className="fc-day fc-widget-content fc-fri" />
+                              {showWeekend && (
+                                <td className="fc-day fc-widget-content fc-sat" />
+                              )}
+                              {showWeekend && (
+                                <td className="fc-day fc-widget-content fc-sun" />
+                              )}
                             </tr>
                           </tbody>
                         </table>
@@ -400,7 +422,9 @@ const Calendar = (props: CalendarProps) => {
                       </div>
                       <div className="fc-timeline" style={timelineStyle} />
                       <div className="fc-content-skeleton">
-                        <SlotManagerContainer days={DAYS} />
+                        <SlotManagerContainer
+                          days={showWeekend ? DAYS : DAYS.slice(0, 5)}
+                        />
                       </div>
                       <hr
                         className="fc-divider fc-widget-header"

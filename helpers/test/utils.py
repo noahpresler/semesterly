@@ -22,9 +22,9 @@ def get_response(request, url, *args):
     return view(request, *args)
 
 
-def get_auth_response(request, user, url, *args):
+def get_auth_response(request, user, url, *args, **kwargs):
     force_authenticate(request, user=user)
     request.user = user
     request.subdomain = "uoft"
     view = resolve(url).func
-    return view(request, *args)
+    return view(request, *args, **kwargs)

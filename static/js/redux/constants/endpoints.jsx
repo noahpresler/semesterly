@@ -28,6 +28,8 @@ export const getSaveTimetableEndpoint = () => "/user/timetables/";
 export const getUpdateEventEndpoint = () => "/user/events/";
 export const getDeleteTimetableEndpoint = (semester, name) =>
   `/user/timetables/${semester.name}/${semester.year}/${name}/`;
+export const getTimetablePreferencesEndpoint = (id) =>
+  `/user/timetables/${id}/preferences/`;
 export const getSaveSettingsEndpoint = () => "/user/settings/";
 export const getClassmatesEndpoint = (semester, courses) =>
   `/user/classmates/${semester.name}/${semester.year}?${$.param({
