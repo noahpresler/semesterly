@@ -107,7 +107,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                 "Thursday": "R",
                 "Friday": "F",
                 "Saturday": "S",
-                "Sunday": "U"
+                "Sunday": "U",
             }
             course_matches = course_matches.filter(
                 reduce(

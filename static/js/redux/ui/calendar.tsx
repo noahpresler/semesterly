@@ -56,7 +56,7 @@ const Row = (props: RowProps) => {
 };
 
 type CalendarProps = {
-  togglePreferenceModal: Function;
+  showPreferenceModal: Function;
   triggerSaveCalendarModal: Function;
   isFetchingShareLink: boolean;
   endHour: number;
@@ -306,7 +306,7 @@ const Calendar = (props: CalendarProps) => {
   const preferenceButton = (
     <div className="cal-btn-wrapper">
       <button
-        onClick={() => props.togglePreferenceModal()}
+        onClick={() => props.showPreferenceModal()}
         className="save-timetable"
         data-tip
         data-for="pref-btn-tooltip"

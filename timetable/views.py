@@ -83,7 +83,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                 custom_events,
                 with_conflicts,
                 opt_course_ids,
-                show_weekend
+                show_weekend,
             )
         ]
 

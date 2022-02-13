@@ -324,9 +324,7 @@ class Slot extends React.Component {
     return (
       <div>
         <StyleRoot>
-          <div className="fc-event-container">
-            {slot}
-          </div>
+          <div className="fc-event-container">{slot}</div>
         </StyleRoot>
       </div>
     );

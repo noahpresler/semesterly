@@ -45,7 +45,11 @@ from student.utils import (
     get_student_tts,
 )
 from timetable.models import Semester, Course, Section
-from timetable.serializers import DisplayTimetableSerializer, EventSerializer, PersonalTimeTablePreferencesSerializer
+from timetable.serializers import (
+    DisplayTimetableSerializer,
+    EventSerializer,
+    PersonalTimeTablePreferencesSerializer,
+)
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
 from semesterly.settings import get_secret
@@ -332,7 +336,9 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         )
 
 
-class UserTimetablePreferenceView(ValidateSubdomainMixin, RedirectToSignupMixin, GenericAPIView, UpdateModelMixin):
+class UserTimetablePreferenceView(
+    ValidateSubdomainMixin, RedirectToSignupMixin, GenericAPIView, UpdateModelMixin
+):
     """
     Used to update timetable preferences
     """

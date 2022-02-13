@@ -21,6 +21,7 @@ const initialState: SavingTimetableSliceState = {
     id: null,
     slots: [],
     has_conflict: null,
+    show_weekend: null,
     avg_rating: null,
     events: [],
   },

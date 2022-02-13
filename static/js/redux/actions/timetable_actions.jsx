@@ -197,12 +197,21 @@ export const createNewTimetable =
   (ttName = "Untitled Schedule") =>
   (dispatch) => {
     dispatch(
-      loadTimetable({ name: ttName, slots: [], events: [], has_conflict: false }, true)
+      loadTimetable(
+        {
+          name: ttName,
+          slots: [],
+          events: [],
+          has_conflict: false,
+          show_weekend: true,
+        },
+        true
+      )
     );
   };
 
 export const nullifyTimetable = () => (dispatch) => {
-  dispatch(receiveTimetables([{ slots: [], has_conflict: false }]));
+  dispatch(receiveTimetables([{ slots: [] }]));
   dispatch(courseSectionsActions.receiveCourseSections({}));
   dispatch(
     changeActiveSavedTimetable({
@@ -211,6 +220,7 @@ export const nullifyTimetable = () => (dispatch) => {
         slots: [],
         events: [],
         has_conflict: false,
+        show_weekend: true,
       },
       upToDate: false,
     })

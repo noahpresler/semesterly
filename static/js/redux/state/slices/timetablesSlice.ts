@@ -28,6 +28,7 @@ interface TimetablesSliceState {
 const emptyTimetable: Timetable = {
   slots: [],
   has_conflict: false,
+  show_weekend: true,
   id: null,
   avg_rating: 0,
   events: [],

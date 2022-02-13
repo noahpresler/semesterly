@@ -51,7 +51,7 @@ const Row = (props: RowProps) => {
 };
 
 type DayCalendarProps = {
-  togglePreferenceModal: Function;
+  showPreferenceModal: Function;
   triggerSaveCalendarModal: Function;
   isFetchingShareLink: boolean;
   endHour: number;
@@ -93,23 +93,19 @@ const DayCalendar = (props: DayCalendarProps) => {
   useEffect(() => {
     if (currentDay === 5 && !showWeekend) {
       setCurrentDay(4);
-    } else if (currentDay == 6 && !showWeekend) {
+    } else if (currentDay === 6 && !showWeekend) {
       setCurrentDay(0);
     }
-  }, [currentDay, showWeekend])
+  }, [currentDay, showWeekend]);
 
   const mod = (n: number, m: number) => ((n % m) + m) % m;
 
   const swipedLeft = () => {
-    setCurrentDay((prev) => {
-      return showWeekend ? mod(prev + 1, 7) : mod(prev + 1, 5);
-    });
+    setCurrentDay((prev) => (showWeekend ? mod(prev + 1, 7) : mod(prev + 1, 5)));
   };
 
   const swipedRight = () => {
-    setCurrentDay((prev) => {
-      return showWeekend ? mod(prev - 1, 7) : mod(prev - 1, 5);
-    });
+    setCurrentDay((prev) => (showWeekend ? mod(prev - 1, 7) : mod(prev - 1, 5)));
   };
 
   const getTimelineStyle = () => {
@@ -206,7 +202,7 @@ const DayCalendar = (props: DayCalendarProps) => {
   );
 
   const preferenceButton = (
-    <button onClick={() => props.togglePreferenceModal()} className="save-timetable">
+    <button onClick={() => props.showPreferenceModal()} className="save-timetable">
       <i className="fa fa-cog" />
     </button>
   );
