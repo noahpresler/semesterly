@@ -21,7 +21,7 @@ interface TimetablesSliceState {
   } | null;
   active: number;
   loadingCachedTT: boolean;
-  lastSlotAdded: number | Object | null;
+  lastCourseAdded: { courseId: number; section: string } | null;
   // either int (course id), object (custom slots state), or null
 }
 
@@ -41,7 +41,7 @@ const initialState: TimetablesSliceState = {
   hovered: null,
   active: 0,
   loadingCachedTT: true,
-  lastSlotAdded: null, // either int (course id), object (custom slots state), or null
+  lastCourseAdded: null, // either int (course id), object (custom slots state), or null
 };
 
 const timetablesSlice = createSlice({
@@ -75,8 +75,11 @@ const timetablesSlice = createSlice({
     unhoverSection: (state) => {
       state.hovered = null;
     },
-    updateLastCourseAdded: (state, action: PayloadAction<number | Object | null>) => {
-      state.lastSlotAdded = action.payload;
+    updateLastCourseAdded: (
+      state,
+      action: PayloadAction<{ courseId: number; section: string }>
+    ) => {
+      state.lastCourseAdded = action.payload;
     },
   },
   extraReducers: (builder) => {

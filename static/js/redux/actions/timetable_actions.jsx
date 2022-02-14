@@ -336,7 +336,7 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
  locked. Otherwise, no section is locked.
  */
 export const addOrRemoveCourse =
-  (newCourseId, lockingSection = "") =>
+  (courseId, section = "") =>
   (dispatch, getState) => {
     let state = getState();
     if (state.timetables.isFetching) {
@@ -344,12 +344,12 @@ export const addOrRemoveCourse =
     }
 
     const removing =
-      state.courseSections.objects[newCourseId] !== undefined && lockingSection === "";
+      state.courseSections.objects[courseId] !== undefined && section === "";
     let reqBody = getBaseReqBody(state);
-    if (state.optionalCourses.courses.some((c) => c === newCourseId)) {
+    if (state.optionalCourses.courses.some((c) => c === courseId)) {
       dispatch({
         type: ActionTypes.REMOVE_OPTIONAL_COURSE_BY_ID,
-        courseId: newCourseId,
+        courseId,
       });
       reqBody = getBaseReqBody(state);
     }
@@ -357,7 +357,7 @@ export const addOrRemoveCourse =
     state = getState();
     if (removing) {
       const updatedCourseSections = Object.assign({}, state.courseSections.objects);
-      delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
+      delete updatedCourseSections[courseId]; // remove it from courseSections.objects
       reqBody.courseSections = updatedCourseSections;
       Object.assign(reqBody, {
         optionCourses: state.optionalCourses.courses,
@@ -366,13 +366,13 @@ export const addOrRemoveCourse =
       });
     } else {
       // adding a course
-      dispatch(timetablesActions.updateLastCourseAdded(newCourseId));
+      dispatch(timetablesActions.updateLastCourseAdded({ courseId, section }));
       state = getState();
       Object.assign(reqBody, {
         updated_courses: [
           {
-            course_id: newCourseId,
-            section_codes: [lockingSection],
+            course_id: courseId,
+            section_codes: [section],
           },
         ],
         optionCourses: state.optionalCourses.courses,
@@ -405,15 +405,11 @@ const refetchTimetables = () => (dispatch, getState) => {
 export const addLastAddedCourse = () => (dispatch, getState) => {
   const state = getState();
   // last timetable change was a custom event edit, not add
-  if (state.timetables.lastSlotAdded === null) {
+  if (state.timetables.lastCourseAdded === null) {
     return;
   }
-  if (typeof state.timetables.lastSlotAdded === "object") {
-    dispatch(customEventsActions.receiveCustomEvents(state.timetables.lastSlotAdded));
-    dispatch(refetchTimetables());
-  } else if (typeof state.timetables.lastSlotAdded === "number") {
-    dispatch(addOrRemoveCourse(state.timetables.lastSlotAdded));
-  }
+  const { courseId, section } = state.timetables.lastCourseAdded;
+  dispatch(addOrRemoveCourse(courseId, section));
 };
 
 export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
