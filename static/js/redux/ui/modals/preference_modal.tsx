@@ -16,10 +16,7 @@ import React, { useEffect, useRef } from "react";
 // @ts-ignore
 import { FadeModal } from "boron-15";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import {
-  preferencesActions,
-  savePreferences,
-} from "../../state/slices/preferencesSlice";
+import { preferencesActions } from "../../state/slices/preferencesSlice";
 import { saveLocalPreferences } from "../../util";
 
 const PreferenceModal = () => {
@@ -54,7 +51,7 @@ const PreferenceModal = () => {
 
   const onSave = () => {
     if (isLoggedIn) {
-      dispatch(savePreferences);
+      dispatch(preferencesActions.savePreferences());
     } else {
       saveLocalPreferences({ tryWithConflicts, showWeekend });
     }
