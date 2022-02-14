@@ -17,7 +17,7 @@ import React from "react";
 import DayCalendarContainer from "./containers/day_calendar_container";
 import CalendarContainer from "./containers/calendar_container";
 import AlertBox from "./alert_box";
-import ConflictAlertContainer from "./alerts/conflict_alert_container";
+import ConflictAlert from "./alerts/conflict_alert";
 import TimetableExistsAlertContainer from "./alerts/timetable_exists_alert_container";
 import ChangeSemesterAlertContainer from "./alerts/change_semester_alert_container";
 import NewTimetableAlertContainer from "./alerts/new_timetable_alert_container";
@@ -97,7 +97,7 @@ class Semesterly extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps !== this.props) {
       if (nextProps.alertConflict && !this.props.alertConflict) {
-        this.showAlert(<ConflictAlertContainer />, "info", 10000);
+        this.showAlert(<ConflictAlert />, "info", 10000);
       } else if (nextProps.alertTimetableExists && !this.props.alertTimetableExists) {
         this.showAlert(<TimetableExistsAlertContainer />, "info", 10000);
       } else if (nextProps.alertChangeSemester && !this.props.alertChangeSemester) {
