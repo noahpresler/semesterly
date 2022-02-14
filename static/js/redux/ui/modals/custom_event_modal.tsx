@@ -19,6 +19,7 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { updateCustomSlot } from "../../actions";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { customEventsActions } from "../../state/slices/customEventsSlice";
+import { DAYS } from "../../constants/constants";
 
 const CustomEventModal = () => {
   const isVisible = useAppSelector((state) => state.customEvents.isModalVisible);
@@ -241,13 +242,16 @@ const CustomEventModal = () => {
     </div>
   );
 
+  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
+  const days = showWeekend ? DAYS : DAYS.slice(0, 5);
+
   const editCustomEventForm = (
     <form className="edit-custom-event-form" onSubmit={onCustomEventSave}>
       <div className="event-form-items">
         {window.innerWidth > 600 ? eventLabels : null}
         <div className="event-text-inputs">
           <div className="event-days">
-            {["M", "T", "W", "R", "F", "S", "U"].map((day) => {
+            {days.map((day) => {
               if (day === "R") {
                 return createDayButton(day, "Th");
               } else if (day === "U") {
