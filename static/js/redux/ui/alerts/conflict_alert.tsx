@@ -31,6 +31,7 @@ const ConflictAlert = () => {
 
   const handleClick = () => {
     dispatch(preferencesActions.toggleConflicts());
+    dispatch(preferencesActions.savePreferences());
     dispatch(addLastAddedCourse());
     dispatch(alertsActions.dismissAlertConflict());
   };

@@ -236,7 +236,6 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
     def create_or_update_timetable(self, request):
         school = request.subdomain
-        has_conflict = request.data["has_conflict"]
         name = request.data["name"]
         semester, _ = Semester.objects.get_or_create(**request.data["semester"])
         student = Student.objects.get(user=request.user)
@@ -256,7 +255,7 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             else PersonalTimetable.objects.get(id=tt_id)
         )
         slots = request.data["slots"]
-        self.update_tt(personal_timetable, name, has_conflict, slots)
+        self.update_tt(personal_timetable, name, slots)
         self.update_events(personal_timetable, request.data["events"])
 
         response = {
@@ -270,9 +269,8 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         )
         return Response(response, status=response_status)
 
-    def update_tt(self, tt, new_name, new_has_conflict, new_slots):
+    def update_tt(self, tt, new_name, new_slots):
         tt.name = new_name
-        tt.has_conflict = new_has_conflict
 
         tt.courses.clear()
         tt.sections.clear()
