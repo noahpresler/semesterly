@@ -36,13 +36,9 @@ const ConflictAlert = () => {
     dispatch(alertsActions.dismissAlertConflict());
   };
 
-  const addedItem = useAppSelector((state) =>
-    typeof state.timetables.lastSlotAdded === "string" ? "course" : "event"
-  );
-
   return (
     <div className="conflict-alert">
-      Adding that {addedItem} causes a conflict!
+      Adding that course causes a conflict!
       <button onClick={() => handleClick()} className="conflict-alert-btn">
         Allow Conflicts!
       </button>

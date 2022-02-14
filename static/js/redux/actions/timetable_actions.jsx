@@ -49,8 +49,6 @@ import { signupModalActions } from "../state/slices/signupModalSlice";
 import { convertToMinutes } from "../ui/slotUtils";
 import { preferencesActions } from "../state/slices/preferencesSlice";
 
-let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
-
 export const setActiveTimetable = (newActive) => (dispatch) => {
   dispatch(changeActiveTimetable(newActive));
   dispatch(autoSave());
@@ -418,15 +416,6 @@ export const addLastAddedCourse = () => (dispatch, getState) => {
   }
 };
 
-const autoFetch = () => (dispatch, getState) => {
-  const state = getState();
-  clearTimeout(customEventUpdateTimer);
-  customEventUpdateTimer = setTimeout(() => {
-    dispatch(timetablesActions.updateLastCourseAdded(state.customEvents));
-    dispatch(refetchTimetables());
-  }, 250);
-};
-
 export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
   dispatch(
     addNewCustomEvent({
@@ -441,12 +430,12 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
       preview,
     })
   );
-  dispatch(autoFetch());
+  dispatch(refetchTimetables());
 };
 
 export const removeCustomSlot = (id) => (dispatch) => {
   dispatch(removeCustomEvent(id));
-  dispatch(autoFetch());
+  dispatch(refetchTimetables());
 };
 
 function isNewTimeLessThan10Minutes(timeStart, timeEnd) {
