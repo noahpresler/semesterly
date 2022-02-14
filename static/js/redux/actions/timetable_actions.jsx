@@ -101,7 +101,6 @@ export const fetchTimetables =
           // user wasn't removing or refetching for custom events
           // (i.e. was adding a course/section), but we got no timetables back.
           // therefore course added by the user resulted in a conflict
-          dispatch(customEventsActions.clearConflictingEvents());
           dispatch(alertConflict());
         }
         return json;
