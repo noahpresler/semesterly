@@ -13,7 +13,7 @@ GNU General Public License for more details.
 */
 
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppDispatch } from "../../hooks";
 import { alertsActions } from "../../state/slices";
 import { preferencesActions } from "../../state/slices/preferencesSlice";
 import { addLastAddedCourse } from "../../actions/timetable_actions";
@@ -31,7 +31,6 @@ const ConflictAlert = () => {
 
   const handleClick = () => {
     dispatch(preferencesActions.toggleConflicts());
-    dispatch(preferencesActions.savePreferences());
     dispatch(addLastAddedCourse());
     dispatch(alertsActions.dismissAlertConflict());
   };

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppDispatch, getActiveTimetable, RootState } from "..";
+import { AppDispatch, RootState } from "..";
 import { changeActiveSavedTimetable } from "../../actions";
 import { Timetable } from "../../constants/commonTypes";
 import { getTimetablePreferencesEndpoint } from "../../constants/endpoints";
@@ -20,7 +20,7 @@ const initialState: PreferencesSliceState = {
 export const savePreferences =
   () => (_dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const activeTimetable = getActiveTimetable(state);
+    const activeTimetable = state.savingTimetable.activeTimetable;
     const preferences = state.preferences;
     fetch(getTimetablePreferencesEndpoint(activeTimetable.id), {
       headers: {
