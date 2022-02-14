@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppDispatch, getActiveTimetable, RootState } from "..";
+import { AppDispatch, RootState } from "..";
 import { changeActiveSavedTimetable } from "../../actions";
 import { Timetable } from "../../constants/commonTypes";
 import { getTimetablePreferencesEndpoint } from "../../constants/endpoints";
@@ -17,24 +17,25 @@ const initialState: PreferencesSliceState = {
   isModalVisible: false,
 };
 
-export const savePreferences = (_dispatch: AppDispatch, getState: () => RootState) => {
-  const state = getState();
-  const activeTimetable = getActiveTimetable(state);
-  const preferences = state.preferences;
-  fetch(getTimetablePreferencesEndpoint(activeTimetable.id), {
-    headers: {
-      "X-CSRFToken": Cookie.get("csrftoken"),
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    method: "PUT",
-    body: JSON.stringify({
-      has_conflict: preferences.tryWithConflicts,
-      show_weekend: preferences.showWeekend,
-    }),
-    credentials: "include",
-  });
-};
+export const savePreferences =
+  () => (_dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState();
+    const activeTimetable = state.savingTimetable.activeTimetable;
+    const preferences = state.preferences;
+    fetch(getTimetablePreferencesEndpoint(activeTimetable.id), {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken"),
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify({
+        has_conflict: preferences.tryWithConflicts,
+        show_weekend: preferences.showWeekend,
+      }),
+      credentials: "include",
+    });
+  };
 
 const preferencesSlice = createSlice({
   name: "preferences",
@@ -76,6 +77,6 @@ const preferencesSlice = createSlice({
     );
   },
 });
-export const preferencesActions = preferencesSlice.actions;
+export const preferencesActions = { ...preferencesSlice.actions, savePreferences };
 
 export default preferencesSlice.reducer;

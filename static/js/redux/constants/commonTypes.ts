@@ -64,7 +64,6 @@ export interface Event {
   credits: string;
   id: number;
   preview: boolean;
-  exists_conflict?: boolean;
   custom?: boolean;
   key?: number;
 }
