@@ -36,7 +36,6 @@ import peerModal from "./peer_modal_reducer";
 import friends from "./friends_reducer";
 import notificationToken from "./notification_token_reducer";
 import integrationModal from "./integration_modal_reducer";
-import integrations from "./integrations_reducer";
 import saveCalendarModal from "./slices/saveCalendarModalSlice";
 import termsOfServiceModal from "./slices/termsOfServiceModalSlice";
 import termsOfServiceBanner from "./slices/termOfServiceBannerSlice";
@@ -56,7 +55,6 @@ export const reducers = {
   explorationModal,
   friends,
   integrationModal,
-  integrations,
   notificationToken,
   optionalCourses,
   peerModal,
