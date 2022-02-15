@@ -28,7 +28,7 @@ import ui from "./slices/uiSlice";
 import userInfo, { isUserInfoIncomplete } from "./slices/userInfoSlice";
 import savingTimetable from "./slices/savingTimetableSlice";
 import classmates from "./slices/classmatesSlice";
-import optionalCourses from "./optional_courses_reducer";
+import optionalCourses from "./slices/optionalCoursesSlice";
 import explorationModal, * as fromExplorationModal from "./slices/explorationModalSlice";
 import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
