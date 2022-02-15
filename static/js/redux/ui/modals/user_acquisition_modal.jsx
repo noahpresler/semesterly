@@ -68,18 +68,18 @@ const UserAcquisitionModal = () => {
             document.body.appendChild(link);
             link.click();
           }}
-          disabled
-          // TODO: remove "disable" and p tag below once FB issue is resolved
+          // disabled
+          // used disable in case this needs a temp block
         >
           <span className="img-icon">
             <i className="fa fa-facebook" />
           </span>
           <span>Continue with Facebook</span>
         </button>
-        {/* <p className="method-details">Allows the option to friends in your classes.</p> */}
-        <p className="method-details">
+        <p className="method-details">Allows the option to friends in your classes.</p>
+        {/* <p className="method-details">
           Temporarily Unavailable. Please use JHED Login until further notice.
-        </p>
+        </p> */}
         <br />
 
         <button
