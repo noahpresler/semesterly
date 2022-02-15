@@ -300,8 +300,6 @@ const UserSettingsModal = () => {
             document.body.appendChild(link);
             link.click();
           }}
-          // disabled
-          // use disabled for temp blocking
         >
           <span className="img-icon">
             <i className="fa fa-facebook" />
@@ -313,7 +311,6 @@ const UserSettingsModal = () => {
           in your classes! Only friends in your course will see your name – your
           information is never shared with any other party.
         </p>
-        {/* <p className="disclaimer ctr">Temporarily Unavailable.</p> */}
       </div>
     ) : null;
 
