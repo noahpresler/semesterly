@@ -20,10 +20,12 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from hashids import Hashids
+from rest_framework.generics import GenericAPIView
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.mixins import UpdateModelMixin
 from decimal import Decimal
 
 from authpipe.utils import check_student_token
@@ -43,7 +45,11 @@ from student.utils import (
     get_student_tts,
 )
 from timetable.models import Semester, Course, Section
-from timetable.serializers import DisplayTimetableSerializer, EventSerializer
+from timetable.serializers import (
+    DisplayTimetableSerializer,
+    EventSerializer,
+    PersonalTimeTablePreferencesSerializer,
+)
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
 from semesterly.settings import get_secret
@@ -230,7 +236,6 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
     def create_or_update_timetable(self, request):
         school = request.subdomain
-        has_conflict = request.data["has_conflict"]
         name = request.data["name"]
         semester, _ = Semester.objects.get_or_create(**request.data["semester"])
         student = Student.objects.get(user=request.user)
@@ -250,7 +255,7 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             else PersonalTimetable.objects.get(id=tt_id)
         )
         slots = request.data["slots"]
-        self.update_tt(personal_timetable, name, has_conflict, slots)
+        self.update_tt(personal_timetable, name, slots)
         self.update_events(personal_timetable, request.data["events"])
 
         response = {
@@ -264,9 +269,8 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         )
         return Response(response, status=response_status)
 
-    def update_tt(self, tt, new_name, new_has_conflict, new_slots):
+    def update_tt(self, tt, new_name, new_slots):
         tt.name = new_name
-        tt.has_conflict = new_has_conflict
 
         tt.courses.clear()
         tt.sections.clear()
@@ -328,6 +332,22 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             {"timetables": get_student_tts(student, school, semester)},
             status=status.HTTP_200_OK,
         )
+
+
+class UserTimetablePreferenceView(
+    ValidateSubdomainMixin, RedirectToSignupMixin, GenericAPIView, UpdateModelMixin
+):
+    """
+    Used to update timetable preferences
+    """
+
+    serializer_class = PersonalTimeTablePreferencesSerializer
+
+    def get_queryset(self):
+        return PersonalTimetable.objects.filter(student__user=self.request.user)
+
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
 
 
 class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):

@@ -162,6 +162,7 @@ class PersonalTimetable(timetable_models.Timetable):
     student = models.ForeignKey(Student, on_delete=models.deletion.CASCADE)
     last_updated = models.DateTimeField(auto_now=True)
     has_conflict = models.BooleanField(blank=True, default=False)
+    show_weekend = models.BooleanField(blank=True, default=True)
 
 
 class RegistrationToken(models.Model):

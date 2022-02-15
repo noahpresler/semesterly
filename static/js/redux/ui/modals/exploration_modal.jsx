@@ -468,7 +468,15 @@ class ExplorationModal extends React.Component {
           </div>
           {filters}
           <Filter
-            results={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]}
+            results={[
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday",
+            ]}
             filterType={"times"}
             add={this.addDayForTimesFilter}
             show={this.state.show_times}

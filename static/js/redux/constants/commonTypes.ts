@@ -64,7 +64,6 @@ export interface Event {
   credits: string;
   id: number;
   preview: boolean;
-  exists_conflict?: boolean;
   custom?: boolean;
   key?: number;
 }
@@ -76,6 +75,7 @@ export interface Timetable {
   id: number;
   slots: Slot[];
   has_conflict: boolean;
+  show_weekend: boolean;
   name: string;
   avg_rating: number;
   events: Event[];

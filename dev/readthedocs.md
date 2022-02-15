@@ -9,7 +9,7 @@ answer the following questions.
 
 3. How do I get a terminal running in my docker container?
 
-4. Where do I store data I don’t want to commit?
+4. Where do I store data such as passwords or secrets that I don’t want to commit?
 
 5. What is our stack?
 

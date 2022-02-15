@@ -18,9 +18,9 @@ def get_default_tt_request():
         "numOptionCourses": 0,
         "optionCourses": [],
         "preferences": {
-            "try_with_conflicts": False,
+            "tryWithConflicts": False,
         },
-        "try_with_conflicts": False,
+        "tryWithConflicts": False,
         "school": "uoft",
         "semester": {"name": "Fall", "year": "2016"},
         "updated_courses": [],

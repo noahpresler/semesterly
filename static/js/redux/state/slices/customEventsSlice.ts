@@ -26,12 +26,6 @@ const customEventsSlice = createSlice({
     clearCustomEvents: (state) => {
       state.events = [];
     },
-    clearConflictingEvents: (state) => {
-      state.events = state.events.filter(
-        (event: Event) =>
-          event.exists_conflict === undefined || event.exists_conflict === false
-      );
-    },
     receiveCustomEvents: (state, action: PayloadAction<Event[]>) => {
       state.events = action.payload;
     },

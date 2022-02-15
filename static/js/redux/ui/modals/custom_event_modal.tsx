@@ -19,6 +19,7 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { updateCustomSlot } from "../../actions";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { customEventsActions } from "../../state/slices/customEventsSlice";
+import { DAYS } from "../../constants/constants";
 
 const CustomEventModal = () => {
   const isVisible = useAppSelector((state) => state.customEvents.isModalVisible);
@@ -228,24 +229,36 @@ const CustomEventModal = () => {
     />
   );
 
+  const eventLabels = (
+    <div className="event-labels">
+      {createLabel("event-days", "Day:")}
+      {createLabel("event-name", "Name:")}
+      {createLabel("event-location", "Location:")}
+      {createLabel("event-color", "Color:")}
+      {eventColorPresets}
+      {createLabel("event-start-time", "Start Time:")}
+      {createLabel("event-end-time", "End Time:")}
+      {createLabel("event-credits", "Credits:")}
+    </div>
+  );
+
+  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
+  const days = showWeekend ? DAYS : DAYS.slice(0, 5);
+
   const editCustomEventForm = (
     <form className="edit-custom-event-form" onSubmit={onCustomEventSave}>
       <div className="event-form-items">
-        <div className="event-labels">
-          {createLabel("event-days", "Day:")}
-          {createLabel("event-name", "Name:")}
-          {createLabel("event-location", "Location:")}
-          {createLabel("event-color", "Color:")}
-          {eventColorPresets}
-          {createLabel("event-start-time", "Start Time:")}
-          {createLabel("event-end-time", "End Time:")}
-          {createLabel("event-credits", "Credits:")}
-        </div>
+        {window.innerWidth > 600 ? eventLabels : null}
         <div className="event-text-inputs">
           <div className="event-days">
-            {["M", "T", "W", "R", "F"].map((day) =>
-              day !== "R" ? createDayButton(day) : createDayButton(day, "Th")
-            )}
+            {days.map((day) => {
+              if (day === "R") {
+                return createDayButton(day, "Th");
+              } else if (day === "U") {
+                return createDayButton(day, "Su");
+              }
+              return createDayButton(day);
+            })}
           </div>
           {createTextInput(
             "event-name",
@@ -311,6 +324,7 @@ const CustomEventModal = () => {
       onHide={() => {
         dispatch(customEventsActions.hideCustomEventsModal());
       }}
+      modalStyle={{ width: "100%", maxWidth: "600px" }}
     >
       {modalHeader}
       {editCustomEventForm}
