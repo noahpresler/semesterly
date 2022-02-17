@@ -74,8 +74,4 @@ export const react = (cid, title) => (dispatch) => {
     });
 };
 
-export const toggleIntegrationModal = () => ({
-  type: ActionTypes.TOGGLE_INTEGRATION_MODAL,
-});
-
 export const togglePeerModal = () => ({ type: ActionTypes.TOGGLE_PEER_MODAL });

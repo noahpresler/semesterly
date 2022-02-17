@@ -46,6 +46,7 @@ import {
   closeTermsOfServiceModal,
   triggerTermsOfServiceModal,
 } from "../state/slices/termsOfServiceModalSlice";
+import { initIntegrationModal } from "../state/slices/integrationModalSlice";
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
@@ -427,12 +428,13 @@ export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
     credentials: "include",
     method: "GET",
   }).then((response) => {
-    dispatch({
-      type: ActionTypes.OPEN_INTEGRATION_MODAL,
-      enabled: response.status === 200,
-      id: courseID,
-      integration_id: integrationID,
-    });
+    dispatch(
+      initIntegrationModal({
+        enabled: response.status === 200,
+        id: courseID,
+        integration_id: integrationID,
+      })
+    );
   });
 };
 

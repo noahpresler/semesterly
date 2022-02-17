@@ -60,7 +60,7 @@ class IntegrationModal extends React.Component {
         }}
         className="integration-modal narrow-modal"
         modalStyle={modalStyle}
-        onHide={this.props.toggleIntegrationModal}
+        onHide={() => this.props.toggleIntegrationModal()}
       >
         <div className="integration-modal__wrapper">
           <div className="integration-logo" style={integrationLogo} />
