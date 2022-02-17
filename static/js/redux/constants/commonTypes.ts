@@ -1,7 +1,5 @@
 // This file stores typescript types used by both react and redux
 
-import { string } from "prop-types";
-
 export type Day = "M" | "T" | "W" | "R" | "F";
 
 export interface Semester {
@@ -40,6 +38,10 @@ export interface Section {
   semester: Semester;
   waitlist: number;
   waitlist_size: number;
+}
+
+export interface EntitySection extends Omit<Section, "offering_set"> {
+  offering_set: number[];
 }
 
 /**
@@ -155,6 +157,10 @@ export interface DenormalizedSlot {
   offerings: Offering[];
   is_optional: boolean;
   is_locked: boolean;
+}
+
+export interface DenormalizedCourse extends Omit<Course, "sections"> {
+  sections: Section[];
 }
 
 export interface TermOfServiceAgreement {
