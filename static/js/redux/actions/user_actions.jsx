@@ -46,6 +46,7 @@ import {
   closeTermsOfServiceModal,
   triggerTermsOfServiceModal,
 } from "../state/slices/termsOfServiceModalSlice";
+import { timetablesActions } from "../state/slices/timetablesSlice";
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
@@ -275,8 +276,9 @@ export const saveSettings = (callback) => async (dispatch, getState) => {
   }
 };
 
-export const getUserSavedTimetables = (semester) => (dispatch) => {
+export const getUserSavedTimetables = (semester) => (dispatch, getState) => {
   dispatch(userInfoActions.requestSaveUserInfo());
+  dispatch(timetablesActions.requestTimetables());
   fetch(getLoadSavedTimetablesEndpoint(semester), {
     credentials: "include",
   })
