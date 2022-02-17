@@ -277,7 +277,6 @@ export const saveSettings = (callback) => async (dispatch, getState) => {
 };
 
 export const getUserSavedTimetables = (semester) => (dispatch, getState) => {
-  const state = getState();
   dispatch(userInfoActions.requestSaveUserInfo());
   dispatch(timetablesActions.requestTimetables());
   fetch(getLoadSavedTimetablesEndpoint(semester), {

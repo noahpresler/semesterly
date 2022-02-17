@@ -84,9 +84,6 @@ const timetablesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(updateSemester, (state) => {
-        state.isFetching = false;
-      })
       .addCase(receiveCourses, (state) => {
         state.isFetching = false;
       })
