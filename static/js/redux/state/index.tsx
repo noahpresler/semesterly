@@ -34,7 +34,7 @@ import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
 import peerModal from "./slices/peerModalSlice";
 import friends from "./slices/friendsSlice";
-import notificationToken from "./notification_token_reducer";
+import notificationToken from "./slices/notificationTokenSlice";
 import integrationModal from "./slices/integrationModalSlice";
 import saveCalendarModal from "./slices/saveCalendarModalSlice";
 import termsOfServiceModal from "./slices/termsOfServiceModalSlice";

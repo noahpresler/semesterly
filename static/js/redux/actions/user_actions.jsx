@@ -49,6 +49,7 @@ import {
 import { initIntegrationModal } from "../state/slices/integrationModalSlice";
 import { peerModalLoaded, peerModalLoading } from "../state/slices/peerModalSlice";
 import { receiveFriends, requestFriends } from "../state/slices/friendsSlice";
+import { registerToken, unregisterToken } from "../state/slices/notificationTokenSlice";
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
@@ -334,9 +335,7 @@ export const sendRegistrationToken = (token) => (dispatch) => {
     credentials: "include",
   }).then((response) => {
     if (response.status === 201) {
-      dispatch({
-        type: ActionTypes.TOKEN_REGISTERED,
-      });
+      dispatch(registerToken());
     }
   });
 };
@@ -365,9 +364,7 @@ export const isRegistered = () => (dispatch) => {
       .then((reg) =>
         reg.pushManager.getSubscription().then((sub) => {
           if (sub) {
-            dispatch({
-              type: ActionTypes.TOKEN_REGISTERED,
-            });
+            dispatch(registerToken());
             return true;
           }
           return null;
@@ -388,9 +385,7 @@ export const sendRegistrationTokenForDeletion = (token) => (dispatch) => {
     credentials: "include",
   }).then((response) => {
     if (response.status === 204) {
-      dispatch({
-        type: ActionTypes.UNREGISTER_TOKEN,
-      });
+      dispatch(unregisterToken());
     }
   });
 };
