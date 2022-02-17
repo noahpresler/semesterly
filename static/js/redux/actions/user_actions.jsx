@@ -48,21 +48,13 @@ import {
 } from "../state/slices/termsOfServiceModalSlice";
 import { initIntegrationModal } from "../state/slices/integrationModalSlice";
 import { peerModalLoaded, peerModalLoading } from "../state/slices/peerModalSlice";
+import { receiveFriends, requestFriends } from "../state/slices/friendsSlice";
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
 
 export const receiveClassmates = (json) => (dispatch) =>
   dispatch(classmatesActions.classmatesReceived(json));
-
-export const getFriends = (json) => ({
-  type: ActionTypes.FRIENDS_RECEIVED,
-  peers: json,
-});
-
-export const requestFriends = () => ({
-  type: ActionTypes.REQUEST_FRIENDS,
-});
 
 const getSaveTimetablesRequestBody = (state) => {
   const tt = getActiveTimetable(state);
@@ -308,7 +300,7 @@ export const fetchFriends = () => (dispatch, getState) => {
   })
     .then((response) => response.json())
     .then((json) => {
-      dispatch(getFriends(json));
+      dispatch(receiveFriends(json));
       dispatch(peerModalLoaded());
     });
 };

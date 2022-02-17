@@ -17,6 +17,7 @@ import * as ActionTypes from "../constants/actionTypes";
 const friends = (state = { peers: [], isFetching: false }, action) => {
   switch (action.type) {
     case ActionTypes.FRIENDS_RECEIVED:
+      console.log(action.peers);
       return Object.assign({}, state, { peers: action.peers, isFetching: false });
     case ActionTypes.REQUEST_FRIENDS:
       return Object.assign({}, state, { isFetching: true });

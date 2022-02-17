@@ -33,7 +33,7 @@ import explorationModal, * as fromExplorationModal from "./slices/explorationMod
 import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
 import peerModal from "./slices/peerModalSlice";
-import friends from "./friends_reducer";
+import friends from "./slices/friendsSlice";
 import notificationToken from "./notification_token_reducer";
 import integrationModal from "./slices/integrationModalSlice";
 import saveCalendarModal from "./slices/saveCalendarModalSlice";
