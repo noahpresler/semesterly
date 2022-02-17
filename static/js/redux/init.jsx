@@ -148,9 +148,6 @@ const handleFlows = (featureFlow) => (dispatch) => {
         dispatch(userInfoActions.overrideSettingsShow(true));
       }
       break;
-    case "EXPORT_SIS_TIMETABLE":
-      dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
-      break;
     case "DELETE_ACCOUNT":
       dispatch(userInfoActions.overrideSettingsShow(true));
       break;

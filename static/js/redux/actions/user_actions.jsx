@@ -85,10 +85,6 @@ export const lockActiveSections = (timetable) => {
   return courseSections;
 };
 
-export const requestMostClassmates = () => ({
-  type: ActionTypes.REQUEST_MOST_CLASSMATES,
-});
-
 export const fetchMostClassmatesCount = (timetable) => (dispatch, getState) => {
   const state = getState();
   const courseIds = uniq(timetable.slots.map((s) => s.course));
@@ -97,7 +93,6 @@ export const fetchMostClassmatesCount = (timetable) => (dispatch, getState) => {
     return;
   }
   const semester = getCurrentSemester(state);
-  dispatch(requestMostClassmates());
   fetch(getMostClassmatesCountEndpoint(semester, courseIds), {
     credentials: "include",
     method: "GET",

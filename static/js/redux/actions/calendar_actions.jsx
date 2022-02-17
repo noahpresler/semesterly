@@ -98,7 +98,6 @@ export const fetchSISTimetableData = () => (dispatch, getState) => {
       sections,
     },
   };
-  dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
   return sisData;
 };
 
