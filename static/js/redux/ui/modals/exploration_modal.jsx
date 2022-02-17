@@ -91,9 +91,7 @@ class ExplorationModal extends React.Component {
       times: prevState.times,
       levels: prevState.levels,
     };
-    if (!isEqual(filters, prevFilters)) {
-      this.props.clearPagination();
-    }
+
     $(".exp-search-results").scroll(() => {
       const expSearchResultsDiv = $(".exp-search-results");
       const scrollPercent =
@@ -105,7 +103,6 @@ class ExplorationModal extends React.Component {
         this.state.hasUpdatedCourses
       ) {
         this.setState({ hasUpdatedCourses: false });
-        this.props.paginate();
         this.fetchAdvancedSearchResultsWrapper();
       }
     });
@@ -417,7 +414,6 @@ class ExplorationModal extends React.Component {
               }}
               placeholder={`Searching ${this.props.semesterName}`}
               onInput={() => {
-                this.props.clearPagination();
                 this.fetchAdvancedSearchResultsWrapper();
               }}
             />
@@ -537,12 +533,10 @@ ExplorationModal.propTypes = {
   addOrRemoveOptionalCourse: PropTypes.func.isRequired,
   advancedSearchResults: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse)
     .isRequired,
-  clearPagination: PropTypes.func.isRequired,
   active: PropTypes.number.isRequired,
   fetchAdvancedSearchResults: PropTypes.func.isRequired,
   fetchCourseClassmates: PropTypes.func.isRequired,
   hasHoveredResult: PropTypes.bool.isRequired,
-  paginate: PropTypes.func.isRequired,
   isVisible: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   hideExplorationModal: PropTypes.func.isRequired,

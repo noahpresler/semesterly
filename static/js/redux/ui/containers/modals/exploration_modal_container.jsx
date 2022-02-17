@@ -20,9 +20,7 @@ import {
 } from "../../../state";
 import ExplorationModal from "../../modals/exploration_modal";
 import {
-  clearAdvancedSearchPagination,
   fetchAdvancedSearchResults,
-  paginateAdvancedSearchResults,
   setAdvancedSearchResultIndex,
 } from "../../../actions/search_actions";
 import {
@@ -68,8 +66,6 @@ const ExplorationModalContainer = connect(mapStateToProps, {
   addOrRemoveOptionalCourse,
   unHoverSection: timetablesActions.unhoverSection,
   addOrRemoveCourse,
-  paginate: paginateAdvancedSearchResults,
-  clearPagination: clearAdvancedSearchPagination,
   setAdvancedSearchResultIndex,
 })(ExplorationModal);
 

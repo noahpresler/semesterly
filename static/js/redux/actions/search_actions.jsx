@@ -119,14 +119,6 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
     });
 };
 
-export const paginateAdvancedSearchResults = () => ({
-  type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS,
-});
-
-export const clearAdvancedSearchPagination = () => ({
-  type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION,
-});
-
 export const setAdvancedSearchResultIndex = (idx, courseId) => (dispatch) => {
   dispatch(explorationModalActions.setActiveAdvancedSearchResult(idx));
   dispatch(fetchCourseClassmates(courseId));
