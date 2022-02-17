@@ -1,5 +1,7 @@
 // This file stores typescript types used by both react and redux
 
+import { string } from "prop-types";
+
 export type Day = "M" | "T" | "W" | "R" | "F";
 
 export interface Semester {
@@ -166,3 +168,18 @@ export type SearchMetrics =
   | "number of conflicts"
   | "time on campus"
   | "course rating stars";
+
+export interface Peer {
+  class_year: number;
+  email_enabled: boolean;
+  img_url: string;
+  integrations: any[];
+  jhed: string;
+  major: string;
+  preferred_name: null | string;
+  school: string;
+  social_all: boolean;
+  social_courses: boolean;
+  social_offerings: boolean;
+  time_accepted_tos: string;
+}
