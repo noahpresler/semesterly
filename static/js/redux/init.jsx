@@ -47,7 +47,6 @@ import {
   timeLapsedInDays,
 } from "./util";
 // import { addTTtoGCal } from './actions/calendar_actions';
-import * as ActionTypes from "./constants/actionTypes";
 import { initAllState, setCourseInfo } from "./actions";
 import { timetablesActions } from "./state/slices/timetablesSlice";
 import { signupModalActions } from "./state/slices/signupModalSlice";
@@ -160,7 +159,6 @@ const handleFlows = (featureFlow) => (dispatch) => {
 const setup = () => (dispatch) => {
   initData = JSON.parse(initData);
 
-  dispatch({ type: ActionTypes.INIT_STATE, data: initData });
   dispatch(initAllState(initData));
   dispatch(receiveCourses(initData.currentUser.courses));
   dispatch(

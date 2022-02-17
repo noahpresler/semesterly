@@ -3,9 +3,10 @@ import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
 import {
   receiveAdvancedSearchResults,
   receiveCourses,
+  receiveSearchResults,
   setCourseInfo,
   setCourseReactions,
-} from "../../actions";
+} from "../../actions/initActions";
 import {
   Course,
   Offering,
@@ -52,7 +53,12 @@ const entitiesSlice = createSlice({
         }
       )
       .addMatcher(
-        isAnyOf(setCourseInfo, receiveCourses, receiveAdvancedSearchResults),
+        isAnyOf(
+          setCourseInfo,
+          receiveCourses,
+          receiveAdvancedSearchResults,
+          receiveSearchResults
+        ),
         (state, action) => merge({}, state, action.payload.entities)
       );
   },

@@ -3,7 +3,7 @@ import { initAllState, receiveTimetables } from "../../actions";
 import { requestCourses } from "../../actions/initActions";
 import { Timetable } from "../../constants/commonTypes";
 import { getNextAvailableColour } from "../../util";
-import { getCourseIdsFromSlots } from "../entities_reducer";
+import { getCourseIdsFromSlots } from "./entitiesSlice";
 
 interface UiSliceState {
   searchHover: number;

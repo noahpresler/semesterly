@@ -29,7 +29,6 @@ import {
   lockActiveSections,
   getUserSavedTimetables,
 } from "./user_actions";
-import * as ActionTypes from "../constants/actionTypes";
 import { alertsActions } from "../state/slices";
 import {
   updateSemester,

@@ -27,7 +27,6 @@ import {
   getActiveDenormTimetable,
   getActiveTimetable,
 } from "../state";
-import * as ActionTypes from "../constants/actionTypes";
 import { calendarActions } from "../state/slices";
 import { saveCalendarModalActions } from "../state/slices/saveCalendarModalSlice";
 

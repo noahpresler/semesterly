@@ -20,7 +20,6 @@ import {
   getReactToCourseEndpoint,
 } from "../constants/endpoints";
 import { getSchool, getSemester } from "../actions/school_actions";
-import * as ActionTypes from "../constants/actionTypes";
 import { courseInfoActions } from "../state/slices";
 import { setCourseReactions, setCourseInfo } from "./initActions";
 

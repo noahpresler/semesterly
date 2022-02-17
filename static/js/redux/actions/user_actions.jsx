@@ -34,7 +34,6 @@ import { getActiveTimetable, getCurrentSemester } from "../state";
 import { fetchCourseClassmates } from "./modal_actions";
 import { getNumberedName, loadTimetable, nullifyTimetable } from "./timetable_actions";
 import { MAX_TIMETABLE_NAME_LENGTH } from "../constants/constants";
-import * as ActionTypes from "../constants/actionTypes";
 import { setTimeShownBanner, checkStatus, clearLocalTimetable } from "../util";
 import { alertsActions, userInfoActions } from "../state/slices";
 import { alertTimeTableExists, receiveCourses } from "./initActions";
