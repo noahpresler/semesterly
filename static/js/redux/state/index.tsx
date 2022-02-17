@@ -32,7 +32,7 @@ import optionalCourses from "./slices/optionalCoursesSlice";
 import explorationModal, * as fromExplorationModal from "./slices/explorationModalSlice";
 import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
-import peerModal from "./peer_modal_reducer";
+import peerModal from "./slices/peerModalSlice";
 import friends from "./friends_reducer";
 import notificationToken from "./notification_token_reducer";
 import integrationModal from "./slices/integrationModalSlice";

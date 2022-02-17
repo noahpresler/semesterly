@@ -47,6 +47,7 @@ import {
   triggerTermsOfServiceModal,
 } from "../state/slices/termsOfServiceModalSlice";
 import { initIntegrationModal } from "../state/slices/integrationModalSlice";
+import { peerModalLoaded, peerModalLoading } from "../state/slices/peerModalSlice";
 
 // temporary fix to allow custom event debounce
 let autoSaveTimer;
@@ -300,9 +301,7 @@ export const fetchFriends = () => (dispatch, getState) => {
     return;
   }
   dispatch(requestFriends());
-  dispatch({
-    type: ActionTypes.PEER_MODAL_LOADING,
-  });
+  dispatch(peerModalLoading());
   fetch(getFriendsEndpoint(getCurrentSemester(state)), {
     credentials: "include",
     method: "GET",
@@ -310,9 +309,7 @@ export const fetchFriends = () => (dispatch, getState) => {
     .then((response) => response.json())
     .then((json) => {
       dispatch(getFriends(json));
-      dispatch({
-        type: ActionTypes.PEER_MODAL_LOADED,
-      });
+      dispatch(peerModalLoaded());
     });
 };
 

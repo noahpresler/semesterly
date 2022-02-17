@@ -53,6 +53,7 @@ import { timetablesActions } from "./state/slices/timetablesSlice";
 import { signupModalActions } from "./state/slices/signupModalSlice";
 import { saveCalendarModalActions } from "./state/slices/saveCalendarModalSlice";
 import { setHighlightNotifs } from "./state/slices/uiSlice";
+import { togglePeerModal } from "./state/slices/peerModalSlice";
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
@@ -137,7 +138,7 @@ const handleFlows = (featureFlow) => (dispatch) => {
       dispatch(fetchCourseClassmates(featureFlow.sharedCourse.id));
       break;
     case "FIND_FRIENDS":
-      dispatch({ type: ActionTypes.TOGGLE_PEER_MODAL });
+      dispatch(togglePeerModal());
       break;
     case "ENABLE_NOTFIS":
       dispatch(setHighlightNotifs(true));
