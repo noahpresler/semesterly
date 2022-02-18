@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import { connect } from "react-redux";
 import { getActiveTimetable, getSearchResult } from "../../state";
-import { getSectionTypeToSections } from "../../state/entities_reducer";
+import { getSectionTypeToSections } from "../../state/slices/entitiesSlice";
 import SearchSideBar from "../search_side_bar";
 import { addOrRemoveCourse } from "../../actions/timetable_actions";
 import { timetablesActions } from "../../state/slices/timetablesSlice";

@@ -34,7 +34,6 @@ import { getActiveTimetable, getCurrentSemester } from "../state";
 import { fetchCourseClassmates } from "./modal_actions";
 import { getNumberedName, loadTimetable, nullifyTimetable } from "./timetable_actions";
 import { MAX_TIMETABLE_NAME_LENGTH } from "../constants/constants";
-import * as ActionTypes from "../constants/actionTypes";
 import { setTimeShownBanner, checkStatus, clearLocalTimetable } from "../util";
 import { alertsActions, userInfoActions } from "../state/slices";
 import { alertTimeTableExists, receiveCourses } from "./initActions";
@@ -46,6 +45,10 @@ import {
   closeTermsOfServiceModal,
   triggerTermsOfServiceModal,
 } from "../state/slices/termsOfServiceModalSlice";
+import { initIntegrationModal } from "../state/slices/integrationModalSlice";
+import { peerModalLoaded, peerModalLoading } from "../state/slices/peerModalSlice";
+import { receiveFriends, requestFriends } from "../state/slices/friendsSlice";
+import { registerToken, unregisterToken } from "../state/slices/notificationTokenSlice";
 import { timetablesActions } from "../state/slices/timetablesSlice";
 
 // temporary fix to allow custom event debounce
@@ -53,15 +56,6 @@ let autoSaveTimer;
 
 export const receiveClassmates = (json) => (dispatch) =>
   dispatch(classmatesActions.classmatesReceived(json));
-
-export const getFriends = (json) => ({
-  type: ActionTypes.FRIENDS_RECEIVED,
-  peers: json,
-});
-
-export const requestFriends = () => ({
-  type: ActionTypes.REQUEST_FRIENDS,
-});
 
 const getSaveTimetablesRequestBody = (state) => {
   const tt = getActiveTimetable(state);
@@ -91,10 +85,6 @@ export const lockActiveSections = (timetable) => {
   return courseSections;
 };
 
-export const requestMostClassmates = () => ({
-  type: ActionTypes.REQUEST_MOST_CLASSMATES,
-});
-
 export const fetchMostClassmatesCount = (timetable) => (dispatch, getState) => {
   const state = getState();
   const courseIds = uniq(timetable.slots.map((s) => s.course));
@@ -103,7 +93,6 @@ export const fetchMostClassmatesCount = (timetable) => (dispatch, getState) => {
     return;
   }
   const semester = getCurrentSemester(state);
-  dispatch(requestMostClassmates());
   fetch(getMostClassmatesCountEndpoint(semester, courseIds), {
     credentials: "include",
     method: "GET",
@@ -301,19 +290,15 @@ export const fetchFriends = () => (dispatch, getState) => {
     return;
   }
   dispatch(requestFriends());
-  dispatch({
-    type: ActionTypes.PEER_MODAL_LOADING,
-  });
+  dispatch(peerModalLoading());
   fetch(getFriendsEndpoint(getCurrentSemester(state)), {
     credentials: "include",
     method: "GET",
   })
     .then((response) => response.json())
     .then((json) => {
-      dispatch(getFriends(json));
-      dispatch({
-        type: ActionTypes.PEER_MODAL_LOADED,
-      });
+      dispatch(receiveFriends(json));
+      dispatch(peerModalLoaded());
     });
 };
 
@@ -346,9 +331,7 @@ export const sendRegistrationToken = (token) => (dispatch) => {
     credentials: "include",
   }).then((response) => {
     if (response.status === 201) {
-      dispatch({
-        type: ActionTypes.TOKEN_REGISTERED,
-      });
+      dispatch(registerToken());
     }
   });
 };
@@ -377,9 +360,7 @@ export const isRegistered = () => (dispatch) => {
       .then((reg) =>
         reg.pushManager.getSubscription().then((sub) => {
           if (sub) {
-            dispatch({
-              type: ActionTypes.TOKEN_REGISTERED,
-            });
+            dispatch(registerToken());
             return true;
           }
           return null;
@@ -400,9 +381,7 @@ export const sendRegistrationTokenForDeletion = (token) => (dispatch) => {
     credentials: "include",
   }).then((response) => {
     if (response.status === 204) {
-      dispatch({
-        type: ActionTypes.UNREGISTER_TOKEN,
-      });
+      dispatch(unregisterToken());
     }
   });
 };
@@ -429,12 +408,13 @@ export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
     credentials: "include",
     method: "GET",
   }).then((response) => {
-    dispatch({
-      type: ActionTypes.OPEN_INTEGRATION_MODAL,
-      enabled: response.status === 200,
-      id: courseID,
-      integration_id: integrationID,
-    });
+    dispatch(
+      initIntegrationModal({
+        enabled: response.status === 200,
+        id: courseID,
+        integration_id: integrationID,
+      })
+    );
   });
 };
 

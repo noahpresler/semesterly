@@ -1,5 +1,5 @@
 import { normalize } from "normalizr";
-import { getDenormCourseById } from "../state/entities_reducer";
+import { getDenormCourseById } from "../state/slices/entitiesSlice";
 import * as schemas from "../schema";
 
 const course = {

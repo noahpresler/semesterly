@@ -17,7 +17,6 @@ import { getActiveTimetableCourses, getCurrentSemester } from "../state";
 import { getCourseSearchEndpoint } from "../constants/endpoints";
 import { getUserSavedTimetables, saveTimetable } from "./user_actions";
 import { nullifyTimetable } from "./timetable_actions";
-import * as ActionTypes from "../constants/actionTypes";
 import { fetchCourseClassmates } from "./modal_actions";
 import { getSemester } from "./school_actions";
 import { alertsActions, explorationModalActions } from "../state/slices";
@@ -118,14 +117,6 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
       dispatch(receiveAdvancedSearchResults(json));
     });
 };
-
-export const paginateAdvancedSearchResults = () => ({
-  type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS,
-});
-
-export const clearAdvancedSearchPagination = () => ({
-  type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION,
-});
 
 export const setAdvancedSearchResultIndex = (idx, courseId) => (dispatch) => {
   dispatch(explorationModalActions.setActiveAdvancedSearchResult(idx));

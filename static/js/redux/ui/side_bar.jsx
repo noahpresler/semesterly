@@ -187,7 +187,7 @@ class SideBar extends React.Component {
             </div>
           </div>
         </div>
-        <a onClick={this.props.launchPeerModal}>
+        <a onClick={() => this.props.launchPeerModal()}>
           <h4 className="sb-header">
             Current Courses
             <div className="sb-header-link">

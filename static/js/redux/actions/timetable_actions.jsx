@@ -29,7 +29,6 @@ import {
   lockActiveSections,
   getUserSavedTimetables,
 } from "./user_actions";
-import * as ActionTypes from "../constants/actionTypes";
 import { alertsActions } from "../state/slices";
 import {
   updateSemester,
@@ -48,6 +47,11 @@ import { courseSectionsActions } from "../state/slices/courseSectionsSlice";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { convertToMinutes } from "../ui/slotUtils";
 import { preferencesActions } from "../state/slices/preferencesSlice";
+import {
+  addRemoveOptionalCourse,
+  clearOptionalCourses,
+  removeOptionalCourseById,
+} from "../state/slices/optionalCoursesSlice";
 
 export const setActiveTimetable = (newActive) => (dispatch) => {
   dispatch(changeActiveTimetable(newActive));
@@ -222,9 +226,7 @@ export const nullifyTimetable = () => (dispatch) => {
       upToDate: false,
     })
   );
-  dispatch({
-    type: ActionTypes.CLEAR_OPTIONAL_COURSES,
-  });
+  dispatch(clearOptionalCourses());
   dispatch(customEventsActions.clearCustomEvents());
 };
 
@@ -346,10 +348,7 @@ export const addOrRemoveCourse =
       state.courseSections.objects[courseId] !== undefined && section === "";
     let reqBody = getBaseReqBody(state);
     if (state.optionalCourses.courses.some((c) => c === courseId)) {
-      dispatch({
-        type: ActionTypes.REMOVE_OPTIONAL_COURSE_BY_ID,
-        courseId,
-      });
+      dispatch(removeOptionalCourseById(courseId));
       reqBody = getBaseReqBody(state);
     }
 
@@ -473,10 +472,7 @@ export const addOrRemoveOptionalCourse = (course) => (dispatch, getState) => {
     return;
   }
 
-  dispatch({
-    type: ActionTypes.ADD_REMOVE_OPTIONAL_COURSE,
-    newCourseId: course.id,
-  });
+  dispatch(addRemoveOptionalCourse(course.id));
   const state = getState(); // the above dispatched action changes the state
   const reqBody = getBaseReqBody(state);
   const { optionalCourses } = state;

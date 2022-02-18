@@ -27,7 +27,6 @@ import {
   getActiveDenormTimetable,
   getActiveTimetable,
 } from "../state";
-import * as ActionTypes from "../constants/actionTypes";
 import { calendarActions } from "../state/slices";
 import { saveCalendarModalActions } from "../state/slices/saveCalendarModalSlice";
 
@@ -98,7 +97,6 @@ export const fetchSISTimetableData = () => (dispatch, getState) => {
       sections,
     },
   };
-  dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
   return sisData;
 };
 
