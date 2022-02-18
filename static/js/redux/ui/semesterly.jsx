@@ -146,16 +146,13 @@ class Semesterly extends React.Component {
     // DataLastUpdated Input example-  2021-05-02 14:42 UTC
     // Params: How the backend sends a timestamp
     // dateString: of the form yyyy-mm-dd hh:mm
-    const dateString = this.props.dataLastUpdated.toString();
+    const dateString = this.props.dataLastUpdated.toString().slice(0, -4); // exclude UTC
 
-    // If we pass anything false return empty string
-    if (!dateString) return "";
-    if (dateString.length === 0) return "";
+    if (!dateString || dateString.length === 0) return "";
 
     // Convert given datetime to local datetime of user
     // in form yyyy-mm-dd hh:mm TZ (Timezone full name)
-    const dateObj = new Date(dateString);
-    return dateObj.toString();
+    return new Date(dateString).toString();
   }
 
   render() {
