@@ -23,8 +23,6 @@ export const setCourseInfo = createAction("global/setCourseInfo", (courseInfo) =
 
 export const setCourseReactions = createAction("global/setCourseReactions");
 
-export const updateSemester = createAction("global/updateSemester");
-
 export const receiveTimetables = createAction("global/receiveTimetables");
 
 /**

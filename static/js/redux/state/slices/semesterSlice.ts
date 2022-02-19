@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initAllState, updateSemester } from "../../actions/initActions";
+import { initAllState } from "../../actions/initActions";
 
 interface SemesterSliceState {
   current: number;
@@ -14,19 +14,20 @@ const initialState: SemesterSliceState = {
 const semesterSlice = createSlice({
   name: "semester",
   initialState,
-  reducers: {},
+  reducers: {
+    updateSemester: (state, action: PayloadAction<number>) => {
+      state.current = action.payload;
+    },
+  },
   extraReducers: (builder) => {
-    builder
-      .addCase(initAllState, (state, action: PayloadAction<any>) => {
-        state.current = parseInt(action.payload.currentSemester, 10);
-        state.all = action.payload.allSemesters;
-      })
-      .addCase(updateSemester, (state, action: PayloadAction<number>) => {
-        state.current = action.payload;
-      });
+    builder.addCase(initAllState, (state, action: PayloadAction<any>) => {
+      state.current = parseInt(action.payload.currentSemester, 10);
+      state.all = action.payload.allSemesters;
+    });
   },
 });
 export const getCurrentSemester = (state: SemesterSliceState) =>
   state.all[state.current];
 
+export const semesterActions = semesterSlice.actions;
 export default semesterSlice.reducer;
