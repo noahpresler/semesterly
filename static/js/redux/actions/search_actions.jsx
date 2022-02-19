@@ -21,10 +21,10 @@ import * as ActionTypes from "../constants/actionTypes";
 import { fetchCourseClassmates } from "./modal_actions";
 import { getSemester } from "./school_actions";
 import { alertsActions, explorationModalActions } from "../state/slices";
+import { semesterActions } from "../state/slices/semesterSlice";
 import {
   receiveAdvancedSearchResults,
   requestCourses,
-  updateSemester,
   receiveSearchResults,
 } from "./initActions";
 
@@ -37,7 +37,7 @@ export const setSemester = (semester) => (dispatch, getState) => {
     dispatch(nullifyTimetable(dispatch));
   }
 
-  dispatch(updateSemester(semester));
+  dispatch(semesterActions.updateSemester(semester));
   dispatch(receiveSearchResults([]));
 };
 

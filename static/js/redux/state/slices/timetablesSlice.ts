@@ -3,7 +3,6 @@ import {
   alertConflict,
   receiveCourses,
   receiveTimetables,
-  updateSemester,
   changeActiveTimetable,
 } from "../../actions/initActions";
 import { Course, Offering, Section, Timetable } from "../../constants/commonTypes";

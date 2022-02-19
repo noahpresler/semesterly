@@ -32,7 +32,6 @@ import {
 import * as ActionTypes from "../constants/actionTypes";
 import { alertsActions } from "../state/slices";
 import {
-  updateSemester,
   changeActiveTimetable,
   receiveTimetables,
   alertConflict,
@@ -43,6 +42,7 @@ import {
   changeActiveSavedTimetable,
 } from "./initActions";
 import { timetablesActions } from "../state/slices/timetablesSlice";
+import { semesterActions } from "../state/slices/semesterSlice";
 import { customEventsActions } from "../state/slices/customEventsSlice";
 import { courseSectionsActions } from "../state/slices/courseSectionsSlice";
 import { signupModalActions } from "../state/slices/signupModalSlice";
@@ -287,7 +287,7 @@ export const loadCachedTimetable =
       if (!personalTimetablesExist) {
         // if no personal TTs and local storage data is valid, load cached timetable
         dispatch(preferencesActions.setAllPreferences(localPreferences));
-        dispatch(updateSemester(matchedIndex));
+        dispatch(semesterActions.updateSemester(matchedIndex));
         dispatch(courseSectionsActions.receiveCourseSections(localCourseSections));
         dispatch(fetchStateTimetables(localActive));
       }
