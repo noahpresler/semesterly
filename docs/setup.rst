@@ -114,7 +114,7 @@ Steps are below on getting your local development environment running:
     This file will automatically be ignored by git. Be sure to replace
     'xxxxxxxx' with your own API key.
 
-4. Add this entry to your hosts file as follows (This file is in C:\\Windows\\System32\\drivers\\etc\\hosts or /etc/hosts)
+4. **Append** this entry to your hosts file as follows (This file is in C:\\Windows\\System32\\drivers\\etc\\hosts or /etc/hosts)
 
     .. code-block:: bash
 
