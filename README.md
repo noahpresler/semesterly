@@ -21,7 +21,7 @@ Read the [Docs](https://semesterly-v2.readthedocs.io/en/latest/) and learn more.
 
 Please make sure to read the [Contributing Guidelines](https://github.com/jhuopensource/semesterly/blob/master/docs/contributing.rst#how-to-contribute) before making a pull request!
 
-Read [Add a School](https://semesterly.readthedocs.io/en/latest/addaschool.html) in the docs to learn more about how to add your school!
+Read [Add a School](https://semesterly-v2.readthedocs.io/en/latest/addaschool.html) in the docs to learn more about how to add your school!
 
 ## Here's a Preview of the Semester.ly Platform
 
