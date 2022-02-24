@@ -429,6 +429,17 @@ class ReactionTest(APITestCase):
         Reaction.objects.get(student=self.student, title=self.title)
         self.assertGreater(Course.objects.get(id=1).reaction_set.count(), 0)
 
+    def test_delete_reaction(self):
+        data = {"cid": 1, "title": self.title}
+        request = self.factory.post("/user/reactions/", data, format="json")
+        get_auth_response(request, self.user, "/user/reactions/")
+        request = self.factory.post("/user/reactions/", data, format="json")
+        response = get_auth_response(request, self.user, "/user/reactions/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue("reactions" in response.data)
+        with self.assertRaises(Reaction.DoesNotExist):
+            Reaction.objects.get(student=self.student, title=self.title)
+
 
 class PersonalEventTest(APITestCase):
     def setUp(self):
