@@ -154,7 +154,7 @@ const AdvancedSearchModal = () => {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (searchQuery.trim().length <= 2) {
+      if (searchQuery.trim().length < 2) {
         return;
       }
       fetchResults();
