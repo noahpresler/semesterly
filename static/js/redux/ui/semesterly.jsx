@@ -25,7 +25,6 @@ import EnableNotificationsAlertContainer from "./alerts/enable_notifications_ale
 import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
 import TopBarContainer from "./containers/top_bar_container";
 import SideBarContainer from "./containers/side_bar_container";
-import ExplorationModalContainer from "./containers/modals/exploration_modal_container";
 import SignupModalContainer from "./containers/modals/signup_modal_container";
 import PreferenceModal from "./modals/preference_modal";
 import TutModalContainer from "./containers/modals/tut_modal_container";
