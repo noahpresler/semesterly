@@ -545,7 +545,7 @@ class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         return Response(response, status=status.HTTP_200_OK)
 
     def reaction_exists(self, title, student, course):
-        course.reaction_set.filter(title=title, student=student).exists()
+        return course.reaction_set.filter(title=title, student=student).exists()
 
     def create_reaction(self, title, student, course):
         reaction = Reaction(student=student, title=title)
@@ -553,9 +553,9 @@ class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         course.reaction_set.add(reaction)
 
     def remove_reaction(self, title, student, course):
-        reaction = course.reaction_set.get(title=title, student=student)
-        course.reaction_set.remove(reaction)
-        reaction.delete()
+        reactions = course.reaction_set.filter(title=title, student=student)
+        course.reaction_set.filter(pk__in=reactions).delete()
+        reactions.delete()
 
 
 class PersonalEventView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
