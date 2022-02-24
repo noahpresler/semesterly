@@ -25,7 +25,6 @@ import EnableNotificationsAlertContainer from "./alerts/enable_notifications_ale
 import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
 import TopBarContainer from "./containers/top_bar_container";
 import SideBarContainer from "./containers/side_bar_container";
-import ExplorationModalContainer from "./containers/modals/exploration_modal_container";
 import SignupModalContainer from "./containers/modals/signup_modal_container";
 import PreferenceModal from "./modals/preference_modal";
 import TutModalContainer from "./containers/modals/tut_modal_container";
@@ -37,6 +36,7 @@ import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_co
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
 import UserSettingsModal from "./modals/user_settings_modal";
 import CustomEventModal from "./modals/custom_event_modal";
+import AdvancedSearchModal from "./modals/advanced_search_modal";
 
 class Semesterly extends React.Component {
   constructor(props) {
@@ -170,7 +170,7 @@ class Semesterly extends React.Component {
       <div className="page-wrapper">
         <TopBarContainer />
         <UserSettingsModal />
-        <ExplorationModalContainer />
+        <AdvancedSearchModal />
         <SignupModalContainer />
         <PreferenceModal />
         <IntegrationModalContainer />
