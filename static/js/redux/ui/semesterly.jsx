@@ -37,6 +37,7 @@ import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_co
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
 import UserSettingsModal from "./modals/user_settings_modal";
 import CustomEventModal from "./modals/custom_event_modal";
+import AdvancedSearchModal from "./modals/advanced_search_modal";
 
 class Semesterly extends React.Component {
   constructor(props) {
@@ -170,7 +171,7 @@ class Semesterly extends React.Component {
       <div className="page-wrapper">
         <TopBarContainer />
         <UserSettingsModal />
-        <ExplorationModalContainer />
+        <AdvancedSearchModal />
         <SignupModalContainer />
         <PreferenceModal />
         <IntegrationModalContainer />
