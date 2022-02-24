@@ -3,7 +3,6 @@ import {
   alertConflict,
   receiveCourses,
   receiveTimetables,
-  updateSemester,
   changeActiveTimetable,
 } from "../../actions/initActions";
 import { Course, Offering, Section, Timetable } from "../../constants/commonTypes";
@@ -84,9 +83,6 @@ const timetablesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(updateSemester, (state) => {
-        state.isFetching = false;
-      })
       .addCase(receiveCourses, (state) => {
         state.isFetching = false;
       })

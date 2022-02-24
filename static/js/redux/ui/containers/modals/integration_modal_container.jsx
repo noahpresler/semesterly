@@ -13,8 +13,8 @@ GNU General Public License for more details.
 */
 
 import { connect } from "react-redux";
+import { toggleIntegrationModal } from "../../../state/slices/integrationModalSlice";
 import IntegrationModal from "../../modals/integration_modal";
-import { toggleIntegrationModal } from "../../../actions/modal_actions";
 
 const mapStateToProps = (state) => ({
   isVisible: state.integrationModal.isVisible,

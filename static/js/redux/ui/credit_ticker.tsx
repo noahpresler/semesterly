@@ -33,11 +33,11 @@ const CreditTicker = () => {
   useEffect(() => {
     setTimeout(() => {
       if (parseFloat(credits.toFixed(2)) > parseFloat(displayedCredits.toFixed(2))) {
-        setDisplayedCredits((previous) => previous + 0.05);
+        setDisplayedCredits((previous) => previous + 0.25);
       } else if (
         parseFloat(credits.toFixed(2)) < parseFloat(displayedCredits.toFixed(2))
       ) {
-        setDisplayedCredits((previous) => previous - 0.05);
+        setDisplayedCredits((previous) => previous - 0.25);
       }
     }, 8);
   }, [credits, displayedCredits]);

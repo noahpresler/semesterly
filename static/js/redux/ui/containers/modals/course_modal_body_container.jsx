@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import CourseModalBody from "../../modals/course_modal_body";
 import { getActiveTimetable, getCurrentSemester } from "../../../state";
-import { getSectionTypeToSections } from "../../../state/entities_reducer";
+import { getSectionTypeToSections } from "../../../state/slices/entitiesSlice";
 import { fetchCourseInfo, react } from "../../../actions/modal_actions";
 import { saveSettings } from "../../../actions/user_actions";
 import { getSchoolSpecificInfo } from "../../../constants/schools";
@@ -22,7 +22,7 @@ const mapStateToProps = (state, ownProps) => {
     ...ownProps,
     id: denormCourseInfo.code,
     schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
-    isFetchingClassmates: state.courseInfo.isFetching,
+    isFetchingClassmates: state.courseInfo.isFetchingClassmates,
     classmates: state.courseInfo.classmates,
     sectionTypeToSections,
     popularityPercent: denormCourseInfo.popularity_percent * 100,

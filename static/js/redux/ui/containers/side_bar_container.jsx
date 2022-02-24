@@ -20,7 +20,7 @@ import {
   getDenormCourseById,
   getCoursesFromSlots,
 } from "../../state";
-import { fetchCourseInfo, togglePeerModal } from "../../actions/modal_actions";
+import { fetchCourseInfo } from "../../actions/modal_actions";
 import {
   addOrRemoveCourse,
   addOrRemoveOptionalCourse,
@@ -28,6 +28,7 @@ import {
 } from "../../actions/timetable_actions";
 import { deleteTimetable, duplicateTimetable } from "../../actions/user_actions";
 import { getCourseShareLink } from "../../constants/endpoints";
+import { togglePeerModal } from "../../state/slices/peerModalSlice";
 
 const mapStateToProps = (state) => {
   const timetable = getActiveTimetable(state);

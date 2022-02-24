@@ -25,7 +25,6 @@ import EnableNotificationsAlertContainer from "./alerts/enable_notifications_ale
 import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
 import TopBarContainer from "./containers/top_bar_container";
 import SideBarContainer from "./containers/side_bar_container";
-import ExplorationModalContainer from "./containers/modals/exploration_modal_container";
 import SignupModalContainer from "./containers/modals/signup_modal_container";
 import PreferenceModal from "./modals/preference_modal";
 import TutModalContainer from "./containers/modals/tut_modal_container";
@@ -37,6 +36,7 @@ import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_co
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
 import UserSettingsModal from "./modals/user_settings_modal";
 import CustomEventModal from "./modals/custom_event_modal";
+import AdvancedSearchModal from "./modals/advanced_search_modal";
 
 class Semesterly extends React.Component {
   constructor(props) {
@@ -146,16 +146,13 @@ class Semesterly extends React.Component {
     // DataLastUpdated Input example-  2021-05-02 14:42 UTC
     // Params: How the backend sends a timestamp
     // dateString: of the form yyyy-mm-dd hh:mm
-    const dateString = this.props.dataLastUpdated.toString();
+    const dateString = this.props.dataLastUpdated.toString().slice(0, -4); // exclude UTC
 
-    // If we pass anything false return empty string
-    if (!dateString) return "";
-    if (dateString.length === 0) return "";
+    if (!dateString || dateString.length === 0) return "";
 
     // Convert given datetime to local datetime of user
     // in form yyyy-mm-dd hh:mm TZ (Timezone full name)
-    const dateObj = new Date(dateString);
-    return dateObj.toString();
+    return new Date(dateString).toString();
   }
 
   render() {
@@ -173,7 +170,7 @@ class Semesterly extends React.Component {
       <div className="page-wrapper">
         <TopBarContainer />
         <UserSettingsModal />
-        <ExplorationModalContainer />
+        <AdvancedSearchModal />
         <SignupModalContainer />
         <PreferenceModal />
         <IntegrationModalContainer />

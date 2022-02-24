@@ -20,7 +20,6 @@ import {
   getReactToCourseEndpoint,
 } from "../constants/endpoints";
 import { getSchool, getSemester } from "../actions/school_actions";
-import * as ActionTypes from "../constants/actionTypes";
 import { courseInfoActions } from "../state/slices";
 import { setCourseReactions, setCourseInfo } from "./initActions";
 
@@ -73,9 +72,3 @@ export const react = (cid, title) => (dispatch) => {
       }
     });
 };
-
-export const toggleIntegrationModal = () => ({
-  type: ActionTypes.TOGGLE_INTEGRATION_MODAL,
-});
-
-export const togglePeerModal = () => ({ type: ActionTypes.TOGGLE_PEER_MODAL });

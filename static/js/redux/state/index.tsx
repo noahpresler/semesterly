@@ -28,21 +28,20 @@ import ui from "./slices/uiSlice";
 import userInfo, { isUserInfoIncomplete } from "./slices/userInfoSlice";
 import savingTimetable from "./slices/savingTimetableSlice";
 import classmates from "./slices/classmatesSlice";
-import optionalCourses from "./optional_courses_reducer";
+import optionalCourses from "./slices/optionalCoursesSlice";
 import explorationModal, * as fromExplorationModal from "./slices/explorationModalSlice";
 import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
-import peerModal from "./peer_modal_reducer";
-import friends from "./friends_reducer";
-import notificationToken from "./notification_token_reducer";
-import integrationModal from "./integration_modal_reducer";
-import integrations from "./integrations_reducer";
+import peerModal from "./slices/peerModalSlice";
+import friends from "./slices/friendsSlice";
+import notificationToken from "./slices/notificationTokenSlice";
+import integrationModal from "./slices/integrationModalSlice";
 import saveCalendarModal from "./slices/saveCalendarModalSlice";
 import termsOfServiceModal from "./slices/termsOfServiceModalSlice";
 import termsOfServiceBanner from "./slices/termOfServiceBannerSlice";
 import userAcquisitionModal from "./slices/userAcquisitionModalSlice";
 import registrar from "./slices/registrarSlice";
-import entities, * as fromEntities from "./entities_reducer";
+import entities, * as fromEntities from "./slices/entitiesSlice";
 import { Slot, Timetable } from "../constants/commonTypes";
 
 export const reducers = {
@@ -56,7 +55,6 @@ export const reducers = {
   explorationModal,
   friends,
   integrationModal,
-  integrations,
   notificationToken,
   optionalCourses,
   peerModal,
@@ -110,6 +108,7 @@ export const getCoursesFromSlots = (state: RootState, slots: Slot[]) =>
   fromEntities.getCoursesFromSlots(state.entities, slots);
 
 export const getMaxTTEndHour = createSelector(
+  // @ts-ignore
   [getActiveDenormTimetable],
   fromEntities.getMaxEndHour
 );

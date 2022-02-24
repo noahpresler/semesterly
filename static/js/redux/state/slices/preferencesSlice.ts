@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "..";
-import { changeActiveSavedTimetable } from "../../actions";
+import { changeActiveSavedTimetable } from "../../actions/initActions";
 import { Timetable } from "../../constants/commonTypes";
 import { getTimetablePreferencesEndpoint } from "../../constants/endpoints";
 import Cookie from "js-cookie";

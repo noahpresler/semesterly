@@ -32,7 +32,7 @@ starting a new branch. You may need to ``git fetch upstream`` first.
 .. code-block:: bash
 
     git checkout develop
-    git pull
+    git pull upstream develop
 
 Then, you'll want to create a new branch.
 

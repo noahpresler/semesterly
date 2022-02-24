@@ -47,12 +47,12 @@ import {
   timeLapsedInDays,
 } from "./util";
 // import { addTTtoGCal } from './actions/calendar_actions';
-import * as ActionTypes from "./constants/actionTypes";
 import { initAllState, setCourseInfo } from "./actions";
 import { timetablesActions } from "./state/slices/timetablesSlice";
 import { signupModalActions } from "./state/slices/signupModalSlice";
 import { saveCalendarModalActions } from "./state/slices/saveCalendarModalSlice";
 import { setHighlightNotifs } from "./state/slices/uiSlice";
+import { togglePeerModal } from "./state/slices/peerModalSlice";
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
@@ -137,7 +137,7 @@ const handleFlows = (featureFlow) => (dispatch) => {
       dispatch(fetchCourseClassmates(featureFlow.sharedCourse.id));
       break;
     case "FIND_FRIENDS":
-      dispatch({ type: ActionTypes.TOGGLE_PEER_MODAL });
+      dispatch(togglePeerModal());
       break;
     case "ENABLE_NOTFIS":
       dispatch(setHighlightNotifs(true));
@@ -146,9 +146,6 @@ const handleFlows = (featureFlow) => (dispatch) => {
       } else {
         dispatch(userInfoActions.overrideSettingsShow(true));
       }
-      break;
-    case "EXPORT_SIS_TIMETABLE":
-      dispatch({ type: ActionTypes.EXPORT_SIS_TIMETABLE });
       break;
     case "DELETE_ACCOUNT":
       dispatch(userInfoActions.overrideSettingsShow(true));
@@ -162,7 +159,6 @@ const handleFlows = (featureFlow) => (dispatch) => {
 const setup = () => (dispatch) => {
   initData = JSON.parse(initData);
 
-  dispatch({ type: ActionTypes.INIT_STATE, data: initData });
   dispatch(initAllState(initData));
   dispatch(receiveCourses(initData.currentUser.courses));
   dispatch(
