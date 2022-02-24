@@ -22,7 +22,7 @@ const mapStateToProps = (state, ownProps) => {
     ...ownProps,
     id: denormCourseInfo.code,
     schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
-    isFetchingClassmates: state.courseInfo.isFetching,
+    isFetchingClassmates: state.courseInfo.isFetchingClassmates,
     classmates: state.courseInfo.classmates,
     sectionTypeToSections,
     popularityPercent: denormCourseInfo.popularity_percent * 100,
