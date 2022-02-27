@@ -24,6 +24,7 @@ const mapStateToProps = (state) => {
   const activeTTLength = getActiveTimetableCourses(state).length;
   return {
     alertConflict: state.alerts.alertConflict,
+    alertDeleteTimetable: state.alerts.alertDeleteTimetable,
     alertEnableNotifications: state.alerts.alertEnableNotifications,
     alertTimetableExists: state.alerts.alertTimetableExists,
     alertChangeSemester: state.alerts.alertChangeSemester,
