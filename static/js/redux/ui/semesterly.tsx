@@ -36,18 +36,37 @@ import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_
 import UserSettingsModal from "./modals/user_settings_modal";
 import CustomEventModal from "./modals/custom_event_modal";
 import AdvancedSearchModal from "./modals/advanced_search_modal";
+import { useAppSelector } from "../hooks";
+import { getActiveTimetableCourses } from "../state";
 
-type SemesterlyProps = {
-  dataLastUpdated: string;
-  alertChangeSemester: boolean;
-  alertConflict: boolean;
-  alertEnableNotifications: boolean;
-  alertFacebookFriends: boolean;
-  alertNewTimetable: boolean;
-  alertTimetableExists: boolean;
-};
+const Semesterly = () => {
+  const dataLastUpdated = useAppSelector((state) => state.school.dataLastUpdated);
+  const alertChangeSemester = useAppSelector(
+    (state) => state.alerts.alertChangeSemester
+  );
+  const alertConflict = useAppSelector((state) => state.alerts.alertConflict);
+  const alertEnableNotifications = useAppSelector(
+    (state) => state.alerts.alertEnableNotifications
+  );
 
-const Semesterly = (props: SemesterlyProps) => {
+  const activeTTLength = useAppSelector(
+    (state) => getActiveTimetableCourses(state).length
+  );
+  const alertFacebookFriends = useAppSelector((state) =>
+    Boolean(
+      state.alerts.alertFacebookFriends &&
+        state.userInfo.data.FacebookSignedUp &&
+        (!state.userInfo.data.social_courses || state.alerts.facebookAlertIsOn) &&
+        !state.userInfo.overrideShow &&
+        state.alerts.mostFriendsCount >= 2 &&
+        activeTTLength >= 1
+    )
+  );
+  const alertNewTimetable = useAppSelector((state) => state.alerts.alertNewTimetable);
+  const alertTimetableExists = useAppSelector(
+    (state) => state.alerts.alertTimetableExists
+  );
+
   const mql = window.matchMedia("(orientation: portrait)");
   const [orientation, setOrientation] = useState(
     !mql.matches ? "landscape" : "portrait"
@@ -76,7 +95,7 @@ const Semesterly = (props: SemesterlyProps) => {
   });
 
   useEffect(() => {
-    if (props.alertEnableNotifications) {
+    if (alertEnableNotifications) {
       alertBoxRef.current?.show(<EnableNotificationsAlertContainer />, {
         type: "info",
         time: 12000,
@@ -94,17 +113,17 @@ const Semesterly = (props: SemesterlyProps) => {
   };
 
   useEffect(() => {
-    if (props.alertConflict) {
+    if (alertConflict) {
       showAlert(<ConflictAlert />, "info", 10000);
-    } else if (props.alertTimetableExists) {
+    } else if (alertTimetableExists) {
       showAlert(<TimetableExistsAlertContainer />, "info", 10000);
-    } else if (props.alertChangeSemester) {
+    } else if (alertChangeSemester) {
       showAlert(<ChangeSemesterAlertContainer />, "info", 15000);
-    } else if (props.alertNewTimetable) {
+    } else if (alertNewTimetable) {
       showAlert(<NewTimetableAlertContainer />, "info", 12000);
-    } else if (props.alertEnableNotifications) {
+    } else if (alertEnableNotifications) {
       showAlert(<EnableNotificationsAlertContainer />, "info", 12000);
-    } else if (props.alertFacebookFriends) {
+    } else if (alertFacebookFriends) {
       alertBoxRef.current?.show(<FriendsInClassAlertContainer />, {
         type: "info",
         time: 25000,
@@ -115,19 +134,19 @@ const Semesterly = (props: SemesterlyProps) => {
       alertBoxRef.current?.removeAll();
     }
   }, [
-    props.alertConflict,
-    props.alertTimetableExists,
-    props.alertChangeSemester,
-    props.alertNewTimetable,
-    props.alertEnableNotifications,
-    props.alertFacebookFriends,
+    alertConflict,
+    alertTimetableExists,
+    alertChangeSemester,
+    alertNewTimetable,
+    alertEnableNotifications,
+    alertFacebookFriends,
   ]);
 
   const toLocalDate = () => {
     // DataLastUpdated Input example-  2021-05-02 14:42 UTC
     // Params: How the backend sends a timestamp
     // dateString: of the form yyyy-mm-dd hh:mm
-    const dateString = props.dataLastUpdated.toString().slice(0, -4); // exclude UTC
+    const dateString = dataLastUpdated.toString().slice(0, -4); // exclude UTC
 
     if (!dateString || dateString.length === 0) return "";
 
@@ -169,9 +188,7 @@ const Semesterly = (props: SemesterlyProps) => {
           <footer className="footer navbar no-print">
             <p className="data-last-updated no-print">
               Data last updated:{" "}
-              {props.dataLastUpdated &&
-              props.dataLastUpdated.length &&
-              props.dataLastUpdated !== "null"
+              {dataLastUpdated && dataLastUpdated.length && dataLastUpdated !== "null"
                 ? toLocalDate()
                 : null}
             </p>
