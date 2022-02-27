@@ -50,7 +50,9 @@ const Semesterly = () => {
     (state) => state.alerts.alertEnableNotifications
   );
 
-  const alertDeleteTimetable = useAppSelector((state) => state.alerts.alertDeleteTimetable);
+  const alertDeleteTimetable = useAppSelector(
+    (state) => state.alerts.alertDeleteTimetable
+  );
 
   const activeTTLength = useAppSelector(
     (state) => getActiveTimetableCourses(state).length
