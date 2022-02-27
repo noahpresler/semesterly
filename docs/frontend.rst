@@ -51,7 +51,7 @@ It is this JSON, called ``initData`` which we read into state as our initial sta
 
 Other actions required for page initialization are also dispatched from ``init.jsx`` including those which load cached timetables from the browser, alerts that show on page load, the loading of user's timetables if logged in, and the triggering of the user agreement modal when appropriate. 
 
-Finally, ``init.jsx`` renders ``<SemesterlyContainer />`` to the DOM. This is the root of the application.
+Finally, ``init.jsx`` renders ``<Semesterly />`` to the DOM. This is the root of the application.
 
 Actions
 ~~~~~~~~
