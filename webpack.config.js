@@ -17,8 +17,7 @@ const path = require("path");
 const webpack = require("webpack");
 const BundleTracker = require("webpack-bundle-tracker");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 const isProd = process.env.NODE_ENV === "production";
 const isDev = process.env.NODE_ENV === "development";
@@ -53,7 +52,7 @@ const config = {
     new ExtractTextPlugin({
       filename: "style-[hash].css",
       allChunks: true,
-    })
+    }),
   ],
 
   devtool: "source-map",
@@ -133,7 +132,6 @@ const config = {
   },
 };
 
-
 if (isDev) {
   // Tell django to use this URL to load packages and not use STATIC_URL + bundle_name
   config.output.publicPath = "http://localhost:3000/assets/bundles/";
@@ -145,7 +143,7 @@ if (isDev) {
   //             exclude: /node_modules/,
   //             loader: "eslint-loader",
   //         }].concat(config.module.loaders);
-}else{
+} else {
   // If not dev, minify the JS file.
   config.plugins = config.plugins.concat(new UglifyJsPlugin());
 }
