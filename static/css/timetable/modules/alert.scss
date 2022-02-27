@@ -54,7 +54,7 @@
 
     &.scale-enter-active {
       transform: scale(1);
-      transition: transform 250ms cubic-bezier(0, 0, .5, 1.5);
+      transition: transform 250ms cubic-bezier(0, 0, 0.5, 1.5);
     }
   }
 
@@ -68,7 +68,7 @@
   }
 
   .fade-enter {
-    opacity: .1;
+    opacity: 0.1;
 
     &.fade-enter-active {
       opacity: 1;
@@ -80,7 +80,7 @@
     opacity: 1;
 
     &.fade-leave-active {
-      opacity: .1;
+      opacity: 0.1;
       transition: opacity 250ms ease-in;
     }
   }
@@ -129,7 +129,7 @@
 
   .close {
     &:hover {
-      opacity: .55;
+      opacity: 0.55;
     }
 
     .close-light {
@@ -190,8 +190,35 @@
   }
 }
 
-.delete-timetable-alert {
-  
+.delete-timetable-alert-btn {
+  background-color: $confirm-green;
+  border: 0;
+  border-bottom: 2px solid $confirm-green-darker;
+  box-shadow: inset 0 -2px $confirm-green-darker;
+  color: $gfff;
+  cursor: pointer;
+  height: 25px;
+  margin-top: 10px;
+  padding: 0;
+  position: relative;
+  text-align: center;
+  text-shadow: 0 1px 2px $black-transparent-25;
+  vertical-align: top;
+  width: 70%;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:active {
+    box-shadow: none;
+    outline: none;
+    top: 1px;
+  }
+
+  &:hover {
+    background-color: $confirm-green-hover;
+  }
 }
 
 .change-semester-alert {
@@ -222,8 +249,8 @@
       cursor: pointer;
       display: block;
       margin-top: 25px;
-      opacity: .77;
-      transition: opacity .3s;
+      opacity: 0.77;
+      transition: opacity 0.3s;
     }
 
     &:hover {
@@ -319,7 +346,3 @@
     font-size: 13px;
   }
 }
-
-
-
-

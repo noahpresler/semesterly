@@ -15,10 +15,11 @@ GNU General Public License for more details.
 import React, { useEffect } from "react";
 import { deleteTimetable } from "../../actions";
 import { alertsActions } from "../../state/slices";
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 
 const DeleteTimetableAlert = () => {
   const dispatch = useAppDispatch();
+  const timetable = useAppSelector((state) => state.alerts.timetableToDelete);
 
   useEffect(
     // cleanup on unmount
@@ -29,7 +30,8 @@ const DeleteTimetableAlert = () => {
   );
 
   const handleConfirm = () => {
-    // dispatch();
+    dispatch(deleteTimetable(timetable));
+    dispatch(alertsActions.dismissDeleteTimetable());
   };
 
   const handleCancel = () => {
@@ -39,8 +41,9 @@ const DeleteTimetableAlert = () => {
   return (
     <div className="delete-timetable-alert">
       Are you sure you want to delete this timetable?
-      <button onClick={() => handleConfirm()}>Yes</button>
-      <button onClick={() => handleCancel()}>No</button>
+      <button onClick={() => handleConfirm()} className="delete-timetable-alert-btn">
+        Confirm
+      </button>
     </div>
   );
 };

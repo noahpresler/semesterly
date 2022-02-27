@@ -140,6 +140,7 @@ const Semesterly = () => {
     }
   }, [
     alertConflict,
+    alertDeleteTimetable,
     alertTimetableExists,
     alertChangeSemester,
     alertNewTimetable,
