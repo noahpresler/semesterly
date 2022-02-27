@@ -37,6 +37,7 @@ import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_
 import UserSettingsModal from "./modals/user_settings_modal";
 import CustomEventModal from "./modals/custom_event_modal";
 import AdvancedSearchModal from "./modals/advanced_search_modal";
+import DeleteTimetableAlert from "./alerts/delete_timetable_alert";
 
 class Semesterly extends React.Component {
   constructor(props) {
@@ -98,6 +99,8 @@ class Semesterly extends React.Component {
     if (nextProps !== this.props) {
       if (nextProps.alertConflict && !this.props.alertConflict) {
         this.showAlert(<ConflictAlert />, "info", 10000);
+      } else if (nextProps.alertDeleteTimetable && !this.props.alertDeleteTimetable) {
+        this.showAlert(<DeleteTimetableAlert />, "info", 10000);
       } else if (nextProps.alertTimetableExists && !this.props.alertTimetableExists) {
         this.showAlert(<TimetableExistsAlertContainer />, "info", 10000);
       } else if (nextProps.alertChangeSemester && !this.props.alertChangeSemester) {
@@ -275,6 +278,7 @@ Semesterly.propTypes = {
   PgCount: PropTypes.number.isRequired,
   alertChangeSemester: PropTypes.bool.isRequired,
   alertConflict: PropTypes.bool.isRequired,
+  alertDeleteTimetable: PropTypes.bool.isRequired,
   alertEnableNotifications: PropTypes.bool.isRequired,
   alertFacebookFriends: PropTypes.bool.isRequired,
   alertNewTimetable: PropTypes.bool.isRequired,
