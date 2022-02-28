@@ -42,15 +42,27 @@ def setUpTests(self):
 
 
 def assertEmptyResponse(self, body, url):
-    response = self.client.post(url, body, format="json", **self.request_headers)
+    response = self.client.get(url, body, format="json", **self.request_headers)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertEqual(len(response.data), 0)
 
 
 def assertNonemptyResponse(self, body, url):
-    response = self.client.post(url, body, format="json", **self.request_headers)
+    response = self.client.get(url, body, format="json", **self.request_headers)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertNotEqual(len(response.data), 0)
+
+
+def advancedSearchAssertEmptyResponse(self, body, url):
+    response = self.client.post(url, body, format="json", **self.request_headers)
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    self.assertEqual(len(response.data["data"]), 0)
+
+
+def advancedSearchAssertNonemptyResponse(self, body, url):
+    response = self.client.post(url, body, format="json", **self.request_headers)
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    self.assertNotEqual(len(response.data["data"]), 0)
 
 
 class BasicSearchTest(APITestCase):
@@ -78,51 +90,51 @@ class AdvancedSearchTest(APITestCase):
         setUpTests(self)
 
     def test_course_exists(self):
-        assertNonemptyResponse(self, {}, "/search/Winter/1995/sea/")
+        advancedSearchAssertNonemptyResponse(self, {}, "/search/Winter/1995/sea/")
 
     def test_no_course_exists(self):
-        assertEmptyResponse(self, {}, "/search/Fall/2016/sea/")
+        advancedSearchAssertEmptyResponse(self, {}, "/search/Fall/2016/sea/")
 
     def test_right_course(self):
         response = self.client.post(
             "/search/Winter/1995/sea/", format="json", **self.request_headers
         )
-        courses = response.data
+        courses = response.data["data"]
         self.assertEquals(1, len(courses))
         self.assertEquals("SEA101", courses[0]["code"])
         self.assertEquals("Intro", courses[0]["name"])
 
     def test_no_filter(self):
-        assertEmptyResponse(self, {}, "/search/Winter/1995/none")
-        assertNonemptyResponse(self, {}, "/search/Winter/1995/sea/")
+        advancedSearchAssertEmptyResponse(self, {}, "/search/Winter/1995/none")
+        advancedSearchAssertNonemptyResponse(self, {}, "/search/Winter/1995/sea/")
 
     def test_filter_times(self):
         body = {"filters": {"times": [{"min": 12, "max": 20, "day": "Tuesday"}]}}
-        assertEmptyResponse(self, body, "/search/Winter/1995/sea/")
+        advancedSearchAssertEmptyResponse(self, body, "/search/Winter/1995/sea/")
         body = {"filters": {"times": [{"min": 8, "max": 20, "day": "Monday"}]}}
-        assertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
+        advancedSearchAssertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
 
     def test_filter_levels(self):
         body = {"filters": {"levels": [200]}}
-        assertEmptyResponse(self, body, "/search/Winter/1995/sea/")
+        advancedSearchAssertEmptyResponse(self, body, "/search/Winter/1995/sea/")
         body = {"filters": {"levels": [100]}}
-        assertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
+        advancedSearchAssertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
 
     def test_filter_areas(self):
         body = {"filters": {"areas": "{H}"}}
-        assertEmptyResponse(self, body, "/search/Winter/1995/sea/")
+        advancedSearchAssertEmptyResponse(self, body, "/search/Winter/1995/sea/")
         body = {"filters": {"areas": "{E}"}}
-        assertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
+        advancedSearchAssertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
         body = {"filters": {"areas": "{Q}"}}
-        assertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
+        advancedSearchAssertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
         body = {"filters": {"areas": "{E,Q}"}}
-        assertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
+        advancedSearchAssertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
 
     def test_filter_departments(self):
         body = {"filters": {"departments": ["Psychology"]}}
-        assertEmptyResponse(self, body, "/search/Winter/1995/sea/")
+        advancedSearchAssertEmptyResponse(self, body, "/search/Winter/1995/sea/")
         body = {"filters": {"departments": ["Computer Science"]}}
-        assertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
+        advancedSearchAssertNonemptyResponse(self, body, "/search/Winter/1995/sea/")
 
 
 class UrlsTest(UrlTestCase):
