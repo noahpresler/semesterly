@@ -95,12 +95,11 @@ const AdvancedSearchModal = () => {
   const [shareLinkShown, setShareLinkShown] = useState(false);
   const [selected, setSelected] = useState(0);
   const [curPage, setCurPage] = useState(1);
-  const [didSearch, setDidSearch] = useState(false);
+  const [newSearch, setNewSearch] = useState(false);
 
   useEffect(() => {
     if (isVisible) {
       modal.current.show();
-      setDidSearch(false);
     }
     if (!isVisible) {
       modal.current.hide();
@@ -137,7 +136,12 @@ const AdvancedSearchModal = () => {
     if (isFetching) {
       return;
     }
-    setDidSearch(false);
+    if (pageToFetch === 1 && scrollContainer.current) {
+      scrollContainer.current.scrollTop = 0;
+      setNewSearch(true);
+    } else {
+      setNewSearch(false);
+    }
     dispatch(
       fetchAdvancedSearchResults(
         searchQuery,
@@ -150,11 +154,7 @@ const AdvancedSearchModal = () => {
         pageToFetch
       )
     );
-    setDidSearch(true);
     setCurPage(pageToFetch);
-    if (pageToFetch === 1 && scrollContainer.current) {
-      scrollContainer.current.scrollTop = 0;
-    }
   };
 
   useEffect(() => {
@@ -472,7 +472,7 @@ const AdvancedSearchModal = () => {
               loader={isFetching && loadSpinner}
               scrollableTarget="scrollDiv"
             >
-              {searchResults}
+              {(!newSearch || !isFetching) && searchResults}
               {/* {!isFetching && didSearch && searchResults.length === 0 && (
                 <div>No course found</div>
               )} */}
@@ -497,7 +497,9 @@ const AdvancedSearchModal = () => {
             onClickOut={hideAllFilters}
             schoolSpecificInfo={schoolSpecificInfo}
           />
-          <div className="col-7-16 exp-modal">{courseModal}</div>
+          <div className="col-7-16 exp-modal">
+            {(!newSearch || !isFetching) && courseModal}
+          </div>
         </div>
       </div>
     </DropModal>
