@@ -57,9 +57,13 @@ const explorationModalSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(receiveAdvancedSearchResults, (state, action) => {
-        state.advancedSearchResults = action.payload.result;
+        if (action.payload.page === 1) {
+          state.advancedSearchResults = action.payload.courses.result;
+          state.active = 0;
+        } else {
+          state.advancedSearchResults.push(...action.payload.courses.result);
+        }
         state.isFetching = false;
-        state.active = 0;
       })
       .addCase(receiveSchoolInfo, (state) => {
         state.schoolInfoLoaded = true;
