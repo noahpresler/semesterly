@@ -231,19 +231,22 @@ class Ingestor(dict):
 
     def _resolve_instructors(self):
         instructors = None
-        instr_keys = set(
-            [
-                "instructors",
-                "instructor",
-                "instr",
-                "instrs",
-                "instr_name",
-                "instr_names",
-                "instructor",
-                "instructor_name",
-                "instructors",
-            ]
-        ) & set(self)
+        instr_keys = (
+            set(
+                [
+                    "instructors",
+                    "instructor",
+                    "instr",
+                    "instrs",
+                    "instr_name",
+                    "instr_names",
+                    "instructor",
+                    "instructor_name",
+                    "instructors",
+                ]
+            )
+            & set(self)
+        )
 
         if len(instr_keys) == 1:
             instructors = self[list(instr_keys)[0]]

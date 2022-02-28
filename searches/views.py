@@ -68,16 +68,20 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
             "student": student,
             "school": request.subdomain,
         }
-        cur_page = int(request.GET.get('page', 1))
-        courses_per_page = int(request.GET.get('limit', 10))
+        cur_page = int(request.GET.get("page", 1))
+        courses_per_page = int(request.GET.get("limit", 10))
         paginator = Paginator(course_matches, courses_per_page)
         if cur_page > paginator.num_pages:
             course_match_data = []
         else:
             paginated_data = paginator.page(cur_page)
-            course_match_data = CourseSerializer(paginated_data, context=serializer_context, many=True).data
+            course_match_data = CourseSerializer(
+                paginated_data, context=serializer_context, many=True
+            ).data
 
-        return Response({"data": course_match_data, "page": cur_page}, status=status.HTTP_200_OK)
+        return Response(
+            {"data": course_match_data, "page": cur_page}, status=status.HTTP_200_OK
+        )
 
     def filter_course_matches(self, course_matches, filters, sem):
         course_matches = self.filter_by_areas(course_matches, filters)
