@@ -463,6 +463,9 @@ const AdvancedSearchModal = () => {
             id="scrollDiv"
             ref={scrollContainer}
           >
+            {!isFetching && newSearch && searchResults.length === 0 && (
+              <p className="text-center h4">No course found</p>
+            )}
             <InfiniteScroll
               dataLength={searchResults.length}
               hasMore
@@ -473,9 +476,6 @@ const AdvancedSearchModal = () => {
               scrollableTarget="scrollDiv"
             >
               {(!newSearch || !isFetching) && searchResults}
-              {/* {!isFetching && didSearch && searchResults.length === 0 && (
-                <div>No course found</div>
-              )} */}
             </InfiniteScroll>
           </div>
           {filters}
