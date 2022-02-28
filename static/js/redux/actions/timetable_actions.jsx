@@ -458,11 +458,12 @@ export const updateCustomSlot = (newValues, id) => (dispatch) => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(newValues),
       credentials: "include",
+    }).then(() => {
+      dispatch(updateExistingEvent(newValues));
     });
-    dispatch(updateExistingEvent(newValues));
   }
 };
 
