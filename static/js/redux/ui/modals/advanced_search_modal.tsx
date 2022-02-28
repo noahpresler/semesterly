@@ -75,6 +75,7 @@ const AdvancedSearchModal = () => {
     getCourseShareLinkFromModal(courseCode, semester);
 
   const modal = useRef<DropModal>();
+  const scrollContainer = useRef<HTMLDivElement>();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterData, setFilterData] = useState({
@@ -151,6 +152,9 @@ const AdvancedSearchModal = () => {
     );
     setDidSearch(true);
     setCurPage(pageToFetch);
+    if (pageToFetch === 1 && scrollContainer.current) {
+      scrollContainer.current.scrollTop = 0;
+    }
   };
 
   useEffect(() => {
@@ -454,7 +458,11 @@ const AdvancedSearchModal = () => {
               {timeFilters}
             </SelectedFilterSection>
           </div>
-          <div className="col-5-16 exp-search-results" id="scrollDiv">
+          <div
+            className="col-5-16 exp-search-results"
+            id="scrollDiv"
+            ref={scrollContainer}
+          >
             <InfiniteScroll
               dataLength={searchResults.length}
               hasMore
