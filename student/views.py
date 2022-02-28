@@ -559,7 +559,7 @@ class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
 
 class PersonalEventView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
-    def post(self, request: HttpRequest):
+    def put(self, request: HttpRequest):
         try:
             event = PersonalEvent.objects.get(id=request.data["id"])
         except PersonalEvent.DoesNotExist:
