@@ -573,3 +573,18 @@ class PersonalEventView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             serializer.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request: HttpRequest):
+        try:
+            timetable = PersonalTimetable.objects.get(id=request.data["timetable"])
+        except PersonalTimetable.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if timetable.student != get_student(request):
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        serializer = EventSerializer(data=request.data, partial=True)
+        if serializer.is_valid():
+            event = serializer.save()
+            return Response(event.id, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
