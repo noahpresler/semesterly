@@ -596,7 +596,7 @@ class PersonalEventView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         except (PersonalTimetable.DoesNotExist, PersonalEvent.DoesNotExist):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        if event.timetable.student != get_student(request):
+        if timetable.student != get_student(request):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         event.delete()
