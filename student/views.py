@@ -270,41 +270,43 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         return Response(response, status=response_status)
 
     def update_tt(self, tt, new_name, new_slots):
-        tt.name = new_name
+        if new_name and new_slots:
+            tt.name = new_name
 
-        tt.courses.clear()
-        tt.sections.clear()
-        added_courses = set()
-        for slot in new_slots:
-            section_id = slot["section"]
-            section = Section.objects.get(id=section_id)
-            tt.sections.add(section)
-            if section.course.id not in added_courses:
-                tt.courses.add(section.course)
-                added_courses.add(section.course.id)
+            tt.courses.clear()
+            tt.sections.clear()
+            added_courses = set()
+            for slot in new_slots:
+                section_id = slot["section"]
+                section = Section.objects.get(id=section_id)
+                tt.sections.add(section)
+                if section.course.id not in added_courses:
+                    tt.courses.add(section.course)
+                    added_courses.add(section.course.id)
 
-        tt.save()
+            tt.save()
 
     def update_events(self, tt, events):
         """Replace tt's events with input events. Deletes all old events to avoid
         buildup in db"""
-        to_delete = tt.events.all()
-        tt.events.clear()
-        to_delete.delete()
-        for event in events:
-            credits = self.validate_credits(event)
-            event_obj = PersonalEvent.objects.create(
-                timetable=tt,
-                name=event["name"],
-                time_start=event["time_start"],
-                time_end=event["time_end"],
-                day=event["day"],
-                color=event["color"],
-                location=event["location"],
-                credits=credits,
-            )
-            tt.events.add(event_obj)
-        tt.save()
+        if events:
+            to_delete = tt.events.all()
+            tt.events.clear()
+            to_delete.delete()
+            for event in events:
+                credits = self.validate_credits(event)
+                event_obj = PersonalEvent.objects.create(
+                    timetable=tt,
+                    name=event["name"],
+                    time_start=event["time_start"],
+                    time_end=event["time_end"],
+                    day=event["day"],
+                    color=event["color"],
+                    location=event["location"],
+                    credits=credits,
+                )
+                tt.events.add(event_obj)
+            tt.save()
 
     def validate_credits(self, event):
         credits = Decimal(event["credits"])
