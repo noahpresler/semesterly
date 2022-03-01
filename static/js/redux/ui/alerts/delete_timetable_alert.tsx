@@ -22,7 +22,7 @@ const DeleteTimetableAlert = () => {
   const timetable = useAppSelector((state) => state.alerts.timetableToDelete);
 
   useEffect(
-    // Cleanup on unmount
+    // cleanup on unmount
     () => () => {
       dispatch(alertsActions.dismissDeleteTimetable());
     },
@@ -39,9 +39,9 @@ const DeleteTimetableAlert = () => {
   };
 
   return (
-    <div className="general-alert">
+    <div className="delete-timetable-alert">
       Are you sure you want to delete this timetable?
-      <button onClick={() => handleConfirm()} className="general-alert-btn">
+      <button onClick={() => handleConfirm()} className="delete-timetable-alert-btn">
         Confirm
       </button>
     </div>

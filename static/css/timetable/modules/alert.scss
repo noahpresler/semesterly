@@ -150,7 +150,7 @@
   }
 }
 
-.general-alert {
+.conflict-alert {
   font-size: 12px;
   margin-left: -12px;
 
@@ -159,7 +159,38 @@
   }
 }
 
-.general-alert-btn {
+.conflict-alert-btn {
+  background-color: $confirm-green;
+  border: 0;
+  border-bottom: 2px solid $confirm-green-darker;
+  box-shadow: inset 0 -2px $confirm-green-darker;
+  color: $gfff;
+  cursor: pointer;
+  height: 25px;
+  margin-top: 10px;
+  padding: 0;
+  position: relative;
+  text-align: center;
+  text-shadow: 0 1px 2px $black-transparent-25;
+  vertical-align: top;
+  width: 70%;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:active {
+    box-shadow: none;
+    outline: none;
+    top: 1px;
+  }
+
+  &:hover {
+    background-color: $confirm-green-hover;
+  }
+}
+
+.delete-timetable-alert-btn {
   background-color: $confirm-green;
   border: 0;
   border-bottom: 2px solid $confirm-green-darker;
@@ -191,7 +222,7 @@
 }
 
 .change-semester-alert {
-  .general-alert-btn {
+  .conflict-alert-btn {
     padding-left: 5px;
     padding-right: 5px;
     width: 90%;
@@ -240,7 +271,7 @@
   margin: 0 10px;
   width: 230px;
 
-  .general-alert-btn {
+  .conflict-alert-btn {
     background-color: $facebook;
     border-bottom: 2px solid $facebook-dark;
     box-shadow: inset -3px -2px $facebook-dark;

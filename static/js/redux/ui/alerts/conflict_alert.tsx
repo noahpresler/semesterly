@@ -37,9 +37,9 @@ const ConflictAlert = () => {
   };
 
   return (
-    <div className="general-alert">
+    <div className="conflict-alert">
       Adding that course causes a conflict!
-      <button onClick={() => handleClick()} className="general-alert-btn">
+      <button onClick={() => handleClick()} className="conflict-alert-btn">
         Allow Conflicts!
       </button>
     </div>
