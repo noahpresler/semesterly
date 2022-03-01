@@ -172,11 +172,11 @@ const CustomSlot = (props: CustomSlotProps) => {
       };
     }
     // the cumulative width of this slot and all of the slots it is conflicting with
-    const totalSlotsWidth = 100 - 5 * props.depth_level;
+    const totalSlotsWidth = 100 - 7 * props.depth_level;
     // the width of this particular slot
     const slotWidthPercentage = totalSlotsWidth / props.num_conflicts;
     // the amount of left margin of this particular slot, in percentage
-    let pushLeft = props.shift_index * slotWidthPercentage + 5 * props.depth_level;
+    let pushLeft = props.shift_index * slotWidthPercentage + 7 * props.depth_level;
     if (pushLeft === 50) {
       pushLeft += 0.5;
     }

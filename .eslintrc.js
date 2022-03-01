@@ -24,6 +24,7 @@ module.exports = {
     $: true,
     initData: true, // homepage context data passed from backend
     reactAlertEvents: true,
+    JSX: true,
   },
   rules: {
     "no-else-return": 0,

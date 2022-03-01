@@ -8,7 +8,7 @@ interface CourseInfoSliceState {
   data: {
     reactions?: Reaction[];
   };
-  id: null | Number;
+  id: null | number;
   classmates: any; // TODO: change type
 }
 
@@ -30,7 +30,7 @@ const courseInfoSlice = createSlice({
       state.classmates = action.payload;
     },
     requestCourseInfo: () => initialState,
-    setCourseId: (state, action: PayloadAction<Number>) => {
+    setCourseId: (state, action: PayloadAction<number>) => {
       state.id = action.payload;
     },
   },
@@ -45,7 +45,7 @@ const courseInfoSlice = createSlice({
         (
           state,
           action: PayloadAction<{
-            id: Number;
+            id: number;
             reactions: Reaction[];
           }>
         ) => {

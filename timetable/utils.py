@@ -29,10 +29,13 @@ Timetable = namedtuple("Timetable", "courses sections has_conflict")
 class DisplayTimetable:
     """Object that represents the frontend's interpretation of a timetable."""
 
-    def __init__(self, slots, has_conflict, name="", events=None, id=None):
+    def __init__(
+        self, slots, has_conflict, show_weekend, name="", events=None, id=None
+    ):
         self.slots = slots
         self.has_conflict = has_conflict
         self.name = name
+        self.show_weekend = show_weekend
         self.events = events or []
         self.id = id
 
@@ -50,9 +53,16 @@ class DisplayTimetable:
             for section in timetable.sections.all()
         ]
         id = timetable.id if isinstance(timetable, PersonalTimetable) else None
+        # set show_weekend to False if timetable is not a PersonalTimetable (ex: SharedTimetable)
+        show_weekend = (
+            timetable.show_weekend
+            if isinstance(timetable, PersonalTimetable)
+            else False
+        )
         return DisplayTimetable(
             slots,
             timetable.has_conflict,
+            show_weekend,
             getattr(timetable, "name", ""),
             getattr(timetable, "events", []),
             id,
@@ -67,12 +77,13 @@ def courses_to_timetables(
     custom_events,
     with_conflicts,
     optional_course_ids,
+    show_weekend,
 ):
     all_offerings = courses_to_slots(
         courses, locked_sections, semester, optional_course_ids
     )
     timetable_gen = slots_to_timetables(
-        all_offerings, school, custom_events, with_conflicts
+        all_offerings, school, custom_events, with_conflicts, show_weekend
     )
     return itertools.islice(timetable_gen, MAX_RETURN)
 
@@ -120,7 +131,7 @@ def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
     return slots
 
 
-def slots_to_timetables(slots, school, custom_events, with_conflicts):
+def slots_to_timetables(slots, school, custom_events, with_conflicts, show_weekend):
     """Generate timetables in a depth-first manner based on a list of slots."""
     num_offerings, num_permutations_remaining = get_xproduct_indicies(slots)
     total_num_permutations = num_permutations_remaining.pop(0)
@@ -141,7 +152,7 @@ def slots_to_timetables(slots, school, custom_events, with_conflicts):
             current_tt.append(slots[i][j])
         if add_tt and current_tt:
             has_conflict = bool(num_conflicts)
-            current_tt = DisplayTimetable(current_tt, has_conflict)
+            current_tt = DisplayTimetable(current_tt, has_conflict, show_weekend)
             yield current_tt
 
 
@@ -305,7 +316,7 @@ def get_day_to_usage(custom_events, school):
         # This really should be 24 * 60, but for some reason the timetable is
         # capped at starting at 8am, so 8am-12am is 16 hours.
         day: [set() for _ in range(int(16 * 60 / SCHOOLS_MAP[school].granularity))]
-        for day in ["M", "T", "W", "R", "F"]
+        for day in ["M", "T", "W", "R", "F", "S", "U"]
     }
 
     for event in custom_events:

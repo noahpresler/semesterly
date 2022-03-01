@@ -40,6 +40,10 @@ export interface Section {
   waitlist_size: number;
 }
 
+export interface EntitySection extends Omit<Section, "offering_set"> {
+  offering_set: number[];
+}
+
 /**
  * Slot stores section and offering information regarding a course
  */
@@ -64,7 +68,6 @@ export interface Event {
   credits: string;
   id: number;
   preview: boolean;
-  exists_conflict?: boolean;
   custom?: boolean;
   key?: number;
 }
@@ -76,6 +79,7 @@ export interface Timetable {
   id: number;
   slots: Slot[];
   has_conflict: boolean;
+  show_weekend: boolean;
   name: string;
   avg_rating: number;
   events: Event[];
@@ -155,6 +159,10 @@ export interface DenormalizedSlot {
   is_locked: boolean;
 }
 
+export interface DenormalizedCourse extends Omit<Course, "sections"> {
+  sections: Section[];
+}
+
 export interface TermOfServiceAgreement {
   timeUpdated: string;
   description: string;
@@ -166,3 +174,18 @@ export type SearchMetrics =
   | "number of conflicts"
   | "time on campus"
   | "course rating stars";
+
+export interface Peer {
+  class_year: number;
+  email_enabled: boolean;
+  img_url: string;
+  integrations: any[];
+  jhed: string;
+  major: string;
+  preferred_name: null | string;
+  school: string;
+  social_all: boolean;
+  social_courses: boolean;
+  social_offerings: boolean;
+  time_accepted_tos: string;
+}

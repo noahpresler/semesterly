@@ -23,8 +23,6 @@ export const setCourseInfo = createAction("global/setCourseInfo", (courseInfo) =
 
 export const setCourseReactions = createAction("global/setCourseReactions");
 
-export const updateSemester = createAction("global/updateSemester");
-
 export const receiveTimetables = createAction("global/receiveTimetables");
 
 /**
@@ -61,8 +59,8 @@ export const receiveSearchResults = createAction(
 
 export const receiveAdvancedSearchResults = createAction(
   "global/receiveAdvancedSearchResults",
-  (courses) => ({
-    payload: normalize(courses, [courseSchema]),
+  (response) => ({
+    payload: { courses: normalize(response.data, [courseSchema]), page: response.page },
   })
 );
 

@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import PropTypes from "prop-types";
 import React from "react";
 import classNames from "classnames";
-import { getSectionTypeToSections } from "../state/entities_reducer";
+import { getSectionTypeToSections } from "../state/slices/entitiesSlice";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
 class SearchResult extends React.Component {

@@ -17,14 +17,13 @@ import { getActiveTimetableCourses, getCurrentSemester } from "../state";
 import { getCourseSearchEndpoint } from "../constants/endpoints";
 import { getUserSavedTimetables, saveTimetable } from "./user_actions";
 import { nullifyTimetable } from "./timetable_actions";
-import * as ActionTypes from "../constants/actionTypes";
 import { fetchCourseClassmates } from "./modal_actions";
 import { getSemester } from "./school_actions";
 import { alertsActions, explorationModalActions } from "../state/slices";
+import { semesterActions } from "../state/slices/semesterSlice";
 import {
   receiveAdvancedSearchResults,
   requestCourses,
-  updateSemester,
   receiveSearchResults,
 } from "./initActions";
 
@@ -37,7 +36,7 @@ export const setSemester = (semester) => (dispatch, getState) => {
     dispatch(nullifyTimetable(dispatch));
   }
 
-  dispatch(updateSemester(semester));
+  dispatch(semesterActions.updateSemester(semester));
   dispatch(receiveSearchResults([]));
 };
 
@@ -87,45 +86,39 @@ export const fetchSearchResults = (query) => (dispatch, getState) => {
     });
 };
 
-export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getState) => {
-  // if too small a query AND no filters; don't make request.
-  // we'll allow small query strings if some filters
-  // (departments, or breadths, or levels) are chosen.
-  if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
-    dispatch(receiveAdvancedSearchResults([]));
-    return;
-  }
+export const fetchAdvancedSearchResults =
+  (query, filters, page = 1) =>
+  (dispatch, getState) => {
+    // if too small a query AND no filters; don't make request.
+    // we'll allow small query strings if some filters
+    // (departments, or breadths, or levels) are chosen.
+    if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
+      dispatch(receiveAdvancedSearchResults({ data: [], page }));
+      return;
+    }
 
-  // indicate that we are now requesting courses
-  dispatch(explorationModalActions.requestAdvancedSearchResults());
-  // send a request (via fetch) to the appropriate endpoint to get courses
-  const state = getState();
-  fetch(getCourseSearchEndpoint(query, getSemester(getState())), {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    method: "POST",
-    body: JSON.stringify({
-      filters,
-      semester: getCurrentSemester(state),
-    }),
-  })
-    .then((response) => response.json()) // TODO(rohan): error-check the response
-    .then((json) => {
-      // indicate that courses have been received
-      dispatch(receiveAdvancedSearchResults(json));
-    });
-};
-
-export const paginateAdvancedSearchResults = () => ({
-  type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS,
-});
-
-export const clearAdvancedSearchPagination = () => ({
-  type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION,
-});
+    // indicate that we are now requesting courses
+    dispatch(explorationModalActions.requestAdvancedSearchResults());
+    // send a request (via fetch) to the appropriate endpoint to get courses
+    const state = getState();
+    fetch(getCourseSearchEndpoint(query, getSemester(getState()), page), {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      method: "POST",
+      body: JSON.stringify({
+        filters,
+        semester: getCurrentSemester(state),
+      }),
+    })
+      .then((response) => response.json()) // TODO(rohan): error-check the response
+      .then((json) => {
+        // indicate that courses have been received
+        dispatch(receiveAdvancedSearchResults(json));
+      });
+  };
 
 export const setAdvancedSearchResultIndex = (idx, courseId) => (dispatch) => {
   dispatch(explorationModalActions.setActiveAdvancedSearchResult(idx));

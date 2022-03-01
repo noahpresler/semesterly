@@ -147,6 +147,8 @@ const SlotManager = (props: SlotManagerProps) => {
       W: [],
       R: [],
       F: [],
+      S: [],
+      U: [],
     };
 
     const hoveredSlot: any = props.hoveredSlot || {

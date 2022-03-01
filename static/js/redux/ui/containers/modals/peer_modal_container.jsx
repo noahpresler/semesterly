@@ -16,9 +16,9 @@ import { connect } from "react-redux";
 import { getActiveTimetableDenormCourses } from "../../../state";
 import { fetchFriends, saveSettings } from "../../../actions/user_actions";
 import PeerModal from "../../modals/peer_modal";
-import { togglePeerModal } from "../../../actions/modal_actions";
 import { userInfoActions } from "../../../state/slices";
 import { signupModalActions } from "../../../state/slices/signupModalSlice";
+import { togglePeerModal } from "../../../state/slices/peerModalSlice";
 
 const mapStateToProps = (state) => ({
   // don't want to consider courses that are shown on timetable only

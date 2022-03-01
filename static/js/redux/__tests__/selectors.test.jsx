@@ -1,4 +1,4 @@
-import { getSectionTypeToSections, getMaxEndHour } from "../state/entities_reducer";
+import { getSectionTypeToSections, getMaxEndHour } from "../state/slices/entitiesSlice";
 
 describe("course selectors", () => {
   describe("section type to sections selector", () => {
@@ -20,6 +20,7 @@ describe("timetable selectors", () => {
   const timetable = {
     name: "tt_name",
     has_conflict: false,
+    show_weekend: true,
     slots: [
       {
         course: {
