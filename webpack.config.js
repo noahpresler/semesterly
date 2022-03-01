@@ -17,6 +17,7 @@ const path = require("path");
 const webpack = require("webpack");
 const BundleTracker = require("webpack-bundle-tracker");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 const isProd = process.env.NODE_ENV === "production";
 const isDev = process.env.NODE_ENV === "development";
@@ -142,20 +143,9 @@ if (isDev) {
   //             exclude: /node_modules/,
   //             loader: "eslint-loader",
   //         }].concat(config.module.loaders);
-}
-
-if (isProd) {
-  // keeps hashes consistent between compilations
-  config.plugins = config.plugins.concat(new webpack.optimize.OccurrenceOrderPlugin());
-
-  // minifies your code
-  config.plugins = config.plugins.concat(
-    new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        warnings: false,
-      },
-    })
-  );
+} else {
+  // If not dev, minify the JS file.
+  config.plugins = config.plugins.concat(new UglifyJsPlugin());
 }
 
 module.exports = config;
