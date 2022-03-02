@@ -462,6 +462,26 @@ class PersonalEventTest(APITestCase):
         self.tt.save()
         self.factory = APIRequestFactory()
 
+    def test_create_event(self):
+        event_data = {
+            "name": "New Custom Event",
+            "day": "W",
+            "time_start": "19:00",
+            "time_end": "21:00",
+            "color": "#93d9a4",
+            "location": "",
+            "credits": "0.0",
+            "timetable": 5,
+            "preview": False,
+        }
+        request = self.factory.post("/user/events/", event_data, format="json")
+        response = get_auth_response(request, self.user, "/user/events/")
+
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(response.data)
+
+        self.assertTrue(response.data["id"])
+
     def test_update_event(self):
         event_data = {
             "id": 1875,
