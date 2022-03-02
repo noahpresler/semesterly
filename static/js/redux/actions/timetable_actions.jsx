@@ -428,8 +428,6 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
 };
 
 export const removeCustomSlot = (id) => (dispatch, getState) => {
-  console.log(id);
-  console.trace()
   fetch(getPersonalEventEndpoint(), {
          headers: {
         "X-CSRFToken": Cookie.get("csrftoken"),
@@ -439,7 +437,7 @@ export const removeCustomSlot = (id) => (dispatch, getState) => {
       method: "DELETE",
       body: JSON.stringify({
         id,
-        timetable: getActiveTimetable(getState()),
+        timetable: getActiveTimetable(getState()).id,
       }),
       credentials: "include",
     }).then(() => dispatch(removeCustomEvent(id)))
