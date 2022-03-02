@@ -254,9 +254,11 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             if tt_id is None
             else PersonalTimetable.objects.get(id=tt_id)
         )
-        slots = request.data["slots"] # a slot corresponds to a course and section
+        slots = request.data["slots"]  # a slot corresponds to a course and section
         self.update_tt(personal_timetable, name, slots)
-        self.update_events(personal_timetable, request.data["events"]) # events correspond to PersonalEvent model
+        self.update_events(
+            personal_timetable, request.data["events"]
+        )  # events correspond to PersonalEvent model
 
         response = {
             "timetables": get_student_tts(student, school, semester),
@@ -587,8 +589,8 @@ class PersonalEventView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
         serializer = EventSerializer(data=request.data, partial=True)
         if serializer.is_valid():
-            event = serializer.save()
-            return Response(event.id, status=status.HTTP_204_NO_CONTENT)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request: HttpRequest):
