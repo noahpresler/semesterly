@@ -536,3 +536,10 @@ class PersonalEventTest(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(AttributeError):
             self.assertNotEquals(self.event.stan, "fromis_9")
+
+    def test_delete_event(self):
+        event_data = {"id": self.event.id, "timetable": self.tt.id}
+        request = self.factory.delete("/user/events/", event_data, format="json")
+        response = get_auth_response(request, self.user, "/user/events/")
+
+        self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
