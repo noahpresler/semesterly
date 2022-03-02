@@ -19,6 +19,7 @@ import ClickOutHandler from "react-onclickout";
 import MasterSlot from "./master_slot";
 import TimetableNameInput from "./timetable_name_input";
 import CreditTicker from "./credit_ticker";
+import { alertsActions } from "../state/slices";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 import { getNextAvailableColour } from "../util";
 
@@ -55,7 +56,7 @@ class SideBar extends React.Component {
             {t.name}
             <button
               onClick={(event) =>
-                this.stopPropagation(() => this.props.deleteTimetable(t), event)
+                this.stopPropagation(() => this.props.alertDeleteTimetable(t), event)
               }
               className="row-button"
             >
@@ -232,7 +233,7 @@ SideBar.propTypes = {
   courseToClassmates: PropTypes.shape({ "*": SemesterlyPropTypes.classmates })
     .isRequired,
   loadTimetable: PropTypes.func.isRequired,
-  deleteTimetable: PropTypes.func.isRequired,
+  alertDeleteTimetable: PropTypes.func.isRequired,
   isCourseInRoster: PropTypes.func.isRequired,
   duplicateTimetable: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,

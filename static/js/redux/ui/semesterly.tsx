@@ -17,6 +17,7 @@ import DayCalendarContainer from "./containers/day_calendar_container";
 import CalendarContainer from "./containers/calendar_container";
 import AlertBox from "./alert_box";
 import ConflictAlert from "./alerts/conflict_alert";
+import DeleteTimetableAlert from "./alerts/delete_timetable_alert";
 import TimetableExistsAlertContainer from "./alerts/timetable_exists_alert_container";
 import ChangeSemesterAlertContainer from "./alerts/change_semester_alert_container";
 import NewTimetableAlertContainer from "./alerts/new_timetable_alert_container";
@@ -47,6 +48,10 @@ const Semesterly = () => {
   const alertConflict = useAppSelector((state) => state.alerts.alertConflict);
   const alertEnableNotifications = useAppSelector(
     (state) => state.alerts.alertEnableNotifications
+  );
+
+  const alertDeleteTimetable = useAppSelector(
+    (state) => state.alerts.alertDeleteTimetable
   );
 
   const activeTTLength = useAppSelector(
@@ -115,6 +120,8 @@ const Semesterly = () => {
   useEffect(() => {
     if (alertConflict) {
       showAlert(<ConflictAlert />, "info", 10000);
+    } else if (alertDeleteTimetable) {
+      showAlert(<DeleteTimetableAlert />, "info", 10000);
     } else if (alertTimetableExists) {
       showAlert(<TimetableExistsAlertContainer />, "info", 10000);
     } else if (alertChangeSemester) {
@@ -135,6 +142,7 @@ const Semesterly = () => {
     }
   }, [
     alertConflict,
+    alertDeleteTimetable,
     alertTimetableExists,
     alertChangeSemester,
     alertNewTimetable,
