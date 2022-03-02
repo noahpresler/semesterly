@@ -34,10 +34,6 @@ const DeleteTimetableAlert = () => {
     dispatch(alertsActions.dismissDeleteTimetable());
   };
 
-  const handleCancel = () => {
-    dispatch(alertsActions.dismissDeleteTimetable());
-  };
-
   return (
     <div className="delete-timetable-alert">
       Are you sure you want to delete this timetable?
