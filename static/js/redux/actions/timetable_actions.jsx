@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import fetch from "isomorphic-fetch";
 import Cookie from "js-cookie";
 import { getActiveTimetable, getCurrentSemester, getDenormTimetable } from "../state";
-import { getTimetablesEndpoint, getUpdateEventEndpoint } from "../constants/endpoints";
+import { getTimetablesEndpoint, getPersonalEventEndpoint } from "../constants/endpoints";
 import {
   browserSupportsLocalStorage,
   saveLocalActiveIndex,
@@ -427,9 +427,22 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
   dispatch(refetchTimetables());
 };
 
-export const removeCustomSlot = (id) => (dispatch) => {
-  dispatch(removeCustomEvent(id));
-  dispatch(refetchTimetables());
+export const removeCustomSlot = (id) => (dispatch, getState) => {
+  console.log(id);
+  console.trace()
+  fetch(getPersonalEventEndpoint(), {
+         headers: {
+        "X-CSRFToken": Cookie.get("csrftoken"),
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      }, 
+      method: "DELETE",
+      body: JSON.stringify({
+        id,
+        timetable: getActiveTimetable(getState()),
+      }),
+      credentials: "include",
+    }).then(() => dispatch(removeCustomEvent(id)))
 };
 
 function isNewTimeLessThan10Minutes(timeStart, timeEnd) {
@@ -452,7 +465,7 @@ export const updateCustomSlot = (newValues, id) => (dispatch) => {
     // For some reason, students can drag and drop past midnight
   } else if (!goesPastMidnight(newValues.timeEnd)) {
     newValues.id = id;
-    fetch(getUpdateEventEndpoint(), {
+    fetch(getPersonalEventEndpoint(), {
       headers: {
         "X-CSRFToken": Cookie.get("csrftoken"),
         Accept: "application/json",
