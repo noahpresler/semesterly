@@ -288,9 +288,7 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
     def update_events(self, tt, events):
         """Replace tt's events with input events. Deletes all old events to avoid
         buildup in db"""
-        to_delete = tt.events.all()
-        tt.events.clear()
-        to_delete.delete()
+        tt.events.all().delete()
         for event in events:
             credits = self.validate_credits(event)
             event_obj = PersonalEvent.objects.create(
