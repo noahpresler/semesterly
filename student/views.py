@@ -291,6 +291,7 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         tt.events.all().delete()
         for event in events:
             credits = self.validate_credits(event)
+            self.validate_time(event["time_start"], event["time_end"])
             event_obj = PersonalEvent.objects.create(
                 timetable=tt,
                 name=event["name"],
@@ -311,6 +312,19 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         if credits < 0 or credits > 20:
             raise serializers.ValidationError("Field credit must be between 0 and 20")
         return credits
+
+    def validate_time(self, time_start: str, time_end: str):
+        start_minutes = self.convert_to_minutes(time_start)
+        end_minutes = self.convert_to_minutes(time_end)
+        print(end_minutes, start_minutes, end_minutes - start_minutes)
+        if end_minutes - start_minutes < 10:
+            raise serializers.ValidationError(
+                "Time start must come before time end by at least 10 minutes."
+            )
+
+    def convert_to_minutes(self, time: str):
+        hours, minutes = time.split(":")
+        return 60 * int(hours) + int(minutes)
 
     def delete(self, request, sem_name, year, tt_name):
         """Deletes a PersonalTimetable by name/year/term."""
