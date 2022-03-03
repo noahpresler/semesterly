@@ -223,11 +223,9 @@ const Semesterly = () => {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href="https://discord.gg/txYbphsAV7"
-                  // TODO: add discord logo correctly
+                  href="https://discord.gg/HmnwdbehBh"
                 >
-                  <i className="fab fa-discord" />
-                  Forum
+                  Discord
                 </a>
               </li>
               <li className="footer-button" role="presentation">
