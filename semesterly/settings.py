@@ -300,7 +300,9 @@ TEST_RUNNER = "helpers.test.test_runners.FastTestRunner"
 
 STATIC_URL = "/static/"
 
-STATIC_ROOT = os.path.join(PROJECT_DIRECTORY, "static")
+STATICFILES_DIRS = [os.path.join(PROJECT_DIRECTORY, "static")]
+
+STATIC_ROOT = ""
 
 
 # Caching
