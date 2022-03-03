@@ -90,7 +90,7 @@ spec:
       - name: gunicorn
         image: semesterly.azurecr.io/semesterly:Version
         command: ["bash"]
-        args: ["-c","python manage.py migrate; gunicorn semesterly.wsgi wsgi:application --bind=0.0.0.0:8000 --preload --workers=16 --max-requests=16384 --access-logfile - --error-logfile - --log-level info"]  
+        args: ["-c","python manage.py migrate; python manage.py collectstatic; gunicorn semesterly.wsgi wsgi:application --bind=0.0.0.0:8000 --preload --workers=16 --max-requests=16384 --access-logfile - --error-logfile - --log-level info"]  
         workingDir: /code
         ports:
         - containerPort: 8000
