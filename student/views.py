@@ -292,23 +292,21 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         """Replace tt's events with input events. Deletes all old events to avoid
         buildup in db"""
         if events:
-            to_delete = tt.events.all()
-            tt.events.clear()
-            to_delete.delete()
-            for event in events:
-                credits = self.validate_credits(event)
-                event_obj = PersonalEvent.objects.create(
-                    timetable=tt,
-                    name=event["name"],
-                    time_start=event["time_start"],
-                    time_end=event["time_end"],
-                    day=event["day"],
-                    color=event["color"],
-                    location=event["location"],
-                    credits=credits,
-                )
-                tt.events.add(event_obj)
-            tt.save()
+          tt.events.all().delete()
+          for event in events:
+              credits = self.validate_credits(event)
+              event_obj = PersonalEvent.objects.create(
+                  timetable=tt,
+                  name=event["name"],
+                  time_start=event["time_start"],
+                  time_end=event["time_end"],
+                  day=event["day"],
+                  color=event["color"],
+                  location=event["location"],
+                  credits=credits,
+              )
+              tt.events.add(event_obj)
+          tt.save()
 
     def validate_credits(self, event):
         credits = Decimal(event["credits"])

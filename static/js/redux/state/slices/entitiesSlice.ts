@@ -52,13 +52,11 @@ const entitiesSlice = createSlice({
           state.courses[action.payload.id].reactions = action.payload.reactions;
         }
       )
+      .addCase(receiveAdvancedSearchResults, (state, action) =>
+        merge({}, state, action.payload.courses.entities)
+      )
       .addMatcher(
-        isAnyOf(
-          setCourseInfo,
-          receiveCourses,
-          receiveAdvancedSearchResults,
-          receiveSearchResults
-        ),
+        isAnyOf(setCourseInfo, receiveCourses, receiveSearchResults),
         (state, action) => merge({}, state, action.payload.entities)
       );
   },

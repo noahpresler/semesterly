@@ -16,11 +16,9 @@ import {
   addOrRemoveCourse,
   addOrRemoveOptionalCourse,
   fetchAdvancedSearchResults,
-  fetchCourseClassmates,
   setAdvancedSearchResultIndex,
 } from "../../actions";
 import { timetablesActions } from "../../state/slices/timetablesSlice";
-import { Course } from "../../constants/commonTypes";
 import { VERBOSE_DAYS } from "../../constants/constants";
 import { ShareLink } from "../master_slot";
 import CourseModalBodyContainer from "../containers/modals/course_modal_body_container";
@@ -30,6 +28,7 @@ import {
   SelectedFilterSection,
 } from "../advanced_search_filters";
 import TimeSelector from "../time_selector";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 type ExplorationSearchResultProps = {
   name: string;
@@ -76,6 +75,7 @@ const AdvancedSearchModal = () => {
     getCourseShareLinkFromModal(courseCode, semester);
 
   const modal = useRef<DropModal>();
+  const scrollContainer = useRef<HTMLDivElement>();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterData, setFilterData] = useState({
@@ -94,7 +94,8 @@ const AdvancedSearchModal = () => {
   });
   const [shareLinkShown, setShareLinkShown] = useState(false);
   const [selected, setSelected] = useState(0);
-  const [didSearch, setDidSearch] = useState(false);
+  const [curPage, setCurPage] = useState(1);
+  const [newSearch, setNewSearch] = useState(false);
 
   useEffect(() => {
     if (isVisible) {
@@ -131,21 +132,29 @@ const AdvancedSearchModal = () => {
     });
   };
 
-  const fetchResults = () => {
+  const fetchResults = (pageToFetch: number = 1) => {
     if (isFetching) {
       return;
     }
-
-    setDidSearch(false);
+    if (pageToFetch === 1 && scrollContainer.current) {
+      scrollContainer.current.scrollTop = 0;
+      setNewSearch(true);
+    } else {
+      setNewSearch(false);
+    }
     dispatch(
-      fetchAdvancedSearchResults(searchQuery, {
-        areas: filterData.areas,
-        departments: filterData.departments,
-        times: filterData.times,
-        levels: filterData.levels,
-      })
+      fetchAdvancedSearchResults(
+        searchQuery,
+        {
+          areas: filterData.areas,
+          departments: filterData.departments,
+          times: filterData.times,
+          levels: filterData.levels,
+        },
+        pageToFetch
+      )
     );
-    setDidSearch(true);
+    setCurPage(pageToFetch);
   };
 
   useEffect(() => {
@@ -256,12 +265,6 @@ const AdvancedSearchModal = () => {
       ...stateUpdate,
     }));
   };
-
-  // presentation logic
-  const numSearchResults =
-    !isFetching && advancedSearchResults.length > 0 ? (
-      <p>returned {advancedSearchResults.length} Search Results</p>
-    ) : null;
 
   const searchResults = advancedSearchResults.map((c: any, i) => (
     <ExplorationSearchResult
@@ -395,91 +398,13 @@ const AdvancedSearchModal = () => {
     );
   });
 
-  const content = (
+  const loadSpinner = (
     <div
-      className={classNames("exploration-content", {
-        loading: isFetching,
-      })}
+      style={{
+        textAlign: "center",
+      }}
     >
-      <div className="exploration-header cf">
-        <div className="col-4-16 exp-title">
-          <i className="fa fa-compass" />
-          <h1>Advanced Search</h1>
-        </div>
-        <div className="col-5-16">
-          <input
-            value={searchQuery}
-            placeholder={`Searching ${semesterName}`}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-            }}
-          />
-        </div>
-        <div className="exploration-close" onMouseDown={() => modal.current.hide()}>
-          <i className="fa fa-times" />
-        </div>
-      </div>
-      <div className="exploration-body">
-        <div className="col-4-16 exp-filters">
-          {selectedFilterSections}
-          <SelectedFilterSection
-            key={"times"}
-            name={"Day/Times"}
-            toggle={toggleFilter("times")}
-            type={"times"}
-            removeAll={() => {
-              removeFilter("times");
-            }}
-          >
-            {timeFilters}
-          </SelectedFilterSection>
-        </div>
-        <div className="col-5-16 exp-search-results">
-          <div id="exp-search-list" style={{ height: "calc(100% - 20px)" }}>
-            {numSearchResults}
-            {didSearch &&
-              !isFetching &&
-              (searchResults.length ? (
-                searchResults
-              ) : (
-                <p>No courses have been found</p>
-              ))}
-            {isFetching ? (
-              <div
-                style={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <i className="fa fa-spin fa-refresh" />
-              </div>
-            ) : null}
-          </div>
-        </div>
-        {filters}
-        <Filter
-          results={[
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday",
-          ]}
-          filterType={"times"}
-          add={addDayForTimesFilter}
-          show={filterVisibility.show_times}
-          isFiltered={isFiltered}
-          isFetching={isFetching}
-          onClickOut={hideAllFilters}
-          schoolSpecificInfo={schoolSpecificInfo}
-        />
-        {isFetching ? null : <div className="col-7-16 exp-modal">{courseModal}</div>}
-      </div>
+      <i className="fa fa-spin fa-refresh mx-auto" />
     </div>
   );
 
@@ -495,7 +420,88 @@ const AdvancedSearchModal = () => {
       }}
       onHide={() => dispatch(explorationModalActions.hideExplorationModal())}
     >
-      {content}
+      <div
+        className={classNames("exploration-content", {
+          loading: isFetching,
+        })}
+      >
+        <div className="exploration-header cf">
+          <div className="col-4-16 exp-title">
+            <i className="fa fa-compass" />
+            <h1>Advanced Search</h1>
+          </div>
+          <div className="col-5-16">
+            <input
+              value={searchQuery}
+              placeholder={`Searching ${semesterName}`}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
+            />
+          </div>
+          <div className="exploration-close" onMouseDown={() => modal.current.hide()}>
+            <i className="fa fa-times" />
+          </div>
+        </div>
+        <div className="exploration-body">
+          <div className="col-4-16 exp-filters">
+            {selectedFilterSections}
+            <SelectedFilterSection
+              key={"times"}
+              name={"Day/Times"}
+              toggle={toggleFilter("times")}
+              type={"times"}
+              removeAll={() => {
+                removeFilter("times");
+              }}
+            >
+              {timeFilters}
+            </SelectedFilterSection>
+          </div>
+          <div
+            className="col-5-16 exp-search-results"
+            id="scrollDiv"
+            ref={scrollContainer}
+          >
+            {!isFetching && newSearch && searchResults.length === 0 && (
+              <p className="text-center h4">No course found</p>
+            )}
+            <InfiniteScroll
+              dataLength={searchResults.length}
+              hasMore
+              next={() => {
+                fetchResults(curPage + 1);
+              }}
+              loader={isFetching && loadSpinner}
+              scrollableTarget="scrollDiv"
+            >
+              {(!newSearch || !isFetching) && searchResults}
+            </InfiniteScroll>
+          </div>
+          {filters}
+          <Filter
+            results={[
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday",
+            ]}
+            filterType={"times"}
+            add={addDayForTimesFilter}
+            show={filterVisibility.show_times}
+            isFiltered={isFiltered}
+            isFetching={isFetching}
+            onClickOut={hideAllFilters}
+            schoolSpecificInfo={schoolSpecificInfo}
+          />
+          <div className="col-7-16 exp-modal">
+            {(!newSearch || !isFetching) && courseModal}
+          </div>
+        </div>
+      </div>
     </DropModal>
   );
 };

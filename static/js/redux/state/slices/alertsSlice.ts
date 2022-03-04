@@ -1,8 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { alertConflict, alertTimeTableExists } from "../../actions/initActions";
+import { Timetable } from "../../constants/commonTypes";
+import TimetableExistsAlert from "../../ui/alerts/timetable_exists_alert";
 
 interface AlertsSliceState {
   alertConflict: boolean;
+  alertDeleteTimetable: boolean;
   alertTimetableExists: boolean;
   alertChangeSemester: boolean;
   alertNewTimetable: boolean;
@@ -13,10 +16,12 @@ interface AlertsSliceState {
   mostFriendsCount: number;
   totalFriendsCount: number;
   desiredSemester: number;
+  timetableToDelete: null | Timetable;
 }
 
 const initialState: AlertsSliceState = {
   alertConflict: false,
+  alertDeleteTimetable: false,
   alertTimetableExists: false,
   alertChangeSemester: false,
   alertNewTimetable: false,
@@ -27,6 +32,7 @@ const initialState: AlertsSliceState = {
   mostFriendsCount: 0,
   totalFriendsCount: 0,
   desiredSemester: 0,
+  timetableToDelete: null,
 };
 
 const alertsSlice = createSlice({
@@ -36,6 +42,14 @@ const alertsSlice = createSlice({
     // dispatched when there's a conflict
     dismissAlertConflict: (state) => {
       state.alertConflict = false;
+    },
+    // dispatched when a user attempts to delete a timetable
+    alertDeleteTimetable: (state, action: PayloadAction<Timetable>) => {
+      state.alertDeleteTimetable = true;
+      state.timetableToDelete = action.payload;
+    },
+    dismissDeleteTimetable: (state) => {
+      state.alertDeleteTimetable = false;
     },
     // dispatched there's a saved timetable with the same name
     dismissTimeTableExists: (state) => {
