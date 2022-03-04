@@ -176,13 +176,7 @@ class UserTimetableViewTest(APITestCase):
     def test_create_timetable(self):
         data = {
             "semester": {"name": "Winter", "year": "1995"},
-            "slots": [
-                {
-                    "course": 1,
-                    "section": 1,
-                    "offerings": [1],
-                }
-            ],
+            "slots": [{"course": 1, "section": 1, "offerings": [1],}],
             "events": [],
             "name": "new tt",
             "has_conflict": False,
@@ -195,13 +189,7 @@ class UserTimetableViewTest(APITestCase):
     def test_create_timetable_exists(self):
         data = {
             "semester": {"name": "Winter", "year": "1995"},
-            "slots": [
-                {
-                    "course": 1,
-                    "section": 1,
-                    "offerings": [1],
-                }
-            ],
+            "slots": [{"course": 1, "section": 1, "offerings": [1],}],
             "events": [],
             "name": "tt",
             "has_conflict": False,
@@ -226,13 +214,7 @@ class UserTimetableViewTest(APITestCase):
         data = {
             "id": 10,
             "semester": {"name": "Winter", "year": "1995"},
-            "slots": [
-                {
-                    "course": 1,
-                    "section": 1,
-                    "offerings": [1],
-                }
-            ],
+            "slots": [{"course": 1, "section": 1, "offerings": [1],}],
             "events": [],
             "name": "renamed",
             "has_conflict": False,
@@ -255,12 +237,7 @@ class UserTimetableViewTest(APITestCase):
         )
         request = self.factory.delete("/user/timetables/Winter/1995/todelete")
         response = get_auth_response(
-            request,
-            self.user,
-            "/user/timetables/",
-            "Winter",
-            "1995",
-            "todelete",
+            request, self.user, "/user/timetables/", "Winter", "1995", "todelete",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(PersonalTimetable.objects.filter(id=20).exists())

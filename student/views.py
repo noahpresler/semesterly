@@ -595,12 +595,11 @@ class PersonalEventView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
     def delete(self, request: HttpRequest):
         try:
-            timetable = PersonalTimetable.objects.get(id=request.data["timetable"])
             event = PersonalEvent.objects.get(id=request.data["id"])
-        except (PersonalTimetable.DoesNotExist, PersonalEvent.DoesNotExist):
+        except (PersonalEvent.DoesNotExist):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        if timetable.student != get_student(request):
+        if event.timetable.student != get_student(request):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         event.delete()
