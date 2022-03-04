@@ -5,12 +5,12 @@ on:
     branches: 
       - prod
       - develop
-      - feature/add-saturday-sunday
+      - feature/news-modal
   pull_request:
     branches: 
       - prod
       - develop
-      - feature/add-saturday-sunday
+      - feature/news-modal
 
 jobs:
   build:
