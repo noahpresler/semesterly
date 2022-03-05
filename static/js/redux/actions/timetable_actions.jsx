@@ -15,7 +15,10 @@ GNU General Public License for more details.
 import fetch from "isomorphic-fetch";
 import Cookie from "js-cookie";
 import { getActiveTimetable, getCurrentSemester, getDenormTimetable } from "../state";
-import { getTimetablesEndpoint, getPersonalEventEndpoint } from "../constants/endpoints";
+import {
+  getTimetablesEndpoint,
+  getPersonalEventEndpoint,
+} from "../constants/endpoints";
 import {
   browserSupportsLocalStorage,
   saveLocalActiveIndex,
@@ -424,23 +427,22 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
       preview,
     })
   );
-  dispatch(refetchTimetables());
 };
 
 export const removeCustomSlot = (id) => (dispatch, getState) => {
   fetch(getPersonalEventEndpoint(), {
-         headers: {
-        "X-CSRFToken": Cookie.get("csrftoken"),
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      }, 
-      method: "DELETE",
-      body: JSON.stringify({
-        id,
-        timetable: getActiveTimetable(getState()).id,
-      }),
-      credentials: "include",
-    }).then(() => dispatch(removeCustomEvent(id)))
+    headers: {
+      "X-CSRFToken": Cookie.get("csrftoken"),
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "DELETE",
+    body: JSON.stringify({
+      id,
+      timetable: getState().savingTimetable.activeTimetable.id,
+    }),
+    credentials: "include",
+  }).then(() => dispatch(removeCustomEvent(id)));
 };
 
 function isNewTimeLessThan10Minutes(timeStart, timeEnd) {
@@ -457,25 +459,69 @@ function goesPastMidnight(timeEnd) {
   return false;
 }
 
-export const updateCustomSlot = (newValues, id) => (dispatch) => {
-  if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
+let createEventTimer = null;
+export const updateCustomSlot = (newValues, id) => (dispatch, getState) => {
+  newValues.id = id;
+  const event = getState().customEvents.events.find((e) => e.id === id);
+  if (!event) {
+    return;
+  }
+  if (event.preview) {
+    updateEventPreview(dispatch, getState, newValues);
+  } else if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
     dispatch(removeCustomSlot(id));
     // For some reason, students can drag and drop past midnight
   } else if (!goesPastMidnight(newValues.timeEnd)) {
-    newValues.id = id;
+    updateEvent(dispatch, newValues);
+  }
+};
+
+const updateEventPreview = (dispatch, getState, newValues) => {
+  dispatch(updateExistingEvent(newValues));
+  clearTimeout(createEventTimer);
+  createEventTimer = setTimeout(() => {
+    const event = getState().customEvents.events.find((e) => e.id === newValues.id);
+    if (!event) {
+      return;
+    }
     fetch(getPersonalEventEndpoint(), {
       headers: {
         "X-CSRFToken": Cookie.get("csrftoken"),
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      method: "PUT",
-      body: JSON.stringify(newValues),
+      method: "POST",
+      body: JSON.stringify({
+        timetable: getState().savingTimetable.activeTimetable.id,
+        ...event,
+      }),
       credentials: "include",
-    }).then(() => {
-      dispatch(updateExistingEvent(newValues));
-    });
-  }
+    })
+      .then((res) => res.json())
+      .then((event) => {
+        dispatch(
+          customEventsActions.replacePreviewEvent({
+            oldId: newValues.id,
+            newId: event.id,
+          })
+        );
+      });
+  }, 500);
+};
+
+const updateEvent = (dispatch, newValues) => {
+  fetch(getPersonalEventEndpoint(), {
+    headers: {
+      "X-CSRFToken": Cookie.get("csrftoken"),
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+    body: JSON.stringify(newValues),
+    credentials: "include",
+  }).then(() => {
+    dispatch(updateExistingEvent(newValues));
+  });
 };
 
 export const addOrRemoveOptionalCourse = (course) => (dispatch, getState) => {
