@@ -60,10 +60,10 @@ const createSlotTarget = {
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
     let timeEnd = convertHalfHoursToStr(convertToHalfHours(props.time_start) + n);
 
-    if (timeStart > timeEnd) {
+    if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
-    props.updateCustomSlot({ preview: false }, id);
+    props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
   },
   hover(props, monitor) {
     let { timeStart } = monitor.getItem();

@@ -96,10 +96,10 @@ const createSlotTarget = {
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
     let timeEnd = convertHalfHoursToStr(convertToHalfHours(props.time_start) + n);
 
-    if (timeStart > timeEnd) {
+    if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
-    props.updateCustomSlot({ preview: false }, id);
+    props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
   },
   canDrop(props: any, monitor: any) {
     // new custom slot must start and end on the same day
@@ -216,6 +216,12 @@ const CustomSlot = (props: CustomSlotProps) => {
         }`
       : props.time_end;
 
+  const showModalIfNotPreview = () => {
+    if (!props.preview) {
+      dispatch(customEventsActions.showCustomEventsModal(props.id));
+    }
+  };
+
   const dispatch = useAppDispatch();
   const customSlot = (
     <div
@@ -223,7 +229,7 @@ const CustomSlot = (props: CustomSlotProps) => {
       style={getSlotStyles()}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => dispatch(customEventsActions.showCustomEventsModal(props.id))}
+      onClick={showModalIfNotPreview}
       id={`${props.id}`}
     >
       <div
