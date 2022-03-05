@@ -81,7 +81,7 @@ const createTarget = {
     if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
-    props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
+    props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id, true);
   },
   hover(props, monitor) {
     if (props.time === lastPreview) {

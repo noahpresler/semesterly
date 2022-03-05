@@ -460,26 +460,27 @@ function goesPastMidnight(timeEnd) {
 }
 
 let createEventTimer = null;
-export const updateCustomSlot = (newValues, id) => (dispatch, getState) => {
-  newValues.id = id;
-  const event = getState().customEvents.events.find((e) => e.id === id);
-  if (!event) {
-    return;
-  }
-  if (event.preview) {
-    updateEventPreview(dispatch, getState, newValues);
-  } else if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
-    dispatch(removeCustomSlot(id));
-    // For some reason, students can drag and drop past midnight
-  } else if (!goesPastMidnight(newValues.timeEnd)) {
-    updateEvent(dispatch, newValues);
-  }
-};
+export const updateCustomSlot =
+  (newValues, id, finalize = false) =>
+  (dispatch, getState) => {
+    newValues.id = id;
+    const event = getState().customEvents.events.find((e) => e.id === id);
+    if (!event) {
+      return;
+    }
+    if (event.preview) {
+      updateEventPreview(dispatch, getState, newValues, finalize);
+    } else if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
+      dispatch(removeCustomSlot(id));
+      // For some reason, students can drag and drop past midnight
+    } else if (!goesPastMidnight(newValues.timeEnd)) {
+      updateEvent(dispatch, newValues);
+    }
+  };
 
-const updateEventPreview = (dispatch, getState, newValues) => {
+const updateEventPreview = (dispatch, getState, newValues, finalize) => {
   dispatch(updateExistingEvent(newValues));
-  clearTimeout(createEventTimer);
-  createEventTimer = setTimeout(() => {
+  if (finalize) {
     const event = getState().customEvents.events.find((e) => e.id === newValues.id);
     if (!event) {
       return;
@@ -506,7 +507,7 @@ const updateEventPreview = (dispatch, getState, newValues) => {
           })
         );
       });
-  }, 500);
+  }
 };
 
 const updateEvent = (dispatch, newValues) => {
