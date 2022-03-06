@@ -39,6 +39,7 @@ import CustomEventModal from "./modals/custom_event_modal";
 import AdvancedSearchModal from "./modals/advanced_search_modal";
 import { useAppSelector } from "../hooks";
 import { getActiveTimetableCourses } from "../state";
+import NewsModal from "./modals/news_modal";
 
 const Semesterly = () => {
   const dataLastUpdated = useAppSelector((state) => state.school.dataLastUpdated);
@@ -179,6 +180,7 @@ const Semesterly = () => {
       <TopBarContainer />
       <UserSettingsModal />
       <AdvancedSearchModal />
+      <NewsModal />
       <SignupModalContainer />
       <PreferenceModal />
       <IntegrationModalContainer />
