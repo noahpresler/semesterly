@@ -1,0 +1,21 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.rulers": [88],
+  "search.exclude": {
+    "**/node_modules": true,
+    "static/admin/": true,
+    "static/bundles/": true,
+    "static/django_extensions/": true,
+    "static/drf-yasg/": true,
+    "static/lists/": true,
+    "static/rest_framework": true
+  },
+  "python.linting.enabled": true,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "python.linting.pycodestyleEnabled": true,
+  "python.linting.pycodestyleArgs": ["--max-line-length=88"],
+  "python.formatting.provider": "black"
+}
