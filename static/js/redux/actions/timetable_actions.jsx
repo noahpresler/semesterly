@@ -388,21 +388,6 @@ export const addOrRemoveCourse =
     dispatch(fetchTimetables(reqBody, removing));
   };
 
-// fetch timetables with same courses, but updated optional courses/custom slots
-const refetchTimetables = () => (dispatch, getState) => {
-  const state = getState();
-  const reqBody = getBaseReqBody(state);
-
-  Object.assign(reqBody, {
-    optionCourses: state.optionalCourses.courses,
-    numOptionCourses: state.optionalCourses.numRequired,
-    customEvents: state.customEvents,
-  });
-
-  dispatch(fetchTimetables(reqBody, false));
-  dispatch(autoSave());
-};
-
 export const addLastAddedCourse = () => (dispatch, getState) => {
   const state = getState();
   // last timetable change was a custom event edit, not add
