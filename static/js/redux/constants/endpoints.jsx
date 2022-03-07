@@ -61,3 +61,5 @@ export function getCourseShareLinkFromModal(code, semester) {
 export function getCourseShareLink(code, semester) {
   return `/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;
 }
+
+export const getNewsEndpoint = () => "notifications/news";
