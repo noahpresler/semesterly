@@ -444,7 +444,6 @@ function goesPastMidnight(timeEnd) {
   return false;
 }
 
-let createEventTimer = null;
 export const updateCustomSlot =
   (newValues, id, finalize = false) =>
   (dispatch, getState) => {

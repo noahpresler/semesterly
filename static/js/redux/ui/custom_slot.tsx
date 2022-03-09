@@ -99,7 +99,7 @@ const createSlotTarget = {
     if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
-    props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
+    props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id, true);
   },
   canDrop(props: any, monitor: any) {
     // new custom slot must start and end on the same day
