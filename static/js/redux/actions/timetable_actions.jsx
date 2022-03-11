@@ -444,53 +444,19 @@ function goesPastMidnight(timeEnd) {
   return false;
 }
 
-export const updateCustomSlot =
-  (newValues, id, finalize = false) =>
-  (dispatch, getState) => {
-    newValues.id = id;
-    const event = getState().customEvents.events.find((e) => e.id === id);
-    if (!event) {
-      return;
-    }
-    if (event.preview) {
-      updateEventPreview(dispatch, getState, newValues, finalize);
-    } else if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
-      dispatch(removeCustomSlot(id));
-      // For some reason, students can drag and drop past midnight
-    } else if (!goesPastMidnight(newValues.timeEnd)) {
-      updateEvent(dispatch, newValues);
-    }
-  };
-
-const updateEventPreview = (dispatch, getState, newValues, finalize) => {
-  dispatch(updateExistingEvent(newValues));
-  if (finalize) {
-    const event = getState().customEvents.events.find((e) => e.id === newValues.id);
-    if (!event) {
-      return;
-    }
-    fetch(getPersonalEventEndpoint(), {
-      headers: {
-        "X-CSRFToken": Cookie.get("csrftoken"),
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({
-        timetable: getState().savingTimetable.activeTimetable.id,
-        ...event,
-      }),
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((event) => {
-        dispatch(
-          customEventsActions.replacePreviewEvent({
-            oldId: newValues.id,
-            newId: event.id,
-          })
-        );
-      });
+export const updateCustomSlot = (newValues, id) => (dispatch, getState) => {
+  newValues.id = id;
+  const event = getState().customEvents.events.find((e) => e.id === id);
+  if (!event) {
+    return;
+  }
+  if (event.preview) {
+    dispatch(updateExistingEvent(newValues));
+  } else if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
+    dispatch(removeCustomSlot(id));
+    // For some reason, students can drag and drop past midnight
+  } else if (!goesPastMidnight(newValues.timeEnd)) {
+    updateEvent(dispatch, newValues);
   }
 };
 
@@ -507,6 +473,36 @@ const updateEvent = (dispatch, newValues) => {
   }).then(() => {
     dispatch(updateExistingEvent(newValues));
   });
+};
+
+export const finalizeCustomSlot = (id) => (dispatch, getState) => {
+  const event = getState().customEvents.events.find((e) => e.id === id);
+  if (!event) {
+    return;
+  }
+
+  fetch(getPersonalEventEndpoint(), {
+    headers: {
+      "X-CSRFToken": Cookie.get("csrftoken"),
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({
+      timetable: getState().savingTimetable.activeTimetable.id,
+      ...event,
+    }),
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .then((newEvent) => {
+      dispatch(
+        customEventsActions.replacePreviewEvent({
+          oldId: id,
+          newId: newEvent.id,
+        })
+      );
+    });
 };
 
 export const addOrRemoveOptionalCourse = (course) => (dispatch, getState) => {

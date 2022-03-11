@@ -66,7 +66,8 @@ export function onCustomSlotCreateDrop(props: any, monitor: any) {
   if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
     [timeStart, timeEnd] = [timeEnd, timeStart];
   }
-  props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id, true);
+  props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
+  props.finalizeCustomSlot(id);
 }
 
 let lastPreview: number = null;
