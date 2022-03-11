@@ -19,9 +19,10 @@ import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
 import { useAppDispatch } from "../hooks";
 import { customEventsActions } from "../state/slices/customEventsSlice";
 import {
-  convertHalfHoursToStr,
-  convertToHalfHours,
-  getNewSlotValues,
+  canDropCustomSlot,
+  onCustomSlotCreateDrag,
+  onCustomSlotCreateDrop,
+  onCustomSlotUpdateDrop,
 } from "./slotUtils";
 
 type CustomSlotProps = {
@@ -63,17 +64,7 @@ function collectDragSource(connect: any) {
 
 const dragSlotTarget = {
   drop(props: any, monitor: any) {
-    // move it to current location on drop
-    const { timeStart, timeEnd, id } = monitor.getItem();
-
-    // @ts-ignore
-    const slotTop = $(`#${props.id}`).offset().top;
-    // number half hours from slot start
-    const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
-
-    const newStartHour = convertToHalfHours(props.time_start) + n;
-    const newValues = getNewSlotValues(timeStart, timeEnd, newStartHour, props.day);
-    props.updateCustomSlot(newValues, id);
+    onCustomSlotUpdateDrop(props, monitor);
   },
 };
 
@@ -84,44 +75,15 @@ function collectDragDrop(connect: any) {
   };
 }
 
-let lastPreview: number = null;
 const createSlotTarget = {
   drop(props: any, monitor: any) {
-    // move it to current location on drop
-    let { timeStart } = monitor.getItem();
-    const { id } = monitor.getItem();
-
-    // @ts-ignore get the time that the mouse dropped on
-    const slotTop = $(`#${props.id}`).offset().top;
-    const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
-    let timeEnd = convertHalfHoursToStr(convertToHalfHours(props.time_start) + n);
-
-    if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
-      [timeStart, timeEnd] = [timeEnd, timeStart];
-    }
-    props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id, true);
+    onCustomSlotCreateDrop(props, monitor);
   },
   canDrop(props: any, monitor: any) {
-    // new custom slot must start and end on the same day
-    const { day } = monitor.getItem();
-    return day === props.day;
+    return canDropCustomSlot(props, monitor);
   },
   hover(props: any, monitor: any) {
-    let { timeStart } = monitor.getItem();
-    const { id } = monitor.getItem();
-
-    // @ts-ignore get the time that the mouse dropped on
-    const slotTop = $(`#${props.id}`).offset().top;
-    const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
-    if (n === lastPreview) {
-      return;
-    }
-    let timeEnd = convertHalfHoursToStr(convertToHalfHours(props.time_start) + n);
-    if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
-      [timeStart, timeEnd] = [timeEnd, timeStart];
-    }
-    lastPreview = n;
-    props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
+    onCustomSlotCreateDrag(props, monitor);
   },
 };
 
