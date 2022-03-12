@@ -3,12 +3,15 @@ import React, { useState, useEffect, useRef } from "react";
 // @ts-ignore
 import { WaveModal } from "boron-15";
 import { getNewsEndpoint } from "../../constants/endpoints";
+import { newsModalActions } from "../../state/slices/newsModalSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import parse from "html-react-parser";
 
 const NewsModal = () => {
+  const dispatch = useAppDispatch();
   const modal = useRef<WaveModal>();
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { isVisible } = useAppSelector((state) => state.newsModal);
   const [newsTitle, setNewsTitle] = useState("");
   const [newsBody, setNewsBody] = useState("");
 
@@ -22,7 +25,7 @@ const NewsModal = () => {
 
       // Only display modal if the news was posted after the last viewed time
       if (data.date && new Date(data.date) > lastViewedTime) {
-        setIsModalVisible(true);
+        dispatch(newsModalActions.showNewsModal());
         // Set to current date and time
         localStorage.setItem("lastViewedNewsDate", new Date(Date.now()).toISOString());
       }
@@ -33,10 +36,12 @@ const NewsModal = () => {
 
     fetchData();
 
-    if (isModalVisible) {
+    if (isVisible) {
       modal.current.show();
     }
-  }, [isModalVisible]);
+
+    dispatch(newsModalActions.hideNewsModal());
+  }, [isVisible]);
 
   const modalHeader = (
     <div className="modal-content">

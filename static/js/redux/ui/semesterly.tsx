@@ -37,11 +37,14 @@ import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_
 import UserSettingsModal from "./modals/user_settings_modal";
 import CustomEventModal from "./modals/custom_event_modal";
 import AdvancedSearchModal from "./modals/advanced_search_modal";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { getActiveTimetableCourses } from "../state";
 import NewsModal from "./modals/news_modal";
+import { newsModalActions } from "../state/slices/newsModalSlice";
 
 const Semesterly = () => {
+  const dispatch = useAppDispatch();
+
   const dataLastUpdated = useAppSelector((state) => state.school.dataLastUpdated);
   const alertChangeSemester = useAppSelector(
     (state) => state.alerts.alertChangeSemester
@@ -203,6 +206,15 @@ const Semesterly = () => {
                 : null}
             </p>
             <ul className="nav nav-pills no-print">
+              <li className="footer-button" role="presentation">
+                <a
+                  target="_blank"
+                  rel="no-refresh"
+                  onClick={() => dispatch(newsModalActions.showNewsModal())}
+                >
+                  News
+                </a>
+              </li>
               <li className="footer-button" role="presentation">
                 <a href="/termsofservice">Terms</a>
               </li>
