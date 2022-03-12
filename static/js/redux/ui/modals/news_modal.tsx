@@ -38,10 +38,6 @@ const NewsModal = () => {
     }
   }, [isModalVisible]);
 
-  const modalStyle = {
-    width: "100%",
-  };
-
   const modalHeader = (
     <div className="modal-content">
       <div className="modal-header">
@@ -51,9 +47,9 @@ const NewsModal = () => {
   );
 
   return (
-    <WaveModal ref={modal} className="signup-modal max-modal" modalStyle={modalStyle}>
+    <WaveModal ref={modal} className="news-modal">
       {modalHeader}
-      {parse(newsBody)}
+      <div className="news-body">{parse(newsBody)}</div>
     </WaveModal>
   );
 };
