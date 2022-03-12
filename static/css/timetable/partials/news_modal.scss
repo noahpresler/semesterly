@@ -1,0 +1,13 @@
+.news-modal {
+  max-height: 588px;
+  max-width: 500px;
+  overflow: auto;
+
+  h1 {
+    font-style: italic;
+  }
+
+  .news-body {
+    padding: 1rem;
+  }
+}
