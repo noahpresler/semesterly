@@ -46,8 +46,12 @@ const NewsModal = () => {
     </div>
   );
 
+  const modalStyle = {
+    width: "100%",
+  };
+
   return (
-    <WaveModal ref={modal} className="news-modal">
+    <WaveModal ref={modal} className="news-modal" modalStyle={modalStyle}>
       {modalHeader}
       <div className="news-body">{parse(newsBody)}</div>
     </WaveModal>
