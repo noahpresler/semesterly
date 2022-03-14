@@ -34,7 +34,9 @@ const NewsModal = () => {
       setNewsBody(data.body);
     };
 
-    fetchData();
+    if (!newsTitle && !newsBody) {
+      fetchData();
+    }
 
     if (isVisible) {
       modal.current.show();
