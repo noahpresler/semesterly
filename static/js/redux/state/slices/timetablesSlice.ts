@@ -80,6 +80,9 @@ const timetablesSlice = createSlice({
     ) => {
       state.lastCourseAdded = action.payload;
     },
+    setIsFetching: (state, action: PayloadAction<boolean>) => {
+      state.isFetching = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder

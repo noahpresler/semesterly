@@ -109,6 +109,9 @@ export const fetchTimetables =
           // (i.e. was adding a course/section), but we got no timetables back.
           // therefore course added by the user resulted in a conflict
           dispatch(alertConflict());
+        } else {
+          // hide loader regardless of api response
+          dispatch(timetablesActions.setIsFetching(false));
         }
         return json;
       })
