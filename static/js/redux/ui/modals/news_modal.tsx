@@ -46,10 +46,8 @@ const NewsModal = () => {
   }, [isVisible]);
 
   const modalHeader = (
-    <div className="modal-content">
-      <div className="modal-header">
-        <h1>{newsTitle}</h1>
-      </div>
+    <div className="modal-header">
+      <h1>{newsTitle}</h1>
     </div>
   );
 
