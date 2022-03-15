@@ -53,9 +53,6 @@ const timetablesSlice = createSlice({
     cachedTimetableLoaded: (state) => {
       state.loadingCachedTT = false;
     },
-    requestTimetables: (state) => {
-      state.isFetching = true;
-    },
     hoverSection: (
       state,
       action: PayloadAction<{

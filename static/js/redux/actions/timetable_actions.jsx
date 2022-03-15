@@ -67,7 +67,7 @@ export const fetchTimetables =
     const state = getState();
 
     // mark that we are now asynchronously requesting timetables
-    dispatch(timetablesActions.requestTimetables());
+    dispatch(timetablesActions.setIsFetching(true));
 
     // send a request (via fetch) to the appropriate endpoint with
     // relevant data as contained in @state (including courses, preferences, etc)
