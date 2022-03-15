@@ -53,9 +53,6 @@ const timetablesSlice = createSlice({
     cachedTimetableLoaded: (state) => {
       state.loadingCachedTT = false;
     },
-    requestTimetables: (state) => {
-      state.isFetching = true;
-    },
     hoverSection: (
       state,
       action: PayloadAction<{
@@ -79,6 +76,9 @@ const timetablesSlice = createSlice({
       action: PayloadAction<{ courseId: number; section: string }>
     ) => {
       state.lastCourseAdded = action.payload;
+    },
+    setIsFetching: (state, action: PayloadAction<boolean>) => {
+      state.isFetching = action.payload;
     },
   },
   extraReducers: (builder) => {

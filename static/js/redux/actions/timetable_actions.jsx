@@ -67,7 +67,7 @@ export const fetchTimetables =
     const state = getState();
 
     // mark that we are now asynchronously requesting timetables
-    dispatch(timetablesActions.requestTimetables());
+    dispatch(timetablesActions.setIsFetching(true));
 
     // send a request (via fetch) to the appropriate endpoint with
     // relevant data as contained in @state (including courses, preferences, etc)
@@ -109,6 +109,9 @@ export const fetchTimetables =
           // (i.e. was adding a course/section), but we got no timetables back.
           // therefore course added by the user resulted in a conflict
           dispatch(alertConflict());
+        } else {
+          // hide loader regardless of api response
+          dispatch(timetablesActions.setIsFetching(false));
         }
         return json;
       })
@@ -480,7 +483,11 @@ export const finalizeCustomSlot = (id) => (dispatch, getState) => {
   if (!event) {
     return;
   }
-
+  // if no timetable id, create a new timetable which will automatically save the new event
+  if (!getState().savingTimetable.activeTimetable.id) {
+    dispatch(fetchStateTimetables());
+    return;
+  }
   fetch(getPersonalEventEndpoint(), {
     headers: {
       "X-CSRFToken": Cookie.get("csrftoken"),
