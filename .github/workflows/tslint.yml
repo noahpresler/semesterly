@@ -5,12 +5,10 @@ on:
     branches:
       - prod
       - develop
-      - feature/news-modal
   pull_request:
     branches:
       - prod
       - develop
-      - feature/news-modal
 
 
 jobs:
