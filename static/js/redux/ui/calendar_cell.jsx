@@ -60,6 +60,10 @@ const createSource = {
   canDrag(props) {
     return props.loggedIn && props.customEventModeOn;
   },
+  endDrag(props, monitor) {
+    const { id } = monitor.getItem();
+    props.finalizeCustomSlot(id);
+  },
 };
 
 function collectCreateBegin(connect) {
