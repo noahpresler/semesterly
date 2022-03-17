@@ -60,6 +60,10 @@ const createSource = {
   canDrag(props) {
     return props.loggedIn && props.customEventModeOn;
   },
+  endDrag(props, monitor) {
+    const { id } = monitor.getItem();
+    props.finalizeCustomSlot(id);
+  },
 };
 
 function collectCreateBegin(connect) {
@@ -82,7 +86,6 @@ const createTarget = {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
     props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
-    props.finalizeCustomSlot(id);
   },
   hover(props, monitor) {
     if (props.time === lastPreview) {
