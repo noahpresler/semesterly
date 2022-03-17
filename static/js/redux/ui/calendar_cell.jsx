@@ -86,7 +86,6 @@ const createTarget = {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
     props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
-    props.finalizeCustomSlot(id);
   },
   hover(props, monitor) {
     if (props.time === lastPreview) {
