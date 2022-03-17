@@ -5,3 +5,4 @@ static/admin/
 static/django_extensions/
 static/drf-yasg/
 static/rest_framework/
+static/ckeditor/

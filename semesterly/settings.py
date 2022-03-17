@@ -156,22 +156,24 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "social_django",
-    "django_extensions",
-    "authpipe",
-    "timetable",
-    "integrations",
-    "searches",
-    "courses",
-    "analytics",
-    "scripts",
-    "student",
     "cachalot",
-    "rest_framework",
+    "django_extensions",
     "drf_yasg",
+    "rest_framework",
+    "social_django",
     "webpack_loader",
     "agreement",
+    "analytics",
+    "authpipe",
+    "courses",
+    "integrations",
+    "notifications",
     "parsing",
+    "scripts",
+    "searches",
+    "student",
+    "timetable",
+    "ckeditor",
 )
 
 REST_FRAMEWORK = {"UNICODE_JSON": False}
@@ -304,6 +306,29 @@ STATICFILES_DIRS = [os.path.join(PROJECT_DIRECTORY, "static")]
 
 STATIC_ROOT = ""
 
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            ["Format", "Font", "FontSize", "TextColor"],
+            ["Bold", "Italic", "Underline"],
+            [
+                "NumberedList",
+                "BulletedList",
+                "-",
+                "Outdent",
+                "Indent",
+                "-",
+                "JustifyLeft",
+                "JustifyCenter",
+                "JustifyRight",
+                "JustifyBlock",
+            ],
+            ["Link", "Unlink"],
+            ["RemoveFormat", "Source"],
+        ],
+    }
+}
 
 # Caching
 CACHES = {

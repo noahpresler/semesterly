@@ -5,12 +5,11 @@ on:
     branches:
       - prod
       - develop
-      - feature/add-saturday-sunday
   pull_request:
     branches:
       - prod
       - develop
-      - feature/add-saturday-sunday
+
 
 jobs:
   lint:
