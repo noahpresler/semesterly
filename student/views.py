@@ -254,9 +254,11 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             if tt_id is None
             else PersonalTimetable.objects.get(id=tt_id)
         )
-        slots = request.data["slots"]
+        slots = request.data["slots"]  # a slot corresponds to a course and section
         self.update_tt(personal_timetable, name, slots)
-        self.update_events(personal_timetable, request.data["events"])
+        self.update_events(
+            personal_timetable, request.data["events"]
+        )  # events correspond to PersonalEvent model
 
         response = {
             "timetables": get_student_tts(student, school, semester),
@@ -270,20 +272,21 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         return Response(response, status=response_status)
 
     def update_tt(self, tt, new_name, new_slots):
-        tt.name = new_name
+        if new_name and new_slots:
+            tt.name = new_name
 
-        tt.courses.clear()
-        tt.sections.clear()
-        added_courses = set()
-        for slot in new_slots:
-            section_id = slot["section"]
-            section = Section.objects.get(id=section_id)
-            tt.sections.add(section)
-            if section.course.id not in added_courses:
-                tt.courses.add(section.course)
-                added_courses.add(section.course.id)
+            tt.courses.clear()
+            tt.sections.clear()
+            added_courses = set()
+            for slot in new_slots:
+                section_id = slot["section"]
+                section = Section.objects.get(id=section_id)
+                tt.sections.add(section)
+                if section.course.id not in added_courses:
+                    tt.courses.add(section.course)
+                    added_courses.add(section.course.id)
 
-        tt.save()
+            tt.save()
 
     def update_events(self, tt, events):
         """Replace tt's events with input events. Deletes all old events to avoid
@@ -571,7 +574,7 @@ class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
 
 class PersonalEventView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
-    def post(self, request: HttpRequest):
+    def put(self, request: HttpRequest):
         try:
             event = PersonalEvent.objects.get(id=request.data["id"])
         except PersonalEvent.DoesNotExist:
@@ -585,3 +588,30 @@ class PersonalEventView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             serializer.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request: HttpRequest):
+        try:
+            timetable = PersonalTimetable.objects.get(id=request.data["timetable"])
+        except PersonalTimetable.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if timetable.student != get_student(request):
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        serializer = EventSerializer(data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request: HttpRequest):
+        try:
+            event = PersonalEvent.objects.get(id=request.data["id"])
+        except (PersonalEvent.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if event.timetable.student != get_student(request):
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        event.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

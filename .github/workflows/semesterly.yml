@@ -5,12 +5,12 @@ on:
     branches: 
       - prod
       - develop
-      - feature/add-saturday-sunday
+      - feature/custom-events-endpoint
   pull_request:
     branches: 
       - prod
       - develop
-      - feature/add-saturday-sunday
+      - feature/custom-events-endpoint
 
 jobs:
   build:

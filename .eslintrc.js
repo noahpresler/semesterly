@@ -30,6 +30,7 @@ module.exports = {
     "no-else-return": 0,
     "no-plusplus": 0,
     "no-unused-vars": 0,
+    "no-use-before-define": 0,
     "jsx-a11y/no-static-element-interactions": 0,
     "jsx-a11y/no-noninteractive-element-interactions": 0,
     "jsx-a11y/heading-has-content": 0,
