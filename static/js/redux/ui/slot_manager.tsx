@@ -127,7 +127,7 @@ type SlotManagerProps = {
   addOrRemoveOptionalCourse: Function;
   updateCustomSlot: Function;
   addCustomSlot: Function;
-  finalizeCustomSlot: Function,
+  finalizeCustomSlot: Function;
   fetchCourseInfo: Function;
   days: string[];
   slots: DenormalizedSlot[];

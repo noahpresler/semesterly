@@ -1,4 +1,3 @@
-
 import { HALF_HOUR_HEIGHT } from "../constants/constants";
 
 export function convertToHalfHours(time: string) {
