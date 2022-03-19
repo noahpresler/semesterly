@@ -67,7 +67,6 @@ export function onCustomSlotCreateDrop(props: any, monitor: any) {
     [timeStart, timeEnd] = [timeEnd, timeStart];
   }
   props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
-  props.finalizeCustomSlot(id);
 }
 
 let lastPreview: number = null;

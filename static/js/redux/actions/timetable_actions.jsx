@@ -483,11 +483,18 @@ export const finalizeCustomSlot = (id) => (dispatch, getState) => {
   if (!event) {
     return;
   }
+
+  if (isNewTimeLessThan10Minutes(event.time_start, event.time_end)) {
+    dispatch(customEventsActions.deletePreviewEvent(id));
+    return;
+  }
+
   // if no timetable id, create a new timetable which will automatically save the new event
   if (!getState().savingTimetable.activeTimetable.id) {
     dispatch(fetchStateTimetables());
     return;
   }
+
   fetch(getPersonalEventEndpoint(), {
     headers: {
       "X-CSRFToken": Cookie.get("csrftoken"),

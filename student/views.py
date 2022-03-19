@@ -291,22 +291,22 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
     def update_events(self, tt, events):
         """Replace tt's events with input events. Deletes all old events to avoid
         buildup in db"""
-        if events:
-          tt.events.all().delete()
-          for event in events:
-              credits = self.validate_credits(event)
-              event_obj = PersonalEvent.objects.create(
-                  timetable=tt,
-                  name=event["name"],
-                  time_start=event["time_start"],
-                  time_end=event["time_end"],
-                  day=event["day"],
-                  color=event["color"],
-                  location=event["location"],
-                  credits=credits,
-              )
-              tt.events.add(event_obj)
-          tt.save()
+        tt.events.all().delete()
+        for event in events:
+            credits = self.validate_credits(event)
+            self.validate_time(event["time_start"], event["time_end"])
+            event_obj = PersonalEvent.objects.create(
+                timetable=tt,
+                name=event["name"],
+                time_start=event["time_start"],
+                time_end=event["time_end"],
+                day=event["day"],
+                color=event["color"],
+                location=event["location"],
+                credits=credits,
+            )
+            tt.events.add(event_obj)
+        tt.save()
 
     def validate_credits(self, event):
         credits = Decimal(event["credits"])
@@ -315,6 +315,18 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         if credits < 0 or credits > 20:
             raise serializers.ValidationError("Field credit must be between 0 and 20")
         return credits
+
+    def validate_time(self, time_start: str, time_end: str):
+        start_minutes = self.convert_to_minutes(time_start)
+        end_minutes = self.convert_to_minutes(time_end)
+        if end_minutes - start_minutes < 10:
+            raise serializers.ValidationError(
+                "Time start must come before time end by at least 10 minutes."
+            )
+
+    def convert_to_minutes(self, time: str):
+        hours, minutes = time.split(":")
+        return 60 * int(hours) + int(minutes)
 
     def delete(self, request, sem_name, year, tt_name):
         """Deletes a PersonalTimetable by name/year/term."""
