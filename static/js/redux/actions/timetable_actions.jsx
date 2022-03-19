@@ -484,7 +484,7 @@ export const finalizeCustomSlot = (id) => (dispatch, getState) => {
     return;
   }
 
-  if (convertToMinutes(event.time_end) - convertToMinutes(event.time_start) < 10) {
+  if (isNewTimeLessThan10Minutes(event.time_start, event.time_end)) {
     dispatch(customEventsActions.deletePreviewEvent(id));
     return;
   }
