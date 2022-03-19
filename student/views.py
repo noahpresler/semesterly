@@ -319,7 +319,6 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
     def validate_time(self, time_start: str, time_end: str):
         start_minutes = self.convert_to_minutes(time_start)
         end_minutes = self.convert_to_minutes(time_end)
-        print(end_minutes, start_minutes, end_minutes - start_minutes)
         if end_minutes - start_minutes < 10:
             raise serializers.ValidationError(
                 "Time start must come before time end by at least 10 minutes."
