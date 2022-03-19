@@ -5,12 +5,10 @@ on:
     branches:
       - prod
       - develop
-      - feature/custom-events-endpoint
   pull_request:
     branches:
       - prod
       - develop
-      - feature/custom-events-endpoint
 
 jobs:
   lint:
