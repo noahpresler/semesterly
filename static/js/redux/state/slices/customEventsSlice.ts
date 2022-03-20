@@ -29,6 +29,17 @@ const customEventsSlice = createSlice({
     receiveCustomEvents: (state, action: PayloadAction<Event[]>) => {
       state.events = action.payload;
     },
+    replacePreviewEvent: (
+      state,
+      action: PayloadAction<{ oldId: number; newId: number }>
+    ) => {
+      const { oldId, newId } = action.payload;
+      const index = state.events.findIndex((event) => event.id === oldId);
+      state.events[index] = { ...state.events[index], id: newId, preview: false };
+    },
+    deletePreviewEvent: (state, action: PayloadAction<number>) => {
+      state.events = state.events.filter((event) => event.id !== action.payload);
+    },
     showCustomEventsModal: (state, action: PayloadAction<number>) => {
       state.selectedEventId = action.payload;
       state.isModalVisible = true;

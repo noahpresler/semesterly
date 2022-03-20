@@ -15,7 +15,10 @@ GNU General Public License for more details.
 import fetch from "isomorphic-fetch";
 import Cookie from "js-cookie";
 import { getActiveTimetable, getCurrentSemester, getDenormTimetable } from "../state";
-import { getTimetablesEndpoint, getUpdateEventEndpoint } from "../constants/endpoints";
+import {
+  getTimetablesEndpoint,
+  getPersonalEventEndpoint,
+} from "../constants/endpoints";
 import {
   browserSupportsLocalStorage,
   saveLocalActiveIndex,
@@ -64,7 +67,7 @@ export const fetchTimetables =
     const state = getState();
 
     // mark that we are now asynchronously requesting timetables
-    dispatch(timetablesActions.requestTimetables());
+    dispatch(timetablesActions.setIsFetching(true));
 
     // send a request (via fetch) to the appropriate endpoint with
     // relevant data as contained in @state (including courses, preferences, etc)
@@ -106,6 +109,9 @@ export const fetchTimetables =
           // (i.e. was adding a course/section), but we got no timetables back.
           // therefore course added by the user resulted in a conflict
           dispatch(alertConflict());
+        } else {
+          // hide loader regardless of api response
+          dispatch(timetablesActions.setIsFetching(false));
         }
         return json;
       })
@@ -385,21 +391,6 @@ export const addOrRemoveCourse =
     dispatch(fetchTimetables(reqBody, removing));
   };
 
-// fetch timetables with same courses, but updated optional courses/custom slots
-const refetchTimetables = () => (dispatch, getState) => {
-  const state = getState();
-  const reqBody = getBaseReqBody(state);
-
-  Object.assign(reqBody, {
-    optionCourses: state.optionalCourses.courses,
-    numOptionCourses: state.optionalCourses.numRequired,
-    customEvents: state.customEvents,
-  });
-
-  dispatch(fetchTimetables(reqBody, false));
-  dispatch(autoSave());
-};
-
 export const addLastAddedCourse = () => (dispatch, getState) => {
   const state = getState();
   // last timetable change was a custom event edit, not add
@@ -424,12 +415,22 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
       preview,
     })
   );
-  dispatch(refetchTimetables());
 };
 
-export const removeCustomSlot = (id) => (dispatch) => {
-  dispatch(removeCustomEvent(id));
-  dispatch(refetchTimetables());
+export const removeCustomSlot = (id) => (dispatch, getState) => {
+  fetch(getPersonalEventEndpoint(), {
+    headers: {
+      "X-CSRFToken": Cookie.get("csrftoken"),
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "DELETE",
+    body: JSON.stringify({
+      id,
+      timetable: getState().savingTimetable.activeTimetable.id,
+    }),
+    credentials: "include",
+  }).then(() => dispatch(removeCustomEvent(id)));
 };
 
 function isNewTimeLessThan10Minutes(timeStart, timeEnd) {
@@ -446,24 +447,76 @@ function goesPastMidnight(timeEnd) {
   return false;
 }
 
-export const updateCustomSlot = (newValues, id) => (dispatch) => {
-  if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
+export const updateCustomSlot = (newValues, id) => (dispatch, getState) => {
+  newValues.id = id;
+  const event = getState().customEvents.events.find((e) => e.id === id);
+  if (!event) {
+    return;
+  }
+  if (event.preview) {
+    dispatch(updateExistingEvent(newValues));
+  } else if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
     dispatch(removeCustomSlot(id));
     // For some reason, students can drag and drop past midnight
   } else if (!goesPastMidnight(newValues.timeEnd)) {
-    newValues.id = id;
-    fetch(getUpdateEventEndpoint(), {
-      headers: {
-        "X-CSRFToken": Cookie.get("csrftoken"),
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(newValues),
-      credentials: "include",
-    });
-    dispatch(updateExistingEvent(newValues));
+    updateEvent(dispatch, newValues);
   }
+};
+
+const updateEvent = (dispatch, newValues) => {
+  fetch(getPersonalEventEndpoint(), {
+    headers: {
+      "X-CSRFToken": Cookie.get("csrftoken"),
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+    body: JSON.stringify(newValues),
+    credentials: "include",
+  }).then(() => {
+    dispatch(updateExistingEvent(newValues));
+  });
+};
+
+export const finalizeCustomSlot = (id) => (dispatch, getState) => {
+  const event = getState().customEvents.events.find((e) => e.id === id);
+  if (!event) {
+    return;
+  }
+
+  if (isNewTimeLessThan10Minutes(event.time_start, event.time_end)) {
+    dispatch(customEventsActions.deletePreviewEvent(id));
+    return;
+  }
+
+  // if no timetable id, create a new timetable which will automatically save the new event
+  if (!getState().savingTimetable.activeTimetable.id) {
+    dispatch(fetchStateTimetables());
+    return;
+  }
+
+  fetch(getPersonalEventEndpoint(), {
+    headers: {
+      "X-CSRFToken": Cookie.get("csrftoken"),
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({
+      timetable: getState().savingTimetable.activeTimetable.id,
+      ...event,
+    }),
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .then((newEvent) => {
+      dispatch(
+        customEventsActions.replacePreviewEvent({
+          oldId: id,
+          newId: newEvent.id,
+        })
+      );
+    });
 };
 
 export const addOrRemoveOptionalCourse = (course) => (dispatch, getState) => {

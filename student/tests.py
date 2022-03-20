@@ -462,6 +462,26 @@ class PersonalEventTest(APITestCase):
         self.tt.save()
         self.factory = APIRequestFactory()
 
+    def test_create_event(self):
+        event_data = {
+            "name": "New Custom Event",
+            "day": "W",
+            "time_start": "19:00",
+            "time_end": "21:00",
+            "color": "#93d9a4",
+            "location": "",
+            "credits": "0.0",
+            "timetable": 5,
+            "preview": False,
+        }
+        request = self.factory.post("/user/events/", event_data, format="json")
+        response = get_auth_response(request, self.user, "/user/events/")
+
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(response.data)
+
+        self.assertTrue(response.data["id"])
+
     def test_update_event(self):
         event_data = {
             "id": 1875,
@@ -475,7 +495,7 @@ class PersonalEventTest(APITestCase):
             "timetable": 5,
             "preview": False,
         }
-        request = self.factory.post("/user/events/", event_data, format="json")
+        request = self.factory.put("/user/events/", event_data, format="json")
         response = get_auth_response(request, self.user, "/user/events/")
         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
         self.event.refresh_from_db()
@@ -488,27 +508,27 @@ class PersonalEventTest(APITestCase):
             "time_start": "19:00",
             "time_end": "21:00",
         }
-        request = self.factory.post("/user/events/", event_data, format="json")
+        request = self.factory.put("/user/events/", event_data, format="json")
         response = get_auth_response(request, self.user, "/user/events/")
         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
         self.event.refresh_from_db()
         self.assertDictContainsSubset(event_data, EventSerializer(self.event).data)
 
     def test_nonexistent_event_doesnt_create_event(self):
-        request = self.factory.post("/user/events/", {"id": 1876}, format="json")
+        request = self.factory.put("/user/events/", {"id": 1876}, format="json")
         response = get_auth_response(request, self.user, "/user/events/")
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
         with self.assertRaises(PersonalEvent.DoesNotExist):
             PersonalEvent.objects.get(id=1876)
 
     def test_wrong_student_cant_update_event(self):
-        request = self.factory.post("/user/events/", {"id": 1875}, format="json")
+        request = self.factory.put("/user/events/", {"id": 1875}, format="json")
         response = get_auth_response(request, self.user2, "/user/events/")
         self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEquals(PersonalEvent.objects.count(), 1)
 
     def test_bad_event_data_ignored(self):
-        request = self.factory.post(
+        request = self.factory.put(
             "/user/events/", {"id": 1875, "stan": "fromis_9"}, format="json"
         )
         response = get_auth_response(request, self.user, "/user/events/")
@@ -516,3 +536,10 @@ class PersonalEventTest(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
         with self.assertRaises(AttributeError):
             self.assertNotEquals(self.event.stan, "fromis_9")
+
+    def test_delete_event(self):
+        event_data = {"id": self.event.id, "timetable": self.tt.id}
+        request = self.factory.delete("/user/events/", event_data, format="json")
+        response = get_auth_response(request, self.user, "/user/events/")
+
+        self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)

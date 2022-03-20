@@ -10,7 +10,7 @@ django-ckeditor==6.2.0
 celery==5.2.2
 coverage==4.4.1
 cryptography==36.0.1
-dateparser==1.0.0
+dateparser==1.1.0
 Django==3.2.12
 django-cachalot==2.4.3
 django-extensions==3.1.5
@@ -34,7 +34,7 @@ oauth2client==4.1.2
 progressbar2==3.34.2
 psycopg2-binary==2.8.6
 pycodestyle==2.6.0
-python-dateutil==2.6.1
+python-dateutil==2.8.2
 social-auth-core==4.0.3
 social-auth-app-django==4.0.0
 python-memcached==1.59

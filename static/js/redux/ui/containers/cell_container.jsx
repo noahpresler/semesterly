@@ -14,7 +14,11 @@ GNU General Public License for more details.
 
 import { connect } from "react-redux";
 import Cell from "../calendar_cell";
-import { addCustomSlot, updateCustomSlot } from "../../actions/timetable_actions";
+import {
+  addCustomSlot,
+  updateCustomSlot,
+  finalizeCustomSlot,
+} from "../../actions/timetable_actions";
 import { getMaxEndHour } from "../../state";
 
 const mapStateToProps = (state) => ({
@@ -24,6 +28,7 @@ const mapStateToProps = (state) => ({
 const CellContainer = connect(mapStateToProps, {
   addCustomSlot,
   updateCustomSlot,
+  finalizeCustomSlot,
 })(Cell);
 
 export default CellContainer;
