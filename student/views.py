@@ -272,21 +272,18 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         return Response(response, status=response_status)
 
     def update_tt(self, tt, new_name, new_slots):
-        if new_name and new_slots:
-            tt.name = new_name
-
-            tt.courses.clear()
-            tt.sections.clear()
-            added_courses = set()
-            for slot in new_slots:
-                section_id = slot["section"]
-                section = Section.objects.get(id=section_id)
-                tt.sections.add(section)
-                if section.course.id not in added_courses:
-                    tt.courses.add(section.course)
-                    added_courses.add(section.course.id)
-
-            tt.save()
+        tt.name = new_name
+        tt.courses.clear()
+        tt.sections.clear()
+        added_courses = set()
+        for slot in new_slots:
+            section_id = slot["section"]
+            section = Section.objects.get(id=section_id)
+            tt.sections.add(section)
+            if section.course.id not in added_courses:
+                tt.courses.add(section.course)
+                added_courses.add(section.course.id)
+        tt.save()
 
     def update_events(self, tt, events):
         """Replace tt's events with input events. Deletes all old events to avoid
