@@ -38,7 +38,6 @@ import {
   receiveTimetables,
   alertConflict,
   receiveCourses,
-  addNewCustomEvent,
   updateExistingEvent,
   removeCustomEvent,
   changeActiveSavedTimetable,
@@ -55,6 +54,7 @@ import {
   clearOptionalCourses,
   removeOptionalCourseById,
 } from "../state/slices/optionalCoursesSlice";
+import { savingTimetableActions } from "../state/slices/savingTimetableSlice";
 
 export const setActiveTimetable = (newActive) => (dispatch) => {
   dispatch(changeActiveTimetable(newActive));
@@ -403,7 +403,7 @@ export const addLastAddedCourse = () => (dispatch, getState) => {
 
 export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
   dispatch(
-    addNewCustomEvent({
+    customEventsActions.addNewCustomEvent({
       day,
       name: "New Custom Event", // default name for custom slot
       location: "",
@@ -415,6 +415,7 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
       preview,
     })
   );
+  dispatch(savingTimetableActions.setUpToDate(false));
 };
 
 export const removeCustomSlot = (id) => (dispatch, getState) => {
@@ -486,6 +487,7 @@ export const finalizeCustomSlot = (id) => (dispatch, getState) => {
 
   if (isNewTimeLessThan10Minutes(event.time_start, event.time_end)) {
     dispatch(customEventsActions.deletePreviewEvent(id));
+    dispatch(savingTimetableActions.setUpToDate(true));
     return;
   }
 
@@ -516,6 +518,7 @@ export const finalizeCustomSlot = (id) => (dispatch, getState) => {
           newId: newEvent.id,
         })
       );
+      dispatch(savingTimetableActions.setUpToDate(true));
     });
 };
 

@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  addNewCustomEvent,
   changeActiveSavedTimetable,
   removeCustomEvent,
   updateExistingEvent,
@@ -25,6 +24,9 @@ const customEventsSlice = createSlice({
   reducers: {
     clearCustomEvents: (state) => {
       state.events = [];
+    },
+    addNewCustomEvent: (state, action: PayloadAction<Event>) => {
+      state.events.push(action.payload);
     },
     receiveCustomEvents: (state, action: PayloadAction<Event[]>) => {
       state.events = action.payload;
@@ -51,9 +53,6 @@ const customEventsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addNewCustomEvent, (state, action: PayloadAction<Event>) => {
-        state.events.push(action.payload);
-      })
       .addCase(updateExistingEvent, (state, action: PayloadAction<Event>) => {
         const tEventIndex = state.events.findIndex((s) => s.id === action.payload.id);
         if (tEventIndex !== -1) {

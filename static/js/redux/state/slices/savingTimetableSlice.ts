@@ -1,6 +1,5 @@
 import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
 import {
-  addNewCustomEvent,
   alertTimeTableExists,
   changeActiveSavedTimetable,
   changeActiveTimetable,
@@ -40,6 +39,9 @@ const savingTimetableSlice = createSlice({
       state.activeTimetable.name = action.payload;
       state.upToDate = false;
     },
+    setUpToDate: (state, action: PayloadAction<boolean>) => {
+      state.upToDate = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -61,7 +63,7 @@ const savingTimetableSlice = createSlice({
         state.saving = false;
       })
       .addMatcher(
-        isAnyOf(addNewCustomEvent, changeActiveTimetable, removeCustomEvent),
+        isAnyOf(changeActiveTimetable, removeCustomEvent),
         (state) => {
           state.upToDate = false;
         }
