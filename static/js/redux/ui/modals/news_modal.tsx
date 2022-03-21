@@ -19,6 +19,11 @@ const NewsModal = () => {
   const lastViewedTime = new Date(localStorage.getItem("lastViewedNewsDate"));
 
   useEffect(() => {
+    const tutorialData = JSON.parse(localStorage.getItem("tutorial"));
+    if (!tutorialData || !tutorialData.modalTutShown) {
+      return;
+    }
+
     const fetchData = async () => {
       const response = await fetch(getNewsEndpoint());
       const data = await response.json();
