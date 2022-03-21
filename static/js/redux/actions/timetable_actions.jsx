@@ -38,9 +38,6 @@ import {
   receiveTimetables,
   alertConflict,
   receiveCourses,
-  addNewCustomEvent,
-  updateExistingEvent,
-  removeCustomEvent,
   changeActiveSavedTimetable,
 } from "./initActions";
 import { timetablesActions } from "../state/slices/timetablesSlice";
@@ -55,6 +52,7 @@ import {
   clearOptionalCourses,
   removeOptionalCourseById,
 } from "../state/slices/optionalCoursesSlice";
+import { savingTimetableActions } from "../state/slices/savingTimetableSlice";
 
 export const setActiveTimetable = (newActive) => (dispatch) => {
   dispatch(changeActiveTimetable(newActive));
@@ -403,7 +401,7 @@ export const addLastAddedCourse = () => (dispatch, getState) => {
 
 export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
   dispatch(
-    addNewCustomEvent({
+    customEventsActions.addNewCustomEvent({
       day,
       name: "New Custom Event", // default name for custom slot
       location: "",
@@ -415,9 +413,11 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
       preview,
     })
   );
+  dispatch(savingTimetableActions.setUpToDate(false));
 };
 
 export const removeCustomSlot = (id) => (dispatch, getState) => {
+  dispatch(savingTimetableActions.setUpToDate(false));
   fetch(getPersonalEventEndpoint(), {
     headers: {
       "X-CSRFToken": Cookie.get("csrftoken"),
@@ -430,7 +430,10 @@ export const removeCustomSlot = (id) => (dispatch, getState) => {
       timetable: getState().savingTimetable.activeTimetable.id,
     }),
     credentials: "include",
-  }).then(() => dispatch(removeCustomEvent(id)));
+  }).then(() => {
+    dispatch(customEventsActions.removeCustomEvent(id));
+    dispatch(savingTimetableActions.setUpToDate(true));
+  });
 };
 
 function isNewTimeLessThan10Minutes(timeStart, timeEnd) {
@@ -454,7 +457,7 @@ export const updateCustomSlot = (newValues, id) => (dispatch, getState) => {
     return;
   }
   if (event.preview) {
-    dispatch(updateExistingEvent(newValues));
+    dispatch(customEventsActions.updateExistingEvent(newValues));
   } else if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
     dispatch(removeCustomSlot(id));
     // For some reason, students can drag and drop past midnight
@@ -464,6 +467,7 @@ export const updateCustomSlot = (newValues, id) => (dispatch, getState) => {
 };
 
 const updateEvent = (dispatch, newValues) => {
+  dispatch(savingTimetableActions.setUpToDate(false));
   fetch(getPersonalEventEndpoint(), {
     headers: {
       "X-CSRFToken": Cookie.get("csrftoken"),
@@ -474,7 +478,8 @@ const updateEvent = (dispatch, newValues) => {
     body: JSON.stringify(newValues),
     credentials: "include",
   }).then(() => {
-    dispatch(updateExistingEvent(newValues));
+    dispatch(customEventsActions.updateExistingEvent(newValues));
+    dispatch(savingTimetableActions.setUpToDate(true));
   });
 };
 
@@ -486,6 +491,7 @@ export const finalizeCustomSlot = (id) => (dispatch, getState) => {
 
   if (isNewTimeLessThan10Minutes(event.time_start, event.time_end)) {
     dispatch(customEventsActions.deletePreviewEvent(id));
+    dispatch(savingTimetableActions.setUpToDate(true));
     return;
   }
 
@@ -516,6 +522,7 @@ export const finalizeCustomSlot = (id) => (dispatch, getState) => {
           newId: newEvent.id,
         })
       );
+      dispatch(savingTimetableActions.setUpToDate(true));
     });
 };
 
