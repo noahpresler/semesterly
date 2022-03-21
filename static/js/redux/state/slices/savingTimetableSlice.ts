@@ -3,7 +3,6 @@ import {
   alertTimeTableExists,
   changeActiveSavedTimetable,
   changeActiveTimetable,
-  updateExistingEvent,
 } from "../../actions/initActions";
 import { Timetable } from "../../constants/commonTypes";
 

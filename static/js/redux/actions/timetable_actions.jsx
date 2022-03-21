@@ -38,7 +38,6 @@ import {
   receiveTimetables,
   alertConflict,
   receiveCourses,
-  updateExistingEvent,
   changeActiveSavedTimetable,
 } from "./initActions";
 import { timetablesActions } from "../state/slices/timetablesSlice";
@@ -458,7 +457,7 @@ export const updateCustomSlot = (newValues, id) => (dispatch, getState) => {
     return;
   }
   if (event.preview) {
-    dispatch(updateExistingEvent(newValues));
+    dispatch(customEventsActions.updateExistingEvent(newValues));
   } else if (isNewTimeLessThan10Minutes(newValues.time_start, newValues.time_end)) {
     dispatch(removeCustomSlot(id));
     // For some reason, students can drag and drop past midnight
@@ -468,6 +467,7 @@ export const updateCustomSlot = (newValues, id) => (dispatch, getState) => {
 };
 
 const updateEvent = (dispatch, newValues) => {
+  dispatch(savingTimetableActions.setUpToDate(false));
   fetch(getPersonalEventEndpoint(), {
     headers: {
       "X-CSRFToken": Cookie.get("csrftoken"),
@@ -478,7 +478,8 @@ const updateEvent = (dispatch, newValues) => {
     body: JSON.stringify(newValues),
     credentials: "include",
   }).then(() => {
-    dispatch(updateExistingEvent(newValues));
+    dispatch(customEventsActions.updateExistingEvent(newValues));
+    dispatch(savingTimetableActions.setUpToDate(true));
   });
 };
 

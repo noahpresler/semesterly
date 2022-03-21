@@ -34,8 +34,6 @@ export const receiveCourses = createAction("global/receiveCourses", (courses) =>
 
 export const changeActiveTimetable = createAction("global/changeActiveTimetable");
 
-export const updateExistingEvent = createAction("global/updateExistingEvent");
-
 export const changeActiveSavedTimetable = createAction(
   "global/changeActiveSavedTimetable"
 );
