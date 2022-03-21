@@ -89,7 +89,8 @@ const setupChromeNotifs = () => (dispatch) => {
     (isSecondVisit && daysSinceFirstVisit > 1) ||
     (!isSecondVisit && !userHasActed)
   ) {
-    dispatch(alertsActions.alertEnableNotifications());
+    // TODO: Use when we actually have notifications
+    // dispatch(alertsActions.alertEnableNotifications());
   }
 };
 
