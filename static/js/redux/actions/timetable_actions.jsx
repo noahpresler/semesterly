@@ -39,7 +39,6 @@ import {
   alertConflict,
   receiveCourses,
   updateExistingEvent,
-  removeCustomEvent,
   changeActiveSavedTimetable,
 } from "./initActions";
 import { timetablesActions } from "../state/slices/timetablesSlice";
@@ -419,6 +418,7 @@ export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch
 };
 
 export const removeCustomSlot = (id) => (dispatch, getState) => {
+  dispatch(savingTimetableActions.setUpToDate(false));
   fetch(getPersonalEventEndpoint(), {
     headers: {
       "X-CSRFToken": Cookie.get("csrftoken"),
@@ -431,7 +431,10 @@ export const removeCustomSlot = (id) => (dispatch, getState) => {
       timetable: getState().savingTimetable.activeTimetable.id,
     }),
     credentials: "include",
-  }).then(() => dispatch(removeCustomEvent(id)));
+  }).then(() => {
+    dispatch(customEventsActions.removeCustomEvent(id));
+    dispatch(savingTimetableActions.setUpToDate(true));
+  });
 };
 
 function isNewTimeLessThan10Minutes(timeStart, timeEnd) {

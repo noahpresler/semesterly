@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   changeActiveSavedTimetable,
-  removeCustomEvent,
   updateExistingEvent,
 } from "../../actions/initActions";
 import { Event, Timetable } from "../../constants/commonTypes";
@@ -25,11 +24,11 @@ const customEventsSlice = createSlice({
     clearCustomEvents: (state) => {
       state.events = [];
     },
-    addNewCustomEvent: (state, action: PayloadAction<Event>) => {
-      state.events.push(action.payload);
-    },
     receiveCustomEvents: (state, action: PayloadAction<Event[]>) => {
       state.events = action.payload;
+    },
+    addNewCustomEvent: (state, action: PayloadAction<Event>) => {
+      state.events.push(action.payload);
     },
     replacePreviewEvent: (
       state,
@@ -41,6 +40,10 @@ const customEventsSlice = createSlice({
     },
     deletePreviewEvent: (state, action: PayloadAction<number>) => {
       state.events = state.events.filter((event) => event.id !== action.payload);
+    },
+    removeCustomEvent: (state, action: PayloadAction<number>) => {
+      const newState = state.events.filter((event) => event.id !== action.payload);
+      state.events = newState;
     },
     showCustomEventsModal: (state, action: PayloadAction<number>) => {
       state.selectedEventId = action.payload;
@@ -63,10 +66,6 @@ const customEventsSlice = createSlice({
           );
           state.events[tEventIndex] = updatedEvent;
         }
-      })
-      .addCase(removeCustomEvent, (state, action: PayloadAction<number>) => {
-        const newState = state.events.filter((event) => event.id !== action.payload);
-        state.events = newState;
       })
       .addCase(
         changeActiveSavedTimetable,

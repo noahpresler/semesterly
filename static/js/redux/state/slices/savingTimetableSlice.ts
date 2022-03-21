@@ -3,7 +3,6 @@ import {
   alertTimeTableExists,
   changeActiveSavedTimetable,
   changeActiveTimetable,
-  removeCustomEvent,
   updateExistingEvent,
 } from "../../actions/initActions";
 import { Timetable } from "../../constants/commonTypes";
@@ -62,12 +61,9 @@ const savingTimetableSlice = createSlice({
       .addCase(alertTimeTableExists, (state) => {
         state.saving = false;
       })
-      .addMatcher(
-        isAnyOf(changeActiveTimetable, removeCustomEvent),
-        (state) => {
-          state.upToDate = false;
-        }
-      );
+      .addCase(changeActiveTimetable, (state) => {
+        state.upToDate = false;
+      });
   },
 });
 
