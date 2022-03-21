@@ -26,9 +26,10 @@ import {
   addOrRemoveOptionalCourse,
   loadTimetable,
 } from "../../actions/timetable_actions";
-import { deleteTimetable, duplicateTimetable } from "../../actions/user_actions";
+import { duplicateTimetable } from "../../actions/user_actions";
 import { getCourseShareLink } from "../../constants/endpoints";
 import { togglePeerModal } from "../../state/slices/peerModalSlice";
+import { alertsActions } from "../../state/slices";
 
 const mapStateToProps = (state) => {
   const timetable = getActiveTimetable(state);
@@ -63,7 +64,7 @@ const SideBarContainer = connect(mapStateToProps, {
   removeOptionalCourse: addOrRemoveOptionalCourse,
   launchPeerModal: togglePeerModal,
   duplicateTimetable,
-  deleteTimetable,
+  alertDeleteTimetable: alertsActions.alertDeleteTimetable,
   loadTimetable,
 })(SideBar);
 

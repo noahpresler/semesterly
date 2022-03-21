@@ -1,3 +1,8 @@
 docs
 venv
-static/bundles
+static/bundles/
+static/admin/
+static/django_extensions/
+static/drf-yasg/
+static/rest_framework/
+static/ckeditor/

@@ -34,12 +34,6 @@ export const receiveCourses = createAction("global/receiveCourses", (courses) =>
 
 export const changeActiveTimetable = createAction("global/changeActiveTimetable");
 
-export const addNewCustomEvent = createAction("global/addNewCustomEvent");
-
-export const updateExistingEvent = createAction("global/updateExistingEvent");
-
-export const removeCustomEvent = createAction("global/removeCustomEvent");
-
 export const changeActiveSavedTimetable = createAction(
   "global/changeActiveSavedTimetable"
 );
@@ -59,8 +53,8 @@ export const receiveSearchResults = createAction(
 
 export const receiveAdvancedSearchResults = createAction(
   "global/receiveAdvancedSearchResults",
-  (courses) => ({
-    payload: normalize(courses, [courseSchema]),
+  (response) => ({
+    payload: { courses: normalize(response.data, [courseSchema]), page: response.page },
   })
 );
 

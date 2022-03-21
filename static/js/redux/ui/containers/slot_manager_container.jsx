@@ -25,6 +25,7 @@ import {
   addOrRemoveOptionalCourse,
   removeCustomSlot,
   updateCustomSlot,
+  finalizeCustomSlot,
 } from "../../actions/timetable_actions";
 import { getSchoolSpecificInfo } from "../../constants/schools";
 import SlotManager from "../slot_manager";
@@ -70,6 +71,7 @@ const SlotManagerContainer = connect(mapStateToProps, {
   removeCustomSlot,
   updateCustomSlot,
   addCustomSlot,
+  finalizeCustomSlot,
 })(SlotManager);
 
 export default SlotManagerContainer;
