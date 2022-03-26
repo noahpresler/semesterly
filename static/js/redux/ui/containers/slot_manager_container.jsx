@@ -26,15 +26,6 @@ import {
 import SlotManager from "../slot_manager";
 
 const mapStateToProps = (state, ownProps) => ({
-  getClassmatesInSection: (courseId, sectionCode) => {
-    if (!(courseId in state.classmates.courseToClassmates)) {
-      return [];
-    }
-    const classmatesInCourse = state.classmates.courseToClassmates[courseId];
-    return classmatesInCourse.current.filter((cm) =>
-      cm.sections.find((s) => s === sectionCode)
-    );
-  },
   days: ownProps.days,
   uses12HrTime: state.ui.uses12HrTime,
 });

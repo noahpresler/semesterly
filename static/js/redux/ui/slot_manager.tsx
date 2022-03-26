@@ -131,7 +131,6 @@ type SlotManagerProps = {
   finalizeCustomSlot: Function;
   fetchCourseInfo: Function;
   days: string[];
-  getClassmatesInSection: Function;
   uses12HrTime: boolean;
 };
 
@@ -225,6 +224,19 @@ const SlotManager = (props: SlotManagerProps) => {
   const getOptionalCourseById = (courseId: number) =>
     getDenormCourseById(entities, courseId);
 
+  const courseToClassmates = useAppSelector(
+    (state) => state.classmates.courseToClassmates
+  );
+  const getClassmatesInSection = (courseId: number, sectionCode: string) => {
+    if (!(courseId in courseToClassmates)) {
+      return [];
+    }
+    const classmatesInCourse = courseToClassmates[courseId];
+    return classmatesInCourse.current.filter((cm: any) =>
+      cm.sections.find((s: string) => s === sectionCode)
+    );
+  };
+
   const allSlots = props.days.map((day, i) => {
     const daySlots = slotsByDay[day].map((slot: any, j: number) => {
       const courseId = slot.courseId;
@@ -249,7 +261,7 @@ const SlotManager = (props: SlotManagerProps) => {
           locked={locked}
           classmates={
             socialSections
-              ? props.getClassmatesInSection(courseId, slot.meeting_section)
+              ? getClassmatesInSection(courseId, slot.meeting_section)
               : []
           }
           lockOrUnlockSection={() =>
