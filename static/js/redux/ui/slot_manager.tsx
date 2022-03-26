@@ -131,7 +131,6 @@ type SlotManagerProps = {
   finalizeCustomSlot: Function;
   fetchCourseInfo: Function;
   days: string[];
-  uses12HrTime: boolean;
 };
 
 const SlotManager = (props: SlotManagerProps) => {
@@ -237,6 +236,8 @@ const SlotManager = (props: SlotManagerProps) => {
     );
   };
 
+  const uses12HrTime = useAppSelector((state) => state.ui.uses12HrTime);
+
   const allSlots = props.days.map((day, i) => {
     const daySlots = slotsByDay[day].map((slot: any, j: number) => {
       const courseId = slot.courseId;
@@ -251,7 +252,7 @@ const SlotManager = (props: SlotManagerProps) => {
           updateCustomSlot={props.updateCustomSlot}
           addCustomSlot={props.addCustomSlot}
           finalizeCustomSlot={props.finalizeCustomSlot}
-          uses12HrTime={props.uses12HrTime}
+          uses12HrTime={uses12HrTime}
         />
       ) : (
         <Slot
@@ -277,7 +278,7 @@ const SlotManager = (props: SlotManagerProps) => {
           updateCustomSlot={props.updateCustomSlot}
           addCustomSlot={props.addCustomSlot}
           finalizeCustomSlot={props.finalizeCustomSlot}
-          uses12HrTime={props.uses12HrTime}
+          uses12HrTime={uses12HrTime}
         />
       );
     });

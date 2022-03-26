@@ -13,7 +13,6 @@ GNU General Public License for more details.
 */
 
 import { connect } from "react-redux";
-import { getDenormCourseById } from "../../state";
 import { fetchCourseInfo } from "../../actions/modal_actions";
 import {
   addCustomSlot,
@@ -27,7 +26,6 @@ import SlotManager from "../slot_manager";
 
 const mapStateToProps = (state, ownProps) => ({
   days: ownProps.days,
-  uses12HrTime: state.ui.uses12HrTime,
 });
 
 const SlotManagerContainer = connect(mapStateToProps, {
