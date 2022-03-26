@@ -133,7 +133,6 @@ type SlotManagerProps = {
   fetchCourseInfo: Function;
   days: string[];
   slots: DenormalizedSlot[];
-  courseToColourIndex: any;
   getClassmatesInSection: Function;
   custom: Event[];
   uses12HrTime: boolean;
@@ -160,6 +159,7 @@ const SlotManager = (props: SlotManagerProps) => {
           hoveredSlot?.section.section_type !== slot.section.section_type
       )
     );
+    const courseToColourIndex = useAppSelector((state) => state.ui.courseToColourIndex);
 
     slots.forEach((slot) => {
       const { course, section, offerings } = slot;
@@ -167,7 +167,7 @@ const SlotManager = (props: SlotManagerProps) => {
       offerings
         .filter((offering) => offering.day in slotsByDay)
         .forEach((offering) => {
-          const colourId = props.courseToColourIndex[course.id];
+          const colourId = courseToColourIndex[course.id];
           slotsByDay[offering.day].push(
             slotToDisplayOffering(course, section, offering, colourId)
           );
@@ -180,9 +180,9 @@ const SlotManager = (props: SlotManagerProps) => {
         .filter((offering) => offering.day in slotsByDay)
         .forEach((offering) => {
           const colourId =
-            course.id in props.courseToColourIndex
-              ? props.courseToColourIndex[course.id]
-              : getNextAvailableColour(props.courseToColourIndex);
+            course.id in courseToColourIndex
+              ? courseToColourIndex[course.id]
+              : getNextAvailableColour(courseToColourIndex);
           slotsByDay[offering.day].push(
             slotToDisplayOffering(course, section, offering, colourId)
           );

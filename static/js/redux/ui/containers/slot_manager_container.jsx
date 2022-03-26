@@ -26,7 +26,6 @@ import {
 import SlotManager from "../slot_manager";
 
 const mapStateToProps = (state, ownProps) => ({
-  courseToColourIndex: state.ui.courseToColourIndex,
   custom: state.customEvents.events,
   isCourseOptional: (cid) => state.optionalCourses.courses.some((c) => c === cid),
   getOptionalCourseById: (cid) => getDenormCourseById(state, cid),
