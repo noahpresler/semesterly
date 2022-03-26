@@ -25,6 +25,7 @@ import { convertToMinutes } from "./slotUtils";
 import { Event, HoveredSlot, DenormalizedSlot } from "../constants/commonTypes";
 import { useAppSelector } from "../hooks";
 import { getActiveDenormTimetable, getHoveredSlots } from "../state";
+import { getSchoolSpecificInfo } from "../constants/schools";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -135,8 +136,6 @@ type SlotManagerProps = {
   courseToColourIndex: any;
   getClassmatesInSection: Function;
   custom: Event[];
-  primaryDisplayAttribute: string;
-  socialSections?: boolean;
   uses12HrTime: boolean;
 };
 
@@ -215,6 +214,13 @@ const SlotManager = (props: SlotManagerProps) => {
     );
   };
 
+  const socialSections = useAppSelector(
+    (state) => state.userInfo.data.social_offerings
+  );
+  const primaryDisplayAttribute = useAppSelector(
+    (state) => getSchoolSpecificInfo(state.school.school).primaryDisplay
+  );
+
   const allSlots = props.days.map((day, i) => {
     const daySlots = slotsByDay[day].map((slot: any, j: number) => {
       const courseId = slot.courseId;
@@ -238,7 +244,7 @@ const SlotManager = (props: SlotManagerProps) => {
           key={slot.id + i.toString() + j.toString()}
           locked={locked}
           classmates={
-            props.socialSections
+            socialSections
               ? props.getClassmatesInSection(courseId, slot.meeting_section)
               : []
           }
@@ -251,7 +257,7 @@ const SlotManager = (props: SlotManagerProps) => {
             }
             return props.addOrRemoveOptionalCourse(optionalCourse);
           }}
-          primaryDisplayAttribute={props.primaryDisplayAttribute}
+          primaryDisplayAttribute={primaryDisplayAttribute}
           updateCustomSlot={props.updateCustomSlot}
           addCustomSlot={props.addCustomSlot}
           finalizeCustomSlot={props.finalizeCustomSlot}
