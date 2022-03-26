@@ -204,12 +204,11 @@ const SlotManager = (props: SlotManagerProps) => {
 
   const slotsByDay = getSlotsByDay();
 
+  const courseSections = useAppSelector((state) => state.courseSections);
   const isLocked = (courseId: number, section: number) => {
     // check the courseSections state variable, which tells us
     // precisely which courses have which sections locked, if any
-    const typeToLocked = useAppSelector(
-      (state) => state.courseSections.objects[courseId]
-    );
+    const typeToLocked = courseSections.objects[courseId];
     return (
       typeToLocked !== undefined &&
       Object.keys(typeToLocked).some(
