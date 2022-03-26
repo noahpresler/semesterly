@@ -24,6 +24,7 @@ import { getNextAvailableColour, slotToDisplayOffering } from "../util";
 import { convertToMinutes } from "./slotUtils";
 import { Event, DenormalizedSlot } from "../constants/commonTypes";
 import { useAppSelector } from "../hooks";
+import { getActiveDenormTimetable } from "../state";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -157,11 +158,11 @@ const SlotManager = (props: SlotManagerProps) => {
       section: { section_type: null },
     };
     // don't show slot if an alternative is being hovered
-    const slots = props.slots.filter(
+    const slots = useAppSelector((state) => getActiveDenormTimetable(state).slots.filter(
       (slot) =>
         hoveredSlot.course.id !== slot.course.id ||
         hoveredSlot.section.section_type !== slot.section.section_type
-    );
+    ));
 
     slots.forEach((slot) => {
       const { course, section, offerings } = slot;

@@ -31,7 +31,6 @@ import { getSchoolSpecificInfo } from "../../constants/schools";
 import SlotManager from "../slot_manager";
 
 const mapStateToProps = (state, ownProps) => ({
-  slots: getActiveDenormTimetable(state).slots,
   hoveredSlot: getHoveredSlots(state),
   isLoggedIn: state.userInfo.data.isLoggedIn,
   socialSections: state.userInfo.data.social_offerings,
