@@ -13,11 +13,7 @@ GNU General Public License for more details.
 */
 
 import { connect } from "react-redux";
-import {
-  getActiveDenormTimetable,
-  getHoveredSlots,
-  getDenormCourseById,
-} from "../../state";
+import { getHoveredSlots, getDenormCourseById } from "../../state";
 import { fetchCourseInfo } from "../../actions/modal_actions";
 import {
   addCustomSlot,
@@ -31,7 +27,6 @@ import { getSchoolSpecificInfo } from "../../constants/schools";
 import SlotManager from "../slot_manager";
 
 const mapStateToProps = (state, ownProps) => ({
-  hoveredSlot: getHoveredSlots(state),
   isLoggedIn: state.userInfo.data.isLoggedIn,
   socialSections: state.userInfo.data.social_offerings,
   primaryDisplayAttribute: getSchoolSpecificInfo(state.school.school).primaryDisplay,
