@@ -26,6 +26,7 @@ import { Event, HoveredSlot, DenormalizedSlot } from "../constants/commonTypes";
 import { useAppSelector } from "../hooks";
 import { getActiveDenormTimetable, getHoveredSlots } from "../state";
 import { getSchoolSpecificInfo } from "../constants/schools";
+import { getDenormCourseById } from "../state/slices/entitiesSlice";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -122,7 +123,6 @@ function getConflictStyles(slotsByDay: any) {
 }
 
 type SlotManagerProps = {
-  getOptionalCourseById: Function;
   removeCustomSlot: Function;
   addOrRemoveCourse: Function;
   addOrRemoveOptionalCourse: Function;
@@ -221,13 +221,16 @@ const SlotManager = (props: SlotManagerProps) => {
   const optionalCourses = useAppSelector((state) => state.optionalCourses.courses);
   const isCourseOptional = (courseId: number) =>
     optionalCourses.some((c) => c === courseId);
+  const entities = useAppSelector((state) => state.entities);
+  const getOptionalCourseById = (courseId: number) =>
+    getDenormCourseById(entities, courseId);
 
   const allSlots = props.days.map((day, i) => {
     const daySlots = slotsByDay[day].map((slot: any, j: number) => {
       const courseId = slot.courseId;
       const locked = isLocked(courseId, slot.meeting_section);
       const isOptional = isCourseOptional(courseId);
-      const optionalCourse = isOptional ? props.getOptionalCourseById(courseId) : null;
+      const optionalCourse = isOptional ? getOptionalCourseById(courseId) : null;
       return slot.custom ? (
         <CustomSlot
           {...slot}

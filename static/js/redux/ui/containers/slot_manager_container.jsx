@@ -26,8 +26,6 @@ import {
 import SlotManager from "../slot_manager";
 
 const mapStateToProps = (state, ownProps) => ({
-  isCourseOptional: (cid) => state.optionalCourses.courses.some((c) => c === cid),
-  getOptionalCourseById: (cid) => getDenormCourseById(state, cid),
   getClassmatesInSection: (courseId, sectionCode) => {
     if (!(courseId in state.classmates.courseToClassmates)) {
       return [];
