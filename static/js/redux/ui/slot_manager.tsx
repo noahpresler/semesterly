@@ -23,6 +23,7 @@ import CustomSlot from "./custom_slot";
 import { getNextAvailableColour, slotToDisplayOffering } from "../util";
 import { convertToMinutes } from "./slotUtils";
 import { Event, DenormalizedSlot } from "../constants/commonTypes";
+import { useAppSelector } from "../hooks";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -119,7 +120,6 @@ function getConflictStyles(slotsByDay: any) {
 }
 
 type SlotManagerProps = {
-  isLocked: Function;
   isCourseOptional: Function;
   getOptionalCourseById: Function;
   removeCustomSlot: Function;
@@ -200,11 +200,27 @@ const SlotManager = (props: SlotManagerProps) => {
     }
     return getConflictStyles(slotsByDay);
   };
+
   const slotsByDay = getSlotsByDay();
+
+  const isLocked = (courseId: number, section: number) => {
+    // check the courseSections state variable, which tells us
+    // precisely which courses have which sections locked, if any
+    const typeToLocked = useAppSelector(
+      (state) => state.courseSections.objects[courseId]
+    );
+    return (
+      typeToLocked !== undefined &&
+      Object.keys(typeToLocked).some(
+        (sectionType) => section === typeToLocked[sectionType]
+      )
+    );
+  };
+
   const allSlots = props.days.map((day, i) => {
     const daySlots = slotsByDay[day].map((slot: any, j: number) => {
       const courseId = slot.courseId;
-      const locked = props.isLocked(courseId, slot.meeting_section);
+      const locked = isLocked(courseId, slot.meeting_section);
       const isOptional = props.isCourseOptional(courseId);
       const optionalCourse = isOptional ? props.getOptionalCourseById(courseId) : null;
       return slot.custom ? (
