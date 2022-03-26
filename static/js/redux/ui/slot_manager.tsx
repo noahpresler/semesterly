@@ -189,9 +189,9 @@ const SlotManager = (props: SlotManagerProps) => {
         });
     }
 
-    // custom slots
-    for (let i = 0; i < props.custom.length; i++) {
-      const customSlot = Object.assign({}, props.custom[i]);
+    const customEvents = useAppSelector((state) => state.customEvents.events);
+    for (let i = 0; i < customEvents.length; i++) {
+      const customSlot = Object.assign({}, customEvents[i]);
       customSlot.custom = true;
       customSlot.key = customSlot.id;
       slotsByDay[customSlot.day].push(customSlot);
