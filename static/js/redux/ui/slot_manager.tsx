@@ -122,7 +122,6 @@ function getConflictStyles(slotsByDay: any) {
 }
 
 type SlotManagerProps = {
-  isCourseOptional: Function;
   getOptionalCourseById: Function;
   removeCustomSlot: Function;
   addOrRemoveCourse: Function;
@@ -132,9 +131,7 @@ type SlotManagerProps = {
   finalizeCustomSlot: Function;
   fetchCourseInfo: Function;
   days: string[];
-  slots: DenormalizedSlot[];
   getClassmatesInSection: Function;
-  custom: Event[];
   uses12HrTime: boolean;
 };
 
@@ -221,11 +218,15 @@ const SlotManager = (props: SlotManagerProps) => {
     (state) => getSchoolSpecificInfo(state.school.school).primaryDisplay
   );
 
+  const optionalCourses = useAppSelector((state) => state.optionalCourses.courses);
+  const isCourseOptional = (courseId: number) =>
+    optionalCourses.some((c) => c === courseId);
+
   const allSlots = props.days.map((day, i) => {
     const daySlots = slotsByDay[day].map((slot: any, j: number) => {
       const courseId = slot.courseId;
       const locked = isLocked(courseId, slot.meeting_section);
-      const isOptional = props.isCourseOptional(courseId);
+      const isOptional = isCourseOptional(courseId);
       const optionalCourse = isOptional ? props.getOptionalCourseById(courseId) : null;
       return slot.custom ? (
         <CustomSlot
