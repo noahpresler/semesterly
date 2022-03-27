@@ -21,7 +21,7 @@ import PaginationContainer from "./containers/pagination_container";
 import SlotManagerContainer from "./containers/slot_manager_container";
 import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
-import { ShareLink } from "./master_slot";
+import { ShareLink } from "./MasterSlot";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { useAppSelector } from "../hooks";
 

@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import classNames from "classnames";
 import ClickOutHandler from "react-onclickout";
-import MasterSlot from "./master_slot";
+import MasterSlot from "./MasterSlot";
 import TimetableNameInput from "./timetable_name_input";
 import CreditTicker from "./credit_ticker";
 import { alertsActions } from "../state/slices";
