@@ -210,7 +210,7 @@ MasterSlot.defaultProps = {
 type ShareLinkProps = {
   link: string;
   onClickOut: Function;
-  type: string;
+  type?: string;
 };
 
 export const ShareLink = ({ link, onClickOut, type }: ShareLinkProps) => {
