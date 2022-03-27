@@ -17,7 +17,7 @@ import React from "react";
 import isEmpty from "lodash/isEmpty";
 import Reaction from "../reaction";
 import REACTION_MAP from "../../constants/reactions";
-import MasterSlot from "../master_slot";
+import MasterSlot from "../MasterSlot";
 import COLOUR_DATA from "../../constants/colours";
 import EvaluationList from "../evaluation_list";
 import CourseModalSection from "../course_modal_section";
