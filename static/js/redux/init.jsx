@@ -106,6 +106,7 @@ const showFriendAlert = () => (dispatch) => {
   }
 };
 
+// handle feature flows
 const handleFlows = (featureFlow) => (dispatch) => {
   switch (featureFlow.name) {
     case "SIGNUP":
