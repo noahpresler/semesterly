@@ -24,7 +24,6 @@ import NewTimetableAlertContainer from "./alerts/new_timetable_alert_container";
 import EnableNotificationsAlertContainer from "./alerts/enable_notifications_alert_container";
 import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
 import TopBarContainer from "./containers/top_bar_container";
-import SideBarContainer from "./containers/side_bar_container";
 import SignupModalContainer from "./containers/modals/signup_modal_container";
 import PreferenceModal from "./modals/preference_modal";
 import TutModalContainer from "./containers/modals/tut_modal_container";
@@ -41,6 +40,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { getActiveTimetableCourses } from "../state";
 import NewsModal from "./modals/news_modal";
 import { newsModalActions } from "../state/slices/newsModalSlice";
+import SideBar from "./SideBar";
 
 const Semesterly = () => {
   const dispatch = useAppDispatch();
@@ -275,7 +275,7 @@ const Semesterly = () => {
             </ul>
           </footer>
         </div>
-        <SideBarContainer />
+        <SideBar />
       </div>
     </div>
   );

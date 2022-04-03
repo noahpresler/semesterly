@@ -12,7 +12,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from "prop-types";
 import React, { useState } from "react";
 import classNames from "classnames";
 import ClickOutHandler from "react-onclickout";
@@ -20,10 +19,53 @@ import MasterSlot from "./MasterSlot";
 import TimetableNameInput from "./timetable_name_input";
 import CreditTicker from "./credit_ticker";
 import { alertsActions } from "../state/slices";
-import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 import { getNextAvailableColour } from "../util";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import {
+  getActiveTimetable,
+  getCoursesFromSlots,
+  getCurrentSemester,
+  getDenormCourseById,
+} from "../state";
+import { getCourseShareLink } from "../constants/endpoints";
+import {
+  addOrRemoveCourse,
+  addOrRemoveOptionalCourse,
+  duplicateTimetable,
+  fetchCourseInfo,
+  loadTimetable,
+} from "../actions";
+import { togglePeerModal } from "../state/slices/peerModalSlice";
 
-const SideBar = (props) => {
+const SideBar = () => {
+  const dispatch = useAppDispatch();
+
+  const timetable = useAppSelector(getActiveTimetable);
+  const coursesInTimetable = useAppSelector((state) =>
+    getCoursesFromSlots(state, timetable.slots)
+  );
+  const mandatoryCourses = useAppSelector((state) =>
+    getCoursesFromSlots(
+      state,
+      timetable.slots.filter((slot) => !slot.is_optional)
+    )
+  );
+  const optionalCourses = useAppSelector((state) =>
+    state.optionalCourses.courses.map((cid) => getDenormCourseById(state, cid))
+  );
+  const semester = useAppSelector(getCurrentSemester);
+  const savedTimetablesState = useAppSelector(
+    (state) => state.userInfo.data.timetables
+  );
+  const courseToColourIndex = useAppSelector((state) => state.ui.courseToColourIndex);
+  const courseToClassmates = useAppSelector(
+    (state) => state.classmates.courseToClassmates
+  );
+  const avgRating = useAppSelector((state) => timetable.avg_rating);
+  const isCourseInRoster = (courseId) =>
+    timetable.slots.some((s) => s.course === courseId);
+  const getShareLink = (courseCode) => getCourseShareLink(courseCode, semester);
+
   const [showDropdown, setShowDropdown] = useState(false);
 
   const hideDropdown = () => {
@@ -40,13 +82,20 @@ const SideBar = (props) => {
     callback();
   };
 
-  const savedTimetables = props.savedTimetables
-    ? props.savedTimetables.map((t) => (
-        <div className="tt-name" key={t.id} onMouseDown={() => props.loadTimetable(t)}>
+  const savedTimetables = savedTimetablesState
+    ? savedTimetablesState.map((t) => (
+        <div
+          className="tt-name"
+          key={t.id}
+          onMouseDown={() => dispatch(loadTimetable(t))}
+        >
           {t.name}
           <button
             onClick={(event) =>
-              stopPropagation(() => props.alertDeleteTimetable(t), event)
+              stopPropagation(
+                () => dispatch(alertsActions.alertDeleteTimetable(t)),
+                event
+              )
             }
             className="row-button"
           >
@@ -54,7 +103,7 @@ const SideBar = (props) => {
           </button>
           <button
             onClick={(event) =>
-              stopPropagation(() => props.duplicateTimetable(t), event)
+              stopPropagation(() => dispatch(duplicateTimetable(t)), event)
             }
             className="row-button"
           >
@@ -64,44 +113,44 @@ const SideBar = (props) => {
       ))
     : null;
   // TOOD: code duplication between masterslots/optionalslots
-  let masterSlots = props.mandatoryCourses
-    ? props.mandatoryCourses.map((course) => {
+  let masterSlots = mandatoryCourses
+    ? mandatoryCourses.map((course) => {
         const colourIndex =
-          course.id in props.courseToColourIndex
-            ? props.courseToColourIndex[course.id]
-            : getNextAvailableColour(props.courseToColourIndex);
+          course.id in courseToColourIndex
+            ? courseToColourIndex[course.id]
+            : getNextAvailableColour(courseToColourIndex);
         const professors = course.sections.map((section) => section.instructors);
         return (
           <MasterSlot
             key={course.id}
             professors={professors}
             colourIndex={colourIndex}
-            classmates={props.courseToClassmates[course.id]}
-            onTimetable={props.isCourseInRoster(course.id)}
+            classmates={courseToClassmates[course.id]}
+            onTimetable={isCourseInRoster(course.id)}
             course={course}
-            fetchCourseInfo={() => props.fetchCourseInfo(course.id)}
-            removeCourse={() => props.removeCourse(course.id)}
-            getShareLink={props.getShareLink}
+            fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
+            removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
+            getShareLink={getShareLink}
           />
         );
       })
     : null;
-  let optionalSlots = props.coursesInTimetable
-    ? props.optionalCourses.map((course) => {
+  let optionalSlots = coursesInTimetable
+    ? optionalCourses.map((course) => {
         const colourIndex =
-          course.id in props.courseToColourIndex
-            ? props.courseToColourIndex[course.id]
-            : getNextAvailableColour(props.courseToColourIndex);
+          course.id in courseToColourIndex
+            ? courseToColourIndex[course.id]
+            : getNextAvailableColour(courseToColourIndex);
         return (
           <MasterSlot
             key={course.id}
-            onTimetable={props.isCourseInRoster(course.id)}
+            onTimetable={isCourseInRoster(course.id)}
             colourIndex={colourIndex}
-            classmates={props.courseToClassmates[course.id]}
+            classmates={courseToClassmates[course.id]}
             course={course}
-            fetchCourseInfo={() => props.fetchCourseInfo(course.id)}
-            removeCourse={() => props.removeOptionalCourse(course)}
-            getShareLink={props.getShareLink}
+            fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
+            removeCourse={() => dispatch(addOrRemoveOptionalCourse(course))}
+            getShareLink={getShareLink}
           />
         );
       })
@@ -161,7 +210,7 @@ const SideBar = (props) => {
           >
             <div className="tip-border" />
             <div className="tip" />
-            <h4>{`${props.semester.name} ${props.semester.year}`}</h4>
+            <h4>{`${semester.name} ${semester.year}`}</h4>
             {savedTimetables}
           </div>
         </ClickOutHandler>
@@ -171,14 +220,11 @@ const SideBar = (props) => {
         <h3>Average Course Rating</h3>
         <div className="sub-rating-wrapper">
           <div className="star-ratings-sprite">
-            <span
-              style={{ width: `${(100 * props.avgRating) / 5}%` }}
-              className="rating"
-            />
+            <span style={{ width: `${(100 * avgRating) / 5}%` }} className="rating" />
           </div>
         </div>
       </div>
-      <a onClick={() => props.launchPeerModal()}>
+      <a onClick={() => dispatch(togglePeerModal())}>
         <h4 className="sb-header">
           Current Courses
           <div className="sb-header-link">
@@ -203,42 +249,6 @@ const SideBar = (props) => {
 SideBar.defaultProps = {
   savedTimetables: null,
   avgRating: 0,
-};
-
-SideBar.propTypes = {
-  savedTimetables: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-    })
-  ),
-  mandatoryCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse)
-    .isRequired,
-  optionalCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
-  coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse)
-    .isRequired,
-  courseToColourIndex: PropTypes.shape({
-    id: PropTypes.string,
-  }).isRequired,
-  courseToClassmates: PropTypes.shape({ "*": SemesterlyPropTypes.classmates })
-    .isRequired,
-  loadTimetable: PropTypes.func.isRequired,
-  alertDeleteTimetable: PropTypes.func.isRequired,
-  isCourseInRoster: PropTypes.func.isRequired,
-  duplicateTimetable: PropTypes.func.isRequired,
-  fetchCourseInfo: PropTypes.func.isRequired,
-  removeCourse: PropTypes.func.isRequired,
-  removeOptionalCourse: PropTypes.func.isRequired,
-  launchPeerModal: PropTypes.func.isRequired,
-  semester: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    year: PropTypes.numberisRequired,
-  }).isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
-  semesterIndex: PropTypes.number.isRequired,
-  avgRating: PropTypes.number,
-  // eslint-disable-next-line react/no-unused-prop-types
-  hasLoaded: PropTypes.bool.isRequired,
-  getShareLink: PropTypes.func.isRequired,
 };
 
 export default SideBar;
