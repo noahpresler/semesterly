@@ -14,6 +14,7 @@ GNU General Public License for more details.
 
 import React, { useState } from "react";
 import classNames from "classnames";
+// @ts-ignore no available type
 import ClickOutHandler from "react-onclickout";
 import MasterSlot from "./MasterSlot";
 import TimetableNameInput from "./timetable_name_input";
@@ -36,6 +37,7 @@ import {
   loadTimetable,
 } from "../actions";
 import { togglePeerModal } from "../state/slices/peerModalSlice";
+import { Timetable } from "../constants/commonTypes";
 
 const SideBar = () => {
   const dispatch = useAppDispatch();
@@ -62,9 +64,9 @@ const SideBar = () => {
     (state) => state.classmates.courseToClassmates
   );
   const avgRating = useAppSelector((state) => timetable.avg_rating);
-  const isCourseInRoster = (courseId) =>
+  const isCourseInRoster = (courseId: number) =>
     timetable.slots.some((s) => s.course === courseId);
-  const getShareLink = (courseCode) => getCourseShareLink(courseCode, semester);
+  const getShareLink = (courseCode: string) => getCourseShareLink(courseCode, semester);
 
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -76,14 +78,14 @@ const SideBar = () => {
     setShowDropdown((old) => !old);
   };
 
-  const stopPropagation = (callback, event) => {
+  const stopPropagation = (callback: Function, event: React.MouseEvent) => {
     event.stopPropagation();
     hideDropdown();
     callback();
   };
 
   const savedTimetables = savedTimetablesState
-    ? savedTimetablesState.map((t) => (
+    ? savedTimetablesState.map((t: Timetable) => (
         <div
           className="tt-name"
           key={t.id}
@@ -127,7 +129,7 @@ const SideBar = () => {
             colourIndex={colourIndex}
             classmates={courseToClassmates[course.id]}
             onTimetable={isCourseInRoster(course.id)}
-            course={course}
+            course={course as any}
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
             getShareLink={getShareLink}
@@ -147,7 +149,7 @@ const SideBar = () => {
             onTimetable={isCourseInRoster(course.id)}
             colourIndex={colourIndex}
             classmates={courseToClassmates[course.id]}
-            course={course}
+            course={course as any}
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveOptionalCourse(course))}
             getShareLink={getShareLink}
@@ -162,6 +164,7 @@ const SideBar = () => {
       </div>
     ) : null;
   if (masterSlots.length === 0) {
+    // @ts-ignore
     masterSlots = (
       <div className="empty-state">
         <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
@@ -186,6 +189,7 @@ const SideBar = () => {
         alt="No optional courses added."
       />
     );
+    // @ts-ignore
     optionalSlots = (
       <div className="empty-state">
         {img}
