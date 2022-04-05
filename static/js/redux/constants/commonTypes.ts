@@ -53,6 +53,7 @@ export interface Slot {
   offerings: number[];
   is_optional: boolean;
   is_locked: boolean;
+  is_section_filled?: boolean;
 }
 
 /**
@@ -116,6 +117,7 @@ export interface Course {
   pos: string[];
   writing_intensive: string;
   sub_school: string;
+  slots?: Slot[];
 }
 
 export interface RelatedCourse {

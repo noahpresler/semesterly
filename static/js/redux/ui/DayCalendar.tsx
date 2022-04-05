@@ -20,7 +20,7 @@ import PaginationContainer from "./containers/pagination_container";
 import SlotManager from "./SlotManager";
 import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
-import { ShareLink } from "./master_slot";
+import { ShareLink } from "./MasterSlot";
 import { useAppSelector } from "../hooks";
 
 type RowProps = {

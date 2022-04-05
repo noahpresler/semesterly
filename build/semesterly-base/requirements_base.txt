@@ -4,7 +4,7 @@ Sphinx==4.0.2
 alabaster==0.7.10
 argparse==1.4.0
 beautifulsoup4==4.6.0
-black==22.1.0
+black==22.3.0
 bs4==0.0.1
 django-ckeditor==6.2.0 
 celery==5.2.2

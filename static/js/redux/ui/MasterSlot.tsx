@@ -13,18 +13,43 @@ GNU General Public License for more details.
 */
 
 import PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, MouseEventHandler, MouseEvent } from "react";
+// @ts-ignore outdated package
 import ClickOutHandler from "react-onclickout";
 import uniq from "lodash/uniq";
 import Clipboard from "clipboard";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import COLOUR_DATA from "../constants/colours";
-import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
+import { Course } from "../constants/commonTypes";
 
-const MasterSlot = (props) => {
+type Classmate = {
+  first_name: string;
+  last_name: string;
+  img_url: string;
+  sections: string[]; // section codes
+};
+
+type MasterSlotProps = {
+  colourIndex: number;
+  inModal?: boolean;
+  fakeFriends: number;
+  course: Course;
+  professors: string[];
+  classmates: {
+    current: Classmate[];
+    past: Classmate[];
+  };
+  hideCloseButton?: boolean;
+  onTimetable: boolean;
+  fetchCourseInfo: MouseEventHandler<HTMLDivElement>;
+  removeCourse?: Function;
+  getShareLink: Function;
+};
+
+const MasterSlot = (props: MasterSlotProps) => {
   const [shareLinkShown, setShareLinkShown] = useState(false);
 
-  const updateColours = (colour) => {
+  const updateColours = (colour: string) => {
     // no updating when hovering over a masterslot in the course modal (i.e. related course)
     if (props.inModal) {
       return;
@@ -39,7 +64,7 @@ const MasterSlot = (props) => {
   const onMasterSlotUnhover = () => {
     updateColours(COLOUR_DATA[props.colourIndex].background);
   };
-  const stopPropagation = (callback, event) => {
+  const stopPropagation = (callback: Function, event: MouseEvent) => {
     event.stopPropagation();
     onMasterSlotUnhover();
     callback();
@@ -173,7 +198,7 @@ MasterSlot.defaultProps = {
   inModal: false,
   fakeFriends: 0,
   hideCloseButton: false,
-  course: PropTypes.shape({
+  course: PropTypes.shape<any>({
     is_waitlist_only: false,
   }),
   professors: null,
@@ -182,32 +207,13 @@ MasterSlot.defaultProps = {
   classmates: { current: [], past: [] },
 };
 
-MasterSlot.propTypes = {
-  colourIndex: PropTypes.number.isRequired,
-  inModal: PropTypes.bool,
-  fakeFriends: PropTypes.number,
-  course: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    num_credits: PropTypes.number.isRequired,
-    code: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    is_waitlist_only: PropTypes.bool,
-    slots: PropTypes.arrayOf(
-      PropTypes.shape({
-        is_section_filled: PropTypes.bool.isRequired,
-      })
-    ),
-  }).isRequired,
-  professors: PropTypes.arrayOf(PropTypes.string),
-  classmates: SemesterlyPropTypes.classmates,
-  hideCloseButton: PropTypes.bool,
-  onTimetable: PropTypes.bool.isRequired,
-  fetchCourseInfo: PropTypes.func.isRequired,
-  removeCourse: PropTypes.func,
-  getShareLink: PropTypes.func.isRequired,
+type ShareLinkProps = {
+  link: string;
+  onClickOut: Function;
+  type?: string;
 };
 
-export const ShareLink = ({ link, onClickOut, type }) => {
+export const ShareLink = ({ link, onClickOut, type }: ShareLinkProps) => {
   const [shareBtnText, setShareBtnText] = useState("Copy to Clipboard");
   useEffect(() => {
     if (shareBtnText === "Copied!") {
@@ -241,12 +247,6 @@ export const ShareLink = ({ link, onClickOut, type }) => {
       </div>
     </ClickOutHandler>
   );
-};
-
-ShareLink.propTypes = {
-  link: PropTypes.string.isRequired,
-  onClickOut: PropTypes.func.isRequired,
-  type: PropTypes.string,
 };
 
 export default MasterSlot;

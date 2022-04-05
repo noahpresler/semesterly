@@ -19,7 +19,7 @@ import Clipboard from "clipboard";
 import { WaveModal } from "boron-15";
 import { AreaBubble, WritingIntensive } from "../search_result";
 import CourseModalBodyContainer from "../containers/modals/course_modal_body_container";
-import { ShareLink } from "../master_slot";
+import { ShareLink } from "../MasterSlot";
 import { normalizedCourse } from "../../constants/semesterlyPropTypes";
 
 class CourseModal extends React.Component {
