@@ -130,7 +130,7 @@ function getConflictStyles(slotsByDay: any) {
   return styledSlotsByDay;
 }
 
-const SlotManager = (props: {days: string[]}) => {
+const SlotManager = (props: { days: string[] }) => {
   const getSlotsByDay = () => {
     const slotsByDay: any = {
       M: [],
@@ -255,9 +255,7 @@ const SlotManager = (props: {days: string[]}) => {
           key={slot.id + i.toString() + j.toString()}
           locked={locked}
           classmates={
-            socialSections
-              ? getClassmatesInSection(courseId, slot.meeting_section)
-              : []
+            socialSections ? getClassmatesInSection(courseId, slot.meeting_section) : []
           }
           lockOrUnlockSection={() =>
             dispatch(addOrRemoveCourse(courseId, slot.meeting_section))

@@ -13,7 +13,7 @@ GNU General Public License for more details.
 */
 
 import { connect } from "react-redux";
-import Calendar from "../calendar";
+import Calendar from "../Calendar";
 import { saveTimetable } from "../../actions/user_actions";
 import { handleCreateNewTimetable } from "../../actions/timetable_actions";
 import {

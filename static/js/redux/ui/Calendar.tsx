@@ -422,9 +422,7 @@ const Calendar = (props: CalendarProps) => {
                       </div>
                       <div className="fc-timeline" style={timelineStyle} />
                       <div className="fc-content-skeleton">
-                        <SlotManager
-                          days={showWeekend ? DAYS : DAYS.slice(0, 5)}
-                        />
+                        <SlotManager days={showWeekend ? DAYS : DAYS.slice(0, 5)} />
                       </div>
                       <hr
                         className="fc-divider fc-widget-header"
