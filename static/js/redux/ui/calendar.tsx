@@ -18,7 +18,7 @@ import classnames from "classnames";
 import ReactTooltip from "react-tooltip";
 import Clipboard from "clipboard";
 import PaginationContainer from "./containers/pagination_container";
-import SlotManagerContainer from "./containers/slot_manager_container";
+import SlotManager from "./SlotManager";
 import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
 import { ShareLink } from "./master_slot";
@@ -422,7 +422,7 @@ const Calendar = (props: CalendarProps) => {
                       </div>
                       <div className="fc-timeline" style={timelineStyle} />
                       <div className="fc-content-skeleton">
-                        <SlotManagerContainer
+                        <SlotManager
                           days={showWeekend ? DAYS : DAYS.slice(0, 5)}
                         />
                       </div>

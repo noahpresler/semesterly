@@ -27,7 +27,14 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { getActiveDenormTimetable, getHoveredSlots } from "../state";
 import { getSchoolSpecificInfo } from "../constants/schools";
 import { getDenormCourseById } from "../state/slices/entitiesSlice";
-import { removeCustomSlot } from "../actions/timetable_actions";
+import {
+  addCustomSlot,
+  addOrRemoveCourse,
+  addOrRemoveOptionalCourse,
+  updateCustomSlot,
+  finalizeCustomSlot,
+  removeCustomSlot,
+} from "../actions/timetable_actions";
 import { fetchCourseInfo } from "../actions/modal_actions";
 
 function getConflictStyles(slotsByDay: any) {
@@ -124,16 +131,7 @@ function getConflictStyles(slotsByDay: any) {
   return styledSlotsByDay;
 }
 
-type SlotManagerProps = {
-  addOrRemoveCourse: Function;
-  addOrRemoveOptionalCourse: Function;
-  updateCustomSlot: Function;
-  addCustomSlot: Function;
-  finalizeCustomSlot: Function;
-  days: string[];
-};
-
-const SlotManager = (props: SlotManagerProps) => {
+const SlotManager = (props: { days: string[] }) => {
   const getSlotsByDay = () => {
     const slotsByDay: any = {
       M: [],
@@ -250,9 +248,9 @@ const SlotManager = (props: SlotManagerProps) => {
           {...slot}
           key={`${i.toString() + j.toString()} custom`}
           removeCustomSlot={() => dispatch(removeCustomSlot(slot.id))}
-          updateCustomSlot={props.updateCustomSlot}
-          addCustomSlot={props.addCustomSlot}
-          finalizeCustomSlot={props.finalizeCustomSlot}
+          updateCustomSlot={updateCustomSlot}
+          addCustomSlot={addCustomSlot}
+          finalizeCustomSlot={finalizeCustomSlot}
           uses12HrTime={uses12HrTime}
         />
       ) : (
@@ -262,23 +260,21 @@ const SlotManager = (props: SlotManagerProps) => {
           key={slot.id + i.toString() + j.toString()}
           locked={locked}
           classmates={
-            socialSections
-              ? getClassmatesInSection(courseId, slot.meeting_section)
-              : []
+            socialSections ? getClassmatesInSection(courseId, slot.meeting_section) : []
           }
           lockOrUnlockSection={() =>
-            props.addOrRemoveCourse(courseId, slot.meeting_section)
+            dispatch(addOrRemoveCourse(courseId, slot.meeting_section))
           }
           removeCourse={() => {
             if (!isOptional) {
-              return props.addOrRemoveCourse(courseId);
+              return dispatch(addOrRemoveCourse(courseId));
             }
-            return props.addOrRemoveOptionalCourse(optionalCourse);
+            return dispatch(addOrRemoveOptionalCourse(optionalCourse));
           }}
           primaryDisplayAttribute={primaryDisplayAttribute}
-          updateCustomSlot={props.updateCustomSlot}
-          addCustomSlot={props.addCustomSlot}
-          finalizeCustomSlot={props.finalizeCustomSlot}
+          updateCustomSlot={updateCustomSlot}
+          addCustomSlot={addCustomSlot}
+          finalizeCustomSlot={finalizeCustomSlot}
           uses12HrTime={uses12HrTime}
         />
       );

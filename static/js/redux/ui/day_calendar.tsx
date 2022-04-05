@@ -17,7 +17,7 @@ import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 import { Swipeable } from "react-swipeable";
 import PaginationContainer from "./containers/pagination_container";
-import SlotManagerContainer from "./containers/slot_manager_container";
+import SlotManager from "./SlotManager";
 import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
 import { ShareLink } from "./master_slot";
@@ -279,7 +279,7 @@ const DayCalendar = (props: DayCalendarProps) => {
                         </div>
                         <div className="fc-timeline" style={getTimelineStyle()} />
                         <div className="fc-content-skeleton">
-                          <SlotManagerContainer days={[DAYS[currentDay]]} />
+                          <SlotManager days={[DAYS[currentDay]]} />
                         </div>
                         <hr
                           className="fc-divider fc-widget-header"
