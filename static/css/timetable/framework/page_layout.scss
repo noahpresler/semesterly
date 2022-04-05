@@ -92,6 +92,14 @@ textarea {
   z-index: 1000;
 }
 
+.top-bar.dark-mode {
+  background-color: $gdark111;
+  box-shadow: 0 0 12px $black-transparent-1, 0 0 1px $black-transparent-15;
+  min-height: 50px;
+  position: relative;
+  z-index: 1000;
+}
+
 .la-ball-clip-rotate-multiple {
   float: right;
   margin-right: 0;
