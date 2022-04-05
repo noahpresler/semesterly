@@ -22,12 +22,13 @@ import Slot from "./slot";
 import CustomSlot from "./custom_slot";
 import { getNextAvailableColour, slotToDisplayOffering } from "../util";
 import { convertToMinutes } from "./slotUtils";
-import { Event, HoveredSlot, DenormalizedSlot } from "../constants/commonTypes";
+import { HoveredSlot } from "../constants/commonTypes";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getActiveDenormTimetable, getHoveredSlots } from "../state";
 import { getSchoolSpecificInfo } from "../constants/schools";
 import { getDenormCourseById } from "../state/slices/entitiesSlice";
 import { removeCustomSlot } from "../actions/timetable_actions";
+import { fetchCourseInfo } from "../actions/modal_actions";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -129,7 +130,6 @@ type SlotManagerProps = {
   updateCustomSlot: Function;
   addCustomSlot: Function;
   finalizeCustomSlot: Function;
-  fetchCourseInfo: Function;
   days: string[];
 };
 
@@ -258,7 +258,7 @@ const SlotManager = (props: SlotManagerProps) => {
       ) : (
         <Slot
           {...slot}
-          fetchCourseInfo={() => props.fetchCourseInfo(courseId)}
+          fetchCourseInfo={() => dispatch(fetchCourseInfo(courseId))}
           key={slot.id + i.toString() + j.toString()}
           locked={locked}
           classmates={

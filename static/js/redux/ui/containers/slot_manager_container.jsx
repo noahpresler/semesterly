@@ -13,7 +13,6 @@ GNU General Public License for more details.
 */
 
 import { connect } from "react-redux";
-import { fetchCourseInfo } from "../../actions/modal_actions";
 import {
   addCustomSlot,
   addOrRemoveCourse,
@@ -28,7 +27,6 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const SlotManagerContainer = connect(mapStateToProps, {
-  fetchCourseInfo,
   addOrRemoveOptionalCourse,
   addOrRemoveCourse,
   updateCustomSlot,
