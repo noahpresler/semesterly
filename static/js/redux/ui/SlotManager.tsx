@@ -19,7 +19,7 @@ import {
   // @ts-ignore
 } from "static-interval-tree";
 import Slot from "./slot";
-import CustomSlot from "./custom_slot";
+import CustomSlot from "./CustomSlot";
 import { getNextAvailableColour, slotToDisplayOffering } from "../util";
 import { convertToMinutes } from "./slotUtils";
 import { HoveredSlot } from "../constants/commonTypes";
@@ -33,7 +33,6 @@ import {
   addOrRemoveOptionalCourse,
   updateCustomSlot,
   finalizeCustomSlot,
-  removeCustomSlot,
 } from "../actions/timetable_actions";
 import { fetchCourseInfo } from "../actions/modal_actions";
 
@@ -131,7 +130,7 @@ function getConflictStyles(slotsByDay: any) {
   return styledSlotsByDay;
 }
 
-const SlotManager = (props: { days: string[] }) => {
+const SlotManager = (props: {days: string[]}) => {
   const getSlotsByDay = () => {
     const slotsByDay: any = {
       M: [],
@@ -247,10 +246,6 @@ const SlotManager = (props: { days: string[] }) => {
         <CustomSlot
           {...slot}
           key={`${i.toString() + j.toString()} custom`}
-          removeCustomSlot={() => dispatch(removeCustomSlot(slot.id))}
-          updateCustomSlot={updateCustomSlot}
-          addCustomSlot={addCustomSlot}
-          finalizeCustomSlot={finalizeCustomSlot}
           uses12HrTime={uses12HrTime}
         />
       ) : (
@@ -260,7 +255,9 @@ const SlotManager = (props: { days: string[] }) => {
           key={slot.id + i.toString() + j.toString()}
           locked={locked}
           classmates={
-            socialSections ? getClassmatesInSection(courseId, slot.meeting_section) : []
+            socialSections
+              ? getClassmatesInSection(courseId, slot.meeting_section)
+              : []
           }
           lockOrUnlockSection={() =>
             dispatch(addOrRemoveCourse(courseId, slot.meeting_section))
