@@ -18,7 +18,6 @@ import {
   addCustomSlot,
   addOrRemoveCourse,
   addOrRemoveOptionalCourse,
-  removeCustomSlot,
   updateCustomSlot,
   finalizeCustomSlot,
 } from "../../actions/timetable_actions";
@@ -32,7 +31,6 @@ const SlotManagerContainer = connect(mapStateToProps, {
   fetchCourseInfo,
   addOrRemoveOptionalCourse,
   addOrRemoveCourse,
-  removeCustomSlot,
   updateCustomSlot,
   addCustomSlot,
   finalizeCustomSlot,

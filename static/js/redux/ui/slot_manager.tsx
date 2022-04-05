@@ -23,10 +23,11 @@ import CustomSlot from "./custom_slot";
 import { getNextAvailableColour, slotToDisplayOffering } from "../util";
 import { convertToMinutes } from "./slotUtils";
 import { Event, HoveredSlot, DenormalizedSlot } from "../constants/commonTypes";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { getActiveDenormTimetable, getHoveredSlots } from "../state";
 import { getSchoolSpecificInfo } from "../constants/schools";
 import { getDenormCourseById } from "../state/slices/entitiesSlice";
+import { removeCustomSlot } from "../actions/timetable_actions";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -123,7 +124,6 @@ function getConflictStyles(slotsByDay: any) {
 }
 
 type SlotManagerProps = {
-  removeCustomSlot: Function;
   addOrRemoveCourse: Function;
   addOrRemoveOptionalCourse: Function;
   updateCustomSlot: Function;
@@ -238,6 +238,7 @@ const SlotManager = (props: SlotManagerProps) => {
 
   const uses12HrTime = useAppSelector((state) => state.ui.uses12HrTime);
 
+  const dispatch = useAppDispatch();
   const allSlots = props.days.map((day, i) => {
     const daySlots = slotsByDay[day].map((slot: any, j: number) => {
       const courseId = slot.courseId;
@@ -248,7 +249,7 @@ const SlotManager = (props: SlotManagerProps) => {
         <CustomSlot
           {...slot}
           key={`${i.toString() + j.toString()} custom`}
-          removeCustomSlot={() => props.removeCustomSlot(slot.id)}
+          removeCustomSlot={() => dispatch(removeCustomSlot(slot.id))}
           updateCustomSlot={props.updateCustomSlot}
           addCustomSlot={props.addCustomSlot}
           finalizeCustomSlot={props.finalizeCustomSlot}
