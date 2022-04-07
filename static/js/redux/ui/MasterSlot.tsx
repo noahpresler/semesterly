@@ -20,14 +20,7 @@ import uniq from "lodash/uniq";
 import Clipboard from "clipboard";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import COLOUR_DATA from "../constants/colours";
-import { Course } from "../constants/commonTypes";
-
-type Classmate = {
-  first_name: string;
-  last_name: string;
-  img_url: string;
-  sections: string[]; // section codes
-};
+import { Classmate, Course } from "../constants/commonTypes";
 
 type MasterSlotProps = {
   colourIndex: number;

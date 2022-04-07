@@ -18,12 +18,12 @@ import Radium, { StyleRoot } from "radium";
 import { DropTarget } from "react-dnd";
 import COLOUR_DATA from "../constants/colours";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
-import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 import {
   onCustomSlotCreateDrag,
   onCustomSlotCreateDrop,
   onCustomSlotUpdateDrop,
 } from "./slotUtils";
+import { Classmate } from "../constants/commonTypes";
 import internal from "events";
 
 const dragSlotTarget = {
@@ -56,7 +56,7 @@ function collectCreateDrop(connect) {
 }
 
 type SlotProps = {
-  classmates: classmatesArray;
+  classmates: Classmate[];
   colourId: number;
   courseId: number;
   depth_level: number;
