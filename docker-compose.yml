@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   db:
@@ -11,7 +11,7 @@ services:
       - NODE_ENV=development
       - PYTHONUNBUFFERED=0
     build: .
-    command: bash -c "python manage.py migrate; npm run watch & python /code/manage.py runserver 0.0.0.0:8000"
+    command: bash -c "pip install -r requirements.txt -q; npm install --quiet; python manage.py migrate; npm run watch & python /code/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
       - /code/node_modules # Use local node_modules from image
