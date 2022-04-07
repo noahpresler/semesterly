@@ -14,6 +14,7 @@ GNU General Public License for more details.
 
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
+// @ts-ignore
 import Radium, { StyleRoot } from "radium";
 import { DropTarget } from "react-dnd";
 import COLOUR_DATA from "../constants/colours";
@@ -88,10 +89,6 @@ const Slot = (props: SlotProps) => {
   };
 
   const [hovered, setHovered] = useState(false);
-  const [overflow, setOverflow] = useState(false);
-  const [defaultScrollWidth, setDefaultScrollWidth] = useState(0);
-
-  useEffect(() => {});
 
   const onSlotHover = () => {
     setHovered(true);
@@ -230,7 +227,7 @@ const Slot = (props: SlotProps) => {
         {lockButton}
         <div className="fc-content">
           <div className="fc-time">
-            <span className={`fc-time-name${overflow ? "-overflow" : ""}`}>
+            <span className="fc-time-name">
               {`${props[props.primaryDisplayAttribute]} `}
             </span>
             <span>{props.meeting_section}</span>
