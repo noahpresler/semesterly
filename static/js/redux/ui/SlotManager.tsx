@@ -19,10 +19,22 @@ import {
   // @ts-ignore
 } from "static-interval-tree";
 import Slot from "./slot";
-import CustomSlot from "./custom_slot";
+import CustomSlot from "./CustomSlot";
 import { getNextAvailableColour, slotToDisplayOffering } from "../util";
 import { convertToMinutes } from "./slotUtils";
-import { Event, DenormalizedSlot } from "../constants/commonTypes";
+import { HoveredSlot } from "../constants/commonTypes";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { getActiveDenormTimetable, getHoveredSlots } from "../state";
+import { getSchoolSpecificInfo } from "../constants/schools";
+import { getDenormCourseById } from "../state/slices/entitiesSlice";
+import {
+  addCustomSlot,
+  addOrRemoveCourse,
+  addOrRemoveOptionalCourse,
+  updateCustomSlot,
+  finalizeCustomSlot,
+} from "../actions/timetable_actions";
+import { fetchCourseInfo } from "../actions/modal_actions";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -118,29 +130,7 @@ function getConflictStyles(slotsByDay: any) {
   return styledSlotsByDay;
 }
 
-type SlotManagerProps = {
-  isLocked: Function;
-  isCourseOptional: Function;
-  getOptionalCourseById: Function;
-  removeCustomSlot: Function;
-  addOrRemoveCourse: Function;
-  addOrRemoveOptionalCourse: Function;
-  updateCustomSlot: Function;
-  addCustomSlot: Function;
-  finalizeCustomSlot: Function;
-  fetchCourseInfo: Function;
-  days: string[];
-  slots: DenormalizedSlot[];
-  hoveredSlot?: DenormalizedSlot;
-  courseToColourIndex: any;
-  getClassmatesInSection: Function;
-  custom: Event[];
-  primaryDisplayAttribute: string;
-  socialSections?: boolean;
-  uses12HrTime: boolean;
-};
-
-const SlotManager = (props: SlotManagerProps) => {
+const SlotManager = (props: { days: string[] }) => {
   const getSlotsByDay = () => {
     const slotsByDay: any = {
       M: [],
@@ -152,16 +142,16 @@ const SlotManager = (props: SlotManagerProps) => {
       U: [],
     };
 
-    const hoveredSlot: any = props.hoveredSlot || {
-      course: { id: null },
-      section: { section_type: null },
-    };
+    const hoveredSlot: HoveredSlot = useAppSelector((state) => getHoveredSlots(state));
     // don't show slot if an alternative is being hovered
-    const slots = props.slots.filter(
-      (slot) =>
-        hoveredSlot.course.id !== slot.course.id ||
-        hoveredSlot.section.section_type !== slot.section.section_type
+    const slots = useAppSelector((state) =>
+      getActiveDenormTimetable(state).slots.filter(
+        (slot) =>
+          hoveredSlot?.course.id !== slot.course.id ||
+          hoveredSlot?.section.section_type !== slot.section.section_type
+      )
     );
+    const courseToColourIndex = useAppSelector((state) => state.ui.courseToColourIndex);
 
     slots.forEach((slot) => {
       const { course, section, offerings } = slot;
@@ -169,79 +159,118 @@ const SlotManager = (props: SlotManagerProps) => {
       offerings
         .filter((offering) => offering.day in slotsByDay)
         .forEach((offering) => {
-          const colourId = props.courseToColourIndex[course.id];
+          const colourId = courseToColourIndex[course.id];
           slotsByDay[offering.day].push(
             slotToDisplayOffering(course, section, offering, colourId)
           );
         });
     });
 
-    if (props.hoveredSlot !== null) {
-      const { course, section, offerings } = props.hoveredSlot;
+    if (hoveredSlot !== null) {
+      const { course, section, offerings } = hoveredSlot;
       offerings
         .filter((offering) => offering.day in slotsByDay)
         .forEach((offering) => {
           const colourId =
-            course.id in props.courseToColourIndex
-              ? props.courseToColourIndex[course.id]
-              : getNextAvailableColour(props.courseToColourIndex);
+            course.id in courseToColourIndex
+              ? courseToColourIndex[course.id]
+              : getNextAvailableColour(courseToColourIndex);
           slotsByDay[offering.day].push(
             slotToDisplayOffering(course, section, offering, colourId)
           );
         });
     }
 
-    // custom slots
-    for (let i = 0; i < props.custom.length; i++) {
-      const customSlot = Object.assign({}, props.custom[i]);
+    const customEvents = useAppSelector((state) => state.customEvents.events);
+    for (let i = 0; i < customEvents.length; i++) {
+      const customSlot = Object.assign({}, customEvents[i]);
       customSlot.custom = true;
       customSlot.key = customSlot.id;
       slotsByDay[customSlot.day].push(customSlot);
     }
     return getConflictStyles(slotsByDay);
   };
+
   const slotsByDay = getSlotsByDay();
+
+  const courseSections = useAppSelector((state) => state.courseSections);
+  const isLocked = (courseId: number, section: number) => {
+    // check the courseSections state variable, which tells us
+    // precisely which courses have which sections locked, if any
+    const typeToLocked = courseSections.objects[courseId];
+    return (
+      typeToLocked !== undefined &&
+      Object.keys(typeToLocked).some(
+        (sectionType) => section === typeToLocked[sectionType]
+      )
+    );
+  };
+
+  const socialSections = useAppSelector(
+    (state) => state.userInfo.data.social_offerings
+  );
+  const primaryDisplayAttribute = useAppSelector(
+    (state) => getSchoolSpecificInfo(state.school.school).primaryDisplay
+  );
+
+  const optionalCourses = useAppSelector((state) => state.optionalCourses.courses);
+  const isCourseOptional = (courseId: number) =>
+    optionalCourses.some((c) => c === courseId);
+  const entities = useAppSelector((state) => state.entities);
+  const getOptionalCourseById = (courseId: number) =>
+    getDenormCourseById(entities, courseId);
+
+  const courseToClassmates = useAppSelector(
+    (state) => state.classmates.courseToClassmates
+  );
+  const getClassmatesInSection = (courseId: number, sectionCode: string) => {
+    if (!(courseId in courseToClassmates)) {
+      return [];
+    }
+    const classmatesInCourse = courseToClassmates[courseId];
+    return classmatesInCourse.current.filter((cm: any) =>
+      cm.sections.find((s: string) => s === sectionCode)
+    );
+  };
+
+  const uses12HrTime = useAppSelector((state) => state.ui.uses12HrTime);
+
+  const dispatch = useAppDispatch();
   const allSlots = props.days.map((day, i) => {
     const daySlots = slotsByDay[day].map((slot: any, j: number) => {
       const courseId = slot.courseId;
-      const locked = props.isLocked(courseId, slot.meeting_section);
-      const isOptional = props.isCourseOptional(courseId);
-      const optionalCourse = isOptional ? props.getOptionalCourseById(courseId) : null;
+      const locked = isLocked(courseId, slot.meeting_section);
+      const isOptional = isCourseOptional(courseId);
+      const optionalCourse = isOptional ? getOptionalCourseById(courseId) : null;
       return slot.custom ? (
         <CustomSlot
           {...slot}
           key={`${i.toString() + j.toString()} custom`}
-          removeCustomSlot={() => props.removeCustomSlot(slot.id)}
-          updateCustomSlot={props.updateCustomSlot}
-          addCustomSlot={props.addCustomSlot}
-          finalizeCustomSlot={props.finalizeCustomSlot}
-          uses12HrTime={props.uses12HrTime}
+          uses12HrTime={uses12HrTime}
         />
       ) : (
         <Slot
           {...slot}
-          fetchCourseInfo={() => props.fetchCourseInfo(courseId)}
+          fetchCourseInfo={() => dispatch(fetchCourseInfo(courseId))}
           key={slot.id + i.toString() + j.toString()}
           locked={locked}
           classmates={
-            props.socialSections
-              ? props.getClassmatesInSection(courseId, slot.meeting_section)
-              : []
+            socialSections ? getClassmatesInSection(courseId, slot.meeting_section) : []
           }
           lockOrUnlockSection={() =>
-            props.addOrRemoveCourse(courseId, slot.meeting_section)
+            dispatch(addOrRemoveCourse(courseId, slot.meeting_section))
           }
           removeCourse={() => {
             if (!isOptional) {
-              return props.addOrRemoveCourse(courseId);
+              return dispatch(addOrRemoveCourse(courseId));
             }
-            return props.addOrRemoveOptionalCourse(optionalCourse);
+            return dispatch(addOrRemoveOptionalCourse(optionalCourse));
           }}
-          primaryDisplayAttribute={props.primaryDisplayAttribute}
-          updateCustomSlot={props.updateCustomSlot}
-          addCustomSlot={props.addCustomSlot}
-          finalizeCustomSlot={props.finalizeCustomSlot}
-          uses12HrTime={props.uses12HrTime}
+          primaryDisplayAttribute={primaryDisplayAttribute}
+          updateCustomSlot={updateCustomSlot}
+          addCustomSlot={addCustomSlot}
+          finalizeCustomSlot={finalizeCustomSlot}
+          uses12HrTime={uses12HrTime}
         />
       );
     });

@@ -5,19 +5,13 @@ import {
   receiveTimetables,
   changeActiveTimetable,
 } from "../../actions/initActions";
-import { Course, Offering, Section, Timetable } from "../../constants/commonTypes";
+import { Course, HoveredSlot, Section, Timetable } from "../../constants/commonTypes";
 import { saveLocalActiveIndex } from "../../util";
 
 interface TimetablesSliceState {
   isFetching: boolean;
   items: Timetable[];
-  hovered: {
-    course: Course;
-    section: Section;
-    offerings: Offering[];
-    is_optional: boolean;
-    is_locked: boolean;
-  } | null;
+  hovered: HoveredSlot | null;
   active: number;
   loadingCachedTT: boolean;
   lastCourseAdded: { courseId: number; section: string } | null;
