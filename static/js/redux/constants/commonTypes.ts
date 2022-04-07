@@ -205,4 +205,4 @@ export interface Classmate {
   last_name: string;
   img_url: string;
   sections: string[]; // section codes
-};
+}

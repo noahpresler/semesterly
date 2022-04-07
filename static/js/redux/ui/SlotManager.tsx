@@ -18,7 +18,7 @@ import {
   matches01 as getIntersections,
   // @ts-ignore
 } from "static-interval-tree";
-import Slot from "./slot";
+import Slot from "./Slot";
 import CustomSlot from "./CustomSlot";
 import { getNextAvailableColour, slotToDisplayOffering } from "../util";
 import { convertToMinutes } from "./slotUtils";
