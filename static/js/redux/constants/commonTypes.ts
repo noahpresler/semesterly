@@ -199,3 +199,10 @@ export interface Peer {
   social_offerings: boolean;
   time_accepted_tos: string;
 }
+
+export interface Classmate {
+  first_name: string;
+  last_name: string;
+  img_url: string;
+  sections: string[]; // section codes
+};
