@@ -18,7 +18,7 @@ import classNames from "classnames";
 import ClickOutHandler from "react-onclickout";
 import MasterSlot from "./MasterSlot";
 import TimetableNameInput from "./TimetableNameInput";
-import CreditTicker from "./credit_ticker";
+import CreditTicker from "./CreditTicker";
 import { alertsActions } from "../state/slices";
 import { getNextAvailableColour } from "../util";
 import { useAppDispatch, useAppSelector } from "../hooks";

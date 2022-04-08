@@ -136,6 +136,14 @@ export interface RelatedCourse {
   corequisites: string;
 }
 
+export interface HoveredSlot {
+  course: Course;
+  section: Section;
+  offerings: Offering[];
+  is_optional: boolean;
+  is_locked: boolean;
+}
+
 export interface NormalizedCourse extends RelatedCourse {
   related_courses: RelatedCourse[];
 }
@@ -190,4 +198,11 @@ export interface Peer {
   social_courses: boolean;
   social_offerings: boolean;
   time_accepted_tos: string;
+}
+
+export interface Classmate {
+  first_name: string;
+  last_name: string;
+  img_url: string;
+  sections: string[]; // section codes
 }
