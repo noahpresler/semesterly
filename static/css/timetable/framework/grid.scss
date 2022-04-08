@@ -210,6 +210,8 @@
 }
 
 .hr {
-  background-color: $g808080;
+  @include theme() {
+      background-color: t('background');
+  }
   height: 1px;
 }

@@ -34,7 +34,9 @@ textarea {
 }
 
 .side-bar {
-  background-color: $gfff;
+    @include theme(){
+        background-color: t('sidebar');
+    }
   bottom: auto;
   height: 100%;
   left: calc(100% - 300px);
