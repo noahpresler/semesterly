@@ -3,7 +3,11 @@
     This is created for convenience, as multiple components may have same colors.
      */
 
+// Light mode shared variables
 $light__base-component-bg: $gfff;
+
+// Dark mode shared variables
+$dark__base-component-bg: $gfff;
 
 /*
     Change the variables in the $theme below to change the themes.
@@ -21,15 +25,25 @@ $light__base-component-bg: $gfff;
 $themes : (
     // Light mode
     light: (
-        background: $g808080,
+        background: $g808080,                               // Not sure what this is for, but was referenced in grid_layout.scss
         sidebar-background: $light__base-component-bg,
         main-bar-background: $light__base-component-bg,
         top-bar-background: $light__base-component-bg,
         main-calendar-border-color: #ddd,
+    ),
+    // Dark Mode
+    dark: (
+        background: $g808080,
+        sidebar-background: $dark__base-component-bg,
+        main-bar-background: $dark__base-component-bg,
+        top-bar-background: $dark__base-component-bg,
+        main-calendar-border-color: #ddd,
     )
 );
 
+
 // Function for using the themes
+// Don't change
 
 @mixin theme() {
     @each $theme, $map in $themes {

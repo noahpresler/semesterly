@@ -547,3 +547,13 @@
     right: 85px;
   }
 }
+
+.theme-toggle-container {
+  float: right;
+  padding: 10px 2px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 1.25em;
+}
