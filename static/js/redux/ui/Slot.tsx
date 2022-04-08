@@ -12,10 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-// @ts-ignore
-import Radium, { StyleRoot } from "radium";
+import React, { useState } from "react";
 import { DropTarget } from "react-dnd";
 import COLOUR_DATA from "../constants/colours";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
@@ -25,7 +22,6 @@ import {
   onCustomSlotUpdateDrop,
 } from "./slotUtils";
 import { Classmate } from "../constants/commonTypes";
-import internal from "events";
 
 const dragSlotTarget = {
   drop(props: any, monitor: any) {
@@ -249,9 +245,7 @@ const Slot = (props: SlotProps) => {
 
   return (
     <div>
-      <StyleRoot>
-        <div className="fc-event-container">{slot}</div>
-      </StyleRoot>
+      <div className="fc-event-container">{slot}</div>
     </div>
   );
 };
@@ -260,4 +254,4 @@ export default DropTarget(
   DRAG_TYPES.CREATE,
   createSlotTarget,
   collectCreateDrop
-)(DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(Radium(Slot)));
+)(DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(Slot));
