@@ -35,7 +35,7 @@ textarea {
 
 .side-bar {
     @include theme(){
-        background-color: t('sidebar');
+        background-color: t('sidebar-background');
     }
   bottom: auto;
   height: 100%;
@@ -67,6 +67,9 @@ textarea {
   transition: width .3s, opacity .3s, visibility .3s;
   visibility: visible;
   width: calc(100% - 300px);
+  @include theme() {
+    background-color: t('main-bar-background');
+  }
 
   &.full-cal {
     width: 100%;
@@ -87,15 +90,9 @@ textarea {
 }
 
 .top-bar {
-  background-color: $gfff;
-  box-shadow: 0 0 12px $black-transparent-1, 0 0 1px $black-transparent-15;
-  min-height: 50px;
-  position: relative;
-  z-index: 1000;
-}
-
-.top-bar.dark-mode {
-  background-color: $gdark111;
+  @include theme() {
+    background-color: t('top-bar-background');
+  }
   box-shadow: 0 0 12px $black-transparent-1, 0 0 1px $black-transparent-15;
   min-height: 50px;
   position: relative;

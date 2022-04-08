@@ -1,18 +1,31 @@
 /*
+    Variables to change color of components that have the same color.
+    This is created for convenience, as multiple components may have same colors.
+     */
+
+$light__base-component-bg: $gfff;
+
+/*
     Change the variables in the $theme below to change the themes.
 
     To change the colors by theme, use this function:
 
     @include theme() {
         background-color: t('key');
+        // or other css...
     }
+
+    Try to be as descriptive as possible when naming variables, ex) instead of sidebar, name it as sidebar-background.
 */
 
 $themes : (
     // Light mode
     light: (
         background: $g808080,
-        sidebar: $gfff,
+        sidebar-background: $light__base-component-bg,
+        main-bar-background: $light__base-component-bg,
+        top-bar-background: $light__base-component-bg,
+        main-calendar-border-color: #ddd,
     )
 );
 
