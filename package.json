@@ -59,7 +59,6 @@
     "phantomjs": "^2.1.7",
     "postcss-loader": "^2.1.6",
     "prop-types": "^15.7.2",
-    "radium": "^0.19.6",
     "react": "^16.14.0",
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-shallow-compare": "^15.6.3",

@@ -18,7 +18,7 @@ import {
   matches01 as getIntersections,
   // @ts-ignore
 } from "static-interval-tree";
-import Slot from "./slot";
+import Slot from "./Slot";
 import CustomSlot from "./CustomSlot";
 import { getNextAvailableColour, slotToDisplayOffering } from "../util";
 import { convertToMinutes } from "./slotUtils";
@@ -131,6 +131,18 @@ function getConflictStyles(slotsByDay: any) {
 }
 
 const SlotManager = (props: { days: string[] }) => {
+  const hoveredSlot: HoveredSlot = useAppSelector((state) => getHoveredSlots(state));
+  // don't show slot if an alternative is being hovered
+  const slots = useAppSelector((state) =>
+    getActiveDenormTimetable(state).slots.filter(
+      (slot) =>
+        hoveredSlot?.course.id !== slot.course.id ||
+        hoveredSlot?.section.section_type !== slot.section.section_type
+    )
+  );
+  const courseToColourIndex = useAppSelector((state) => state.ui.courseToColourIndex);
+  const customEvents = useAppSelector((state) => state.customEvents.events);
+
   const getSlotsByDay = () => {
     const slotsByDay: any = {
       M: [],
@@ -141,17 +153,6 @@ const SlotManager = (props: { days: string[] }) => {
       S: [],
       U: [],
     };
-
-    const hoveredSlot: HoveredSlot = useAppSelector((state) => getHoveredSlots(state));
-    // don't show slot if an alternative is being hovered
-    const slots = useAppSelector((state) =>
-      getActiveDenormTimetable(state).slots.filter(
-        (slot) =>
-          hoveredSlot?.course.id !== slot.course.id ||
-          hoveredSlot?.section.section_type !== slot.section.section_type
-      )
-    );
-    const courseToColourIndex = useAppSelector((state) => state.ui.courseToColourIndex);
 
     slots.forEach((slot) => {
       const { course, section, offerings } = slot;
@@ -181,7 +182,6 @@ const SlotManager = (props: { days: string[] }) => {
         });
     }
 
-    const customEvents = useAppSelector((state) => state.customEvents.events);
     for (let i = 0; i < customEvents.length; i++) {
       const customSlot = Object.assign({}, customEvents[i]);
       customSlot.custom = true;
