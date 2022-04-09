@@ -17,12 +17,14 @@ import classnames from "classnames";
 import { useSelector } from "react-redux";
 import { useActions } from "../hooks";
 import { signupModalActions } from "../state/slices/signupModalSlice";
-import {RootState} from "../state/index"
+import { RootState } from "../state/index";
 
 const TimetableNameInput = () => {
   // select redux state, same as mapStateToProps
   const isLoggedIn = useSelector((state: RootState) => state.userInfo.data.isLoggedIn);
-  const { activeTimetable, upToDate } = useSelector((state: RootState) => state.savingTimetable);
+  const { activeTimetable, upToDate } = useSelector(
+    (state: RootState) => state.savingTimetable
+  );
 
   // get actionCreators needed
   const { changeTimetableName } = useActions();
@@ -38,13 +40,16 @@ const TimetableNameInput = () => {
     }
   };
 
-  const handleEnterKeyPressed = useCallback((e) => {
-    // save course when user pressed enter
-    if (inputRef && e.key === "Enter") {
-      setTimetableName();
-      inputRef.current?.blur();
-    }
-  }, [inputRef]);
+  const handleEnterKeyPressed = useCallback(
+    (e) => {
+      // save course when user pressed enter
+      if (inputRef && e.key === "Enter") {
+        setTimetableName();
+        inputRef.current?.blur();
+      }
+    },
+    [inputRef]
+  );
 
   useEffect(() => {
     $(document.body).on("keydown", handleEnterKeyPressed);
@@ -63,7 +68,9 @@ const TimetableNameInput = () => {
     }
   };
 
-  const alterTimetableName = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+  const alterTimetableName = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setInputValue(event.target.value);
   };
 
