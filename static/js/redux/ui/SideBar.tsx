@@ -17,7 +17,7 @@ import classNames from "classnames";
 // @ts-ignore no available type
 import ClickOutHandler from "react-onclickout";
 import MasterSlot from "./MasterSlot";
-import TimetableNameInput from "./timetable_name_input";
+import TimetableNameInput from "./TimetableNameInput";
 import CreditTicker from "./CreditTicker";
 import { alertsActions } from "../state/slices";
 import { getNextAvailableColour } from "../util";
