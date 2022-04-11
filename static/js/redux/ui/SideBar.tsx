@@ -38,6 +38,7 @@ import {
 } from "../actions";
 import { togglePeerModal } from "../state/slices/peerModalSlice";
 import { Timetable } from "../constants/commonTypes";
+import { toggleCompareTimetableSideBar } from "../state/slices/compareTimetableSlice";
 
 const SideBar = () => {
   const dispatch = useAppDispatch();
@@ -64,6 +65,10 @@ const SideBar = () => {
     (state) => state.classmates.courseToClassmates
   );
   const avgRating = useAppSelector((state) => timetable.avg_rating);
+  const currentTimetableName = useAppSelector(
+    (state) => state.savingTimetable.activeTimetable.name
+  );
+
   const isCourseInRoster = (courseId: number) =>
     timetable.slots.some((s) => s.course === courseId);
   const getShareLink = (courseCode: string) => getCourseShareLink(courseCode, semester);
@@ -86,11 +91,7 @@ const SideBar = () => {
 
   const savedTimetables = savedTimetablesState
     ? savedTimetablesState.map((t: Timetable) => (
-        <div
-          className="tt-name"
-          key={t.id}
-          onMouseDown={() => dispatch(loadTimetable(t))}
-        >
+        <div className="tt-name" key={t.id} onClick={() => dispatch(loadTimetable(t))}>
           {t.name}
           <button
             onClick={(event) =>
@@ -111,6 +112,17 @@ const SideBar = () => {
           >
             <i className="fa fa-clone" />
           </button>
+          {currentTimetableName !== t.name && (
+            <button
+              onClick={(event) => {
+                dispatch(toggleCompareTimetableSideBar());
+                event.stopPropagation();
+              }}
+              className="row-button"
+            >
+              <i className="fa-solid fa-arrows-left-right" />
+            </button>
+          )}
         </div>
       ))
     : null;

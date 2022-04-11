@@ -41,6 +41,7 @@ import { getActiveTimetableCourses } from "../state";
 import NewsModal from "./modals/news_modal";
 import { newsModalActions } from "../state/slices/newsModalSlice";
 import SideBar from "./SideBar";
+import CompareTimetableSideBar from "./CompareTimetableSidebar";
 
 const Semesterly = () => {
   const dispatch = useAppDispatch();
@@ -74,6 +75,10 @@ const Semesterly = () => {
   const alertNewTimetable = useAppSelector((state) => state.alerts.alertNewTimetable);
   const alertTimetableExists = useAppSelector(
     (state) => state.alerts.alertTimetableExists
+  );
+
+  const isCompareTimetableSideBarVisible = useAppSelector(
+    (state) => state.compareTimetable.showCompareTimetableSideBar
   );
 
   const mql = window.matchMedia("(orientation: portrait)");
@@ -275,7 +280,7 @@ const Semesterly = () => {
             </ul>
           </footer>
         </div>
-        <SideBar />
+        {isCompareTimetableSideBarVisible ? <CompareTimetableSideBar /> : <SideBar />}
       </div>
     </div>
   );
