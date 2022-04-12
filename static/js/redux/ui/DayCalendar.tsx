@@ -228,20 +228,30 @@ const DayCalendar = (props: DayCalendarProps) => {
       <img alt="add" src="static/img/addtocalendar.png" />
     </button>
   );
+
+  const isComparingTimetables = useAppSelector(
+    (state) => state.compareTimetable.isComparing
+  );
+  const toolbar = isComparingTimetables ? (
+    <>{preferenceButton}</>
+  ) : (
+    <>
+      {shareButton}
+      {shareLink}
+      {addButton}
+      {saveButton}
+      {preferenceButton}
+      {saveToCalendarButton}
+    </>
+  );
+
   return (
     <div className="calendar fc fc-ltr fc-unthemed day-calendar">
       <div className="fc-toolbar no-print">
         <div className="fc-left">
           <PaginationContainer />
         </div>
-        <div className="fc-right">
-          {shareButton}
-          {shareLink}
-          {addButton}
-          {saveButton}
-          {preferenceButton}
-          {saveToCalendarButton}
-        </div>
+        <div className="fc-right">{toolbar}</div>
         <div className="fc-center" />
         <div className="fc-clear cf">
           <div className="day-pills">
