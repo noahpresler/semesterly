@@ -152,9 +152,12 @@ const SlotManager = (props: { days: string[] }) => {
   const comparedSlots = useAppSelector(
     (state) =>
       isComparingTimetables &&
-      uniqBy(getDenormTimetable(state, state.compareTimetable.activeTimetable).slots.concat(
-        getDenormTimetable(state, state.compareTimetable.comparedTimetable).slots
-      ), (slot) => slot.section.id)
+      uniqBy(
+        getDenormTimetable(state, state.compareTimetable.activeTimetable).slots.concat(
+          getDenormTimetable(state, state.compareTimetable.comparedTimetable).slots
+        ),
+        (slot) => slot.section.id
+      )
   );
   const slots = isComparingTimetables ? comparedSlots : timetableSlots;
 
@@ -178,7 +181,7 @@ const SlotManager = (props: { days: string[] }) => {
       offerings
         .filter((offering) => offering.day in slotsByDay)
         .forEach((offering) => {
-          const colourId = isComparingTimetables ? 0: courseToColourIndex[course.id];
+          const colourId = isComparingTimetables ? 0 : courseToColourIndex[course.id];
           slotsByDay[offering.day].push(
             slotToDisplayOffering(course, section, offering, colourId)
           );
