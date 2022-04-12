@@ -146,7 +146,7 @@ const SideBar = () => {
             colourIndex={colourIndex}
             classmates={courseToClassmates[course.id]}
             onTimetable={isCourseInRoster(course.id)}
-            course={course as any}
+            course={course}
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
             getShareLink={getShareLink}
@@ -166,7 +166,7 @@ const SideBar = () => {
             onTimetable={isCourseInRoster(course.id)}
             colourIndex={colourIndex}
             classmates={courseToClassmates[course.id]}
-            course={course as any}
+            course={course}
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveOptionalCourse(course))}
             getShareLink={getShareLink}

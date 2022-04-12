@@ -20,13 +20,13 @@ import uniq from "lodash/uniq";
 import Clipboard from "clipboard";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import COLOUR_DATA from "../constants/colours";
-import { Classmate, Course } from "../constants/commonTypes";
+import { Classmate, DenormalizedCourse } from "../constants/commonTypes";
 
 type MasterSlotProps = {
   colourIndex: number;
   inModal?: boolean;
   fakeFriends: number;
-  course: Course;
+  course: DenormalizedCourse;
   professors: string[];
   classmates: {
     current: Classmate[];
