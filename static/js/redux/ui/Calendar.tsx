@@ -325,6 +325,23 @@ const Calendar = (props: CalendarProps) => {
     </div>
   );
 
+  const isComparingTimetables = useAppSelector(
+    (state) => state.compareTimetable.isComparing
+  );
+  const toolbar = isComparingTimetables ? (
+    <>{preferenceButton}</>
+  ) : (
+    <>
+      {addSISButton}
+      {toggleCustomEventModeButton}
+      {shareButton}
+      {shareLink}
+      {addNewTimetableButton}
+      {saveToCalendarButton}
+      {preferenceButton}
+    </>
+  );
+
   const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
 
   return (
@@ -338,15 +355,7 @@ const Calendar = (props: CalendarProps) => {
           {!customEventModeOn ? <PaginationContainer /> : null}
           {customEventDescription}
         </div>
-        <div className="fc-right">
-          {addSISButton}
-          {toggleCustomEventModeButton}
-          {shareButton}
-          {shareLink}
-          {addNewTimetableButton}
-          {saveToCalendarButton}
-          {preferenceButton}
-        </div>
+        <div className="fc-right">{toolbar}</div>
         <div className="fc-center" />
         <div className="fc-clear" />
       </div>

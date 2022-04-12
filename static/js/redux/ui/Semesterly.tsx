@@ -77,8 +77,8 @@ const Semesterly = () => {
     (state) => state.alerts.alertTimetableExists
   );
 
-  const isCompareTimetableSideBarVisible = useAppSelector(
-    (state) => state.compareTimetable.showCompareTimetableSideBar
+  const isComparingTimetables = useAppSelector(
+    (state) => state.compareTimetable.isComparing
   );
 
   const mql = window.matchMedia("(orientation: portrait)");
@@ -280,7 +280,7 @@ const Semesterly = () => {
             </ul>
           </footer>
         </div>
-        {isCompareTimetableSideBarVisible ? <CompareTimetableSideBar /> : <SideBar />}
+        {isComparingTimetables ? <CompareTimetableSideBar /> : <SideBar />}
       </div>
     </div>
   );

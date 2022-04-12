@@ -2,13 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Timetable } from "../../constants/commonTypes";
 
 interface CompareTimetableSliceState {
-  showCompareTimetableSideBar: boolean;
+  isComparing: boolean;
   activeTimetable: Timetable | null;
   comparedTimetable: Timetable | null;
 }
 
 const initialState: CompareTimetableSliceState = {
-  showCompareTimetableSideBar: false,
+  isComparing: false,
   activeTimetable: null,
   comparedTimetable: null,
 };
@@ -24,7 +24,7 @@ const compareTimetableSlice = createSlice({
         comparedTimetable: Timetable;
       }>
     ) => {
-      state.showCompareTimetableSideBar = !state.showCompareTimetableSideBar;
+      state.isComparing = !state.isComparing;
       state.activeTimetable = action.payload.activeTimetable;
       state.comparedTimetable = action.payload.comparedTimetable;
     },
