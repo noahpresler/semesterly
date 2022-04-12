@@ -1,23 +1,53 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { fetchCourseInfo } from "../actions";
+import { DenormalizedCourse } from "../constants/commonTypes";
+import { getCourseShareLink } from "../constants/endpoints";
 import { useAppSelector } from "../hooks";
+import { getCoursesFromSlots, getCurrentSemester } from "../state";
 import { toggleCompareTimetableSideBar } from "../state/slices/compareTimetableSlice";
+import MasterSlot from "./MasterSlot";
 
 const CompareTimetableSideBar = () => {
   const dispatch = useDispatch();
-  const activeTimetable = useAppSelector(
-    (state) => state.compareTimetable.activeTimetable
+  const activeCourses = useAppSelector((state) =>
+    getCoursesFromSlots(state, state.compareTimetable.activeTimetable.slots)
   );
-  const comparedTimetable = useAppSelector(
-    (state) => state.compareTimetable.comparedTimetable
+  const comparedCourses = useAppSelector((state) =>
+    getCoursesFromSlots(state, state.compareTimetable.comparedTimetable.slots)
   );
 
-  console.log("Active: ", activeTimetable);
-  console.log("Compared: ", comparedTimetable);
+  const courseToClassmates = useAppSelector(
+    (state) => state.classmates.courseToClassmates
+  );
+  const semester = useAppSelector(getCurrentSemester);
+  const createMasterSlot = (course: DenormalizedCourse, colourIndex: number) => {
+    const professors = course.sections.map((section) => section.instructors);
+    return (
+      <MasterSlot
+        key={course.id}
+        professors={professors}
+        colourIndex={colourIndex}
+        classmates={courseToClassmates[course.id]}
+        course={course}
+        fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
+        getShareLink={(courseCode: string) => getCourseShareLink(courseCode, semester)}
+        onTimetable
+        hideCloseButton
+      />
+    );
+  };
+
+  const activeSlots = activeCourses.map((course) => createMasterSlot(course, 0));
+  const comparedSlots = comparedCourses.map((course) => createMasterSlot(course, 1));
 
   return (
     <div>
       <p>New sidebar</p>
+      <div className="slots-comparison">
+        <div className="slots-list">{activeSlots}</div>
+        <div className="slots-list">{comparedSlots}</div>
+      </div>
       <div
         onClick={() => dispatch(toggleCompareTimetableSideBar())}
         style={{ cursor: "pointer" }}
