@@ -5,7 +5,7 @@ import { DenormalizedCourse } from "../constants/commonTypes";
 import { getCourseShareLink } from "../constants/endpoints";
 import { useAppSelector } from "../hooks";
 import { getCoursesFromSlots, getCurrentSemester } from "../state";
-import { toggleCompareTimetableSideBar } from "../state/slices/compareTimetableSlice";
+import { stopComparingTimetables } from "../state/slices/compareTimetableSlice";
 import MasterSlot from "./MasterSlot";
 
 const CompareTimetableSideBar = () => {
@@ -49,7 +49,7 @@ const CompareTimetableSideBar = () => {
         <div className="slots-list">{comparedSlots}</div>
       </div>
       <div
-        onClick={() => dispatch(toggleCompareTimetableSideBar())}
+        onClick={() => dispatch(stopComparingTimetables())}
         style={{ cursor: "pointer" }}
       >
         Exit Compare Timetables

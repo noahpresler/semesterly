@@ -17,19 +17,25 @@ const compareTimetableSlice = createSlice({
   name: "compareTimetable",
   initialState,
   reducers: {
-    toggleCompareTimetableSideBar: (
+    startComparingTimetables: (
       state,
       action: PayloadAction<{
         activeTimetable: Timetable;
         comparedTimetable: Timetable;
       }>
     ) => {
-      state.isComparing = !state.isComparing;
+      state.isComparing = true;
       state.activeTimetable = action.payload.activeTimetable;
       state.comparedTimetable = action.payload.comparedTimetable;
+    },
+    stopComparingTimetables: (state) => {
+      state.isComparing = false;
+      state.activeTimetable = null;
+      state.comparedTimetable = null;
     },
   },
 });
 
-export const { toggleCompareTimetableSideBar } = compareTimetableSlice.actions;
+export const { startComparingTimetables, stopComparingTimetables } =
+  compareTimetableSlice.actions;
 export default compareTimetableSlice.reducer;

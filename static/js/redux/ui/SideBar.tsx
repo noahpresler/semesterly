@@ -38,7 +38,7 @@ import {
 } from "../actions";
 import { togglePeerModal } from "../state/slices/peerModalSlice";
 import { Timetable } from "../constants/commonTypes";
-import { toggleCompareTimetableSideBar } from "../state/slices/compareTimetableSlice";
+import { startComparingTimetables } from "../state/slices/compareTimetableSlice";
 
 const SideBar = () => {
   const dispatch = useAppDispatch();
@@ -116,7 +116,7 @@ const SideBar = () => {
             <button
               onClick={(event) => {
                 dispatch(
-                  toggleCompareTimetableSideBar({
+                  startComparingTimetables({
                     activeTimetable,
                     comparedTimetable: t,
                   })
