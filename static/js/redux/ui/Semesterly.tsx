@@ -183,6 +183,10 @@ const Semesterly = () => {
       <CalendarContainer />
     );
 
+  const mainbarClassName = `main-bar${
+    isComparingTimetables ? "-compare-timetable" : ""
+  }`;
+
   return (
     <div className="page-wrapper">
       <TopBarContainer />
@@ -201,7 +205,7 @@ const Semesterly = () => {
       <TermsOfServiceBannerContainer />
       <AlertBox ref={alertBoxRef} />
       <div className="all-cols">
-        <div className="main-bar">
+        <div className={mainbarClassName}>
           {cal}
           <footer className="footer navbar no-print">
             <p className="data-last-updated no-print">

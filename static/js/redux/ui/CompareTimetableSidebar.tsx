@@ -42,7 +42,7 @@ const CompareTimetableSideBar = () => {
   const comparedSlots = comparedCourses.map((course) => createMasterSlot(course, 1));
 
   return (
-    <div>
+    <div className="side-bar-compare-timetable">
       <p>New sidebar</p>
       <div className="slots-comparison">
         <div className="slots-list">{activeSlots}</div>
