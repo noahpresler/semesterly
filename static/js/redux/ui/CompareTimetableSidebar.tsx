@@ -5,9 +5,15 @@ import { toggleCompareTimetableSideBar } from "../state/slices/compareTimetableS
 
 const CompareTimetableSideBar = () => {
   const dispatch = useDispatch();
-  const isCompareTimetableSideBarVisible = useAppSelector(
-    (state) => state.compareTimetable.showCompareTimetableSideBar
+  const activeTimetable = useAppSelector(
+    (state) => state.compareTimetable.activeTimetable
   );
+  const comparedTimetable = useAppSelector(
+    (state) => state.compareTimetable.comparedTimetable
+  );
+
+  console.log("Active: ", activeTimetable);
+  console.log("Compared: ", comparedTimetable);
 
   return (
     <div>

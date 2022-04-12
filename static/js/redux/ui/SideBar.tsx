@@ -65,8 +65,8 @@ const SideBar = () => {
     (state) => state.classmates.courseToClassmates
   );
   const avgRating = useAppSelector((state) => timetable.avg_rating);
-  const currentTimetableName = useAppSelector(
-    (state) => state.savingTimetable.activeTimetable.name
+  const activeTimetable = useAppSelector(
+    (state) => state.savingTimetable.activeTimetable
   );
 
   const isCourseInRoster = (courseId: number) =>
@@ -112,10 +112,15 @@ const SideBar = () => {
           >
             <i className="fa fa-clone" />
           </button>
-          {currentTimetableName !== t.name && (
+          {activeTimetable.name !== t.name && (
             <button
               onClick={(event) => {
-                dispatch(toggleCompareTimetableSideBar());
+                dispatch(
+                  toggleCompareTimetableSideBar({
+                    activeTimetable,
+                    comparedTimetable: t,
+                  })
+                );
                 event.stopPropagation();
               }}
               className="row-button"
