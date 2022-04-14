@@ -28,10 +28,16 @@ $themes : (
         text-color: $primary-navy,
 
         background: $g808080,                               // Not sure what this is for, but was referenced in grid_layout.scss
-        sidebar-background: $light__base-component-bg,
         main-bar-background: $light__base-component-bg,
         top-bar-background: $light__base-component-bg,
         main-calendar-border-color: #ddd,
+
+        sidebar-background: $light__base-component-bg,
+
+        sidebar-input-background: #ddd,
+        sidebar-input-border: 1px solid $gfff,
+        sidebar-input-border_hover: 1px solid $gddd,
+        sidebar-input-border_foucs: 1px solid $blue-alt
     ),
     // Dark Mode
     dark: (

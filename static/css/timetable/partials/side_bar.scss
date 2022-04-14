@@ -12,7 +12,20 @@
 
 .side-bar {
   input {
-    border: 1px solid $gfff;
+
+    @include theme(){
+      border: t('sidebar-input-border');
+      background-color: t('sidebar-input-background');
+
+      &:focus {
+        border: t('sidebar-input-border_focus');
+      }
+
+      &:hover {
+        border: t('sidebar-input-border_hover');
+      }
+    }
+
     border-radius: 25px;
     font-family: $font-body;
     font-size: 18px;
@@ -22,14 +35,6 @@
     padding: 5px 5px 5px 15px;
     transition: border .3s;
     width: 100%;
-
-    &:focus {
-      border: 1px solid $blue-alt;
-    }
-
-    &:hover {
-      border: 1px solid $gddd;
-    }
   }
 
   .unsaved {

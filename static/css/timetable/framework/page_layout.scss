@@ -41,7 +41,7 @@ textarea {
 
 .side-bar {
   @include theme(){
-      background-color: t('sidebar-background');
+    background-color: t('sidebar-background');
   }
   bottom: auto;
   height: 100%;
