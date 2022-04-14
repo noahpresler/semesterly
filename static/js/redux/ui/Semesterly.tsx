@@ -77,8 +77,8 @@ const Semesterly = () => {
     (state) => state.alerts.alertTimetableExists
   );
 
-  const isCompareTimetableSideBarVisible = useAppSelector(
-    (state) => state.compareTimetable.showCompareTimetableSideBar
+  const isComparingTimetables = useAppSelector(
+    (state) => state.compareTimetable.isComparing
   );
 
   const mql = window.matchMedia("(orientation: portrait)");
@@ -183,6 +183,10 @@ const Semesterly = () => {
       <CalendarContainer />
     );
 
+  const mainbarClassName = `main-bar${
+    isComparingTimetables ? "-compare-timetable" : ""
+  }`;
+
   return (
     <div className="page-wrapper">
       <TopBarContainer />
@@ -201,7 +205,7 @@ const Semesterly = () => {
       <TermsOfServiceBannerContainer />
       <AlertBox ref={alertBoxRef} />
       <div className="all-cols">
-        <div className="main-bar">
+        <div className={mainbarClassName}>
           {cal}
           <footer className="footer navbar no-print">
             <p className="data-last-updated no-print">
@@ -280,7 +284,7 @@ const Semesterly = () => {
             </ul>
           </footer>
         </div>
-        {isCompareTimetableSideBarVisible ? <CompareTimetableSideBar /> : <SideBar />}
+        {isComparingTimetables ? <CompareTimetableSideBar /> : <SideBar />}
       </div>
     </div>
   );

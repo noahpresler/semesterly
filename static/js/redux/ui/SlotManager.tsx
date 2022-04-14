@@ -24,7 +24,11 @@ import { getNextAvailableColour, slotToDisplayOffering } from "../util";
 import { convertToMinutes } from "./slotUtils";
 import { HoveredSlot } from "../constants/commonTypes";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { getActiveDenormTimetable, getHoveredSlots } from "../state";
+import {
+  getActiveDenormTimetable,
+  getDenormTimetable,
+  getHoveredSlots,
+} from "../state";
 import { getSchoolSpecificInfo } from "../constants/schools";
 import { getDenormCourseById } from "../state/slices/entitiesSlice";
 import {
@@ -35,6 +39,7 @@ import {
   finalizeCustomSlot,
 } from "../actions/timetable_actions";
 import { fetchCourseInfo } from "../actions/modal_actions";
+import { uniqBy } from "lodash";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -133,13 +138,29 @@ function getConflictStyles(slotsByDay: any) {
 const SlotManager = (props: { days: string[] }) => {
   const hoveredSlot: HoveredSlot = useAppSelector((state) => getHoveredSlots(state));
   // don't show slot if an alternative is being hovered
-  const slots = useAppSelector((state) =>
+  const timetableSlots = useAppSelector((state) =>
     getActiveDenormTimetable(state).slots.filter(
       (slot) =>
         hoveredSlot?.course.id !== slot.course.id ||
         hoveredSlot?.section.section_type !== slot.section.section_type
     )
   );
+
+  const isComparingTimetables = useAppSelector(
+    (state) => state.compareTimetable.isComparing
+  );
+  const comparedSlots = useAppSelector(
+    (state) =>
+      isComparingTimetables &&
+      uniqBy(
+        getDenormTimetable(state, state.compareTimetable.activeTimetable).slots.concat(
+          getDenormTimetable(state, state.compareTimetable.comparedTimetable).slots
+        ),
+        (slot) => slot.section.id
+      )
+  );
+  const slots = isComparingTimetables ? comparedSlots : timetableSlots;
+
   const courseToColourIndex = useAppSelector((state) => state.ui.courseToColourIndex);
   const customEvents = useAppSelector((state) => state.customEvents.events);
 
@@ -160,7 +181,7 @@ const SlotManager = (props: { days: string[] }) => {
       offerings
         .filter((offering) => offering.day in slotsByDay)
         .forEach((offering) => {
-          const colourId = courseToColourIndex[course.id];
+          const colourId = isComparingTimetables ? 0 : courseToColourIndex[course.id];
           slotsByDay[offering.day].push(
             slotToDisplayOffering(course, section, offering, colourId)
           );

@@ -1,0 +1,28 @@
+@import "../framework/page_layout.scss";
+
+.side-bar-compare-timetable {
+  @include side-bar;
+  left: calc(100% - 600px);
+  width: 600px;
+}
+
+.main-bar-compare-timetable {
+  @include main-bar;
+  width: calc(100% - 600px);
+  &.less-cal {
+    width: calc(100% - 600px);
+  }
+}
+
+.slots-comparison {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.slots-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}

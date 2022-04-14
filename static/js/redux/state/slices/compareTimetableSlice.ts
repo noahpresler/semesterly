@@ -1,22 +1,41 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Timetable } from "../../constants/commonTypes";
 
 interface CompareTimetableSliceState {
-  showCompareTimetableSideBar: boolean;
+  isComparing: boolean;
+  activeTimetable: Timetable | null;
+  comparedTimetable: Timetable | null;
 }
 
 const initialState: CompareTimetableSliceState = {
-  showCompareTimetableSideBar: false,
+  isComparing: false,
+  activeTimetable: null,
+  comparedTimetable: null,
 };
 
 const compareTimetableSlice = createSlice({
   name: "compareTimetable",
   initialState,
   reducers: {
-    toggleCompareTimetableSideBar: (state) => {
-      state.showCompareTimetableSideBar = !state.showCompareTimetableSideBar;
+    startComparingTimetables: (
+      state,
+      action: PayloadAction<{
+        activeTimetable: Timetable;
+        comparedTimetable: Timetable;
+      }>
+    ) => {
+      state.isComparing = true;
+      state.activeTimetable = action.payload.activeTimetable;
+      state.comparedTimetable = action.payload.comparedTimetable;
+    },
+    stopComparingTimetables: (state) => {
+      state.isComparing = false;
+      state.activeTimetable = null;
+      state.comparedTimetable = null;
     },
   },
 });
 
-export const { toggleCompareTimetableSideBar } = compareTimetableSlice.actions;
+export const { startComparingTimetables, stopComparingTimetables } =
+  compareTimetableSlice.actions;
 export default compareTimetableSlice.reducer;

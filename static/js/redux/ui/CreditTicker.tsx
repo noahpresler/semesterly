@@ -31,7 +31,7 @@ const CreditTicker = () => {
     events.reduce((acc: number, event: Event) => acc + parseFloat(event.credits), 0);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       if (parseFloat(credits.toFixed(2)) > parseFloat(displayedCredits.toFixed(2))) {
         setDisplayedCredits((previous) => previous + 0.25);
       } else if (
@@ -40,6 +40,7 @@ const CreditTicker = () => {
         setDisplayedCredits((previous) => previous - 0.25);
       }
     }, 8);
+    return () => clearTimeout(timer);
   }, [credits, displayedCredits]);
 
   return (

@@ -38,7 +38,7 @@ import {
 } from "../actions";
 import { togglePeerModal } from "../state/slices/peerModalSlice";
 import { Timetable } from "../constants/commonTypes";
-import { toggleCompareTimetableSideBar } from "../state/slices/compareTimetableSlice";
+import { startComparingTimetables } from "../state/slices/compareTimetableSlice";
 
 const SideBar = () => {
   const dispatch = useAppDispatch();
@@ -65,8 +65,8 @@ const SideBar = () => {
     (state) => state.classmates.courseToClassmates
   );
   const avgRating = useAppSelector((state) => timetable.avg_rating);
-  const currentTimetableName = useAppSelector(
-    (state) => state.savingTimetable.activeTimetable.name
+  const activeTimetable = useAppSelector(
+    (state) => state.savingTimetable.activeTimetable
   );
 
   const isCourseInRoster = (courseId: number) =>
@@ -112,10 +112,15 @@ const SideBar = () => {
           >
             <i className="fa fa-clone" />
           </button>
-          {currentTimetableName !== t.name && (
+          {activeTimetable.name !== t.name && (
             <button
               onClick={(event) => {
-                dispatch(toggleCompareTimetableSideBar());
+                dispatch(
+                  startComparingTimetables({
+                    activeTimetable,
+                    comparedTimetable: t,
+                  })
+                );
                 event.stopPropagation();
               }}
               className="row-button"
@@ -141,7 +146,7 @@ const SideBar = () => {
             colourIndex={colourIndex}
             classmates={courseToClassmates[course.id]}
             onTimetable={isCourseInRoster(course.id)}
-            course={course as any}
+            course={course}
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
             getShareLink={getShareLink}
@@ -161,7 +166,7 @@ const SideBar = () => {
             onTimetable={isCourseInRoster(course.id)}
             colourIndex={colourIndex}
             classmates={courseToClassmates[course.id]}
-            course={course as any}
+            course={course}
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveOptionalCourse(course))}
             getShareLink={getShareLink}
