@@ -158,7 +158,9 @@
   transition: color .3s;
 
   &:hover {
-    color: $primary-navy;
+    @include theme() {
+        color: t('text-color-hover');
+    }
     cursor: pointer;
   }
 }
@@ -182,7 +184,9 @@
 
 .sb-rating {
   h3 {
-    color: $g777;
+    @include theme() {
+        color: t('text-color');
+    }
     font-size: 12px;
     font-weight: 200;
     margin: 0;
@@ -200,7 +204,9 @@
   text-align: center;
 
   h3 {
-    color: $primary-navy;
+    @include theme() {
+        color: t('text-color');
+    }
     font-size: 30px;
     font-weight: 300;
     line-height: 36px;
@@ -208,7 +214,9 @@
   }
 
   h4 {
-    color: $g999;
+    @include theme() {
+        color: t('text-color');
+    }
     font-size: 14px;
     font-weight: 300;
     line-height: 14px;

@@ -98,6 +98,7 @@ textarea {
 .top-bar {
   @include theme() {
     background-color: t('top-bar-background');
+    border-bottom: t('top-bar-border-bottom');
   }
   box-shadow: 0 0 12px $black-transparent-1, 0 0 1px $black-transparent-15;
   min-height: 50px;
@@ -250,7 +251,9 @@ textarea {
   z-index: 3;
 
   span {
-    background-color: $primary-navy;
+    @include theme() {
+        background-color: t('navicon-hamburger-background');
+    }
     display: block;
     height: 3px;
     position: absolute;
