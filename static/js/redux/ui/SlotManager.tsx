@@ -22,7 +22,7 @@ import Slot from "./Slot";
 import CustomSlot from "./CustomSlot";
 import { getNextAvailableColour, slotToDisplayOffering } from "../util";
 import { convertToMinutes } from "./slotUtils";
-import { HoveredSlot } from "../constants/commonTypes";
+import { HoveredSlot, Offering, Timetable } from "../constants/commonTypes";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
   getActiveDenormTimetable,
@@ -163,6 +163,41 @@ const SlotManager = (props: { days: string[] }) => {
 
   const courseToColourIndex = useAppSelector((state) => state.ui.courseToColourIndex);
   const customEvents = useAppSelector((state) => state.customEvents.events);
+  const activeTimetable = useAppSelector(
+    (state) => state.compareTimetable.activeTimetable
+  );
+  const comparedTimetable = useAppSelector(
+    (state) => state.compareTimetable.comparedTimetable
+  );
+
+  const isOfferingInTimetable = (timetable: Timetable, offering: Offering) => {
+    let inTimetable = false;
+    timetable.slots.forEach((currentSlot) => {
+      if (currentSlot.offerings.indexOf(offering.id) !== -1) {
+        inTimetable = true;
+      }
+    });
+    return inTimetable;
+  };
+
+  const getComparedTimetableSlotColor = (offering: Offering, courseId: number) => {
+    const isOfferingInActiveTimetable = isOfferingInTimetable(
+      activeTimetable,
+      offering
+    );
+    const isOfferingInComparedTimetable = isOfferingInTimetable(
+      comparedTimetable,
+      offering
+    );
+    if (isOfferingInActiveTimetable && isOfferingInComparedTimetable) {
+      // return courseToColourIndex[courseId];
+      return 2;
+    } else if (isOfferingInActiveTimetable) {
+      return 0;
+    } else {
+      return 1;
+    }
+  };
 
   const getSlotsByDay = () => {
     const slotsByDay: any = {
@@ -181,7 +216,10 @@ const SlotManager = (props: { days: string[] }) => {
       offerings
         .filter((offering) => offering.day in slotsByDay)
         .forEach((offering) => {
-          const colourId = isComparingTimetables ? 0 : courseToColourIndex[course.id];
+          const colourId = isComparingTimetables
+            ? getComparedTimetableSlotColor(offering, course.id)
+            : courseToColourIndex[course.id];
+
           slotsByDay[offering.day].push(
             slotToDisplayOffering(course, section, offering, colourId)
           );

@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { fetchCourseInfo } from "../actions";
-import { DenormalizedCourse } from "../constants/commonTypes";
+import { DenormalizedCourse, Timetable } from "../constants/commonTypes";
 import { getCourseShareLink } from "../constants/endpoints";
 import { useAppSelector } from "../hooks";
 import { getCoursesFromSlots, getCurrentSemester } from "../state";
@@ -15,6 +15,12 @@ const CompareTimetableSideBar = () => {
   );
   const comparedCourses = useAppSelector((state) =>
     getCoursesFromSlots(state, state.compareTimetable.comparedTimetable.slots)
+  );
+  const activeTimetable = useAppSelector(
+    (state) => state.compareTimetable.activeTimetable
+  );
+  const comparedTimetable = useAppSelector(
+    (state) => state.compareTimetable.comparedTimetable
   );
 
   const courseToClassmates = useAppSelector(
@@ -38,8 +44,42 @@ const CompareTimetableSideBar = () => {
     );
   };
 
-  const activeSlots = activeCourses.map((course) => createMasterSlot(course, 0));
-  const comparedSlots = comparedCourses.map((course) => createMasterSlot(course, 1));
+  const isOfferingInTimetable = (timetable: Timetable, offeringId: number) => {
+    let inTimetable = false;
+    timetable.slots.forEach((currentSlot) => {
+      if (currentSlot.offerings.indexOf(offeringId) !== -1) {
+        inTimetable = true;
+      }
+    });
+    return inTimetable;
+  };
+
+  /**
+   * returns an array of course ids of the courses that have the same section in both timetables
+   */
+  const getSectionsInBothTimetables = () => {
+    const courseIds: number[] = [];
+
+    activeTimetable.slots.forEach((slot) => {
+      slot.offerings.forEach((offeringId) => {
+        if (isOfferingInTimetable(comparedTimetable, offeringId)) {
+          courseIds.push(slot.course);
+        }
+      });
+    });
+    return courseIds;
+  };
+  const sectionsInBoth = getSectionsInBothTimetables();
+
+  const activeSlots = activeCourses.map((course) => {
+    const colorIndex = sectionsInBoth.indexOf(course.id) === -1 ? 0 : 2;
+
+    return createMasterSlot(course, colorIndex);
+  });
+  const comparedSlots = comparedCourses.map((course) => {
+    const colorIndex = sectionsInBoth.indexOf(course.id) === -1 ? 1 : 2;
+    return createMasterSlot(course, colorIndex);
+  });
 
   return (
     <div className="side-bar-compare-timetable">
