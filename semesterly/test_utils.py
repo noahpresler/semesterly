@@ -87,7 +87,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.img_dir = os.path.dirname(os.path.realpath(__file__)) + "/test_failures"
         self.init_screenshot_dir()
         self.driver = webdriver.Chrome(
-            ChromeDriverManager().install(), chrome_options=self.chrome_options
+            ChromeDriverManager().install(), options=self.chrome_options
         )
         sem = get_current_semesters("jhu")[0]
         sem, _ = Semester.objects.update_or_create(name=sem["name"], year=sem["year"])
