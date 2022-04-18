@@ -593,19 +593,24 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             password (str): User's password
         """
         self.find((By.CLASS_NAME, "social-login"), clickable=True).click()
-        self.find((By.CLASS_NAME, "fb-btn"), clickable=True).click()
-        self.find((By.XPATH, '/html[@id="facebook"]'))
-        email_input = self.find((By.ID, "email"))
-        email_input.send_keys(email)
-        pass_input = self.find((By.ID, "pass"))
-        pass_input.send_keys(password)
-        self.find((By.ID, "loginbutton")).click()
-        self.find(
-            (
-                By.XPATH,
-                "/html/body/div[2]/div/div/div/div/div/div/div[1]/div/div/div[2]/div[2]/div[1]/div/div/div",
-            )
-        ).click()   # click accept login
+        self.find((By.CLASS_NAME, "fb-btn"), clickable=True)
+        user = User.objects.create(
+            username="semlytestdev", email=email, password=password
+        )
+        student = Student.objects.create(
+            user=user,
+            img_url=self.get_test_url("jhu", path="static/img/user2-160x160.jpg"),
+        )
+        social_user = UserSocialAuth.objects.create(
+            user=user,
+            uid="12345678987654321",
+            provider="facebook",
+            extra_data={"access_token": "12345678987654321", "expires": "never"},
+        )
+        user.save()
+        student.save()
+        social_user.save()
+        force_login(user, self.driver, self.get_test_url("jhu"))
 
     def login_via_google(self, email, password, **kwargs):
         """Mocks the login of a user via Google by clicking continue with Facebook
@@ -627,7 +632,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             ),
             clickable=True,
         )
-        user = User.objects.create(username="semlytestdev", email=email, password=password)
+        user = User.objects.create(
+            username="semlytestdev", email=email, password=password
+        )
         student = Student.objects.create(
             user=user,
             img_url=self.get_test_url("jhu", path="static/img/user2-160x160.jpg"),
