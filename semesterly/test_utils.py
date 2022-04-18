@@ -31,8 +31,10 @@ from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.remote.webelement import WebElement
 from webdriver_manager.chrome import ChromeDriverManager
 from social_django.models import UserSocialAuth
 
@@ -150,7 +152,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         url = url.replace("http://", "http://%s." % school)
         return url.replace("localhost", "sem.ly") + path
 
-    def find(self, locator, get_all=False, root=None, clickable=False, hidden=False):
+    def find(
+        self, locator, get_all=False, root=None, clickable=False, hidden=False
+    ) -> "WebElement | list[WebElement]":
         """Locates element in the DOM and returns it when found.
 
         Args:
@@ -686,26 +690,22 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             hidden=True,
         )
         major_select.send_keys(major)
-        self.find(
-            (By.XPATH, "//div[contains(@id,'react-select-')]"),
-        ).click()
+        major_select.send_keys(Keys.TAB)
         year_select.send_keys(class_year)
-        self.find(
-            (By.XPATH, "//div[contains(@id,'react-select-')]"),
-        ).click()
+        year_select.send_keys(Keys.TAB)
         self.find(
             (
                 By.XPATH,
                 "//span[contains(@class, 'switch-label') and contains(@data-off, 'CLICK TO ACCEPT')]",
             )
         ).click()
-        self.find(
-            (
-                By.XPATH,
-                "//input[contains(@id, 'tos-agreed-input') and contains(@value, 'on')]",
-            ),
-            hidden=True,
-        )
+        # self.find(
+        #     (
+        #         By.XPATH,
+        #         "//input[contains(@id, 'tos-agreed-input') and contains(@value, 'on')]",
+        #     ),
+        #     hidden=True,
+        # )
         self.save_user_settings()
         self.assert_invisibility((By.CLASS_NAME, "welcome-modal"))
 
