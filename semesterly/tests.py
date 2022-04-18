@@ -21,9 +21,6 @@ class EndToEndTest(SeleniumTestCase):
     fixtures = ["jhu_fall_sample.json", "jhu_spring_sample.json"]
 
     def test_logged_out_flow(self):
-        # Set window size is not a recognized command for some reason,
-        # try commenting it out for now
-        # self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
         with self.description("search, add, then remove course"):
             self.search_course("calc", 3)
@@ -87,9 +84,7 @@ class EndToEndTest(SeleniumTestCase):
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
 
-    @unittest.skip("TODO: fix on mac")
     def test_logged_in_via_fb_flow(self):
-        # self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
         with self.description("succesfully signup with facebook"):
             self.login_via_fb(
@@ -148,10 +143,9 @@ class EndToEndTest(SeleniumTestCase):
             self.open_course_modal_from_slot(0)
             self.assert_friend_in_modal(friend)
 
-    @unittest.skip("TODO: fix on mac")
+    @unittest.skip("TODO: Once Facebook is resolved")
     def test_logged_in_via_google_flow(self):
         with self.description("setup and clear tutorial"):
-            # self.driver.set_window_size(1440, 1080)
             self.clear_tutorial()
         with self.description("login via Google, complete user settings"):
             self.login_via_google(
