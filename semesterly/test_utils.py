@@ -400,11 +400,11 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         if not str(url).startswith("http"):
             url = "%s%s" % ("http://", url)
         self.driver.execute_script("window.open()")
-        self.driver.switch_to_window(self.driver.window_handles[1])
+        self.driver.switch_to.window(self.driver.window_handles[1])
         self.driver.get(url)
         validate()
         self.driver.close()
-        self.driver.switch_to_window(self.driver.window_handles[0])
+        self.driver.switch_to.window(self.driver.window_handles[0])
 
     def follow_share_link_from_modal(self):
         modal = self.find((By.CLASS_NAME, "course-modal"))
