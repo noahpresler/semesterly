@@ -626,10 +626,8 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 ),
             ),
             clickable=True,
-        ).click()
-        # ensure that we are on the google page
-        self.find((By.ID, "identifierId"))
-        user = User.objects.create(username="temporary", password="temporary", **kwargs)
+        )
+        user = User.objects.create(username="semlytestdev", email=email, password=password)
         student = Student.objects.create(
             user=user,
             img_url=self.get_test_url("jhu", path="static/img/user2-160x160.jpg"),

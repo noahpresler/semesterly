@@ -85,6 +85,7 @@ class EndToEndTest(SeleniumTestCase):
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
 
+    @unittest.skip("temporary")
     def test_logged_in_via_fb_flow(self):
         self.clear_tutorial()
         with self.description("succesfully signup with facebook"):
@@ -144,7 +145,6 @@ class EndToEndTest(SeleniumTestCase):
             self.open_course_modal_from_slot(0)
             self.assert_friend_in_modal(friend)
 
-    @unittest.skip("temporary")
     def test_logged_in_via_google_flow(self):
         with self.description("setup and clear tutorial"):
             self.clear_tutorial()
