@@ -600,6 +600,12 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         pass_input = self.find((By.ID, "pass"))
         pass_input.send_keys(password)
         self.find((By.ID, "loginbutton")).click()
+        self.find(
+            (
+                By.XPATH,
+                "/html/body/div[2]/div/div/div/div/div/div/div[1]/div/div/div[2]/div[2]/div[1]/div/div/div",
+            )
+        ).click()   # click accept login
 
     def login_via_google(self, email, password, **kwargs):
         """Mocks the login of a user via Google by clicking continue with Facebook
