@@ -702,14 +702,15 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def change_ptt_name(self, name):
         """Changes personal timetable name to the provided title"""
         name_input = self.find((By.CLASS_NAME, "timetable-name"))
-        name_input.clear()
-        name_input.send_keys(name)
+        ActionChains(self.driver).click(name_input).double_click(name_input).perform()
+        name_input.send_keys(Keys.DELETE, name)
         self.click_off()
 
     def assert_ptt_const_across_refresh(self):
         """Refreshes the browser and asserts that the tuple
         version of the personal timetable is equivalent to pre-refresh
         """
+        self.assert_invisibility((By.CLASS_NAME, "unsaved"))
         ptt = self.ptt_to_tuple()
         self.driver.refresh()
         self.assert_ptt_equals(ptt)
@@ -772,7 +773,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         friend = Student.objects.create(
             user=user,
             img_url=self.get_test_url("jhu", path="static/img/user2-160x160.jpg"),
-            **kwargs
+            **kwargs,
         )
         friend.friends.add(Student.objects.first())
         friend.save()
@@ -823,6 +824,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 "//input[contains(@class, 'timetable-name') and @value='%s']" % name,
             )
         )
+
+    def screenshot(self, name):
+        self.driver.save_screenshot(f"{self.img_dir}/{name}.png")
 
 
 class url_matches_regex:

@@ -13,14 +13,12 @@ import unittest
 
 from semesterly.test_utils import SeleniumTestCase
 from timetable.models import Semester, Course
-from .settings import get_secret
 
 
 class EndToEndTest(SeleniumTestCase):
 
     fixtures = ["jhu_fall_sample.json", "jhu_spring_sample.json"]
 
-    @unittest.skip("temporary")
     def test_logged_out_flow(self):
         self.clear_tutorial()
         with self.description("search, add, then remove course"):
@@ -141,7 +139,6 @@ class EndToEndTest(SeleniumTestCase):
             self.open_course_modal_from_slot(0)
             self.assert_friend_in_modal(friend)
 
-    @unittest.skip("temporary")
     def test_logged_in_via_google_flow(self):
         with self.description("setup and clear tutorial"):
             self.clear_tutorial()
