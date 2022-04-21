@@ -25,6 +25,8 @@ const TermsOfServiceModal = (props) => {
   useEffect(() => {
     if (modal && props.isVisible) {
       modal.show();
+    } else if (modal && !props.isVisible) {
+      modal.hide();
     }
   }, [props.isVisible]);
 
