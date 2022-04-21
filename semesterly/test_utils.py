@@ -24,7 +24,6 @@ from django.contrib.auth import BACKEND_SESSION_KEY
 from django.contrib.auth import HASH_SESSION_KEY
 from django.contrib.auth import SESSION_KEY
 from django.contrib.auth.models import User
-from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import StaleElementReferenceException
@@ -68,8 +67,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def __init__(self, *args, **kwargs):
         super(SeleniumTestCase, self).__init__(*args, **kwargs)
-        if settings.DEBUG == False:
-            settings.DEBUG = True
 
     @classmethod
     def setUpClass(cls):
@@ -960,4 +957,6 @@ def force_login(user, driver, base_url):
     }
 
     driver.add_cookie(cookie)
+    # hack to get past authentication errors
+    driver.add_cookie({"name": "csrftoken", "value": session.session_key})  
     driver.refresh()
