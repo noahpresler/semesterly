@@ -1,0 +1,50 @@
+.news-modal {
+  max-height: 588px;
+  max-width: 700px;
+  overflow: auto;
+
+  .modal-header {
+    padding: 1em 2em;
+    h1 {
+      font-weight: bold;
+    }
+  }
+
+  .news-body {
+    padding: 0 2em 1em 2em;
+
+    h1 {
+      font-size: 2em;
+      margin: 0.5em 0 0.5em 0;
+      font-weight: bold;
+    }
+
+    h2 {
+      font-size: 1.75em;
+      margin: 0.5em 0 0.5em 0;
+      font-weight: bold;
+    }
+
+    h3 {
+      font-size: 1.5em;
+      margin: 0.5em 0 0.5em 0;
+      font-weight: bold;
+    }
+
+    h4 {
+      font-size: 1.30em;
+      margin: 0.5em 0 0.5em 0;
+      font-weight: bold;
+    }
+
+    h5 {
+      font-size: 1.15em;
+      margin: 0.5em 0 0.5em 0;
+      font-weight: bold;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+}

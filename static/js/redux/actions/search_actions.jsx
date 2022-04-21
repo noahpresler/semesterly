@@ -86,37 +86,39 @@ export const fetchSearchResults = (query) => (dispatch, getState) => {
     });
 };
 
-export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getState) => {
-  // if too small a query AND no filters; don't make request.
-  // we'll allow small query strings if some filters
-  // (departments, or breadths, or levels) are chosen.
-  if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
-    dispatch(receiveAdvancedSearchResults([]));
-    return;
-  }
+export const fetchAdvancedSearchResults =
+  (query, filters, page = 1) =>
+  (dispatch, getState) => {
+    // if too small a query AND no filters; don't make request.
+    // we'll allow small query strings if some filters
+    // (departments, or breadths, or levels) are chosen.
+    if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
+      dispatch(receiveAdvancedSearchResults({ data: [], page }));
+      return;
+    }
 
-  // indicate that we are now requesting courses
-  dispatch(explorationModalActions.requestAdvancedSearchResults());
-  // send a request (via fetch) to the appropriate endpoint to get courses
-  const state = getState();
-  fetch(getCourseSearchEndpoint(query, getSemester(getState())), {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    method: "POST",
-    body: JSON.stringify({
-      filters,
-      semester: getCurrentSemester(state),
-    }),
-  })
-    .then((response) => response.json()) // TODO(rohan): error-check the response
-    .then((json) => {
-      // indicate that courses have been received
-      dispatch(receiveAdvancedSearchResults(json));
-    });
-};
+    // indicate that we are now requesting courses
+    dispatch(explorationModalActions.requestAdvancedSearchResults());
+    // send a request (via fetch) to the appropriate endpoint to get courses
+    const state = getState();
+    fetch(getCourseSearchEndpoint(query, getSemester(getState()), page), {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      method: "POST",
+      body: JSON.stringify({
+        filters,
+        semester: getCurrentSemester(state),
+      }),
+    })
+      .then((response) => response.json()) // TODO(rohan): error-check the response
+      .then((json) => {
+        // indicate that courses have been received
+        dispatch(receiveAdvancedSearchResults(json));
+      });
+  };
 
 export const setAdvancedSearchResultIndex = (idx, courseId) => (dispatch) => {
   dispatch(explorationModalActions.setActiveAdvancedSearchResult(idx));

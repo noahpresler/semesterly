@@ -19,7 +19,7 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
-import SemesterlyContainer from "./ui/containers/semesterly_container";
+import Semesterly from "./ui//semesterly";
 import {
   fetchMostClassmatesCount,
   handleAgreement,
@@ -89,7 +89,8 @@ const setupChromeNotifs = () => (dispatch) => {
     (isSecondVisit && daysSinceFirstVisit > 1) ||
     (!isSecondVisit && !userHasActed)
   ) {
-    dispatch(alertsActions.alertEnableNotifications());
+    // TODO: Use when we actually have notifications
+    // dispatch(alertsActions.alertEnableNotifications());
   }
 };
 
@@ -105,6 +106,7 @@ const showFriendAlert = () => (dispatch) => {
   }
 };
 
+// handle feature flows
 const handleFlows = (featureFlow) => (dispatch) => {
   switch (featureFlow.name) {
     case "SIGNUP":
@@ -192,7 +194,7 @@ store.dispatch(setup());
 render(
   <Provider store={store}>
     <DndProvider backend={HTML5Backend}>
-      <SemesterlyContainer />
+      <Semesterly />
     </DndProvider>
   </Provider>,
   document.getElementsByClassName("page")[0]

@@ -127,6 +127,7 @@ type SlotManagerProps = {
   addOrRemoveOptionalCourse: Function;
   updateCustomSlot: Function;
   addCustomSlot: Function;
+  finalizeCustomSlot: Function;
   fetchCourseInfo: Function;
   days: string[];
   slots: DenormalizedSlot[];
@@ -213,6 +214,7 @@ const SlotManager = (props: SlotManagerProps) => {
           removeCustomSlot={() => props.removeCustomSlot(slot.id)}
           updateCustomSlot={props.updateCustomSlot}
           addCustomSlot={props.addCustomSlot}
+          finalizeCustomSlot={props.finalizeCustomSlot}
           uses12HrTime={props.uses12HrTime}
         />
       ) : (
@@ -238,6 +240,7 @@ const SlotManager = (props: SlotManagerProps) => {
           primaryDisplayAttribute={props.primaryDisplayAttribute}
           updateCustomSlot={props.updateCustomSlot}
           addCustomSlot={props.addCustomSlot}
+          finalizeCustomSlot={props.finalizeCustomSlot}
           uses12HrTime={props.uses12HrTime}
         />
       );

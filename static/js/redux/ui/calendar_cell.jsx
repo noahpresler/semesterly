@@ -60,6 +60,10 @@ const createSource = {
   canDrag(props) {
     return props.loggedIn && props.customEventModeOn;
   },
+  endDrag(props, monitor) {
+    const { id } = monitor.getItem();
+    props.finalizeCustomSlot(id);
+  },
 };
 
 function collectCreateBegin(connect) {
@@ -78,10 +82,10 @@ const createTarget = {
     const { id } = monitor.getItem();
 
     let timeEnd = props.time;
-    if (timeStart > timeEnd) {
+    if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
-    props.updateCustomSlot({ preview: false }, id);
+    props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
   },
   hover(props, monitor) {
     if (props.time === lastPreview) {
@@ -94,7 +98,6 @@ const createTarget = {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
     lastPreview = props.time;
-    // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime());
     props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
   },
 };

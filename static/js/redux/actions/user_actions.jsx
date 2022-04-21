@@ -138,11 +138,8 @@ export const saveTimetable =
     if (!state.userInfo.data.isLoggedIn) {
       return dispatch(signupModalActions.showSignupModal());
     }
-    const activeTimetable = getActiveTimetable(state);
 
-    // if current timetable is empty or we're already in saved state, don't save this timetable
-    const numSlots = activeTimetable.slots.length + state.customEvents.events.length;
-    if (numSlots === 0 || state.savingTimetable.upToDate) {
+    if (state.savingTimetable.upToDate) {
       return null;
     }
 
@@ -267,7 +264,7 @@ export const saveSettings = (callback) => async (dispatch, getState) => {
 
 export const getUserSavedTimetables = (semester) => (dispatch, getState) => {
   dispatch(userInfoActions.requestSaveUserInfo());
-  dispatch(timetablesActions.requestTimetables());
+  dispatch(timetablesActions.setIsFetching(true));
   fetch(getLoadSavedTimetablesEndpoint(semester), {
     credentials: "include",
   })
@@ -308,9 +305,7 @@ export const autoSave = () => (dispatch, getState) => {
   clearTimeout(autoSaveTimer);
   autoSaveTimer = setTimeout(() => {
     const state = getState();
-    const existsSlots = getActiveTimetable(state).slots.length > 0;
-    const existsCustomEvents = state.customEvents.events.length > 0;
-    if (state.userInfo.data.isLoggedIn && (existsSlots || existsCustomEvents)) {
+    if (state.userInfo.data.isLoggedIn) {
       dispatch(saveTimetable(true));
       clearLocalTimetable();
     }

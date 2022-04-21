@@ -52,13 +52,11 @@ const entitiesSlice = createSlice({
           state.courses[action.payload.id].reactions = action.payload.reactions;
         }
       )
+      .addCase(receiveAdvancedSearchResults, (state, action) =>
+        merge({}, state, action.payload.courses.entities)
+      )
       .addMatcher(
-        isAnyOf(
-          setCourseInfo,
-          receiveCourses,
-          receiveAdvancedSearchResults,
-          receiveSearchResults
-        ),
+        isAnyOf(setCourseInfo, receiveCourses, receiveSearchResults),
         (state, action) => merge({}, state, action.payload.entities)
       );
   },
@@ -89,9 +87,6 @@ const getDenormSectionsForCourse = (state: EntitiesSliceState, course: Course) =
 
 // TODO use denormalize from normalizr
 export const getDenormCourseById = (state: EntitiesSliceState, id: number) => {
-  if (!("courses" in state)) {
-    return {};
-  }
   const course = getCourseById(state, id);
   const sections = getDenormSectionsForCourse(state, course);
   return { ...course, sections };

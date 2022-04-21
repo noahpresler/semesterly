@@ -1,11 +1,8 @@
 import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
 import {
-  addNewCustomEvent,
   alertTimeTableExists,
   changeActiveSavedTimetable,
   changeActiveTimetable,
-  removeCustomEvent,
-  updateExistingEvent,
 } from "../../actions/initActions";
 import { Timetable } from "../../constants/commonTypes";
 
@@ -40,6 +37,9 @@ const savingTimetableSlice = createSlice({
       state.activeTimetable.name = action.payload;
       state.upToDate = false;
     },
+    setUpToDate: (state, action: PayloadAction<boolean>) => {
+      state.upToDate = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -60,12 +60,9 @@ const savingTimetableSlice = createSlice({
       .addCase(alertTimeTableExists, (state) => {
         state.saving = false;
       })
-      .addMatcher(
-        isAnyOf(addNewCustomEvent, changeActiveTimetable, removeCustomEvent),
-        (state) => {
-          state.upToDate = false;
-        }
-      );
+      .addCase(changeActiveTimetable, (state) => {
+        state.upToDate = false;
+      });
   },
 });
 

@@ -137,7 +137,7 @@ class AlertBox extends React.Component {
 
   /**
    * Show the alert in the page
-   * @param  {string} message
+   * @param  message
    * @param  {Object} options
    * @return {void}
    */
