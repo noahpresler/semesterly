@@ -117,7 +117,6 @@ const TermsOfServiceModal = (props) => {
           className="accept-tos-btn"
           onClick={() => {
             props.acceptTOS();
-            modal.hide();
           }}
         >
           <i className="fa fa-check" />
