@@ -86,11 +86,10 @@ class EndToEndTest(SeleniumTestCase):
             self.select_nth_adv_search_result(2, sem)
 
     def test_logged_in_via_fb_flow(self):
-        self.clear_tutorial()
+        with self.description("setup and clear tutorial"):
+            self.clear_tutorial()
         with self.description("succesfully signup with facebook"):
-            self.login_via_fb(
-                email=get_secret("FB_TEST_EMAIL"), password=get_secret("FB_TEST_PASS")
-            )
+            self.login_via_fb(email="e@ma.il", password="password")
             self.complete_user_settings_basics(
                 major="Computer Science", class_year=2023
             )
@@ -150,8 +149,8 @@ class EndToEndTest(SeleniumTestCase):
             self.clear_tutorial()
         with self.description("login via Google, complete user settings"):
             self.login_via_google(
-                email=get_secret("GOOGLE_TEST_EMAIL"),
-                password=get_secret("GOOGLE_TEST_PASS"),
+                email="em@ai.l",
+                password="password",
             )
             self.complete_user_settings_basics(
                 major="Computer Science", class_year=2023

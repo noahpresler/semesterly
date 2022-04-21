@@ -699,13 +699,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 "//span[contains(@class, 'switch-label') and contains(@data-off, 'CLICK TO ACCEPT')]",
             )
         ).click()
-        # self.find(
-        #     (
-        #         By.XPATH,
-        #         "//input[contains(@id, 'tos-agreed-input') and contains(@value, 'on')]",
-        #     ),
-        #     hidden=True,
-        # )
         self.save_user_settings()
         self.assert_invisibility((By.CLASS_NAME, "welcome-modal"))
 
