@@ -706,17 +706,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         name_input.send_keys(name)
         self.click_off()
 
-    def save_ptt(self):
-        """Saves the user's current personal timetable and returs a tuple representation"""
-        self.find((By.CLASS_NAME, "fa-floppy-o")).click()
-        self.assert_invisibility(
-            (
-                By.XPATH,
-                "//input[contains(@class, 'timetable-name) and contains(@class, 'unsaved')]",
-            )
-        )
-        return self.ptt_to_tuple()
-
     def assert_ptt_const_across_refresh(self):
         """Refreshes the browser and asserts that the tuple
         version of the personal timetable is equivalent to pre-refresh
@@ -958,5 +947,5 @@ def force_login(user, driver, base_url):
 
     driver.add_cookie(cookie)
     # hack to get past authentication errors
-    driver.add_cookie({"name": "csrftoken", "value": session.session_key})  
+    driver.add_cookie({"name": "csrftoken", "value": session.session_key})
     driver.refresh()
