@@ -651,6 +651,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         social_user.save()
         force_login(user, self.driver, self.get_test_url("jhu"))
 
+    def logout(self):
+        self.find((By.CLASS_NAME, "social-pro-pic"), clickable=True).click()
+        self.find((By.XPATH, "//a[@href='/user/logout/']"), clickable=True).click()
+
     def select_nth_adv_search_result(self, index, semester):
         """Selects the nth advanced search result with a click.
         Validates the course modal body displayed in the search reuslts"""
@@ -788,6 +792,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         ptt.save()
         return ptt
 
+    def assert_login_button_found(self):
+        self.find((By.CLASS_NAME, "social-login"), clickable=True)
+
     def assert_friend_image_found(self, friend):
         """Asserts that the provided friend's image is found on the page"""
         self.assert_n_elements_found((By.CLASS_NAME, "ms-friend"), 1)
@@ -810,6 +817,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             ),
             root=friend_div,
         )
+        self.find((By.CLASS_NAME, "modal-close"), clickable=True).click()
 
     def switch_to_ptt(self, name):
         """Switches to the personal timetable with matching name"""

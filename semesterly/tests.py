@@ -107,6 +107,9 @@ class EndToEndTest(SeleniumTestCase):
             self.assert_friend_image_found(friend)
             self.open_course_modal_from_slot(0)
             self.assert_friend_in_modal(friend)
+        with self.description("Log out"):
+            self.logout()
+            self.assert_login_button_found()
 
     def test_logged_in_via_google_flow(self):
         with self.description("setup and clear tutorial"):
@@ -120,6 +123,9 @@ class EndToEndTest(SeleniumTestCase):
                 major="Computer Science", class_year=2023
             )
         self.common_logged_in_tests()
+        with self.description("Log out"):
+            self.logout()
+            self.assert_login_button_found()
 
     def common_logged_in_tests(self):
         with self.description("search, add, change personal timetable name and save"):
