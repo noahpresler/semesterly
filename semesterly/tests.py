@@ -91,6 +91,37 @@ class EndToEndTest(SeleniumTestCase):
             self.complete_user_settings_basics(
                 major="Computer Science", class_year=2023
             )
+        self.common_logged_in_tests()
+        with self.description(
+            (
+                "add friend with course,"
+                "check for friend circles"
+                "and presence in modal"
+            )
+        ):
+            friend = self.create_friend("Tester", "McTestFace", social_courses=True)
+            self.create_personal_timetable_obj(
+                friend, [Course.objects.get(code="AS.110.105")], self.current_sem
+            )
+            self.assert_ptt_const_across_refresh()
+            self.assert_friend_image_found(friend)
+            self.open_course_modal_from_slot(0)
+            self.assert_friend_in_modal(friend)
+
+    def test_logged_in_via_google_flow(self):
+        with self.description("setup and clear tutorial"):
+            self.clear_tutorial()
+        with self.description("login via Google, complete user settings"):
+            self.login_via_google(
+                email="em@ai.l",
+                password="password",
+            )
+            self.complete_user_settings_basics(
+                major="Computer Science", class_year=2023
+            )
+        self.common_logged_in_tests()
+
+    def common_logged_in_tests(self):
         with self.description("search, add, change personal timetable name and save"):
             self.search_course("AS.110.105", 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
@@ -123,30 +154,3 @@ class EndToEndTest(SeleniumTestCase):
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.change_to_current_term()
             self.assert_ptt_equals(e2e_ptt)
-        with self.description(
-            (
-                "add friend with course,"
-                "check for friend circles"
-                "and presence in modal"
-            )
-        ):
-            friend = self.create_friend("Tester", "McTestFace", social_courses=True)
-            self.create_personal_timetable_obj(
-                friend, [Course.objects.get(code="AS.110.105")], self.current_sem
-            )
-            self.assert_ptt_const_across_refresh()
-            self.assert_friend_image_found(friend)
-            self.open_course_modal_from_slot(0)
-            self.assert_friend_in_modal(friend)
-
-    def test_logged_in_via_google_flow(self):
-        with self.description("setup and clear tutorial"):
-            self.clear_tutorial()
-        with self.description("login via Google, complete user settings"):
-            self.login_via_google(
-                email="em@ai.l",
-                password="password",
-            )
-            self.complete_user_settings_basics(
-                major="Computer Science", class_year=2023
-            )
