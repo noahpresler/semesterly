@@ -29,7 +29,7 @@ Read [Add a School](https://semesterly-v2.readthedocs.io/en/latest/addaschool.ht
 
 ## Questions
 
-For questions and support, please contact us at <contact@semester.ly> or ask in the [community forum](https://discord.gg/txYbphsAV7). The [Issues section](https://github.com/jhuopensource/semesterly/issues) of this repository is **ONLY** for bug reports and feature requests.
+For questions and support, please contact us at <semesterly@jhu.edu> or ask in the [community forum](https://discord.gg/txYbphsAV7). The [Issues section](https://github.com/jhuopensource/semesterly/issues) of this repository is **ONLY** for bug reports and feature requests.
 
 ## Our Contributors
 <div align="center">
