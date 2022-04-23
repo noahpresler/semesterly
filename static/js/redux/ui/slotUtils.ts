@@ -1,3 +1,4 @@
+import { Timetable } from "../constants/commonTypes";
 import { HALF_HOUR_HEIGHT } from "../constants/constants";
 
 export function convertToHalfHours(time: string) {
@@ -91,3 +92,13 @@ export function canDropCustomSlot(props: any, monitor: any) {
   const { day } = monitor.getItem();
   return day === props.day;
 }
+
+export const isOfferingInTimetable = (timetable: Timetable, offeringId: number) => {
+  let inTimetable = false;
+  timetable.slots.forEach((currentSlot) => {
+    if (currentSlot.offerings.indexOf(offeringId) !== -1) {
+      inTimetable = true;
+    }
+  });
+  return inTimetable;
+};

@@ -136,7 +136,7 @@ const Slot = (props: SlotProps) => {
 
   const updateColours = (colour: string) => {
     // update sibling slot colours (i.e. the slots for the same course)
-    $(`.slot-${props.courseId}`).css("background-color", colour);
+    $(`.slot-${props.courseId}-${props.colourId}`).css("background-color", colour);
   };
 
   const removeButton = hovered ? (
@@ -205,7 +205,7 @@ const Slot = (props: SlotProps) => {
   const slot = props.connectCreateTarget(
     props.connectDragTarget(
       <div
-        className={`fc-time-grid-event fc-event slot slot-${props.courseId}`}
+        className={`fc-time-grid-event fc-event slot slot-${props.courseId}-${props.colourId}`}
         style={getSlotStyles()}
         onClick={() => {
           props.fetchCourseInfo();
