@@ -21,7 +21,7 @@ import {
 import Slot from "./Slot";
 import CustomSlot from "./CustomSlot";
 import { getNextAvailableColour, slotToDisplayOffering } from "../util";
-import { convertToMinutes } from "./slotUtils";
+import { convertToMinutes, isOfferingInTimetable } from "./slotUtils";
 import { HoveredSlot, Offering, Timetable } from "../constants/commonTypes";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
@@ -170,24 +170,14 @@ const SlotManager = (props: { days: string[] }) => {
     (state) => state.compareTimetable.comparedTimetable
   );
 
-  const isOfferingInTimetable = (timetable: Timetable, offering: Offering) => {
-    let inTimetable = false;
-    timetable.slots.forEach((currentSlot) => {
-      if (currentSlot.offerings.indexOf(offering.id) !== -1) {
-        inTimetable = true;
-      }
-    });
-    return inTimetable;
-  };
-
   const getComparedTimetableSlotColor = (offering: Offering, courseId: number) => {
     const isOfferingInActiveTimetable = isOfferingInTimetable(
       activeTimetable,
-      offering
+      offering.id
     );
     const isOfferingInComparedTimetable = isOfferingInTimetable(
       comparedTimetable,
-      offering
+      offering.id
     );
     if (isOfferingInActiveTimetable && isOfferingInComparedTimetable) {
       // return courseToColourIndex[courseId];

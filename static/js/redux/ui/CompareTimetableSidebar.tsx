@@ -7,6 +7,7 @@ import { useAppSelector } from "../hooks";
 import { getCoursesFromSlots, getCurrentSemester } from "../state";
 import { stopComparingTimetables } from "../state/slices/compareTimetableSlice";
 import MasterSlot from "./MasterSlot";
+import { isOfferingInTimetable } from "./slotUtils";
 
 const CompareTimetableSideBar = () => {
   const dispatch = useDispatch();
@@ -42,16 +43,6 @@ const CompareTimetableSideBar = () => {
         hideCloseButton
       />
     );
-  };
-
-  const isOfferingInTimetable = (timetable: Timetable, offeringId: number) => {
-    let inTimetable = false;
-    timetable.slots.forEach((currentSlot) => {
-      if (currentSlot.offerings.indexOf(offeringId) !== -1) {
-        inTimetable = true;
-      }
-    });
-    return inTimetable;
   };
 
   /**
