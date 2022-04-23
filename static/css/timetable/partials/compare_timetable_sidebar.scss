@@ -2,27 +2,72 @@
 
 .side-bar-compare-timetable {
   @include side-bar;
-  left: calc(100% - 600px);
-  width: 600px;
+  left: calc(100% - 550px);
+  width: 550px;
 }
 
 .main-bar-compare-timetable {
   @include main-bar;
-  width: calc(100% - 600px);
+  width: calc(100% - 550px);
   &.less-cal {
-    width: calc(100% - 600px);
+    width: calc(100% - 550px);
   }
+}
+
+.slots-credits {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.slots-rating {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .slots-comparison {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+  border-top: 2px solid rgba(196, 196, 196, 1);
+  padding-top: 5px;
+  margin-top: 5px;
+  height: 80%;
 }
 
 .slots-list {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   margin-bottom: 1rem;
+}
+
+.slots-separator {
+  border-left: 2px solid rgba(196, 196, 196, 1);
+  height: 80%;
+  position: absolute;
+  left: 50%;
+  margin-left: -5px;
+  top: 0;
+}
+
+.compare-timetable-exit {
+  position: absolute;
+  right: 0;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.credit-wrapper {
+  width: 50%;
+  margin-left: 15px;
+}
+
+.c-rating-wrapper {
+  width: 50%;
+}
+
+.c-rating-inner {
+  width: 160px;
+  margin-left: auto;
 }
