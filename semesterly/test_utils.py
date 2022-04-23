@@ -111,6 +111,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             shutil.rmtree(self.img_dir)
         os.makedirs(self.img_dir)
 
+    def screenshot(self, name):
+        self.driver.save_screenshot(f"{self.img_dir}/{name}.png")
+
     @contextmanager
     def description(self, descr):
         """A context manager which wraps a group of code and adds details to any exceptions thrown
@@ -833,8 +836,72 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             )
         )
 
-    def screenshot(self, name):
-        self.driver.save_screenshot(f"{self.img_dir}/{name}.png")
+    def toggle_custom_event_mode(self):
+        self.find((By.CLASS_NAME, "fa-pencil")).click()
+
+    def create_custom_event(
+        self, day: int, start_time: int, end_time: int, show_weekend: bool = True
+    ):
+        """Creates a custom event using drag and drop assuming custom event mode is off
+
+        day: 0-6, 0 is Monday
+        start_time: 0 is 8:00A.M, every 1 is 30 mins
+        end_time: 0 is 8:00A.M, every 1 is 30 mins
+        show_weekend: if weekends are shown
+        """
+        calendar_cells = self.find((By.CLASS_NAME, "cal-cell"), get_all=True)
+        cells_per_row = 7 if show_weekend else 5
+        start_cell = calendar_cells[day + (cells_per_row * start_time)]
+        end_cell = calendar_cells[day + (cells_per_row * end_time)]
+
+        self.toggle_custom_event_mode()
+        # Magical code that simulates drag and drop because the driver doesn't work.
+        self.driver.execute_script(
+            "function createEvent(typeOfEvent) {\n"
+            + 'var event = document.createEvent("CustomEvent");\n'
+            + "event.initCustomEvent(typeOfEvent,true, true, null);\n"
+            + "event.dataTransfer = {\n"
+            + "data: {},\n"
+            + "setData: function (key, value) {\n"
+            + "this.data[key] = value;\n"
+            + "},\n"
+            + "getData: function (key) {\n"
+            + "return this.data[key];\n"
+            + "}\n"
+            + "};\n"
+            + "return event;\n"
+            + "}\n"
+            + "\n"
+            + "function dispatchEvent(element, event,transferData) {\n"
+            + "if (transferData !== undefined) {\n"
+            + "event.dataTransfer = transferData;\n"
+            + "}\n"
+            + "if (element.dispatchEvent) {\n"
+            + "element.dispatchEvent(event);\n"
+            + "} else if (element.fireEvent) {\n"
+            + 'element.fireEvent("on" + event.type, event);\n'
+            + "}\n"
+            + "}\n"
+            + "\n"
+            + "function simulateHTML5DragAndDrop(element, destination) {\n"
+            + "var dragStartEvent =createEvent('dragstart');\n"
+            + "dispatchEvent(element, dragStartEvent);\n"
+            + "var dropEvent = createEvent('drop');\n"
+            + "dispatchEvent(destination, dropEvent,dragStartEvent.dataTransfer);\n"
+            + "var dragEndEvent = createEvent('dragend');\n"
+            + "dispatchEvent(element, dragEndEvent,dropEvent.dataTransfer);\n"
+            + "}\n"
+            + "\n"
+            + "var source = arguments[0];\n"
+            + "var destination = arguments[1];\n"
+            + "simulateHTML5DragAndDrop(source,destination);",
+            start_cell,
+            end_cell,
+        )
+        self.toggle_custom_event_mode()
+
+    def assert_custom_event_presence():
+        pass
 
 
 class url_matches_regex:
