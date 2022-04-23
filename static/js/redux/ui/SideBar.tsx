@@ -24,6 +24,7 @@ import { getNextAvailableColour } from "../util";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
   getActiveTimetable,
+  getActiveTimetableCourses,
   getCoursesFromSlots,
   getCurrentSemester,
   getDenormCourseById,
@@ -39,6 +40,7 @@ import {
 import { togglePeerModal } from "../state/slices/peerModalSlice";
 import { Timetable } from "../constants/commonTypes";
 import { startComparingTimetables } from "../state/slices/compareTimetableSlice";
+import AvgCourseRating from "./AvgCourseRating";
 
 const SideBar = () => {
   const dispatch = useAppDispatch();
@@ -72,6 +74,9 @@ const SideBar = () => {
   const isCourseInRoster = (courseId: number) =>
     timetable.slots.some((s) => s.course === courseId);
   const getShareLink = (courseCode: string) => getCourseShareLink(courseCode, semester);
+
+  const timetableCourses = useAppSelector((state) => getActiveTimetableCourses(state));
+  const events = useAppSelector((state) => state.customEvents.events);
 
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -236,14 +241,11 @@ const SideBar = () => {
           </div>
         </ClickOutHandler>
       </div>
-      <CreditTicker />
-      <div className="col-2-3 sb-rating">
-        <h3>Average Course Rating</h3>
-        <div className="sub-rating-wrapper">
-          <div className="star-ratings-sprite">
-            <span style={{ width: `${(100 * avgRating) / 5}%` }} className="rating" />
-          </div>
-        </div>
+      <div className="col-1-3" style={{ textAlign: "center" }}>
+        <CreditTicker timetableCourses={timetableCourses} events={events} />
+      </div>
+      <div className="col-2-3">
+        <AvgCourseRating avgRating={avgRating} />
       </div>
       <a onClick={() => dispatch(togglePeerModal())}>
         <h4 className="sb-header">
