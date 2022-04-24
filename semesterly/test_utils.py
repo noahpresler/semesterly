@@ -908,6 +908,12 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             end_cell,
         )
         self.toggle_custom_event_mode()
+        self.assert_invisibility(
+            (
+                By.XPATH,
+                "//div[contains(@class, 'slot') and contains(@class, 'preview')]",
+            ),
+        )
 
     def assert_custom_event_presence():
         pass
