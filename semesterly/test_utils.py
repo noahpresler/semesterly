@@ -186,6 +186,17 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 'Failed to locate visible element "%s" by %s' % locator[::-1]
             )
 
+    def assert_timetable_not_found(self, name):
+        timetable_dropdown = self.find((By.CLASS_NAME, "timetable-drop-it-down"))
+        timetable_dropdown.click()
+
+        try:
+            row = self.find((By.XPATH, "//div[@class='tt-name' and contains(text(),'%s')]" % name))
+        except RuntimeError:
+            return True
+        
+        raise RuntimeError("Timetable found")
+
     def assert_invisibility(self, locator, root=None):
         """Asserts the invisibility of the provided element
 
@@ -336,6 +347,21 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         )
         if n_slots_expected:
             self.assert_n_elements_found((By.CLASS_NAME, "slot"), n_slots_expected)
+        
+    def delete_timetable(self, name):
+        timetable_dropdown = self.find((By.CLASS_NAME, "timetable-drop-it-down"))
+        timetable_dropdown.click()
+
+        row = self.find((By.XPATH, "//div[@class='tt-name' and contains(text(),'%s')]" % name))
+        del_button = self.find(
+            (By.CLASS_NAME, "fa-trash-o"), root=row, clickable=True
+        )
+        del_button.click()
+
+        confirmation_btn = self.find(
+            (By.CLASS_NAME, "delete-timetable-alert-btn"), clickable=True
+        )
+        confirmation_btn.click()
 
     def open_course_modal_from_search(self, course_idx):
         """Opens course modal from search by search result index"""

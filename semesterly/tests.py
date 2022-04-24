@@ -84,7 +84,6 @@ class EndToEndTest(SeleniumTestCase):
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
 
-    @unittest.skip("temporary")
     def test_logged_in_via_fb_flow(self):
         with self.description("setup and clear tutorial"):
             self.clear_tutorial()
@@ -162,5 +161,8 @@ class EndToEndTest(SeleniumTestCase):
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.change_to_current_term()
             self.assert_ptt_equals(e2e_ptt)
+        with self.description("Delete a timetable"):
+            self.delete_timetable("End To End Testing!")
+            self.assert_timetable_not_found("End To End Testing!")
         with self.description("add and edit custom events"):
             self.create_custom_event(5, 0, 4)
