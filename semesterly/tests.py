@@ -162,5 +162,32 @@ class EndToEndTest(SeleniumTestCase):
         #     self.add_course(0, n_slots=4, n_master_slots=1)
         #     self.change_to_current_term()
         #     self.assert_ptt_equals(e2e_ptt)
+        with self.description("Create multiple timetables"):
+            self.create_ptt("timetable 1")
+            self.search_course("AS.110.105", 1)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            timetable1 = self.ptt_to_tuple()
+            self.assert_ptt_const_across_refresh()
+
+            self.create_ptt("timetable 2")
+            self.search_course("AS.110.106", 1)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            timetable2 = self.ptt_to_tuple()
+            self.assert_ptt_const_across_refresh()
+
+            self.create_ptt("timetable 3")
+            self.search_course("AS.110.107", 1)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            timetable3 = self.ptt_to_tuple()
+            self.assert_ptt_const_across_refresh()
+
+            self.switch_to_ptt("timetable 1")
+            self.assert_ptt_equals(timetable1)
+
+            # TODO: Fix these 
+            # self.switch_to_ptt("timetable 2")
+            # self.assert_ptt_equals(timetable2)
+            # self.switch_to_ptt("timetable 3")
+            # self.assert_ptt_equals(timetable3)
         with self.description("add and edit custom events"):
             self.create_custom_event(5, 0, 4)
