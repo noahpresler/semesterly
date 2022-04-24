@@ -14,12 +14,6 @@
   }
 }
 
-.slots-credits {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
 .slots-rating {
   display: flex;
   flex-direction: row;
@@ -58,21 +52,15 @@
   cursor: pointer;
 }
 
-.credit-wrapper {
-  width: 50%;
-  margin-left: 15px;
-}
-
-.c-rating-wrapper {
-  width: 50%;
-}
-
-.c-rating-inner {
-  width: 160px;
-  margin-left: auto;
-}
-
 .slots-title-wrapper {
-  margin-left: 15px;
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.title-wrapper {
+  width: 50%;
+  margin-left: 10px;
+  margin-right: 10px;
 }

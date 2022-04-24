@@ -30,7 +30,6 @@ const CompareTimetableSideBar = () => {
     (state) => state.classmates.courseToClassmates
   );
   const semester = useAppSelector(getCurrentSemester);
-  const events = useAppSelector((state) => state.customEvents.events);
 
   const createMasterSlot = (course: DenormalizedCourse, colourIndex: number) => {
     const professors = course.sections.map((section) => section.instructors);
@@ -79,26 +78,27 @@ const CompareTimetableSideBar = () => {
   return (
     <div className="side-bar-compare-timetable">
       <div className="slots-title-wrapper">
-        {activeTimetable.name} and {comparedTimetable.name}
-      </div>
-      <div className="slots-credits">
-        <div className="credit-wrapper">
-          <CreditTicker timetableCourses={activeCourses} events={events} />
-        </div>
-        <div className="credit-wrapper">
-          <CreditTicker timetableCourses={activeCourses} events={events} />
-        </div>
+        <div className="title-wrapper">{activeTimetable.name}</div>
+        <div className="title-wrapper">{comparedTimetable.name}</div>
       </div>
       <div className="slots-rating">
-        <div className="c-rating-wrapper">
-          <div className="c-rating-inner">
-            <AvgCourseRating avgRating={activeTimetable.avg_rating} />
-          </div>
+        <div className="col-1-3 text-center">
+          <CreditTicker
+            timetableCourses={activeCourses}
+            events={activeTimetable.events}
+          />
         </div>
-        <div className="c-rating-wrapper">
-          <div className="c-rating-inner">
-            <AvgCourseRating avgRating={comparedTimetable.avg_rating} />
-          </div>
+        <div className="col-2-3">
+          <AvgCourseRating avgRating={activeTimetable.avg_rating} />
+        </div>
+        <div className="col-1-3 text-center">
+          <CreditTicker
+            timetableCourses={comparedCourses}
+            events={comparedTimetable.events}
+          />
+        </div>
+        <div className="col-2-3">
+          <AvgCourseRating avgRating={comparedTimetable.avg_rating} />
         </div>
       </div>
       <div className="slots-comparison">
