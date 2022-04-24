@@ -166,6 +166,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
         Returns:
            The WebElement object returned by self.driver (Selenium)
+
+        Throws:
+            RuntimeError: If element is not found or both get_all and clickable is True
         """
         if get_all and clickable:
             raise RuntimeError("Cannot use both get_all and clickable")
@@ -268,9 +271,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 )
             )
         else:
-            chosen_course = search_results.find_elements(by=By.CLASS_NAME, value="search-course")[
-                course_idx
-            ]
+            chosen_course = search_results.find_elements(
+                by=By.CLASS_NAME, value="search-course"
+            )[course_idx]
         if not by_section:
             add_button = self.find(
                 (By.CLASS_NAME, "search-course-add"), root=chosen_course, clickable=True
@@ -340,9 +343,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def open_course_modal_from_search(self, course_idx):
         """Opens course modal from search by search result index"""
         search_results = self.find((By.CLASS_NAME, "search-results"))
-        chosen_course = search_results.find_elements(by=By.CLASS_NAME, value="search-course")[
-            course_idx
-        ]
+        chosen_course = search_results.find_elements(
+            by=By.CLASS_NAME, value="search-course"
+        )[course_idx]
         chosen_course.click()
 
     def validate_course_modal(self):
@@ -739,22 +742,27 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.assertCountEqual(
             master_slots, self.get_elements_as_text((By.CLASS_NAME, "master-slot"))
         )
-        self.assertCountEqual(
-            tt_name, self.get_elements_as_text((By.CLASS_NAME, "timetable-name"))
-        )
+        self.assertCountEqual(tt_name, self.get_timetable_name())
         return True
 
     def ptt_to_tuple(self):
         """Converts personal timetable to a tuple representation"""
         slots = self.get_elements_as_text((By.CLASS_NAME, "slot"))
         master_slots = self.get_elements_as_text((By.CLASS_NAME, "master-slot"))
-        tt_name = self.get_elements_as_text((By.CLASS_NAME, "timetable-name"))
+        tt_name = self.get_timetable_name()
         return (slots, master_slots, tt_name)
 
     def get_elements_as_text(self, locator):
         """Gets elements using self.get and represents them as text"""
-        eles = self.find(locator, get_all=True)
-        return [s.text for s in eles]
+        try:
+            eles = self.find(locator, get_all=True)
+            return [s.text for s in eles]
+        except RuntimeError:
+            return []
+
+    def get_timetable_name(self):
+        """Gets the personal timetable name"""
+        return self.find((By.CLASS_NAME, "timetable-name")).get_property("value")
 
     def create_ptt(self, name=None):
         """Create a personaltimetable with the provided name when provided"""
@@ -844,10 +852,11 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     ):
         """Creates a custom event using drag and drop assuming custom event mode is off
 
-        day: 0-6, 0 is Monday
-        start_time: 0 is 8:00A.M, every 1 is 30 mins
-        end_time: 0 is 8:00A.M, every 1 is 30 mins
-        show_weekend: if weekends are shown
+        Args:
+            day: 0-6, 0 is Monday
+            start_time: 0 is 8:00A.M, every 1 is 30 mins
+            end_time: 0 is 8:00A.M, every 1 is 30 mins
+            show_weekend: if weekends are shown
         """
         calendar_cells = self.find((By.CLASS_NAME, "cal-cell"), get_all=True)
         cells_per_row = 7 if show_weekend else 5
