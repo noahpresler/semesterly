@@ -19,7 +19,6 @@ class EndToEndTest(SeleniumTestCase):
 
     fixtures = ["jhu_fall_sample.json", "jhu_spring_sample.json"]
 
-    @unittest.skip("temporary")
     def test_logged_out_flow(self):
         self.clear_tutorial()
         with self.description("search, add, then remove course"):
@@ -167,6 +166,18 @@ class EndToEndTest(SeleniumTestCase):
         with self.description("add and edit custom events"):
             self.create_custom_event(5, 0, 4)
             self.assert_custom_event_exists(
-                "New Custom Event", start_time="8:00", end_time="10:00"
+                name="New Custom Event", start_time="8:00", end_time="10:00"
             )
+            self.assert_ptt_const_across_refresh()  # custom events saved as slots too
+            event = {
+                "name": "Semly",
+                "day": "M",
+                "location": "Malone Hall",
+                "color": "#6f00ff",
+                "start_time": "14:00",
+                "end_time": "17:30",
+                "credits": 4.5,
+            }
+            self.edit_custom_event("New Custom Event", **event)
+            self.assert_custom_event_exists(**event)
             self.assert_ptt_const_across_refresh()

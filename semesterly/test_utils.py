@@ -194,10 +194,12 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         timetable_dropdown.click()
 
         try:
-            row = self.find((By.XPATH, "//div[@class='tt-name' and contains(text(),'%s')]" % name))
+            row = self.find(
+                (By.XPATH, "//div[@class='tt-name' and contains(text(),'%s')]" % name)
+            )
         except RuntimeError:
             return True
-        
+
         raise RuntimeError("Timetable found")
 
     def assert_invisibility(self, locator, root=None):
@@ -350,15 +352,15 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         )
         if n_slots_expected:
             self.assert_n_elements_found((By.CLASS_NAME, "slot"), n_slots_expected)
-        
+
     def delete_timetable(self, name):
         timetable_dropdown = self.find((By.CLASS_NAME, "timetable-drop-it-down"))
         timetable_dropdown.click()
 
-        row = self.find((By.XPATH, "//div[@class='tt-name' and contains(text(),'%s')]" % name))
-        del_button = self.find(
-            (By.CLASS_NAME, "fa-trash-o"), root=row, clickable=True
+        row = self.find(
+            (By.XPATH, "//div[@class='tt-name' and contains(text(),'%s')]" % name)
         )
+        del_button = self.find((By.CLASS_NAME, "fa-trash-o"), root=row, clickable=True)
         del_button.click()
 
         confirmation_btn = self.find(
@@ -941,10 +943,74 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             ),
         )
 
+    def edit_custom_event(
+        self,
+        old_name: str,
+        /,
+        *,
+        name: str = None,
+        day: str = None,
+        location: str = None,
+        color: str = None,
+        start_time: str = None,
+        end_time: str = None,
+        credits: float = None,
+    ):
+        """Edits the first custom event found with the provided name.
+
+        Args:
+            old_name: The name of the event to edit.
+            name: The new name to give the event.
+            day: The new day of the week, one of "M", "T", "W", "R", "F", "S", "U".
+            location: The new location.
+            color: The new color as a hex code (#FF0000).
+            start_time: The new start time in military time (8:00).
+            end_time: The new end time in military time (13:00).
+            credits: The new number of credits.
+        """
+        slots: list[WebElement] = self.find((By.CLASS_NAME, "slot"), get_all=True)
+        for slot in slots:
+            if not slot.text.startswith(old_name):
+                continue
+            slot.click()
+            if name is not None:
+                event_name = self.find((By.ID, "event-name"))
+                event_name.clear()
+                event_name.send_keys(name)
+            if day is not None:
+                self.find((By.XPATH, f"//button[@name='{day}']")).click()
+            if location is not None:
+                event_location = self.find((By.ID, "event-location"))
+                event_location.clear()
+                event_location.send_keys(location)
+            if color is not None:
+                event_color = self.find((By.ID, "event-color"))
+                event_color.clear()
+                event_color.send_keys(color)
+            if start_time is not None:
+                event_start_time = self.find((By.ID, "event-start-time"))
+                event_start_time.clear()
+                event_start_time.send_keys(start_time)
+            if end_time is not None:
+                event_end_time = self.find((By.ID, "event-end-time"))
+                event_end_time.clear()
+                event_end_time.send_keys(end_time)
+            if credits is not None:
+                event_credits = self.find((By.ID, "event-credits"))
+                event_credits.clear()
+                event_credits.send_keys(str(credits))
+            self.find((By.CLASS_NAME, "save-button")).click()
+            return
+        raise RuntimeError(
+            f"Could not find event with name: {name}, day: {day}, location: {location},"
+            f" color: {color}, start_time: {start_time}, end_time: {end_time},"
+            f" credits: {credits}"
+        )
+
     def assert_custom_event_exists(
         self,
-        name: str,
         *,
+        name: str,
         day: str = None,
         location: str = None,
         color: str = None,
@@ -970,30 +1036,31 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         x, y = self.find((By.CLASS_NAME, "semesterly-name")).location.values()
         slots: list[WebElement] = self.find((By.CLASS_NAME, "slot"), get_all=True)
         for slot in slots:
-            if slot.text.startswith(name):
-                slot.click()
-                (
-                    event_name,
-                    event_day,
-                    event_location,
-                    event_color,
-                    event_start_time,
-                    event_end_time,
-                    event_credits,
-                ) = self.get_custom_event_fields()
+            if not slot.text.startswith(name):
+                continue
+            slot.click()
+            (
+                event_name,
+                event_day,
+                event_location,
+                event_color,
+                event_start_time,
+                event_end_time,
+                event_credits,
+            ) = self.get_custom_event_fields()
 
-                # close modal
-                ActionChains(self.driver).move_by_offset(x, y).click().perform()
-                if (
-                    event_name.startswith(name)
-                    and (not day or event_day.startswith(day))
-                    and (not location or event_location.startswith(location))
-                    and (not color or event_color.lower() == color.lower())
-                    and (not start_time or event_start_time == start_time)
-                    and (not end_time or event_end_time == end_time)
-                    and (not credits or float(event_credits) == credits)
-                ):
-                    return
+            # close modal
+            ActionChains(self.driver).move_by_offset(x, y).click().perform()
+            if (
+                event_name.startswith(name)
+                and (not day or event_day.startswith(day))
+                and (not location or event_location.startswith(location))
+                and (not color or event_color.lower() == color.lower())
+                and (not start_time or event_start_time == start_time)
+                and (not end_time or event_end_time == end_time)
+                and (not credits or float(event_credits) == credits)
+            ):
+                return
 
         raise RuntimeError(
             f"Could not find event with name: {name}, day: {day}, location: {location},"
