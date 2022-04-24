@@ -915,8 +915,91 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             ),
         )
 
-    def assert_custom_event_presence():
-        pass
+    def assert_custom_event_exists(
+        self,
+        name: str,
+        *,
+        day: str = None,
+        location: str = None,
+        color: str = None,
+        start_time: str = None,
+        end_time: str = None,
+        credits: float = None,
+    ):
+        """Asserts that a custom event with the provided fields exists in the current
+        timetable.
+
+        Args:
+            name: Name of the event, can be substring of the actual name
+            day: Day of the week, one of "M", "T", "W", "R", "F", "S", "U"
+            location: Location of the event, can be substring of the actual name
+            color: Color of the event in hex (#F8F6F7), case insensitive
+            start_time: Start time of the event as a non zero-padded string (8:00)
+            end_time: End time of the event as a non zero-padded string (14:30)
+            credits: Number of credits of the event
+
+        Raises:
+            RuntimeError: If the event could not be found.
+        """
+        x, y = self.find((By.CLASS_NAME, "semesterly-name")).location.values()
+        slots: list[WebElement] = self.find((By.CLASS_NAME, "slot"), get_all=True)
+        for slot in slots:
+            if slot.text.startswith(name):
+                slot.click()
+                (
+                    event_name,
+                    event_day,
+                    event_location,
+                    event_color,
+                    event_start_time,
+                    event_end_time,
+                    event_credits,
+                ) = self.get_custom_event_fields()
+
+                # close modal
+                ActionChains(self.driver).move_by_offset(x, y).click().perform()
+                if (
+                    event_name.startswith(name)
+                    and (not day or event_day.startswith(day))
+                    and (not location or event_location.startswith(location))
+                    and (not color or event_color.lower() == color.lower())
+                    and (not start_time or event_start_time == start_time)
+                    and (not end_time or event_end_time == end_time)
+                    and (not credits or float(event_credits) == credits)
+                ):
+                    return
+
+        raise RuntimeError(
+            f"Could not find event with name: {name}, day: {day}, location: {location},"
+            f" color: {color}, start_time: {start_time}, end_time: {end_time},"
+            f" credits: {credits}"
+        )
+
+    def get_custom_event_fields(self):
+        """Returns the fields of the currently selected custom event.
+
+        Pre-condition:
+            Custom event modal is open.
+        """
+        event_name = self.find((By.ID, "event-name")).get_property("value")
+        event_day = self.find((By.XPATH, "//button[@class='active']")).get_property(
+            "name"
+        )
+        event_location = self.find((By.ID, "event-location")).get_property("value")
+        event_color = self.find((By.ID, "event-color")).get_property("value")
+        event_start_time = self.find((By.ID, "event-start-time")).get_property("value")
+        event_end_time = self.find((By.ID, "event-end-time")).get_property("value")
+        event_credits = self.find((By.ID, "event-credits")).get_property("value")
+
+        return (
+            event_name,
+            event_day,
+            event_location,
+            event_color,
+            event_start_time,
+            event_end_time,
+            event_credits,
+        )
 
 
 class url_matches_regex:
