@@ -6,6 +6,8 @@ import { getCourseShareLink } from "../constants/endpoints";
 import { useAppSelector } from "../hooks";
 import { getCoursesFromSlots, getCurrentSemester } from "../state";
 import { stopComparingTimetables } from "../state/slices/compareTimetableSlice";
+import AvgCourseRating from "./AvgCourseRating";
+import CreditTicker from "./CreditTicker";
 import MasterSlot from "./MasterSlot";
 import { isOfferingInTimetable } from "./slotUtils";
 
@@ -28,6 +30,7 @@ const CompareTimetableSideBar = () => {
     (state) => state.classmates.courseToClassmates
   );
   const semester = useAppSelector(getCurrentSemester);
+
   const createMasterSlot = (course: DenormalizedCourse, colourIndex: number) => {
     const professors = course.sections.map((section) => section.instructors);
     return (
@@ -74,14 +77,38 @@ const CompareTimetableSideBar = () => {
 
   return (
     <div className="side-bar-compare-timetable">
-      <p>New sidebar</p>
+      <div className="slots-title-wrapper">
+        <div className="title-wrapper">{activeTimetable.name}</div>
+        <div className="title-wrapper">{comparedTimetable.name}</div>
+      </div>
+      <div className="slots-rating">
+        <div className="col-1-3 text-center">
+          <CreditTicker
+            timetableCourses={activeCourses}
+            events={activeTimetable.events}
+          />
+        </div>
+        <div className="col-2-3">
+          <AvgCourseRating avgRating={activeTimetable.avg_rating} />
+        </div>
+        <div className="col-1-3 text-center">
+          <CreditTicker
+            timetableCourses={comparedCourses}
+            events={comparedTimetable.events}
+          />
+        </div>
+        <div className="col-2-3">
+          <AvgCourseRating avgRating={comparedTimetable.avg_rating} />
+        </div>
+      </div>
       <div className="slots-comparison">
         <div className="slots-list">{activeSlots}</div>
+        <div className="slots-separator" />
         <div className="slots-list">{comparedSlots}</div>
       </div>
       <div
         onClick={() => dispatch(stopComparingTimetables())}
-        style={{ cursor: "pointer" }}
+        className="compare-timetable-exit"
       >
         Exit Compare Timetables
       </div>

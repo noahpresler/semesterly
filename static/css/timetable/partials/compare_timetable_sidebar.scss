@@ -2,27 +2,65 @@
 
 .side-bar-compare-timetable {
   @include side-bar;
-  left: calc(100% - 600px);
-  width: 600px;
+  left: calc(100% - 550px);
+  width: 550px;
 }
 
 .main-bar-compare-timetable {
   @include main-bar;
-  width: calc(100% - 600px);
+  width: calc(100% - 550px);
   &.less-cal {
-    width: calc(100% - 600px);
+    width: calc(100% - 550px);
   }
+}
+
+.slots-rating {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .slots-comparison {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+  border-top: 2px solid rgba(196, 196, 196, 1);
+  padding-top: 5px;
+  margin-top: 5px;
+  height: 80%;
 }
 
 .slots-list {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   margin-bottom: 1rem;
+}
+
+.slots-separator {
+  border-left: 2px solid rgba(196, 196, 196, 1);
+  height: 80%;
+  position: absolute;
+  left: 50%;
+  margin-left: -5px;
+  top: 70px;
+}
+
+.compare-timetable-exit {
+  position: absolute;
+  right: 0;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.slots-title-wrapper {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.title-wrapper {
+  width: 50%;
+  margin-left: 10px;
+  margin-right: 10px;
 }
