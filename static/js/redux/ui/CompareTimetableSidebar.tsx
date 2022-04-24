@@ -78,7 +78,9 @@ const CompareTimetableSideBar = () => {
 
   return (
     <div className="side-bar-compare-timetable">
-      <p>New sidebar</p>
+      <div className="slots-title-wrapper">
+        {activeTimetable.name} and {comparedTimetable.name}
+      </div>
       <div className="slots-credits">
         <div className="credit-wrapper">
           <CreditTicker timetableCourses={activeCourses} events={events} />
