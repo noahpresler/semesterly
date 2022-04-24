@@ -268,7 +268,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 )
             )
         else:
-            chosen_course = search_results.find_elements_by_class_name("search-course")[
+            chosen_course = search_results.find_elements(by=By.CLASS_NAME, value="search-course")[
                 course_idx
             ]
         if not by_section:
@@ -340,7 +340,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def open_course_modal_from_search(self, course_idx):
         """Opens course modal from search by search result index"""
         search_results = self.find((By.CLASS_NAME, "search-results"))
-        chosen_course = search_results.find_elements_by_class_name("search-course")[
+        chosen_course = search_results.find_elements(by=By.CLASS_NAME, value="search-course")[
             course_idx
         ]
         chosen_course.click()
