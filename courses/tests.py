@@ -455,8 +455,7 @@ class Serializers(TestCase):
             },
         )
         data = serialized.data["is_waitlist_only"]
-        self.assertTrue(data)
-        # TODO: what is expected behavior here?
+        self.assertFalse(data)
 
     def test_get_sections(self):
         serialized_course = CourseSerializer(
