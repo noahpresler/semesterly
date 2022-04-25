@@ -26,7 +26,7 @@ from timetable.models import (
 )
 from parsing.models import DataUpdate
 from helpers.test.test_cases import UrlTestCase
-from .serializers import CourseSerializer, SectionSerializer
+from .serializers import CourseSerializer, SectionSerializer, SemesterSerializer
 from student.models import Student, Reaction
 from django.contrib.auth.models import User
 from student.models import PersonalTimetable
@@ -471,7 +471,46 @@ class Serializers(TestCase):
 
         self.assertEqual(serialized_course.data["sections"][0], serialized_sec.data)
 
+    # This function is literally never used
+    def test_get_section_dict_basic_info(self):
+        serialized_section = SectionSerializer(
+            self.section,
+        )
 
+    def test_SectionSerializer(self):
+        testSem = Semester.objects.create(name="Spring", year="2022")
+        courseOne = Course.objects.create(
+            id=25235, school=self.school, code="SEM102", name="STAD1"
+        )
+        courseOneSec1 = Section.objects.create(
+            course=courseOne, meeting_section="01", size=10, enrolment=10, waitlist=1, waitlist_size=10, instructors="instructor", semester=testSem, was_full=False, course_section_id=1 
+        )
+        serialized_section = SectionSerializer(
+            courseOneSec1,
+        )
+        serialized_semester = SemesterSerializer(
+            testSem,
+        )
+        result = serialized_section.data
+        self.assertTrue(result["meeting_section"] == courseOneSec1.meeting_section)
+        self.assertTrue(result["size"] == courseOneSec1.size)
+        self.assertTrue(result["enrolment"] == courseOneSec1.enrolment)
+        self.assertTrue(result["waitlist"] == courseOneSec1.waitlist)
+        self.assertTrue(result["section_type"] == courseOneSec1.section_type)
+        self.assertTrue(result["instructors"] == courseOneSec1.instructors)
+        self.assertTrue(result["semester"] == serialized_semester.data)
+
+        
+    def test_SemesterSerializer(self):
+        testSem = Semester.objects.create(name="Spring", year="2022")
+        serialized_semester = SemesterSerializer(
+            testSem
+        )
+        data = serialized_semester.data
+        self.assertTrue(data["name"] == testSem.name)
+        self.assertTrue(data["year"] == testSem.year)
+
+        
 class CourseDetail(APITestCase):
     school = "uoft"
     search_endpoint = "search"
