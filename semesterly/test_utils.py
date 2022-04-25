@@ -620,8 +620,8 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             self.assert_n_elements_found((By.CLASS_NAME, "exp-s-result"), n_results)
 
     def login_via_fb(self, email, password):
-        """Login user via fb by clicking continue with Facebook in the signup modal,
-        entering the user's credentials into Facebook, then returns to Semester.ly
+        """Login user via fb by detecting the Continue with Facebook button in the
+        signup modal, and then mocking user's credentials
 
         Args:
             email (str): User's email
@@ -629,28 +629,19 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         """
         self.find((By.CLASS_NAME, "social-login"), clickable=True).click()
         self.find((By.CLASS_NAME, "fb-btn"), clickable=True)
-        user = User.objects.create(
-            username="semlytestdev", email=email, password=password
-        )
-        student = Student.objects.create(
-            user=user,
-            img_url=self.get_test_url("jhu", path="static/img/user2-160x160.jpg"),
-        )
-        social_user = UserSocialAuth.objects.create(
+        user = self.get_or_create_student(email, password).user
+        social_user, _ = UserSocialAuth.objects.get_or_create(
             user=user,
             uid="12345678987654321",
             provider="facebook",
             extra_data={"access_token": "12345678987654321", "expires": "never"},
         )
-        user.save()
-        student.save()
         social_user.save()
         force_login(user, self.driver, self.get_test_url("jhu"))
 
-    def login_via_google(self, email, password, **kwargs):
-        """Mocks the login of a user via Google by clicking continue with Facebook
-        in the signup modal. Then manually creates and logins a user. All kwargs are
-        passed to the user model on creation (e.g. name and email).
+    def login_via_google(self, email, password):
+        """Mocks the login of a user via Google by detecting the Continue with Google
+        button in the signup modal, and then mocking the user's credentials.
 
         Args:
             email (str): User's email
@@ -667,23 +658,27 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             ),
             clickable=True,
         )
-        user = User.objects.create(
-            username="semlytestdev", email=email, password=password
-        )
-        student = Student.objects.create(
-            user=user,
-            img_url=self.get_test_url("jhu", path="static/img/user2-160x160.jpg"),
-        )
-        social_user = UserSocialAuth.objects.create(
+        user = self.get_or_create_student(email, password).user
+        social_user, _ = UserSocialAuth.objects.get_or_create(
             user=user,
             uid="12345678987654321",
             provider="google-oauth2",
             extra_data={"access_token": "12345678987654321", "expires": "never"},
         )
-        user.save()
-        student.save()
         social_user.save()
         force_login(user, self.driver, self.get_test_url("jhu"))
+
+    def get_or_create_student(self, email, password) -> Student:
+        user, _ = User.objects.get_or_create(
+            username="semlytestdev", email=email, password=password
+        )
+        student, _ = Student.objects.get_or_create(
+            user=user,
+            img_url=self.get_test_url("jhu", path="static/img/user2-160x160.jpg"),
+        )
+        user.save()
+        student.save()
+        return student
 
     def logout(self):
         self.find((By.CLASS_NAME, "social-pro-pic"), clickable=True).click()
