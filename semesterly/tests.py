@@ -107,6 +107,7 @@ class EndToEndTest(SeleniumTestCase):
             self.assert_friend_image_found(friend)
             self.open_course_modal_from_slot(0)
             self.assert_friend_in_modal(friend)
+            self.close_course_modal()
         with self.description("Log out"):
             self.logout()
             self.assert_login_button_found()

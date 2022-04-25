@@ -856,7 +856,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             ),
             root=friend_div,
         )
-        self.find((By.CLASS_NAME, "modal-close"), clickable=True).click()
 
     def switch_to_ptt(self, name):
         """Switches to the personal timetable with matching name"""
