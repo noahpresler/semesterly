@@ -14,7 +14,16 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from timetable.models import Semester, Course, Section, Offering, Evaluation, Integration, CourseIntegration, Timetable
+from timetable.models import (
+    Semester,
+    Course,
+    Section,
+    Offering,
+    Evaluation,
+    Integration,
+    CourseIntegration,
+    Timetable,
+)
 from parsing.models import DataUpdate
 from helpers.test.test_cases import UrlTestCase
 from .serializers import CourseSerializer, SectionSerializer
@@ -24,7 +33,6 @@ from student.models import PersonalTimetable
 
 
 class Serializers(TestCase):
-
     def setUp(self):
         self.sem_name = "Winter"
         self.year = "1995"
@@ -36,7 +44,7 @@ class Serializers(TestCase):
         self.course = Course.objects.create(
             id=self.cid, school=self.school, code=self.code, name=self.name
         )
-        
+
         self.section = Section.objects.create(
             course=self.course, semester=self.sem, meeting_section="L1"
         )
@@ -74,10 +82,38 @@ class Serializers(TestCase):
         return True
 
     def test_course_serialization_get_evals(self):
-        Evaluation.objects.create(course=self.course, score=5.0, summary="This class was great", professor="prof",course_code=self.code,year=self.year)
-        Evaluation.objects.create(course=self.course, score=1.0, summary="This class was terrible", professor="prof",course_code=self.code,year=self.year)
-        Evaluation.objects.create(course=self.course, score=3.0, summary="This class was meh", professor="prof",course_code=self.code,year=str(int(self.year)+1))
-        Evaluation.objects.create(course=self.course, score=3.0, summary="Loved it", professor="prof",course_code=self.code,year=str(int(self.year)+2))
+        Evaluation.objects.create(
+            course=self.course,
+            score=5.0,
+            summary="This class was great",
+            professor="prof",
+            course_code=self.code,
+            year=self.year,
+        )
+        Evaluation.objects.create(
+            course=self.course,
+            score=1.0,
+            summary="This class was terrible",
+            professor="prof",
+            course_code=self.code,
+            year=self.year,
+        )
+        Evaluation.objects.create(
+            course=self.course,
+            score=3.0,
+            summary="This class was meh",
+            professor="prof",
+            course_code=self.code,
+            year=str(int(self.year) + 1),
+        )
+        Evaluation.objects.create(
+            course=self.course,
+            score=3.0,
+            summary="Loved it",
+            professor="prof",
+            course_code=self.code,
+            year=str(int(self.year) + 2),
+        )
         serialized = CourseSerializer(
             self.course,
             context={
@@ -90,7 +126,9 @@ class Serializers(TestCase):
     def test_course_serialization_get_integrations(self):
         testSem = Semester.objects.create(name="Spring", year="2022")
         integration = Integration.objects.create(name="testIntegration")
-        courseInt = CourseIntegration.objects.create(course=self.course, integration=integration, json="randomJson")
+        courseInt = CourseIntegration.objects.create(
+            course=self.course, integration=integration, json="randomJson"
+        )
         courseInt.semester.add(testSem)
         courseInt.semester.add(self.sem)
         serialized = CourseSerializer(
@@ -109,33 +147,78 @@ class Serializers(TestCase):
             id=2, school=self.school, code="SEM102", name="STAD1"
         )
         courseOneSec = Section.objects.create(
-            course=relatedCourseOne, meeting_section="01", size=10, enrolment=3, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=True, course_section_id=1 
+            course=relatedCourseOne,
+            meeting_section="01",
+            size=10,
+            enrolment=3,
+            waitlist=0,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=self.sem,
+            was_full=True,
+            course_section_id=1,
         )
         relatedCourseTwo = Course.objects.create(
             id=3, school=self.school, code="SEM103", name="STAD2"
         )
         courseTwoSec = Section.objects.create(
-            course=relatedCourseTwo, meeting_section="01", size=10, enrolment=3, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=True, course_section_id=1 
+            course=relatedCourseTwo,
+            meeting_section="01",
+            size=10,
+            enrolment=3,
+            waitlist=0,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=self.sem,
+            was_full=True,
+            course_section_id=1,
         )
         relatedCourseThree = Course.objects.create(
             id=4, school=self.school, code="SEM104", name="STAD3"
         )
         courseThreeSec = Section.objects.create(
-            course=relatedCourseThree, meeting_section="01", size=10, enrolment=3, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=True, course_section_id=1 
+            course=relatedCourseThree,
+            meeting_section="01",
+            size=10,
+            enrolment=3,
+            waitlist=0,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=self.sem,
+            was_full=True,
+            course_section_id=1,
         )
         relatedCourseFour = Course.objects.create(
             id=5, school=self.school, code="SEM105", name="STAD4"
         )
         courseFourSec = Section.objects.create(
-            course=relatedCourseFour, meeting_section="01", size=10, enrolment=3, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=True, course_section_id=1 
+            course=relatedCourseFour,
+            meeting_section="01",
+            size=10,
+            enrolment=3,
+            waitlist=0,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=self.sem,
+            was_full=True,
+            course_section_id=1,
         )
         relatedCourseFive = Course.objects.create(
             id=6, school=self.school, code="SEM106", name="STAD5"
         )
         courseFiveSec = Section.objects.create(
-            course=relatedCourseFive, meeting_section="01", size=10, enrolment=3, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=True, course_section_id=1 
+            course=relatedCourseFive,
+            meeting_section="01",
+            size=10,
+            enrolment=3,
+            waitlist=0,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=self.sem,
+            was_full=True,
+            course_section_id=1,
         )
-        
+
         self.course.related_courses.add(relatedCourseOne)
         self.course.related_courses.add(relatedCourseTwo)
         self.course.related_courses.add(relatedCourseThree)
@@ -155,7 +238,7 @@ class Serializers(TestCase):
         self.assertTrue(data[2]["code"] == "SEM104")
         self.assertTrue(data[3]["code"] == "SEM105")
         self.assertTrue(data[4]["code"] == "SEM106")
-        
+
     def test_get_reactions_no_student(self):
         serialized = CourseSerializer(
             self.course,
@@ -169,22 +252,22 @@ class Serializers(TestCase):
 
     def test_get_reactions_with_student(self):
         testSem = Semester.objects.create(name="Spring", year="2022")
-       
-        user1 = User.objects.create_user(username='user', email='student@jhu.edu', password='password')
+
+        user1 = User.objects.create_user(
+            username="user", email="student@jhu.edu", password="password"
+        )
         student = Student.objects.create(
-            preferred_name="nickname", class_year=2022, user=user1, img_url="no_url", major="English"
+            preferred_name="nickname",
+            class_year=2022,
+            user=user1,
+            img_url="no_url",
+            major="English",
         )
-        react = Reaction.objects.create(
-            student=student, title="FIRE"
-        )
+        react = Reaction.objects.create(student=student, title="FIRE")
         react.course.add(self.course)
         serialized = CourseSerializer(
             self.course,
-            context={
-                "semester": self.sem,
-                "school": self.school,
-                "student": student
-            },
+            context={"semester": self.sem, "school": self.school, "student": student},
         )
         data = serialized.data["reactions"]
         self.assertTrue(data)
@@ -194,30 +277,34 @@ class Serializers(TestCase):
         courseOne = Course.objects.create(
             id=2, school=self.school, code="SEM102", name="STAD1"
         )
-        
-        user1 = User.objects.create_user(username='user', email='student@jhu.edu', password='password')
-        user2 = User.objects.create_user(username='person', email='staff@jhu.edu', password='password')
+
+        user1 = User.objects.create_user(
+            username="user", email="student@jhu.edu", password="password"
+        )
+        user2 = User.objects.create_user(
+            username="person", email="staff@jhu.edu", password="password"
+        )
         student1 = Student.objects.create(
-            preferred_name="nickname", class_year=2022, user=user1, img_url="no_url", major="English"
+            preferred_name="nickname",
+            class_year=2022,
+            user=user1,
+            img_url="no_url",
+            major="English",
         )
         student2 = Student.objects.create(
-            preferred_name="nicknames", class_year=2022, user=user2, img_url="no_url", major="undecided"
+            preferred_name="nicknames",
+            class_year=2022,
+            user=user2,
+            img_url="no_url",
+            major="undecided",
         )
-        reaction1 = Reaction.objects.create(
-            student=student1, title="FIRE"
-        )
-        reaction2 = Reaction.objects.create(
-            student=student2, title="CRAP"
-        )
+        reaction1 = Reaction.objects.create(student=student1, title="FIRE")
+        reaction2 = Reaction.objects.create(student=student2, title="CRAP")
         reaction1.course.add(self.course)
         reaction2.course.add(self.course)
         serialized = CourseSerializer(
             self.course,
-            context={
-                "semester": self.sem,
-                "school": self.school,
-                "student": student1
-            },
+            context={"semester": self.sem, "school": self.school, "student": student1},
         )
         data = serialized.data["reactions"]
         self.assertTrue(data[0]["title"] == "CRAP")
@@ -229,10 +316,10 @@ class Serializers(TestCase):
         #     id=2, school=self.school, code="SEM102", name="STAD1"
         # )
         # courseOneSec1 = Section.objects.create(
-        #     course=relatedCourseOne, meeting_section="01", size=10, enrolment=3, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=False, course_section_id=1 
+        #     course=relatedCourseOne, meeting_section="01", size=10, enrolment=3, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=False, course_section_id=1
         # )
         # courseOneSec2 = Section.objects.create(
-        #     course=relatedCourseOne, meeting_section="02", size=10, enrolment=3, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=False, course_section_id=1 
+        #     course=relatedCourseOne, meeting_section="02", size=10, enrolment=3, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=False, course_section_id=1
         # )
         # user1 = User.objects.create_user(username='user', email='student@jhu.edu', password='password')
         # user2 = User.objects.create_user(username='person', email='staff@jhu.edu', password='password')
@@ -257,8 +344,8 @@ class Serializers(TestCase):
             },
         )
         data = serialized.data["popularity_percent"]
-        self.assertTrue(data == -0.0) # TODO: why is it negative?
-        
+        self.assertTrue(data == -0.0)  # TODO: why is it negative?
+
     def test_get_popularity_percent_without_sections(self):
         testSem = Semester.objects.create(name="Spring", year="2022")
         courseOne = Course.objects.create(
@@ -280,10 +367,28 @@ class Serializers(TestCase):
             id=2, school=self.school, code="SEM102", name="STAD1"
         )
         courseOneSec1 = Section.objects.create(
-            course=courseOne, meeting_section="01", size=10, enrolment=10, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=False, course_section_id=1 
+            course=courseOne,
+            meeting_section="01",
+            size=10,
+            enrolment=10,
+            waitlist=0,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=self.sem,
+            was_full=False,
+            course_section_id=1,
         )
         courseOneSec2 = Section.objects.create(
-            course=courseOne, meeting_section="02", size=10, enrolment=0, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=False, course_section_id=1 
+            course=courseOne,
+            meeting_section="02",
+            size=10,
+            enrolment=0,
+            waitlist=0,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=self.sem,
+            was_full=False,
+            course_section_id=1,
         )
         serialized = CourseSerializer(
             courseOne,
@@ -301,10 +406,28 @@ class Serializers(TestCase):
             id=2, school=self.school, code="SEM102", name="STAD1"
         )
         courseOneSec1 = Section.objects.create(
-            course=courseOne, meeting_section="01", size=10, enrolment=10, waitlist=1, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=False, course_section_id=1 
+            course=courseOne,
+            meeting_section="01",
+            size=10,
+            enrolment=10,
+            waitlist=1,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=self.sem,
+            was_full=False,
+            course_section_id=1,
         )
         courseOneSec2 = Section.objects.create(
-            course=courseOne, meeting_section="02", size=10, enrolment=10, waitlist=1, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=False, course_section_id=2 
+            course=courseOne,
+            meeting_section="02",
+            size=10,
+            enrolment=10,
+            waitlist=1,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=self.sem,
+            was_full=False,
+            course_section_id=2,
         )
 
         print("sec one full: " + str(courseOneSec1.is_full()))
@@ -344,13 +467,10 @@ class Serializers(TestCase):
             },
         )
 
-        serialized_sec = SectionSerializer(
-            self.section
-        )
+        serialized_sec = SectionSerializer(self.section)
 
         self.assertEqual(serialized_course.data["sections"][0], serialized_sec.data)
 
-        
 
 class CourseDetail(APITestCase):
     school = "uoft"
