@@ -166,6 +166,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
         Returns:
            The WebElement object returned by self.driver (Selenium)
+
+        Throws:
+            RuntimeError: If element is not found or both get_all and clickable is True
         """
         if get_all and clickable:
             raise RuntimeError("Cannot use both get_all and clickable")
@@ -185,6 +188,19 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             raise RuntimeError(
                 'Failed to locate visible element "%s" by %s' % locator[::-1]
             )
+
+    def assert_timetable_not_found(self, name):
+        timetable_dropdown = self.find((By.CLASS_NAME, "timetable-drop-it-down"))
+        timetable_dropdown.click()
+
+        try:
+            row = self.find(
+                (By.XPATH, "//div[@class='tt-name' and contains(text(),'%s')]" % name)
+            )
+        except RuntimeError:
+            return True
+
+        raise RuntimeError("Timetable found")
 
     def assert_invisibility(self, locator, root=None):
         """Asserts the invisibility of the provided element
@@ -268,9 +284,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 )
             )
         else:
-            chosen_course = search_results.find_elements_by_class_name("search-course")[
-                course_idx
-            ]
+            chosen_course = search_results.find_elements(
+                by=By.CLASS_NAME, value="search-course"
+            )[course_idx]
         if not by_section:
             add_button = self.find(
                 (By.CLASS_NAME, "search-course-add"), root=chosen_course, clickable=True
@@ -337,12 +353,27 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         if n_slots_expected:
             self.assert_n_elements_found((By.CLASS_NAME, "slot"), n_slots_expected)
 
+    def delete_timetable(self, name):
+        timetable_dropdown = self.find((By.CLASS_NAME, "timetable-drop-it-down"))
+        timetable_dropdown.click()
+
+        row = self.find(
+            (By.XPATH, "//div[@class='tt-name' and contains(text(),'%s')]" % name)
+        )
+        del_button = self.find((By.CLASS_NAME, "fa-trash-o"), root=row, clickable=True)
+        del_button.click()
+
+        confirmation_btn = self.find(
+            (By.CLASS_NAME, "delete-timetable-alert-btn"), clickable=True
+        )
+        confirmation_btn.click()
+
     def open_course_modal_from_search(self, course_idx):
         """Opens course modal from search by search result index"""
         search_results = self.find((By.CLASS_NAME, "search-results"))
-        chosen_course = search_results.find_elements_by_class_name("search-course")[
-            course_idx
-        ]
+        chosen_course = search_results.find_elements(
+            by=By.CLASS_NAME, value="search-course"
+        )[course_idx]
         chosen_course.click()
 
     def validate_course_modal(self):
@@ -739,22 +770,27 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.assertCountEqual(
             master_slots, self.get_elements_as_text((By.CLASS_NAME, "master-slot"))
         )
-        self.assertCountEqual(
-            tt_name, self.get_elements_as_text((By.CLASS_NAME, "timetable-name"))
-        )
+        self.assertCountEqual(tt_name, self.get_timetable_name())
         return True
 
     def ptt_to_tuple(self):
         """Converts personal timetable to a tuple representation"""
         slots = self.get_elements_as_text((By.CLASS_NAME, "slot"))
         master_slots = self.get_elements_as_text((By.CLASS_NAME, "master-slot"))
-        tt_name = self.get_elements_as_text((By.CLASS_NAME, "timetable-name"))
+        tt_name = self.get_timetable_name()
         return (slots, master_slots, tt_name)
 
     def get_elements_as_text(self, locator):
         """Gets elements using self.get and represents them as text"""
-        eles = self.find(locator, get_all=True)
-        return [s.text for s in eles]
+        try:
+            eles = self.find(locator, get_all=True)
+            return [s.text for s in eles]
+        except RuntimeError:
+            return []
+
+    def get_timetable_name(self):
+        """Gets the personal timetable name"""
+        return self.find((By.CLASS_NAME, "timetable-name")).get_property("value")
 
     def create_ptt(self, name=None):
         """Create a personaltimetable with the provided name when provided"""
@@ -844,10 +880,11 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     ):
         """Creates a custom event using drag and drop assuming custom event mode is off
 
-        day: 0-6, 0 is Monday
-        start_time: 0 is 8:00A.M, every 1 is 30 mins
-        end_time: 0 is 8:00A.M, every 1 is 30 mins
-        show_weekend: if weekends are shown
+        Args:
+            day: 0-6, 0 is Monday
+            start_time: 0 is 8:00A.M, every 1 is 30 mins
+            end_time: 0 is 8:00A.M, every 1 is 30 mins
+            show_weekend: if weekends are shown
         """
         calendar_cells = self.find((By.CLASS_NAME, "cal-cell"), get_all=True)
         cells_per_row = 7 if show_weekend else 5
@@ -899,9 +936,163 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             end_cell,
         )
         self.toggle_custom_event_mode()
+        self.assert_invisibility(
+            (
+                By.XPATH,
+                "//div[contains(@class, 'slot') and contains(@class, 'preview')]",
+            ),
+        )
 
-    def assert_custom_event_presence():
-        pass
+    def edit_custom_event(
+        self,
+        old_name: str,
+        /,
+        *,
+        name: str = None,
+        day: str = None,
+        location: str = None,
+        color: str = None,
+        start_time: str = None,
+        end_time: str = None,
+        credits: float = None,
+    ):
+        """Edits the first custom event found with the provided name.
+
+        Args:
+            old_name: The name of the event to edit.
+            name: The new name to give the event.
+            day: The new day of the week, one of "M", "T", "W", "R", "F", "S", "U".
+            location: The new location.
+            color: The new color as a hex code (#FF0000).
+            start_time: The new start time in military time (8:00).
+            end_time: The new end time in military time (13:00).
+            credits: The new number of credits.
+        """
+        slots: list[WebElement] = self.find((By.CLASS_NAME, "slot"), get_all=True)
+        for slot in slots:
+            if not slot.text.startswith(old_name):
+                continue
+            slot.click()
+            if name is not None:
+                event_name = self.find((By.ID, "event-name"))
+                event_name.clear()
+                event_name.send_keys(name)
+            if day is not None:
+                self.find((By.XPATH, f"//button[@name='{day}']")).click()
+            if location is not None:
+                event_location = self.find((By.ID, "event-location"))
+                event_location.clear()
+                event_location.send_keys(location)
+            if color is not None:
+                event_color = self.find((By.ID, "event-color"))
+                event_color.clear()
+                event_color.send_keys(color)
+            if start_time is not None:
+                event_start_time = self.find((By.ID, "event-start-time"))
+                event_start_time.clear()
+                event_start_time.send_keys(start_time)
+            if end_time is not None:
+                event_end_time = self.find((By.ID, "event-end-time"))
+                event_end_time.clear()
+                event_end_time.send_keys(end_time)
+            if credits is not None:
+                event_credits = self.find((By.ID, "event-credits"))
+                event_credits.clear()
+                event_credits.send_keys(str(credits))
+            self.find((By.CLASS_NAME, "save-button")).click()
+            return
+        raise RuntimeError(
+            f"Could not find event with name: {name}, day: {day}, location: {location},"
+            f" color: {color}, start_time: {start_time}, end_time: {end_time},"
+            f" credits: {credits}"
+        )
+
+    def assert_custom_event_exists(
+        self,
+        *,
+        name: str,
+        day: str = None,
+        location: str = None,
+        color: str = None,
+        start_time: str = None,
+        end_time: str = None,
+        credits: float = None,
+    ):
+        """Asserts that a custom event with the provided fields exists in the current
+        timetable.
+
+        Args:
+            name: Name of the event, can be substring of the actual name
+            day: Day of the week, one of "M", "T", "W", "R", "F", "S", "U"
+            location: Location of the event, can be substring of the actual name
+            color: Color of the event in hex (#F8F6F7), case insensitive
+            start_time: Start time of the event as a non zero-padded string (8:00)
+            end_time: End time of the event as a non zero-padded string (14:30)
+            credits: Number of credits of the event
+
+        Raises:
+            RuntimeError: If the event could not be found.
+        """
+        x, y = self.find((By.CLASS_NAME, "semesterly-name")).location.values()
+        slots: list[WebElement] = self.find((By.CLASS_NAME, "slot"), get_all=True)
+        for slot in slots:
+            if not slot.text.startswith(name):
+                continue
+            slot.click()
+            (
+                event_name,
+                event_day,
+                event_location,
+                event_color,
+                event_start_time,
+                event_end_time,
+                event_credits,
+            ) = self.get_custom_event_fields()
+
+            # close modal
+            ActionChains(self.driver).move_by_offset(x, y).click().perform()
+            if (
+                event_name.startswith(name)
+                and (not day or event_day.startswith(day))
+                and (not location or event_location.startswith(location))
+                and (not color or event_color.lower() == color.lower())
+                and (not start_time or event_start_time == start_time)
+                and (not end_time or event_end_time == end_time)
+                and (not credits or float(event_credits) == credits)
+            ):
+                return
+
+        raise RuntimeError(
+            f"Could not find event with name: {name}, day: {day}, location: {location},"
+            f" color: {color}, start_time: {start_time}, end_time: {end_time},"
+            f" credits: {credits}"
+        )
+
+    def get_custom_event_fields(self):
+        """Returns the fields of the currently selected custom event.
+
+        Pre-condition:
+            Custom event modal is open.
+        """
+        event_name = self.find((By.ID, "event-name")).get_property("value")
+        event_day = self.find((By.XPATH, "//button[@class='active']")).get_property(
+            "name"
+        )
+        event_location = self.find((By.ID, "event-location")).get_property("value")
+        event_color = self.find((By.ID, "event-color")).get_property("value")
+        event_start_time = self.find((By.ID, "event-start-time")).get_property("value")
+        event_end_time = self.find((By.ID, "event-end-time")).get_property("value")
+        event_credits = self.find((By.ID, "event-credits")).get_property("value")
+
+        return (
+            event_name,
+            event_day,
+            event_location,
+            event_color,
+            event_start_time,
+            event_end_time,
+            event_credits,
+        )
 
 
 class url_matches_regex:
