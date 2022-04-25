@@ -10,7 +10,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-from os import set_inheritable
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
