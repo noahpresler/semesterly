@@ -1,8 +1,13 @@
 [run]
 source =
     ./timetable
-    ./analytics
+    ./courses
     ./student
 
 include =
-    */views.py
+    timetable/views.py
+    timetable/serializers.py
+    courses/views.py
+    courses/serializers.py
+    student/views.py
+    student/serializers.py
