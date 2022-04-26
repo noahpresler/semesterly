@@ -65,38 +65,40 @@ class SerializersTest(TestCase):
         self.assertEquals(serialized["preferred_name"], self.preferred_name)
         self.assertEquals(serialized["major"], self.major)
 
-def test_log_ical_export_student_does_not_exist(self):
-    factory = APIRequestFactory()
-    user1 = create_user(username="Alice", password="security")
-    url =  "/user/log_ical/"
-    request = factory.get(url, {}, format='json')
-    response = get_auth_response(
-        request, user1, url,
-    )
-    self.assertEquals(len(CalendarExport.objects.all()), 1)
-    self.assertEquals(response.status_code, status.HTTP_200_OK)
+class MiscellaneousTest(APITestCase):
+    
 
-def test_log_ical_export_student_exists(self):
-    factory = APIRequestFactory()
-    user1 = create_user(username="Alice", password="security")
-    create_student(user=user1)
-    url =  "/user/log_ical/"
-    request = factory.get(url, {}, format='json')
-    response = get_auth_response(
-        request, user1, url,
-    )
-    self.assertEquals(len(CalendarExport.objects.all()), 1)
-    self.assertEquals(response.status_code, status.HTTP_200_OK)
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.user1 = create_user(username="Alice", password="security")
+        self.student1 = create_student(user=self.user1)
 
-def test_accept_tos(self):
-    factory = APIRequestFactory()
-    user1 = create_user(username="Alice", password="security")
-    url =  "/tos/accept/"
-    request = factory.get(url, {}, format='json')
-    response = get_auth_response(
-        request, user1, url,
-    )
-    self.assertEquals(response.status_code, 204)
+    def test_log_ical_export_student_exists(self):
+        url =  "/user/log_ical/"
+        request = self.factory.get(url, {}, format='json')
+        response = get_auth_response(
+            request, self.user1, url,
+        )
+        self.assertEquals(len(CalendarExport.objects.all()), 1)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+    def test_log_ical_export_student_does_not_exist(self):
+        url =  "/user/log_ical/"
+        request = self.factory.get(url, {}, format='json')
+        self.user2 = create_user(username="Bob", password="super_secure")
+        response = get_auth_response(
+            request, self.user2, url,
+        )
+        self.assertEquals(len(CalendarExport.objects.all()), 1)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+    def test_accept_tos(self):
+        url =  "/tos/accept/"
+        request = self.factory.get(url, {}, format='json')
+        response = get_auth_response(
+            request, self.user1, url,
+        )
+        self.assertEquals(response.status_code, 204)
 
 class UrlsTest(UrlTestCase):
     """Test student/urls.py"""
