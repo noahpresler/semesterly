@@ -18,6 +18,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from pytz import timezone
+from regex import E
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -138,7 +139,8 @@ class CourseModal(FeatureFlowView):
 
     def get_feature_flow(self, request, code, sem_name, year):
         semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-        code = code.upper()
+        code = str(code).upper()
+        print("School in feature flow: " + str(self.school))
         course = get_object_or_404(Course, school=self.school, code=code)
         course_json = CourseSerializer(
             course,

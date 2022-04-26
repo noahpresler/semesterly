@@ -28,7 +28,7 @@ from timetable.models import (
 )
 from parsing.models import DataUpdate
 from helpers.test.test_cases import UrlTestCase
-from .serializers import CourseSerializer, SectionSerializer, SemesterSerializer
+from .serializers import CourseSerializer, SectionSerializer, SemesterSerializer, get_section_dict
 from student.models import Student, Reaction
 from django.contrib.auth.models import User
 from student.models import PersonalTimetable
@@ -257,6 +257,17 @@ class Serializers(TestCase):
         )
         data = serialized.data["reactions"]
         self.assertTrue(not data)
+
+    def test_get_regexed_courses(self):
+        serialized = CourseSerializer(
+            self.course,
+            context={
+                "semester": self.sem,
+                "school": self.school,
+            },
+        )
+        data = serialized.data["regexed_courses"]
+        print(data)
 
     def test_get_reactions_with_student(self):
         testSem = Semester.objects.create(name="Spring", year="2022")
@@ -489,6 +500,19 @@ class Serializers(TestCase):
         self.assertTrue(data["name"] == testSem.name)
         self.assertTrue(data["year"] == testSem.year)
 
+    def test_get_section_dict(self):
+        testSem = Semester.objects.create(name="Spring", year="2022")
+        courseOne = Course.objects.create(
+            id=25235, school=self.school, code="SEM102", name="STAD1"
+        )
+        courseOneSec1 = Section.objects.create(
+            course=courseOne, meeting_section="01", size=10, enrolment=10, waitlist=1, waitlist_size=10, instructors="instructor", semester=testSem, was_full=False, course_section_id=1 
+        )
+        data = get_section_dict(courseOneSec1)
+        self.assertTrue(data["is_section_filled"])
+        self.assertEquals(data["instructors"], "instructor")
+        self.assertEquals(data["size"], 10)
+        self.assertEquals(data["waitlist"], 1)
         
 class CourseDetail(APITestCase):
     school = "uoft"
