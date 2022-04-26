@@ -4,6 +4,8 @@ source =
     ./courses
     ./student
 
+branch = True
+
 include =
     timetable/views.py
     timetable/serializers.py
@@ -11,3 +13,10 @@ include =
     courses/serializers.py
     student/views.py
     student/serializers.py
+
+[report]
+show_missing = True
+skip_covered = True
+
+[html]
+title = htmlReport
