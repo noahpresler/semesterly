@@ -7,7 +7,7 @@ beautifulsoup4==4.6.0
 black==22.3.0
 bs4==0.0.1
 celery==5.2.2
-coverage==4.4.1
+coverage==6.3.2
 cryptography==36.0.1
 dateparser==1.1.0
 Django==3.2.12

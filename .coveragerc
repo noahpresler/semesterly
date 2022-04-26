@@ -16,7 +16,7 @@ include =
 
 [report]
 show_missing = True
-skip_covered = True
+# skip_covered = True
 
 [html]
 title = htmlReport
