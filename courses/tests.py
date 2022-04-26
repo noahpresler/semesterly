@@ -384,11 +384,10 @@ class Serializers(TestCase):
         self.assertFalse(data)
 
     def test_get_is_waitlist_both_sec_full(self):
-        testSem = Semester.objects.create(name="Spring", year="2022")
         courseOne = Course.objects.create(
             id=2, school=self.school, code="SEM102", name="STAD1"
         )
-        courseOneSec1 = Section.objects.create(
+        Section.objects.create(
             course=courseOne,
             meeting_section="01",
             size=10,
@@ -400,7 +399,7 @@ class Serializers(TestCase):
             was_full=False,
             course_section_id=1,
         )
-        courseOneSec2 = Section.objects.create(
+        Section.objects.create(
             course=courseOne,
             meeting_section="02",
             size=10,
@@ -413,17 +412,15 @@ class Serializers(TestCase):
             course_section_id=2,
         )
 
-        # print("sec one full: " + str(courseOneSec1.is_full()))
-        # print("sec two full: " + str(courseOneSec2.is_full()))
         serialized = CourseSerializer(
             courseOne,
             context={
-                "semester": testSem,
+                "semester": self.sem,
                 "school": self.school,
             },
         )
         data = serialized.data["is_waitlist_only"]
-        # self.assertTrue(data)
+        self.assertTrue(data)
 
     def test_get_is_waitlist_no_sec(self):
         testSem = Semester.objects.create(name="Spring", year="2022")
@@ -438,8 +435,7 @@ class Serializers(TestCase):
             },
         )
         data = serialized.data["is_waitlist_only"]
-        # self.assertTrue(data)
-        # TODO: what is expected behavior here?
+        self.assertFalse(data)
 
     def test_get_sections(self):
         serialized_course = CourseSerializer(

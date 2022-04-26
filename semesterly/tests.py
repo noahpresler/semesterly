@@ -107,9 +107,14 @@ class EndToEndTest(SeleniumTestCase):
             self.assert_friend_image_found(friend)
             self.open_course_modal_from_slot(0)
             self.assert_friend_in_modal(friend)
+            self.close_course_modal()
+        ptt = self.ptt_to_tuple()
         with self.description("Log out"):
             self.logout()
             self.assert_login_button_found()
+        with self.description("Log back in"):
+            self.login_via_fb(email="e@ma.il", password="password")
+            self.assert_ptt_equals(ptt)
 
     def test_logged_in_via_google_flow(self):
         with self.description("setup and clear tutorial"):
@@ -123,9 +128,13 @@ class EndToEndTest(SeleniumTestCase):
                 major="Computer Science", class_year=2023
             )
         self.common_logged_in_tests()
+        ptt = self.ptt_to_tuple()
         with self.description("Log out"):
             self.logout()
             self.assert_login_button_found()
+        with self.description("Log back in"):
+            self.login_via_google(email="em@ai.l", password="password")
+            self.assert_ptt_equals(ptt)
 
     def common_logged_in_tests(self):
         with self.description("search, add, change personal timetable name and save"):

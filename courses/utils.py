@@ -17,7 +17,7 @@ from operator import attrgetter
 def is_waitlist_only(course, semester):
     return any(
         sections_are_filled(sections)
-        for _, sections in get_sections_by_section_type(course, semester).items()
+        for sections in get_sections_by_section_type(course, semester).values()
     )
 
 
