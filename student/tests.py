@@ -373,7 +373,6 @@ class UserTimetableViewTest(APITestCase):
 
     def test_delete_timetable(self):
         PersonalTimetable.objects.create(
-            id=20,
             name="todelete",
             school="uoft",
             semester=self.sem,
@@ -389,11 +388,10 @@ class UserTimetableViewTest(APITestCase):
             "todelete",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertFalse(PersonalTimetable.objects.filter(id=20).exists())
+        self.assertFalse(PersonalTimetable.objects.filter(name="todelete").exists())
 
     def test_update_timetable_preference(self):
         timetable = PersonalTimetable.objects.create(
-            id=20,
             name="todelete",
             school="uoft",
             semester=self.sem,
