@@ -447,10 +447,8 @@ class UserTimetableViewTest(APITestCase):
         event3_serialized = EventSerializer(event3).data
         events = [event1_serialized, event2_serialized, event3_serialized]
         view = UserTimetableView()
-        view.update_events(testTimetableModified, events)
-        oldEvents = testTimetable.events.all()
-        newEvents = testTimetableModified.events.all()
-        self.assertEquals(len(oldEvents),0)
+        view.update_events(testTimetable, events)
+        newEvents = testTimetable.events.all()
         self.assertEquals(len(newEvents),3)
 
     def test_validate_credits_not_divisible_by_point_five(self):
@@ -516,6 +514,26 @@ class UserTimetableViewTest(APITestCase):
         )
         event1_serialized = EventSerializer(event1).data
         self.assertEquals(view.validate_credits(event1_serialized), 2.0)
+
+    def test_validate_time_valid_edge_case(self):
+        view = UserTimetableView()
+        view.validate_time("05:23", "05:33")
+
+    def test_validate_time_invalid(self):
+        view = UserTimetableView()
+        self.assertRaises(rest_framework.exceptions.ValidationError, view.validate_time, "05:23", "05:32")
+
+    def test_validate_time_invalid(self):
+        view = UserTimetableView()
+        self.assertRaises(rest_framework.exceptions.ValidationError, view.validate_time, "06:23", "05:32")
+
+    def test_convert_to_minutes_zero(self):
+        view = UserTimetableView()
+        self.assertEquals(view.convert_to_minutes("00:00"), 0)
+
+    def test_convert_to_minutes_complex(self):
+        view = UserTimetableView()
+        self.assertEquals(view.convert_to_minutes("15:23"), 923)
 
 class ClassmateViewTest(APITestCase):
     def setUp(self):

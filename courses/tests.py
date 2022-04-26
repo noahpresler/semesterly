@@ -267,7 +267,7 @@ class Serializers(TestCase):
             },
         )
         data = serialized.data["regexed_courses"]
-        print(data)
+        # print(data)
 
     def test_get_reactions_with_student(self):
         testSem = Semester.objects.create(name="Spring", year="2022")
@@ -551,6 +551,21 @@ class CourseDetail(APITestCase):
         )
         self.factory = APIRequestFactory()
 
+    def test_all_courses(self):
+        url =  "/courses/"
+        request = self.factory.get(url, {}, format='json')
+        response = get_auth_response(
+            request, self.user1, url
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_course_page(self):
+        url =  "/c/{}/".format(self.code)
+        request = self.factory.get(url, {'code': self.code}, format='json')
+        response = get_auth_response(
+            request, self.user1, url, self.code
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_course_exists(self):
         response = self.client.get(
@@ -591,7 +606,7 @@ class CourseDetail(APITestCase):
             request, self.user1, url, self.school, self.sem_name, self.year, self.cid
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(json.loads(response.content))
+        # print(json.loads(response.content))
 
     def test_get_clean_evals_no_change_for_well_formatted_input(self):
         Evaluation.objects.create(
