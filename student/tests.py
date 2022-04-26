@@ -39,8 +39,10 @@ from student.views import UserView, UserTimetableView
 from rest_framework import serializers
 import rest_framework
 
+
 class SerializersTest(TestCase):
     """Test student/serializers.py"""
+
     def setUp(self):
         self.user = create_user(username="thomas", password="opensesame")
         self.preferred_name = "Thomas"
@@ -48,9 +50,16 @@ class SerializersTest(TestCase):
         self.major = "Physics"
         self.jhed = "jhed1"
         self.school = "jhu"
-        self.student = create_student(user=self.user, preferred_name = self.preferred_name, class_year = self.class_year, major = self.major, school = self.school, jhed = self.jhed)
+        self.student = create_student(
+            user=self.user,
+            preferred_name=self.preferred_name,
+            class_year=self.class_year,
+            major=self.major,
+            school=self.school,
+            jhed=self.jhed,
+        )
         self.semester = Semester.objects.create(name="Spring", year="2022")
-    
+
     def test_get_student_dict_exists(self):
         user_dict = get_student_dict(self.school, self.student, self.semester)
         self.assertTrue(user_dict["isLoggedIn"])
@@ -68,40 +77,46 @@ class SerializersTest(TestCase):
         self.assertEquals(serialized["preferred_name"], self.preferred_name)
         self.assertEquals(serialized["major"], self.major)
 
-class MiscellaneousTest(APITestCase):
-    
 
+class MiscellaneousTest(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.user1 = create_user(username="Alice", password="security")
         self.student1 = create_student(user=self.user1)
 
     def test_log_ical_export_student_exists(self):
-        url =  "/user/log_ical/"
-        request = self.factory.get(url, {}, format='json')
+        url = "/user/log_ical/"
+        request = self.factory.get(url, {}, format="json")
         response = get_auth_response(
-            request, self.user1, url,
+            request,
+            self.user1,
+            url,
         )
         self.assertEquals(len(CalendarExport.objects.all()), 1)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
     def test_log_ical_export_student_does_not_exist(self):
-        url =  "/user/log_ical/"
-        request = self.factory.get(url, {}, format='json')
+        url = "/user/log_ical/"
+        request = self.factory.get(url, {}, format="json")
         self.user2 = create_user(username="Bob", password="super_secure")
         response = get_auth_response(
-            request, self.user2, url,
+            request,
+            self.user2,
+            url,
         )
         self.assertEquals(len(CalendarExport.objects.all()), 1)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
     def test_accept_tos(self):
-        url =  "/tos/accept/"
-        request = self.factory.get(url, {}, format='json')
+        url = "/tos/accept/"
+        request = self.factory.get(url, {}, format="json")
         response = get_auth_response(
-            request, self.user1, url,
+            request,
+            self.user1,
+            url,
         )
         self.assertEquals(response.status_code, 204)
+
 
 class UrlsTest(UrlTestCase):
     """Test student/urls.py"""
@@ -145,7 +160,9 @@ class UrlsTest(UrlTestCase):
 class UserViewTest(APITestCase):
     def setUp(self):
         self.user = create_user(username="jacob", password="top_secret")
-        self.student = create_student(user=self.user, preferred_name="jac", major="STAD")
+        self.student = create_student(
+            user=self.user, preferred_name="jac", major="STAD"
+        )
         self.school = "jhu"
         self.course1 = Course.objects.create(
             id=2, school=self.school, code="SEM102", name="STAD"
@@ -182,7 +199,6 @@ class UserViewTest(APITestCase):
         self.assertEquals(context["total"], 2)
         self.assertEquals(context["CRAP"], 1)
         self.assertEquals(context["FIRE"], 1)
-        
 
     def test_update_settings(self):
         new_settings = {"emails_enabled": True, "social_courses": True, "major": "CS"}
@@ -333,7 +349,7 @@ class UserTimetableViewTest(APITestCase):
         PersonalEvent.objects.create(
             timetable=testTimetable,
             name="study session",
-            day='F',
+            day="F",
             time_start="08:50",
             time_end="10:10",
         )
@@ -414,32 +430,32 @@ class UserTimetableViewTest(APITestCase):
         testTimetableModified = PersonalTimetable.objects.create(
             name="newTimetable", school="jhu", semester=self.sem, student=self.student
         )
-        
+
         event1 = PersonalEvent.objects.create(
             timetable=testTimetable,
             name="study session",
-            day='F',
+            day="F",
             time_start="08:30",
             time_end="10:35",
-            credits=0.0
+            credits=0.0,
         )
         event2 = PersonalEvent.objects.create(
             timetable=testTimetable,
             name="birthday",
-            day='S',
+            day="S",
             time_start="09:20",
             time_end="10:30",
-            credits=0.0
+            credits=0.0,
         )
         event3 = PersonalEvent.objects.create(
             timetable=testTimetable,
             name="oose meeting",
-            day='M',
+            day="M",
             time_start="14:30",
             time_end="16:40",
-            credits=0.5
+            credits=0.5,
         )
-        self.assertEquals(len(PersonalEvent.objects.all()),3)
+        self.assertEquals(len(PersonalEvent.objects.all()), 3)
         event1_serialized = EventSerializer(event1).data
         event2_serialized = EventSerializer(event2).data
         event3_serialized = EventSerializer(event3).data
@@ -447,7 +463,7 @@ class UserTimetableViewTest(APITestCase):
         view = UserTimetableView()
         view.update_events(testTimetable, events)
         newEvents = testTimetable.events.all()
-        self.assertEquals(len(newEvents),3)
+        self.assertEquals(len(newEvents), 3)
 
     def test_validate_credits_not_divisible_by_point_five(self):
         view = UserTimetableView()
@@ -457,13 +473,17 @@ class UserTimetableViewTest(APITestCase):
         event1 = PersonalEvent.objects.create(
             timetable=testTimetable,
             name="study session",
-            day='F',
+            day="F",
             time_start="08:30",
             time_end="10:35",
-            credits=0.3
+            credits=0.3,
         )
         event1_serialized = EventSerializer(event1).data
-        self.assertRaises(rest_framework.exceptions.ValidationError, view.validate_credits, event1_serialized)
+        self.assertRaises(
+            rest_framework.exceptions.ValidationError,
+            view.validate_credits,
+            event1_serialized,
+        )
 
     def test_validate_credits_negative(self):
         view = UserTimetableView()
@@ -473,13 +493,17 @@ class UserTimetableViewTest(APITestCase):
         event1 = PersonalEvent.objects.create(
             timetable=testTimetable,
             name="study session",
-            day='F',
+            day="F",
             time_start="08:30",
             time_end="10:35",
-            credits=-1.0
+            credits=-1.0,
         )
         event1_serialized = EventSerializer(event1).data
-        self.assertRaises(rest_framework.exceptions.ValidationError, view.validate_credits, event1_serialized)
+        self.assertRaises(
+            rest_framework.exceptions.ValidationError,
+            view.validate_credits,
+            event1_serialized,
+        )
 
     def test_validate_credits_too_large(self):
         view = UserTimetableView()
@@ -489,13 +513,17 @@ class UserTimetableViewTest(APITestCase):
         event1 = PersonalEvent.objects.create(
             timetable=testTimetable,
             name="study session",
-            day='F',
+            day="F",
             time_start="08:30",
             time_end="10:35",
-            credits=21.0
+            credits=21.0,
         )
         event1_serialized = EventSerializer(event1).data
-        self.assertRaises(rest_framework.exceptions.ValidationError, view.validate_credits, event1_serialized)
+        self.assertRaises(
+            rest_framework.exceptions.ValidationError,
+            view.validate_credits,
+            event1_serialized,
+        )
 
     def test_validate_credits_correct(self):
         view = UserTimetableView()
@@ -505,10 +533,10 @@ class UserTimetableViewTest(APITestCase):
         event1 = PersonalEvent.objects.create(
             timetable=testTimetable,
             name="study session",
-            day='F',
+            day="F",
             time_start="08:30",
             time_end="10:35",
-            credits=2.0
+            credits=2.0,
         )
         event1_serialized = EventSerializer(event1).data
         self.assertEquals(view.validate_credits(event1_serialized), 2.0)
@@ -519,11 +547,21 @@ class UserTimetableViewTest(APITestCase):
 
     def test_validate_time_invalid(self):
         view = UserTimetableView()
-        self.assertRaises(rest_framework.exceptions.ValidationError, view.validate_time, "05:23", "05:32")
+        self.assertRaises(
+            rest_framework.exceptions.ValidationError,
+            view.validate_time,
+            "05:23",
+            "05:32",
+        )
 
     def test_validate_time_invalid(self):
         view = UserTimetableView()
-        self.assertRaises(rest_framework.exceptions.ValidationError, view.validate_time, "06:23", "05:32")
+        self.assertRaises(
+            rest_framework.exceptions.ValidationError,
+            view.validate_time,
+            "06:23",
+            "05:32",
+        )
 
     def test_convert_to_minutes_zero(self):
         view = UserTimetableView()
@@ -532,6 +570,7 @@ class UserTimetableViewTest(APITestCase):
     def test_convert_to_minutes_complex(self):
         view = UserTimetableView()
         self.assertEquals(view.convert_to_minutes("15:23"), 923)
+
 
 class ClassmateViewTest(APITestCase):
     def setUp(self):

@@ -95,10 +95,10 @@ class Serializers(TestCase):
         event = PersonalEvent.objects.create(
             timetable=testTimetable,
             name="study session",
-            day='F',
+            day="F",
             time_start="08:30",
             time_end="10:35",
-            credits=0.0
+            credits=0.0,
         )
         event_serialized = EventSerializer(event).data
         self.assertEquals(event_serialized["name"], "study session")

@@ -28,7 +28,12 @@ from timetable.models import (
 )
 from parsing.models import DataUpdate
 from helpers.test.test_cases import UrlTestCase
-from .serializers import CourseSerializer, SectionSerializer, SemesterSerializer, get_section_dict
+from .serializers import (
+    CourseSerializer,
+    SectionSerializer,
+    SemesterSerializer,
+    get_section_dict,
+)
 from student.models import Student, Reaction
 from django.contrib.auth.models import User
 from student.models import PersonalTimetable
@@ -39,6 +44,7 @@ from helpers.test.utils import (
     get_auth_response,
 )
 from analytics.models import SharedCourseView
+
 
 class Serializers(TestCase):
     def setUp(self):
@@ -473,7 +479,16 @@ class Serializers(TestCase):
             id=25235, school=self.school, code="SEM102", name="STAD1"
         )
         courseOneSec1 = Section.objects.create(
-            course=courseOne, meeting_section="01", size=10, enrolment=10, waitlist=1, waitlist_size=10, instructors="instructor", semester=testSem, was_full=False, course_section_id=1 
+            course=courseOne,
+            meeting_section="01",
+            size=10,
+            enrolment=10,
+            waitlist=1,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=testSem,
+            was_full=False,
+            course_section_id=1,
         )
         serialized_section = SectionSerializer(
             courseOneSec1,
@@ -490,12 +505,9 @@ class Serializers(TestCase):
         self.assertTrue(result["instructors"] == courseOneSec1.instructors)
         self.assertTrue(result["semester"] == serialized_semester.data)
 
-        
     def test_SemesterSerializer(self):
         testSem = Semester.objects.create(name="Spring", year="2022")
-        serialized_semester = SemesterSerializer(
-            testSem
-        )
+        serialized_semester = SemesterSerializer(testSem)
         data = serialized_semester.data
         self.assertTrue(data["name"] == testSem.name)
         self.assertTrue(data["year"] == testSem.year)
@@ -506,14 +518,24 @@ class Serializers(TestCase):
             id=25235, school=self.school, code="SEM102", name="STAD1"
         )
         courseOneSec1 = Section.objects.create(
-            course=courseOne, meeting_section="01", size=10, enrolment=10, waitlist=1, waitlist_size=10, instructors="instructor", semester=testSem, was_full=False, course_section_id=1 
+            course=courseOne,
+            meeting_section="01",
+            size=10,
+            enrolment=10,
+            waitlist=1,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=testSem,
+            was_full=False,
+            course_section_id=1,
         )
         data = get_section_dict(courseOneSec1)
         self.assertTrue(data["is_section_filled"])
         self.assertEquals(data["instructors"], "instructor")
         self.assertEquals(data["size"], 10)
         self.assertEquals(data["waitlist"], 1)
-        
+
+
 class CourseDetail(APITestCase):
     school = "uoft"
     search_endpoint = "search"
@@ -541,30 +563,38 @@ class CourseDetail(APITestCase):
             time_end="10:00",
             is_short_course=False,
         )
-        self.user1 = User.objects.create_user(username='student', email='student@jhu.edu', password='password')
-        self.user2 = User.objects.create_user(username='staff', email='staff@jhu.edu', password='password')
+        self.user1 = User.objects.create_user(
+            username="student", email="student@jhu.edu", password="password"
+        )
+        self.user2 = User.objects.create_user(
+            username="staff", email="staff@jhu.edu", password="password"
+        )
         self.student1 = Student.objects.create(
-            preferred_name="studentTester", class_year=2022, user=self.user1, img_url="no_url", major="English"
+            preferred_name="studentTester",
+            class_year=2022,
+            user=self.user1,
+            img_url="no_url",
+            major="English",
         )
         self.student2 = Student.objects.create(
-            preferred_name="staffTester", class_year=2022, user=self.user2, img_url="no_url", major="undecided"
+            preferred_name="staffTester",
+            class_year=2022,
+            user=self.user2,
+            img_url="no_url",
+            major="undecided",
         )
         self.factory = APIRequestFactory()
 
     def test_all_courses(self):
-        url =  "/courses/"
-        request = self.factory.get(url, {}, format='json')
-        response = get_auth_response(
-            request, self.user1, url
-        )
+        url = "/courses/"
+        request = self.factory.get(url, {}, format="json")
+        response = get_auth_response(request, self.user1, url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_course_page(self):
-        url =  "/c/{}/".format(self.code)
-        request = self.factory.get(url, {'code': self.code}, format='json')
-        response = get_auth_response(
-            request, self.user1, url, self.code
-        )
+        url = "/c/{}/".format(self.code)
+        request = self.factory.get(url, {"code": self.code}, format="json")
+        response = get_auth_response(request, self.user1, url, self.code)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_course_exists(self):
@@ -585,23 +615,62 @@ class CourseDetail(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_get_classmate_in_course(self):     
+    def test_get_classmate_in_course(self):
         courseOneSec1 = Section.objects.create(
-            course=self.course, meeting_section="01", size=10, enrolment=3, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=False, course_section_id=1
+            course=self.course,
+            meeting_section="01",
+            size=10,
+            enrolment=3,
+            waitlist=0,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=self.sem,
+            was_full=False,
+            course_section_id=1,
         )
         courseOneSec2 = Section.objects.create(
-            course=self.course, meeting_section="02", size=10, enrolment=3, waitlist=0, waitlist_size=10, instructors="instructor", semester=self.sem, was_full=False, course_section_id=1
+            course=self.course,
+            meeting_section="02",
+            size=10,
+            enrolment=3,
+            waitlist=0,
+            waitlist_size=10,
+            instructors="instructor",
+            semester=self.sem,
+            was_full=False,
+            course_section_id=1,
         )
-        
-        personalTimetable1 = PersonalTimetable.objects.create(name="timetable1", student=self.student1, semester=self.sem, school=self.school)
+
+        personalTimetable1 = PersonalTimetable.objects.create(
+            name="timetable1",
+            student=self.student1,
+            semester=self.sem,
+            school=self.school,
+        )
         personalTimetable1.courses.add(self.course)
         personalTimetable1.sections.add(courseOneSec1)
 
-        personalTimetable2 = PersonalTimetable.objects.create(name="timetable2", student=self.student2, semester=self.sem, school=self.school)
+        personalTimetable2 = PersonalTimetable.objects.create(
+            name="timetable2",
+            student=self.student2,
+            semester=self.sem,
+            school=self.school,
+        )
         personalTimetable2.courses.add(self.course)
         personalTimetable2.sections.add(courseOneSec1)
-        url =  "/course_classmates/{}/{}/{}/id/{}/".format(self.school, self.sem_name, self.year, self.cid)
-        request = self.factory.get(url, {'school': self.school, 'sem_name': self.sem_name, 'year': self.year, 'course_id': self.cid}, format='json')
+        url = "/course_classmates/{}/{}/{}/id/{}/".format(
+            self.school, self.sem_name, self.year, self.cid
+        )
+        request = self.factory.get(
+            url,
+            {
+                "school": self.school,
+                "sem_name": self.sem_name,
+                "year": self.year,
+                "course_id": self.cid,
+            },
+            format="json",
+        )
         response = get_auth_response(
             request, self.user1, url, self.school, self.sem_name, self.year, self.cid
         )
@@ -683,7 +752,7 @@ class CourseDetail(APITestCase):
                 self.course, context={"semester": self.sem, "school": self.school}
             ).data
             self.assertNotEquals(course_dict["evals"], get_clean_evals(course_dict))
-        
+
         def test_get_clean_evals_formatted_input_with_colon(self):
             year = self.year + ":"
             Evaluation.objects.create(
@@ -730,26 +799,26 @@ class CourseDetail(APITestCase):
             lecs = [s for s in sections if s["section_type"] == "L"]
             tutorials = [s for s in sections if s["section_type"] == "T"]
             practicals = [s for s in sections if s["section_type"] == "P"]
-            url =  "/c/{}/".format(self.cid)
-            request = self.factory.get(url, {'course_id': self.cid}, format='json')
-            response = get_auth_response(
-                request, self.user1, url, self.cid
-            )
+            url = "/c/{}/".format(self.cid)
+            request = self.factory.get(url, {"course_id": self.cid}, format="json")
+            response = get_auth_response(request, self.user1, url, self.cid)
             self.assertEquals(response.context["course"], Course.objects.get(self.cid))
             self.assertEquals(response.context["lectures"], lecs)
             self.assertEquals(response.context["tutorials"], tutorials)
             self.assertEquals(response.context["practicals"], practicals)
 
         def test_all_courses(self):
-            url =  "/courses/"
+            url = "/courses/"
             request = self.factory.get(url)
             response = get_auth_response(
-                request, self.user1, url,
+                request,
+                self.user1,
+                url,
             )
             self.assertEquals(response.context["school_name"], self.school)
 
+
 class CourseModalTest(APITestCase):
-    
     def setUp(self):
         self.sem_name = "Winter"
         self.school = "uoft"
@@ -774,32 +843,46 @@ class CourseModalTest(APITestCase):
             is_short_course=False,
         )
         self.factory = APIRequestFactory()
-        self.user1 = User.objects.create_user(username='student', email='student@jhu.edu', password='password')
+        self.user1 = User.objects.create_user(
+            username="student", email="student@jhu.edu", password="password"
+        )
 
     def test_get_feature_flow_no_course_in_db(self):
-        url =  "/course/{}/{}/{}/".format(self.code, self.sem_name, self.year)
-        request = self.factory.get(url, {'code': self.code, 'sem_name': self.sem_name, 'year': self.year}, format='json')
+        url = "/course/{}/{}/{}/".format(self.code, self.sem_name, self.year)
+        request = self.factory.get(
+            url,
+            {"code": self.code, "sem_name": self.sem_name, "year": self.year},
+            format="json",
+        )
         response = get_auth_response(
             request, self.user1, url, self.code, self.sem_name, self.year
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
     def test_get_feature_flow_with_course_in_db(self):
-        url =  "/course/{}/{}/{}/".format("SEM3420", self.sem_name, self.year)
-        request = self.factory.get(url, {'code': "SEM3420", 'sem_name': self.sem_name, 'year': self.year}, format='json')
+        url = "/course/{}/{}/{}/".format("SEM3420", self.sem_name, self.year)
+        request = self.factory.get(
+            url,
+            {"code": "SEM3420", "sem_name": self.sem_name, "year": self.year},
+            format="json",
+        )
         response = get_auth_response(
             request, self.user1, url, "SEM3420", self.sem_name, self.year
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_feature_flow_shared_course_view_created(self):
-        url =  "/course/{}/{}/{}/".format(self.code, self.sem_name, self.year)
-        request = self.factory.get(url, {'code': self.code, 'sem_name': self.sem_name, 'year': self.year}, format='json')
+        url = "/course/{}/{}/{}/".format(self.code, self.sem_name, self.year)
+        request = self.factory.get(
+            url,
+            {"code": self.code, "sem_name": self.sem_name, "year": self.year},
+            format="json",
+        )
         response = get_auth_response(
             request, self.user1, url, self.code, self.sem_name, self.year
         )
         self.assertTrue(SharedCourseView.objects.all())
-    
+
 
 class SchoolListTest(APITestCase):
     school = "uoft"
@@ -818,12 +901,12 @@ class SchoolListTest(APITestCase):
         )
         areas2 = ["area2", "area3"]
         Course.objects.create(
-            school = self.school,
-            code = "SEA102",
-            name = "Test Case 2",
-            areas = areas2,
-            department = self.departments,
-            level = self.level
+            school=self.school,
+            code="SEA102",
+            name="Test Case 2",
+            areas=areas2,
+            department=self.departments,
+            level=self.level,
         )
         semester, _ = Semester.objects.update_or_create(name="Fall", year="2017")
         DataUpdate.objects.create(
@@ -851,12 +934,18 @@ class SchoolListTest(APITestCase):
         self.assertIsNone(school_info["last_updated"])
 
     def test_get_distinct_areas(self):
-        area_groups = list(Course.objects.filter(school = self.school).exclude(areas__exact=[]).values_list("areas", flat=True).distinct())
+        area_groups = list(
+            Course.objects.filter(school=self.school)
+            .exclude(areas__exact=[])
+            .values_list("areas", flat=True)
+            .distinct()
+        )
         distinct_areas = get_distinct_areas(area_groups)
         self.assertTrue("area1" in distinct_areas)
         self.assertTrue("area2" in distinct_areas)
         self.assertTrue("area3" in distinct_areas)
         self.assertEquals(len(distinct_areas), 3)
+
 
 class UrlsTest(UrlTestCase):
     """Test courses/urls.py"""
