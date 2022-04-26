@@ -12,7 +12,7 @@
 
 from attr import Attribute
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.urls import resolve
 from django.forms.models import model_to_dict
 from rest_framework import status
@@ -35,6 +35,9 @@ from helpers.test.test_cases import UrlTestCase
 from timetable.serializers import EventSerializer
 from student.serializers import StudentSerializer, get_student_dict
 from analytics.models import CalendarExport
+from student.views import UserView, UserTimetableView
+from rest_framework import serializers
+import rest_framework
 
 class SerializersTest(TestCase):
     """Test student/serializers.py"""
@@ -142,7 +145,14 @@ class UrlsTest(UrlTestCase):
 class UserViewTest(APITestCase):
     def setUp(self):
         self.user = create_user(username="jacob", password="top_secret")
-        self.student = create_student(user=self.user)
+        self.student = create_student(user=self.user, preferred_name="jac", major="STAD")
+        self.school = "jhu"
+        self.course1 = Course.objects.create(
+            id=2, school=self.school, code="SEM102", name="STAD"
+        )
+        self.course2 = Course.objects.create(
+            id=3, school=self.school, code="SEM103", name="STAD2"
+        )
         self.factory = APIRequestFactory()
 
     def test_profile_page(self):
@@ -150,10 +160,29 @@ class UserViewTest(APITestCase):
         response = self.client.get("/user/settings/")
         self.assertTemplateUsed(response, "profile.html")
 
+    def test_profile_page_context(self):
+        self.client.force_login(self.user)
+        response = self.client.get("/user/settings/")
+        self.assertEquals(response.context["major"], "STAD")
+        self.assertEquals(response.context["student"], self.student)
+
     def test_profile_page_not_signed_in(self):
         self.client.logout()
         response = self.client.get("/user/settings/")
         self.assertRedirects(response, "/signup/")
+
+    def test_add_reactions(self):
+        view = UserView()
+        context = {"total": 0}
+        reaction1 = Reaction.objects.create(student=self.student, title="FIRE")
+        reaction2 = Reaction.objects.create(student=self.student, title="CRAP")
+        reaction1.course.add(self.course1)
+        reaction2.course.add(self.course2)
+        view.add_reactions(context, self.student)
+        self.assertEquals(context["total"], 2)
+        self.assertEquals(context["CRAP"], 1)
+        self.assertEquals(context["FIRE"], 1)
+        
 
     def test_update_settings(self):
         new_settings = {"emails_enabled": True, "social_courses": True, "major": "CS"}
@@ -288,6 +317,37 @@ class UserTimetableViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         PersonalTimetable.objects.get(name="dupe tt")
 
+    def test_get_duplicate_m2m_fields(self):
+        testTimetable = PersonalTimetable.objects.create(
+            name="testTimetable", school="jhu", semester=self.sem, student=self.student
+        )
+        view = UserTimetableView()
+        course1 = Course.objects.create(id=10, school="jhu", code="SEM103", name="STAD")
+        section1 = Section.objects.create(
+            course=course1, semester=self.sem, meeting_section="L1"
+        )
+        course2 = Course.objects.create(id=11, school="jhu", code="SEM104", name="Algo")
+        section2 = Section.objects.create(
+            course=course2, semester=self.sem, meeting_section="L1"
+        )
+        PersonalEvent.objects.create(
+            timetable=testTimetable,
+            name="study session",
+            day='F',
+            time_start="08:50",
+            time_end="10:10",
+        )
+        testTimetable.courses.add(course1)
+        testTimetable.courses.add(course2)
+        testTimetable.sections.add(section1)
+        testTimetable.sections.add(section2)
+        courses, sections, events = view.get_duplicate_m2m_fields(testTimetable)
+        self.assertEquals(courses[0], course1)
+        self.assertEquals(courses[1], course2)
+        self.assertEquals(sections[0], section1)
+        self.assertEquals(sections[1], section2)
+        self.assertTrue(events)
+
     def test_rename_timetable(self):
         data = {
             "id": 10,
@@ -349,6 +409,113 @@ class UserTimetableViewTest(APITestCase):
         self.assertEqual(modified_timetable.has_conflict, False)
         self.assertEqual(modified_timetable.show_weekend, False)
 
+    def test_update_events(self):
+        testTimetable = PersonalTimetable.objects.create(
+            name="testTimetable", school="jhu", semester=self.sem, student=self.student
+        )
+        testTimetableModified = PersonalTimetable.objects.create(
+            name="newTimetable", school="jhu", semester=self.sem, student=self.student
+        )
+        
+        event1 = PersonalEvent.objects.create(
+            timetable=testTimetable,
+            name="study session",
+            day='F',
+            time_start="08:30",
+            time_end="10:35",
+            credits=0.0
+        )
+        event2 = PersonalEvent.objects.create(
+            timetable=testTimetable,
+            name="birthday",
+            day='S',
+            time_start="09:20",
+            time_end="10:30",
+            credits=0.0
+        )
+        event3 = PersonalEvent.objects.create(
+            timetable=testTimetable,
+            name="oose meeting",
+            day='M',
+            time_start="14:30",
+            time_end="16:40",
+            credits=0.5
+        )
+        self.assertEquals(len(PersonalEvent.objects.all()),3)
+        event1_serialized = EventSerializer(event1).data
+        event2_serialized = EventSerializer(event2).data
+        event3_serialized = EventSerializer(event3).data
+        events = [event1_serialized, event2_serialized, event3_serialized]
+        view = UserTimetableView()
+        view.update_events(testTimetableModified, events)
+        oldEvents = testTimetable.events.all()
+        newEvents = testTimetableModified.events.all()
+        self.assertEquals(len(oldEvents),0)
+        self.assertEquals(len(newEvents),3)
+
+    def test_validate_credits_not_divisible_by_point_five(self):
+        view = UserTimetableView()
+        testTimetable = PersonalTimetable.objects.create(
+            name="testTimetable", school="jhu", semester=self.sem, student=self.student
+        )
+        event1 = PersonalEvent.objects.create(
+            timetable=testTimetable,
+            name="study session",
+            day='F',
+            time_start="08:30",
+            time_end="10:35",
+            credits=0.3
+        )
+        event1_serialized = EventSerializer(event1).data
+        self.assertRaises(rest_framework.exceptions.ValidationError, view.validate_credits, event1_serialized)
+
+    def test_validate_credits_negative(self):
+        view = UserTimetableView()
+        testTimetable = PersonalTimetable.objects.create(
+            name="testTimetable", school="jhu", semester=self.sem, student=self.student
+        )
+        event1 = PersonalEvent.objects.create(
+            timetable=testTimetable,
+            name="study session",
+            day='F',
+            time_start="08:30",
+            time_end="10:35",
+            credits=-1.0
+        )
+        event1_serialized = EventSerializer(event1).data
+        self.assertRaises(rest_framework.exceptions.ValidationError, view.validate_credits, event1_serialized)
+
+    def test_validate_credits_too_large(self):
+        view = UserTimetableView()
+        testTimetable = PersonalTimetable.objects.create(
+            name="testTimetable", school="jhu", semester=self.sem, student=self.student
+        )
+        event1 = PersonalEvent.objects.create(
+            timetable=testTimetable,
+            name="study session",
+            day='F',
+            time_start="08:30",
+            time_end="10:35",
+            credits=21.0
+        )
+        event1_serialized = EventSerializer(event1).data
+        self.assertRaises(rest_framework.exceptions.ValidationError, view.validate_credits, event1_serialized)
+
+    def test_validate_credits_correct(self):
+        view = UserTimetableView()
+        testTimetable = PersonalTimetable.objects.create(
+            name="testTimetable", school="jhu", semester=self.sem, student=self.student
+        )
+        event1 = PersonalEvent.objects.create(
+            timetable=testTimetable,
+            name="study session",
+            day='F',
+            time_start="08:30",
+            time_end="10:35",
+            credits=2.0
+        )
+        event1_serialized = EventSerializer(event1).data
+        self.assertEquals(view.validate_credits(event1_serialized), 2.0)
 
 class ClassmateViewTest(APITestCase):
     def setUp(self):
