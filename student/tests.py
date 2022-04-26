@@ -12,6 +12,7 @@
 
 from attr import Attribute
 from django.contrib.auth.models import User
+from django.test import TestCase
 from django.urls import resolve
 from django.forms.models import model_to_dict
 from rest_framework import status
@@ -32,7 +33,70 @@ from helpers.test.utils import (
 )
 from helpers.test.test_cases import UrlTestCase
 from timetable.serializers import EventSerializer
+from student.serializers import StudentSerializer, get_student_dict
+from analytics.models import CalendarExport
 
+class SerializersTest(TestCase):
+    """Test student/serializers.py"""
+    def setUp(self):
+        self.user = create_user(username="thomas", password="opensesame")
+        self.preferred_name = "Thomas"
+        self.class_year = 2022
+        self.major = "Physics"
+        self.jhed = "jhed1"
+        self.school = "jhu"
+        self.student = create_student(user=self.user, preferred_name = self.preferred_name, class_year = self.class_year, major = self.major, school = self.school, jhed = self.jhed)
+        self.semester = Semester.objects.create(name="Spring", year="2022")
+    
+    def test_get_student_dict_exists(self):
+        user_dict = get_student_dict(self.school, self.student, self.semester)
+        self.assertTrue(user_dict["isLoggedIn"])
+
+    def test_get_student_dict_not_exist(self):
+        user_dict = get_student_dict(self.school, None, self.semester)
+        self.assertFalse(user_dict["isLoggedIn"])
+
+    def test_student_serializer(self):
+        serialized = StudentSerializer(
+            self.student,
+        ).data
+        self.assertEquals(serialized["userFirstName"], "")
+        self.assertEquals(serialized["userLastName"], "")
+        self.assertEquals(serialized["preferred_name"], self.preferred_name)
+        self.assertEquals(serialized["major"], self.major)
+
+def test_log_ical_export_student_does_not_exist(self):
+    factory = APIRequestFactory()
+    user1 = create_user(username="Alice", password="security")
+    url =  "/user/log_ical/"
+    request = factory.get(url, {}, format='json')
+    response = get_auth_response(
+        request, user1, url,
+    )
+    self.assertEquals(len(CalendarExport.objects.all()), 1)
+    self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+def test_log_ical_export_student_exists(self):
+    factory = APIRequestFactory()
+    user1 = create_user(username="Alice", password="security")
+    create_student(user=user1)
+    url =  "/user/log_ical/"
+    request = factory.get(url, {}, format='json')
+    response = get_auth_response(
+        request, user1, url,
+    )
+    self.assertEquals(len(CalendarExport.objects.all()), 1)
+    self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+def test_accept_tos(self):
+    factory = APIRequestFactory()
+    user1 = create_user(username="Alice", password="security")
+    url =  "/tos/accept/"
+    request = factory.get(url, {}, format='json')
+    response = get_auth_response(
+        request, user1, url,
+    )
+    self.assertEquals(response.status_code, 204)
 
 class UrlsTest(UrlTestCase):
     """Test student/urls.py"""
