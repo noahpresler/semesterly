@@ -943,6 +943,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 "//div[contains(@class, 'slot') and contains(@class, 'preview')]",
             ),
         )
+        self.assert_loader_completes()
 
     def edit_custom_event(
         self,

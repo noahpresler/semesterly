@@ -214,3 +214,9 @@ class EndToEndTest(SeleniumTestCase):
             self.edit_custom_event("New Custom Event", **event)
             self.assert_custom_event_exists(**event)
             self.assert_ptt_const_across_refresh()
+        with self.description("advanced search basic query executes"):
+            self.change_to_current_term()
+            sem = Semester.objects.get(year=2017, name="Fall")
+            self.open_and_query_adv_search("ca", n_results=4)
+            self.select_nth_adv_search_result(1, sem)
+            self.select_nth_adv_search_result(2, sem)
