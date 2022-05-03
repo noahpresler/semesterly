@@ -242,6 +242,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         )
         search_box.clear()
         search_box.send_keys(query)
+        try:
+            self.find((By.CLASS_NAME, "results-loading-gif"))
+        except RuntimeError:
+            pass  # wait for debounce, but ignore if didn't happen
         self.assert_invisibility((By.CLASS_NAME, "results-loading-gif"))
 
     def assert_loader_completes(self):
@@ -332,9 +336,12 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             self.find((By.CLASS_NAME, "master-slot"), get_all=True)
         )
         if from_slot:
-            if n_master_slots_before > 0:
+            if n_master_slots_before > 1:
                 raise RuntimeError("Cannot remove via slot button unless n_courses = 1")
+            if n_master_slots_before == 0:
+                raise RuntimeError("Cannot remove via slot button if no courses")
             slot = self.find((By.CLASS_NAME, "slot"), get_all=True)[0]
+            ActionChains(self.driver).move_to_element(slot).pause(1).perform()
             del_button = self.find(
                 (By.CLASS_NAME, "fa-times"), root=slot, clickable=True
             )
@@ -411,7 +418,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def open_course_modal_from_slot(self, course_idx):
         """Opens the course modal from the nth slot"""
-        slot = self.find((By.CLASS_NAME, "slot"), clickable=True)
+        slot = self.find((By.CLASS_NAME, "master-slot"), get_all=True)[course_idx]
         slot.click()
 
     def close_course_modal(self):

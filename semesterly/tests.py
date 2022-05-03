@@ -19,6 +19,7 @@ class EndToEndTest(SeleniumTestCase):
 
     fixtures = ["jhu_fall_sample.json", "jhu_spring_sample.json"]
 
+    @unittest.skip("temp")
     def test_logged_out_flow(self):
         self.clear_tutorial()
         with self.description("search, add, then remove course"):
@@ -105,7 +106,7 @@ class EndToEndTest(SeleniumTestCase):
             )
             self.assert_ptt_const_across_refresh()
             self.assert_friend_image_found(friend)
-            self.open_course_modal_from_slot(0)
+            self.open_course_modal_from_slot(1)
             self.assert_friend_in_modal(friend)
             self.close_course_modal()
         ptt = self.ptt_to_tuple()
@@ -116,6 +117,7 @@ class EndToEndTest(SeleniumTestCase):
             self.login_via_fb(email="e@ma.il", password="password")
             self.assert_ptt_equals(ptt)
 
+    @unittest.skip("temp")
     def test_logged_in_via_google_flow(self):
         with self.description("setup and clear tutorial"):
             self.clear_tutorial()
@@ -137,19 +139,41 @@ class EndToEndTest(SeleniumTestCase):
             self.assert_ptt_equals(ptt)
 
     def common_logged_in_tests(self):
-        with self.description("search, add, change personal timetable name and save"):
+        with self.description("search and add courses"):
             self.search_course("AS.110.105", 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
+            self.search_course("AS.110.106", 1)
+            self.add_course(0, n_slots=8, n_master_slots=2)
+            self.search_course("AS.110.415", 1)
+            self.add_course(0, n_slots=11, n_master_slots=3)
+            self.search_course("AS.110.795", 1)
+            self.add_course(0, n_slots=12, n_master_slots=4)
+            self.assert_ptt_const_across_refresh()
+        with self.description("change personal timetable name"):
             self.change_ptt_name("Testing Timetable")
             self.assert_ptt_const_across_refresh()
-        with self.description("add to personal timetable, share, save"):
+        with self.description("remove courses"):
+            self.remove_course(3)
+            self.remove_course(2)
+            self.remove_course(1)
+            self.remove_course(0, from_slot=True)
+            self.assert_ptt_const_across_refresh()
+        with self.description("add and remove from course modal"):
+            self.search_course("AS.110.105", 1)
+            self.open_course_modal_from_search(0)
+            course1 = self.add_course_from_course_modal(n_slots=4, n_master_slots=1)
             self.search_course("AS.110.106", 1)
             self.open_course_modal_from_search(0)
-            self.share_timetable(
-                [self.add_course_from_course_modal(n_slots=8, n_master_slots=2)]
-            )
-            testing_ptt = self.ptt_to_tuple()
+            course2 = self.add_course_from_course_modal(n_slots=8, n_master_slots=2)
+            self.search_course("AS.110.415", 1)
+            self.open_course_modal_from_search(0)
+            self.add_course_from_course_modal(n_slots=11, n_master_slots=3)
+            self.open_course_modal_from_slot(2)
+            self.remove_course_from_course_modal(n_slots_expected=8)
+        with self.description("share timetable"):
+            self.share_timetable([course1, course2])
             self.assert_ptt_const_across_refresh()
+        testing_ptt = self.ptt_to_tuple()
         with self.description("create new personal timetable, validate on reload"):
             self.create_ptt("End To End Testing!")
             self.search_course("AS.110.105", 1)
