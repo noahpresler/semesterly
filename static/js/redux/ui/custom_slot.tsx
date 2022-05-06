@@ -187,7 +187,7 @@ const CustomSlot = (props: CustomSlotProps) => {
   const dispatch = useAppDispatch();
   const customSlot = (
     <div
-      className={"fc-time-grid-event fc-event slot"}
+      className={`fc-time-grid-event fc-event slot ${props.preview ? "preview" : ""}`}
       style={getSlotStyles()}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

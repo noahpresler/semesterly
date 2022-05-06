@@ -25,6 +25,8 @@ const TermsOfServiceModal = (props) => {
   useEffect(() => {
     if (modal && props.isVisible) {
       modal.show();
+    } else if (modal && !props.isVisible) {
+      modal.hide();
     }
   }, [props.isVisible]);
 
@@ -115,7 +117,6 @@ const TermsOfServiceModal = (props) => {
           className="accept-tos-btn"
           onClick={() => {
             props.acceptTOS();
-            modal.hide();
           }}
         >
           <i className="fa fa-check" />
