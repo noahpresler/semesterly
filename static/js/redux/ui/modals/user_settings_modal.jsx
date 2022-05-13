@@ -20,6 +20,7 @@ import classnames from "classnames";
 import { WaveModal } from "boron-15";
 import majors from "../../constants/majors";
 import { isIncomplete as TOSIncomplete } from "../../util";
+import { isUserInfoIncomplete as areUserSettingsIncomplete } from "../../state/slices";
 import { getIsUserInfoIncomplete } from "../../state";
 
 const UserSettingsModal = () => {
@@ -55,13 +56,12 @@ const UserSettingsModal = () => {
 
   const [showDelete, setShowDelete] = useState(false);
   const [fbSwitchAlertText, setFbSwitchAlertText] = useState(null);
+  const [userSettings, setUserSettings] = useState({ ...userInfo });
 
   const isIncomplete = (prop) => prop === undefined || prop === "";
 
   const changeForm = (obj = {}) => {
-    const userSettings = { ...userInfo, ...obj };
-    changeUserInfo(userSettings);
-    saveSettings();
+    setUserSettings({ ...userSettings, ...obj });
   };
 
   const handleChangefbSettings = (e) => {
@@ -123,7 +123,9 @@ const UserSettingsModal = () => {
     userInfo.isLoggedIn && !hideOverrided && (showOverrided || isUserInfoIncomplete);
 
   const hide = () => {
-    if (!isUserInfoIncomplete) {
+    changeUserInfo(userSettings);
+    saveSettings();
+    if (!areUserSettingsIncomplete(userSettings)) {
       modal.current.hide();
       setUserSettingsModalHidden();
       overrideSettingsShow(false);
@@ -142,8 +144,7 @@ const UserSettingsModal = () => {
         social_offerings: false,
         social_all: false,
       };
-      const userSettings = Object.assign({}, userInfo, newUserSettings);
-      changeUserInfo(userSettings);
+      setUserSettings(Object.assign({}, userInfo, newUserSettings));
     }
   }, []);
 
@@ -164,14 +165,12 @@ const UserSettingsModal = () => {
   }, [userInfo.isLoggedIn, hideOverrided, showOverrided, isUserInfoIncomplete]);
 
   useEffect(() => {
-    const userSettings = {
-      ...userInfo,
+    setUserSettings({
+      ...userSettings,
       social_offerings: fbSettings.shareSectionsWithFriends,
       social_courses: fbSettings.shareClassesWithFriends,
       social_all: fbSettings.findNewFriends,
-    };
-    changeUserInfo(userSettings);
-    saveSettings();
+    });
   }, [fbSettings]);
 
   const tos = isSigningUp ? (
@@ -182,15 +181,11 @@ const UserSettingsModal = () => {
           id="tos-agreed-input"
           className="switch-input"
           type="checkbox"
-          checked={!TOSIncomplete(userInfo.timeAcceptedTos)}
-          disabled={!TOSIncomplete(userInfo.timeAcceptedTos)}
+          checked={!TOSIncomplete(userSettings.timeAcceptedTos)}
+          disabled={!TOSIncomplete(userSettings.timeAcceptedTos)}
           onChange={() => {
             acceptTOS();
-            changeUserInfo(
-              Object.assign({}, userInfo, {
-                timeAcceptedTos: String(new Date()),
-              })
-            );
+            setUserSettings({ ...userSettings, timeAcceptedTos: String(new Date()) });
           }}
         />
         <span className="switch-label" data-on="ACCEPTED" data-off="CLICK TO ACCEPT" />
@@ -369,7 +364,7 @@ const UserSettingsModal = () => {
             <h3>What&#39;s your major?</h3>
             <Select
               name="form-field-name"
-              value={userInfo.major}
+              value={userSettings.major}
               options={majors}
               searchable
               onChange={changeMajor}
@@ -379,7 +374,7 @@ const UserSettingsModal = () => {
             <h3>What&#39;s your graduating class year?</h3>
             <Select
               name="form-field-name"
-              value={userInfo.class_year}
+              value={userSettings.class_year}
               options={[
                 { value: 2021, label: 2021 },
                 { value: 2022, label: 2022 },
@@ -394,7 +389,6 @@ const UserSettingsModal = () => {
             />
           </div>
           {preferences}
-          {/* { !state.isSigningUp ? notifications : null } */}
           {fbUpsell}
           {tos}
           {!isSigningUp ? deleteDropdown : null}

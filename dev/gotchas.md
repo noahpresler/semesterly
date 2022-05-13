@@ -6,6 +6,10 @@
   number in the HTTPS link. You might also have to click past `Your connection in not
   private` by going to `Advanced` and then `Proceed to jhu.sem.ly (unsafe)`.
 
+* If your Docker container keeps running into issues with dependencies, this likely
+  means that we've updated a dependency, but your container was built before this change
+  was made. You can fix this with `docker-compose up --build`.
+
 * `ImmatureSignatureError` - check if your timezone is correct with `date`. You might
   need to reset it with `sudo hwclock -s`.
 

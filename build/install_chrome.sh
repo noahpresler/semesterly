@@ -5,18 +5,10 @@
 
 export DEBIAN_FRONTEND=noninteractive
 apt update
-apt install wget unzip
+apt install wget
 
 cd /tmp
-# Please note chrome and chromedriver major versions need to match - update both when updating
-wget -O google-chrome-stable.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_89.0.4389.82-1_amd64.deb
-wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+apt install ./google-chrome-stable_current_amd64.deb
+rm google-chrome-stable_current_amd64.deb
 
-apt install -yq ./google-chrome-stable.deb
-
-unzip chromedriver_linux64.zip
-mv chromedriver /usr/bin/chromedriver
-chown root:root /usr/bin/chromedriver
-chmod +x /usr/bin/chromedriver
-
-rm -rf google-chrome-stable.deb chromedriver_linux64.zip
