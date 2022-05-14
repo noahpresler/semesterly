@@ -218,3 +218,4 @@ class EndToEndTest(SeleniumTestCase):
             self.open_and_query_adv_search("ca", n_results=4)
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
+            self.close_adv_search()

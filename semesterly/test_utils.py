@@ -625,6 +625,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         search.send_keys(query)
         if n_results:
             self.assert_n_elements_found((By.CLASS_NAME, "exp-s-result"), n_results)
+    
+    def close_adv_search(self):
+        """Closes the advanced search modal"""
+        self.find((By.CLASS_NAME, "fa-times"), clickable=True).click()
 
     def login_via_fb(self, email, password):
         """Login user via fb by detecting the Continue with Facebook button in the
