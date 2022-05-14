@@ -315,6 +315,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.assert_slot_presence(n_slots, n_master_slots)
         self.click_off()
 
+    def assert_visibility(self, locator, root=None):
+        self.assert_n_elements_found(locator, 1, root=root)
+
     def assert_n_elements_found(self, locator, n_elements, root=None):
         """Asserts that n_elements are found by the provided locator"""
         if n_elements == 0:
@@ -382,6 +385,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             by=By.CLASS_NAME, value="search-course"
         )[course_idx]
         chosen_course.click()
+        self.assert_visibility((By.CLASS_NAME, "course-modal"))
 
     def validate_course_modal(self):
         """Validates the course modal displays proper course data"""
@@ -419,7 +423,11 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def open_course_modal_from_slot(self, course_idx):
         """Opens the course modal from the nth slot"""
         slot = self.find((By.CLASS_NAME, "master-slot"), get_all=True)[course_idx]
-        slot.click()
+        # For some reason, it was always clicking the share link instead of the slot
+        ActionChains(self.driver).move_to_element(slot).move_by_offset(
+            0, -10
+        ).click().perform()
+        self.assert_visibility((By.CLASS_NAME, "course-modal"))
 
     def close_course_modal(self):
         """Closes the course modal using the (x) button"""
@@ -625,7 +633,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         search.send_keys(query)
         if n_results:
             self.assert_n_elements_found((By.CLASS_NAME, "exp-s-result"), n_results)
-    
+
     def close_adv_search(self):
         """Closes the advanced search modal"""
         self.find((By.CLASS_NAME, "fa-times"), clickable=True).click()
