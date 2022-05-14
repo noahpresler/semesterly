@@ -722,14 +722,14 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         # Assert welcome modal is open
         self.find((By.CLASS_NAME, "welcome-modal"))
         major_select, year_select = self.find(
-            (By.XPATH, "//div[contains(@class,'Select-input')]//input"),
+            (By.XPATH, "//div[contains(@class,'select-field')]//input"),
             get_all=True,
             hidden=True,
         )
         major_select.send_keys(major)
-        major_select.send_keys(Keys.TAB)
+        self.find((By.XPATH, f"//div[contains(text(), '{major}')]")).click()
         year_select.send_keys(class_year)
-        year_select.send_keys(Keys.TAB)
+        self.find((By.XPATH, f"//div[contains(text(), '{class_year}')]")).click()
         self.find(
             (
                 By.XPATH,
