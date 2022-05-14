@@ -59,11 +59,9 @@ const userInfoSlice = createSlice({
       state.overrideHide = action.payload;
     },
     changeUserInfo: (state, action: PayloadAction<any>) => {
-      const changeData = action.payload;
-      changeData.social_courses = changeData.social_offerings
-        ? true
-        : changeData.social_courses;
-      state.data = changeData;
+      state.data = action.payload;
+      state.data.social_courses =
+        action.payload.social_offerings || action.payload.social_courses;
     },
     requestSaveUserInfo: (state) => {
       state.saving = true;
