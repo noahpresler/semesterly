@@ -786,7 +786,17 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         """Gets elements using self.get and represents them as text"""
         try:
             eles = self.find(locator, get_all=True)
-            return [s.text for s in eles]
+            elements = [s.text for s in eles if s.text]
+            # Remove "Unlock this section" from text if present
+            return list(
+                map(
+                    lambda s: "\n".join(s.split("\n")[1:])
+                    if s.startswith("Unlock this section")
+                    else s,
+                    elements,
+                )
+            )
+
         except RuntimeError:
             return []
 
