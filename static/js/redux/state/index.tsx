@@ -146,6 +146,6 @@ export const getDenormAdvancedSearchResults = (state: RootState) =>
 
 // modal selectors
 export const getIsUserInfoIncomplete = (state: RootState) =>
-  isUserInfoIncomplete(state.userInfo);
+  isUserInfoIncomplete(state.userInfo.data);
 
 export default store;

@@ -1,8 +1,22 @@
 [run]
 source =
     ./timetable
-    ./analytics
+    ./courses
     ./student
 
+branch = True
+
 include =
-    */views.py
+    timetable/views.py
+    timetable/serializers.py
+    courses/views.py
+    courses/serializers.py
+    student/views.py
+    student/serializers.py
+
+[report]
+show_missing = True
+# skip_covered = True
+
+[html]
+title = htmlReport
