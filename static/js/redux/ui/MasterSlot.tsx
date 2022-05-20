@@ -21,6 +21,7 @@ import Clipboard from "clipboard";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import COLOUR_DATA from "../constants/colours";
 import { Classmate, DenormalizedCourse } from "../constants/commonTypes";
+import { useAppSelector } from "../hooks";
 
 type MasterSlotProps = {
   colourIndex: number;
@@ -40,6 +41,9 @@ type MasterSlotProps = {
 };
 
 const MasterSlot = (props: MasterSlotProps) => {
+  const isComparingTimetable = useAppSelector(
+    (state) => state.compareTimetable.isComparing
+  );
   const [shareLinkShown, setShareLinkShown] = useState(false);
 
   const updateColours = (colour: string) => {
@@ -49,6 +53,12 @@ const MasterSlot = (props: MasterSlotProps) => {
     }
     // update sibling slot colours (i.e. the slots for the same course)
     $(`.slot-${props.course.id}-${props.colourIndex}`).css("background-color", colour);
+    if (isComparingTimetable && props.colourIndex === 2) {
+      $(`.slot-${props.course.id}-${props.colourIndex}`).css(
+        "background-color",
+        colour
+      );
+    }
   };
 
   const onMasterSlotHover = () => {

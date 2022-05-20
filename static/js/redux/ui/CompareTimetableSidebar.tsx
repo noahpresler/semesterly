@@ -65,14 +65,26 @@ const CompareTimetableSideBar = () => {
   };
   const sectionsInBoth = getSectionsInBothTimetables();
 
-  const activeSlots = activeCourses.map((course) => {
-    const colorIndex = sectionsInBoth.indexOf(course.id) === -1 ? 0 : 2;
+  const commonCourses: DenormalizedCourse[] = [];
+  activeCourses.forEach((course) => {
+    if (sectionsInBoth.indexOf(course.id) !== -1) {
+      // course is in both timetables
+      commonCourses.push(course);
+    }
+  });
+  const commonSlots = commonCourses.map((course) => createMasterSlot(course, 2));
 
-    return createMasterSlot(course, colorIndex);
+  const activeSlots = activeCourses.map((course) => {
+    if (sectionsInBoth.indexOf(course.id) === -1) {
+      return createMasterSlot(course, 0);
+    }
+    return null;
   });
   const comparedSlots = comparedCourses.map((course) => {
-    const colorIndex = sectionsInBoth.indexOf(course.id) === -1 ? 1 : 2;
-    return createMasterSlot(course, colorIndex);
+    if (sectionsInBoth.indexOf(course.id) === -1) {
+      return createMasterSlot(course, 1);
+    }
+    return null;
   });
 
   return (
@@ -102,9 +114,15 @@ const CompareTimetableSideBar = () => {
         </div>
       </div>
       <div className="slots-comparison">
-        <div className="slots-list">{activeSlots}</div>
+        <div className="slots-list">
+          {commonSlots}
+          {activeSlots}
+        </div>
         <div className="slots-separator" />
-        <div className="slots-list">{comparedSlots}</div>
+        <div className="slots-list">
+          {commonSlots}
+          {comparedSlots}
+        </div>
       </div>
       <div
         onClick={() => dispatch(stopComparingTimetables())}
