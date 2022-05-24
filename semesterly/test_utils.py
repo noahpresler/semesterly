@@ -818,6 +818,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def create_ptt(self, name=None):
         """Create a personaltimetable with the provided name when provided"""
+        self.assert_invisibility((By.CLASS_NAME, "unsaved"))
         self.find(
             (
                 By.XPATH,
@@ -894,6 +895,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 "//input[contains(@class, 'timetable-name') and @value='%s']" % name,
             )
         )
+        self.find((By.CLASS_NAME, "timetable-drop-it-down")).click()
 
     def toggle_custom_event_mode(self):
         self.find((By.CLASS_NAME, "fa-pencil")).click()
@@ -1117,6 +1119,33 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             event_end_time,
             event_credits,
         )
+
+    def compare_timetable(self, timetable_name: str):
+        """Activates the compare timetable mode with a timetable of the given name.
+
+        Args:
+            timetable_name: Name of the timetable to compare to, must already exist.
+        
+        Pre-condition: 
+            The timetable dropdown is not clicked.
+        """
+        self.screenshot("before-dropdown")
+        self.find((By.CLASS_NAME, "timetable-drop-it-down")).click()
+        self.screenshot("after-dropdown")
+        row = self.find(
+            (
+                By.XPATH,
+                "//div[@class='tt-name' and contains(text(),'%s')]" % timetable_name,
+            )
+        )
+        self.find(
+            (By.CLASS_NAME, "fa-arrows-left-right"), root=row, clickable=True
+        ).click()
+        self.screenshot("compare-timetables")
+
+    def exit_compare_timetable(self):
+        """Exits the compare timetable mode (pre: already in compare timetable mode)"""
+        self.find((By.CLASS_NAME), "compare-timetable-exit").click()
 
 
 class url_matches_regex:
