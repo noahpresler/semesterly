@@ -1125,8 +1125,8 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
         Args:
             timetable_name: Name of the timetable to compare to, must already exist.
-        
-        Pre-condition: 
+
+        Pre-condition:
             The timetable dropdown is not clicked.
         """
         self.screenshot("before-dropdown")
