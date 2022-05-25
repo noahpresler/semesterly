@@ -176,11 +176,17 @@ class EndToEndTest(SeleniumTestCase):
             self.create_ptt("End To End Testing!")
             self.search_course("AS.110.105", 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
+            self.search_course("AS.110.415", 1)
+            self.add_course(0, n_slots=7, n_master_slots=2)
             e2e_ptt = self.ptt_to_tuple()
             self.assert_ptt_const_across_refresh()
         with self.description("Switch to original ptt and validate"):
             self.switch_to_ptt("Testing Timetable")
             self.assert_ptt_equals(testing_ptt)
+        with self.description("Compare timetables"):
+            self.compare_timetable("End To End Testing!")
+            self.assert_slot_presence(11, 3)
+            self.exit_compare_timetable()
         with self.description(
             "switch semester, create personal timetable, switch back"
         ):
