@@ -113,15 +113,12 @@ const CompareTimetableSideBar = () => {
           <AvgCourseRating avgRating={comparedTimetable.avg_rating} />
         </div>
       </div>
-      <div className="slots-comparison">
-        <div className="slots-list">
-          {commonSlots}
-          {activeSlots}
-        </div>
-        <div className="slots-separator" />
-        <div className="slots-list">
-          {commonSlots}
-          {comparedSlots}
+      <div className="slots-wrapper">
+        <div className="horizontal-bar">{commonSlots}</div>
+        <div className="slots-comparison">
+          <div className="slots-list">{activeSlots}</div>
+          <div className="slots-separator" />
+          <div className="slots-list">{comparedSlots}</div>
         </div>
       </div>
       <div

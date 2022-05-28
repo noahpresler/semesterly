@@ -20,14 +20,16 @@
   justify-content: space-around;
 }
 
+.horizontal-bar {
+  border-top: 2px solid rgba(196, 196, 196, 1);
+  padding-top: 5px;
+  margin: 0 10px;
+}
+
 .slots-comparison {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  border-top: 2px solid rgba(196, 196, 196, 1);
-  padding-top: 5px;
-  margin-top: 5px;
-  height: 80%;
 }
 
 .slots-list {
@@ -64,4 +66,8 @@
   width: 50%;
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.slots-wrapper {
+  min-height: 80%;
 }

@@ -191,7 +191,7 @@ class EndToEndTest(SeleniumTestCase):
             "switch semester, create personal timetable, switch back"
         ):
             self.change_term("Spring 2017")
-            self.create_ptt("Hope ders no bugs!")
+            self.create_ptt("Hope ders no bugs!", finish_saving=False)
             self.click_off()
             self.search_course("AS.110.106", 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
