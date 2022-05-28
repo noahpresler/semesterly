@@ -1145,7 +1145,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def exit_compare_timetable(self):
         """Exits the compare timetable mode (pre: already in compare timetable mode)"""
-        self.find((By.CLASS_NAME), "compare-timetable-exit").click()
+        self.find((By.CLASS_NAME, "compare-timetable-exit")).click()
 
 
 class url_matches_regex:
