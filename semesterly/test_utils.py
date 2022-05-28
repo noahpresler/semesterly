@@ -816,9 +816,15 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         """Gets the personal timetable name"""
         return self.find((By.CLASS_NAME, "timetable-name")).get_property("value")
 
-    def create_ptt(self, name=None):
-        """Create a personaltimetable with the provided name when provided"""
-        self.assert_invisibility((By.CLASS_NAME, "unsaved"))
+    def create_ptt(self, name: str = "", finish_saving: bool = True):
+        """Create a personaltimetable with the provided name when provided
+
+        Args:
+            name: Name of the personal timetable
+            finish_saving: Whether to wait until the personal timetable is saved
+        """
+        if finish_saving:
+            self.assert_invisibility((By.CLASS_NAME, "unsaved"))
         self.find(
             (
                 By.XPATH,
@@ -1129,9 +1135,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         Pre-condition:
             The timetable dropdown is not clicked.
         """
-        self.screenshot("before-dropdown")
         self.find((By.CLASS_NAME, "timetable-drop-it-down")).click()
-        self.screenshot("after-dropdown")
         row = self.find(
             (
                 By.XPATH,
@@ -1141,7 +1145,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.find(
             (By.CLASS_NAME, "fa-arrows-left-right"), root=row, clickable=True
         ).click()
-        self.screenshot("compare-timetables")
 
     def exit_compare_timetable(self):
         """Exits the compare timetable mode (pre: already in compare timetable mode)"""
