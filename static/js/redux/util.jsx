@@ -183,3 +183,89 @@ export const slotToDisplayOffering = (course, section, offering, colourId) => ({
   custom: false,
   meeting_section: section.meeting_section,
 });
+
+// gradient utils
+const componentToHex = (c) => {
+  const hex = c.toString(16);
+  return hex.length === 1 ? `0${hex}` : hex;
+};
+
+export const rgbToHex = ({ r, g, b }) =>
+  `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}`;
+
+export const hexToRgb = (hex) => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+};
+
+export const subtractRgb = (end, start) => ({
+  r: end.r - start.r,
+  g: end.g - start.g,
+  b: end.b - start.b,
+});
+
+export const addRgb = (op1, op2) => ({
+  r: op1.r + op2.r,
+  g: op1.g + op2.g,
+  b: op1.b + op2.b,
+});
+
+// Change this to raw division with floats
+export const divideRgb = (color, scale) => ({
+  r: color.r / scale,
+  g: color.g / scale,
+  b: color.b / scale,
+});
+
+export const multRgb = (color, scale) => ({
+  r: color.r * scale,
+  g: color.g * scale,
+  b: color.b * scale,
+});
+
+// Add this to round only when necessary
+export const roundRgb = (color) => ({
+  r: Math.round(color.r),
+  g: Math.round(color.g),
+  b: Math.round(color.b),
+});
+
+export const isRgbValid = (color) => {
+  const invalid = Object.keys(color).some((key) => color[key] > 255 || color[key] < 0);
+  return !invalid;
+};
+
+export const equalRgb = (a, b) => a.r === b.r && a.g === b.g && a.b === b.b;
+
+export const buildGradient = (start, end, rng) => {
+  if (rng < 2) {
+    return [start];
+    // OR: throw new Error("Gradient should have at least two steps");
+  }
+  const b = hexToRgb(start); // y-intercept
+  const diff = subtractRgb(hexToRgb(end), b);
+  // Change this to range - 1 so that you get both start and end as values
+  // The caveat here is that range has to be > 1 now
+  // (which means you need two colors for a gradient, which is expected anyways)
+  const step = divideRgb(diff, rng - 1);
+  const gradient = [];
+  for (let i = 0; i < rng; i += 1) {
+    const next = gradient.length > 0 ? addRgb(gradient[gradient.length - 1], step) : b;
+    gradient.push(next);
+  }
+  // Only round when converting to Hex
+  return gradient
+    .map((color) => rgbToHex(roundRgb(color)))
+    .map((color) => ({
+      background: color,
+      highlight: color, // TODO: replace with highlight color
+      border: color, // TODO: replace with border color
+      font: "#222",
+    }));
+};
