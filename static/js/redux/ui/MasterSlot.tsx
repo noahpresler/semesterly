@@ -19,8 +19,7 @@ import ClickOutHandler from "react-onclickout";
 import uniq from "lodash/uniq";
 import Clipboard from "clipboard";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import COLOUR_DATA from "../constants/colours";
-import { Classmate, DenormalizedCourse } from "../constants/commonTypes";
+import { Classmate, DenormalizedCourse, SlotColorData } from "../constants/commonTypes";
 import { useAppSelector } from "../hooks";
 
 type MasterSlotProps = {
@@ -38,6 +37,7 @@ type MasterSlotProps = {
   fetchCourseInfo: MouseEventHandler<HTMLDivElement>;
   removeCourse?: Function;
   getShareLink: Function;
+  colorData: SlotColorData[];
 };
 
 const MasterSlot = (props: MasterSlotProps) => {
@@ -62,10 +62,10 @@ const MasterSlot = (props: MasterSlotProps) => {
   };
 
   const onMasterSlotHover = () => {
-    updateColours(COLOUR_DATA[props.colourIndex].highlight);
+    updateColours(props.colorData[props.colourIndex].highlight);
   };
   const onMasterSlotUnhover = () => {
-    updateColours(COLOUR_DATA[props.colourIndex].background);
+    updateColours(props.colorData[props.colourIndex].background);
   };
   const stopPropagation = (callback: Function, event: MouseEvent) => {
     event.stopPropagation();
@@ -150,7 +150,7 @@ const MasterSlot = (props: MasterSlotProps) => {
         waitlistOnlyFlag = (
           <span
             className="ms-flag"
-            style={{ backgroundColor: COLOUR_DATA[props.colourIndex].border }}
+            style={{ backgroundColor: props.colorData[props.colourIndex].border }}
           >
             {flagValue}
           </span>
@@ -163,12 +163,12 @@ const MasterSlot = (props: MasterSlotProps) => {
       className={masterSlotClass}
       onMouseEnter={onMasterSlotHover}
       onMouseLeave={onMasterSlotUnhover}
-      style={{ backgroundColor: COLOUR_DATA[props.colourIndex].background }}
+      style={{ backgroundColor: props.colorData[props.colourIndex].background }}
       onClick={props.fetchCourseInfo}
     >
       <div
         className="slot-bar"
-        style={{ backgroundColor: COLOUR_DATA[props.colourIndex].border }}
+        style={{ backgroundColor: props.colorData[props.colourIndex].border }}
       />
       <div className="master-slot-content">
         <h3>

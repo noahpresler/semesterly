@@ -41,6 +41,7 @@ import { togglePeerModal } from "../state/slices/peerModalSlice";
 import { Timetable } from "../constants/commonTypes";
 import { startComparingTimetables } from "../state/slices/compareTimetableSlice";
 import AvgCourseRating from "./AvgCourseRating";
+import COLOUR_DATA from "../constants/colours";
 
 const SideBar = () => {
   const dispatch = useAppDispatch();
@@ -155,6 +156,7 @@ const SideBar = () => {
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
             getShareLink={getShareLink}
+            colorData={COLOUR_DATA}
           />
         );
       })
@@ -175,6 +177,7 @@ const SideBar = () => {
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveOptionalCourse(course))}
             getShareLink={getShareLink}
+            colorData={COLOUR_DATA}
           />
         );
       })
