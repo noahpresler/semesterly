@@ -1,11 +1,15 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { fetchCourseInfo } from "../actions";
-import { DenormalizedCourse, Timetable } from "../constants/commonTypes";
+import COLOUR_DATA from "../constants/colours";
+import { DenormalizedCourse, SlotColorData, Timetable } from "../constants/commonTypes";
 import { getCourseShareLink } from "../constants/endpoints";
 import { useAppSelector } from "../hooks";
 import { getCoursesFromSlots, getCurrentSemester } from "../state";
-import { stopComparingTimetables } from "../state/slices/compareTimetableSlice";
+import {
+  selectGradient,
+  stopComparingTimetables,
+} from "../state/slices/compareTimetableSlice";
 import AvgCourseRating from "./AvgCourseRating";
 import CreditTicker from "./CreditTicker";
 import MasterSlot from "./MasterSlot";
@@ -26,12 +30,18 @@ const CompareTimetableSideBar = () => {
     (state) => state.compareTimetable.comparedTimetable
   );
 
+  const gradient = useAppSelector(selectGradient);
+
   const courseToClassmates = useAppSelector(
     (state) => state.classmates.courseToClassmates
   );
   const semester = useAppSelector(getCurrentSemester);
 
-  const createMasterSlot = (course: DenormalizedCourse, colourIndex: number) => {
+  const createMasterSlot = (
+    course: DenormalizedCourse,
+    colourIndex: number,
+    colorData: SlotColorData[]
+  ) => {
     const professors = course.sections.map((section) => section.instructors);
     return (
       <MasterSlot
@@ -42,6 +52,7 @@ const CompareTimetableSideBar = () => {
         course={course}
         fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
         getShareLink={(courseCode: string) => getCourseShareLink(courseCode, semester)}
+        colorData={colorData}
         onTimetable
         hideCloseButton
       />
@@ -72,17 +83,19 @@ const CompareTimetableSideBar = () => {
       commonCourses.push(course);
     }
   });
-  const commonSlots = commonCourses.map((course) => createMasterSlot(course, 2));
+  const commonSlots = commonCourses.map((course) =>
+    createMasterSlot(course, 2, COLOUR_DATA)
+  );
 
-  const activeSlots = activeCourses.map((course) => {
+  const activeSlots = activeCourses.map((course, index) => {
     if (sectionsInBoth.indexOf(course.id) === -1) {
-      return createMasterSlot(course, 0);
+      return createMasterSlot(course, index, gradient.active);
     }
     return null;
   });
   const comparedSlots = comparedCourses.map((course) => {
     if (sectionsInBoth.indexOf(course.id) === -1) {
-      return createMasterSlot(course, 1);
+      return createMasterSlot(course, 1, gradient.compared);
     }
     return null;
   });
