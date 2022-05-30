@@ -14,14 +14,13 @@ GNU General Public License for more details.
 
 import React, { useState } from "react";
 import { DropTarget } from "react-dnd";
-import COLOUR_DATA from "../constants/colours";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
 import {
   onCustomSlotCreateDrag,
   onCustomSlotCreateDrop,
   onCustomSlotUpdateDrop,
 } from "./slotUtils";
-import { Classmate } from "../constants/commonTypes";
+import { Classmate, SlotColorData } from "../constants/commonTypes";
 
 const dragSlotTarget = {
   drop(props: any, monitor: any) {
@@ -76,6 +75,7 @@ type SlotProps = {
   connectCreateTarget: Function;
   connectDragTarget: Function;
   uses12HrTime: boolean;
+  colorData: SlotColorData[];
 };
 
 const Slot = (props: SlotProps) => {
@@ -88,12 +88,12 @@ const Slot = (props: SlotProps) => {
 
   const onSlotHover = () => {
     setHovered(true);
-    updateColours(COLOUR_DATA[props.colourId].highlight);
+    updateColours(props.colorData[props.colourId].highlight);
   };
 
   const onSlotUnhover = () => {
     setHovered(false);
-    updateColours(COLOUR_DATA[props.colourId].background);
+    updateColours(props.colorData[props.colourId].background);
   };
 
   const getSlotStyles = () => {
@@ -120,14 +120,14 @@ const Slot = (props: SlotProps) => {
     }
     return {
       "@media print": {
-        boxShadow: `inset 0 0 0 1000px ${COLOUR_DATA[props.colourId].background}`,
-        backgroundColor: `${COLOUR_DATA[props.colourId].background}`,
+        boxShadow: `inset 0 0 0 1000px ${props.colorData[props.colourId].background}`,
+        backgroundColor: `${props.colorData[props.colourId].background}`,
       },
       top,
       bottom: -bottom,
       right: "0%",
-      backgroundColor: COLOUR_DATA[props.colourId].background,
-      color: COLOUR_DATA[props.colourId].font,
+      backgroundColor: props.colorData[props.colourId].background,
+      color: props.colorData[props.colourId].font,
       width: `${slotWidthPercentage}%`,
       left: `${pushLeft}%`,
       zIndex: 10 * props.depth_level,
@@ -217,7 +217,7 @@ const Slot = (props: SlotProps) => {
         {shortCourseDatesPanel}
         <div
           className="slot-bar"
-          style={{ backgroundColor: COLOUR_DATA[props.colourId].border }}
+          style={{ backgroundColor: props.colorData[props.colourId].border }}
         />
         {removeButton}
         {lockButton}
