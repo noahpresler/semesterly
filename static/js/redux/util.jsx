@@ -13,6 +13,7 @@ GNU General Public License for more details.
 */
 
 import range from "lodash/range";
+import tinycolor from "tinycolor2";
 import COLOUR_DATA from "./constants/colours";
 
 export const browserSupportsLocalStorage = () => {
@@ -250,9 +251,16 @@ export const isRgbValid = (color) => {
 
 export const equalRgb = (a, b) => a.r === b.r && a.g === b.g && a.b === b.b;
 
+export const gradientToSlotColorData = (color) => ({
+  background: color,
+  highlight: color,
+  border: tinycolor(color).darken(20).toString(),
+  font: "#222",
+});
+
 export const buildGradient = (start, end, rng) => {
   if (rng < 2) {
-    return [start];
+    return [gradientToSlotColorData(start)];
     // OR: throw new Error("Gradient should have at least two steps");
   }
   const b = hexToRgb(start); // y-intercept
@@ -269,10 +277,5 @@ export const buildGradient = (start, end, rng) => {
   // Only round when converting to Hex
   return gradient
     .map((color) => rgbToHex(roundRgb(color)))
-    .map((color) => ({
-      background: color,
-      highlight: color, // TODO: replace with highlight color
-      border: color, // TODO: replace with border color
-      font: "#222",
-    }));
+    .map(gradientToSlotColorData);
 };
