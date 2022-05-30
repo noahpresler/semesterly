@@ -109,11 +109,9 @@ export const getSectionsInTwoTimetables = (tbA: Timetable, tbB: Timetable) => {
     return [];
   }
   tbA.slots.forEach((slot) => {
-    slot.offerings.forEach((offeringId) => {
-      if (isOfferingInTimetable(tbB, offeringId)) {
-        courseIds.push(slot.course);
-      }
-    });
+    if (slot.offerings.some((offeringId) => isOfferingInTimetable(tbB, offeringId))) {
+      courseIds.push(slot.course);
+    }
   });
   return courseIds;
 };

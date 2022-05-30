@@ -2,6 +2,7 @@ import { SlotColorData, Timetable } from "./../../constants/commonTypes";
 import { RootState } from "..";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { buildGradient } from "../../util";
+import { getSectionsInTwoTimetables } from "../../ui/slotUtils";
 
 interface CompareTimetableSliceState {
   isComparing: boolean;
@@ -10,6 +11,7 @@ interface CompareTimetableSliceState {
   gradient: {
     active: SlotColorData[];
     compared: SlotColorData[];
+    common: SlotColorData[];
   };
 }
 
@@ -20,6 +22,7 @@ const initialState: CompareTimetableSliceState = {
   gradient: {
     active: [],
     compared: [],
+    common: [],
   },
 };
 
@@ -37,18 +40,26 @@ const compareTimetableSlice = createSlice({
       state.isComparing = true;
       state.activeTimetable = action.payload.activeTimetable;
       state.comparedTimetable = action.payload.comparedTimetable;
+      const numCommon = getSectionsInTwoTimetables(
+        state.activeTimetable,
+        state.comparedTimetable
+      ).length;
+
       const activeGradient = buildGradient(
-        "#33bfff",
-        "#2c387e",
-        action.payload.activeTimetable.slots.length
+        "#fd7473",
+        "#f4cece",
+        state.activeTimetable.slots.length - numCommon
       );
       const comparedGradient = buildGradient(
-        "#33bfff",
-        "#2c387e",
-        action.payload.comparedTimetable.slots.length
+        "#5cccf2",
+        "#c2e6f2",
+        state.comparedTimetable.slots.length - numCommon
       );
+      const commonGradient = buildGradient("#36debb", "#d9f6f0", numCommon);
+
       state.gradient.active = activeGradient;
       state.gradient.compared = comparedGradient;
+      state.gradient.common = commonGradient;
     },
     stopComparingTimetables: (state) => initialState,
   },
