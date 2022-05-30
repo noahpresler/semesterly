@@ -13,7 +13,7 @@ import {
 import AvgCourseRating from "./AvgCourseRating";
 import CreditTicker from "./CreditTicker";
 import MasterSlot from "./MasterSlot";
-import { isOfferingInTimetable } from "./slotUtils";
+import { getSectionsInTwoTimetables } from "./slotUtils";
 
 const CompareTimetableSideBar = () => {
   const dispatch = useDispatch();
@@ -59,22 +59,7 @@ const CompareTimetableSideBar = () => {
     );
   };
 
-  /**
-   * returns an array of course ids of the courses that have the same section in both timetables
-   */
-  const getSectionsInBothTimetables = () => {
-    const courseIds: number[] = [];
-
-    activeTimetable.slots.forEach((slot) => {
-      slot.offerings.forEach((offeringId) => {
-        if (isOfferingInTimetable(comparedTimetable, offeringId)) {
-          courseIds.push(slot.course);
-        }
-      });
-    });
-    return courseIds;
-  };
-  const sectionsInBoth = getSectionsInBothTimetables();
+  const sectionsInBoth = getSectionsInTwoTimetables(activeTimetable, comparedTimetable);
 
   const commonCourses: DenormalizedCourse[] = [];
   activeCourses.forEach((course) => {

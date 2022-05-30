@@ -102,3 +102,18 @@ export const isOfferingInTimetable = (timetable: Timetable, offeringId: number) 
   });
   return inTimetable;
 };
+
+export const getSectionsInTwoTimetables = (tbA: Timetable, tbB: Timetable) => {
+  const courseIds: number[] = [];
+  if (!tbA || !tbB) {
+    return [];
+  }
+  tbA.slots.forEach((slot) => {
+    slot.offerings.forEach((offeringId) => {
+      if (isOfferingInTimetable(tbB, offeringId)) {
+        courseIds.push(slot.course);
+      }
+    });
+  });
+  return courseIds;
+};
