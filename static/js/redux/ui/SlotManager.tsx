@@ -26,7 +26,7 @@ import {
   getSectionsInTwoTimetables,
   isOfferingInTimetable,
 } from "./slotUtils";
-import { HoveredSlot, Offering, Timetable } from "../constants/commonTypes";
+import { HoveredSlot, Offering } from "../constants/commonTypes";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
   getActiveDenormTimetable,
@@ -187,8 +187,11 @@ const SlotManager = (props: { days: string[] }) => {
       offering.id
     );
     if (isOfferingInActiveTimetable && isOfferingInComparedTimetable) {
-      // return courseToColourIndex[courseId];
-      return [2, COLOUR_DATA];
+      const index = comparedTimetable.slots
+        .filter((course) => sectionsInBoth.indexOf(course.course) !== -1)
+        .map((slot) => slot.course)
+        .indexOf(courseId);
+      return [index, gradient.common];
     } else if (isOfferingInActiveTimetable) {
       const index = activeTimetable.slots
         .filter((course) => sectionsInBoth.indexOf(course.course) === -1)

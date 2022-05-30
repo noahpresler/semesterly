@@ -68,8 +68,8 @@ const CompareTimetableSideBar = () => {
       commonCourses.push(course);
     }
   });
-  const commonSlots = commonCourses.map((course) =>
-    createMasterSlot(course, 2, COLOUR_DATA)
+  const commonSlots = commonCourses.map((course, index) =>
+    createMasterSlot(course, index, gradient.common)
   );
 
   const activeSlots = activeCourses
