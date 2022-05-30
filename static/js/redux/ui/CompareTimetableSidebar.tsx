@@ -87,18 +87,12 @@ const CompareTimetableSideBar = () => {
     createMasterSlot(course, 2, COLOUR_DATA)
   );
 
-  const activeSlots = activeCourses.map((course, index) => {
-    if (sectionsInBoth.indexOf(course.id) === -1) {
-      return createMasterSlot(course, index, gradient.active);
-    }
-    return null;
-  });
-  const comparedSlots = comparedCourses.map((course) => {
-    if (sectionsInBoth.indexOf(course.id) === -1) {
-      return createMasterSlot(course, 1, gradient.compared);
-    }
-    return null;
-  });
+  const activeSlots = activeCourses
+    .filter((course) => sectionsInBoth.indexOf(course.id) === -1)
+    .map((course, index) => createMasterSlot(course, index, gradient.active));
+  const comparedSlots = comparedCourses
+    .filter((course) => sectionsInBoth.indexOf(course.id) === -1)
+    .map((course, index) => createMasterSlot(course, index, gradient.compared));
 
   return (
     <div className="side-bar-compare-timetable">

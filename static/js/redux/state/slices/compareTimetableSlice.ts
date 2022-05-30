@@ -1,7 +1,6 @@
-import { SlotColorData } from "./../../constants/commonTypes";
+import { SlotColorData, Timetable } from "./../../constants/commonTypes";
 import { RootState } from "..";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Timetable } from "../../constants/commonTypes";
 import { buildGradient } from "../../util";
 
 interface CompareTimetableSliceState {
