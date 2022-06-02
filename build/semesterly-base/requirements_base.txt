@@ -22,7 +22,7 @@ fuzzywuzzy==0.10.0
 google-api-python-client==1.6.1
 gunicorn==17.5
 hashids==1.1.0
-html5lib==0.999
+html5lib==0.99999999
 interruptingcow==0.6
 jsondiff==1.1.0
 jsonfield==2.0.1
