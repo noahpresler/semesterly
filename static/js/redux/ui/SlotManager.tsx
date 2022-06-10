@@ -187,7 +187,7 @@ const SlotManager = (props: { days: string[] }) => {
       offering.id
     );
     if (isOfferingInActiveTimetable && isOfferingInComparedTimetable) {
-      const index = comparedTimetable.slots
+      const index = activeTimetable.slots
         .filter((course) => sectionsInBoth.indexOf(course.course) !== -1)
         .map((slot) => slot.course)
         .indexOf(courseId);
