@@ -40,7 +40,8 @@ const CompareTimetableSideBar = () => {
   const createMasterSlot = (
     course: DenormalizedCourse,
     colourIndex: number,
-    colorData: SlotColorData[]
+    colorData: SlotColorData[],
+    sectionId: number
   ) => {
     const professors = course.sections.map((section) => section.instructors);
     return (
@@ -50,6 +51,7 @@ const CompareTimetableSideBar = () => {
         colourIndex={colourIndex}
         classmates={courseToClassmates[course.id]}
         course={course}
+        sectionId={sectionId}
         fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
         getShareLink={(courseCode: string) => getCourseShareLink(courseCode, semester)}
         colorData={colorData}
@@ -68,16 +70,29 @@ const CompareTimetableSideBar = () => {
       commonCourses.push(course);
     }
   });
-  const commonSlots = commonCourses.map((course, index) =>
-    createMasterSlot(course, index, gradient.common)
-  );
+  const commonSlots = commonCourses.map((course, index) => {
+    const sectionId = activeTimetable.slots.filter(
+      (slot) => slot.course === course.id
+    )[0].section;
+    return createMasterSlot(course, index, gradient.common, sectionId);
+  });
 
   const activeSlots = activeCourses
     .filter((course) => sectionsInBoth.indexOf(course.id) === -1)
-    .map((course, index) => createMasterSlot(course, index, gradient.active));
+    .map((course, index) => {
+      const sectionId = activeTimetable.slots.filter(
+        (slot) => slot.course === course.id
+      )[0].section;
+      return createMasterSlot(course, index, gradient.active, sectionId);
+    });
   const comparedSlots = comparedCourses
     .filter((course) => sectionsInBoth.indexOf(course.id) === -1)
-    .map((course, index) => createMasterSlot(course, index, gradient.compared));
+    .map((course, index) => {
+      const sectionId = comparedTimetable.slots.filter(
+        (slot) => slot.course === course.id
+      )[0].section;
+      return createMasterSlot(course, index, gradient.compared, sectionId);
+    });
 
   return (
     <div className="side-bar-compare-timetable">

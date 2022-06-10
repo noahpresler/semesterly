@@ -189,6 +189,7 @@ export const slotToDisplayOffering = (
   name: course.name,
   custom: false,
   meeting_section: section.meeting_section,
+  sectionId: section.id,
   colorData,
 });
 

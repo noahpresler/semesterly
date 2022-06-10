@@ -27,6 +27,7 @@ type MasterSlotProps = {
   inModal?: boolean;
   fakeFriends: number;
   course: DenormalizedCourse;
+  sectionId?: number;
   professors: string[];
   classmates: {
     current: Classmate[];
@@ -52,13 +53,7 @@ const MasterSlot = (props: MasterSlotProps) => {
       return;
     }
     // update sibling slot colours (i.e. the slots for the same course)
-    $(`.slot-${props.course.id}-${props.colourIndex}`).css("background-color", colour);
-    if (isComparingTimetable && props.colourIndex === 2) {
-      $(`.slot-${props.course.id}-${props.colourIndex}`).css(
-        "background-color",
-        colour
-      );
-    }
+    $(`.slot-${props.sectionId}-${props.colourIndex}`).css("background-color", colour);
   };
 
   const onMasterSlotHover = () => {
@@ -118,7 +113,7 @@ const MasterSlot = (props: MasterSlotProps) => {
       </div>,
     ].concat(friendCircles.slice(0, 3));
   }
-  let masterSlotClass = `master-slot slot-${props.course.id}-${props.colourIndex}`;
+  let masterSlotClass = `master-slot slot-${props.sectionId}-${props.colourIndex}`;
   const validProfs = props.professors ? uniq(props.professors.filter((p) => p)) : false;
   const prof =
     !validProfs || validProfs.length === 0 || validProfs[0] === ""
