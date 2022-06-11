@@ -145,9 +145,13 @@ const SideBar = () => {
             ? courseToColourIndex[course.id]
             : getNextAvailableColour(courseToColourIndex);
         const professors = course.sections.map((section) => section.instructors);
+        const sectionId = timetable.slots.find(
+          (slot) => slot.course === course.id
+        ).section;
         return (
           <MasterSlot
             key={course.id}
+            sectionId={sectionId}
             professors={professors}
             colourIndex={colourIndex}
             classmates={courseToClassmates[course.id]}
@@ -167,9 +171,13 @@ const SideBar = () => {
           course.id in courseToColourIndex
             ? courseToColourIndex[course.id]
             : getNextAvailableColour(courseToColourIndex);
+        const sectionId = timetable.slots.find(
+          (slot) => slot.course === course.id
+        ).section;
         return (
           <MasterSlot
             key={course.id}
+            sectionId={sectionId}
             onTimetable={isCourseInRoster(course.id)}
             colourIndex={colourIndex}
             classmates={courseToClassmates[course.id]}

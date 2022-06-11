@@ -27,7 +27,7 @@ type MasterSlotProps = {
   inModal?: boolean;
   fakeFriends: number;
   course: DenormalizedCourse;
-  sectionId?: number;
+  sectionId: number;
   professors: string[];
   classmates: {
     current: Classmate[];
