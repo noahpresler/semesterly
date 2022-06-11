@@ -1,3 +1,4 @@
+import { calcGradientRange } from "./../../gradientUtils";
 import { SlotColorData, Timetable } from "./../../constants/commonTypes";
 import { RootState } from "..";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -44,18 +45,21 @@ const compareTimetableSlice = createSlice({
         state.activeTimetable,
         state.comparedTimetable
       ).length;
-
       const activeGradient = buildGradient(
         "#fd7473",
         "#f4cece",
-        state.activeTimetable.slots.length - numCommon
+        calcGradientRange(state.activeTimetable.slots.length - numCommon)
       );
       const comparedGradient = buildGradient(
         "#5cccf2",
         "#c2e6f2",
-        state.comparedTimetable.slots.length - numCommon
+        calcGradientRange(state.comparedTimetable.slots.length - numCommon)
       );
-      const commonGradient = buildGradient("#36debb", "#d9f6f0", numCommon);
+      const commonGradient = buildGradient(
+        "#36debb",
+        "#d9f6f0",
+        calcGradientRange(numCommon)
+      );
 
       state.gradient.active = activeGradient;
       state.gradient.compared = comparedGradient;
