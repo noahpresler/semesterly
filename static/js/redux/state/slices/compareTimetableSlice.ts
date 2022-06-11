@@ -1,9 +1,8 @@
-import { calcGradientRange } from "./../../gradientUtils";
 import { SlotColorData, Timetable } from "./../../constants/commonTypes";
 import { RootState } from "..";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { buildGradient } from "../../util";
 import { getSectionsInTwoTimetables } from "../../ui/slotUtils";
+import { buildGradient, calcGradientRange } from "../../ui/gradientUtils";
 
 interface CompareTimetableSliceState {
   isComparing: boolean;
