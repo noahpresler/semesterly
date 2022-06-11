@@ -254,7 +254,7 @@ export const equalRgb = (a, b) => a.r === b.r && a.g === b.g && a.b === b.b;
 
 export const gradientToSlotColorData = (color) => ({
   background: color,
-  highlight: tinycolor(color).darken(10).toString(),
+  highlight: tinycolor(color).darken(5).toString(),
   border: tinycolor(color).darken(20).toString(),
   font: "#222",
 });
