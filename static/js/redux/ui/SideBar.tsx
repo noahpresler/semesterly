@@ -41,6 +41,7 @@ import { togglePeerModal } from "../state/slices/peerModalSlice";
 import { Timetable } from "../constants/commonTypes";
 import { startComparingTimetables } from "../state/slices/compareTimetableSlice";
 import AvgCourseRating from "./AvgCourseRating";
+import COLOUR_DATA from "../constants/colours";
 
 const SideBar = () => {
   const dispatch = useAppDispatch();
@@ -144,9 +145,13 @@ const SideBar = () => {
             ? courseToColourIndex[course.id]
             : getNextAvailableColour(courseToColourIndex);
         const professors = course.sections.map((section) => section.instructors);
+        const sectionId = timetable.slots.find(
+          (slot) => slot.course === course.id
+        ).section;
         return (
           <MasterSlot
             key={course.id}
+            sectionId={sectionId}
             professors={professors}
             colourIndex={colourIndex}
             classmates={courseToClassmates[course.id]}
@@ -155,6 +160,7 @@ const SideBar = () => {
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
             getShareLink={getShareLink}
+            colorData={COLOUR_DATA}
           />
         );
       })
@@ -165,9 +171,13 @@ const SideBar = () => {
           course.id in courseToColourIndex
             ? courseToColourIndex[course.id]
             : getNextAvailableColour(courseToColourIndex);
+        const sectionId = timetable.slots.find(
+          (slot) => slot.course === course.id
+        ).section;
         return (
           <MasterSlot
             key={course.id}
+            sectionId={sectionId}
             onTimetable={isCourseInRoster(course.id)}
             colourIndex={colourIndex}
             classmates={courseToClassmates[course.id]}
@@ -175,6 +185,7 @@ const SideBar = () => {
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveOptionalCourse(course))}
             getShareLink={getShareLink}
+            colorData={COLOUR_DATA}
           />
         );
       })

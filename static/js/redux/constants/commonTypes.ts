@@ -206,3 +206,10 @@ export interface Classmate {
   img_url: string;
   sections: string[]; // section codes
 }
+
+export interface SlotColorData {
+  background: string;
+  highlight: string;
+  border: string;
+  font: string;
+}

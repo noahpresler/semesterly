@@ -21,8 +21,12 @@ import {
 import Slot from "./Slot";
 import CustomSlot from "./CustomSlot";
 import { getNextAvailableColour, slotToDisplayOffering } from "../util";
-import { convertToMinutes, isOfferingInTimetable } from "./slotUtils";
-import { HoveredSlot, Offering, Timetable } from "../constants/commonTypes";
+import {
+  convertToMinutes,
+  getSectionsInTwoTimetables,
+  isOfferingInTimetable,
+} from "./slotUtils";
+import { HoveredSlot, Offering } from "../constants/commonTypes";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
   getActiveDenormTimetable,
@@ -40,6 +44,8 @@ import {
 } from "../actions/timetable_actions";
 import { fetchCourseInfo } from "../actions/modal_actions";
 import { uniqBy } from "lodash";
+import COLOUR_DATA from "../constants/colours";
+import { selectGradient } from "../state/slices/compareTimetableSlice";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -160,7 +166,7 @@ const SlotManager = (props: { days: string[] }) => {
       )
   );
   const slots = isComparingTimetables ? comparedSlots : timetableSlots;
-
+  const gradient = useAppSelector(selectGradient);
   const courseToColourIndex = useAppSelector((state) => state.ui.courseToColourIndex);
   const customEvents = useAppSelector((state) => state.customEvents.events);
   const activeTimetable = useAppSelector(
@@ -169,6 +175,7 @@ const SlotManager = (props: { days: string[] }) => {
   const comparedTimetable = useAppSelector(
     (state) => state.compareTimetable.comparedTimetable
   );
+  const sectionsInBoth = getSectionsInTwoTimetables(activeTimetable, comparedTimetable);
 
   const getComparedTimetableSlotColor = (offering: Offering, courseId: number) => {
     const isOfferingInActiveTimetable = isOfferingInTimetable(
@@ -180,12 +187,23 @@ const SlotManager = (props: { days: string[] }) => {
       offering.id
     );
     if (isOfferingInActiveTimetable && isOfferingInComparedTimetable) {
-      // return courseToColourIndex[courseId];
-      return 2;
+      const index = activeTimetable.slots
+        .filter((course) => sectionsInBoth.indexOf(course.course) !== -1)
+        .map((slot) => slot.course)
+        .indexOf(courseId);
+      return [index, gradient.common];
     } else if (isOfferingInActiveTimetable) {
-      return 0;
+      const index = activeTimetable.slots
+        .filter((course) => sectionsInBoth.indexOf(course.course) === -1)
+        .map((slot) => slot.course)
+        .indexOf(courseId);
+      return [index, gradient.active];
     } else {
-      return 1;
+      const index = comparedTimetable.slots
+        .filter((course) => sectionsInBoth.indexOf(course.course) === -1)
+        .map((slot) => slot.course)
+        .indexOf(courseId);
+      return [index, gradient.compared];
     }
   };
 
@@ -206,12 +224,19 @@ const SlotManager = (props: { days: string[] }) => {
       offerings
         .filter((offering) => offering.day in slotsByDay)
         .forEach((offering) => {
-          const colourId = isComparingTimetables
-            ? getComparedTimetableSlotColor(offering, course.id)
-            : courseToColourIndex[course.id];
-
+          let colorIndex;
+          let colorData;
+          if (isComparingTimetables) {
+            [colorIndex, colorData] = getComparedTimetableSlotColor(
+              offering,
+              course.id
+            );
+          } else {
+            colorIndex = courseToColourIndex[course.id];
+            colorData = COLOUR_DATA;
+          }
           slotsByDay[offering.day].push(
-            slotToDisplayOffering(course, section, offering, colourId)
+            slotToDisplayOffering(course, section, offering, colorIndex, colorData)
           );
         });
     });
@@ -226,7 +251,7 @@ const SlotManager = (props: { days: string[] }) => {
               ? courseToColourIndex[course.id]
               : getNextAvailableColour(courseToColourIndex);
           slotsByDay[offering.day].push(
-            slotToDisplayOffering(course, section, offering, colourId)
+            slotToDisplayOffering(course, section, offering, colourId, COLOUR_DATA)
           );
         });
     }
