@@ -20,19 +20,27 @@ import TimetableLoaderContainer from "./containers/timetable_loader_container";
 import SocialProfileContainer from "./containers/social_profile_container";
 import { getCurrentSemester } from "../state";
 
-export const expandSideBar = () => {
-  $(".main-bar, .side-bar").removeClass("full-cal").addClass("less-cal");
-};
-
-export const collapseSideBar = () => {
-  $(".main-bar, .side-bar").removeClass("less-cal").addClass("full-cal");
-};
-
 const TopBar = () => {
   const userInfo = useAppSelector((state) => state.userInfo.data);
   const currentSemester = useAppSelector((state) => getCurrentSemester(state));
+  const isComparing = useAppSelector((state) => state.compareTimetable.isComparing);
 
   const [sideBarCollapsed, setSideBarCollapsed] = useState("neutral");
+
+  const mainBarSelector = isComparing ? ".main-bar-compare-timetable" : ".main-bar";
+  const sideBarSelector = isComparing ? ".side-bar-compare-timetable" : ".side-bar";
+
+  const expandSideBar = () => {
+    $(`${mainBarSelector}, ${sideBarSelector}`)
+      .removeClass("full-cal")
+      .addClass("less-cal");
+  };
+
+  const collapseSideBar = () => {
+    $(`${mainBarSelector}, ${sideBarSelector}`)
+      .removeClass("less-cal")
+      .addClass("full-cal");
+  };
 
   const toggleSideBar = () => {
     if (sideBarCollapsed === "neutral") {
