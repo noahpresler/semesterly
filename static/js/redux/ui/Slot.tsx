@@ -224,7 +224,7 @@ const Slot = (props: SlotProps) => {
           style={{ backgroundColor: props.colorData[props.colourId].border }}
         />
         {!isComparingTimetables && removeButton}
-        {lockButton}
+        {!isComparingTimetables && lockButton}
         <div className="fc-content">
           <div className="fc-time">
             <span className="fc-time-name">
