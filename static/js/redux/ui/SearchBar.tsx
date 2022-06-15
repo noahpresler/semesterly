@@ -157,9 +157,7 @@ const SearchBar = () => {
     );
   const availableSemesters = allSemesters.map((sem: Semester, index: number) => {
     const name =
-      $(window).width() < 767
-        ? getAbbreviatedSemesterName(sem)
-        : getSemesterName(sem);
+      $(window).width() < 767 ? getAbbreviatedSemesterName(sem) : getSemesterName(sem);
     return (
       <div
         key={name}
