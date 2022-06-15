@@ -155,11 +155,11 @@ const SearchBar = () => {
         <SearchSideBarContainer />
       </ul>
     );
-  const availableSemesters = allSemesters.map((semester: Semester, index: number) => {
+  const availableSemesters = allSemesters.map((sem: Semester, index: number) => {
     const name =
       $(window).width() < 767
-        ? getAbbreviatedSemesterName(semester)
-        : getSemesterName(semester);
+        ? getAbbreviatedSemesterName(sem)
+        : getSemesterName(sem);
     return (
       <div
         key={name}

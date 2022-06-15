@@ -189,8 +189,8 @@ const SearchResult = (props: SearchResultProps) => {
       <div className="search-result-labels">
         <h4
           className={classNames("label", {
-            hoverAdd: hoverAdd,
-            hoverSave: hoverSave,
+            hoverAdd,
+            hoverSave,
           })}
         >
           {info}
