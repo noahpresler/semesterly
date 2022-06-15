@@ -5,7 +5,7 @@ export type Day = "M" | "T" | "W" | "R" | "F";
 export interface Semester {
   id: number;
   name: string;
-  year: number;
+  year: string;
 }
 
 /**
@@ -103,7 +103,7 @@ export interface Course {
   department: string;
   num_credits: number;
   areas: string[];
-  campus: string;
+  campus: number;
   evals: any;
   integrations: any;
   related_courses: Course[];
@@ -128,7 +128,7 @@ export interface RelatedCourse {
   department: string;
   num_credits: number;
   areas: string[];
-  campus: string;
+  campus: number;
   evals: any;
   integrations: any;
   prerequisites: string;

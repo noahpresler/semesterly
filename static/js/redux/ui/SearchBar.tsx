@@ -12,42 +12,57 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from "prop-types";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, KeyboardEvent } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks";
+// @ts-ignore
 import ClickOutHandler from "react-onclickout";
 import classNames from "classnames";
 import SearchSideBarContainer from "./containers/search_side_bar_container";
-import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
-import SearchResult from "./search_result";
+import SearchResult from "./SearchResult";
+import { DenormalizedCourse, Semester } from "../constants/commonTypes";
+import { addOrRemoveCourse, fetchSearchResults, maybeSetSemester } from "../actions";
+import { hoverSearchResult } from "../state/slices/uiSlice";
+import { explorationModalActions } from "../state/slices";
+import { getCurrentSemester, getHoveredSlots, getSearchResults } from "../state";
 
-/* eslint-disable react/no-unused-prop-types */
+const getSemesterName = (semester: Semester) => `${semester.name} ${semester.year}`;
 
-const getSemesterName = (semester) => `${semester.name} ${semester.year}`;
-
-const abbreviateSemesterName = (semesterName) => {
+const abbreviateSemesterName = (semesterName: string) => {
   if (semesterName === "Summer") {
     return "Su";
   }
   return semesterName[0];
 };
 
-const abbreviateYear = (year) => year.replace("20", "'");
+const abbreviateYear = (year: string) => year.replace("20", "'");
 
-const getAbbreviatedSemesterName = (semester) =>
+const getAbbreviatedSemesterName = (semester: Semester) =>
   `${abbreviateSemesterName(semester.name)}${abbreviateYear(semester.year)}`;
 
-const SearchBar = (props) => {
+const SearchBar = () => {
+  const explorationModalIsVisible = useAppSelector(
+    (state) => state.explorationModal.isVisible
+  );
+  const semester = useAppSelector((state) => getCurrentSemester(state));
+  const allSemesters = useAppSelector((state) => state.semester.all);
+  const searchResults = useAppSelector((state) => getSearchResults(state));
+  const isFetching = useAppSelector((state) => state.searchResults.isFetching);
+  const hasHoveredResult = useAppSelector((state) => getHoveredSlots(state) !== null);
+  const hoveredPosition = useAppSelector((state) => state.ui.searchHover);
+
+  const dispatch = useAppDispatch();
+
   const [inputFocused, setInputFocused] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const input = useRef();
+  const input = useRef<HTMLInputElement>();
 
   useEffect(() => {
     // better way to search, only run API call when user stops typing for 1 seconds
     const timeoutId = setTimeout(() => {
       // when user stops typing we search
-      props.fetchCourses(searchTerm);
+      dispatch(fetchSearchResults(searchTerm));
     }, 1000);
     // clear timeout everytime user updates query
     return () => {
@@ -55,43 +70,43 @@ const SearchBar = (props) => {
     };
   }, [searchTerm]);
 
-  const handleKeyDown = useCallback((e) => {
-    if (
-      $("input:focus").length === 0 &&
-      !props.explorationModalIsVisible &&
-      !e.ctrlKey
-    ) {
-      // autofocus if no other inputs are focused
-      if (
-        (e.keyCode >= 48 && e.keyCode <= 57) ||
-        (e.keyCode >= 65 && e.keyCode <= 90)
-      ) {
-        // only focus if user inputted char or number
-        input.current.focus();
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if ($("input:focus").length === 0 && !explorationModalIsVisible && !e.ctrlKey) {
+        // autofocus if no other inputs are focused
+        if (
+          (e.keyCode >= 48 && e.keyCode <= 57) ||
+          (e.keyCode >= 65 && e.keyCode <= 90)
+        ) {
+          // only focus if user inputted char or number
+          input.current.focus();
+        }
+      } else if ($("input:focus").length !== 0) {
+        const numSearchResults = searchResults.length;
+        if (e.key === "Enter" && numSearchResults > 0 && inputFocused) {
+          // add course to timetable if user press enter on while hovering on a search result
+          dispatch(addOrRemoveCourse(searchResults[hoveredPosition].id));
+        } else if (e.key === "ArrowDown") {
+          // change hovered course
+          dispatch(hoverSearchResult((hoveredPosition + 1) % numSearchResults));
+        } else if (e.key === "ArrowUp") {
+          // change hovered course
+          let newHoveredPosition = hoveredPosition - 1;
+          newHoveredPosition =
+            newHoveredPosition < 0 ? numSearchResults - 1 : newHoveredPosition;
+          dispatch(hoverSearchResult(newHoveredPosition));
+        } else if (e.key === "Escape") {
+          // do not show resultsContainer if user pressed escape
+          setInputFocused(false);
+          input.current.blur();
+        }
       }
-    } else if ($("input:focus").length !== 0) {
-      const numSearchResults = props.searchResults.length;
-      if (e.key === "Enter" && numSearchResults > 0 && inputFocused) {
-        // add course to timetable if user press enter on while hovering on a search result
-        props.addCourse(props.searchResults[props.hoveredPosition].id);
-      } else if (e.key === "ArrowDown") {
-        // change hovered course
-        props.hoverSearchResult((props.hoveredPosition + 1) % numSearchResults);
-      } else if (e.key === "ArrowUp") {
-        // change hovered course
-        let newHoveredPosition = props.hoveredPosition - 1;
-        newHoveredPosition =
-          newHoveredPosition < 0 ? numSearchResults - 1 : newHoveredPosition;
-        props.hoverSearchResult(newHoveredPosition);
-      } else if (e.key === "Escape") {
-        // do not show resultsContainer if user pressed escape
-        setInputFocused(false);
-        input.current.blur();
-      }
-    }
-  });
+    },
+    [explorationModalIsVisible, searchResults, hoveredPosition]
+  );
 
   useEffect(() => {
+    // @ts-ignore
     $(document).on("keydown", handleKeyDown);
     return () => {
       $(document).off("keydown");
@@ -102,9 +117,9 @@ const SearchBar = (props) => {
     setShowDropdown(false);
   };
 
-  const maybeSetSemester = (semester) => {
+  const hideDropdownAndMaybeSetSemester = (semesterIndex: number) => {
     setShowDropdown(false);
-    props.maybeSetSemester(semester);
+    dispatch(maybeSetSemester(semesterIndex));
   };
 
   const toggleDropdown = () => {
@@ -113,17 +128,10 @@ const SearchBar = (props) => {
 
   const resClass = classNames({
     "search-results": true,
-    trans50: props.hasHoveredResult,
+    trans50: hasHoveredResult,
   });
-  const results = props.searchResults.map((c, i) => (
-    <SearchResult
-      {...props}
-      course={c}
-      key={c.id}
-      inRoster={props.isCourseInRoster(c.id)}
-      inOptionRoster={props.isCourseOptional(c.id)}
-      position={i}
-    />
+  const results = searchResults.map((c: DenormalizedCourse, i: number) => (
+    <SearchResult key={c.id} course={c} position={i} />
   ));
   const seeMore =
     results.length > 0 && results.length < 3 ? (
@@ -147,7 +155,7 @@ const SearchBar = (props) => {
         <SearchSideBarContainer />
       </ul>
     );
-  const availableSemesters = props.allSemesters.map((semester, index) => {
+  const availableSemesters = allSemesters.map((semester: Semester, index: number) => {
     const name =
       $(window).width() < 767
         ? getAbbreviatedSemesterName(semester)
@@ -156,7 +164,7 @@ const SearchBar = (props) => {
       <div
         key={name}
         className="semester-option"
-        onMouseDown={() => maybeSetSemester(index)}
+        onMouseDown={() => hideDropdownAndMaybeSetSemester(index)}
       >
         {name}
       </div>
@@ -164,9 +172,9 @@ const SearchBar = (props) => {
   });
   const currSem =
     $(window).width() < 767
-      ? getAbbreviatedSemesterName(props.semester)
-      : getSemesterName(props.semester);
-  const resultsShown = results.length !== 0 && inputFocused && !props.hasHoveredResult;
+      ? getAbbreviatedSemesterName(semester)
+      : getSemesterName(semester);
+  const resultsShown = results.length !== 0 && inputFocused && !hasHoveredResult;
   return (
     <div className="search-bar no-print">
       <div className={classNames("search-bar__wrapper", { results: resultsShown })}>
@@ -192,7 +200,7 @@ const SearchBar = (props) => {
           <input
             ref={input}
             placeholder={`Searching ${currSem}`}
-            className={classNames(props.isFetching ? "results-loading-gif" : "", {
+            className={classNames(isFetching ? "results-loading-gif" : "", {
               results: resultsShown,
             })}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -205,7 +213,7 @@ const SearchBar = (props) => {
         </div>
         <div
           className="show-exploration"
-          onMouseDown={() => props.showExplorationModal()}
+          onMouseDown={() => dispatch(explorationModalActions.showExplorationModal())}
         >
           <i className="fa fa-compass" />
           <span>Advanced Search</span>
@@ -214,23 +222,6 @@ const SearchBar = (props) => {
       {resultContainer}
     </div>
   );
-};
-
-SearchBar.propTypes = {
-  addCourse: PropTypes.func.isRequired,
-  explorationModalIsVisible: PropTypes.bool.isRequired,
-  fetchCourses: PropTypes.func.isRequired,
-  hasHoveredResult: PropTypes.bool.isRequired,
-  hoverSearchResult: PropTypes.func.isRequired,
-  hoveredPosition: PropTypes.number.isRequired,
-  isCourseInRoster: PropTypes.func.isRequired,
-  isCourseOptional: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  maybeSetSemester: PropTypes.func.isRequired,
-  searchResults: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
-  semester: SemesterlyPropTypes.semester.isRequired,
-  showExplorationModal: PropTypes.func.isRequired,
-  allSemesters: PropTypes.arrayOf(SemesterlyPropTypes.semester).isRequired,
 };
 
 export default SearchBar;
