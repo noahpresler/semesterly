@@ -23,7 +23,7 @@ import ChangeSemesterAlertContainer from "./alerts/change_semester_alert_contain
 import NewTimetableAlertContainer from "./alerts/new_timetable_alert_container";
 import EnableNotificationsAlertContainer from "./alerts/enable_notifications_alert_container";
 import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
-import TopBarContainer from "./containers/top_bar_container";
+import TopBar from "./TopBar";
 import SignupModalContainer from "./containers/modals/signup_modal_container";
 import PreferenceModal from "./modals/preference_modal";
 import TutModalContainer from "./containers/modals/tut_modal_container";
@@ -189,7 +189,7 @@ const Semesterly = () => {
 
   return (
     <div className="page-wrapper">
-      <TopBarContainer />
+      <TopBar />
       <UserSettingsModal />
       <AdvancedSearchModal />
       <NewsModal />
