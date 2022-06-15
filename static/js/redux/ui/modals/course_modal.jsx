@@ -156,8 +156,8 @@ class CourseModal extends React.Component {
             <i className="fa fa-share-alt" onClick={this.showShareLink} />
           </div>
           {shareLink}
-          {addOptional}
-          {add}
+          {!this.props.isComparingTimetables && addOptional}
+          {!this.props.isComparingTimetables && add}
         </div>
         <CourseModalBodyContainer
           inRoster={this.props.inRoster}
