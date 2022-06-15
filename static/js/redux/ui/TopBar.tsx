@@ -104,7 +104,7 @@ const TopBar = () => {
           />
         </div>
       </div>
-      <SearchBar />
+      {!isComparing && <SearchBar />}
       <CourseModalContainer />
       <SocialProfileContainer />
       <TimetableLoaderContainer />
