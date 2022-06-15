@@ -13,6 +13,7 @@ GNU General Public License for more details.
 */
 
 import React, { useState } from "react";
+import { useAppSelector } from "../hooks";
 import { DropTarget } from "react-dnd";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
 import {
@@ -79,12 +80,15 @@ type SlotProps = {
 };
 
 const Slot = (props: SlotProps) => {
+  const isComparingTimetables = useAppSelector(
+    (state) => state.compareTimetable.isComparing
+  );
+  const [hovered, setHovered] = useState(false);
+
   const stopPropagation = (callback: Function, event: React.SyntheticEvent) => {
     event.stopPropagation();
     callback();
   };
-
-  const [hovered, setHovered] = useState(false);
 
   const onSlotHover = () => {
     setHovered(true);
@@ -219,7 +223,7 @@ const Slot = (props: SlotProps) => {
           className="slot-bar"
           style={{ backgroundColor: props.colorData[props.colourId].border }}
         />
-        {removeButton}
+        {!isComparingTimetables && removeButton}
         {lockButton}
         <div className="fc-content">
           <div className="fc-time">
