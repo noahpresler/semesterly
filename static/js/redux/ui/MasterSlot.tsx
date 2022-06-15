@@ -20,7 +20,6 @@ import uniq from "lodash/uniq";
 import Clipboard from "clipboard";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Classmate, DenormalizedCourse, SlotColorData } from "../constants/commonTypes";
-import { useAppSelector } from "../hooks";
 
 type MasterSlotProps = {
   colourIndex: number;
@@ -42,9 +41,6 @@ type MasterSlotProps = {
 };
 
 const MasterSlot = (props: MasterSlotProps) => {
-  const isComparingTimetable = useAppSelector(
-    (state) => state.compareTimetable.isComparing
-  );
   const [shareLinkShown, setShareLinkShown] = useState(false);
 
   const updateColours = (colour: string) => {
