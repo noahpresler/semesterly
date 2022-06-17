@@ -171,9 +171,7 @@ const SideBar = () => {
           course.id in courseToColourIndex
             ? courseToColourIndex[course.id]
             : getNextAvailableColour(courseToColourIndex);
-        const sectionId = timetable.slots.find(
-          (slot) => slot.course === course.id
-        ).section;
+        const sectionId = course.id;
         return (
           <MasterSlot
             key={course.id}
