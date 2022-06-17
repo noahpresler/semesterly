@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import React, { useState, useEffect } from "react";
 import { useAppSelector } from "../hooks";
-import SearchBarContainer from "./containers/search_bar_container";
+import SearchBar from "./SearchBar";
 import CourseModalContainer from "./containers/modals/course_modal_container";
 import TimetableLoaderContainer from "./containers/timetable_loader_container";
 import SocialProfileContainer from "./containers/social_profile_container";
@@ -67,21 +67,19 @@ const TopBar = () => {
     }
   }, [sideBarCollapsed]);
 
-  const renderUserForPrint = () => {
-    return (
-      <div className="print">
-        <img alt="Profile" className="usr-pic print" src={userInfo.img_url} />
-        <div className="print-name-major print">
-          <span className="print-name print">{`${userInfo.userFirstName} ${userInfo.userLastName}`}</span>
-          <span className="print-major print">
-            {userInfo.major}
-            {userInfo.class_year ? `| Class of ${userInfo.class_year}` : null} |
-            {`${currentSemester.name} ${currentSemester.year}`}
-          </span>
-        </div>
+  const renderUserForPrint = () => (
+    <div className="print">
+      <img alt="Profile" className="usr-pic print" src={userInfo.img_url} />
+      <div className="print-name-major print">
+        <span className="print-name print">{`${userInfo.userFirstName} ${userInfo.userLastName}`}</span>
+        <span className="print-major print">
+          {userInfo.major}
+          {userInfo.class_year ? `| Class of ${userInfo.class_year}` : null} |
+          {`${currentSemester.name} ${currentSemester.year}`}
+        </span>
       </div>
-    );
-  };
+    </div>
+  );
 
   return (
     <div className="top-bar">
@@ -104,7 +102,7 @@ const TopBar = () => {
           />
         </div>
       </div>
-      <SearchBarContainer />
+      {!isComparing && <SearchBar />}
       <CourseModalContainer />
       <SocialProfileContainer />
       <TimetableLoaderContainer />

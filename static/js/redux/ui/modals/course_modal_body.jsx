@@ -522,7 +522,7 @@ class CourseModalBody extends React.Component {
             </div>
           </div>
           <div id="modal-section-lists" className="col-5-16 cf">
-            {sectionGrid}
+            {!this.props.isComparingTimetables && sectionGrid}
             {similarCourses}
           </div>
         </div>
@@ -577,6 +577,7 @@ CourseModalBody.propTypes = {
   unHoverSection: PropTypes.func.isRequired,
   getShareLink: PropTypes.func.isRequired,
   getShareLinkFromModal: PropTypes.func.isRequired,
+  isComparingTimetables: PropTypes.bool.isRequired,
 };
 
 export default CourseModalBody;
