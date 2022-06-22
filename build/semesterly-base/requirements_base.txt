@@ -29,7 +29,7 @@ jsonschema==3.2.0
 lxml==4.6.5
 mock==2.0.0
 nltk==3.6.6
-numpy==1.21.0
+numpy==1.22.0
 oauth2client==4.1.2
 progressbar2==3.34.2
 psycopg2-binary==2.8.6
