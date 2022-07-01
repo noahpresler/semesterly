@@ -13,33 +13,52 @@ GNU General Public License for more details.
 */
 
 import PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, MouseEventHandler, MouseEvent } from "react";
+// @ts-ignore outdated package
 import ClickOutHandler from "react-onclickout";
 import uniq from "lodash/uniq";
 import Clipboard from "clipboard";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import COLOUR_DATA from "../constants/colours";
-import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
+import { Classmate, DenormalizedCourse, SlotColorData } from "../constants/commonTypes";
 
-const MasterSlot = (props) => {
+type MasterSlotProps = {
+  colourIndex: number;
+  inModal?: boolean;
+  fakeFriends: number;
+  course: DenormalizedCourse;
+  sectionId: number;
+  professors: string[];
+  classmates: {
+    current: Classmate[];
+    past: Classmate[];
+  };
+  hideCloseButton?: boolean;
+  onTimetable: boolean;
+  fetchCourseInfo: MouseEventHandler<HTMLDivElement>;
+  removeCourse?: Function;
+  getShareLink: Function;
+  colorData: SlotColorData[];
+};
+
+const MasterSlot = (props: MasterSlotProps) => {
   const [shareLinkShown, setShareLinkShown] = useState(false);
 
-  const updateColours = (colour) => {
+  const updateColours = (colour: string) => {
     // no updating when hovering over a masterslot in the course modal (i.e. related course)
     if (props.inModal) {
       return;
     }
     // update sibling slot colours (i.e. the slots for the same course)
-    $(`.slot-${props.course.id}`).css("background-color", colour);
+    $(`.slot-${props.sectionId}-${props.colourIndex}`).css("background-color", colour);
   };
 
   const onMasterSlotHover = () => {
-    updateColours(COLOUR_DATA[props.colourIndex].highlight);
+    updateColours(props.colorData[props.colourIndex].highlight);
   };
   const onMasterSlotUnhover = () => {
-    updateColours(COLOUR_DATA[props.colourIndex].background);
+    updateColours(props.colorData[props.colourIndex].background);
   };
-  const stopPropagation = (callback, event) => {
+  const stopPropagation = (callback: Function, event: MouseEvent) => {
     event.stopPropagation();
     onMasterSlotUnhover();
     callback();
@@ -90,7 +109,7 @@ const MasterSlot = (props) => {
       </div>,
     ].concat(friendCircles.slice(0, 3));
   }
-  let masterSlotClass = `master-slot slot-${props.course.id}`;
+  let masterSlotClass = `master-slot slot-${props.sectionId}-${props.colourIndex}`;
   const validProfs = props.professors ? uniq(props.professors.filter((p) => p)) : false;
   const prof =
     !validProfs || validProfs.length === 0 || validProfs[0] === ""
@@ -122,7 +141,7 @@ const MasterSlot = (props) => {
         waitlistOnlyFlag = (
           <span
             className="ms-flag"
-            style={{ backgroundColor: COLOUR_DATA[props.colourIndex].border }}
+            style={{ backgroundColor: props.colorData[props.colourIndex].border }}
           >
             {flagValue}
           </span>
@@ -135,12 +154,12 @@ const MasterSlot = (props) => {
       className={masterSlotClass}
       onMouseEnter={onMasterSlotHover}
       onMouseLeave={onMasterSlotUnhover}
-      style={{ backgroundColor: COLOUR_DATA[props.colourIndex].background }}
+      style={{ backgroundColor: props.colorData[props.colourIndex].background }}
       onClick={props.fetchCourseInfo}
     >
       <div
         className="slot-bar"
-        style={{ backgroundColor: COLOUR_DATA[props.colourIndex].border }}
+        style={{ backgroundColor: props.colorData[props.colourIndex].border }}
       />
       <div className="master-slot-content">
         <h3>
@@ -173,7 +192,7 @@ MasterSlot.defaultProps = {
   inModal: false,
   fakeFriends: 0,
   hideCloseButton: false,
-  course: PropTypes.shape({
+  course: PropTypes.shape<any>({
     is_waitlist_only: false,
   }),
   professors: null,
@@ -182,32 +201,13 @@ MasterSlot.defaultProps = {
   classmates: { current: [], past: [] },
 };
 
-MasterSlot.propTypes = {
-  colourIndex: PropTypes.number.isRequired,
-  inModal: PropTypes.bool,
-  fakeFriends: PropTypes.number,
-  course: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    num_credits: PropTypes.number.isRequired,
-    code: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    is_waitlist_only: PropTypes.bool,
-    slots: PropTypes.arrayOf(
-      PropTypes.shape({
-        is_section_filled: PropTypes.bool.isRequired,
-      })
-    ),
-  }).isRequired,
-  professors: PropTypes.arrayOf(PropTypes.string),
-  classmates: SemesterlyPropTypes.classmates,
-  hideCloseButton: PropTypes.bool,
-  onTimetable: PropTypes.bool.isRequired,
-  fetchCourseInfo: PropTypes.func.isRequired,
-  removeCourse: PropTypes.func,
-  getShareLink: PropTypes.func.isRequired,
+type ShareLinkProps = {
+  link: string;
+  onClickOut: Function;
+  type?: string;
 };
 
-export const ShareLink = ({ link, onClickOut, type }) => {
+export const ShareLink = ({ link, onClickOut, type }: ShareLinkProps) => {
   const [shareBtnText, setShareBtnText] = useState("Copy to Clipboard");
   useEffect(() => {
     if (shareBtnText === "Copied!") {
@@ -241,12 +241,6 @@ export const ShareLink = ({ link, onClickOut, type }) => {
       </div>
     </ClickOutHandler>
   );
-};
-
-ShareLink.propTypes = {
-  link: PropTypes.string.isRequired,
-  onClickOut: PropTypes.func.isRequired,
-  type: PropTypes.string,
 };
 
 export default MasterSlot;

@@ -41,6 +41,7 @@ import saveCalendarModal from "./slices/saveCalendarModalSlice";
 import termsOfServiceModal from "./slices/termsOfServiceModalSlice";
 import termsOfServiceBanner from "./slices/termOfServiceBannerSlice";
 import userAcquisitionModal from "./slices/userAcquisitionModalSlice";
+import compareTimetable from "./slices/compareTimetableSlice";
 import registrar from "./slices/registrarSlice";
 import entities, * as fromEntities from "./slices/entitiesSlice";
 import { Slot, Timetable } from "../constants/commonTypes";
@@ -74,6 +75,7 @@ export const reducers = {
   ui,
   userAcquisitionModal,
   userInfo,
+  compareTimetable,
 };
 
 const store = configureStore({ reducer: reducers });

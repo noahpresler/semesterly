@@ -315,6 +315,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.assert_slot_presence(n_slots, n_master_slots)
         self.click_off()
 
+    def assert_visibility(self, locator, root=None):
+        self.assert_n_elements_found(locator, 1, root=root)
+
     def assert_n_elements_found(self, locator, n_elements, root=None):
         """Asserts that n_elements are found by the provided locator"""
         if n_elements == 0:
@@ -382,6 +385,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             by=By.CLASS_NAME, value="search-course"
         )[course_idx]
         chosen_course.click()
+        self.assert_visibility((By.CLASS_NAME, "course-modal"))
 
     def validate_course_modal(self):
         """Validates the course modal displays proper course data"""
@@ -419,7 +423,11 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def open_course_modal_from_slot(self, course_idx):
         """Opens the course modal from the nth slot"""
         slot = self.find((By.CLASS_NAME, "master-slot"), get_all=True)[course_idx]
-        slot.click()
+        # For some reason, it was always clicking the share link instead of the slot
+        ActionChains(self.driver).move_to_element(slot).move_by_offset(
+            0, -10
+        ).click().perform()
+        self.assert_visibility((By.CLASS_NAME, "course-modal"))
 
     def close_course_modal(self):
         """Closes the course modal using the (x) button"""
@@ -626,6 +634,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         if n_results:
             self.assert_n_elements_found((By.CLASS_NAME, "exp-s-result"), n_results)
 
+    def close_adv_search(self):
+        """Closes the advanced search modal"""
+        self.find((By.CLASS_NAME, "fa-times"), clickable=True).click()
+
     def login_via_fb(self, email, password):
         """Login user via fb by detecting the Continue with Facebook button in the
         signup modal, and then mocking user's credentials
@@ -722,14 +734,14 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         # Assert welcome modal is open
         self.find((By.CLASS_NAME, "welcome-modal"))
         major_select, year_select = self.find(
-            (By.XPATH, "//div[contains(@class,'Select-input')]//input"),
+            (By.XPATH, "//div[contains(@class,'select-field')]//input"),
             get_all=True,
             hidden=True,
         )
         major_select.send_keys(major)
-        major_select.send_keys(Keys.TAB)
+        self.find((By.XPATH, f"//div[contains(text(), '{major}')]")).click()
         year_select.send_keys(class_year)
-        year_select.send_keys(Keys.TAB)
+        self.find((By.XPATH, f"//div[contains(text(), '{class_year}')]")).click()
         self.find(
             (
                 By.XPATH,
@@ -786,7 +798,17 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         """Gets elements using self.get and represents them as text"""
         try:
             eles = self.find(locator, get_all=True)
-            return [s.text for s in eles]
+            elements = [s.text for s in eles if s.text]
+            # Remove "Unlock this section" from text if present
+            return list(
+                map(
+                    lambda s: "\n".join(s.split("\n")[1:])
+                    if s.startswith("Unlock this section")
+                    else s,
+                    elements,
+                )
+            )
+
         except RuntimeError:
             return []
 
@@ -794,8 +816,15 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         """Gets the personal timetable name"""
         return self.find((By.CLASS_NAME, "timetable-name")).get_property("value")
 
-    def create_ptt(self, name=None):
-        """Create a personaltimetable with the provided name when provided"""
+    def create_ptt(self, name: str = "", finish_saving: bool = True):
+        """Create a personaltimetable with the provided name when provided
+
+        Args:
+            name: Name of the personal timetable
+            finish_saving: Whether to wait until the personal timetable is saved
+        """
+        if finish_saving:
+            self.assert_invisibility((By.CLASS_NAME, "unsaved"))
         self.find(
             (
                 By.XPATH,
@@ -872,6 +901,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 "//input[contains(@class, 'timetable-name') and @value='%s']" % name,
             )
         )
+        self.find((By.CLASS_NAME, "timetable-drop-it-down")).click()
 
     def toggle_custom_event_mode(self):
         self.find((By.CLASS_NAME, "fa-pencil")).click()
@@ -1095,6 +1125,30 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             event_end_time,
             event_credits,
         )
+
+    def compare_timetable(self, timetable_name: str):
+        """Activates the compare timetable mode with a timetable of the given name.
+
+        Args:
+            timetable_name: Name of the timetable to compare to, must already exist.
+
+        Pre-condition:
+            The timetable dropdown is not clicked.
+        """
+        self.find((By.CLASS_NAME, "timetable-drop-it-down")).click()
+        row = self.find(
+            (
+                By.XPATH,
+                "//div[@class='tt-name' and contains(text(),'%s')]" % timetable_name,
+            )
+        )
+        self.find(
+            (By.CLASS_NAME, "fa-arrows-left-right"), root=row, clickable=True
+        ).click()
+
+    def exit_compare_timetable(self):
+        """Exits the compare timetable mode (pre: already in compare timetable mode)"""
+        self.find((By.CLASS_NAME, "compare-timetable-exit")).click()
 
 
 class url_matches_regex:

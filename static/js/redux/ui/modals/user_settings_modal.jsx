@@ -363,18 +363,18 @@ const UserSettingsModal = () => {
           <div className="preference cf">
             <h3>What&#39;s your major?</h3>
             <Select
-              name="form-field-name"
-              value={userSettings.major}
+              className="select-field"
+              value={{ label: userSettings.major, value: userSettings.major }}
               options={majors}
-              searchable
+              isSearchable
               onChange={changeMajor}
             />
           </div>
           <div className="preference cf">
             <h3>What&#39;s your graduating class year?</h3>
             <Select
-              name="form-field-name"
-              value={userSettings.class_year}
+              className="select-field"
+              value={{ label: userSettings.class_year, value: userSettings.class_year }}
               options={[
                 { value: 2021, label: 2021 },
                 { value: 2022, label: 2022 },
@@ -384,7 +384,7 @@ const UserSettingsModal = () => {
                 { value: 2026, label: 2026 },
                 { value: 2027, label: 2027 },
               ]}
-              searchable
+              isSearchable
               onChange={changeClassYear}
             />
           </div>

@@ -19,7 +19,6 @@ class EndToEndTest(SeleniumTestCase):
 
     fixtures = ["jhu_fall_sample.json", "jhu_spring_sample.json"]
 
-    @unittest.skip("temp")
     def test_logged_out_flow(self):
         self.clear_tutorial()
         with self.description("search, add, then remove course"):
@@ -117,7 +116,6 @@ class EndToEndTest(SeleniumTestCase):
             self.login_via_fb(email="e@ma.il", password="password")
             self.assert_ptt_equals(ptt)
 
-    @unittest.skip("temp")
     def test_logged_in_via_google_flow(self):
         with self.description("setup and clear tutorial"):
             self.clear_tutorial()
@@ -178,16 +176,22 @@ class EndToEndTest(SeleniumTestCase):
             self.create_ptt("End To End Testing!")
             self.search_course("AS.110.105", 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
+            self.search_course("AS.110.415", 1)
+            self.add_course(0, n_slots=7, n_master_slots=2)
             e2e_ptt = self.ptt_to_tuple()
             self.assert_ptt_const_across_refresh()
         with self.description("Switch to original ptt and validate"):
             self.switch_to_ptt("Testing Timetable")
             self.assert_ptt_equals(testing_ptt)
+        with self.description("Compare timetables"):
+            self.compare_timetable("End To End Testing!")
+            self.assert_slot_presence(11, 3)
+            self.exit_compare_timetable()
         with self.description(
             "switch semester, create personal timetable, switch back"
         ):
             self.change_term("Spring 2017")
-            self.create_ptt("Hope ders no bugs!")
+            self.create_ptt("Hope ders no bugs!", finish_saving=False)
             self.click_off()
             self.search_course("AS.110.106", 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
@@ -220,3 +224,4 @@ class EndToEndTest(SeleniumTestCase):
             self.open_and_query_adv_search("ca", n_results=4)
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
+            self.close_adv_search()
