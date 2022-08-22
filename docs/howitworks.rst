@@ -14,7 +14,7 @@ schedules a student can take can easily become overwhelming.
 Solution
 ~~~~~~~~
 Semester.ly aims to make course registration easy and collaborative through a user
-interface that focuses on student needs, providing quick access to all of the tools a
+interface that focuses on student needs, providing quick access to necessary tools a
 student may need in order to organize and decide on what courses they want to take.
 
 Current Features
