@@ -101,24 +101,20 @@ const CompareTimetableSideBar = () => {
         <div className="title-wrapper">{comparedTimetable.name}</div>
       </div>
       <div className="slots-rating">
-        <div className="col-1-3 text-center">
+        <div className="text-center">
           <CreditTicker
             timetableCourses={activeCourses}
             events={activeTimetable.events}
           />
         </div>
-        <div className="col-2-3">
-          <AvgCourseRating avgRating={activeTimetable.avg_rating} />
-        </div>
-        <div className="col-1-3 text-center">
+        <AvgCourseRating avgRating={activeTimetable.avg_rating} />
+        <div className="text-center">
           <CreditTicker
             timetableCourses={comparedCourses}
             events={comparedTimetable.events}
           />
         </div>
-        <div className="col-2-3">
-          <AvgCourseRating avgRating={comparedTimetable.avg_rating} />
-        </div>
+        <AvgCourseRating avgRating={comparedTimetable.avg_rating} />
       </div>
       <div className="slots-wrapper">
         <div className="horizontal-bar">{commonSlots}</div>
