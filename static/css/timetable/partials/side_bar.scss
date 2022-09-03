@@ -185,8 +185,9 @@
   }
 
   .sub-rating-wrapper {
-    margin-left: 50%;
-    transform: translateX(-50%);
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 

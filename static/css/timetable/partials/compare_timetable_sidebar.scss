@@ -41,18 +41,19 @@
 
 .slots-separator {
   border-left: 2px solid rgba(196, 196, 196, 1);
-  height: 80%;
   position: absolute;
   left: 50%;
   margin-left: -5px;
-  top: 70px;
+  height: 80%;
+  top: 20px;
   z-index: -1;
 }
 
 .compare-timetable-exit {
   position: absolute;
   right: 0;
-  padding: 0.5rem;
+  padding: 1rem;
+  margin-right: 10px;
   cursor: pointer;
 }
 
@@ -65,8 +66,8 @@
 
 .title-wrapper {
   width: 50%;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .slots-wrapper {
