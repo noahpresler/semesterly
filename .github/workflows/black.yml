@@ -5,12 +5,10 @@ on:
     branches:
       - prod
       - develop
-      - feature/compare-timetables
   pull_request:
     branches:
       - prod
       - develop
-      - feature/compare-timetables
 
 jobs:
   lint:
@@ -20,4 +18,4 @@ jobs:
       - uses: psf/black@stable
         with:
           options: "--check --verbose"
-          version: 22.3.0
+          version: 22.1.0

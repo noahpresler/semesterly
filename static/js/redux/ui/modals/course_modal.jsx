@@ -17,9 +17,9 @@ import React from "react";
 import classNames from "classnames";
 import Clipboard from "clipboard";
 import { WaveModal } from "boron-15";
-import { AreaBubble, WritingIntensive } from "../SearchResult";
+import { AreaBubble, WritingIntensive } from "../search_result";
 import CourseModalBodyContainer from "../containers/modals/course_modal_body_container";
-import { ShareLink } from "../MasterSlot";
+import { ShareLink } from "../master_slot";
 import { normalizedCourse } from "../../constants/semesterlyPropTypes";
 
 class CourseModal extends React.Component {
@@ -156,8 +156,8 @@ class CourseModal extends React.Component {
             <i className="fa fa-share-alt" onClick={this.showShareLink} />
           </div>
           {shareLink}
-          {!this.props.isComparingTimetables && addOptional}
-          {!this.props.isComparingTimetables && add}
+          {addOptional}
+          {add}
         </div>
         <CourseModalBodyContainer
           inRoster={this.props.inRoster}
@@ -207,7 +207,6 @@ CourseModal.propTypes = {
   // Must be included to be passed down into CourseModalBody, which needs to either refer to
   // state.courseInfo.isFetching or state.explorationModal.isFetching depending on its parent
   isFetching: PropTypes.bool.isRequired,
-  isComparingTimetables: PropTypes.bool.isRequired,
 };
 
 export default CourseModal;

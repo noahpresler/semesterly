@@ -19,7 +19,7 @@ from helpers.test.data import get_default_tt_request
 from analytics.models import SharedTimetable
 from timetable.models import Semester, Course, Section, Offering
 from timetable.utils import DisplayTimetable
-from timetable.serializers import DisplayTimetableSerializer, EventSerializer
+from timetable.serializers import DisplayTimetableSerializer
 from student.models import Student, PersonalTimetable, PersonalEvent
 from helpers.test.test_cases import UrlTestCase
 
@@ -87,25 +87,6 @@ class Serializers(TestCase):
         self.assertEqual(len(serialized["slots"]), 1)
         self.assertIsInstance(serialized["slots"][0]["course"], int)
         self.assertEqual(len(serialized["events"]), 1)
-
-    def test_event_serializer(self):
-        testTimetable = PersonalTimetable.objects.create(
-            name="testTimetable", school="jhu", semester=self.sem, student=self.student
-        )
-        event = PersonalEvent.objects.create(
-            timetable=testTimetable,
-            name="study session",
-            day="F",
-            time_start="08:30",
-            time_end="10:35",
-            credits=0.0,
-        )
-        event_serialized = EventSerializer(event).data
-        self.assertEquals(event_serialized["name"], "study session")
-        self.assertEquals(event_serialized["day"], "F")
-        self.assertEquals(event_serialized["time_start"], "08:30")
-        self.assertEquals(event_serialized["time_end"], "10:35")
-        self.assertEquals(event_serialized["credits"], "0.0")
 
 
 class UrlsTest(UrlTestCase):

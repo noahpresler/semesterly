@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { initAllState } from "../../actions/initActions";
-import { Semester } from "../../constants/commonTypes";
 
 interface SemesterSliceState {
   current: number;
-  all: Semester[];
+  all: { name: string; year: string }[];
 }
 
 const initialState: SemesterSliceState = {

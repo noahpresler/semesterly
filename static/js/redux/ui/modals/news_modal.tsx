@@ -6,16 +6,12 @@ import { getNewsEndpoint } from "../../constants/endpoints";
 import { newsModalActions } from "../../state/slices/newsModalSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import parse from "html-react-parser";
-import { getIsUserInfoIncomplete } from "../../state";
 
 const NewsModal = () => {
   const dispatch = useAppDispatch();
   const modal = useRef<WaveModal>();
 
   const { isVisible } = useAppSelector((state) => state.newsModal);
-  const isSigningUp = useAppSelector(
-    (state) => !state.userInfo.overrideShow && getIsUserInfoIncomplete(state)
-  );
   const [newsTitle, setNewsTitle] = useState("");
   const [newsBody, setNewsBody] = useState("");
 
@@ -24,7 +20,7 @@ const NewsModal = () => {
 
   useEffect(() => {
     const tutorialData = JSON.parse(localStorage.getItem("tutorial"));
-    if (!tutorialData || !tutorialData.modalTutShown || isSigningUp) {
+    if (!tutorialData || !tutorialData.modalTutShown) {
       return;
     }
 

@@ -1,9 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  requestCourses,
-  initAllState,
-  receiveTimetables,
-} from "../../actions/initActions";
+import { initAllState, receiveTimetables } from "../../actions";
+import { requestCourses } from "../../actions/initActions";
 import { Timetable } from "../../constants/commonTypes";
 import { getNextAvailableColour } from "../../util";
 import { getCourseIdsFromSlots } from "./entitiesSlice";

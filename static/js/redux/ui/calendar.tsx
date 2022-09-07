@@ -18,10 +18,10 @@ import classnames from "classnames";
 import ReactTooltip from "react-tooltip";
 import Clipboard from "clipboard";
 import PaginationContainer from "./containers/pagination_container";
-import SlotManager from "./SlotManager";
+import SlotManagerContainer from "./containers/slot_manager_container";
 import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
-import { ShareLink } from "./MasterSlot";
+import { ShareLink } from "./master_slot";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { useAppSelector } from "../hooks";
 
@@ -325,23 +325,6 @@ const Calendar = (props: CalendarProps) => {
     </div>
   );
 
-  const isComparingTimetables = useAppSelector(
-    (state) => state.compareTimetable.isComparing
-  );
-  const toolbar = isComparingTimetables ? (
-    <>{preferenceButton}</>
-  ) : (
-    <>
-      {addSISButton}
-      {toggleCustomEventModeButton}
-      {shareButton}
-      {shareLink}
-      {addNewTimetableButton}
-      {saveToCalendarButton}
-      {preferenceButton}
-    </>
-  );
-
   const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
 
   return (
@@ -355,7 +338,15 @@ const Calendar = (props: CalendarProps) => {
           {!customEventModeOn ? <PaginationContainer /> : null}
           {customEventDescription}
         </div>
-        <div className="fc-right">{toolbar}</div>
+        <div className="fc-right">
+          {addSISButton}
+          {toggleCustomEventModeButton}
+          {shareButton}
+          {shareLink}
+          {addNewTimetableButton}
+          {saveToCalendarButton}
+          {preferenceButton}
+        </div>
         <div className="fc-center" />
         <div className="fc-clear" />
       </div>
@@ -431,7 +422,9 @@ const Calendar = (props: CalendarProps) => {
                       </div>
                       <div className="fc-timeline" style={timelineStyle} />
                       <div className="fc-content-skeleton">
-                        <SlotManager days={showWeekend ? DAYS : DAYS.slice(0, 5)} />
+                        <SlotManagerContainer
+                          days={showWeekend ? DAYS : DAYS.slice(0, 5)}
+                        />
                       </div>
                       <hr
                         className="fc-divider fc-widget-header"

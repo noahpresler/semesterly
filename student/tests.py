@@ -12,7 +12,6 @@
 
 from attr import Attribute
 from django.contrib.auth.models import User
-from django.test import TestCase, RequestFactory
 from django.urls import resolve
 from django.forms.models import model_to_dict
 from rest_framework import status
@@ -33,89 +32,6 @@ from helpers.test.utils import (
 )
 from helpers.test.test_cases import UrlTestCase
 from timetable.serializers import EventSerializer
-from student.serializers import StudentSerializer, get_student_dict
-from analytics.models import CalendarExport
-from student.views import UserView, UserTimetableView
-from rest_framework import serializers
-import rest_framework
-
-
-class SerializersTest(TestCase):
-    """Test student/serializers.py"""
-
-    def setUp(self):
-        self.user = create_user(username="thomas", password="opensesame")
-        self.preferred_name = "Thomas"
-        self.class_year = 2022
-        self.major = "Physics"
-        self.jhed = "jhed1"
-        self.school = "jhu"
-        self.student = create_student(
-            user=self.user,
-            preferred_name=self.preferred_name,
-            class_year=self.class_year,
-            major=self.major,
-            school=self.school,
-            jhed=self.jhed,
-        )
-        self.semester = Semester.objects.create(name="Spring", year="2022")
-
-    def test_get_student_dict_exists(self):
-        user_dict = get_student_dict(self.school, self.student, self.semester)
-        self.assertTrue(user_dict["isLoggedIn"])
-
-    def test_get_student_dict_not_exist(self):
-        user_dict = get_student_dict(self.school, None, self.semester)
-        self.assertFalse(user_dict["isLoggedIn"])
-
-    def test_student_serializer(self):
-        serialized = StudentSerializer(
-            self.student,
-        ).data
-        self.assertEquals(serialized["userFirstName"], "")
-        self.assertEquals(serialized["userLastName"], "")
-        self.assertEquals(serialized["preferred_name"], self.preferred_name)
-        self.assertEquals(serialized["major"], self.major)
-
-
-class MiscellaneousTest(APITestCase):
-    def setUp(self):
-        self.factory = APIRequestFactory()
-        self.user1 = create_user(username="Alice", password="security")
-        self.student1 = create_student(user=self.user1)
-
-    def test_log_ical_export_student_exists(self):
-        url = "/user/log_ical/"
-        request = self.factory.get(url, {}, format="json")
-        response = get_auth_response(
-            request,
-            self.user1,
-            url,
-        )
-        self.assertEquals(len(CalendarExport.objects.all()), 1)
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-
-    def test_log_ical_export_student_does_not_exist(self):
-        url = "/user/log_ical/"
-        request = self.factory.get(url, {}, format="json")
-        self.user2 = create_user(username="Bob", password="super_secure")
-        response = get_auth_response(
-            request,
-            self.user2,
-            url,
-        )
-        self.assertEquals(len(CalendarExport.objects.all()), 1)
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-
-    def test_accept_tos(self):
-        url = "/tos/accept/"
-        request = self.factory.get(url, {}, format="json")
-        response = get_auth_response(
-            request,
-            self.user1,
-            url,
-        )
-        self.assertEquals(response.status_code, 204)
 
 
 class UrlsTest(UrlTestCase):
@@ -160,16 +76,7 @@ class UrlsTest(UrlTestCase):
 class UserViewTest(APITestCase):
     def setUp(self):
         self.user = create_user(username="jacob", password="top_secret")
-        self.student = create_student(
-            user=self.user, preferred_name="jac", major="STAD"
-        )
-        self.school = "jhu"
-        self.course1 = Course.objects.create(
-            id=2, school=self.school, code="SEM102", name="STAD"
-        )
-        self.course2 = Course.objects.create(
-            id=3, school=self.school, code="SEM103", name="STAD2"
-        )
+        self.student = create_student(user=self.user)
         self.factory = APIRequestFactory()
 
     def test_profile_page(self):
@@ -177,28 +84,10 @@ class UserViewTest(APITestCase):
         response = self.client.get("/user/settings/")
         self.assertTemplateUsed(response, "profile.html")
 
-    def test_profile_page_context(self):
-        self.client.force_login(self.user)
-        response = self.client.get("/user/settings/")
-        self.assertEquals(response.context["major"], "STAD")
-        self.assertEquals(response.context["student"], self.student)
-
     def test_profile_page_not_signed_in(self):
         self.client.logout()
         response = self.client.get("/user/settings/")
         self.assertRedirects(response, "/signup/")
-
-    def test_add_reactions(self):
-        view = UserView()
-        context = {"total": 0}
-        reaction1 = Reaction.objects.create(student=self.student, title="FIRE")
-        reaction2 = Reaction.objects.create(student=self.student, title="CRAP")
-        reaction1.course.add(self.course1)
-        reaction2.course.add(self.course2)
-        view.add_reactions(context, self.student)
-        self.assertEquals(context["total"], 2)
-        self.assertEquals(context["CRAP"], 1)
-        self.assertEquals(context["FIRE"], 1)
 
     def test_update_settings(self):
         new_settings = {"emails_enabled": True, "social_courses": True, "major": "CS"}
@@ -333,37 +222,6 @@ class UserTimetableViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         PersonalTimetable.objects.get(name="dupe tt")
 
-    def test_get_duplicate_m2m_fields(self):
-        testTimetable = PersonalTimetable.objects.create(
-            name="testTimetable", school="jhu", semester=self.sem, student=self.student
-        )
-        view = UserTimetableView()
-        course1 = Course.objects.create(id=10, school="jhu", code="SEM103", name="STAD")
-        section1 = Section.objects.create(
-            course=course1, semester=self.sem, meeting_section="L1"
-        )
-        course2 = Course.objects.create(id=11, school="jhu", code="SEM104", name="Algo")
-        section2 = Section.objects.create(
-            course=course2, semester=self.sem, meeting_section="L1"
-        )
-        PersonalEvent.objects.create(
-            timetable=testTimetable,
-            name="study session",
-            day="F",
-            time_start="08:50",
-            time_end="10:10",
-        )
-        testTimetable.courses.add(course1)
-        testTimetable.courses.add(course2)
-        testTimetable.sections.add(section1)
-        testTimetable.sections.add(section2)
-        courses, sections, events = view.get_duplicate_m2m_fields(testTimetable)
-        self.assertEquals(courses[0], course1)
-        self.assertEquals(courses[1], course2)
-        self.assertEquals(sections[0], section1)
-        self.assertEquals(sections[1], section2)
-        self.assertTrue(events)
-
     def test_rename_timetable(self):
         data = {
             "id": 10,
@@ -389,6 +247,7 @@ class UserTimetableViewTest(APITestCase):
 
     def test_delete_timetable(self):
         PersonalTimetable.objects.create(
+            id=20,
             name="todelete",
             school="uoft",
             semester=self.sem,
@@ -404,10 +263,11 @@ class UserTimetableViewTest(APITestCase):
             "todelete",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertFalse(PersonalTimetable.objects.filter(name="todelete").exists())
+        self.assertFalse(PersonalTimetable.objects.filter(id=20).exists())
 
     def test_update_timetable_preference(self):
         timetable = PersonalTimetable.objects.create(
+            id=20,
             name="todelete",
             school="uoft",
             semester=self.sem,
@@ -422,154 +282,6 @@ class UserTimetableViewTest(APITestCase):
         modified_timetable = PersonalTimetable.objects.get(id=timetable.id)
         self.assertEqual(modified_timetable.has_conflict, False)
         self.assertEqual(modified_timetable.show_weekend, False)
-
-    def test_update_events(self):
-        testTimetable = PersonalTimetable.objects.create(
-            name="testTimetable", school="jhu", semester=self.sem, student=self.student
-        )
-        testTimetableModified = PersonalTimetable.objects.create(
-            name="newTimetable", school="jhu", semester=self.sem, student=self.student
-        )
-
-        event1 = PersonalEvent.objects.create(
-            timetable=testTimetable,
-            name="study session",
-            day="F",
-            time_start="08:30",
-            time_end="10:35",
-            credits=0.0,
-        )
-        event2 = PersonalEvent.objects.create(
-            timetable=testTimetable,
-            name="birthday",
-            day="S",
-            time_start="09:20",
-            time_end="10:30",
-            credits=0.0,
-        )
-        event3 = PersonalEvent.objects.create(
-            timetable=testTimetable,
-            name="oose meeting",
-            day="M",
-            time_start="14:30",
-            time_end="16:40",
-            credits=0.5,
-        )
-        self.assertEquals(len(PersonalEvent.objects.all()), 3)
-        event1_serialized = EventSerializer(event1).data
-        event2_serialized = EventSerializer(event2).data
-        event3_serialized = EventSerializer(event3).data
-        events = [event1_serialized, event2_serialized, event3_serialized]
-        view = UserTimetableView()
-        view.update_events(testTimetable, events)
-        newEvents = testTimetable.events.all()
-        self.assertEquals(len(newEvents), 3)
-
-    def test_validate_credits_not_divisible_by_point_five(self):
-        view = UserTimetableView()
-        testTimetable = PersonalTimetable.objects.create(
-            name="testTimetable", school="jhu", semester=self.sem, student=self.student
-        )
-        event1 = PersonalEvent.objects.create(
-            timetable=testTimetable,
-            name="study session",
-            day="F",
-            time_start="08:30",
-            time_end="10:35",
-            credits=0.3,
-        )
-        event1_serialized = EventSerializer(event1).data
-        self.assertRaises(
-            rest_framework.exceptions.ValidationError,
-            view.validate_credits,
-            event1_serialized,
-        )
-
-    def test_validate_credits_negative(self):
-        view = UserTimetableView()
-        testTimetable = PersonalTimetable.objects.create(
-            name="testTimetable", school="jhu", semester=self.sem, student=self.student
-        )
-        event1 = PersonalEvent.objects.create(
-            timetable=testTimetable,
-            name="study session",
-            day="F",
-            time_start="08:30",
-            time_end="10:35",
-            credits=-1.0,
-        )
-        event1_serialized = EventSerializer(event1).data
-        self.assertRaises(
-            rest_framework.exceptions.ValidationError,
-            view.validate_credits,
-            event1_serialized,
-        )
-
-    def test_validate_credits_too_large(self):
-        view = UserTimetableView()
-        testTimetable = PersonalTimetable.objects.create(
-            name="testTimetable", school="jhu", semester=self.sem, student=self.student
-        )
-        event1 = PersonalEvent.objects.create(
-            timetable=testTimetable,
-            name="study session",
-            day="F",
-            time_start="08:30",
-            time_end="10:35",
-            credits=21.0,
-        )
-        event1_serialized = EventSerializer(event1).data
-        self.assertRaises(
-            rest_framework.exceptions.ValidationError,
-            view.validate_credits,
-            event1_serialized,
-        )
-
-    def test_validate_credits_correct(self):
-        view = UserTimetableView()
-        testTimetable = PersonalTimetable.objects.create(
-            name="testTimetable", school="jhu", semester=self.sem, student=self.student
-        )
-        event1 = PersonalEvent.objects.create(
-            timetable=testTimetable,
-            name="study session",
-            day="F",
-            time_start="08:30",
-            time_end="10:35",
-            credits=2.0,
-        )
-        event1_serialized = EventSerializer(event1).data
-        self.assertEquals(view.validate_credits(event1_serialized), 2.0)
-
-    def test_validate_time_valid_edge_case(self):
-        view = UserTimetableView()
-        view.validate_time("05:23", "05:33")
-
-    def test_validate_time_invalid(self):
-        view = UserTimetableView()
-        self.assertRaises(
-            rest_framework.exceptions.ValidationError,
-            view.validate_time,
-            "05:23",
-            "05:32",
-        )
-
-    def test_validate_time_invalid(self):
-        view = UserTimetableView()
-        self.assertRaises(
-            rest_framework.exceptions.ValidationError,
-            view.validate_time,
-            "06:23",
-            "05:32",
-        )
-
-    def test_convert_to_minutes_zero(self):
-        view = UserTimetableView()
-        self.assertEquals(view.convert_to_minutes("00:00"), 0)
-
-    def test_convert_to_minutes_complex(self):
-        view = UserTimetableView()
-        self.assertEquals(view.convert_to_minutes("15:23"), 923)
 
 
 class ClassmateViewTest(APITestCase):

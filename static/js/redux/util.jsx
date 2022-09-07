@@ -174,13 +174,7 @@ export const getNextAvailableColour = (courseToColourIndex) =>
 export const generateCustomEventId = () =>
   new Date().getTime() + Math.floor(Math.random() * 10000 + 1);
 
-export const slotToDisplayOffering = (
-  course,
-  section,
-  offering,
-  colourId,
-  colorData
-) => ({
+export const slotToDisplayOffering = (course, section, offering, colourId) => ({
   ...offering,
   colourId,
   courseId: course.id,
@@ -188,6 +182,4 @@ export const slotToDisplayOffering = (
   name: course.name,
   custom: false,
   meeting_section: section.meeting_section,
-  sectionId: section.id,
-  colorData,
 });

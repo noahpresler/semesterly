@@ -5,7 +5,7 @@ export type Day = "M" | "T" | "W" | "R" | "F";
 export interface Semester {
   id: number;
   name: string;
-  year: string;
+  year: number;
 }
 
 /**
@@ -53,7 +53,6 @@ export interface Slot {
   offerings: number[];
   is_optional: boolean;
   is_locked: boolean;
-  is_section_filled?: boolean;
 }
 
 /**
@@ -103,7 +102,7 @@ export interface Course {
   department: string;
   num_credits: number;
   areas: string[];
-  campus: number;
+  campus: string;
   evals: any;
   integrations: any;
   related_courses: Course[];
@@ -117,7 +116,6 @@ export interface Course {
   pos: string[];
   writing_intensive: string;
   sub_school: string;
-  slots?: Slot[];
 }
 
 export interface RelatedCourse {
@@ -128,20 +126,12 @@ export interface RelatedCourse {
   department: string;
   num_credits: number;
   areas: string[];
-  campus: number;
+  campus: string;
   evals: any;
   integrations: any;
   prerequisites: string;
   exclusions: string;
   corequisites: string;
-}
-
-export interface HoveredSlot {
-  course: Course;
-  section: Section;
-  offerings: Offering[];
-  is_optional: boolean;
-  is_locked: boolean;
 }
 
 export interface NormalizedCourse extends RelatedCourse {
@@ -198,18 +188,4 @@ export interface Peer {
   social_courses: boolean;
   social_offerings: boolean;
   time_accepted_tos: string;
-}
-
-export interface Classmate {
-  first_name: string;
-  last_name: string;
-  img_url: string;
-  sections: string[]; // section codes
-}
-
-export interface SlotColorData {
-  background: string;
-  highlight: string;
-  border: string;
-  font: string;
 }
