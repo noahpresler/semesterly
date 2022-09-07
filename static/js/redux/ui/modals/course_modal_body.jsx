@@ -224,6 +224,7 @@ class CourseModalBody extends React.Component {
               inModal
               fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
               getShareLink={this.props.getShareLink}
+              colorData={COLOUR_DATA}
             />
           ))}
         </div>
