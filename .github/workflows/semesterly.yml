@@ -5,10 +5,12 @@ on:
     branches: 
       - prod
       - develop
+      - feature/compare-timetables
   pull_request:
     branches: 
       - prod
       - develop
+      - feature/compare-timetables
 
 jobs:
   build:

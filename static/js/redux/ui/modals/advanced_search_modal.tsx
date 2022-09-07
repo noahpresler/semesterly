@@ -20,7 +20,7 @@ import {
 } from "../../actions";
 import { timetablesActions } from "../../state/slices/timetablesSlice";
 import { VERBOSE_DAYS } from "../../constants/constants";
-import { ShareLink } from "../master_slot";
+import { ShareLink } from "../MasterSlot";
 import CourseModalBodyContainer from "../containers/modals/course_modal_body_container";
 import {
   Filter,
