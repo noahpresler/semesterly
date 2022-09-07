@@ -56,7 +56,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_evals(self, course):
         """
-        Flag all eval instances s.t. there exists repeated term+year values.
+        Append all eval instances with a flag designating whether there exists another eval for the course with the same term+year values.
         Returns:
           List of modified evaluation dictionaries (added flag 'unique_term_year')
         """
@@ -136,6 +136,7 @@ class CourseSerializer(serializers.ModelSerializer):
             semester=self.context["semester"]
         )
         num_students_in_course = tts_with_course.values("student").distinct().count()
+        # print("num students: " + str(num_students_in_course))
         sections = course.section_set.filter(semester=self.context["semester"])
         course_capacity = (
             sum(sections.values_list("size", flat=True)) if sections else 0

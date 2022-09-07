@@ -3,6 +3,7 @@ import { initAllState } from "../../actions/initActions";
 import { isIncomplete } from "../../util";
 
 interface UserData {
+  [key: string]: any;
   FacebookSignedUp: boolean;
   GoogleLoggedIn: boolean;
   GoogleSignedUp: boolean;
@@ -58,11 +59,9 @@ const userInfoSlice = createSlice({
       state.overrideHide = action.payload;
     },
     changeUserInfo: (state, action: PayloadAction<any>) => {
-      const changeData = action.payload;
-      changeData.social_courses = changeData.social_offerings
-        ? true
-        : changeData.social_courses;
-      state.data = changeData;
+      state.data = action.payload;
+      state.data.social_courses =
+        action.payload.social_offerings || action.payload.social_courses;
     },
     requestSaveUserInfo: (state) => {
       state.saving = true;
@@ -91,13 +90,13 @@ const userInfoSlice = createSlice({
   },
 });
 
-export const isUserInfoIncomplete = (state: UserInfoReducerState) => {
-  const fields = state.data.FacebookSignedUp
+export const isUserInfoIncomplete = (data: UserData) => {
+  const fields = data.FacebookSignedUp
     ? ["social_offerings", "social_courses", "major", "class_year"]
     : ["major", "class_year"];
   return (
-    state.data.isLoggedIn &&
-    fields.map((field) => state.data[field]).some((val) => isIncomplete(val))
+    data.isLoggedIn &&
+    fields.map((field) => data[field]).some((val) => isIncomplete(val))
   );
 };
 

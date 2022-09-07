@@ -15,6 +15,7 @@ GNU General Public License for more details.
 import React, { useEffect, useState } from "react";
 import { DragSource, DropTarget } from "react-dnd";
 import tinycolor from "tinycolor2";
+import { removeCustomSlot } from "../actions/timetable_actions";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
 import { useAppDispatch } from "../hooks";
 import { customEventsActions } from "../state/slices/customEventsSlice";
@@ -26,8 +27,6 @@ import {
 } from "./slotUtils";
 
 type CustomSlotProps = {
-  connectDragSource: Function;
-  connectDragTarget: Function;
   depth_level: number;
   num_conflicts: number;
   shift_index: number;
@@ -40,7 +39,8 @@ type CustomSlotProps = {
   id: number;
   uses12HrTime: boolean;
   preview: boolean;
-  removeCustomSlot: Function;
+  connectDragSource: Function;
+  connectDragTarget: Function;
   connectCreateTarget: Function;
 };
 
@@ -155,9 +155,10 @@ const CustomSlot = (props: CustomSlotProps) => {
     };
   };
 
+  const dispatch = useAppDispatch();
   const removeCustomButtonClicked = (event: any) => {
     event.stopPropagation();
-    props.removeCustomSlot();
+    dispatch(removeCustomSlot(props.id));
   };
 
   const removeButton = hovered ? (
@@ -184,10 +185,9 @@ const CustomSlot = (props: CustomSlotProps) => {
     }
   };
 
-  const dispatch = useAppDispatch();
   const customSlot = (
     <div
-      className={"fc-time-grid-event fc-event slot"}
+      className={`fc-time-grid-event fc-event slot ${props.preview ? "preview" : ""}`}
       style={getSlotStyles()}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
