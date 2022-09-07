@@ -55,7 +55,6 @@ const mapStateToProps = (state) => {
       getCourseShareLink(courseCode, getCurrentSemester(state)),
     getShareLinkFromModal: (courseCode) =>
       getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
-    isComparingTimetables: state.compareTimetable.isComparing,
   };
 };
 

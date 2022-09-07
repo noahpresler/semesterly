@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import classnames from "classnames";
 import { LogFacebookAlertClick } from "../../actions/user_actions";
-import MasterSlot from "../MasterSlot";
+import MasterSlot from "../master_slot";
 import COLOUR_DATA from "../../constants/colours";
 import { setDeclinedNotifications } from "../../util";
 

@@ -192,8 +192,6 @@ class Section(models.Model):
         semester (:obj:`ForeignKey` to :obj:`Semester`): the semester for the section
         was_full (:obj:`BooleanField`): whether the course was full during the last
             parse
-        course_section_id (:obj:`IntegerField`): the id of the section when sending data
-            to SIS
     """
 
     course = models.ForeignKey(Course, on_delete=models.deletion.CASCADE)

@@ -20,7 +20,6 @@ import classnames from "classnames";
 import { WaveModal } from "boron-15";
 import majors from "../../constants/majors";
 import { isIncomplete as TOSIncomplete } from "../../util";
-import { isUserInfoIncomplete as areUserSettingsIncomplete } from "../../state/slices";
 import { getIsUserInfoIncomplete } from "../../state";
 
 const UserSettingsModal = () => {
@@ -56,12 +55,13 @@ const UserSettingsModal = () => {
 
   const [showDelete, setShowDelete] = useState(false);
   const [fbSwitchAlertText, setFbSwitchAlertText] = useState(null);
-  const [userSettings, setUserSettings] = useState({ ...userInfo });
 
   const isIncomplete = (prop) => prop === undefined || prop === "";
 
   const changeForm = (obj = {}) => {
-    setUserSettings({ ...userSettings, ...obj });
+    const userSettings = { ...userInfo, ...obj };
+    changeUserInfo(userSettings);
+    saveSettings();
   };
 
   const handleChangefbSettings = (e) => {
@@ -123,9 +123,7 @@ const UserSettingsModal = () => {
     userInfo.isLoggedIn && !hideOverrided && (showOverrided || isUserInfoIncomplete);
 
   const hide = () => {
-    changeUserInfo(userSettings);
-    saveSettings();
-    if (!areUserSettingsIncomplete(userSettings)) {
+    if (!isUserInfoIncomplete) {
       modal.current.hide();
       setUserSettingsModalHidden();
       overrideSettingsShow(false);
@@ -144,7 +142,8 @@ const UserSettingsModal = () => {
         social_offerings: false,
         social_all: false,
       };
-      setUserSettings(Object.assign({}, userInfo, newUserSettings));
+      const userSettings = Object.assign({}, userInfo, newUserSettings);
+      changeUserInfo(userSettings);
     }
   }, []);
 
@@ -165,12 +164,14 @@ const UserSettingsModal = () => {
   }, [userInfo.isLoggedIn, hideOverrided, showOverrided, isUserInfoIncomplete]);
 
   useEffect(() => {
-    setUserSettings({
-      ...userSettings,
+    const userSettings = {
+      ...userInfo,
       social_offerings: fbSettings.shareSectionsWithFriends,
       social_courses: fbSettings.shareClassesWithFriends,
       social_all: fbSettings.findNewFriends,
-    });
+    };
+    changeUserInfo(userSettings);
+    saveSettings();
   }, [fbSettings]);
 
   const tos = isSigningUp ? (
@@ -181,11 +182,15 @@ const UserSettingsModal = () => {
           id="tos-agreed-input"
           className="switch-input"
           type="checkbox"
-          checked={!TOSIncomplete(userSettings.timeAcceptedTos)}
-          disabled={!TOSIncomplete(userSettings.timeAcceptedTos)}
+          checked={!TOSIncomplete(userInfo.timeAcceptedTos)}
+          disabled={!TOSIncomplete(userInfo.timeAcceptedTos)}
           onChange={() => {
             acceptTOS();
-            setUserSettings({ ...userSettings, timeAcceptedTos: String(new Date()) });
+            changeUserInfo(
+              Object.assign({}, userInfo, {
+                timeAcceptedTos: String(new Date()),
+              })
+            );
           }}
         />
         <span className="switch-label" data-on="ACCEPTED" data-off="CLICK TO ACCEPT" />
@@ -363,18 +368,18 @@ const UserSettingsModal = () => {
           <div className="preference cf">
             <h3>What&#39;s your major?</h3>
             <Select
-              className="select-field"
-              value={{ label: userSettings.major, value: userSettings.major }}
+              name="form-field-name"
+              value={userInfo.major}
               options={majors}
-              isSearchable
+              searchable
               onChange={changeMajor}
             />
           </div>
           <div className="preference cf">
             <h3>What&#39;s your graduating class year?</h3>
             <Select
-              className="select-field"
-              value={{ label: userSettings.class_year, value: userSettings.class_year }}
+              name="form-field-name"
+              value={userInfo.class_year}
               options={[
                 { value: 2021, label: 2021 },
                 { value: 2022, label: 2022 },
@@ -384,11 +389,12 @@ const UserSettingsModal = () => {
                 { value: 2026, label: 2026 },
                 { value: 2027, label: 2027 },
               ]}
-              isSearchable
+              searchable
               onChange={changeClassYear}
             />
           </div>
           {preferences}
+          {/* { !state.isSigningUp ? notifications : null } */}
           {fbUpsell}
           {tos}
           {!isSigningUp ? deleteDropdown : null}

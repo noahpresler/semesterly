@@ -23,7 +23,8 @@ import ChangeSemesterAlertContainer from "./alerts/change_semester_alert_contain
 import NewTimetableAlertContainer from "./alerts/new_timetable_alert_container";
 import EnableNotificationsAlertContainer from "./alerts/enable_notifications_alert_container";
 import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
-import TopBar from "./TopBar";
+import TopBarContainer from "./containers/top_bar_container";
+import SideBarContainer from "./containers/side_bar_container";
 import SignupModalContainer from "./containers/modals/signup_modal_container";
 import PreferenceModal from "./modals/preference_modal";
 import TutModalContainer from "./containers/modals/tut_modal_container";
@@ -40,8 +41,6 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { getActiveTimetableCourses } from "../state";
 import NewsModal from "./modals/news_modal";
 import { newsModalActions } from "../state/slices/newsModalSlice";
-import SideBar from "./SideBar";
-import CompareTimetableSideBar from "./CompareTimetableSidebar";
 
 const Semesterly = () => {
   const dispatch = useAppDispatch();
@@ -75,10 +74,6 @@ const Semesterly = () => {
   const alertNewTimetable = useAppSelector((state) => state.alerts.alertNewTimetable);
   const alertTimetableExists = useAppSelector(
     (state) => state.alerts.alertTimetableExists
-  );
-
-  const isComparingTimetables = useAppSelector(
-    (state) => state.compareTimetable.isComparing
   );
 
   const mql = window.matchMedia("(orientation: portrait)");
@@ -183,13 +178,9 @@ const Semesterly = () => {
       <CalendarContainer />
     );
 
-  const mainbarClassName = `main-bar${
-    isComparingTimetables ? "-compare-timetable" : ""
-  }`;
-
   return (
     <div className="page-wrapper">
-      <TopBar />
+      <TopBarContainer />
       <UserSettingsModal />
       <AdvancedSearchModal />
       <NewsModal />
@@ -205,7 +196,7 @@ const Semesterly = () => {
       <TermsOfServiceBannerContainer />
       <AlertBox ref={alertBoxRef} />
       <div className="all-cols">
-        <div className={mainbarClassName}>
+        <div className="main-bar">
           {cal}
           <footer className="footer navbar no-print">
             <p className="data-last-updated no-print">
@@ -284,7 +275,7 @@ const Semesterly = () => {
             </ul>
           </footer>
         </div>
-        {isComparingTimetables ? <CompareTimetableSideBar /> : <SideBar />}
+        <SideBarContainer />
       </div>
     </div>
   );

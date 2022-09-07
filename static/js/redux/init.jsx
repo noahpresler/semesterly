@@ -19,7 +19,7 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
-import Semesterly from "./ui/Semesterly";
+import Semesterly from "./ui//semesterly";
 import {
   fetchMostClassmatesCount,
   handleAgreement,

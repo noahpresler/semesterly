@@ -24,16 +24,15 @@ from django.contrib.auth import BACKEND_SESSION_KEY
 from django.contrib.auth import HASH_SESSION_KEY
 from django.contrib.auth import SESSION_KEY
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.remote.webelement import WebElement
 from webdriver_manager.chrome import ChromeDriverManager
 from social_django.models import UserSocialAuth
 
@@ -67,6 +66,8 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def __init__(self, *args, **kwargs):
         super(SeleniumTestCase, self).__init__(*args, **kwargs)
+        if settings.DEBUG == False:
+            settings.DEBUG = True
 
     @classmethod
     def setUpClass(cls):
@@ -81,13 +82,12 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         )  # Allow running chrome as root in Docker
         cls.chrome_options.add_argument("--headless")  # Do not require a display
         cls.chrome_options.add_argument("--disable-dev-shm-usage")  # for docker
-        cls.chrome_options.add_argument("--window-size=1920x1080")
 
     def setUp(self):
         self.img_dir = os.path.dirname(os.path.realpath(__file__)) + "/test_failures"
         self.init_screenshot_dir()
         self.driver = webdriver.Chrome(
-            ChromeDriverManager().install(), options=self.chrome_options
+            ChromeDriverManager().install(), chrome_options=self.chrome_options
         )
         sem = get_current_semesters("jhu")[0]
         sem, _ = Semester.objects.update_or_create(name=sem["name"], year=sem["year"])
@@ -110,9 +110,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         if os.path.exists(self.img_dir):
             shutil.rmtree(self.img_dir)
         os.makedirs(self.img_dir)
-
-    def screenshot(self, name):
-        self.driver.save_screenshot(f"{self.img_dir}/{name}.png")
 
     @contextmanager
     def description(self, descr):
@@ -152,9 +149,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         url = url.replace("http://", "http://%s." % school)
         return url.replace("localhost", "sem.ly") + path
 
-    def find(
-        self, locator, get_all=False, root=None, clickable=False, hidden=False
-    ) -> "WebElement | list[WebElement]":
+    def find(self, locator, get_all=False, root=None, clickable=False, hidden=False):
         """Locates element in the DOM and returns it when found.
 
         Args:
@@ -166,9 +161,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
         Returns:
            The WebElement object returned by self.driver (Selenium)
-
-        Throws:
-            RuntimeError: If element is not found or both get_all and clickable is True
         """
         if get_all and clickable:
             raise RuntimeError("Cannot use both get_all and clickable")
@@ -188,19 +180,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             raise RuntimeError(
                 'Failed to locate visible element "%s" by %s' % locator[::-1]
             )
-
-    def assert_timetable_not_found(self, name):
-        timetable_dropdown = self.find((By.CLASS_NAME, "timetable-drop-it-down"))
-        timetable_dropdown.click()
-
-        try:
-            row = self.find(
-                (By.XPATH, "//div[@class='tt-name' and contains(text(),'%s')]" % name)
-            )
-        except RuntimeError:
-            return True
-
-        raise RuntimeError("Timetable found")
 
     def assert_invisibility(self, locator, root=None):
         """Asserts the invisibility of the provided element
@@ -242,10 +221,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         )
         search_box.clear()
         search_box.send_keys(query)
-        try:
-            self.find((By.CLASS_NAME, "results-loading-gif"))
-        except RuntimeError:
-            pass  # wait for debounce, but ignore if didn't happen
         self.assert_invisibility((By.CLASS_NAME, "results-loading-gif"))
 
     def assert_loader_completes(self):
@@ -288,9 +263,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 )
             )
         else:
-            chosen_course = search_results.find_elements(
-                by=By.CLASS_NAME, value="search-course"
-            )[course_idx]
+            chosen_course = search_results.find_elements_by_class_name("search-course")[
+                course_idx
+            ]
         if not by_section:
             add_button = self.find(
                 (By.CLASS_NAME, "search-course-add"), root=chosen_course, clickable=True
@@ -315,9 +290,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.assert_slot_presence(n_slots, n_master_slots)
         self.click_off()
 
-    def assert_visibility(self, locator, root=None):
-        self.assert_n_elements_found(locator, 1, root=root)
-
     def assert_n_elements_found(self, locator, n_elements, root=None):
         """Asserts that n_elements are found by the provided locator"""
         if n_elements == 0:
@@ -339,12 +311,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             self.find((By.CLASS_NAME, "master-slot"), get_all=True)
         )
         if from_slot:
-            if n_master_slots_before > 1:
+            if n_master_slots_before > 0:
                 raise RuntimeError("Cannot remove via slot button unless n_courses = 1")
-            if n_master_slots_before == 0:
-                raise RuntimeError("Cannot remove via slot button if no courses")
             slot = self.find((By.CLASS_NAME, "slot"), get_all=True)[0]
-            ActionChains(self.driver).move_to_element(slot).pause(1).perform()
             del_button = self.find(
                 (By.CLASS_NAME, "fa-times"), root=slot, clickable=True
             )
@@ -363,29 +332,13 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         if n_slots_expected:
             self.assert_n_elements_found((By.CLASS_NAME, "slot"), n_slots_expected)
 
-    def delete_timetable(self, name):
-        timetable_dropdown = self.find((By.CLASS_NAME, "timetable-drop-it-down"))
-        timetable_dropdown.click()
-
-        row = self.find(
-            (By.XPATH, "//div[@class='tt-name' and contains(text(),'%s')]" % name)
-        )
-        del_button = self.find((By.CLASS_NAME, "fa-trash-o"), root=row, clickable=True)
-        del_button.click()
-
-        confirmation_btn = self.find(
-            (By.CLASS_NAME, "delete-timetable-alert-btn"), clickable=True
-        )
-        confirmation_btn.click()
-
     def open_course_modal_from_search(self, course_idx):
         """Opens course modal from search by search result index"""
         search_results = self.find((By.CLASS_NAME, "search-results"))
-        chosen_course = search_results.find_elements(
-            by=By.CLASS_NAME, value="search-course"
-        )[course_idx]
+        chosen_course = search_results.find_elements_by_class_name("search-course")[
+            course_idx
+        ]
         chosen_course.click()
-        self.assert_visibility((By.CLASS_NAME, "course-modal"))
 
     def validate_course_modal(self):
         """Validates the course modal displays proper course data"""
@@ -422,12 +375,8 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def open_course_modal_from_slot(self, course_idx):
         """Opens the course modal from the nth slot"""
-        slot = self.find((By.CLASS_NAME, "master-slot"), get_all=True)[course_idx]
-        # For some reason, it was always clicking the share link instead of the slot
-        ActionChains(self.driver).move_to_element(slot).move_by_offset(
-            0, -10
-        ).click().perform()
-        self.assert_visibility((By.CLASS_NAME, "course-modal"))
+        slot = self.find((By.CLASS_NAME, "slot"), clickable=True)
+        slot.click()
 
     def close_course_modal(self):
         """Closes the course modal using the (x) button"""
@@ -450,11 +399,11 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         if not str(url).startswith("http"):
             url = "%s%s" % ("http://", url)
         self.driver.execute_script("window.open()")
-        self.driver.switch_to.window(self.driver.window_handles[1])
+        self.driver.switch_to_window(self.driver.window_handles[1])
         self.driver.get(url)
         validate()
         self.driver.close()
-        self.driver.switch_to.window(self.driver.window_handles[0])
+        self.driver.switch_to_window(self.driver.window_handles[0])
 
     def follow_share_link_from_modal(self):
         modal = self.find((By.CLASS_NAME, "course-modal"))
@@ -634,33 +583,27 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         if n_results:
             self.assert_n_elements_found((By.CLASS_NAME, "exp-s-result"), n_results)
 
-    def close_adv_search(self):
-        """Closes the advanced search modal"""
-        self.find((By.CLASS_NAME, "fa-times"), clickable=True).click()
-
     def login_via_fb(self, email, password):
-        """Login user via fb by detecting the Continue with Facebook button in the
-        signup modal, and then mocking user's credentials
+        """Login user via fb by clicking continue with Facebook in the signup modal,
+        entering the user's credentials into Facebook, then returns to Semester.ly
 
         Args:
             email (str): User's email
             password (str): User's password
         """
         self.find((By.CLASS_NAME, "social-login"), clickable=True).click()
-        self.find((By.CLASS_NAME, "fb-btn"), clickable=True)
-        user = self.get_or_create_student(email, password).user
-        social_user, _ = UserSocialAuth.objects.get_or_create(
-            user=user,
-            uid="12345678987654321",
-            provider="facebook",
-            extra_data={"access_token": "12345678987654321", "expires": "never"},
-        )
-        social_user.save()
-        force_login(user, self.driver, self.get_test_url("jhu"))
+        self.find((By.CLASS_NAME, "fb-btn"), clickable=True).click()
+        self.find((By.XPATH, '/html[@id="facebook"]'))
+        email_input = self.find((By.ID, "email"))
+        email_input.send_keys(email)
+        pass_input = self.find((By.ID, "pass"))
+        pass_input.send_keys(password)
+        self.find((By.ID, "loginbutton")).click()
 
-    def login_via_google(self, email, password):
-        """Mocks the login of a user via Google by detecting the Continue with Google
-        button in the signup modal, and then mocking the user's credentials.
+    def login_via_google(self, email, password, **kwargs):
+        """Mocks the login of a user via Google by clicking continue with Facebook
+        in the signup modal. Then manually creates and logins a user. All kwargs are
+        passed to the user model on creation (e.g. name and email).
 
         Args:
             email (str): User's email
@@ -676,32 +619,24 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 ),
             ),
             clickable=True,
+        ).click()
+        # ensure that we are on the google page
+        self.find((By.ID, "identifierId"))
+        user = User.objects.create(username="temporary", password="temporary", **kwargs)
+        student = Student.objects.create(
+            user=user,
+            img_url=self.get_test_url("jhu", path="static/img/user2-160x160.jpg"),
         )
-        user = self.get_or_create_student(email, password).user
-        social_user, _ = UserSocialAuth.objects.get_or_create(
+        social_user = UserSocialAuth.objects.create(
             user=user,
             uid="12345678987654321",
             provider="google-oauth2",
             extra_data={"access_token": "12345678987654321", "expires": "never"},
         )
-        social_user.save()
-        force_login(user, self.driver, self.get_test_url("jhu"))
-
-    def get_or_create_student(self, email, password) -> Student:
-        user, _ = User.objects.get_or_create(
-            username="semlytestdev", email=email, password=password
-        )
-        student, _ = Student.objects.get_or_create(
-            user=user,
-            img_url=self.get_test_url("jhu", path="static/img/user2-160x160.jpg"),
-        )
         user.save()
         student.save()
-        return student
-
-    def logout(self):
-        self.find((By.CLASS_NAME, "social-pro-pic"), clickable=True).click()
-        self.find((By.XPATH, "//a[@href='/user/logout/']"), clickable=True).click()
+        social_user.save()
+        force_login(user, self.driver, self.get_test_url("jhu"))
 
     def select_nth_adv_search_result(self, index, semester):
         """Selects the nth advanced search result with a click.
@@ -734,35 +669,56 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         # Assert welcome modal is open
         self.find((By.CLASS_NAME, "welcome-modal"))
         major_select, year_select = self.find(
-            (By.XPATH, "//div[contains(@class,'select-field')]//input"),
+            (By.XPATH, "//div[contains(@class,'Select-input')]//input"),
             get_all=True,
             hidden=True,
         )
         major_select.send_keys(major)
-        self.find((By.XPATH, f"//div[contains(text(), '{major}')]")).click()
+        self.find(
+            (By.XPATH, "//div[contains(@id,'react-select-')]"),
+        ).click()
         year_select.send_keys(class_year)
-        self.find((By.XPATH, f"//div[contains(text(), '{class_year}')]")).click()
+        self.find(
+            (By.XPATH, "//div[contains(@id,'react-select-')]"),
+        ).click()
         self.find(
             (
                 By.XPATH,
                 "//span[contains(@class, 'switch-label') and contains(@data-off, 'CLICK TO ACCEPT')]",
             )
         ).click()
+        self.find(
+            (
+                By.XPATH,
+                "//input[contains(@id, 'tos-agreed-input') and contains(@value, 'on')]",
+            ),
+            hidden=True,
+        )
         self.save_user_settings()
         self.assert_invisibility((By.CLASS_NAME, "welcome-modal"))
 
     def change_ptt_name(self, name):
         """Changes personal timetable name to the provided title"""
         name_input = self.find((By.CLASS_NAME, "timetable-name"))
-        ActionChains(self.driver).click(name_input).double_click(name_input).perform()
-        name_input.send_keys(Keys.DELETE, name)
+        name_input.clear()
+        name_input.send_keys(name)
         self.click_off()
+
+    def save_ptt(self):
+        """Saves the user's current personal timetable and returs a tuple representation"""
+        self.find((By.CLASS_NAME, "fa-floppy-o")).click()
+        self.assert_invisibility(
+            (
+                By.XPATH,
+                "//input[contains(@class, 'timetable-name) and contains(@class, 'unsaved')]",
+            )
+        )
+        return self.ptt_to_tuple()
 
     def assert_ptt_const_across_refresh(self):
         """Refreshes the browser and asserts that the tuple
         version of the personal timetable is equivalent to pre-refresh
         """
-        self.assert_invisibility((By.CLASS_NAME, "unsaved"))
         ptt = self.ptt_to_tuple()
         self.driver.refresh()
         self.assert_ptt_equals(ptt)
@@ -784,47 +740,25 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.assertCountEqual(
             master_slots, self.get_elements_as_text((By.CLASS_NAME, "master-slot"))
         )
-        self.assertCountEqual(tt_name, self.get_timetable_name())
+        self.assertCountEqual(
+            tt_name, self.get_elements_as_text((By.CLASS_NAME, "timetable-name"))
+        )
         return True
 
     def ptt_to_tuple(self):
         """Converts personal timetable to a tuple representation"""
         slots = self.get_elements_as_text((By.CLASS_NAME, "slot"))
         master_slots = self.get_elements_as_text((By.CLASS_NAME, "master-slot"))
-        tt_name = self.get_timetable_name()
+        tt_name = self.get_elements_as_text((By.CLASS_NAME, "timetable-name"))
         return (slots, master_slots, tt_name)
 
     def get_elements_as_text(self, locator):
         """Gets elements using self.get and represents them as text"""
-        try:
-            eles = self.find(locator, get_all=True)
-            elements = [s.text for s in eles if s.text]
-            # Remove "Unlock this section" from text if present
-            return list(
-                map(
-                    lambda s: "\n".join(s.split("\n")[1:])
-                    if s.startswith("Unlock this section")
-                    else s,
-                    elements,
-                )
-            )
+        eles = self.find(locator, get_all=True)
+        return [s.text for s in eles]
 
-        except RuntimeError:
-            return []
-
-    def get_timetable_name(self):
-        """Gets the personal timetable name"""
-        return self.find((By.CLASS_NAME, "timetable-name")).get_property("value")
-
-    def create_ptt(self, name: str = "", finish_saving: bool = True):
-        """Create a personaltimetable with the provided name when provided
-
-        Args:
-            name: Name of the personal timetable
-            finish_saving: Whether to wait until the personal timetable is saved
-        """
-        if finish_saving:
-            self.assert_invisibility((By.CLASS_NAME, "unsaved"))
+    def create_ptt(self, name=None):
+        """Create a personaltimetable with the provided name when provided"""
         self.find(
             (
                 By.XPATH,
@@ -847,7 +781,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         friend = Student.objects.create(
             user=user,
             img_url=self.get_test_url("jhu", path="static/img/user2-160x160.jpg"),
-            **kwargs,
+            **kwargs
         )
         friend.friends.add(Student.objects.first())
         friend.save()
@@ -861,9 +795,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             ptt.courses.add(course)
         ptt.save()
         return ptt
-
-    def assert_login_button_found(self):
-        self.find((By.CLASS_NAME, "social-login"), clickable=True)
 
     def assert_friend_image_found(self, friend):
         """Asserts that the provided friend's image is found on the page"""
@@ -901,254 +832,6 @@ class SeleniumTestCase(StaticLiveServerTestCase):
                 "//input[contains(@class, 'timetable-name') and @value='%s']" % name,
             )
         )
-        self.find((By.CLASS_NAME, "timetable-drop-it-down")).click()
-
-    def toggle_custom_event_mode(self):
-        self.find((By.CLASS_NAME, "fa-pencil")).click()
-
-    def create_custom_event(
-        self, day: int, start_time: int, end_time: int, show_weekend: bool = True
-    ):
-        """Creates a custom event using drag and drop assuming custom event mode is off
-
-        Args:
-            day: 0-6, 0 is Monday
-            start_time: 0 is 8:00A.M, every 1 is 30 mins
-            end_time: 0 is 8:00A.M, every 1 is 30 mins
-            show_weekend: if weekends are shown
-        """
-        calendar_cells = self.find((By.CLASS_NAME, "cal-cell"), get_all=True)
-        cells_per_row = 7 if show_weekend else 5
-        start_cell = calendar_cells[day + (cells_per_row * start_time)]
-        end_cell = calendar_cells[day + (cells_per_row * end_time)]
-
-        self.toggle_custom_event_mode()
-        # Magical code that simulates drag and drop because the driver doesn't work.
-        self.driver.execute_script(
-            "function createEvent(typeOfEvent) {\n"
-            + 'var event = document.createEvent("CustomEvent");\n'
-            + "event.initCustomEvent(typeOfEvent,true, true, null);\n"
-            + "event.dataTransfer = {\n"
-            + "data: {},\n"
-            + "setData: function (key, value) {\n"
-            + "this.data[key] = value;\n"
-            + "},\n"
-            + "getData: function (key) {\n"
-            + "return this.data[key];\n"
-            + "}\n"
-            + "};\n"
-            + "return event;\n"
-            + "}\n"
-            + "\n"
-            + "function dispatchEvent(element, event,transferData) {\n"
-            + "if (transferData !== undefined) {\n"
-            + "event.dataTransfer = transferData;\n"
-            + "}\n"
-            + "if (element.dispatchEvent) {\n"
-            + "element.dispatchEvent(event);\n"
-            + "} else if (element.fireEvent) {\n"
-            + 'element.fireEvent("on" + event.type, event);\n'
-            + "}\n"
-            + "}\n"
-            + "\n"
-            + "function simulateHTML5DragAndDrop(element, destination) {\n"
-            + "var dragStartEvent =createEvent('dragstart');\n"
-            + "dispatchEvent(element, dragStartEvent);\n"
-            + "var dropEvent = createEvent('drop');\n"
-            + "dispatchEvent(destination, dropEvent,dragStartEvent.dataTransfer);\n"
-            + "var dragEndEvent = createEvent('dragend');\n"
-            + "dispatchEvent(element, dragEndEvent,dropEvent.dataTransfer);\n"
-            + "}\n"
-            + "\n"
-            + "var source = arguments[0];\n"
-            + "var destination = arguments[1];\n"
-            + "simulateHTML5DragAndDrop(source,destination);",
-            start_cell,
-            end_cell,
-        )
-        self.toggle_custom_event_mode()
-        self.assert_invisibility(
-            (
-                By.XPATH,
-                "//div[contains(@class, 'slot') and contains(@class, 'preview')]",
-            ),
-        )
-        self.assert_loader_completes()
-
-    def edit_custom_event(
-        self,
-        old_name: str,
-        /,
-        *,
-        name: str = None,
-        day: str = None,
-        location: str = None,
-        color: str = None,
-        start_time: str = None,
-        end_time: str = None,
-        credits: float = None,
-    ):
-        """Edits the first custom event found with the provided name.
-
-        Args:
-            old_name: The name of the event to edit.
-            name: The new name to give the event.
-            day: The new day of the week, one of "M", "T", "W", "R", "F", "S", "U".
-            location: The new location.
-            color: The new color as a hex code (#FF0000).
-            start_time: The new start time in military time (8:00).
-            end_time: The new end time in military time (13:00).
-            credits: The new number of credits.
-        """
-        slots: list[WebElement] = self.find((By.CLASS_NAME, "slot"), get_all=True)
-        for slot in slots:
-            if not slot.text.startswith(old_name):
-                continue
-            slot.click()
-            if name is not None:
-                event_name = self.find((By.ID, "event-name"))
-                event_name.clear()
-                event_name.send_keys(name)
-            if day is not None:
-                self.find((By.XPATH, f"//button[@name='{day}']")).click()
-            if location is not None:
-                event_location = self.find((By.ID, "event-location"))
-                event_location.clear()
-                event_location.send_keys(location)
-            if color is not None:
-                event_color = self.find((By.ID, "event-color"))
-                event_color.clear()
-                event_color.send_keys(color)
-            if start_time is not None:
-                event_start_time = self.find((By.ID, "event-start-time"))
-                event_start_time.clear()
-                event_start_time.send_keys(start_time)
-            if end_time is not None:
-                event_end_time = self.find((By.ID, "event-end-time"))
-                event_end_time.clear()
-                event_end_time.send_keys(end_time)
-            if credits is not None:
-                event_credits = self.find((By.ID, "event-credits"))
-                event_credits.clear()
-                event_credits.send_keys(str(credits))
-            self.find((By.CLASS_NAME, "save-button")).click()
-            return
-        raise RuntimeError(
-            f"Could not find event with name: {name}, day: {day}, location: {location},"
-            f" color: {color}, start_time: {start_time}, end_time: {end_time},"
-            f" credits: {credits}"
-        )
-
-    def assert_custom_event_exists(
-        self,
-        *,
-        name: str,
-        day: str = None,
-        location: str = None,
-        color: str = None,
-        start_time: str = None,
-        end_time: str = None,
-        credits: float = None,
-    ):
-        """Asserts that a custom event with the provided fields exists in the current
-        timetable.
-
-        Args:
-            name: Name of the event, can be substring of the actual name
-            day: Day of the week, one of "M", "T", "W", "R", "F", "S", "U"
-            location: Location of the event, can be substring of the actual name
-            color: Color of the event in hex (#F8F6F7), case insensitive
-            start_time: Start time of the event as a non zero-padded string (8:00)
-            end_time: End time of the event as a non zero-padded string (14:30)
-            credits: Number of credits of the event
-
-        Raises:
-            RuntimeError: If the event could not be found.
-        """
-        x, y = self.find((By.CLASS_NAME, "semesterly-name")).location.values()
-        slots: list[WebElement] = self.find((By.CLASS_NAME, "slot"), get_all=True)
-        for slot in slots:
-            if not slot.text.startswith(name):
-                continue
-            slot.click()
-            (
-                event_name,
-                event_day,
-                event_location,
-                event_color,
-                event_start_time,
-                event_end_time,
-                event_credits,
-            ) = self.get_custom_event_fields()
-
-            # close modal
-            ActionChains(self.driver).move_by_offset(x, y).click().perform()
-            if (
-                event_name.startswith(name)
-                and (not day or event_day.startswith(day))
-                and (not location or event_location.startswith(location))
-                and (not color or event_color.lower() == color.lower())
-                and (not start_time or event_start_time == start_time)
-                and (not end_time or event_end_time == end_time)
-                and (not credits or float(event_credits) == credits)
-            ):
-                return
-
-        raise RuntimeError(
-            f"Could not find event with name: {name}, day: {day}, location: {location},"
-            f" color: {color}, start_time: {start_time}, end_time: {end_time},"
-            f" credits: {credits}"
-        )
-
-    def get_custom_event_fields(self):
-        """Returns the fields of the currently selected custom event.
-
-        Pre-condition:
-            Custom event modal is open.
-        """
-        event_name = self.find((By.ID, "event-name")).get_property("value")
-        event_day = self.find((By.XPATH, "//button[@class='active']")).get_property(
-            "name"
-        )
-        event_location = self.find((By.ID, "event-location")).get_property("value")
-        event_color = self.find((By.ID, "event-color")).get_property("value")
-        event_start_time = self.find((By.ID, "event-start-time")).get_property("value")
-        event_end_time = self.find((By.ID, "event-end-time")).get_property("value")
-        event_credits = self.find((By.ID, "event-credits")).get_property("value")
-
-        return (
-            event_name,
-            event_day,
-            event_location,
-            event_color,
-            event_start_time,
-            event_end_time,
-            event_credits,
-        )
-
-    def compare_timetable(self, timetable_name: str):
-        """Activates the compare timetable mode with a timetable of the given name.
-
-        Args:
-            timetable_name: Name of the timetable to compare to, must already exist.
-
-        Pre-condition:
-            The timetable dropdown is not clicked.
-        """
-        self.find((By.CLASS_NAME, "timetable-drop-it-down")).click()
-        row = self.find(
-            (
-                By.XPATH,
-                "//div[@class='tt-name' and contains(text(),'%s')]" % timetable_name,
-            )
-        )
-        self.find(
-            (By.CLASS_NAME, "fa-arrows-left-right"), root=row, clickable=True
-        ).click()
-
-    def exit_compare_timetable(self):
-        """Exits the compare timetable mode (pre: already in compare timetable mode)"""
-        self.find((By.CLASS_NAME, "compare-timetable-exit")).click()
 
 
 class url_matches_regex:
@@ -1272,6 +955,4 @@ def force_login(user, driver, base_url):
     }
 
     driver.add_cookie(cookie)
-    # hack to get past authentication errors
-    driver.add_cookie({"name": "csrftoken", "value": session.session_key})
     driver.refresh()
