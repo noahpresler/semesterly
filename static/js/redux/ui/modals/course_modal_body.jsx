@@ -17,7 +17,7 @@ import React from "react";
 import isEmpty from "lodash/isEmpty";
 import Reaction from "../reaction";
 import REACTION_MAP from "../../constants/reactions";
-import MasterSlot from "../master_slot";
+import MasterSlot from "../MasterSlot";
 import COLOUR_DATA from "../../constants/colours";
 import EvaluationList from "../evaluation_list";
 import CourseModalSection from "../course_modal_section";
@@ -224,6 +224,7 @@ class CourseModalBody extends React.Component {
               inModal
               fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
               getShareLink={this.props.getShareLink}
+              colorData={COLOUR_DATA}
             />
           ))}
         </div>
@@ -522,7 +523,7 @@ class CourseModalBody extends React.Component {
             </div>
           </div>
           <div id="modal-section-lists" className="col-5-16 cf">
-            {sectionGrid}
+            {!this.props.isComparingTimetables && sectionGrid}
             {similarCourses}
           </div>
         </div>
@@ -577,6 +578,7 @@ CourseModalBody.propTypes = {
   unHoverSection: PropTypes.func.isRequired,
   getShareLink: PropTypes.func.isRequired,
   getShareLinkFromModal: PropTypes.func.isRequired,
+  isComparingTimetables: PropTypes.bool.isRequired,
 };
 
 export default CourseModalBody;
