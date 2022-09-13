@@ -21,6 +21,9 @@ class EndToEndTest(SeleniumTestCase):
 
     def test_logged_out_flow(self):
         self.clear_tutorial()
+        with self.description("search for course and then delete search query"):
+            self.search_course("calc", 3)
+            self.clear_search_query()
         with self.description("search, add, then remove course"):
             self.search_course("calc", 3)
             self.add_course(0, n_slots=4, n_master_slots=1)
@@ -83,6 +86,7 @@ class EndToEndTest(SeleniumTestCase):
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
 
+    @unittest.skip("Skipping Facebook login test for now")
     def test_logged_in_via_fb_flow(self):
         with self.description("setup and clear tutorial"):
             self.clear_tutorial()
@@ -116,6 +120,7 @@ class EndToEndTest(SeleniumTestCase):
             self.login_via_fb(email="e@ma.il", password="password")
             self.assert_ptt_equals(ptt)
 
+    @unittest.skip("Skipping Google login test for now")
     def test_logged_in_via_google_flow(self):
         with self.description("setup and clear tutorial"):
             self.clear_tutorial()

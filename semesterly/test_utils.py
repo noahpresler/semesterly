@@ -248,6 +248,14 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             pass  # wait for debounce, but ignore if didn't happen
         self.assert_invisibility((By.CLASS_NAME, "results-loading-gif"))
 
+    def clear_search_query(self):
+        """Clears the search box"""
+        search_box = self.find(
+            (By.XPATH, '//div[@class="search-bar__input-wrapper"]/input')
+        )
+        search_box.clear()
+        self.assert_n_elements_found(By.CLASS_NAME, 0)
+
     def assert_loader_completes(self):
         """Asserts that the semester.ly page loader has completed"""
         self.assert_invisibility((By.CLASS_NAME, "la-ball-clip-rotate-multiple"))
