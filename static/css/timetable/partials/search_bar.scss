@@ -187,7 +187,7 @@
 // Each Course that is listed in the Search Results
 .search-course {
   cursor: pointer;
-  height: 59.5px;
+  height: 60px;
   list-style-type: none;
   max-width: 600px;
   padding: 10px 110px 10px 5px;
@@ -539,7 +539,7 @@
 
 @media (min-width: 767px) {
   .search-results {
-    height: 357px;
+    height: 360px;
   }
 
   .search-bar__wrapper {
