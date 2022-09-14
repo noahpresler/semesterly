@@ -93,7 +93,7 @@ export const getDenormCourseById = (state: EntitiesSliceState, id: number) => {
 };
 
 export const getSectionTypeToSections = (denormCourse: DenormalizedCourse) => {
-  if (!("sections" in denormCourse)) {
+  if (!denormCourse || !("sections" in denormCourse)) {
     // empty course (only happens on inital CourseInfo state)
     return {};
   }

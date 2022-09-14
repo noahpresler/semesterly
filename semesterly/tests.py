@@ -21,6 +21,10 @@ class EndToEndTest(SeleniumTestCase):
 
     def test_logged_out_flow(self):
         self.clear_tutorial()
+        with self.description("search for course and then delete search query"):
+            self.search_course("calc", 3)
+            self.search_course("notacoursename", 0)
+            self.clear_search_query()
         with self.description("search, add, then remove course"):
             self.search_course("calc", 3)
             self.add_course(0, n_slots=4, n_master_slots=1)
