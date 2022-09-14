@@ -269,10 +269,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def search_course(self, query, n_results):
         """Searches a course and asserts n_results elements are found
-        
+
         Args:
             query (str): the text to enter into search
-            n_results (int): the number of results to look for. If 0, will look for no 
+            n_results (int): the number of results to look for. If 0, will look for no
                 results
         """
         self.enter_search_query(query)
