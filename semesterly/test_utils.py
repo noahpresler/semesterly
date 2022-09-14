@@ -270,8 +270,11 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def search_course(self, query, n_results):
         """Searches a course and asserts n_results elements are found"""
         self.enter_search_query(query)
-        search_results = self.find((By.CLASS_NAME, "search-results"))
-        self.assert_n_elements_found((By.CLASS_NAME, "search-course"), n_results)
+        if n_results > 0:
+            search_results = self.find((By.CLASS_NAME, "search-results"))
+            self.assert_n_elements_found((By.CLASS_NAME, "search-course"), n_results)
+        else:
+            self.assert_invisibility((By.CLASS_NAME, "search-results"))
 
     def add_course(self, course_idx, n_slots, n_master_slots, by_section="", code=None):
         """Adds a course via search results and asserts the corresponding number of slots are found
