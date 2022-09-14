@@ -268,7 +268,13 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.assertEqual(len(master_slots), n_master_slots)
 
     def search_course(self, query, n_results):
-        """Searches a course and asserts n_results elements are found"""
+        """Searches a course and asserts n_results elements are found
+        
+        Args:
+            query (str): the text to enter into search
+            n_results (int): the number of results to look for. If 0, will look for no 
+                results
+        """
         self.enter_search_query(query)
         if n_results > 0:
             search_results = self.find((By.CLASS_NAME, "search-results"))
