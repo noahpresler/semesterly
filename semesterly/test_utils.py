@@ -254,7 +254,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             (By.XPATH, '//div[@class="search-bar__input-wrapper"]/input')
         )
         search_box.clear()
-        self.assert_n_elements_found(By.CLASS_NAME, 0)
+
+        self.assert_n_elements_found((By.CLASS_NAME, "search-course"), 0)
+        self.assert_visibility((By.CLASS_NAME, "semesterly-name"))
 
     def assert_loader_completes(self):
         """Asserts that the semester.ly page loader has completed"""
