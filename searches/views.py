@@ -35,13 +35,24 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         """Return search results."""
         school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
+
         # grab first 10 results
         course_matches = search(request.subdomain, query, sem).distinct()[:10]
+
+        courses_per_page = int(request.GET.get("limit", 10))
+        paginator = Paginator(course_matches, courses_per_page)
+
+        cur_page = int(request.GET.get("page", 1))
+
+        if cur_page > paginator.num_pages:
+            course_match_data = []
+        else:
+            paginated_data = paginator.page(cur_page)
+            course_match_data = CourseSerializer(
+                paginated_data, context={"semester": sem, "school": school}, many=True
+            ).data
+
         self.save_analytic(request, query, course_matches, sem)
-        course_match_data = [
-            CourseSerializer(course, context={"semester": sem, "school": school}).data
-            for course in course_matches
-        ]
         return Response(course_match_data, status=status.HTTP_200_OK)
 
     def save_analytic(self, request, query, course_matches, sem, advanced=False):
@@ -69,9 +80,11 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
             "student": student,
             "school": request.subdomain,
         }
+
         cur_page = int(request.GET.get("page", 1))
         courses_per_page = int(request.GET.get("limit", 10))
         paginator = Paginator(course_matches, courses_per_page)
+
         if cur_page > paginator.num_pages:
             course_match_data = []
         else:
