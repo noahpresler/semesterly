@@ -21,9 +21,12 @@ import { timetablesActions } from "../../state/slices/timetablesSlice";
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
-  let hoveredResult = getSearchResult(state, state.ui.searchHover);
-  if (!hoveredResult) {
-    hoveredResult = getSearchResult(state, 0);
+  let hoveredResult = null;
+  if (state.searchResults.items.length > 0) {
+    hoveredResult = getSearchResult(state, state.ui.searchHover);
+    if (!hoveredResult) {
+      hoveredResult = getSearchResult(state, 0);
+    }
   }
   const activeTimetable = getActiveTimetable(state);
   return {
