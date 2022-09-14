@@ -248,6 +248,14 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             pass  # wait for debounce, but ignore if didn't happen
         self.assert_invisibility((By.CLASS_NAME, "results-loading-gif"))
 
+    def clear_search_query(self):
+        """Clears the search box"""
+        search_box = self.find(
+            (By.XPATH, '//div[@class="search-bar__input-wrapper"]/input')
+        )
+        search_box.clear()
+        self.assert_n_elements_found((By.CLASS_NAME, "search-course"), 0)
+
     def assert_loader_completes(self):
         """Asserts that the semester.ly page loader has completed"""
         self.assert_invisibility((By.CLASS_NAME, "la-ball-clip-rotate-multiple"))
@@ -260,10 +268,19 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.assertEqual(len(master_slots), n_master_slots)
 
     def search_course(self, query, n_results):
-        """Searches a course and asserts n_results elements are found"""
+        """Searches a course and asserts n_results elements are found
+
+        Args:
+            query (str): the text to enter into search
+            n_results (int): the number of results to look for. If 0, will look for no
+                results
+        """
         self.enter_search_query(query)
-        search_results = self.find((By.CLASS_NAME, "search-results"))
-        self.assert_n_elements_found((By.CLASS_NAME, "search-course"), n_results)
+        if n_results > 0:
+            search_results = self.find((By.CLASS_NAME, "search-results"))
+            self.assert_n_elements_found((By.CLASS_NAME, "search-course"), n_results)
+        else:
+            self.assert_invisibility((By.CLASS_NAME, "search-results"))
 
     def add_course(self, course_idx, n_slots, n_master_slots, by_section="", code=None):
         """Adds a course via search results and asserts the corresponding number of slots are found
