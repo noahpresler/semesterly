@@ -63,7 +63,7 @@ const SearchBar = () => {
     const timeoutId = setTimeout(() => {
       // when user stops typing we search
       dispatch(fetchSearchResults(searchTerm));
-    }, 1000);
+    }, 250);
     // clear timeout everytime user updates query
     return () => {
       clearTimeout(timeoutId);
