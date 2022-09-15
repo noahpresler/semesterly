@@ -62,14 +62,6 @@ class SocialProfile extends React.Component {
               <i className="fa fa-bar-chart" />
               <span>Stats</span>
             </a>
-            <a href="/termsofservice" target="_blank" rel="noopener noreferrer">
-              <i className="fa fa-file-text" />
-              <span>Terms</span>
-            </a>
-            <a href="/privacypolicy" target="_blank" rel="noopener noreferrer">
-              <i className="fa fa-user-secret" />
-              <span>Privacy</span>
-            </a>
             <a href="/user/logout/">
               <i className="fa fa-sign-out" aria-hidden="true" />
               <span>Sign out</span>
