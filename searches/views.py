@@ -53,7 +53,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
             ).data
 
         self.save_analytic(request, query, course_matches, sem)
-        return Response(course_match_data, status=status.HTTP_200_OK)
+        return Response({"data": course_match_data, "page": cur_page}, status=status.HTTP_200_OK)
 
     def save_analytic(self, request, query, course_matches, sem, advanced=False):
         save_analytics_course_search(
