@@ -22,7 +22,11 @@ const searchResultsSlice = createSlice({
     builder
       .addCase(receiveSearchResults, (state, action) => {
         state.isFetching = false;
-        state.items = action.payload.result;
+        if (action.payload.page === 1) {
+          state.items = action.payload.courses.result;
+        } else {
+          state.items = state.items.concat(action.payload.courses.result);
+        }
       })
       .addCase(requestCourses, (state) => {
         state.isFetching = true;

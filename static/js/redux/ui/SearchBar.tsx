@@ -13,6 +13,7 @@ GNU General Public License for more details.
 */
 
 import React, { useState, useEffect, useRef, useCallback, KeyboardEvent } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useAppDispatch, useAppSelector } from "../hooks";
 // @ts-ignore
 import ClickOutHandler from "react-onclickout";
@@ -49,6 +50,7 @@ const SearchBar = () => {
   const isFetching = useAppSelector((state) => state.searchResults.isFetching);
   const hasHoveredResult = useAppSelector((state) => getHoveredSlots(state) !== null);
   const hoveredPosition = useAppSelector((state) => state.ui.searchHover);
+  const [curPage, setCurPage] = useState(1);
 
   const dispatch = useAppDispatch();
 
@@ -57,6 +59,7 @@ const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const input = useRef<HTMLInputElement>();
+  const scrollContainer = useRef<HTMLDivElement>();
 
   useEffect(() => {
     // better way to search, only run API call when user stops typing for 1 seconds
@@ -69,6 +72,17 @@ const SearchBar = () => {
       clearTimeout(timeoutId);
     };
   }, [searchTerm]);
+
+  const fetchResults = (pageToFetch: number = 1) => {
+    if (isFetching) {
+      return;
+    }
+    if (pageToFetch === 1 && scrollContainer.current) {
+      scrollContainer.current.scrollTop = 0;
+    }
+    dispatch(fetchSearchResults(searchTerm, pageToFetch));
+    setCurPage(pageToFetch);
+  };
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -145,12 +159,35 @@ const SearchBar = () => {
         </div>
       </div>
     ) : null;
+  const loadSpinner = (
+    <div
+      style={{
+        textAlign: "center",
+      }}
+    >
+      <i className="fa fa-spin fa-refresh mx-auto" />
+    </div>
+  );
   const resultContainer =
     !inputFocused || results.length === 0 ? null : (
       <ul className={resClass}>
-        <div className="search-results__list-container">
-          {results}
-          {seeMore}
+        <div
+          className="search-results__list-container"
+          id="search-results__list-container"
+          ref={scrollContainer}
+        >
+          <InfiniteScroll
+            dataLength={searchResults.length}
+            hasMore
+            next={() => {
+              fetchResults(curPage + 1);
+            }}
+            loader={isFetching && loadSpinner}
+            scrollableTarget="search-results__list-container"
+          >
+            {results}
+            {seeMore}
+          </InfiniteScroll>
         </div>
         <SearchSideBarContainer />
       </ul>

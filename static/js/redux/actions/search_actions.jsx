@@ -66,7 +66,7 @@ export const maybeSetSemester = (semester) => (dispatch, getState) => {
   return null;
 };
 
-export const fetchSearchResults = (query) => (dispatch, getState) => {
+export const fetchSearchResults = (query, pageToFetch) => (dispatch, getState) => {
   if (query.length <= 1) {
     dispatch(receiveSearchResults([]));
     return;
@@ -74,7 +74,7 @@ export const fetchSearchResults = (query) => (dispatch, getState) => {
   dispatch(requestCourses());
   const state = getState();
   const seqNumber = state.searchResults.seqNumber;
-  fetch(getCourseSearchEndpoint(query, getSemester(state)), {
+  fetch(getCourseSearchEndpoint(query, getSemester(state), pageToFetch), {
     credentials: "include",
   })
     .then((response) => response.json())
