@@ -62,10 +62,10 @@ const SearchBar = () => {
   const scrollContainer = useRef<HTMLDivElement>();
 
   useEffect(() => {
-    // better way to search, only run API call when user stops typing for 1 seconds
+    // better way to search, only run API call when user stops typing for 250 ms
     const timeoutId = setTimeout(() => {
-      // when user stops typing we search
-      dispatch(fetchSearchResults(searchTerm));
+      // when user stops typing we search and fetch first page
+      fetchResults();
     }, 250);
     // clear timeout everytime user updates query
     return () => {
