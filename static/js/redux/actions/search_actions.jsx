@@ -68,7 +68,7 @@ export const maybeSetSemester = (semester) => (dispatch, getState) => {
 
 export const fetchSearchResults = (query, pageToFetch) => (dispatch, getState) => {
   if (query.length <= 1) {
-    dispatch(receiveSearchResults([]));
+    dispatch(receiveSearchResults({ data: [], pageToFetch }));
     return;
   }
   dispatch(requestCourses());
