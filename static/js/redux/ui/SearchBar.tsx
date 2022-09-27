@@ -60,6 +60,7 @@ const SearchBar = () => {
 
   const input = useRef<HTMLInputElement>();
   const scrollContainer = useRef<HTMLDivElement>();
+  const resultsContainer = useRef<HTMLUListElement>();
 
   useEffect(() => {
     // better way to search, only run API call when user stops typing for 250 ms
@@ -72,6 +73,16 @@ const SearchBar = () => {
       clearTimeout(timeoutId);
     };
   }, [searchTerm]);
+
+  useEffect(() => {
+    if (resultsContainer.current) {
+      if (searchResults.length < 4) {
+        resultsContainer.current.style.height = "250px";
+      } else {
+        resultsContainer.current.style.height = "360px";
+      }
+    }
+  }, [searchResults]);
 
   const fetchResults = (pageToFetch: number = 1) => {
     if (isFetching) {
@@ -170,7 +181,7 @@ const SearchBar = () => {
   );
   const resultContainer =
     !inputFocused || results.length === 0 ? null : (
-      <ul className={resClass}>
+      <ul className={resClass} ref={resultsContainer}>
         <div
           className="search-results__list-container"
           id="search-results__list-container"
