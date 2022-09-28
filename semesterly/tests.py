@@ -13,7 +13,6 @@ import unittest
 
 from semesterly.test_utils import SeleniumTestCase
 from timetable.models import Semester, Course
-from .settings import get_secret
 
 
 class EndToEndTest(SeleniumTestCase):
@@ -21,10 +20,11 @@ class EndToEndTest(SeleniumTestCase):
     fixtures = ["jhu_fall_sample.json", "jhu_spring_sample.json"]
 
     def test_logged_out_flow(self):
-        # Set window size is not a recognized command for some reason,
-        # try commenting it out for now
-        # self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
+        with self.description("search for course and then delete search query"):
+            self.search_course("calc", 3)
+            self.search_course("notacoursename", 0)
+            self.clear_search_query()
         with self.description("search, add, then remove course"):
             self.search_course("calc", 3)
             self.add_course(0, n_slots=4, n_master_slots=1)
@@ -87,51 +87,15 @@ class EndToEndTest(SeleniumTestCase):
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
 
-    @unittest.skip("TODO: fix on mac")
     def test_logged_in_via_fb_flow(self):
-        # self.driver.set_window_size(1440, 1080)
-        self.clear_tutorial()
+        with self.description("setup and clear tutorial"):
+            self.clear_tutorial()
         with self.description("succesfully signup with facebook"):
-            self.login_via_fb(
-                email=get_secret("FB_TEST_EMAIL"), password=get_secret("FB_TEST_PASS")
-            )
+            self.login_via_fb(email="e@ma.il", password="password")
             self.complete_user_settings_basics(
-                major="Computer Science", class_year=2017
+                major="Computer Science", class_year=2023
             )
-        with self.description("search, add, change personal timetable name and save"):
-            self.search_course("AS.110.105", 1)
-            self.add_course(0, n_slots=4, n_master_slots=1)
-            self.change_ptt_name("Testing Timetable")
-            self.save_ptt()
-            self.assert_ptt_const_across_refresh()
-        with self.description("add to personal timetable, share, save"):
-            self.search_course("AS.110.106", 1)
-            self.open_course_modal_from_search(0)
-            self.share_timetable(
-                [self.add_course_from_course_modal(n_slots=8, n_master_slots=2)]
-            )
-            testing_ptt = self.save_ptt()
-            self.assert_ptt_const_across_refresh()
-        with self.description("create new personal timetable, validate on reload"):
-            self.create_ptt("End To End Testing!")
-            self.search_course("AS.110.105", 1)
-            self.add_course(0, n_slots=4, n_master_slots=1)
-            e2e_ptt = self.save_ptt()
-            self.assert_ptt_const_across_refresh()
-        with self.description("Switch to original ptt and validate"):
-            self.switch_to_ptt("Testing Timetable")
-            self.assert_ptt_equals(testing_ptt)
-        with self.description(
-            "switch semester, create personal timetable, switch back"
-        ):
-            self.change_term("Spring 2017")
-            self.create_ptt("Hope ders no bugs!")
-            self.click_off()
-            self.search_course("AS.110.106", 1)
-            self.add_course(0, n_slots=4, n_master_slots=1)
-            self.save_ptt()
-            self.change_to_current_term()
-            self.assert_ptt_equals(e2e_ptt)
+        self.common_logged_in_tests()
         with self.description(
             (
                 "add friend with course,"
@@ -145,21 +109,123 @@ class EndToEndTest(SeleniumTestCase):
             )
             self.assert_ptt_const_across_refresh()
             self.assert_friend_image_found(friend)
-            self.open_course_modal_from_slot(0)
+            self.open_course_modal_from_slot(1)
             self.assert_friend_in_modal(friend)
+            self.close_course_modal()
+        ptt = self.ptt_to_tuple()
+        with self.description("Log out"):
+            self.logout()
+            self.assert_login_button_found()
+        with self.description("Log back in"):
+            self.login_via_fb(email="e@ma.il", password="password")
+            self.assert_ptt_equals(ptt)
 
-    @unittest.skip("TODO: fix on mac")
     def test_logged_in_via_google_flow(self):
         with self.description("setup and clear tutorial"):
-            # self.driver.set_window_size(1440, 1080)
             self.clear_tutorial()
         with self.description("login via Google, complete user settings"):
             self.login_via_google(
-                first_name="Tester",
-                last_name="McTesterFace",
-                email="e2etesterly@gmail.com",
-                password="tester.ly",
+                email="em@ai.l",
+                password="password",
             )
             self.complete_user_settings_basics(
-                major="Computer Science", class_year=2017
+                major="Computer Science", class_year=2023
             )
+        self.common_logged_in_tests()
+        ptt = self.ptt_to_tuple()
+        with self.description("Log out"):
+            self.logout()
+            self.assert_login_button_found()
+        with self.description("Log back in"):
+            self.login_via_google(email="em@ai.l", password="password")
+            self.assert_ptt_equals(ptt)
+
+    def common_logged_in_tests(self):
+        with self.description("search and add courses"):
+            self.search_course("AS.110.105", 1)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.search_course("AS.110.106", 1)
+            self.add_course(0, n_slots=8, n_master_slots=2)
+            self.search_course("AS.110.415", 1)
+            self.add_course(0, n_slots=11, n_master_slots=3)
+            self.search_course("AS.110.795", 1)
+            self.add_course(0, n_slots=12, n_master_slots=4)
+            self.assert_ptt_const_across_refresh()
+        with self.description("change personal timetable name"):
+            self.change_ptt_name("Testing Timetable")
+            self.assert_ptt_const_across_refresh()
+        with self.description("remove courses"):
+            self.remove_course(3)
+            self.remove_course(2)
+            self.remove_course(1)
+            self.remove_course(0, from_slot=True)
+            self.assert_ptt_const_across_refresh()
+        with self.description("add and remove from course modal"):
+            self.search_course("AS.110.105", 1)
+            self.open_course_modal_from_search(0)
+            course1 = self.add_course_from_course_modal(n_slots=4, n_master_slots=1)
+            self.search_course("AS.110.106", 1)
+            self.open_course_modal_from_search(0)
+            course2 = self.add_course_from_course_modal(n_slots=8, n_master_slots=2)
+            self.search_course("AS.110.415", 1)
+            self.open_course_modal_from_search(0)
+            self.add_course_from_course_modal(n_slots=11, n_master_slots=3)
+            self.open_course_modal_from_slot(2)
+            self.remove_course_from_course_modal(n_slots_expected=8)
+        with self.description("share timetable"):
+            self.share_timetable([course1, course2])
+            self.assert_ptt_const_across_refresh()
+        testing_ptt = self.ptt_to_tuple()
+        with self.description("create new personal timetable, validate on reload"):
+            self.create_ptt("End To End Testing!")
+            self.search_course("AS.110.105", 1)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.search_course("AS.110.415", 1)
+            self.add_course(0, n_slots=7, n_master_slots=2)
+            e2e_ptt = self.ptt_to_tuple()
+            self.assert_ptt_const_across_refresh()
+        with self.description("Switch to original ptt and validate"):
+            self.switch_to_ptt("Testing Timetable")
+            self.assert_ptt_equals(testing_ptt)
+        with self.description("Compare timetables"):
+            self.compare_timetable("End To End Testing!")
+            self.assert_slot_presence(11, 3)
+            self.exit_compare_timetable()
+        with self.description(
+            "switch semester, create personal timetable, switch back"
+        ):
+            self.change_term("Spring 2017")
+            self.create_ptt("Hope ders no bugs!", finish_saving=False)
+            self.click_off()
+            self.search_course("AS.110.106", 1)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.change_to_current_term()
+            self.assert_ptt_equals(e2e_ptt)
+        with self.description("Delete a timetable"):
+            self.delete_timetable("End To End Testing!")
+            self.assert_timetable_not_found("End To End Testing!")
+        with self.description("add and edit custom events"):
+            self.create_custom_event(5, 0, 4)
+            self.assert_custom_event_exists(
+                name="New Custom Event", start_time="8:00", end_time="10:00"
+            )
+            self.assert_ptt_const_across_refresh()  # custom events saved as slots too
+            event = {
+                "name": "Semly",
+                "day": "M",
+                "location": "Malone Hall",
+                "color": "#6f00ff",
+                "start_time": "14:00",
+                "end_time": "17:30",
+                "credits": 4.5,
+            }
+            self.edit_custom_event("New Custom Event", **event)
+            self.assert_custom_event_exists(**event)
+            self.assert_ptt_const_across_refresh()
+        with self.description("advanced search basic query executes"):
+            self.change_to_current_term()
+            sem = Semester.objects.get(year=2017, name="Fall")
+            self.open_and_query_adv_search("ca", n_results=4)
+            self.select_nth_adv_search_result(1, sem)
+            self.select_nth_adv_search_result(2, sem)
+            self.close_adv_search()

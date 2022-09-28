@@ -17,10 +17,10 @@ import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 import { Swipeable } from "react-swipeable";
 import PaginationContainer from "./containers/pagination_container";
-import SlotManagerContainer from "./containers/slot_manager_container";
+import SlotManager from "./SlotManager";
 import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
-import { ShareLink } from "./master_slot";
+import { ShareLink } from "./MasterSlot";
 import { useAppSelector } from "../hooks";
 
 type RowProps = {
@@ -228,20 +228,30 @@ const DayCalendar = (props: DayCalendarProps) => {
       <img alt="add" src="static/img/addtocalendar.png" />
     </button>
   );
+
+  const isComparingTimetables = useAppSelector(
+    (state) => state.compareTimetable.isComparing
+  );
+  const toolbar = isComparingTimetables ? (
+    <>{preferenceButton}</>
+  ) : (
+    <>
+      {shareButton}
+      {shareLink}
+      {addButton}
+      {saveButton}
+      {preferenceButton}
+      {saveToCalendarButton}
+    </>
+  );
+
   return (
     <div className="calendar fc fc-ltr fc-unthemed day-calendar">
       <div className="fc-toolbar no-print">
         <div className="fc-left">
           <PaginationContainer />
         </div>
-        <div className="fc-right">
-          {shareButton}
-          {shareLink}
-          {addButton}
-          {saveButton}
-          {preferenceButton}
-          {saveToCalendarButton}
-        </div>
+        <div className="fc-right">{toolbar}</div>
         <div className="fc-center" />
         <div className="fc-clear cf">
           <div className="day-pills">
@@ -279,7 +289,7 @@ const DayCalendar = (props: DayCalendarProps) => {
                         </div>
                         <div className="fc-timeline" style={getTimelineStyle()} />
                         <div className="fc-content-skeleton">
-                          <SlotManagerContainer days={[DAYS[currentDay]]} />
+                          <SlotManager days={[DAYS[currentDay]]} />
                         </div>
                         <hr
                           className="fc-divider fc-widget-header"

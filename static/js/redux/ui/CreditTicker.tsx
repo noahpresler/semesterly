@@ -17,11 +17,13 @@ import { Course, Event } from "../constants/commonTypes";
 import { useAppSelector } from "../hooks";
 import { getActiveTimetableCourses } from "../state";
 
-const CreditTicker = () => {
-  const [displayedCredits, setDisplayedCredits] = useState(0);
+interface CreditTickerProps {
+  timetableCourses: any[];
+  events: Event[];
+}
 
-  const timetableCourses = useAppSelector((state) => getActiveTimetableCourses(state));
-  const events = useAppSelector((state) => state.customEvents.events);
+const CreditTicker = ({ timetableCourses, events }: CreditTickerProps) => {
+  const [displayedCredits, setDisplayedCredits] = useState(0);
 
   const credits =
     timetableCourses.reduce(
@@ -31,7 +33,7 @@ const CreditTicker = () => {
     events.reduce((acc: number, event: Event) => acc + parseFloat(event.credits), 0);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       if (parseFloat(credits.toFixed(2)) > parseFloat(displayedCredits.toFixed(2))) {
         setDisplayedCredits((previous) => previous + 0.25);
       } else if (
@@ -40,10 +42,11 @@ const CreditTicker = () => {
         setDisplayedCredits((previous) => previous - 0.25);
       }
     }, 8);
+    return () => clearTimeout(timer);
   }, [credits, displayedCredits]);
 
   return (
-    <div className="col-1-3 sb-credits">
+    <div className="sb-credits">
       <h3>{Math.abs(displayedCredits).toFixed(2)}</h3>
       <h4>credits</h4>
     </div>

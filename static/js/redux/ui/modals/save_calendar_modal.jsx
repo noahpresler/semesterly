@@ -120,7 +120,7 @@ class SaveCalendarModal extends React.Component {
             <span>Download Calendar</span>
           </button>
           <p className="method-details">
-            Downloads a .ics file which can be uploaded to Google Calendar, loaded in to
+            Downloads a .ics file which can be uploaded to Google Calendar, loaded into
             iCal., or any other calendar application.
           </p>
         </div>

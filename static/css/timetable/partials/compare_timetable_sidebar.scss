@@ -1,0 +1,75 @@
+@import "../framework/page_layout.scss";
+
+.side-bar-compare-timetable {
+  @include side-bar;
+  left: calc(100% - 550px);
+  width: 550px;
+}
+
+.main-bar-compare-timetable {
+  @include main-bar;
+  width: calc(100% - 550px);
+  &.less-cal {
+    width: calc(100% - 550px);
+  }
+}
+
+.slots-rating {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.horizontal-bar {
+  border-top: 2px solid rgba(196, 196, 196, 1);
+  padding-top: 5px;
+  margin: 0 10px;
+}
+
+.slots-comparison {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.slots-list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  width: 250px;
+}
+
+.slots-separator {
+  border-left: 2px solid rgba(196, 196, 196, 1);
+  position: absolute;
+  left: 50%;
+  margin-left: -5px;
+  height: 80%;
+  top: 20px;
+  z-index: -1;
+}
+
+.compare-timetable-exit {
+  position: absolute;
+  right: 0;
+  padding: 1rem;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.slots-title-wrapper {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.title-wrapper {
+  width: 50%;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.slots-wrapper {
+  min-height: 80%;
+}

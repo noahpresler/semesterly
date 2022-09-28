@@ -18,7 +18,6 @@ import CourseModalContainer from "./containers/modals/course_modal_container";
 import TimetableLoaderContainer from "./containers/timetable_loader_container";
 import SocialProfileContainer from "./containers/social_profile_container";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
-import ThemeToggle from "./theme_toggle";
 
 export const expandSideBar = () => {
   $(".main-bar, .side-bar").removeClass("full-cal").addClass("less-cal");

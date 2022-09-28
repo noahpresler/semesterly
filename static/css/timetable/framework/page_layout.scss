@@ -39,8 +39,8 @@ textarea {
   height: 100%;
 }
 
-.side-bar {
-  @include theme(){
+@mixin side-bar {
+  @include theme() {
     background-color: t('sidebar-background');
   }
   bottom: auto;
@@ -64,7 +64,17 @@ textarea {
   }
 }
 
-.main-bar {
+.side-bar {
+  @include side-bar;
+}
+
+.side-bar-compare-timetable {
+  @include side-bar;
+  left: calc(100% - 600px);
+  width: 600px;
+}
+
+@mixin main-bar {
   float: left;
   height: 100%;
   opacity: 1;
@@ -83,6 +93,18 @@ textarea {
 
   &.less-cal {
     width: calc(100% - 300px);
+  }
+}
+
+.main-bar {
+  @include main-bar;
+}
+
+.main-bar-compare-timetable {
+  @include main-bar;
+  width: calc(100% - 600px);
+  &.less-cal {
+    width: calc(100% - 600px);
   }
 }
 
@@ -123,9 +145,9 @@ textarea {
 
   i {
     display: inline-block;
-    font-size: 22px;
+    font-size: 20px;
     line-height: 30px;
-    vertical-align:	middle;
+    vertical-align: middle;
   }
 
   span {
@@ -136,7 +158,7 @@ textarea {
     margin-left: 4px;
     padding: 3px 0;
     text-align: left;
-    vertical-align:	middle;
+    vertical-align: middle;
     width: 60px;
   }
 }
@@ -176,7 +198,6 @@ textarea {
     }
   }
 }
-
 
 @media (max-width: 766px) {
   .main-bar {
@@ -288,7 +309,6 @@ textarea {
 }
 // End Navicon
 
-
 li {
   &.footer-button {
     line-height: 22px;
@@ -361,7 +381,7 @@ footer {
   margin: 5px 0;
 }
 
-@media(max-width: 710px) {
+@media (max-width: 710px) {
   .data-last-updated {
     float: none;
     text-align: center;
