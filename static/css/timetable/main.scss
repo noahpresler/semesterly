@@ -1,10 +1,12 @@
 // Base
 @import "base/colors";
 @import "base/fonts";
+@import "base/themes.scss";
 
 // Vendor
 @import "vendor/react-select";
 @import "vendor/react_input_range";
+@import "vendor/full-calendar";
 
 // Framework
 @import "framework/grid";
