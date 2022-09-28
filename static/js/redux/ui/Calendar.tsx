@@ -24,6 +24,8 @@ import { DAYS } from "../constants/constants";
 import { ShareLink } from "./MasterSlot";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { useAppSelector } from "../hooks";
+import Switch from "react-switch";
+import { preferencesActions } from "../state/slices/preferencesSlice";
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -303,24 +305,31 @@ const Calendar = (props: CalendarProps) => {
     </div>
   );
 
-  const preferenceButton = (
+  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
+
+  const showWeekendsButton = (
     <div className="cal-btn-wrapper">
-      <button
-        onClick={() => props.showPreferenceModal()}
-        className="save-timetable"
+      <Switch checked={showWeekend} 
+        onChange={() => dispatch(preferencesActions.toggleShowWeekend())} 
+        onColor="#86d3ff"
+        onHandleColor="#2693e6"
+        handleDiameter={30}
+        uncheckedIcon={false}
+        checkedIcon={false}
+        boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+        activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+        height={20}
+        width={48}
         data-tip
-        data-for="pref-btn-tooltip"
-      >
-        <i className="fa fa-cog" />
-      </button>
+        data-for="showWeekend-btn-tooltip"/>
       <ReactTooltip
-        id="pref-btn-tooltip"
+        id="showWeekend-btn-tooltip"
         class="tooltip"
         type="dark"
         place="bottom"
         effect="solid"
       >
-        <span>Preferences</span>
+        <span>Show Weekends</span>
       </ReactTooltip>
     </div>
   );
@@ -329,7 +338,7 @@ const Calendar = (props: CalendarProps) => {
     (state) => state.compareTimetable.isComparing
   );
   const toolbar = isComparingTimetables ? (
-    <>{preferenceButton}</>
+    <>{showWeekendsButton}</>
   ) : (
     <>
       {addSISButton}
@@ -338,11 +347,9 @@ const Calendar = (props: CalendarProps) => {
       {shareLink}
       {addNewTimetableButton}
       {saveToCalendarButton}
-      {preferenceButton}
+      {showWeekendsButton}
     </>
   );
-
-  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
 
   return (
     <div
