@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from "react";
 
 /*
  *
@@ -13,57 +13,58 @@ import React, {useState, useEffect} from 'react';
  */
 
 // Add more themes here to have it be accepted.
-const availableThemes = ['light', 'dark'];
+const availableThemes = ["light", "dark"];
 
 // For typescript purposes
 type Theme = typeof availableThemes[number];
 const themeLocalStorageKey = "main_theme";
 
 const ThemeToggle = () => {
+  const [theme, setTheme] = useState<Theme>("light");
 
-    const [theme, setTheme] = useState<Theme>('light');
+  // On Mount
+  useEffect(() => {
+    const theme = localStorage.getItem(themeLocalStorageKey);
 
-    // On Mount
-    useEffect(() => {
-        const theme = localStorage.getItem(themeLocalStorageKey);
+    // Check if a theme is valid.
+    if (availableThemes.indexOf(theme) !== -1) {
+      setTheme(theme);
+    } else {
+      // Set the first element as the default theme
+      setTheme(availableThemes[0]);
+    }
+  }, []);
 
-        // Check if a theme is valid.
-        if (availableThemes.indexOf(theme) !== -1) {
-            setTheme(theme);
-        } else {
-            // Set the first element as the default theme
-            setTheme(availableThemes[0])
-        }
-    }, []);
+  // When theme changes
+  useEffect(() => {
+    // Remove previous theme.
+    const root: Element = document.querySelector(".page");
 
-    // When theme changes
-    useEffect(() => {
+    // Reset previous classes
+    root.className = "page";
 
-        // Remove previous theme.
-        const root: Element = document.querySelector('.page');
+    // Now, add the theme
+    root.classList.add("theme--" + theme);
+    root.setAttribute("data-theme", theme);
 
-        // Reset previous classes
-        root.className = 'page';
+    // Store in localStorage
+    localStorage.setItem(themeLocalStorageKey, theme);
+  }, [theme]);
 
-        // Now, add the theme
-        root.classList.add('theme--' + theme);
-        root.setAttribute('data-theme', theme);
-
-        // Store in localStorage
-        localStorage.setItem(themeLocalStorageKey, theme);
-
-    }, [theme]);
-
-    return(
-        <div className="theme-toggle-container">
-            {theme === 'light' ?
-                <i className="fa fa-moon-o" onClick={() => setTheme('dark')} /> : ''
-            }
-            {theme === 'dark' ?
-                <i className="fa fa-sun-o" onClick={() => setTheme('light')} /> : ''
-            }
-        </div>
-    )
-}
+  return (
+    <div className="theme-toggle-container">
+      {theme === "light" ? (
+        <i className="fa fa-moon-o" onClick={() => setTheme("dark")} />
+      ) : (
+        ""
+      )}
+      {theme === "dark" ? (
+        <i className="fa fa-sun-o" onClick={() => setTheme("light")} />
+      ) : (
+        ""
+      )}
+    </div>
+  );
+};
 
 export default ThemeToggle;
