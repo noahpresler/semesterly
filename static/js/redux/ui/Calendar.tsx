@@ -15,7 +15,6 @@ GNU General Public License for more details.
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import classnames from "classnames";
-import ReactTooltip from "react-tooltip";
 import Clipboard from "clipboard";
 import PaginationContainer from "./containers/pagination_container";
 import SlotManager from "./SlotManager";
@@ -28,7 +27,6 @@ import { preferencesActions } from "../state/slices/preferencesSlice";
 import Tooltip from '@mui/material/Tooltip';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -61,7 +59,6 @@ const Row = (props: RowProps) => {
 };
 
 type CalendarProps = {
-  showPreferenceModal: Function;
   triggerSaveCalendarModal: Function;
   isFetchingShareLink: boolean;
   endHour: number;
@@ -273,20 +270,14 @@ const Calendar = (props: CalendarProps) => {
     </div>
   );
 
-
-  const Android12Switch = styled(Switch)(() => ({
-    '& .MuiSwitch-thumb': {
-      color: 'lightgray'
-    },
-  }));
-
   const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
 
   const showWeekendsButton = (
     <div style= {{alignItems: "center", marginLeft: '0px'}} >
       <Tooltip title={<Typography fontSize={12}>Show Weekends</Typography>}>
         <div>
-          <Android12Switch size='small' checked={showWeekend} color='default'
+          <Switch size='small' checked={showWeekend} 
+            color='default' sx={{'& .MuiSwitch-thumb': { color: 'lightgray' }}}
             onChange={() => dispatch(preferencesActions.toggleShowWeekend())} />
         </div> 
       </Tooltip>

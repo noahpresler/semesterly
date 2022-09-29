@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A Timetable Generator",
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/material": "^5.10.7",
     "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
