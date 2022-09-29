@@ -24,8 +24,11 @@ import { DAYS } from "../constants/constants";
 import { ShareLink } from "./MasterSlot";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { useAppSelector } from "../hooks";
-import Switch from "react-switch";
 import { preferencesActions } from "../state/slices/preferencesSlice";
+import Tooltip from '@mui/material/Tooltip';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -176,54 +179,40 @@ const Calendar = (props: CalendarProps) => {
 
   const addSISButton = props.registrarSupported ? (
     <div className="cal-btn-wrapper">
-      <button
-        type="submit"
-        form="form1"
-        className="save-timetable add-button"
-        data-for="sis-btn-tooltip"
-        data-tip
-        onClick={sisButtonClicked}
-      >
-        <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: "2px" }} />
-      </button>
-      <ReactTooltip
-        id="sis-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>SIS Add to Cart</span>
-      </ReactTooltip>
+      <Tooltip title={<Typography fontSize={12}>SIS Add to Cart</Typography>}>
+        <button
+          type="submit"
+          form="form1"
+          className="save-timetable add-button"
+          data-for="sis-btn-tooltip"
+          data-tip
+          onClick={sisButtonClicked}
+        >
+          <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: "2px" }} />
+        </button>
+      </Tooltip>
     </div>
   ) : null;
 
   const shareButton = (
     <div className="cal-btn-wrapper">
-      <button
-        onClick={fetchShareTimetableLink}
-        className="save-timetable add-button"
-        data-tip
-        data-for="share-btn-tooltip"
-      >
-        <i
-          className={classnames(
-            "fa",
-            { "fa-share-alt": !props.isFetchingShareLink },
-            { "fa-spin fa-circle-o-notch": props.isFetchingShareLink }
-          )}
-          onClick={showShareLink}
-        />
-      </button>
-      <ReactTooltip
-        id="share-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>Share Calendar</span>
-      </ReactTooltip>
+      <Tooltip title={<Typography fontSize={12}>Share Calendar</Typography>}>
+        <button
+          onClick={fetchShareTimetableLink}
+          className="save-timetable add-button"
+          data-tip
+          data-for="share-btn-tooltip"
+        >
+          <i
+            className={classnames(
+              "fa",
+              { "fa-share-alt": !props.isFetchingShareLink },
+              { "fa-spin fa-circle-o-notch": props.isFetchingShareLink }
+            )}
+            onClick={showShareLink}
+          />
+        </button>
+      </Tooltip>
     </div>
   );
 
@@ -237,100 +226,70 @@ const Calendar = (props: CalendarProps) => {
 
   const addNewTimetableButton = (
     <div className="cal-btn-wrapper">
-      <button
-        onClick={() => props.handleCreateNewTimetable()}
-        className="save-timetable add-button"
-        data-tip
-        data-for="add-btn-tooltip"
-      >
-        <i className="fa fa-plus" />
-      </button>
-      <ReactTooltip
-        id="add-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>New Timetable</span>
-      </ReactTooltip>
+      <Tooltip title={<Typography fontSize={12}>New Timetable</Typography>}>
+        <button
+          onClick={() => props.handleCreateNewTimetable()}
+          className="save-timetable add-button"
+          data-tip
+          data-for="add-btn-tooltip"
+        >
+          <i className="fa fa-plus" />
+        </button>
+      </Tooltip>
     </div>
   );
 
   const toggleCustomEventModeButton = (
     <div className="cal-btn-wrapper">
-      <button
-        className="save-timetable add-button"
-        onMouseDown={() => customEventModeButtonClicked()}
-        data-tip
-        data-for="save-btn-tooltip"
-      >
-        <i
-          className={classnames("fa fa-pencil", {
-            addingCustomSlot: customEventModeOn,
-          })}
-        />
-      </button>
-      <ReactTooltip
-        id="save-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>Add Custom Event</span>
-      </ReactTooltip>
+      <Tooltip title={<Typography fontSize={12}>Add Custom Event</Typography>}>
+        <button
+          className="save-timetable add-button"
+          onMouseDown={() => customEventModeButtonClicked()}
+          data-tip
+          data-for="save-btn-tooltip"
+        >
+          <i
+            className={classnames("fa fa-pencil", {
+              addingCustomSlot: customEventModeOn,
+            })}
+          />
+        </button>
+      </Tooltip>
     </div>
   );
 
   const saveToCalendarButton = (
     <div className="cal-btn-wrapper">
-      <button
-        onClick={() => props.triggerSaveCalendarModal()}
-        className="save-timetable"
-        data-tip
-        data-for="saveToCal-btn-tooltip"
-      >
-        <img src="/static/img/addtocalendar.png" alt="Add to Calendar" />
-      </button>
-      <ReactTooltip
-        id="saveToCal-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>Save to Calendar</span>
-      </ReactTooltip>
+      <Tooltip title={<Typography fontSize={12}>Save to Calendar</Typography>}>
+        <button
+          onClick={() => props.triggerSaveCalendarModal()}
+          className="save-timetable"
+          data-tip
+          data-for="saveToCal-btn-tooltip"
+        >
+          <img src="/static/img/addtocalendar.png" alt="Add to Calendar" />
+        </button>
+      </Tooltip>
     </div>
   );
+
+
+  const Android12Switch = styled(Switch)(() => ({
+    '& .MuiSwitch-thumb': {
+      color: 'lightgray'
+    },
+  }));
 
   const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
 
   const showWeekendsButton = (
-    <div className="cal-btn-wrapper">
-      <Switch checked={showWeekend} 
-        onChange={() => dispatch(preferencesActions.toggleShowWeekend())} 
-        onColor="#86d3ff"
-        onHandleColor="#2693e6"
-        handleDiameter={30}
-        uncheckedIcon={false}
-        checkedIcon={false}
-        boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-        activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-        height={20}
-        width={48}
-        data-tip
-        data-for="showWeekend-btn-tooltip"/>
-      <ReactTooltip
-        id="showWeekend-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>Show Weekends</span>
-      </ReactTooltip>
+    <div style= {{alignItems: "center", marginLeft: '0px'}} >
+      <Tooltip title={<Typography fontSize={12}>Show Weekends</Typography>}>
+        <div>
+          <Android12Switch size='small' checked={showWeekend} color='default'
+            onChange={() => dispatch(preferencesActions.toggleShowWeekend())} />
+        </div> 
+      </Tooltip>
     </div>
   );
 
