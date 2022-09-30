@@ -223,14 +223,7 @@ const DayCalendar = (props: DayCalendarProps) => {
     </button>
   );
 
-  const isComparingTimetables = useAppSelector(
-    (state) => state.compareTimetable.isComparing
-  );
-  const toolbar = isComparingTimetables ? (
-    <>
-      <ShowWeekendsButton isMobile={true} />
-    </>
-  ) : (
+  const toolbar = (
     <>
       {shareButton}
       {shareLink}

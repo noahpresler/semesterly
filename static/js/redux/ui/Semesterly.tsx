@@ -175,8 +175,7 @@ const Semesterly = () => {
     navigator.userAgent
   );
   const cal =
-    // @ts-ignore
-    mobile && $(window).width() < 767 && orientation === "portrait" ? (
+    mobile && window.innerWidth < 767 && orientation === "portrait" ? (
       <DayCalendarContainer />
     ) : (
       <CalendarContainer />
