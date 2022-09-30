@@ -190,7 +190,7 @@ const SideBar = () => {
     : null;
   const dropItDown =
     savedTimetables && savedTimetables.length !== 0 ? (
-      <div className="timetable-drop-it-down" onMouseDown={toggleDropdown}>
+      <div className="timetable-drop-it-down" onClick={toggleDropdown}>
         <span className={classNames("tip-down", { down: showDropdown })} />
       </div>
     ) : null;
