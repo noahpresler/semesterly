@@ -22,7 +22,7 @@ import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
 import { ShareLink } from "./MasterSlot";
 import { useAppSelector } from "../hooks";
-import {ShowWeekendsButton} from "./Calendar"
+import { ShowWeekendsButton } from "./Calendar";
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -227,7 +227,9 @@ const DayCalendar = (props: DayCalendarProps) => {
     (state) => state.compareTimetable.isComparing
   );
   const toolbar = isComparingTimetables ? (
-    <><ShowWeekendsButton /></>
+    <>
+      <ShowWeekendsButton />
+    </>
   ) : (
     <>
       {shareButton}
