@@ -24,9 +24,9 @@ import { ShareLink } from "./MasterSlot";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { useAppSelector } from "../hooks";
 import { preferencesActions } from "../state/slices/preferencesSlice";
-import Tooltip from '@mui/material/Tooltip';
-import Switch from '@mui/material/Switch';
-import Typography from '@mui/material/Typography';
+import Tooltip from "@mui/material/Tooltip";
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -57,6 +57,26 @@ const Row = (props: RowProps) => {
     </tr>
   );
 };
+
+export const ShowWeekendsButton = () => {
+  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
+  const dispatch = useDispatch();
+  return (
+    <div style={{ alignItems: "center", marginLeft: "0px" }}>
+      <Tooltip title={<Typography fontSize={12}>Show Weekends</Typography>}>
+        <div>
+          <Switch
+            size="small"
+            checked={showWeekend}
+            color="default"
+            sx={{ "& .MuiSwitch-thumb": { color: "lightgray" } }}
+            onChange={() => dispatch(preferencesActions.toggleShowWeekend())}
+          />
+        </div>
+      </Tooltip>
+    </div>
+  )
+}
 
 type CalendarProps = {
   triggerSaveCalendarModal: Function;
@@ -271,24 +291,14 @@ const Calendar = (props: CalendarProps) => {
   );
 
   const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
-
-  const showWeekendsButton = (
-    <div style= {{alignItems: "center", marginLeft: '0px'}} >
-      <Tooltip title={<Typography fontSize={12}>Show Weekends</Typography>}>
-        <div>
-          <Switch size='small' checked={showWeekend} 
-            color='default' sx={{'& .MuiSwitch-thumb': { color: 'lightgray' }}}
-            onChange={() => dispatch(preferencesActions.toggleShowWeekend())} />
-        </div> 
-      </Tooltip>
-    </div>
-  );
-
+  
   const isComparingTimetables = useAppSelector(
     (state) => state.compareTimetable.isComparing
   );
   const toolbar = isComparingTimetables ? (
-    <>{showWeekendsButton}</>
+    <>
+    <ShowWeekendsButton />
+    </>
   ) : (
     <>
       {addSISButton}
@@ -297,7 +307,7 @@ const Calendar = (props: CalendarProps) => {
       {shareLink}
       {addNewTimetableButton}
       {saveToCalendarButton}
-      {showWeekendsButton}
+      <ShowWeekendsButton />
     </>
   );
 
