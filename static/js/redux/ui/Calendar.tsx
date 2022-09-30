@@ -75,8 +75,8 @@ export const ShowWeekendsButton = () => {
         </div>
       </Tooltip>
     </div>
-  )
-}
+  );
+};
 
 type CalendarProps = {
   triggerSaveCalendarModal: Function;
@@ -291,13 +291,13 @@ const Calendar = (props: CalendarProps) => {
   );
 
   const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
-  
+
   const isComparingTimetables = useAppSelector(
     (state) => state.compareTimetable.isComparing
   );
   const toolbar = isComparingTimetables ? (
     <>
-    <ShowWeekendsButton />
+      <ShowWeekendsButton />
     </>
   ) : (
     <>
