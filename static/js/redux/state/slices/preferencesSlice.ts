@@ -41,12 +41,6 @@ const preferencesSlice = createSlice({
   name: "preferences",
   initialState,
   reducers: {
-    showPreferenceModal: (state) => {
-      state.isModalVisible = true;
-    },
-    hidePreferenceModal: (state) => {
-      state.isModalVisible = false;
-    },
     toggleConflicts: (state) => {
       state.tryWithConflicts = !state.tryWithConflicts;
     },
