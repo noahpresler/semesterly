@@ -228,7 +228,7 @@ const DayCalendar = (props: DayCalendarProps) => {
   );
   const toolbar = isComparingTimetables ? (
     <>
-      <ShowWeekendsButton />
+      <ShowWeekendsButton isMobile={true} />
     </>
   ) : (
     <>
@@ -236,8 +236,8 @@ const DayCalendar = (props: DayCalendarProps) => {
       {shareLink}
       {addButton}
       {saveButton}
-      <ShowWeekendsButton />
       {saveToCalendarButton}
+      <ShowWeekendsButton isMobile={true} />
     </>
   );
 
