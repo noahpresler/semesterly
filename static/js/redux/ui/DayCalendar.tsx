@@ -230,7 +230,7 @@ const DayCalendar = (props: DayCalendarProps) => {
       {addButton}
       {saveButton}
       {saveToCalendarButton}
-      <ShowWeekendsButton isMobile={true} />
+      <ShowWeekendsButton isMobile />
     </>
   );
 
