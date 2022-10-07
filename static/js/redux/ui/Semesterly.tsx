@@ -34,7 +34,7 @@ import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_co
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
 import UserSettingsModal from "./modals/user_settings_modal";
 import CustomEventModal from "./modals/custom_event_modal";
-import AdvancedSearchModal from "./modals/advanced_search_modal";
+import AdvancedSearchModal from "./modals/AdvancedSearchModal";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getActiveTimetableCourses } from "../state";
 import NewsModal from "./modals/news_modal";

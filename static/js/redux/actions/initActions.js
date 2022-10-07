@@ -46,8 +46,8 @@ export const receiveSchoolInfo = createAction("global/receiveSchoolInfo");
  */
 export const receiveSearchResults = createAction(
   "global/receiveSearchResults",
-  (courses) => ({
-    payload: normalize(courses, [courseSchema]),
+  (response) => ({
+    payload: { courses: normalize(response.data, [courseSchema]), page: response.page },
   })
 );
 

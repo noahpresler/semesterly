@@ -1,1409 +1,1814 @@
 [
-{
+  {
     "model": "timetable.semester",
     "pk": 4,
     "fields": {
-        "name": "Fall",
-        "year": "2017"
+      "name": "Fall",
+      "year": "2017"
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 814,
     "fields": {
-        "section": 1115,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1115,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 815,
     "fields": {
-        "section": 1115,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1115,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 816,
     "fields": {
-        "section": 1115,
-        "day": "T",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "16:30",
-        "time_end": "17:20",
-        "location": ""
+      "section": 1115,
+      "day": "T",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "16:30",
+      "time_end": "17:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 813,
     "fields": {
-        "section": 1115,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1115,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 817,
     "fields": {
-        "section": 1116,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1116,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 818,
     "fields": {
-        "section": 1116,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1116,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 819,
     "fields": {
-        "section": 1116,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1116,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 820,
     "fields": {
-        "section": 1116,
-        "day": "T",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
+      "section": 1116,
+      "day": "T",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "15:00",
+      "time_end": "15:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 821,
     "fields": {
-        "section": 1117,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1117,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 822,
     "fields": {
-        "section": 1117,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1117,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 823,
     "fields": {
-        "section": 1117,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1117,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 824,
     "fields": {
-        "section": 1117,
-        "day": "R",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "16:30",
-        "time_end": "17:20",
-        "location": ""
+      "section": 1117,
+      "day": "R",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "16:30",
+      "time_end": "17:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 825,
     "fields": {
-        "section": 1118,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1118,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 827,
     "fields": {
-        "section": 1118,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1118,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 828,
     "fields": {
-        "section": 1118,
-        "day": "R",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
+      "section": 1118,
+      "day": "R",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "15:00",
+      "time_end": "15:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 826,
     "fields": {
-        "section": 1118,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1118,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 829,
     "fields": {
-        "section": 1119,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1119,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 830,
     "fields": {
-        "section": 1119,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1119,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 831,
     "fields": {
-        "section": 1119,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1119,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 832,
     "fields": {
-        "section": 1119,
-        "day": "R",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "13:30",
-        "time_end": "14:20",
-        "location": ""
+      "section": 1119,
+      "day": "R",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "13:30",
+      "time_end": "14:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 833,
     "fields": {
-        "section": 1120,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1120,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 834,
     "fields": {
-        "section": 1120,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1120,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 835,
     "fields": {
-        "section": 1120,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1120,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 836,
     "fields": {
-        "section": 1120,
-        "day": "R",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "16:30",
-        "time_end": "17:20",
-        "location": ""
+      "section": 1120,
+      "day": "R",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "16:30",
+      "time_end": "17:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 837,
     "fields": {
-        "section": 1121,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1121,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 838,
     "fields": {
-        "section": 1121,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1121,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 840,
     "fields": {
-        "section": 1121,
-        "day": "R",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
+      "section": 1121,
+      "day": "R",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "15:00",
+      "time_end": "15:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 839,
     "fields": {
-        "section": 1121,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1121,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 841,
     "fields": {
-        "section": 1122,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1122,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 842,
     "fields": {
-        "section": 1122,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1122,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 843,
     "fields": {
-        "section": 1122,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1122,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 844,
     "fields": {
-        "section": 1122,
-        "day": "T",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
+      "section": 1122,
+      "day": "T",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "15:00",
+      "time_end": "15:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 845,
     "fields": {
-        "section": 1123,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1123,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 846,
     "fields": {
-        "section": 1123,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1123,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 847,
     "fields": {
-        "section": 1123,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 1123,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 848,
     "fields": {
-        "section": 1123,
-        "day": "T",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "13:30",
-        "time_end": "14:20",
-        "location": ""
+      "section": 1123,
+      "day": "T",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "13:30",
+      "time_end": "14:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 849,
     "fields": {
-        "section": 1124,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1124,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 850,
     "fields": {
-        "section": 1124,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1124,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 851,
     "fields": {
-        "section": 1124,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1124,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 852,
     "fields": {
-        "section": 1124,
-        "day": "T",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "16:30",
-        "time_end": "17:20",
-        "location": ""
+      "section": 1124,
+      "day": "T",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "16:30",
+      "time_end": "17:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 853,
     "fields": {
-        "section": 1125,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1125,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 854,
     "fields": {
-        "section": 1125,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1125,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 855,
     "fields": {
-        "section": 1125,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1125,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 856,
     "fields": {
-        "section": 1125,
-        "day": "T",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
+      "section": 1125,
+      "day": "T",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "15:00",
+      "time_end": "15:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 857,
     "fields": {
-        "section": 1126,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1126,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 858,
     "fields": {
-        "section": 1126,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1126,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 859,
     "fields": {
-        "section": 1126,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1126,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 860,
     "fields": {
-        "section": 1126,
-        "day": "R",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
+      "section": 1126,
+      "day": "R",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "15:00",
+      "time_end": "15:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 861,
     "fields": {
-        "section": 1127,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1127,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 862,
     "fields": {
-        "section": 1127,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1127,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 863,
     "fields": {
-        "section": 1127,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 1127,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 864,
     "fields": {
-        "section": 1127,
-        "day": "R",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "13:30",
-        "time_end": "14:20",
-        "location": ""
+      "section": 1127,
+      "day": "R",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "13:30",
+      "time_end": "14:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 809,
     "fields": {
-        "section": 1114,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "09:00",
-        "time_end": "09:50",
-        "location": ""
+      "section": 1114,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "09:00",
+      "time_end": "09:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 810,
     "fields": {
-        "section": 1114,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "09:00",
-        "time_end": "09:50",
-        "location": ""
+      "section": 1114,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "09:00",
+      "time_end": "09:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 811,
     "fields": {
-        "section": 1114,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "09:00",
-        "time_end": "09:50",
-        "location": ""
+      "section": 1114,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "09:00",
+      "time_end": "09:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 812,
     "fields": {
-        "section": 1114,
-        "day": "T",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "13:30",
-        "time_end": "14:20",
-        "location": ""
+      "section": 1114,
+      "day": "T",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "13:30",
+      "time_end": "14:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 1091,
     "fields": {
-        "section": 1200,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "15:00",
-        "time_end": "16:00",
-        "location": ""
+      "section": 1200,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "15:00",
+      "time_end": "16:00",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 1090,
     "fields": {
-        "section": 1199,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "15:00",
-        "time_end": "17:30",
-        "location": ""
+      "section": 1199,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "15:00",
+      "time_end": "17:30",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 1051,
     "fields": {
-        "section": 1179,
-        "day": "M",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "13:30",
-        "time_end": "14:45",
-        "location": ""
+      "section": 1179,
+      "day": "M",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "13:30",
+      "time_end": "14:45",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 1052,
     "fields": {
-        "section": 1179,
-        "day": "W",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "13:30",
-        "time_end": "14:45",
-        "location": ""
+      "section": 1179,
+      "day": "W",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "13:30",
+      "time_end": "14:45",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 1053,
     "fields": {
-        "section": 1179,
-        "day": "F",
-        "date_start": "08-29-2017",
-        "date_end": "12-10-2017",
-		"time_start": "13:30",
-        "time_end": "14:20",
-        "location": ""
+      "section": 1179,
+      "day": "F",
+      "date_start": "08-29-2017",
+      "date_end": "12-10-2017",
+      "time_start": "13:30",
+      "time_end": "14:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 7333,
     "fields": {
-        "section": 1201,
-        "day": "M",
-        "date_start": "08-29-2019",
-        "date_end": "10-18-2019",
-        "time_start": "13:30",
-        "time_end": "14:45",
-        "location": "Remsen Hall 101"
+      "section": 1201,
+      "day": "M",
+      "date_start": "08-29-2019",
+      "date_end": "10-18-2019",
+      "time_start": "13:30",
+      "time_end": "14:45",
+      "location": "Remsen Hall 101"
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 7334,
     "fields": {
-        "section": 1201,
-        "day": "W",
-        "date_start": "08-29-2019",
-        "date_end": "10-18-2019",
-        "time_start": "13:30",
-        "time_end": "14:45",
-        "location": "Remsen Hall 101"
+      "section": 1201,
+      "day": "W",
+      "date_start": "08-29-2019",
+      "date_end": "10-18-2019",
+      "time_start": "13:30",
+      "time_end": "14:45",
+      "location": "Remsen Hall 101"
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 7335,
     "fields": {
-        "section": 1201,
-        "day": "F",
-        "date_start": "08-29-2019",
-        "date_end": "10-18-2019",
-        "time_start": "09:00",
-        "time_end": "09:50",
-        "location": "Croft Hall G02"
+      "section": 1201,
+      "day": "F",
+      "date_start": "08-29-2019",
+      "date_end": "10-18-2019",
+      "time_start": "09:00",
+      "time_end": "09:50",
+      "location": "Croft Hall G02"
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 7336,
     "fields": {
-        "section": 1202,
-        "day": "M",
-        "date_start": "10-21-2019",
-        "date_end": "12-06-2019",
-        "time_start": "13:30",
-        "time_end": "14:45",
-        "location": "Remsen Hall 101"
+      "section": 1202,
+      "day": "M",
+      "date_start": "10-21-2019",
+      "date_end": "12-06-2019",
+      "time_start": "13:30",
+      "time_end": "14:45",
+      "location": "Remsen Hall 101"
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 7337,
     "fields": {
-        "section": 1202,
-        "day": "W",
-        "date_start": "10-21-2019",
-        "date_end": "12-06-2019",
-        "time_start": "13:30",
-        "time_end": "14:45",
-        "location": "Remsen Hall 101"
+      "section": 1202,
+      "day": "W",
+      "date_start": "10-21-2019",
+      "date_end": "12-06-2019",
+      "time_start": "13:30",
+      "time_end": "14:45",
+      "location": "Remsen Hall 101"
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 7338,
     "fields": {
-        "section": 1202,
-        "day": "F",
-        "date_start": "10-21-2019",
-        "date_end": "12-06-2019",
-        "time_start": "09:00",
-        "time_end": "09:50",
-        "location": "Croft Hall G02"
+      "section": 1202,
+      "day": "F",
+      "date_start": "10-21-2019",
+      "date_end": "12-06-2019",
+      "time_start": "09:00",
+      "time_end": "09:50",
+      "location": "Croft Hall G02"
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1124,
     "fields": {
-        "course": 424,
-        "meeting_section": "(01)",
-        "size": 30,
-        "enrolment": 3,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "X. Zheng",
-        "semester": 4,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(01)",
+      "size": 30,
+      "enrolment": 3,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "X. Zheng",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1125,
     "fields": {
-        "course": 424,
-        "meeting_section": "(02)",
-        "size": 30,
-        "enrolment": 1,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "X. Zheng",
-        "semester": 4,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(02)",
+      "size": 30,
+      "enrolment": 1,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "X. Zheng",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1126,
     "fields": {
-        "course": 424,
-        "meeting_section": "(03)",
-        "size": 30,
-        "enrolment": 1,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "X. Zheng",
-        "semester": 4,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(03)",
+      "size": 30,
+      "enrolment": 1,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "X. Zheng",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1127,
     "fields": {
-        "course": 424,
-        "meeting_section": "(04)",
-        "size": 30,
-        "enrolment": 2,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "X. Zheng",
-        "semester": 4,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(04)",
+      "size": 30,
+      "enrolment": 2,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "X. Zheng",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1115,
     "fields": {
-        "course": 423,
-        "meeting_section": "(01)",
-        "size": 30,
-        "enrolment": 2,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(01)",
+      "size": 30,
+      "enrolment": 2,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "R. Brown",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1116,
     "fields": {
-        "course": 423,
-        "meeting_section": "(02)",
-        "size": 30,
-        "enrolment": 1,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(02)",
+      "size": 30,
+      "enrolment": 1,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "R. Brown",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1117,
     "fields": {
-        "course": 423,
-        "meeting_section": "(03)",
-        "size": 30,
-        "enrolment": 1,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(03)",
+      "size": 30,
+      "enrolment": 1,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "R. Brown",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1118,
     "fields": {
-        "course": 423,
-        "meeting_section": "(04)",
-        "size": 30,
-        "enrolment": 1,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(04)",
+      "size": 30,
+      "enrolment": 1,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "R. Brown",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1119,
     "fields": {
-        "course": 423,
-        "meeting_section": "(05)",
-        "size": 30,
-        "enrolment": 4,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(05)",
+      "size": 30,
+      "enrolment": 4,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "R. Brown",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1120,
     "fields": {
-        "course": 423,
-        "meeting_section": "(06)",
-        "size": 30,
-        "enrolment": 2,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(06)",
+      "size": 30,
+      "enrolment": 2,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "R. Brown",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1121,
     "fields": {
-        "course": 423,
-        "meeting_section": "(07)",
-        "size": 30,
-        "enrolment": 0,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(07)",
+      "size": 30,
+      "enrolment": 0,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "R. Brown",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1122,
     "fields": {
-        "course": 423,
-        "meeting_section": "(08)",
-        "size": 30,
-        "enrolment": 2,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(08)",
+      "size": 30,
+      "enrolment": 2,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "R. Brown",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1123,
     "fields": {
-        "course": 423,
-        "meeting_section": "(09)",
-        "size": 30,
-        "enrolment": 2,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "R. Brown",
-        "semester": 4,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(09)",
+      "size": 30,
+      "enrolment": 2,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "R. Brown",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1114,
     "fields": {
-        "course": 422,
-        "meeting_section": "(01)",
-        "size": 30,
-        "enrolment": 3,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "Staff",
-        "semester": 4,
-        "was_full": false
+      "course": 422,
+      "meeting_section": "(01)",
+      "size": 30,
+      "enrolment": 3,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "Staff",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1200,
     "fields": {
-        "course": 461,
-        "meeting_section": "(01)",
-        "size": 25,
-        "enrolment": 0,
-        "waitlist": -1,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "M. Maggioni, J. Murphy",
-        "semester": 4,
-        "was_full": false
+      "course": 461,
+      "meeting_section": "(01)",
+      "size": 25,
+      "enrolment": 0,
+      "waitlist": -1,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "M. Maggioni, J. Murphy",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1199,
     "fields": {
-        "course": 460,
-        "meeting_section": "(01)",
-        "size": 25,
-        "enrolment": 0,
-        "waitlist": -1,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "C. Mese, W. Wilson",
-        "semester": 4,
-        "was_full": false
+      "course": 460,
+      "meeting_section": "(01)",
+      "size": 25,
+      "enrolment": 0,
+      "waitlist": -1,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "C. Mese, W. Wilson",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1179,
     "fields": {
-        "course": 440,
-        "meeting_section": "(01)",
-        "size": 20,
-        "enrolment": 16,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "C. Sogge",
-        "semester": 4,
-        "was_full": false
+      "course": 440,
+      "meeting_section": "(01)",
+      "size": 20,
+      "enrolment": 16,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "C. Sogge",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1201,
     "fields": {
-        "course": 241,
-        "meeting_section": "(01)",
-        "size": 30,
-        "enrolment": 26,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "M. Beer",
-        "semester": 4,
-        "was_full": false
+      "course": 241,
+      "meeting_section": "(01)",
+      "size": 30,
+      "enrolment": 26,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "M. Beer",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 1202,
     "fields": {
-        "course": 243,
-        "meeting_section": "(01)",
-        "size": 30,
-        "enrolment": 21,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "M. Miller",
-        "semester": 4,
-        "was_full": false
+      "course": 243,
+      "meeting_section": "(01)",
+      "size": 30,
+      "enrolment": 21,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "M. Miller",
+      "semester": 4,
+      "was_full": false
     }
-},
-{
+  },
+  {
+    "model": "timetable.section",
+    "pk": 10001,
+    "fields": {
+      "course": 4520,
+      "meeting_section": "(86)",
+      "size": 0,
+      "enrolment": 0,
+      "waitlist": -1,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "R. BoonyasaiS. Dy",
+      "semester": 4,
+      "was_full": false,
+      "course_section_id": 713217
+    }
+  },
+  {
+    "model": "timetable.section",
+    "pk": 9977,
+    "fields": {
+      "course": 4504,
+      "meeting_section": "(92)",
+      "size": 10,
+      "enrolment": 1,
+      "waitlist": -1,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "M. ChoL. ErbyL. Jamal",
+      "semester": 4,
+      "was_full": false,
+      "course_section_id": 712973
+    }
+  },
+  {
+    "model": "timetable.section",
+    "pk": 9975,
+    "fields": {
+      "course": 4503,
+      "meeting_section": "(92)",
+      "size": 8,
+      "enrolment": 1,
+      "waitlist": -1,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "L. BieseckerL. Erby",
+      "semester": 4,
+      "was_full": false,
+      "course_section_id": 712951
+    }
+  },
+  {
+    "model": "timetable.section",
+    "pk": 9966,
+    "fields": {
+      "course": 4496,
+      "meeting_section": "(01)",
+      "size": 0,
+      "enrolment": 0,
+      "waitlist": -1,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "M. Moran",
+      "semester": 4,
+      "was_full": false,
+      "course_section_id": 712889
+    }
+  },
+  {
+    "model": "timetable.section",
+    "pk": 9965,
+    "fields": {
+      "course": 4495,
+      "meeting_section": "(01)",
+      "size": 40,
+      "enrolment": 26,
+      "waitlist": -1,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "L. BoneJ. BowieS. Grieb",
+      "semester": 4,
+      "was_full": false,
+      "course_section_id": 712886
+    }
+  },
+  {
+    "model": "timetable.section",
+    "pk": 9659,
+    "fields": {
+      "course": 4334,
+      "meeting_section": "(92)",
+      "size": 8,
+      "enrolment": 6,
+      "waitlist": -1,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "L. Biesecker",
+      "semester": 4,
+      "was_full": false,
+      "course_section_id": 696374
+    }
+  },
+  {
+    "model": "timetable.section",
+    "pk": 9660,
+    "fields": {
+      "course": 4335,
+      "meeting_section": "(92)",
+      "size": 10,
+      "enrolment": 6,
+      "waitlist": -1,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "M. ChoL. ErbyL. Jamal",
+      "semester": 4,
+      "was_full": false,
+      "course_section_id": 696387
+    }
+  },
+  {
+    "model": "timetable.section",
+    "pk": 9988,
+    "fields": {
+      "course": 590,
+      "meeting_section": "(81)",
+      "size": 0,
+      "enrolment": 0,
+      "waitlist": -1,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "M. Diener West",
+      "semester": 4,
+      "was_full": false,
+      "course_section_id": 720408
+    }
+  },
+  {
+    "model": "timetable.section",
+    "pk": 9741,
+    "fields": {
+      "course": 4371,
+      "meeting_section": "(01)",
+      "size": 27,
+      "enrolment": 17,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "T. Rieder",
+      "semester": 4,
+      "was_full": false,
+      "course_section_id": 696458
+    }
+  },
+  {
     "model": "timetable.course",
     "pk": 241,
     "fields": {
-        "school": "jhu",
-        "code": "EN.580.241",
-        "name": "Statistical Physics",
-        "description": "Basic principles of statistical physics and thermodynamics of biological systems.  Topics included quantitative statistical formulation of entropy and its application in thermodynamic optimization\r\nand conversion principles, the Gibbs/Boltzmann distribution, mixing, and phase transitions.\r\nRecommended Background:  AS.110.108-109, AS.030.101-102, AS 171.101-102 or equivalent.",
-        "notes": "",
-        "info": "",
-        "unstopped_description": "",
-        "campus": "",
-        "prerequisites": "",
-        "corequisites": "",
-        "exclusions": "",
-        "num_credits": 2.0,
-        "areas": ["E"],
-        "department": "Biomedical Engineering",
-        "level": "200",
-        "cores": null,
-        "geneds": null,
-        "same_as": null,
-        "related_courses": [],
-        "sub_school": "Whiting School of Engineering",
-        "writing_intensive": "",
-        "pos": []
+      "school": "jhu",
+      "code": "EN.580.241",
+      "name": "Statistical Physics",
+      "description": "Basic principles of statistical physics and thermodynamics of biological systems.  Topics included quantitative statistical formulation of entropy and its application in thermodynamic optimization\r\nand conversion principles, the Gibbs/Boltzmann distribution, mixing, and phase transitions.\r\nRecommended Background:  AS.110.108-109, AS.030.101-102, AS 171.101-102 or equivalent.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 2.0,
+      "areas": ["E"],
+      "department": "Biomedical Engineering",
+      "level": "200",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "related_courses": [],
+      "sub_school": "Whiting School of Engineering",
+      "writing_intensive": "",
+      "pos": []
     }
-},
-{
+  },
+  {
     "model": "timetable.course",
     "pk": 243,
     "fields": {
-        "school": "jhu",
-        "code": "EN.580.243",
-        "name": "Linear Signals and Systems",
-        "description": "An introduction to signals and linear systems.  Topics include first and second order systems, linear time variant discrete and continuous systems, convolution, Fourier series, and Fourier transforms.\r\nRecommended background: AS.171.102 and AS.110.201, AS.110.302, or 553.291.  110.302 may be taken at the same time.",
-        "notes": "",
-        "info": "",
-        "unstopped_description": "",
-        "campus": "",
-        "prerequisites": "",
-        "corequisites": "",
-        "exclusions": "",
-        "num_credits": 2.0,
-        "areas": ["E"],
-        "department": "Biomedical Engineering",
-        "level": "200",
-        "cores": null,
-        "geneds": null,
-        "same_as": null,
-        "related_courses": [],
-        "sub_school": "Whiting School of Engineering",
-        "writing_intensive": "",
-        "pos": []
+      "school": "jhu",
+      "code": "EN.580.243",
+      "name": "Linear Signals and Systems",
+      "description": "An introduction to signals and linear systems.  Topics include first and second order systems, linear time variant discrete and continuous systems, convolution, Fourier series, and Fourier transforms.\r\nRecommended background: AS.171.102 and AS.110.201, AS.110.302, or 553.291.  110.302 may be taken at the same time.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 2.0,
+      "areas": ["E"],
+      "department": "Biomedical Engineering",
+      "level": "200",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "related_courses": [],
+      "sub_school": "Whiting School of Engineering",
+      "writing_intensive": "",
+      "pos": []
     }
-},
-{
+  },
+  {
     "model": "timetable.course",
     "pk": 424,
     "fields": {
-        "school": "jhu",
-        "code": "AS.110.107",
-        "name": "Calculus II (For Biological and Social Science)",
-        "description": "Differential and integral Calculus. Includes analytic geometry, functions, limits, integrals and derivatives, introduction to differential equations, functions of several variables, linear systems, applications for systems of linear differential equations, probability distributions. Applications to the biological and social sciences will be discussed, and the courses are designed to meet the needs of students in these disciplines.",
-        "notes": "",
-        "info": "",
-        "unstopped_description": "",
-        "campus": "",
-        "prerequisites": "",
-        "corequisites": "",
-        "exclusions": "",
-        "num_credits": 4.0,
-        "areas": ["Q"],
-        "department": "AS Mathematics",
-        "level": "100",
-        "cores": null,
-        "geneds": null,
-        "same_as": null,
-        "related_courses": [],
-        "sub_school": "",
-        "writing_intensive": "",
-        "pos": []
+      "school": "jhu",
+      "code": "AS.110.107",
+      "name": "Calculus II (For Biological and Social Science)",
+      "description": "Differential and integral Calculus. Includes analytic geometry, functions, limits, integrals and derivatives, introduction to differential equations, functions of several variables, linear systems, applications for systems of linear differential equations, probability distributions. Applications to the biological and social sciences will be discussed, and the courses are designed to meet the needs of students in these disciplines.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 4.0,
+      "areas": ["Q"],
+      "department": "AS Mathematics",
+      "level": "100",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "related_courses": [],
+      "sub_school": "",
+      "writing_intensive": "",
+      "pos": []
     }
-},
-{
+  },
+  {
     "model": "timetable.course",
     "pk": 423,
     "fields": {
-        "school": "jhu",
-        "code": "AS.110.106",
-        "name": "Calculus I (Biology and Social Sciences)",
-        "description": "Differential and integral calculus. Includes analytic geometry, functions, limits, integrals and derivatives, introduction to differential equations, functions of several variables, linear systems, applications for systems of linear differential equations, probability distributions. Many applications to the biological and social sciences will be discussed.",
-        "notes": "",
-        "info": "",
-        "unstopped_description": "",
-        "campus": "",
-        "prerequisites": "",
-        "corequisites": "",
-        "exclusions": "",
-        "num_credits": 4.0,
-        "areas": ["Q"],
-        "department": "AS Mathematics",
-        "level": "100",
-        "cores": null,
-        "geneds": null,
-        "same_as": null,
-        "related_courses": [],
-        "sub_school": "",
-        "writing_intensive": "",
-        "pos": []
+      "school": "jhu",
+      "code": "AS.110.106",
+      "name": "Calculus I (Biology and Social Sciences)",
+      "description": "Differential and integral calculus. Includes analytic geometry, functions, limits, integrals and derivatives, introduction to differential equations, functions of several variables, linear systems, applications for systems of linear differential equations, probability distributions. Many applications to the biological and social sciences will be discussed.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 4.0,
+      "areas": ["Q"],
+      "department": "AS Mathematics",
+      "level": "100",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "related_courses": [],
+      "sub_school": "",
+      "writing_intensive": "",
+      "pos": []
     }
-},
-{
+  },
+  {
     "model": "timetable.course",
     "pk": 422,
     "fields": {
-        "school": "jhu",
-        "code": "AS.110.105",
-        "name": "Introduction to Calculus",
-        "description": "This course starts from scratch and provides students with all the background necessary for the study of calculus. It includes a review of algebra, trigonometry, exponential and logarithmic functions, coordinates and graphs. Each of these tools will be introduced in its cultural and historical context. The concept of the rate of change of a function will be introduced. Not open to students who have studied calculus in high school.",
-        "notes": "",
-        "info": "",
-        "unstopped_description": "",
-        "campus": "",
-        "prerequisites": "",
-        "corequisites": "",
-        "exclusions": "",
-        "num_credits": 4.0,
-        "areas": ["Q"],
-        "department": "AS Mathematics",
-        "level": "100",
-        "cores": null,
-        "geneds": null,
-        "same_as": null,
-        "related_courses": [],
-        "sub_school": "",
-        "writing_intensive": "",
-        "pos": []
+      "school": "jhu",
+      "code": "AS.110.105",
+      "name": "Introduction to Calculus",
+      "description": "This course starts from scratch and provides students with all the background necessary for the study of calculus. It includes a review of algebra, trigonometry, exponential and logarithmic functions, coordinates and graphs. Each of these tools will be introduced in its cultural and historical context. The concept of the rate of change of a function will be introduced. Not open to students who have studied calculus in high school.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 4.0,
+      "areas": ["Q"],
+      "department": "AS Mathematics",
+      "level": "100",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "related_courses": [],
+      "sub_school": "",
+      "writing_intensive": "",
+      "pos": []
     }
-},
-{
+  },
+  {
     "model": "timetable.course",
     "pk": 461,
     "fields": {
-        "school": "jhu",
-        "code": "AS.110.795",
-        "name": "Seminar in Data Analysis",
-        "description": "Presentations of current research papers by faculty, graduate students and invited guest speakers. For graduate students only.",
-        "notes": "",
-        "info": "",
-        "unstopped_description": "",
-        "campus": "",
-        "prerequisites": "",
-        "corequisites": "",
-        "exclusions": "",
-        "num_credits": 0.0,
-        "areas": ["Q"],
-        "department": "AS Mathematics",
-        "level": "700",
-        "cores": null,
-        "geneds": null,
-        "same_as": null,
-        "related_courses": [],
-        "sub_school": "",
-        "writing_intensive": "",
-        "pos": []
+      "school": "jhu",
+      "code": "AS.110.795",
+      "name": "Seminar in Data Analysis",
+      "description": "Presentations of current research papers by faculty, graduate students and invited guest speakers. For graduate students only.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 0.0,
+      "areas": ["Q"],
+      "department": "AS Mathematics",
+      "level": "700",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "related_courses": [],
+      "sub_school": "",
+      "writing_intensive": "",
+      "pos": []
     }
-},
-{
+  },
+  {
     "model": "timetable.course",
     "pk": 460,
     "fields": {
-        "school": "jhu",
-        "code": "AS.110.793",
-        "name": "Seminar in Topology",
-        "description": "For graduate students only.  Presentations of current research papers by faculty, graduate students and invited guest speakers.",
-        "notes": "",
-        "info": "",
-        "unstopped_description": "",
-        "campus": "",
-        "prerequisites": "",
-        "corequisites": "",
-        "exclusions": "",
-        "num_credits": 4.0,
-        "areas": ["Q"],
-        "department": "AS Mathematics",
-        "level": "700",
-        "cores": null,
-        "geneds": null,
-        "same_as": null,
-        "related_courses": [],
-        "sub_school": "",
-        "writing_intensive": "",
-        "pos": []
+      "school": "jhu",
+      "code": "AS.110.793",
+      "name": "Seminar in Topology",
+      "description": "For graduate students only.  Presentations of current research papers by faculty, graduate students and invited guest speakers.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 4.0,
+      "areas": ["Q"],
+      "department": "AS Mathematics",
+      "level": "700",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "related_courses": [],
+      "sub_school": "",
+      "writing_intensive": "",
+      "pos": []
     }
-},
-{
+  },
+  {
     "model": "timetable.course",
     "pk": 440,
     "fields": {
-        "school": "jhu",
-        "code": "AS.110.415",
-        "name": "Honors Analysis I",
-        "description": "This highly theoretical sequence in analysis is reserved for the most able students. The sequence covers the real number system, metric spaces, basic functional analysis, the Lebesgue integral, and other topics.",
-        "notes": "",
-        "info": "",
-        "unstopped_description": "",
-        "campus": "",
-        "prerequisites": "",
-        "corequisites": "",
-        "exclusions": "",
-        "num_credits": 4.0,
-        "areas": ["Q"],
-        "department": "AS Mathematics",
-        "level": "400",
-        "cores": null,
-        "geneds": null,
-        "same_as": null,
-        "related_courses": [],
-        "sub_school": "",
-        "writing_intensive": "",
-        "pos": []
+      "school": "jhu",
+      "code": "AS.110.415",
+      "name": "Honors Analysis I",
+      "description": "This highly theoretical sequence in analysis is reserved for the most able students. The sequence covers the real number system, metric spaces, basic functional analysis, the Lebesgue integral, and other topics.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 4.0,
+      "areas": ["Q"],
+      "department": "AS Mathematics",
+      "level": "400",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "related_courses": [],
+      "sub_school": "",
+      "writing_intensive": "",
+      "pos": []
     }
-}
+  },
+  {
+    "model": "timetable.course",
+    "pk": 4520,
+    "fields": {
+      "school": "jhu",
+      "code": "PH.603.701",
+      "name": "Introduction to Quality of Care for Practitioners",
+      "description": "Introduces quality issues, including quality assessment and assurance performed by clinicians, health systems, professional societies, and government and other third party organizations who pay for care. Provides a basis to evaluate the effectiveness of quality assessment and assurance activities. Describes different approaches to quality improvement and evaluation.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 4.0,
+      "department": "Online Programs for Applied Learning",
+      "level": "700",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "pos": [],
+      "areas": [],
+      "sub_school": "Bloomberg School of Public Health",
+      "writing_intensive": "No",
+      "related_courses": []
+    }
+  },
+  {
+    "model": "timetable.course",
+    "pk": 4504,
+    "fields": {
+      "school": "jhu",
+      "code": "PH.415.621",
+      "name": "Introduction to Genetic Counseling II",
+      "description": "Compares definitions of genetic counseling (GC) with objectives and service outcomes. Explores counselor values as they relate to roles and responsibilities toward clients. Introduces ethical and policy issues specific to GC in conjunction with a research agenda. Discusses and practices basic tools, including interviewing, history gathering, and case assessment, and nondirective counseling approaches.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 2.0,
+      "department": "Health Behavior and Society",
+      "level": "600",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "pos": [],
+      "areas": [],
+      "sub_school": "Bloomberg School of Public Health",
+      "writing_intensive": "No",
+      "related_courses": []
+    }
+  },
+  {
+    "model": "timetable.course",
+    "pk": 4503,
+    "fields": {
+      "school": "jhu",
+      "code": "PH.415.612",
+      "name": "Introduction to Human Genetics II",
+      "description": "415.610 addresses the chromosomal basis of heredity, chromosomes and genes, tools of human molecular genetics, single gene inheritance, variation, polymorphism and mutation, genes in populations and genes in families. 415.611 presents the role of genetic counseling in health care and emphasizes the essential components of prenatal, pediatric, and adult genetics services. Indications for referral and genetics education and counseling components are illustrated using care examples. Clinical skills and tools are taught including family, medical and development history taking and pedigree construction. Additional case management skills such as the choice of laboratory and test interpretation, and issues in billing and reimbursment of genetic counseling services are addressed. 415.612 -613 expand on the previous two courses to examine the Hemoglobinapathics and Thalassemias as models of molecular pathology, the molecular/biochemical basis of genetic disease, genetics of cancer, gene mapping",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 2.0,
+      "department": "Health Behavior and Society",
+      "level": "600",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "pos": [],
+      "areas": [],
+      "sub_school": "Bloomberg School of Public Health",
+      "writing_intensive": "No",
+      "related_courses": []
+    }
+  },
+  {
+    "model": "timetable.course",
+    "pk": 4496,
+    "fields": {
+      "school": "jhu",
+      "code": "PH.410.650",
+      "name": "Introduction to Persuasive Communications: Theories and Practice",
+      "description": "Examines and interrogates theories of persuasion using lectures, discussions, readings, and assignments so that these theories can be applied to health behavior change interventions. Presents psychological, social, and environmental theories of persuasion as they relate to health behavior. Examines the theoretical underpinnings of persuasive health behavior change interventions. Addresses the strengths and challenges of applying persuasive communication theory to complex health issues. Emphasizes the role of theory in the design, implementation and evaluation of health behavior change interventions.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 4.0,
+      "department": "Health Behavior and Society",
+      "level": "600",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "pos": [],
+      "areas": [],
+      "sub_school": "Bloomberg School of Public Health",
+      "writing_intensive": "No",
+      "related_courses": []
+    }
+  },
+  {
+    "model": "timetable.course",
+    "pk": 4495,
+    "fields": {
+      "school": "jhu",
+      "code": "PH.410.631",
+      "name": "Introduction to Community-Based Participatory Research: Principles and Methods",
+      "description": "Introduces students to the fundamental principles of, rationale for, and key considerations in conducting community-based participatory research (CBPR). Offers knowledge of and skills in CBPR that emphasize the importance of community inclusion and partnership as a viable approach to constructing and increasing the acceptance of interventions and improving the health and well-being of populations. Also uses case-based learning as an approach for real world application of CBPR concepts.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 3.0,
+      "department": "Health Behavior and Society",
+      "level": "600",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "pos": [],
+      "areas": [],
+      "sub_school": "Bloomberg School of Public Health",
+      "writing_intensive": "No",
+      "related_courses": []
+    }
+  },
+  {
+    "model": "timetable.course",
+    "pk": 4334,
+    "fields": {
+      "school": "jhu",
+      "code": "PH.415.611",
+      "name": "Introduction to Human Genetics I",
+      "description": "415.610 addresses the chromosomal basis of heredity, chromosomes and genes, tools of human molecular genetics, single gene inheritance, variation, polymorphism and mutation, genes in populations and genes in families. 415.611 presents the role of genetic counseling in health care and emphasizes the essential components of prenatal, pediatric, and adult genetics services. Indications for referral and genetics education and counseling components are illustrated using care examples. Clinical skills and tools are taught including family, medical and development history taking and pedigree construction. Additional case management skills such as the choice of laboratory and test interpretation, and issues in billing and reimbursment of genetic counseling services are addressed. 415.612 -613 expand on the previous two courses to examine the Hemoglobinapathics and Thalassemias as models of molecular pathology, the molecular/biochemical basis of genetic disease, genetics of cancer, gene mapping",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 2.0,
+      "department": "Health Behavior and Society",
+      "level": "600",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "pos": [],
+      "areas": [],
+      "sub_school": "Bloomberg School of Public Health",
+      "writing_intensive": "No",
+      "related_courses": []
+    }
+  },
+  {
+    "model": "timetable.course",
+    "pk": 4335,
+    "fields": {
+      "school": "jhu",
+      "code": "PH.415.620",
+      "name": "Introduction to Genetic Counseling I",
+      "description": "Introduces the scope of genetic counseling practice, laying a foundation for the JHU/NHGRI Genetic Counseling Graduate Program. Compares definitions of genetic counseling with objectives, practice standards and a code of ethics. Explores genetic counseling values as they relate to roles and responsibilities toward clients. Introduces ethical, legal and policy issues specific to genetic counseling in conjunction with a research agenda for the future. Includes case discussion, verbal critiquing of primary literature, role-playing, and semi-formal debates.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 2.0,
+      "department": "Health Behavior and Society",
+      "level": "600",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "pos": [],
+      "areas": [],
+      "sub_school": "Bloomberg School of Public Health",
+      "writing_intensive": "No",
+      "related_courses": []
+    }
+  },
+  {
+    "model": "timetable.course",
+    "pk": 590,
+    "fields": {
+      "school": "jhu",
+      "code": "PH.550.867",
+      "name": "Introduction to Mph Studies",
+      "description": "Introduces MPH students to their educational program. Includes enrichment seminars, required readingsand assignments, including the Goals Analysis requirement.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 0.0,
+      "department": "Extradepartmental Studies",
+      "level": "800",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "pos": [],
+      "areas": [],
+      "sub_school": "Bloomberg School of Public Health",
+      "writing_intensive": "No",
+      "related_courses": []
+    }
+  },
+  {
+    "model": "timetable.course",
+    "pk": 4371,
+    "fields": {
+      "school": "jhu",
+      "code": "PH.700.603",
+      "name": "Introduction to Ethical Theory",
+      "description": "Explores the relationship between philosophical ethical theory and the practical world of bioethics. Examines the classical accounts of moral obligation and virtue in the context of a variety of contemporary bioethical problems. Presents the distinction between individual bioethics and collective bioethics, with the goal of determining how the theoretical grounding for these fields differ. Answers both methodological and substantive motivating questions: First, how does theory contribute to bioethical investigations?  Second, does reflection on ethical theory tell us what to do concerning particular, bioethical problems?",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 3.0,
+      "department": "Berman Institute",
+      "level": "600",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "pos": [],
+      "areas": [],
+      "sub_school": "Bloomberg School of Public Health",
+      "writing_intensive": "No",
+      "related_courses": []
+    }
+  }
 ]
