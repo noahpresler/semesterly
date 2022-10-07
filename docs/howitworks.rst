@@ -80,20 +80,33 @@ J. Change schedule name
 
 K. Select another schedule (of the same semester) to switch to it.
 
-L. Find New Friends displays other students who are also taking your classes.
+L. (Behind the dropdown) Find New Friends displays other students who are also taking
+   your classes.
 
-M. Opens various account settings
+M. Compares two schedules together, showing same and differing courses
 
-N. Duplicate schedule
+N. Opens various account settings
 
-O. Delete schedule
+O. Duplicate schedule
+
+P. Delete schedule
+
+Screenshots
+^^^^^^^^^^^
+.. image :: compare_timetables.png
+
+An example of what it looks like to compare two schedules.
 
 Features in Development
 ~~~~~~~~~~~~~~~~~~~~~~~
-.. image:: compare_timetables.png
 
-By selecting another schedule, this feature will allow you to compare two schedules side
-by side.
+0. Enhancing Search - display more than 4 results and scroll infinitely when searching
+   for courses regularly
+
+1. Dark Mode - option to toggle between light and dark mode
+
+2. Study Groups - option to message students who are also taking your class to ask if
+   they want to study together or go to class together
 
 Tech Stack
 ~~~~~~~~~~

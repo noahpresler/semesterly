@@ -95,6 +95,12 @@ const SideBar = () => {
     callback();
   };
 
+  const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+  const isMobile = mobile && window.innerWidth < 767 && isPortrait;
+
   const savedTimetables = savedTimetablesState
     ? savedTimetablesState.map((t: Timetable) => (
         <div className="tt-name" key={t.id} onClick={() => dispatch(loadTimetable(t))}>
@@ -118,7 +124,7 @@ const SideBar = () => {
           >
             <i className="fa fa-clone" />
           </button>
-          {activeTimetable.name !== t.name && (
+          {!isMobile && activeTimetable.name !== t.name && (
             <button
               onClick={(event) => {
                 dispatch(
@@ -190,7 +196,7 @@ const SideBar = () => {
     : null;
   const dropItDown =
     savedTimetables && savedTimetables.length !== 0 ? (
-      <div className="timetable-drop-it-down" onMouseDown={toggleDropdown}>
+      <div className="timetable-drop-it-down" onClick={toggleDropdown}>
         <span className={classNames("tip-down", { down: showDropdown })} />
       </div>
     ) : null;

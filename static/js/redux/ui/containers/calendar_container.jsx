@@ -44,7 +44,6 @@ const mapStateToProps = (state) => {
 const CalendarContainer = connect(mapStateToProps, {
   saveTimetable,
   fetchShareTimetableLink,
-  showPreferenceModal: preferencesActions.showPreferenceModal,
   triggerSaveCalendarModal: saveCalendarModalActions.triggerSaveCalendarModal,
   createICalFromTimetable,
   handleCreateNewTimetable,

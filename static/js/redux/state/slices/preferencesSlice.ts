@@ -8,13 +8,11 @@ import Cookie from "js-cookie";
 interface PreferencesSliceState {
   tryWithConflicts: boolean;
   showWeekend: boolean;
-  isModalVisible: boolean;
 }
 
 const initialState: PreferencesSliceState = {
   tryWithConflicts: false,
   showWeekend: true,
-  isModalVisible: false,
 };
 
 export const savePreferences =
@@ -41,12 +39,6 @@ const preferencesSlice = createSlice({
   name: "preferences",
   initialState,
   reducers: {
-    showPreferenceModal: (state) => {
-      state.isModalVisible = true;
-    },
-    hidePreferenceModal: (state) => {
-      state.isModalVisible = false;
-    },
     toggleConflicts: (state) => {
       state.tryWithConflicts = !state.tryWithConflicts;
     },
