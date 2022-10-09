@@ -24,11 +24,11 @@ const ThemeToggle = () => {
 
   // On Mount
   useEffect(() => {
-    const theme = localStorage.getItem(themeLocalStorageKey);
+    const curTheme = localStorage.getItem(themeLocalStorageKey);
 
     // Check if a theme is valid.
-    if (availableThemes.indexOf(theme) !== -1) {
-      setTheme(theme);
+    if (availableThemes.indexOf(curTheme) !== -1) {
+      setTheme(curTheme);
     } else {
       // Set the first element as the default theme
       setTheme(availableThemes[0]);
@@ -44,7 +44,7 @@ const ThemeToggle = () => {
     root.className = "page";
 
     // Now, add the theme
-    root.classList.add("theme--" + theme);
+    root.classList.add(`theme--${theme}`);
     root.setAttribute("data-theme", theme);
 
     // Store in localStorage
