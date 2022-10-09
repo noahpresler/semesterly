@@ -2,9 +2,23 @@ html {
   height: 100%;
 }
 
-h1, h2, h3, h4, h5, h6, p, a, span, div, input, textarea, th, tr, thead {
-  @include theme(){
-    color: t('text-color');
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+div,
+input,
+textarea,
+th,
+tr,
+thead {
+  @include theme() {
+    color: t("text-color");
   }
 }
 
@@ -41,7 +55,7 @@ textarea {
 
 @mixin side-bar {
   @include theme() {
-    background-color: t('sidebar-background');
+    background-color: t("sidebar-background");
   }
   bottom: auto;
   height: 100%;
@@ -51,7 +65,7 @@ textarea {
   position: absolute;
   top: 0;
   transform: translateX(0);
-  transition: transform .3s;
+  transition: transform 0.3s;
   width: 300px;
   z-index: 99;
 
@@ -80,11 +94,11 @@ textarea {
   opacity: 1;
   overflow-y: auto;
   padding: 0 20px;
-  transition: width .3s, opacity .3s, visibility .3s;
+  transition: width 0.3s, opacity 0.3s, visibility 0.3s;
   visibility: visible;
   width: calc(100% - 300px);
   @include theme() {
-    background-color: t('main-bar-background');
+    background-color: t("main-bar-background");
   }
 
   &.full-cal {
@@ -119,8 +133,8 @@ textarea {
 
 .top-bar {
   @include theme() {
-    background-color: t('top-bar-background');
-    border-bottom: t('top-bar-border-bottom');
+    background-color: t("top-bar-background");
+    border-bottom: t("top-bar-border-bottom");
   }
   box-shadow: 0 0 12px $black-transparent-1, 0 0 1px $black-transparent-15;
   min-height: 50px;
@@ -139,7 +153,7 @@ textarea {
   position: absolute;
   right: -95px;
   top: 0;
-  transition: transform .3s;
+  transition: transform 0.3s;
   user-select: none;
   width: 85px;
 
@@ -241,7 +255,7 @@ textarea {
   .fc-ltr {
     .fc-time-grid {
       .fc-event-container {
-        margin-left: .5%;
+        margin-left: 0.5%;
       }
     }
   }
@@ -273,14 +287,14 @@ textarea {
 
   span {
     @include theme() {
-        background-color: t('navicon-hamburger-background');
+      background-color: t("navicon-hamburger-background");
     }
     display: block;
     height: 3px;
     position: absolute;
     right: 0;
     transform: translateY(-50%);
-    transition: width .3s;
+    transition: width 0.3s;
 
     &:nth-child(1) {
       top: 25%;

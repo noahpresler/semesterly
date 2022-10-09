@@ -22,71 +22,67 @@ $dark__base-component-bg: $dblue8;
     Try to be as descriptive as possible when naming variables, ex) instead of sidebar, name it as sidebar-background.
 */
 
-$themes : (
-    // Light mode
-    light: (
-        text-color: $primary-navy,
-        text-color-hover: $primary-navy,
-
-        background: $g808080,            
-                           // Not sure what this is for, but was referenced in grid_layout.scss
-        main-bar-background: $light__base-component-bg,
-        main-calendar-border-color: #ddd,
-        navicon-hamburger-background: $primary-navy,
-
-        sidebar-background: $light__base-component-bg,
-        sidebar-input-background: #ddd,
-        sidebar-input-border: 1px solid $gfff,
-        sidebar-input-border_hover: 1px solid $gddd,
-        sidebar-input-border_foucs: 1px solid $blue-alt,
-
-        top-bar-background: $light__base-component-bg,
-        top-bar-border-bottom: none,
-
-        search-bar-background: #f2f3f5,
-        search-bar-option-background-hover: #f1eeee,
-        search-bar-semester-picker-border: 1px solid $ge6e6e6
+$themes: (
+  // Light mode
+  light:
+    (
+      text-color: $primary-navy,
+      text-color-hover: $primary-navy,
+      background: $g808080,
+      // Not sure what this is for, but was referenced in grid_layout.scss
+      main-bar-background: $light__base-component-bg,
+      main-calendar-border-color: #ddd,
+      navicon-hamburger-background: $primary-navy,
+      sidebar-background: $light__base-component-bg,
+      sidebar-input-background: #ddd,
+      sidebar-input-border: 1px solid $gfff,
+      sidebar-input-border_hover: 1px solid $gddd,
+      sidebar-input-border_foucs: 1px solid $blue-alt,
+      top-bar-background: $light__base-component-bg,
+      top-bar-border-bottom: none,
+      search-bar-background: #f2f3f5,
+      search-bar-option-background-hover: #f1eeee,
+      search-bar-semester-picker-border: 1px solid $ge6e6e6,
     ),
-    // Dark Mode
-    dark: (
-        text-color: $dblue0,
-        text-color-hover: white,
-
-        background: $g808080,
-        sidebar-background: $dark__base-component-bg,
-
-        main-bar-background: $dark__base-component-bg,
-        main-calendar-border-color: $dblue2,
-        navicon-hamburger-background: $dblue0,
-
-        top-bar-background: $dark__base-component-bg,
-        top-bar-border-bottom: 1px solid $dblue2,
-
-        search-bar-background: $dblue3,
-        search-bar-option-background-hover: $dblue2,
-        search-bar-semester-picker-border: 1px solid $dblue2
-
+  // Dark Mode
+  dark:
+    (
+      text-color: $dblue0,
+      text-color-hover: white,
+      background: $g808080,
+      sidebar-background: $dark__base-component-bg,
+      main-bar-background: $dark__base-component-bg,
+      main-calendar-border-color: $dblue2,
+      navicon-hamburger-background: $dblue0,
+      top-bar-background: $dark__base-component-bg,
+      top-bar-border-bottom: 1px solid $dblue2,
+      search-bar-background: $dblue3,
+      search-bar-option-background-hover: $dblue2,
+      search-bar-semester-picker-border: 1px solid $dblue2,
     )
 );
 
-
 // Function for using the themes
 
-
 @mixin theme() {
-    @each $theme, $map in $themes {
-        .theme--#{$theme} & {
-        $theme-map: () !global;
-        @each $key, $submap in $map {
-            $value: map-get(map-get($themes, $theme), '#{$key}');
-            $theme-map: map-merge($theme-map, ($key: $value)) !global;
-        }
-        @content;
-        $theme-map: null !global;
-        }
+  @each $theme, $map in $themes {
+    .theme--#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), "#{$key}");
+        $theme-map: map-merge(
+          $theme-map,
+          (
+            $key: $value,
+          )
+        ) !global;
+      }
+      @content;
+      $theme-map: null !global;
     }
+  }
 }
-  
+
 @function t($key) {
-    @return map-get($theme-map, $key);
+  @return map-get($theme-map, $key);
 }
