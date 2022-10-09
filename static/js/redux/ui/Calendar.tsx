@@ -15,7 +15,6 @@ GNU General Public License for more details.
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import classnames from "classnames";
-import ReactTooltip from "react-tooltip";
 import Clipboard from "clipboard";
 import PaginationContainer from "./containers/pagination_container";
 import SlotManager from "./SlotManager";
@@ -24,6 +23,10 @@ import { DAYS } from "../constants/constants";
 import { ShareLink } from "./MasterSlot";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { useAppSelector } from "../hooks";
+import { preferencesActions } from "../state/slices/preferencesSlice";
+import Tooltip from "@mui/material/Tooltip";
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -55,8 +58,26 @@ const Row = (props: RowProps) => {
   );
 };
 
+export const ShowWeekendsButton = (props: { isMobile: boolean }) => {
+  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
+  const dispatch = useDispatch();
+  const button = (
+    <Tooltip title={<Typography fontSize={12}>Show Weekends</Typography>}>
+      <div className="save-timetable">
+        <Switch
+          size="small"
+          checked={showWeekend}
+          color="default"
+          sx={{ "& .MuiSwitch-thumb": { color: "lightgray" } }}
+          onChange={() => dispatch(preferencesActions.toggleShowWeekend())}
+        />
+      </div>
+    </Tooltip>
+  );
+  return props.isMobile ? button : <div className="cal-btn-wrapper">{button}</div>;
+};
+
 type CalendarProps = {
-  showPreferenceModal: Function;
   triggerSaveCalendarModal: Function;
   isFetchingShareLink: boolean;
   endHour: number;
@@ -174,54 +195,40 @@ const Calendar = (props: CalendarProps) => {
 
   const addSISButton = props.registrarSupported ? (
     <div className="cal-btn-wrapper">
-      <button
-        type="submit"
-        form="form1"
-        className="save-timetable add-button"
-        data-for="sis-btn-tooltip"
-        data-tip
-        onClick={sisButtonClicked}
-      >
-        <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: "2px" }} />
-      </button>
-      <ReactTooltip
-        id="sis-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>SIS Add to Cart</span>
-      </ReactTooltip>
+      <Tooltip title={<Typography fontSize={12}>SIS Add to Cart</Typography>}>
+        <button
+          type="submit"
+          form="form1"
+          className="save-timetable add-button"
+          data-for="sis-btn-tooltip"
+          data-tip
+          onClick={sisButtonClicked}
+        >
+          <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: "2px" }} />
+        </button>
+      </Tooltip>
     </div>
   ) : null;
 
   const shareButton = (
     <div className="cal-btn-wrapper">
-      <button
-        onClick={fetchShareTimetableLink}
-        className="save-timetable add-button"
-        data-tip
-        data-for="share-btn-tooltip"
-      >
-        <i
-          className={classnames(
-            "fa",
-            { "fa-share-alt": !props.isFetchingShareLink },
-            { "fa-spin fa-circle-o-notch": props.isFetchingShareLink }
-          )}
-          onClick={showShareLink}
-        />
-      </button>
-      <ReactTooltip
-        id="share-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>Share Calendar</span>
-      </ReactTooltip>
+      <Tooltip title={<Typography fontSize={12}>Share Calendar</Typography>}>
+        <button
+          onClick={fetchShareTimetableLink}
+          className="save-timetable add-button"
+          data-tip
+          data-for="share-btn-tooltip"
+        >
+          <i
+            className={classnames(
+              "fa",
+              { "fa-share-alt": !props.isFetchingShareLink },
+              { "fa-spin fa-circle-o-notch": props.isFetchingShareLink }
+            )}
+            onClick={showShareLink}
+          />
+        </button>
+      </Tooltip>
     </div>
   );
 
@@ -235,101 +242,62 @@ const Calendar = (props: CalendarProps) => {
 
   const addNewTimetableButton = (
     <div className="cal-btn-wrapper">
-      <button
-        onClick={() => props.handleCreateNewTimetable()}
-        className="save-timetable add-button"
-        data-tip
-        data-for="add-btn-tooltip"
-      >
-        <i className="fa fa-plus" />
-      </button>
-      <ReactTooltip
-        id="add-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>New Timetable</span>
-      </ReactTooltip>
+      <Tooltip title={<Typography fontSize={12}>New Timetable</Typography>}>
+        <button
+          onClick={() => props.handleCreateNewTimetable()}
+          className="save-timetable add-button"
+          data-tip
+          data-for="add-btn-tooltip"
+        >
+          <i className="fa fa-plus" />
+        </button>
+      </Tooltip>
     </div>
   );
 
   const toggleCustomEventModeButton = (
     <div className="cal-btn-wrapper">
-      <button
-        className="save-timetable add-button"
-        onMouseDown={() => customEventModeButtonClicked()}
-        data-tip
-        data-for="save-btn-tooltip"
-      >
-        <i
-          className={classnames("fa fa-pencil", {
-            addingCustomSlot: customEventModeOn,
-          })}
-        />
-      </button>
-      <ReactTooltip
-        id="save-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>Add Custom Event</span>
-      </ReactTooltip>
+      <Tooltip title={<Typography fontSize={12}>Add Custom Event</Typography>}>
+        <button
+          className="save-timetable add-button"
+          onMouseDown={() => customEventModeButtonClicked()}
+          data-tip
+          data-for="save-btn-tooltip"
+        >
+          <i
+            className={classnames("fa fa-pencil", {
+              addingCustomSlot: customEventModeOn,
+            })}
+          />
+        </button>
+      </Tooltip>
     </div>
   );
 
   const saveToCalendarButton = (
     <div className="cal-btn-wrapper">
-      <button
-        onClick={() => props.triggerSaveCalendarModal()}
-        className="save-timetable"
-        data-tip
-        data-for="saveToCal-btn-tooltip"
-      >
-        <img src="/static/img/addtocalendar.png" alt="Add to Calendar" />
-      </button>
-      <ReactTooltip
-        id="saveToCal-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>Save to Calendar</span>
-      </ReactTooltip>
+      <Tooltip title={<Typography fontSize={12}>Save to Calendar</Typography>}>
+        <button
+          onClick={() => props.triggerSaveCalendarModal()}
+          className="save-timetable"
+          data-tip
+          data-for="saveToCal-btn-tooltip"
+        >
+          <img src="/static/img/addtocalendar.png" alt="Add to Calendar" />
+        </button>
+      </Tooltip>
     </div>
   );
 
-  const preferenceButton = (
-    <div className="cal-btn-wrapper">
-      <button
-        onClick={() => props.showPreferenceModal()}
-        className="save-timetable"
-        data-tip
-        data-for="pref-btn-tooltip"
-      >
-        <i className="fa fa-cog" />
-      </button>
-      <ReactTooltip
-        id="pref-btn-tooltip"
-        class="tooltip"
-        type="dark"
-        place="bottom"
-        effect="solid"
-      >
-        <span>Preferences</span>
-      </ReactTooltip>
-    </div>
-  );
+  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
 
   const isComparingTimetables = useAppSelector(
     (state) => state.compareTimetable.isComparing
   );
   const toolbar = isComparingTimetables ? (
-    <>{preferenceButton}</>
+    <>
+      <ShowWeekendsButton isMobile={false} />
+    </>
   ) : (
     <>
       {addSISButton}
@@ -338,11 +306,9 @@ const Calendar = (props: CalendarProps) => {
       {shareLink}
       {addNewTimetableButton}
       {saveToCalendarButton}
-      {preferenceButton}
+      <ShowWeekendsButton isMobile={false} />
     </>
   );
-
-  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
 
   return (
     <div

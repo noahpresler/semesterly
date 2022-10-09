@@ -22,6 +22,7 @@ import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
 import { ShareLink } from "./MasterSlot";
 import { useAppSelector } from "../hooks";
+import { ShowWeekendsButton } from "./Calendar";
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -51,7 +52,6 @@ const Row = (props: RowProps) => {
 };
 
 type DayCalendarProps = {
-  showPreferenceModal: Function;
   triggerSaveCalendarModal: Function;
   isFetchingShareLink: boolean;
   endHour: number;
@@ -201,12 +201,6 @@ const DayCalendar = (props: DayCalendarProps) => {
     </button>
   );
 
-  const preferenceButton = (
-    <button onClick={() => props.showPreferenceModal()} className="save-timetable">
-      <i className="fa fa-cog" />
-    </button>
-  );
-
   const days = showWeekend ? DAYS : DAYS.slice(0, 5);
   const dayPills = days.map((day, i) => (
     <div
@@ -229,19 +223,14 @@ const DayCalendar = (props: DayCalendarProps) => {
     </button>
   );
 
-  const isComparingTimetables = useAppSelector(
-    (state) => state.compareTimetable.isComparing
-  );
-  const toolbar = isComparingTimetables ? (
-    <>{preferenceButton}</>
-  ) : (
+  const toolbar = (
     <>
       {shareButton}
       {shareLink}
       {addButton}
       {saveButton}
-      {preferenceButton}
       {saveToCalendarButton}
+      <ShowWeekendsButton isMobile />
     </>
   );
 

@@ -282,6 +282,21 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         else:
             self.assert_invisibility((By.CLASS_NAME, "search-results"))
 
+    def search_infinite_scroll(self, n):
+        """Scrolls down the search results and asserts n elements are found"""
+        search_results_container = self.find(
+            (By.CLASS_NAME, "search-results__list-container")
+        )
+        self.driver.execute_script(
+            "arguments[0].scrollTo(0, arguments[0].scrollHeight)",
+            search_results_container,
+        )
+
+        if n > 0:
+            self.assert_n_elements_found((By.CLASS_NAME, "search-course"), n)
+        else:
+            self.assert_invisibility((By.CLASS_NAME, "search-results"))
+
     def add_course(self, course_idx, n_slots, n_master_slots, by_section="", code=None):
         """Adds a course via search results and asserts the corresponding number of slots are found
 
