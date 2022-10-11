@@ -42,7 +42,6 @@ const DayCalendarContainer = connect(mapStateToProps, {
   // NOTE: uses this syntax to avoid onClick accidentally passing a callback
   saveTimetable: () => saveTimetable(),
   fetchShareTimetableLink,
-  showPreferenceModal: preferencesActions.showPreferenceModal,
   triggerSaveCalendarModal: saveCalendarModalActions.toggleSaveCalendarModal,
   createICalFromTimetable,
   handleCreateNewTimetable,

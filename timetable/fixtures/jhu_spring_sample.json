@@ -1,871 +1,871 @@
 [
-{
+  {
     "model": "timetable.semester",
     "pk": 2,
     "fields": {
-        "name": "Spring",
-        "year": "2017"
+      "name": "Spring",
+      "year": "2017"
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6628,
     "fields": {
-        "section": 8239,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8239,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6630,
     "fields": {
-        "section": 8239,
-        "day": "F",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8239,
+      "day": "F",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6631,
     "fields": {
-        "section": 8239,
-        "day": "T",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "13:30",
-        "time_end": "14:20",
-        "location": ""
+      "section": 8239,
+      "day": "T",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "13:30",
+      "time_end": "14:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6629,
     "fields": {
-        "section": 8239,
-        "day": "W",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8239,
+      "day": "W",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6632,
     "fields": {
-        "section": 8240,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8240,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6633,
     "fields": {
-        "section": 8240,
-        "day": "W",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8240,
+      "day": "W",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6634,
     "fields": {
-        "section": 8240,
-        "day": "F",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8240,
+      "day": "F",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6635,
     "fields": {
-        "section": 8240,
-        "day": "T",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
+      "section": 8240,
+      "day": "T",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "15:00",
+      "time_end": "15:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6636,
     "fields": {
-        "section": 8241,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8241,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6637,
     "fields": {
-        "section": 8241,
-        "day": "W",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8241,
+      "day": "W",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6638,
     "fields": {
-        "section": 8241,
-        "day": "F",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8241,
+      "day": "F",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6639,
     "fields": {
-        "section": 8241,
-        "day": "R",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
+      "section": 8241,
+      "day": "R",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "15:00",
+      "time_end": "15:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6640,
     "fields": {
-        "section": 8242,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8242,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6641,
     "fields": {
-        "section": 8242,
-        "day": "W",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8242,
+      "day": "W",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6643,
     "fields": {
-        "section": 8242,
-        "day": "R",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "16:30",
-        "time_end": "17:20",
-        "location": ""
+      "section": 8242,
+      "day": "R",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "16:30",
+      "time_end": "17:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6642,
     "fields": {
-        "section": 8242,
-        "day": "F",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8242,
+      "day": "F",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6644,
     "fields": {
-        "section": 8243,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8243,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6645,
     "fields": {
-        "section": 8243,
-        "day": "W",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8243,
+      "day": "W",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6646,
     "fields": {
-        "section": 8243,
-        "day": "F",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8243,
+      "day": "F",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6647,
     "fields": {
-        "section": 8243,
-        "day": "R",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
+      "section": 8243,
+      "day": "R",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "15:00",
+      "time_end": "15:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6648,
     "fields": {
-        "section": 8244,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8244,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6649,
     "fields": {
-        "section": 8244,
-        "day": "W",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8244,
+      "day": "W",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6650,
     "fields": {
-        "section": 8244,
-        "day": "F",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8244,
+      "day": "F",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6651,
     "fields": {
-        "section": 8244,
-        "day": "T",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "16:30",
-        "time_end": "17:20",
-        "location": ""
+      "section": 8244,
+      "day": "T",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "16:30",
+      "time_end": "17:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6652,
     "fields": {
-        "section": 8245,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8245,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6653,
     "fields": {
-        "section": 8245,
-        "day": "W",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8245,
+      "day": "W",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6654,
     "fields": {
-        "section": 8245,
-        "day": "F",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8245,
+      "day": "F",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6655,
     "fields": {
-        "section": 8245,
-        "day": "T",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
+      "section": 8245,
+      "day": "T",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "15:00",
+      "time_end": "15:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6656,
     "fields": {
-        "section": 8246,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8246,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6657,
     "fields": {
-        "section": 8246,
-        "day": "W",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8246,
+      "day": "W",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6658,
     "fields": {
-        "section": 8246,
-        "day": "F",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "11:00",
-        "time_end": "11:50",
-        "location": ""
+      "section": 8246,
+      "day": "F",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "11:00",
+      "time_end": "11:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6659,
     "fields": {
-        "section": 8246,
-        "day": "R",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "13:30",
-        "time_end": "14:20",
-        "location": ""
+      "section": 8246,
+      "day": "R",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "13:30",
+      "time_end": "14:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6617,
     "fields": {
-        "section": 8236,
-        "day": "W",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8236,
+      "day": "W",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6618,
     "fields": {
-        "section": 8236,
-        "day": "F",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8236,
+      "day": "F",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6619,
     "fields": {
-        "section": 8236,
-        "day": "T",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "13:30",
-        "time_end": "14:20",
-        "location": ""
+      "section": 8236,
+      "day": "T",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "13:30",
+      "time_end": "14:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6616,
     "fields": {
-        "section": 8236,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8236,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6620,
     "fields": {
-        "section": 8237,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8237,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6621,
     "fields": {
-        "section": 8237,
-        "day": "W",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8237,
+      "day": "W",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6622,
     "fields": {
-        "section": 8237,
-        "day": "F",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8237,
+      "day": "F",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6623,
     "fields": {
-        "section": 8237,
-        "day": "R",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "15:00",
-        "time_end": "15:50",
-        "location": ""
+      "section": 8237,
+      "day": "R",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "15:00",
+      "time_end": "15:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6624,
     "fields": {
-        "section": 8238,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8238,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6625,
     "fields": {
-        "section": 8238,
-        "day": "W",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8238,
+      "day": "W",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6626,
     "fields": {
-        "section": 8238,
-        "day": "F",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "10:00",
-        "time_end": "10:50",
-        "location": ""
+      "section": 8238,
+      "day": "F",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "10:00",
+      "time_end": "10:50",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6627,
     "fields": {
-        "section": 8238,
-        "day": "R",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "16:30",
-        "time_end": "17:20",
-        "location": ""
+      "section": 8238,
+      "day": "R",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "16:30",
+      "time_end": "17:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.offering",
     "pk": 6845,
     "fields": {
-        "section": 8310,
-        "day": "M",
-        "date_start": "02-01-2017",
-        "date_end": "05-10-2017",
-        "time_start": "15:00",
-        "time_end": "17:20",
-        "location": ""
+      "section": 8310,
+      "day": "M",
+      "date_start": "02-01-2017",
+      "date_end": "05-10-2017",
+      "time_start": "15:00",
+      "time_end": "17:20",
+      "location": ""
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8239,
     "fields": {
-        "course": 424,
-        "meeting_section": "(01)",
-        "size": 30,
-        "enrolment": 11,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "V. Lorman",
-        "semester": 2,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(01)",
+      "size": 30,
+      "enrolment": 11,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "V. Lorman",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8240,
     "fields": {
-        "course": 424,
-        "meeting_section": "(02)",
-        "size": 30,
-        "enrolment": 0,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "V. Lorman",
-        "semester": 2,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(02)",
+      "size": 30,
+      "enrolment": 0,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "V. Lorman",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8241,
     "fields": {
-        "course": 424,
-        "meeting_section": "(03)",
-        "size": 30,
-        "enrolment": 0,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "S. Vigogna",
-        "semester": 2,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(03)",
+      "size": 30,
+      "enrolment": 0,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "S. Vigogna",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8242,
     "fields": {
-        "course": 424,
-        "meeting_section": "(04)",
-        "size": 30,
-        "enrolment": 15,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "V. Lorman",
-        "semester": 2,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(04)",
+      "size": 30,
+      "enrolment": 15,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "V. Lorman",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8243,
     "fields": {
-        "course": 424,
-        "meeting_section": "(05)",
-        "size": 30,
-        "enrolment": 21,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "V. Lorman",
-        "semester": 2,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(05)",
+      "size": 30,
+      "enrolment": 21,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "V. Lorman",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8244,
     "fields": {
-        "course": 424,
-        "meeting_section": "(06)",
-        "size": 30,
-        "enrolment": 23,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "V. Lorman",
-        "semester": 2,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(06)",
+      "size": 30,
+      "enrolment": 23,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "V. Lorman",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8245,
     "fields": {
-        "course": 424,
-        "meeting_section": "(07)",
-        "size": 30,
-        "enrolment": 22,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "V. Lorman",
-        "semester": 2,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(07)",
+      "size": 30,
+      "enrolment": 22,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "V. Lorman",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8246,
     "fields": {
-        "course": 424,
-        "meeting_section": "(08)",
-        "size": 30,
-        "enrolment": 28,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "V. Lorman",
-        "semester": 2,
-        "was_full": false
+      "course": 424,
+      "meeting_section": "(08)",
+      "size": 30,
+      "enrolment": 28,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "V. Lorman",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8236,
     "fields": {
-        "course": 423,
-        "meeting_section": "(01)",
-        "size": 30,
-        "enrolment": 17,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "S. Vigogna",
-        "semester": 2,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(01)",
+      "size": 30,
+      "enrolment": 17,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "S. Vigogna",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8237,
     "fields": {
-        "course": 423,
-        "meeting_section": "(02)",
-        "size": 30,
-        "enrolment": 13,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "S. Vigogna",
-        "semester": 2,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(02)",
+      "size": 30,
+      "enrolment": 13,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "S. Vigogna",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8238,
     "fields": {
-        "course": 423,
-        "meeting_section": "(03)",
-        "size": 30,
-        "enrolment": 0,
-        "waitlist": 0,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "S. Vigogna",
-        "semester": 2,
-        "was_full": false
+      "course": 423,
+      "meeting_section": "(03)",
+      "size": 30,
+      "enrolment": 0,
+      "waitlist": 0,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "S. Vigogna",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.section",
     "pk": 8310,
     "fields": {
-        "course": 460,
-        "meeting_section": "(01)",
-        "size": 20,
-        "enrolment": 2,
-        "waitlist": -1,
-        "waitlist_size": -1,
-        "section_type": "L",
-        "instructors": "W. Wilson",
-        "semester": 2,
-        "was_full": false
+      "course": 460,
+      "meeting_section": "(01)",
+      "size": 20,
+      "enrolment": 2,
+      "waitlist": -1,
+      "waitlist_size": -1,
+      "section_type": "L",
+      "instructors": "W. Wilson",
+      "semester": 2,
+      "was_full": false
     }
-},
-{
+  },
+  {
     "model": "timetable.course",
     "pk": 424,
     "fields": {
-        "school": "jhu",
-        "code": "AS.110.107",
-        "name": "Calculus II (For Biological and Social Science)",
-        "description": "Differential and integral Calculus. Includes analytic geometry, functions, limits, integrals and derivatives, introduction to differential equations, functions of several variables, linear systems, applications for systems of linear differential equations, probability distributions. Applications to the biological and social sciences will be discussed, and the courses are designed to meet the needs of students in these disciplines.",
-        "notes": "",
-        "info": "",
-        "unstopped_description": "",
-        "campus": "",
-        "prerequisites": "",
-        "corequisites": "",
-        "exclusions": "",
-        "num_credits": 4.0,
-        "areas": ["Q"],
-        "department": "AS Mathematics",
-        "level": "100",
-        "cores": null,
-        "geneds": null,
-        "same_as": null,
-        "related_courses": [],
-        "sub_school": "",
-        "writing_intensive": "",
-        "pos": []
+      "school": "jhu",
+      "code": "AS.110.107",
+      "name": "Calculus II (For Biological and Social Science)",
+      "description": "Differential and integral Calculus. Includes analytic geometry, functions, limits, integrals and derivatives, introduction to differential equations, functions of several variables, linear systems, applications for systems of linear differential equations, probability distributions. Applications to the biological and social sciences will be discussed, and the courses are designed to meet the needs of students in these disciplines.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 4.0,
+      "areas": ["Q"],
+      "department": "AS Mathematics",
+      "level": "100",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "related_courses": [],
+      "sub_school": "",
+      "writing_intensive": "",
+      "pos": []
     }
-},
-{
+  },
+  {
     "model": "timetable.course",
     "pk": 423,
     "fields": {
-        "school": "jhu",
-        "code": "AS.110.106",
-        "name": "Calculus I (Biology and Social Sciences)",
-        "description": "Differential and integral calculus. Includes analytic geometry, functions, limits, integrals and\r\nderivatives, introduction to differential equations, functions of several variables, linear systems,\r\napplications for systems of linear differential equations, probability distributions. Many\r\napplications to the biological and social sciences will be discussed.",
-        "notes": "",
-        "info": "",
-        "unstopped_description": "",
-        "campus": "",
-        "prerequisites": "",
-        "corequisites": "",
-        "exclusions": "",
-        "num_credits": 4.0,
-        "areas": ["Q"],
-        "department": "AS Mathematics",
-        "level": "100",
-        "cores": null,
-        "geneds": null,
-        "same_as": null,
-        "related_courses": [],
-        "sub_school": "",
-        "writing_intensive": "",
-        "pos": []
+      "school": "jhu",
+      "code": "AS.110.106",
+      "name": "Calculus I (Biology and Social Sciences)",
+      "description": "Differential and integral calculus. Includes analytic geometry, functions, limits, integrals and\r\nderivatives, introduction to differential equations, functions of several variables, linear systems,\r\napplications for systems of linear differential equations, probability distributions. Many\r\napplications to the biological and social sciences will be discussed.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 4.0,
+      "areas": ["Q"],
+      "department": "AS Mathematics",
+      "level": "100",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "related_courses": [],
+      "sub_school": "",
+      "writing_intensive": "",
+      "pos": []
     }
-},
-{
+  },
+  {
     "model": "timetable.course",
     "pk": 460,
     "fields": {
-        "school": "jhu",
-        "code": "AS.110.793",
-        "name": "Seminar in Topology",
-        "description": "For graduate students only.  Presentations of current research papers by faculty, graduate students and invited guest speakers.",
-        "notes": "",
-        "info": "",
-        "unstopped_description": "",
-        "campus": "",
-        "prerequisites": "",
-        "corequisites": "",
-        "exclusions": "",
-        "num_credits": 0.0,
-        "areas": ["Q"],
-        "department": "AS Mathematics",
-        "level": "700",
-        "cores": null,
-        "geneds": null,
-        "same_as": null,
-        "related_courses": [],
-        "sub_school": "",
-        "writing_intensive": "",
-        "pos": []
+      "school": "jhu",
+      "code": "AS.110.793",
+      "name": "Seminar in Topology",
+      "description": "For graduate students only.  Presentations of current research papers by faculty, graduate students and invited guest speakers.",
+      "notes": "",
+      "info": "",
+      "unstopped_description": "",
+      "campus": "",
+      "prerequisites": "",
+      "corequisites": "",
+      "exclusions": "",
+      "num_credits": 0.0,
+      "areas": ["Q"],
+      "department": "AS Mathematics",
+      "level": "700",
+      "cores": null,
+      "geneds": null,
+      "same_as": null,
+      "related_courses": [],
+      "sub_school": "",
+      "writing_intensive": "",
+      "pos": []
     }
-}
+  }
 ]

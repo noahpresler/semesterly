@@ -21,14 +21,17 @@ class EndToEndTest(SeleniumTestCase):
 
     def test_logged_out_flow(self):
         self.clear_tutorial()
-        with self.description("search for course and then delete search query"):
+        with self.description("Search for course and then delete search query"):
             self.search_course("calc", 3)
             self.search_course("notacoursename", 0)
             self.clear_search_query()
-        with self.description("search, add, then remove course"):
+        with self.description("Search, add, then remove course"):
             self.search_course("calc", 3)
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.remove_course(0, n_slots_expected=0)
+        with self.description("Search for course and test infinite scroll"):
+            self.search_course("introduction", 8)
+            self.search_infinite_scroll(10)  # Total of 10 courses should be displayed
         with self.description("Add two short courses and then remove"):
             self.search_course("EN.580.241", 1)
             self.add_course(0, n_slots=3, n_master_slots=1, code="EN.580.241")
@@ -36,13 +39,13 @@ class EndToEndTest(SeleniumTestCase):
             self.add_course(0, n_slots=6, n_master_slots=2, code="EN.580.243")
             self.remove_course(0, n_slots_expected=3)
             self.remove_course(0, n_slots_expected=0)
-        with self.description("open course modal from search and share"):
+        with self.description("Open course modal from search and share"):
             self.search_course("calc", 3)
             self.open_course_modal_from_search(1)
             self.validate_course_modal()
             self.follow_share_link_from_modal()
             self.close_course_modal()
-        with self.description("open course modal & follow share link from slot"):
+        with self.description("Open course modal & follow share link from slot"):
             self.search_course("calc", 3)
             self.add_course(1, n_slots=4, n_master_slots=1)
             self.follow_share_link_from_slot()
@@ -60,9 +63,9 @@ class EndToEndTest(SeleniumTestCase):
             self.share_timetable(
                 [self.add_course_from_course_modal(n_slots=4, n_master_slots=1)]
             )
-        with self.description("add conflicting course and accept allow conflict alert"):
+        with self.description("Add conflicting course and accept allow conflict alert"):
             self.remove_course(0, n_slots_expected=0)
-            self.click_off()  # click out of share link component
+            self.click_off()  # Click out of share link component
             self.search_course("AS.110.106", 1)
             self.add_course(0, n_slots=4, n_master_slots=1, by_section="(09)")
             self.search_course("AS.110.105", 1)
@@ -73,24 +76,24 @@ class EndToEndTest(SeleniumTestCase):
                 alert_text_contains="Allow Conflicts",
             )
             self.allow_conflicts_add(n_slots=8)
-        with self.description("switch semesters, clear alert and check search/adding"):
+        with self.description("Switch semesters, clear alert and check search/adding"):
             self.change_term("Spring 2017", clear_alert=True)
             self.search_course("calc", 2)
             self.open_course_modal_from_search(1)
             self.share_timetable(
                 [self.add_course_from_course_modal(n_slots=4, n_master_slots=1)]
             )
-        with self.description("advanced search basic query executes"):
+        with self.description("Advanced search basic query executes"):
             self.change_to_current_term(clear_alert=True)
             sem = Semester.objects.get(year=2017, name="Fall")
-            self.open_and_query_adv_search("ca", n_results=4)
+            self.open_and_query_adv_search("ca", n_results=7)
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
 
     def test_logged_in_via_fb_flow(self):
-        with self.description("setup and clear tutorial"):
+        with self.description("Setup and clear tutorial"):
             self.clear_tutorial()
-        with self.description("succesfully signup with facebook"):
+        with self.description("Succesfully signup with facebook"):
             self.login_via_fb(email="e@ma.il", password="password")
             self.complete_user_settings_basics(
                 major="Computer Science", class_year=2023
@@ -98,8 +101,8 @@ class EndToEndTest(SeleniumTestCase):
         self.common_logged_in_tests()
         with self.description(
             (
-                "add friend with course,"
-                "check for friend circles"
+                "Add friend with course,"
+                "check for friend circles,"
                 "and presence in modal"
             )
         ):
@@ -121,9 +124,9 @@ class EndToEndTest(SeleniumTestCase):
             self.assert_ptt_equals(ptt)
 
     def test_logged_in_via_google_flow(self):
-        with self.description("setup and clear tutorial"):
+        with self.description("Setup and clear tutorial"):
             self.clear_tutorial()
-        with self.description("login via Google, complete user settings"):
+        with self.description("Log in via Google and complete user settings"):
             self.login_via_google(
                 email="em@ai.l",
                 password="password",
@@ -141,7 +144,7 @@ class EndToEndTest(SeleniumTestCase):
             self.assert_ptt_equals(ptt)
 
     def common_logged_in_tests(self):
-        with self.description("search and add courses"):
+        with self.description("Search and add courses"):
             self.search_course("AS.110.105", 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.search_course("AS.110.106", 1)
@@ -151,16 +154,16 @@ class EndToEndTest(SeleniumTestCase):
             self.search_course("AS.110.795", 1)
             self.add_course(0, n_slots=12, n_master_slots=4)
             self.assert_ptt_const_across_refresh()
-        with self.description("change personal timetable name"):
+        with self.description("Change personal timetable name"):
             self.change_ptt_name("Testing Timetable")
             self.assert_ptt_const_across_refresh()
-        with self.description("remove courses"):
+        with self.description("Remove courses"):
             self.remove_course(3)
             self.remove_course(2)
             self.remove_course(1)
             self.remove_course(0, from_slot=True)
             self.assert_ptt_const_across_refresh()
-        with self.description("add and remove from course modal"):
+        with self.description("Add and remove from course modal"):
             self.search_course("AS.110.105", 1)
             self.open_course_modal_from_search(0)
             course1 = self.add_course_from_course_modal(n_slots=4, n_master_slots=1)
@@ -172,11 +175,11 @@ class EndToEndTest(SeleniumTestCase):
             self.add_course_from_course_modal(n_slots=11, n_master_slots=3)
             self.open_course_modal_from_slot(2)
             self.remove_course_from_course_modal(n_slots_expected=8)
-        with self.description("share timetable"):
+        with self.description("Share timetable"):
             self.share_timetable([course1, course2])
             self.assert_ptt_const_across_refresh()
         testing_ptt = self.ptt_to_tuple()
-        with self.description("create new personal timetable, validate on reload"):
+        with self.description("Create new personal timetable, validate on reload"):
             self.create_ptt("End To End Testing!")
             self.search_course("AS.110.105", 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
@@ -204,12 +207,12 @@ class EndToEndTest(SeleniumTestCase):
         with self.description("Delete a timetable"):
             self.delete_timetable("End To End Testing!")
             self.assert_timetable_not_found("End To End Testing!")
-        with self.description("add and edit custom events"):
+        with self.description("Add and edit custom events"):
             self.create_custom_event(5, 0, 4)
             self.assert_custom_event_exists(
                 name="New Custom Event", start_time="8:00", end_time="10:00"
             )
-            self.assert_ptt_const_across_refresh()  # custom events saved as slots too
+            self.assert_ptt_const_across_refresh()  # Custom events saved as slots too
             event = {
                 "name": "Semly",
                 "day": "M",
@@ -222,10 +225,10 @@ class EndToEndTest(SeleniumTestCase):
             self.edit_custom_event("New Custom Event", **event)
             self.assert_custom_event_exists(**event)
             self.assert_ptt_const_across_refresh()
-        with self.description("advanced search basic query executes"):
+        with self.description("Advanced search basic query executes"):
             self.change_to_current_term()
             sem = Semester.objects.get(year=2017, name="Fall")
-            self.open_and_query_adv_search("ca", n_results=4)
+            self.open_and_query_adv_search("ca", n_results=7)
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
             self.close_adv_search()

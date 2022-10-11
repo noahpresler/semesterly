@@ -25,7 +25,6 @@ import EnableNotificationsAlertContainer from "./alerts/enable_notifications_ale
 import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
 import TopBar from "./TopBar";
 import SignupModalContainer from "./containers/modals/signup_modal_container";
-import PreferenceModal from "./modals/preference_modal";
 import TutModalContainer from "./containers/modals/tut_modal_container";
 import PeerModalContainer from "./containers/modals/peer_modal_container";
 import IntegrationModalContainer from "./containers/modals/integration_modal_container";
@@ -35,7 +34,7 @@ import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_co
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
 import UserSettingsModal from "./modals/user_settings_modal";
 import CustomEventModal from "./modals/custom_event_modal";
-import AdvancedSearchModal from "./modals/advanced_search_modal";
+import AdvancedSearchModal from "./modals/AdvancedSearchModal";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getActiveTimetableCourses } from "../state";
 import NewsModal from "./modals/news_modal";
@@ -176,8 +175,7 @@ const Semesterly = () => {
     navigator.userAgent
   );
   const cal =
-    // @ts-ignore
-    mobile && $(window).width() < 767 && orientation === "portrait" ? (
+    mobile && window.innerWidth < 767 && orientation === "portrait" ? (
       <DayCalendarContainer />
     ) : (
       <CalendarContainer />
@@ -194,7 +192,6 @@ const Semesterly = () => {
       <AdvancedSearchModal />
       <NewsModal />
       <SignupModalContainer />
-      <PreferenceModal />
       <IntegrationModalContainer />
       <TutModalContainer />
       <PeerModalContainer />
