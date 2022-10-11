@@ -7,10 +7,10 @@ import { newsModalActions } from "../../state/slices/newsModalSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import parse from "html-react-parser";
 import { getIsUserInfoIncomplete } from "../../state";
+import Modal from "./Modal";
 
 const NewsModal = () => {
   const dispatch = useAppDispatch();
-  const modal = useRef<WaveModal>();
 
   const { isVisible } = useAppSelector((state) => state.newsModal);
   const isSigningUp = useAppSelector(
@@ -43,16 +43,8 @@ const NewsModal = () => {
       setNewsBody(data.body);
     };
 
-    if (!newsTitle && !newsBody) {
-      fetchData();
-    }
-
-    if (isVisible) {
-      modal.current.show();
-    }
-
-    dispatch(newsModalActions.hideNewsModal());
-  }, [isVisible]);
+    fetchData();
+  }, []);
 
   const modalHeader = (
     <div className="modal-header">
@@ -65,11 +57,23 @@ const NewsModal = () => {
   };
 
   return (
-    <WaveModal ref={modal} className="news-modal" modalStyle={modalStyle}>
+    <Modal
+      visible={isVisible}
+      onClose={() => {
+        dispatch(newsModalActions.hideNewsModal());
+      }}
+    >
       {modalHeader}
       <div className="news-body">{parse(newsBody)}</div>
-    </WaveModal>
+    </Modal>
   );
+
+  // return (
+  //   <WaveModal ref={modal} className="news-modal" modalStyle={modalStyle}>
+  //     {modalHeader}
+  //     <div className="news-body">{parse(newsBody)}</div>
+  //   </WaveModal>
+  // );
 };
 
 export default NewsModal;

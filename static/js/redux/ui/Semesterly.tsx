@@ -187,10 +187,10 @@ const Semesterly = () => {
 
   return (
     <div className="page-wrapper">
+      <NewsModal />
       <TopBar />
       <UserSettingsModal />
       <AdvancedSearchModal />
-      <NewsModal />
       <SignupModalContainer />
       <IntegrationModalContainer />
       <TutModalContainer />

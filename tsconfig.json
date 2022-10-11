@@ -11,6 +11,5 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "lib": ["es2015", "DOM"]
-  },
-  "include": ["static/js/redux/constants/**/*"]
+  }
 }
