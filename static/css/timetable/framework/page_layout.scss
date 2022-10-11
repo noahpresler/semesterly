@@ -45,7 +45,7 @@ textarea {
   transform: translateX(0);
   transition: transform .3s;
   width: 300px;
-  z-index: 99;
+  z-index: 9;
 
   &.full-cal {
     transform: translateX(100%);
@@ -111,7 +111,7 @@ textarea {
   box-shadow: 0 0 12px $black-transparent-1, 0 0 1px $black-transparent-15;
   min-height: 50px;
   position: relative;
-  z-index: 1000;
+  z-index: 10;
 }
 
 .la-ball-clip-rotate-multiple {
