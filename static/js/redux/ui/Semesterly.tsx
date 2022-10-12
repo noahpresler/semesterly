@@ -37,7 +37,7 @@ import CustomEventModal from "./modals/custom_event_modal";
 import AdvancedSearchModal from "./modals/AdvancedSearchModal";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getActiveTimetableCourses } from "../state";
-import NewsModal from "./modals/news_modal";
+import NewsModal from "./modals/NewsModal";
 import { newsModalActions } from "../state/slices/newsModalSlice";
 import SideBar from "./SideBar";
 import CompareTimetableSideBar from "./CompareTimetableSidebar";
