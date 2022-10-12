@@ -25,8 +25,7 @@ type RodalProps = {
 };
 
 const Modal = (props: RodalProps) => {
-  const x = 0;
-  return <Rodal {...props}> Hello {x}</Rodal>;
+  return <Rodal {...props}>{props.children}</Rodal>;
 };
 
 export default Modal;

@@ -27,10 +27,10 @@
   bottom: 0;
   margin: auto;
   z-index: 101;
-  padding: 15px;
+  // padding: 15px;
   background: #fff;
   border-radius: 3px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 .rodal-dialog:focus {
@@ -50,7 +50,7 @@
 .rodal-close:before,
 .rodal-close:after {
   position: absolute;
-  content: '';
+  content: "";
   height: 2px;
   width: 100%;
   top: 50%;

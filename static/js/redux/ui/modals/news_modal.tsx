@@ -53,7 +53,9 @@ const NewsModal = () => {
   );
 
   const modalStyle = {
-    width: "100%",
+    height: "588px",
+    width: "700px",
+    overflow: "auto",
   };
 
   return (
@@ -62,18 +64,14 @@ const NewsModal = () => {
       onClose={() => {
         dispatch(newsModalActions.hideNewsModal());
       }}
+      animation="door"
+      className="news-modal"
+      customStyles={modalStyle}
     >
       {modalHeader}
       <div className="news-body">{parse(newsBody)}</div>
     </Modal>
   );
-
-  // return (
-  //   <WaveModal ref={modal} className="news-modal" modalStyle={modalStyle}>
-  //     {modalHeader}
-  //     <div className="news-body">{parse(newsBody)}</div>
-  //   </WaveModal>
-  // );
 };
 
 export default NewsModal;
