@@ -43,6 +43,8 @@ $themes: (
       search-bar-background: #f2f3f5,
       search-bar-option-background-hover: #f1eeee,
       search-bar-semester-picker-border: 1px solid $ge6e6e6,
+      search-bar-focused-background: $gfff,
+      search-border: $gfff
     ),
   // Dark Mode
   dark:
@@ -59,6 +61,8 @@ $themes: (
       search-bar-background: $dblue3,
       search-bar-option-background-hover: $dblue2,
       search-bar-semester-picker-border: 1px solid $dblue2,
+      search-bar-focused-background: $dblue8,
+      search-border: $dblue8
     )
 );
 
