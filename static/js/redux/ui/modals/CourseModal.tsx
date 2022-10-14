@@ -100,12 +100,8 @@ const CourseModal = () => {
           dispatch(addOrRemoveCourse(course?.id));
           hide();
         }}
-        onMouseEnter={() => {
-          setAddBtnIsHover(true);
-        }}
-        onMouseLeave={() => {
-          setAddBtnIsHover(false);
-        }}
+        onMouseEnter={() => setAddBtnIsHover(true)}
+        onMouseLeave={() => setAddBtnIsHover(false)}
       >
         <i
           className={classNames("fa", {
