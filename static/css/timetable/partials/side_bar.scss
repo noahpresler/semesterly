@@ -88,8 +88,8 @@
 
 .timetable-names-dropdown {
   @include theme() {
-    background-color: t("timetable-names-dropdown-background");
-    border: t("timetable-names-dropdown-border");
+    background-color: t("dropdown-background");
+    border: t("dropdown-border");
   }
   box-shadow: 0 2px 10px $black-transparent-2;
   display: none;
@@ -106,7 +106,7 @@
   .tip {
     @include theme() {
       // tip color
-      border-bottom-color: t("timetable-names-dropdown-background");
+      border-bottom-color: t("dropdown-background");
     }
     right: 9px;
     top: -7px;
