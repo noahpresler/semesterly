@@ -35,7 +35,7 @@ button {
     line-height: 30px;
     outline: none;
     position: relative;
-    transition: background-color .3s;
+    transition: background-color 0.3s;
     width: 30px;
 
     &:hover,
@@ -63,13 +63,14 @@ button {
     border-radius: 4px;
     float: right;
     margin-right: 2px;
-    transition: color .3s;
+    transition: color 0.3s;
 
     &:hover {
-      background-color: $gddd;
+      @include theme() {
+        background-color: t("row-button-hover-background-color");
+      }
     }
   }
-
 }
 
 .cal-row {
@@ -131,7 +132,7 @@ button {
   }
 
   @media screen and (max-width: 550px) {
-    .custom-instructions{
+    .custom-instructions {
       display: none;
     }
   }
