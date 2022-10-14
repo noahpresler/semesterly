@@ -31,12 +31,9 @@ const CourseModal = () => {
     (state) => courseSections[state.courseInfo.id] !== undefined
   );
   const semester = useAppSelector((state) => getCurrentSemester(state));
-  const getShareLink = (courseCode: string) => {
-    return getCourseShareLink(courseCode, semester);
-  };
-  const getShareLinkFromModal = (courseCode: string) => {
-    return getCourseShareLinkFromModal(courseCode, semester);
-  };
+  const getShareLink = (courseCode: string) => getCourseShareLink(courseCode, semester);
+  const getShareLinkFromModal = (courseCode: string) =>
+    getCourseShareLinkFromModal(courseCode, semester);
   const isComparingTimetables = useAppSelector(
     (state) => state.compareTimetable.isComparing
   );
@@ -137,7 +134,7 @@ const CourseModal = () => {
       </div>
       <CourseModalBodyContainer
         inRoster={inRoster}
-        data={course ? course : {}}
+        data={course || {}}
         addOrRemoveCourse={(courseId: any, section: string = "") => {
           dispatch(addOrRemoveCourse(courseId, section));
           hide();
