@@ -24,8 +24,5 @@ type RodalProps = {
   onAnimationEnd?: () => never;
 };
 
-const Modal = (props: RodalProps) => {
-  return <Rodal {...props}>{props.children}</Rodal>;
-};
-
+const Modal = (props: RodalProps) => <Rodal {...props}>{props.children}</Rodal>;
 export default Modal;
