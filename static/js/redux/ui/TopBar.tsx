@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import React, { useState, useEffect } from "react";
 import { useAppSelector } from "../hooks";
 import SearchBar from "./SearchBar";
-import CourseModalContainer from "./containers/modals/course_modal_container";
+import CourseModal from "./modals/CourseModal";
 import TimetableLoaderContainer from "./containers/timetable_loader_container";
 import SocialProfileContainer from "./containers/social_profile_container";
 import { getCurrentSemester } from "../state";
@@ -104,7 +104,7 @@ const TopBar = () => {
         </div>
       </div>
       {!isComparing && <SearchBar />}
-      <CourseModalContainer />
+      <CourseModal />
       <SocialProfileContainer />
       <TimetableLoaderContainer />
       <ThemeToggle />
