@@ -17,12 +17,12 @@
     right: 3.5px;
     top: 1px;
     transition: transform .2s, opacity .2s;
-    z-index: 9999;
+    z-index: 9;
 
     &:hover {
       opacity: 1;
       transform: scale(1.4);
-      z-index: 9999;
+      z-index: 9;
     }
   }
 
@@ -33,12 +33,12 @@
     position: absolute;
     right: 5px;
     transition: transform .2s, opacity .2s;
-    z-index: 9999;
+    z-index: 9;
 
     &:hover {
       opacity: 1;
       transform: scale(1.4);
-      z-index: 9999;
+      z-index: 9;
     }
   }
 }
@@ -76,7 +76,7 @@
   text-align: center;
   width: 80%;
   background-color: white;
-  z-index: 1000;
+  z-index: 10;
   position: absolute;
   top: 50%;
   left: 50%;
