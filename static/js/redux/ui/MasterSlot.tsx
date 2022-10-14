@@ -235,9 +235,6 @@ export const ShareLink = ({ link, onClickOut, type }: ShareLinkProps) => {
             {shareBtnText}
           </div>
         </CopyToClipboard>
-        {/* <div className="clipboardBtn" id={`clipboard-btn-${uniqueId}`} data-clipboard-text={link}>
-          Copy to Clipboard
-        </div> */}
       </div>
     </ClickOutHandler>
   );
