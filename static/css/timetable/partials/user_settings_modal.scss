@@ -1,8 +1,4 @@
-.welcome-modal {
-  height: 745px;
-  max-height: 90%;
-  max-width: 500px;
-
+.user-settings-modal {
   > div {
     height: 100%;
     outline: none;
@@ -136,7 +132,7 @@
     border-top: 1px solid $gdee2ff;
   }
 
-  .welcome-modal__notifications {
+  .user-settings-modal__notifications {
     border-bottom: 1px solid $geee;
     border-top: 1px solid $geee;
     padding-top: 15px;
@@ -176,7 +172,7 @@
   }
 }
 
-.welcome-modal__notifications {
+.user-settings-modal__notifications {
   &.preference-attn {
     h4 {
       color: $primary-navy;
@@ -207,7 +203,7 @@
 }
 
 .modal-body {
-  .welcome-modal__notifications {
+  .user-settings-modal__notifications {
     h3 {
       font-size: 14px;
       font-weight: bold;
@@ -218,7 +214,7 @@
 }
 
 @media (max-width: 766px) {
-  .welcome-modal {
+  .user-settings-modal {
     .modal-body {
       padding: 22px 0 20px;
 
@@ -230,7 +226,7 @@
 }
 
 @media (max-width: 499px) {
-  .welcome-modal {
+  .user-settings-modal {
     .modal-body {
       p {
         font-size: 12px;

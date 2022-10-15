@@ -13,15 +13,26 @@ GNU General Public License for more details.
 */
 
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
 import { useActions } from "../../hooks";
 import Select from "react-select";
+import Modal from "./Modal";
 import classnames from "classnames";
-import { WaveModal } from "boron-15";
 import majors from "../../constants/majors";
 import { isIncomplete as TOSIncomplete } from "../../util";
 import { isUserInfoIncomplete as areUserSettingsIncomplete } from "../../state/slices";
 import { getIsUserInfoIncomplete } from "../../state";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+
+interface Option {
+  value: string;
+  label: string;
+}
+
+const modalStyle = {
+  height: "588px",
+  width: "700px",
+  overflow: "auto",
+};
 
 const UserSettingsModal = () => {
   const {
@@ -34,37 +45,35 @@ const UserSettingsModal = () => {
     deleteUser,
   } = useActions();
 
-  const userInfo = useSelector((state) => state.userInfo.data);
-  const showOverrided = useSelector((state) => state.userInfo.overrideShow);
-  const hideOverrided = useSelector((state) => state.userInfo.overrideHide);
-  const isUserInfoIncomplete = useSelector((state) => getIsUserInfoIncomplete(state));
-  const highlightNotifs = useSelector((state) => state.ui.highlightNotifs);
-  const isSigningUp = useSelector(
+  const dispatch = useAppDispatch();
+
+  const userInfo = useAppSelector((state) => state.userInfo.data);
+  const showOverrided = useAppSelector((state) => state.userInfo.overrideShow);
+  const hideOverrided = useAppSelector((state) => state.userInfo.overrideHide);
+  const isUserInfoIncomplete = useAppSelector((state) =>
+    getIsUserInfoIncomplete(state)
+  );
+  const highlightNotifs = useAppSelector((state) => state.ui.highlightNotifs);
+  const isSigningUp = useAppSelector(
     (state) => !state.userInfo.overrideShow && getIsUserInfoIncomplete(state)
   );
-  const isDeleted = useSelector((state) => state.userInfo.isDeleted);
+  const isDeleted = useAppSelector((state) => state.userInfo.isDeleted);
 
-  // refactor facebook settings to controlled input in order to perform checks and render alert
   const [fbSettings, setfbSettings] = useState({
     shareClassesWithFriends: userInfo.social_courses || true,
     shareSectionsWithFriends: userInfo.social_offerings || false,
     findNewFriends: userInfo.social_all || false,
   });
 
-  const modal = useRef();
   const tosAgreed = useRef();
 
   const [showDelete, setShowDelete] = useState(false);
   const [fbSwitchAlertText, setFbSwitchAlertText] = useState(null);
   const [userSettings, setUserSettings] = useState({ ...userInfo });
 
-  const isIncomplete = (prop) => prop === undefined || prop === "";
+  const isIncomplete = (prop: string | undefined) => prop === undefined || prop === "";
 
-  const changeForm = (obj = {}) => {
-    setUserSettings({ ...userSettings, ...obj });
-  };
-
-  const handleChangefbSettings = (e) => {
+  const handleChangefbSettings = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const checked = e.target.checked;
     if (name === "shareClassesWithFriends") {
@@ -111,30 +120,25 @@ const UserSettingsModal = () => {
     setShowDelete(!showDelete);
   };
 
-  const changeMajor = (val) => {
-    changeForm({ major: val.value });
+  const changeMajor = (majorOption: Option) => {
+    setUserSettings({ ...userSettings, major: majorOption.value });
   };
 
-  const changeClassYear = (val) => {
-    changeForm({ class_year: val.value });
+  const changeClassYear = (calssYearOption: Option) => {
+    setUserSettings({ ...userSettings, class_year: calssYearOption.value });
   };
 
-  const shouldShow = () =>
+  const showUserSettings = () =>
     userInfo.isLoggedIn && !hideOverrided && (showOverrided || isUserInfoIncomplete);
 
   const hide = () => {
     changeUserInfo(userSettings);
     saveSettings();
     if (!areUserSettingsIncomplete(userSettings)) {
-      modal.current.hide();
       setUserSettingsModalHidden();
       overrideSettingsShow(false);
       setShowDelete(false);
     }
-  };
-
-  const modalStyle = {
-    width: "100%",
   };
 
   useEffect(() => {
@@ -158,8 +162,7 @@ const UserSettingsModal = () => {
   }, [isDeleted]);
 
   useEffect(() => {
-    if (shouldShow()) {
-      modal.current.show();
+    if (showUserSettings()) {
       setUserSettingsModalVisible();
     }
   }, [userInfo.isLoggedIn, hideOverrided, showOverrided, isUserInfoIncomplete]);
@@ -283,9 +286,12 @@ const UserSettingsModal = () => {
   const fbUpsell =
     userInfo.isLoggedIn && !userInfo.FacebookSignedUp ? (
       <div
-        className={classnames("preference welcome-modal__notifications second cf", {
-          "preference-attn": highlightNotifs,
-        })}
+        className={classnames(
+          "preference user-settings-modal__notifications second cf",
+          {
+            "preference-attn": highlightNotifs,
+          }
+        )}
       >
         <button
           className="btn abnb-btn fb-btn"
@@ -342,12 +348,14 @@ const UserSettingsModal = () => {
   );
 
   return (
-    <WaveModal
-      ref={modal}
-      className="welcome-modal max-modal"
-      closeOnClick={false}
-      keyboard={false}
-      modalStyle={modalStyle}
+    <Modal
+      visible={showUserSettings()}
+      onClose={() => {
+        dispatch(setUserSettingsModalHidden());
+      }}
+      animation="door"
+      className="user-settings-modal"
+      customStyles={modalStyle}
     >
       <div className="modal-content">
         <div className="modal-header">
@@ -376,13 +384,13 @@ const UserSettingsModal = () => {
               className="select-field"
               value={{ label: userSettings.class_year, value: userSettings.class_year }}
               options={[
-                { value: 2021, label: 2021 },
                 { value: 2022, label: 2022 },
                 { value: 2023, label: 2023 },
                 { value: 2024, label: 2024 },
                 { value: 2025, label: 2025 },
                 { value: 2026, label: 2026 },
                 { value: 2027, label: 2027 },
+                { value: 2028, label: 2028 },
               ]}
               isSearchable
               onChange={changeClassYear}
@@ -399,7 +407,7 @@ const UserSettingsModal = () => {
           </div>
         </div>
       </div>
-    </WaveModal>
+    </Modal>
   );
 };
 

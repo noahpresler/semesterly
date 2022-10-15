@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import { renderWithRedux } from "../../test-utils";
-import UserSettingsModal from "../../ui/modals/user_settings_modal";
+import UserSettingsModal from "../../ui/modals/UserSettingsModal";
 import {
   unfilledFixture,
   filledFixture,
