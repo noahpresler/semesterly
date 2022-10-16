@@ -21,7 +21,7 @@ import {
 import { timetablesActions } from "../../state/slices/timetablesSlice";
 import { VERBOSE_DAYS } from "../../constants/constants";
 import { ShareLink } from "../MasterSlot";
-import CourseModalBodyContainer from "../containers/modals/course_modal_body_container";
+import CourseModalBody from "./CourseModalBody";
 import {
   Filter,
   SelectedFilter,
@@ -318,14 +318,8 @@ const AdvancedSearchModal = () => {
             />
           </div>
         </div>
-        <CourseModalBodyContainer
-          data={selectedCourse}
-          addOrRemoveCourse={cAddOrRemoveCourse}
-          schoolSpecificInfo={schoolSpecificInfo}
-          unHoverSection={() => dispatch(timetablesActions.unhoverSection())}
+        <CourseModalBody
           hideModal={() => explorationModalActions.hideExplorationModal()}
-          isFetching={false}
-          getShareLink={getShareLink}
         />
       </div>
     );

@@ -5,15 +5,14 @@ import REACTION_MAP from "../../constants/reactions";
 import MasterSlot from "../MasterSlot";
 import COLOUR_DATA from "../../constants/colours";
 import EvaluationList from "../evaluation_list";
-import CourseModalSection from "../course_modal_section";
+import CourseModalSection from "../CourseModalSection";
 import SlotHoverTip from "../slot_hover_tip";
 
 import { getSectionTypeDisplayName, strPropertyCmp } from "../../util";
 import {
   Classmate,
   Course,
-  NormalizedCourse,
-  RelatedCourse,
+  DenormalizedCourse,
   Section,
 } from "../../constants/commonTypes";
 import { useAppDispatch, useAppSelector } from "../../hooks";
@@ -37,7 +36,7 @@ const CourseModalBody = (props: { hideModal: Function }) => {
   const mobileWidth = 767;
   const [isMobile, setIsMobile] = useState(window.innerWidth < mobileWidth);
 
-  const course = useAppSelector((state) =>
+  const course: DenormalizedCourse = useAppSelector((state) =>
     getCourseInfoId(state) ? getDenormCourseById(state, getCourseInfoId(state)) : null
   );
   const isFetchingClassmates = useAppSelector(
@@ -193,7 +192,6 @@ const CourseModalBody = (props: { hideModal: Function }) => {
     });
 
   const { reactions, num_credits: numCredits } = course;
-  // reactions.sort((r1, r2) => {return r1.count < r2.count});
 
   const cid = course.id;
   let totalReactions = reactions.map((r) => r.count).reduce((x, y) => x + y, 0);
@@ -224,7 +222,7 @@ const CourseModalBody = (props: { hideModal: Function }) => {
       />
     );
   });
-  reactionsDisplay.sort((r1, r2) => r1.props.count - r2.props.count);
+  reactionsDisplay.sort((r1, r2) => r2.props.count - r1.props.count);
 
   const integrationList = course.integrations;
   const evalInfo = course.evals;
