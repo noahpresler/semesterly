@@ -107,8 +107,8 @@ const CourseModalBody = (props: { hideModal: Function }) => {
     dispatch(saveSettings());
   };
 
-  const mapSectionsToSlots = (sections: Section[]) => {
-    return sections.sort(strPropertyCmp("meeting_section")).map((section: Section) => (
+  const mapSectionsToSlots = (sections: Section[]) =>
+    sections.sort(strPropertyCmp("meeting_section")).map((section: Section) => (
       <CourseModalSection
         key={course.id + section.meeting_section}
         secName={section.meeting_section}
@@ -128,7 +128,6 @@ const CourseModalBody = (props: { hideModal: Function }) => {
         unHoverSection={() => dispatch(timetablesActions.unhoverSection())}
       />
     ));
-  };
 
   const fetchCourseInfo = (courseId: number) => {
     if (fetchCourseInfo) {
