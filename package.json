@@ -119,6 +119,9 @@
     "transform": {
       "^.+\\.(j|t)sx?$": "ts-jest"
     },
+    "moduleNameMapper": {
+      "\\.(css|less|scss)$": "<rootDir>/__mocks__/styleMock.js"
+    },
     "testEnvironment": "jest-environment-jsdom"
   },
   "scripts": {
