@@ -113,6 +113,7 @@ export interface Course {
   prerequisites: string;
   exclusions: string;
   corequisites: string;
+  popularity_percent: number;
   is_waitlist_only: boolean;
   pos: string[];
   writing_intensive: string;
@@ -137,7 +138,7 @@ export interface RelatedCourse {
 }
 
 export interface HoveredSlot {
-  course: Course;
+  course: Course | DenormalizedCourse;
   section: Section;
   offerings: Offering[];
   is_optional: boolean;

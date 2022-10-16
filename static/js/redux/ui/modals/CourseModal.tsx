@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import classNames from "classnames";
 import Clipboard from "clipboard";
+import CourseModalBody from "./CourseModalBody";
 import { AreaBubble, WritingIntensive } from "../SearchResult";
-import CourseModalBodyContainer from "../containers/modals/course_modal_body_container";
 import { ShareLink } from "../MasterSlot";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { courseInfoActions, getCourseInfoId } from "../../state/slices";
@@ -132,19 +132,7 @@ const CourseModal = () => {
         {!isComparingTimetables && addOptional}
         {!isComparingTimetables && add}
       </div>
-      <CourseModalBodyContainer
-        inRoster={inRoster}
-        data={course || {}}
-        addOrRemoveCourse={(courseId: any, section: string = "") => {
-          dispatch(addOrRemoveCourse(courseId, section));
-          hide();
-        }}
-        hideModal={() => dispatch(courseInfoActions.setCourseId(null))}
-        isFetching={isFetching}
-        unHoverSection={() => dispatch(timetablesActions.unhoverSection())}
-        getShareLink={getShareLink}
-        getShareLinkFromModal={getShareLinkFromModal}
-      />
+      <CourseModalBody hideModal={hide} />
     </div>
   );
 
