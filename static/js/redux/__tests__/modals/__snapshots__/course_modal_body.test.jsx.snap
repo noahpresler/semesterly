@@ -90,17 +90,29 @@ exports[`CourseModalBody correctly renders 1`] = `
               class="friends__inner"
             >
               <div
-                class="loading"
+                class="friend"
               >
-                <span
-                  class="img-icon"
+                <div
+                  class="ms-friend"
+                  style="background-image: url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/10957589_10152725992049147_2815259779743523470_n.jpg?oh=85550d1771fec7b1524ac1d9303cd697&oe=598CCC9B);"
+                />
+                <p
+                  title="Linda Margolius Presler"
                 >
-                  <div
-                    class="loader"
-                  />
-                </span>
-                <p>
-                  loading...
+                  Linda Margolius Presler
+                </p>
+              </div>
+              <div
+                class="friend"
+              >
+                <div
+                  class="ms-friend"
+                  style="background-image: url(https://scontent.xx.fbcdn.net/v/t1.0-1/c163.0.204.204/s50x50/12321414_113682579025974_6205266913524508520_n.jpg?oh=dfa9c89403c0179bd6b00e4afd300569&oe=599A0E58);"
+                />
+                <p
+                  title="Mylittlewilliamyao Isalwaysontheprowl"
+                >
+                  Mylittlewilliamyao Isalwaysontheprowl
                 </p>
               </div>
             </div>
@@ -121,17 +133,16 @@ exports[`CourseModalBody correctly renders 1`] = `
               class="friends__inner"
             >
               <div
-                class="loading"
+                class="friend"
               >
-                <span
-                  class="img-icon"
+                <div
+                  class="ms-friend"
+                  style="background-image: url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/10957589_10152725992049147_2815259779743523470_n.jpg?oh=85550d1771fec7b1524ac1d9303cd697&oe=598CCC9B);"
+                />
+                <p
+                  title="Linda Margolius Presler"
                 >
-                  <div
-                    class="loader"
-                  />
-                </span>
-                <p>
-                  loading...
+                  Linda Margolius Presler
                 </p>
               </div>
             </div>

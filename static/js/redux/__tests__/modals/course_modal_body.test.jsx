@@ -22,7 +22,7 @@ it("CourseModalBody correctly renders", () => {
   const course = courseModalBodyFixture.data;
   const initialState = {
     courseInfo: {
-      isFetchingClassmates: true,
+      isFetchingClassmates: false,
       classmates: courseModalBodyFixture.classmates,
     },
     userInfo: { data: { isLoggedIn: true, social_courses: true } },
