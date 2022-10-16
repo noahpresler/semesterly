@@ -5,7 +5,13 @@ import {
   receiveTimetables,
   changeActiveTimetable,
 } from "../../actions/initActions";
-import { Course, DenormalizedCourse, HoveredSlot, Section, Timetable } from "../../constants/commonTypes";
+import {
+  Course,
+  DenormalizedCourse,
+  HoveredSlot,
+  Section,
+  Timetable,
+} from "../../constants/commonTypes";
 import { saveLocalActiveIndex } from "../../util";
 
 interface TimetablesSliceState {
