@@ -32,19 +32,21 @@ import { timetablesActions } from "../../state/slices/timetablesSlice";
 import { addOrRemoveCourse, react, saveSettings } from "../../actions";
 import { signupModalActions } from "../../state/slices/signupModalSlice";
 
-const CourseModalBody = (props: { hideModal: Function }) => {
+type CourseModalBodyProps = {
+  course: DenormalizedCourse | null;
+  hideModal: Function;
+};
+
+const CourseModalBody = (props: CourseModalBodyProps) => {
   const mobileWidth = 767;
   const [isMobile, setIsMobile] = useState(window.innerWidth < mobileWidth);
 
-  const course: DenormalizedCourse = useAppSelector((state) =>
-    getCourseInfoId(state) ? getDenormCourseById(state, getCourseInfoId(state)) : null
-  );
   const isFetchingClassmates = useAppSelector(
     (state) => state.courseInfo.isFetchingClassmates
   );
   const classmates = useAppSelector((state) => state.courseInfo.classmates);
-  const sectionTypeToSections = getSectionTypeToSections(course);
-  const popularityPercent = course?.popularity_percent * 100;
+  const sectionTypeToSections = getSectionTypeToSections(props.course);
+  const popularityPercent = props.course?.popularity_percent * 100;
   const userInfo = useAppSelector((state) => state.userInfo.data);
 
   const courseSections = useAppSelector((state) => state.courseSections.objects);
@@ -110,20 +112,20 @@ const CourseModalBody = (props: { hideModal: Function }) => {
   const mapSectionsToSlots = (sections: Section[]) =>
     sections.sort(strPropertyCmp("meeting_section")).map((section: Section) => (
       <CourseModalSection
-        key={course.id + section.meeting_section}
+        key={props.course.id + section.meeting_section}
         secName={section.meeting_section}
         instr={section.instructors}
         enrolment={section.enrolment === -1 ? 0 : section.enrolment}
         waitlist={section.waitlist === -1 ? 0 : section.waitlist}
         size={section.size === -1 ? 0 : section.size}
-        locked={isSectionLocked(course.id, section.meeting_section)}
-        isOnActiveTimetable={isSectionOnActiveTimetable(course.id, section.id)}
+        locked={isSectionLocked(props.course.id, section.meeting_section)}
+        isOnActiveTimetable={isSectionOnActiveTimetable(props.course.id, section.id)}
         lockOrUnlock={() => {
-          dispatch(addOrRemoveCourse(course?.id, section.meeting_section));
+          dispatch(addOrRemoveCourse(props.course?.id, section.meeting_section));
           props.hideModal();
         }}
         hoverSection={() =>
-          dispatch(timetablesActions.hoverSection({ course, section }))
+          dispatch(timetablesActions.hoverSection({ course: props.course, section }))
         }
         unHoverSection={() => dispatch(timetablesActions.unhoverSection())}
       />
@@ -135,7 +137,7 @@ const CourseModalBody = (props: { hideModal: Function }) => {
     }
   };
 
-  if (isFetching || isEmpty(course)) {
+  if (isFetching || isEmpty(props.course)) {
     return (
       <div className="modal-body">
         <div className="cf">
@@ -190,9 +192,9 @@ const CourseModalBody = (props: { hideModal: Function }) => {
       );
     });
 
-  const { reactions, num_credits: numCredits } = course;
+  const { reactions, num_credits: numCredits } = props.course;
 
-  const cid = course.id;
+  const cid = props.course.id;
   let totalReactions = reactions.map((r) => r.count).reduce((x, y) => x + y, 0);
   if (totalReactions === 0) {
     totalReactions = 20;
@@ -223,10 +225,10 @@ const CourseModalBody = (props: { hideModal: Function }) => {
   });
   reactionsDisplay.sort((r1, r2) => r2.props.count - r1.props.count);
 
-  const integrationList = course.integrations;
-  const evalInfo = course.evals;
-  const relatedCourses = course.related_courses;
-  const { prerequisites } = course;
+  const integrationList = props.course.integrations;
+  const evalInfo = props.course.evals;
+  const relatedCourses = props.course.related_courses;
+  const { prerequisites } = props.course;
   const maxColourIndex = COLOUR_DATA.length - 1;
 
   const similarCourses =
@@ -250,24 +252,24 @@ const CourseModalBody = (props: { hideModal: Function }) => {
       </div>
     );
   const courseRegex = new RegExp(schoolSpecificInfo.courseRegex, "g");
-  const matchedCoursesDescription = course.description.match(courseRegex);
+  const matchedCoursesDescription = props.course.description.match(courseRegex);
   const description =
-    course.description === ""
+    props.course.description === ""
       ? "No description available"
-      : course.description.split(courseRegex).map((t, i) => {
+      : props.course.description.split(courseRegex).map((t, i) => {
           if (matchedCoursesDescription === null) {
             return t;
           }
           if (
             matchedCoursesDescription.indexOf(t) !== -1 &&
-            Object.keys(course.regexed_courses).indexOf(t) !== -1
+            Object.keys(props.course.regexed_courses).indexOf(t) !== -1
           ) {
             return (
               <SlotHoverTip
                 key={t}
                 num={i}
                 code={t}
-                name={course.regexed_courses[t]}
+                name={props.course.regexed_courses[t]}
                 getShareLinkFromModal={getShareLinkFromModal}
               />
             );
@@ -292,14 +294,14 @@ const CourseModalBody = (props: { hideModal: Function }) => {
           }
           if (
             matchedCoursesPrerequisites.indexOf(t) !== -1 &&
-            Object.keys(course.regexed_courses).indexOf(t) !== -1
+            Object.keys(props.course.regexed_courses).indexOf(t) !== -1
           ) {
             return (
               <SlotHoverTip
                 key={t}
                 num={i}
                 code={t}
-                name={course.regexed_courses[t]}
+                name={props.course.regexed_courses[t]}
                 getShareLinkFromModal={getShareLinkFromModal}
               />
             );
@@ -317,10 +319,10 @@ const CourseModalBody = (props: { hideModal: Function }) => {
     </div>
   );
   const posTags =
-    course.pos && course.pos.length ? (
+    props.course.pos && props.course.pos.length ? (
       <div className="modal-module areas">
         <h3 className="modal-module-header">Program of Study Tags</h3>
-        <p key={`${cid}-pos`}>{course.pos.join(", ")}</p>
+        <p key={`${cid}-pos`}>{props.course.pos.join(", ")}</p>
       </div>
     ) : (
       <div className="modal-module areas">

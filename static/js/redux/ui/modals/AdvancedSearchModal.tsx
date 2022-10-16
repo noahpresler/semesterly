@@ -319,6 +319,7 @@ const AdvancedSearchModal = () => {
           </div>
         </div>
         <CourseModalBody
+          course={selectedCourse}
           hideModal={() => explorationModalActions.hideExplorationModal()}
         />
       </div>
