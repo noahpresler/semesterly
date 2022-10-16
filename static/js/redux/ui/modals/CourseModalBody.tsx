@@ -477,7 +477,10 @@ const CourseModalBody = (props: { hideModal: Function }) => {
         </div>
         <div className="attention__text">
           <span>
-            Over <span className="highlight">{`${popularityPercent}%`}</span>
+            Over{" "}
+            <span className="highlight">{`${(
+              Math.round(popularityPercent * 100) / 100
+            ).toFixed(2)}%`}</span>
             of seats added by students on Semesterly!
           </span>
         </div>
@@ -487,7 +490,10 @@ const CourseModalBody = (props: { hideModal: Function }) => {
   const capacityTracker = (
     <div className="capacity">
       <div className="capacity__tracker-text">
-        <span>{`${popularityPercent}%`} of Seats Added on Semesterly</span>
+        <span>
+          {`${(Math.round(popularityPercent * 100) / 100).toFixed(2)}%`} of Seats Added
+          on Semesterly
+        </span>
       </div>
     </div>
   );
