@@ -1,6 +1,7 @@
-import React, { MouseEventHandler, ReactNode } from "react";
+import React, { MouseEventHandler, ReactNode, useState } from "react";
 // @ts-ignore
 import Rodal from "rodal";
+import { useDelayUnmount } from "../../hooks/useDelayedUnmount";
 import "./rodal.scss";
 
 type RodalProps = {
@@ -24,5 +25,11 @@ type RodalProps = {
   onAnimationEnd?: () => never;
 };
 
-const Modal = (props: RodalProps) => <Rodal {...props}>{props.children}</Rodal>;
+const Modal = (props: RodalProps) => {
+  if ("visible" in props) {
+    const shouldRenderPopup = useDelayUnmount(props.visible, 500);
+    return <>{shouldRenderPopup && <Rodal {...props}>{props.children}</Rodal>}</>;
+  }
+  return <Rodal {...props}>{props.children}</Rodal>;
+};
 export default Modal;
