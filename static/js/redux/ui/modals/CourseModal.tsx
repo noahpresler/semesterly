@@ -132,11 +132,7 @@ const CourseModal = () => {
         {!isComparingTimetables && addOptional}
         {!isComparingTimetables && add}
       </div>
-      <CourseModalBody
-        course={course}
-        hideModal={hide}
-        isFetching={isFetching}
-      />
+      <CourseModalBody course={course} hideModal={hide} isFetching={isFetching} />
     </div>
   );
 
