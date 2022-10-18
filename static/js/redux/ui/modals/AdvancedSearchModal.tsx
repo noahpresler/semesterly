@@ -321,6 +321,7 @@ const AdvancedSearchModal = () => {
         <CourseModalBody
           course={selectedCourse}
           hideModal={() => explorationModalActions.hideExplorationModal()}
+          isFetching={isFetching}
         />
       </div>
     );

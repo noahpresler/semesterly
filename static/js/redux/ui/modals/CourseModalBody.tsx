@@ -29,12 +29,13 @@ import {
   getCourseShareLinkFromModal,
 } from "../../constants/endpoints";
 import { timetablesActions } from "../../state/slices/timetablesSlice";
-import { addOrRemoveCourse, react, saveSettings } from "../../actions";
+import { addOrRemoveCourse, fetchCourseInfo, react, saveSettings } from "../../actions";
 import { signupModalActions } from "../../state/slices/signupModalSlice";
 
 type CourseModalBodyProps = {
   course: DenormalizedCourse | null;
   hideModal: Function;
+  isFetching: boolean;
 };
 
 const CourseModalBody = (props: CourseModalBodyProps) => {
@@ -74,8 +75,6 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
   const schoolSpecificInfo = useAppSelector((state) =>
     getSchoolSpecificInfo(state.school.school)
   );
-
-  const isFetching = useAppSelector((state) => state.courseInfo.isFetching);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -131,13 +130,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
       />
     ));
 
-  const fetchCourseInfo = (courseId: number) => {
-    if (fetchCourseInfo) {
-      fetchCourseInfo(courseId);
-    }
-  };
-
-  if (isFetching || isEmpty(props.course)) {
+  if (props.isFetching || isEmpty(props.course)) {
     return (
       <div className="modal-body">
         <div className="cf">
@@ -244,7 +237,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
             onTimetable
             hideCloseButton
             inModal
-            fetchCourseInfo={() => fetchCourseInfo(rc.id)}
+            fetchCourseInfo={() => dispatch(fetchCourseInfo(rc.id))}
             getShareLink={getShareLink}
             colorData={COLOUR_DATA}
           />
