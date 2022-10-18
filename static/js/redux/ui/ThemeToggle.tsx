@@ -110,16 +110,6 @@ const ThemeToggle = () => {
           setTheme(e.target.checked ? "dark" : "light");
         }}
       />
-      {/* {theme === "light" ? (
-        <i className="fa fa-moon-o" onClick={() => setTheme("dark")} />
-      ) : (
-        ""
-      )}
-      {theme === "dark" ? (
-        <i className="fa fa-sun-o" onClick={() => setTheme("light")} />
-      ) : (
-        ""
-      )} */}
     </div>
   );
 };
