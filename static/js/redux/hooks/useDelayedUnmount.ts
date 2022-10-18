@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function useDelayUnmount(isMounted: boolean, delayTime: number) {
+function useDelayUnmount(isMounted: boolean, delayTime: number) {
   const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
@@ -15,3 +15,5 @@ export function useDelayUnmount(isMounted: boolean, delayTime: number) {
 
   return shouldRender;
 }
+
+export default useDelayUnmount;
