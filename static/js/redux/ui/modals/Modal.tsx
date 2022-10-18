@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, ReactNode, useState } from "react";
 // @ts-ignore
 import Rodal from "rodal";
-import { useDelayUnmount } from "../../hooks/useDelayedUnmount";
+import useDelayUnmount from "../../hooks/useDelayedUnmount";
 import "./rodal.scss";
 
 type RodalProps = {
