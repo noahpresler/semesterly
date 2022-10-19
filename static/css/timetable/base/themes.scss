@@ -26,6 +26,7 @@ $themes: (
   // Light mode
   light:
     (
+      color-scheme-type: light,
       text-color: $primary-navy,
       text-color-hover: $primary-navy,
       background: $g808080,
@@ -51,6 +52,7 @@ $themes: (
   // Dark Mode
   dark:
     (
+      color-scheme-type: dark,
       text-color: $dblue0,
       text-color-hover: white,
       background: $g808080,
