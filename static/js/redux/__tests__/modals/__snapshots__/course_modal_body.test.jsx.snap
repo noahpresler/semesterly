@@ -1,1196 +1,790 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CourseModalBody correctly renders 1`] = `
-<div
-  className="modal-body"
->
+<div>
   <div
-    className="cf"
+    class="modal-body"
   >
     <div
-      className="col-3-16"
+      class="cf"
     >
       <div
-        className="credits"
-      >
-        <h3>
-          1
-        </h3>
-        <h4>
-           credit
-        </h4>
-      </div>
-      <div
-        className="rating-module"
-      >
-        <h4>
-          Average Course Rating
-        </h4>
-        <div
-          className="sub-rating-wrapper"
-        >
-          <div
-            className="star-ratings-sprite"
-          >
-            <span
-              className="rating"
-              style={
-                Object {
-                  "width": "NaN%",
-                }
-              }
-            />
-          </div>
-        </div>
-      </div>
-      <div
-        className="capacity"
+        class="col-3-16"
       >
         <div
-          className="capacity__tracker-text"
+          class="credits"
         >
-          <span>
+          <h3>
             1
-            % of Seats Added on Semesterly
-          </span>
+          </h3>
+          <h4>
+             credit
+          </h4>
         </div>
-      </div>
-      <div
-        className="modal-module prerequisites"
-      >
-        <h3
-          className="modal-module-header"
-        >
-          Prerequisites
-        </h3>
-        <p>
-          
-          <a
-            className="course-link"
-            href={null}
-          >
-            <span>
-              ECO100Y1
-            </span>
-            <span
-              className="course-link-tip"
-              style={
-                Object {
-                  "backgroundColor": "#FD7473",
-                }
-              }
-            >
-              <span
-                className="slot-bar"
-                style={
-                  Object {
-                    "backgroundColor": "#b15150",
-                  }
-                }
-              />
-              <span
-                className="course-link-content"
-              >
-                <span>
-                  ECO100Y1
-                </span>
-                <span>
-                  Introduction to Economics
-                </span>
-              </span>
-            </span>
-          </a>
-          (67%)/(
-          <a
-            className="course-link"
-            href={null}
-          >
-            <span>
-              ECO101H1
-            </span>
-            <span
-              className="course-link-tip"
-              style={
-                Object {
-                  "backgroundColor": "#36DEBB",
-                }
-              }
-            >
-              <span
-                className="slot-bar"
-                style={
-                  Object {
-                    "backgroundColor": "#259b82",
-                  }
-                }
-              />
-              <span
-                className="course-link-content"
-              >
-                <span>
-                  ECO101H1
-                </span>
-                <span>
-                  Principles of Microeconomics
-                </span>
-              </span>
-            </span>
-          </a>
-          (63%), 
-          <a
-            className="course-link"
-            href={null}
-          >
-            <span>
-              ECO102H1
-            </span>
-            <span
-              className="course-link-tip"
-              style={
-                Object {
-                  "backgroundColor": "#C585DE",
-                }
-              }
-            >
-              <span
-                className="slot-bar"
-                style={
-                  Object {
-                    "backgroundColor": "#895d9b",
-                  }
-                }
-              />
-              <span
-                className="course-link-content"
-              >
-                <span>
-                  ECO102H1
-                </span>
-                <span>
-                  Principles of Macroeconomics
-                </span>
-              </span>
-            </span>
-          </a>
-          (63%))/
-          <a
-            className="course-link"
-            href={null}
-          >
-            <span>
-              ECO105Y1
-            </span>
-            <span
-              className="course-link-tip"
-              style={
-                Object {
-                  "backgroundColor": "#D4DBC8",
-                }
-              }
-            >
-              <span
-                className="slot-bar"
-                style={
-                  Object {
-                    "backgroundColor": "#97A086",
-                  }
-                }
-              />
-              <span
-                className="course-link-content"
-              >
-                <span>
-                  ECO105Y1
-                </span>
-                <span>
-                  Principles of Economics for Non-Specialists
-                </span>
-              </span>
-            </span>
-          </a>
-          (80%); 
-          <a
-            className="course-link"
-            href={null}
-          >
-            <span>
-              MAT133Y1
-            </span>
-            <span
-              className="course-link-tip"
-              style={
-                Object {
-                  "backgroundColor": "#A3F5F2",
-                }
-              }
-            >
-              <span
-                className="slot-bar"
-                style={
-                  Object {
-                    "backgroundColor": "#53ABA8",
-                  }
-                }
-              />
-              <span
-                className="course-link-content"
-              >
-                <span>
-                  MAT133Y1
-                </span>
-                <span>
-                  Calculus and Linear Algebra for Commerce
-                </span>
-              </span>
-            </span>
-          </a>
-          /(
-          <a
-            className="course-link"
-            href={null}
-          >
-            <span>
-              MAT135H1
-            </span>
-            <span
-              className="course-link-tip"
-              style={
-                Object {
-                  "backgroundColor": "#E7F76D",
-                }
-              }
-            >
-              <span
-                className="slot-bar"
-                style={
-                  Object {
-                    "backgroundColor": "#6C7A89",
-                  }
-                }
-              />
-              <span
-                className="course-link-content"
-              >
-                <span>
-                  MAT135H1
-                </span>
-                <span>
-                  Calculus 1(A)
-                </span>
-              </span>
-            </span>
-          </a>
-          , 
-          <a
-            className="course-link"
-            href={null}
-          >
-            <span>
-              MAT136H1
-            </span>
-            <span
-              className="course-link-tip"
-              style={
-                Object {
-                  "backgroundColor": "#4c7fd8",
-                }
-              }
-            >
-              <span
-                className="slot-bar"
-                style={
-                  Object {
-                    "backgroundColor": "#375994",
-                  }
-                }
-              />
-              <span
-                className="course-link-content"
-              >
-                <span>
-                  MAT136H1
-                </span>
-                <span>
-                  Calculus 1(B)
-                </span>
-              </span>
-            </span>
-          </a>
-          )/
-          <a
-            className="course-link"
-            href={null}
-          >
-            <span>
-              MAT137Y1
-            </span>
-            <span
-              className="course-link-tip"
-              style={
-                Object {
-                  "backgroundColor": "#5CCCF2",
-                }
-              }
-            >
-              <span
-                className="slot-bar"
-                style={
-                  Object {
-                    "backgroundColor": "#408ea9",
-                  }
-                }
-              />
-              <span
-                className="course-link-content"
-              >
-                <span>
-                  MAT137Y1
-                </span>
-                <span>
-                  Calculus
-                </span>
-              </span>
-            </span>
-          </a>
-          /
-          <a
-            className="course-link"
-            href={null}
-          >
-            <span>
-              MAT157Y1
-            </span>
-            <span
-              className="course-link-tip"
-              style={
-                Object {
-                  "backgroundColor": "#FFD462",
-                }
-              }
-            >
-              <span
-                className="slot-bar"
-                style={
-                  Object {
-                    "backgroundColor": "#b29444",
-                  }
-                }
-              />
-              <span
-                className="course-link-content"
-              >
-                <span>
-                  MAT157Y1
-                </span>
-                <span>
-                  Analysis I
-                </span>
-              </span>
-            </span>
-          </a>
-          
-        </p>
-      </div>
-      <div
-        className="modal-module areas"
-      >
-        <h3
-          className="modal-module-header"
-        >
-          Program of Study Tags
-        </h3>
-        <p>
-          None
-        </p>
-      </div>
-      <div
-        className="modal-module friends"
-      >
-        <h3
-          className="modal-module-header"
-        >
-          Friends In This Course
-        </h3>
         <div
-          id="friends-wrapper"
+          class="rating-module"
         >
+          <h4>
+            Average Course Rating
+          </h4>
           <div
-            className="friends__inner"
+            class="sub-rating-wrapper"
           >
             <div
-              className="friend"
+              class="star-ratings-sprite"
             >
-              <div
-                className="ms-friend"
-                style={
-                  Object {
-                    "backgroundImage": "url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/10957589_10152725992049147_2815259779743523470_n.jpg?oh=85550d1771fec7b1524ac1d9303cd697&oe=598CCC9B)",
-                  }
-                }
+              <span
+                class="rating"
               />
-              <p
-                title="Linda Margolius Presler"
-              >
-                Linda Margolius Presler
-              </p>
-            </div>
-            <div
-              className="friend"
-            >
-              <div
-                className="ms-friend"
-                style={
-                  Object {
-                    "backgroundImage": "url(https://scontent.xx.fbcdn.net/v/t1.0-1/c163.0.204.204/s50x50/12321414_113682579025974_6205266913524508520_n.jpg?oh=dfa9c89403c0179bd6b00e4afd300569&oe=599A0E58)",
-                  }
-                }
-              />
-              <p
-                title="Mylittlewilliamyao Isalwaysontheprowl"
-              >
-                Mylittlewilliamyao Isalwaysontheprowl
-              </p>
             </div>
           </div>
         </div>
-      </div>
-      <div
-        className="modal-module friends"
-      >
-        <h3
-          className="modal-module-header"
-        >
-          Friends Who Have Taken This Course
-        </h3>
         <div
-          id="friends-wrapper"
+          class="capacity"
         >
           <div
-            className="friends__inner"
+            class="capacity__tracker-text"
           >
-            <div
-              className="friend"
-            >
-              <div
-                className="ms-friend"
-                style={
-                  Object {
-                    "backgroundImage": "url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/10957589_10152725992049147_2815259779743523470_n.jpg?oh=85550d1771fec7b1524ac1d9303cd697&oe=598CCC9B)",
-                  }
-                }
-              />
-              <p
-                title="Linda Margolius Presler"
-              >
-                Linda Margolius Presler
-              </p>
-            </div>
+            <span>
+              0.12%
+               of Seats Added on Semesterly
+            </span>
           </div>
         </div>
-      </div>
-    </div>
-    <div
-      className="col-8-16"
-    >
-      <h3
-        className="modal-module-header"
-      >
-        Reactions
-      </h3>
-      <p>
-        Check out your classmate's reactions – click an emoji to add your own opinion!
-      </p>
-      <div
-        className="reactions-wrapper"
-      >
         <div
-          className="reactions"
+          class="modal-module prerequisites"
         >
-          <div
-            className="swing reaction"
-            onClick={[Function]}
+          <h3
+            class="modal-module-header"
           >
-            <div
-              className="emoji"
-              style={
-                Object {
-                  "height": 20,
-                  "width": 20,
-                }
-              }
-            >
-              <img
-                alt="🔥"
-                className="emoji"
-                draggable="false"
-                src="https://twemoji.maxcdn.com/2/72x72/1f525.png"
-              />
-            </div>
-            <div
-              className="action-container"
-            >
-              <div
-                className="emoji-action"
-              >
-                <i
-                  className="fa fa-plus"
-                />
-              </div>
-              <div
-                className="emoji-count"
-              >
-                <span>
-                  0
-                </span>
-              </div>
-            </div>
-            <div
-              className="reaction-dropdown"
-            >
-              <div
-                className="tip-border"
-              />
-              <div
-                className="tip"
-              />
-              <span>
-                Must Take
-              </span>
-            </div>
-          </div>
-          <div
-            className="swing reaction"
-            onClick={[Function]}
-          >
-            <div
-              className="emoji"
-              style={
-                Object {
-                  "height": 20,
-                  "width": 20,
-                }
-              }
-            >
-              <img
-                alt="😍"
-                className="emoji"
-                draggable="false"
-                src="https://twemoji.maxcdn.com/2/72x72/1f60d.png"
-              />
-            </div>
-            <div
-              className="action-container"
-            >
-              <div
-                className="emoji-action"
-              >
-                <i
-                  className="fa fa-plus"
-                />
-              </div>
-              <div
-                className="emoji-count"
-              >
-                <span>
-                  0
-                </span>
-              </div>
-            </div>
-            <div
-              className="reaction-dropdown"
-            >
-              <div
-                className="tip-border"
-              />
-              <div
-                className="tip"
-              />
-              <span>
-                Love It
-              </span>
-            </div>
-          </div>
-          <div
-            className="swing reaction"
-            onClick={[Function]}
-          >
-            <div
-              className="emoji"
-              style={
-                Object {
-                  "height": 20,
-                  "width": 20,
-                }
-              }
-            >
-              <img
-                alt="💩"
-                className="emoji"
-                draggable="false"
-                src="https://twemoji.maxcdn.com/2/72x72/1f4a9.png"
-              />
-            </div>
-            <div
-              className="action-container"
-            >
-              <div
-                className="emoji-action"
-              >
-                <i
-                  className="fa fa-plus"
-                />
-              </div>
-              <div
-                className="emoji-count"
-              >
-                <span>
-                  0
-                </span>
-              </div>
-            </div>
-            <div
-              className="reaction-dropdown"
-            >
-              <div
-                className="tip-border"
-              />
-              <div
-                className="tip"
-              />
-              <span>
-                Crap Class
-              </span>
-            </div>
-          </div>
-          <div
-            className="swing reaction"
-            onClick={[Function]}
-          >
-            <div
-              className="emoji"
-              style={
-                Object {
-                  "height": 20,
-                  "width": 20,
-                }
-              }
-            >
-              <img
-                alt="😐"
-                className="emoji"
-                draggable="false"
-                src="https://twemoji.maxcdn.com/2/72x72/1f610.png"
-              />
-            </div>
-            <div
-              className="action-container"
-            >
-              <div
-                className="emoji-action"
-              >
-                <i
-                  className="fa fa-plus"
-                />
-              </div>
-              <div
-                className="emoji-count"
-              >
-                <span>
-                  0
-                </span>
-              </div>
-            </div>
-            <div
-              className="reaction-dropdown"
-            >
-              <div
-                className="tip-border"
-              />
-              <div
-                className="tip"
-              />
-              <span>
-                It's Aight
-              </span>
-            </div>
-          </div>
-          <div
-            className="swing reaction"
-            onClick={[Function]}
-          >
-            <div
-              className="emoji"
-              style={
-                Object {
-                  "height": 20,
-                  "width": 20,
-                }
-              }
-            >
-              <img
-                alt="😴"
-                className="emoji"
-                draggable="false"
-                src="https://twemoji.maxcdn.com/2/72x72/1f634.png"
-              />
-            </div>
-            <div
-              className="action-container"
-            >
-              <div
-                className="emoji-action"
-              >
-                <i
-                  className="fa fa-plus"
-                />
-              </div>
-              <div
-                className="emoji-count"
-              >
-                <span>
-                  0
-                </span>
-              </div>
-            </div>
-            <div
-              className="reaction-dropdown"
-            >
-              <div
-                className="tip-border"
-              />
-              <div
-                className="tip"
-              />
-              <span>
-                Boring
-              </span>
-            </div>
-          </div>
-          <div
-            className="swing reaction"
-            onClick={[Function]}
-          >
-            <div
-              className="emoji"
-              style={
-                Object {
-                  "height": 20,
-                  "width": 20,
-                }
-              }
-            >
-              <img
-                alt="😩"
-                className="emoji"
-                draggable="false"
-                src="https://twemoji.maxcdn.com/2/72x72/1f629.png"
-              />
-            </div>
-            <div
-              className="action-container"
-            >
-              <div
-                className="emoji-action"
-              >
-                <i
-                  className="fa fa-plus"
-                />
-              </div>
-              <div
-                className="emoji-count"
-              >
-                <span>
-                  0
-                </span>
-              </div>
-            </div>
-            <div
-              className="reaction-dropdown"
-            >
-              <div
-                className="tip-border"
-              />
-              <div
-                className="tip"
-              />
-              <span>
-                Hard
-              </span>
-            </div>
-          </div>
-          <div
-            className="swing reaction"
-            onClick={[Function]}
-          >
-            <div
-              className="emoji"
-              style={
-                Object {
-                  "height": 20,
-                  "width": 20,
-                }
-              }
-            >
-              <img
-                alt="💯"
-                className="emoji"
-                draggable="false"
-                src="https://twemoji.maxcdn.com/2/72x72/1f4af.png"
-              />
-            </div>
-            <div
-              className="action-container"
-            >
-              <div
-                className="emoji-action"
-              >
-                <i
-                  className="fa fa-plus"
-                />
-              </div>
-              <div
-                className="emoji-count"
-              >
-                <span>
-                  0
-                </span>
-              </div>
-            </div>
-            <div
-              className="reaction-dropdown"
-            >
-              <div
-                className="tip-border"
-              />
-              <div
-                className="tip"
-              />
-              <span>
-                Easy
-              </span>
-            </div>
-          </div>
-          <div
-            className="swing reaction"
-            onClick={[Function]}
-          >
-            <div
-              className="emoji"
-              style={
-                Object {
-                  "height": 20,
-                  "width": 20,
-                }
-              }
-            >
-              <img
-                alt="🤓"
-                className="emoji"
-                draggable="false"
-                src="https://twemoji.maxcdn.com/2/72x72/1f913.png"
-              />
-            </div>
-            <div
-              className="action-container"
-            >
-              <div
-                className="emoji-action"
-              >
-                <i
-                  className="fa fa-plus"
-                />
-              </div>
-              <div
-                className="emoji-count"
-              >
-                <span>
-                  0
-                </span>
-              </div>
-            </div>
-            <div
-              className="reaction-dropdown"
-            >
-              <div
-                className="tip-border"
-              />
-              <div
-                className="tip"
-              />
-              <span>
-                Interesting
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <h3
-          className="modal-module-header"
-        >
-          Course Description
-        </h3>
-        <p>
-          The use of microeconomics to analyze a variety of issues from marketing and finance to organizational structure. Consumer preferences and behavior; demand, cost analysis and estimation; allocation of inputs, pricing and firm behavior under perfect and imperfect competition; game theory and public policy, including competition policy. Business cases are used to connect theory and practice and to highlight differences and similarities between economics and accounting, marketing and finance. This course is restricted to students in the Commerce programs.
-        </p>
-        
-      </div>
-      <div
-        className="modal-module"
-      >
-        <h3
-          className="modal-module-header"
-        >
-          Course Evaluations
-        </h3>
-        <div
-          className="modal-entry course-evaluations "
-        >
-          <p
-            className="empty-intro"
-          >
-            No course evaluations for this course yet.
+            Prerequisites
+          </h3>
+          <p>
+            ECO100Y1(67%)/(ECO101H1(63%), ECO102H1(63%))/ECO105Y1(80%); MAT133Y1/(MAT135H1, MAT136H1)/MAT137Y1/MAT157Y1
           </p>
         </div>
+        <div
+          class="modal-module areas"
+        >
+          <h3
+            class="modal-module-header"
+          >
+            Program of Study Tags
+          </h3>
+          <p>
+            None
+          </p>
+        </div>
+        <div
+          class="modal-module friends"
+        >
+          <h3
+            class="modal-module-header"
+          >
+            Friends In This Course
+          </h3>
+          <div
+            id="friends-wrapper"
+          >
+            <div
+              class="friends__inner"
+            >
+              <div
+                class="friend"
+              >
+                <div
+                  class="ms-friend"
+                  style="background-image: url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/10957589_10152725992049147_2815259779743523470_n.jpg?oh=85550d1771fec7b1524ac1d9303cd697&oe=598CCC9B);"
+                />
+                <p
+                  title="Linda Margolius Presler"
+                >
+                  Linda Margolius Presler
+                </p>
+              </div>
+              <div
+                class="friend"
+              >
+                <div
+                  class="ms-friend"
+                  style="background-image: url(https://scontent.xx.fbcdn.net/v/t1.0-1/c163.0.204.204/s50x50/12321414_113682579025974_6205266913524508520_n.jpg?oh=dfa9c89403c0179bd6b00e4afd300569&oe=599A0E58);"
+                />
+                <p
+                  title="Mylittlewilliamyao Isalwaysontheprowl"
+                >
+                  Mylittlewilliamyao Isalwaysontheprowl
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal-module friends"
+        >
+          <h3
+            class="modal-module-header"
+          >
+            Friends Who Have Taken This Course
+          </h3>
+          <div
+            id="friends-wrapper"
+          >
+            <div
+              class="friends__inner"
+            >
+              <div
+                class="friend"
+              >
+                <div
+                  class="ms-friend"
+                  style="background-image: url(https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/10957589_10152725992049147_2815259779743523470_n.jpg?oh=85550d1771fec7b1524ac1d9303cd697&oe=598CCC9B);"
+                />
+                <p
+                  title="Linda Margolius Presler"
+                >
+                  Linda Margolius Presler
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div
-      className="col-5-16 cf"
-      id="modal-section-lists"
-    >
-      <div>
+      <div
+        class="col-8-16"
+      >
         <h3
-          className="modal-module-header"
+          class="modal-module-header"
         >
-           
-          Lecture Sections
-           
-          <small>
-            (Hover to see the section on your timetable)
-          </small>
-           
+          Reactions
         </h3>
+        <p>
+          Check out your classmate's reactions – click an emoji to add your own opinion!
+        </p>
         <div
-          className="modal-section"
-          onMouseDown={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
+          class="reactions-wrapper"
         >
-          <h4>
-            <span>
-              L0101
-            </span>
-            <i
-              className="fa fa-calendar-check-o"
-            />
-          </h4>
-          <h5>
-            S Hussain
-          </h5>
-          <h6>
-            <span
-              className="green"
+          <div
+            class="reactions"
+          >
+            <div
+              class="swing reaction"
             >
-              140 open
-            </span>
-            <span>
-               / 
-            </span>
-            <span
-              className="total-seats"
+              <div
+                class="emoji"
+                style="height: 20px; width: 20px;"
+              >
+                <img
+                  alt="🔥"
+                  class="emoji"
+                  draggable="false"
+                  src="https://twemoji.maxcdn.com/2/72x72/1f525.png"
+                />
+              </div>
+              <div
+                class="action-container"
+              >
+                <div
+                  class="emoji-action"
+                >
+                  <i
+                    class="fa fa-plus"
+                  />
+                </div>
+                <div
+                  class="emoji-count"
+                >
+                  <span>
+                    0
+                  </span>
+                </div>
+              </div>
+              <div
+                class="reaction-dropdown"
+              >
+                <div
+                  class="tip-border"
+                />
+                <div
+                  class="tip"
+                />
+                <span>
+                  Must Take
+                </span>
+              </div>
+            </div>
+            <div
+              class="swing reaction"
             >
-              140
-               seats
-            </span>
-          </h6>
-          <i
-            className="fa fa-lock"
-          />
+              <div
+                class="emoji"
+                style="height: 20px; width: 20px;"
+              >
+                <img
+                  alt="😍"
+                  class="emoji"
+                  draggable="false"
+                  src="https://twemoji.maxcdn.com/2/72x72/1f60d.png"
+                />
+              </div>
+              <div
+                class="action-container"
+              >
+                <div
+                  class="emoji-action"
+                >
+                  <i
+                    class="fa fa-plus"
+                  />
+                </div>
+                <div
+                  class="emoji-count"
+                >
+                  <span>
+                    0
+                  </span>
+                </div>
+              </div>
+              <div
+                class="reaction-dropdown"
+              >
+                <div
+                  class="tip-border"
+                />
+                <div
+                  class="tip"
+                />
+                <span>
+                  Love It
+                </span>
+              </div>
+            </div>
+            <div
+              class="swing reaction"
+            >
+              <div
+                class="emoji"
+                style="height: 20px; width: 20px;"
+              >
+                <img
+                  alt="💩"
+                  class="emoji"
+                  draggable="false"
+                  src="https://twemoji.maxcdn.com/2/72x72/1f4a9.png"
+                />
+              </div>
+              <div
+                class="action-container"
+              >
+                <div
+                  class="emoji-action"
+                >
+                  <i
+                    class="fa fa-plus"
+                  />
+                </div>
+                <div
+                  class="emoji-count"
+                >
+                  <span>
+                    0
+                  </span>
+                </div>
+              </div>
+              <div
+                class="reaction-dropdown"
+              >
+                <div
+                  class="tip-border"
+                />
+                <div
+                  class="tip"
+                />
+                <span>
+                  Crap Class
+                </span>
+              </div>
+            </div>
+            <div
+              class="swing reaction"
+            >
+              <div
+                class="emoji"
+                style="height: 20px; width: 20px;"
+              >
+                <img
+                  alt="😐"
+                  class="emoji"
+                  draggable="false"
+                  src="https://twemoji.maxcdn.com/2/72x72/1f610.png"
+                />
+              </div>
+              <div
+                class="action-container"
+              >
+                <div
+                  class="emoji-action"
+                >
+                  <i
+                    class="fa fa-plus"
+                  />
+                </div>
+                <div
+                  class="emoji-count"
+                >
+                  <span>
+                    0
+                  </span>
+                </div>
+              </div>
+              <div
+                class="reaction-dropdown"
+              >
+                <div
+                  class="tip-border"
+                />
+                <div
+                  class="tip"
+                />
+                <span>
+                  It's Aight
+                </span>
+              </div>
+            </div>
+            <div
+              class="swing reaction"
+            >
+              <div
+                class="emoji"
+                style="height: 20px; width: 20px;"
+              >
+                <img
+                  alt="😴"
+                  class="emoji"
+                  draggable="false"
+                  src="https://twemoji.maxcdn.com/2/72x72/1f634.png"
+                />
+              </div>
+              <div
+                class="action-container"
+              >
+                <div
+                  class="emoji-action"
+                >
+                  <i
+                    class="fa fa-plus"
+                  />
+                </div>
+                <div
+                  class="emoji-count"
+                >
+                  <span>
+                    0
+                  </span>
+                </div>
+              </div>
+              <div
+                class="reaction-dropdown"
+              >
+                <div
+                  class="tip-border"
+                />
+                <div
+                  class="tip"
+                />
+                <span>
+                  Boring
+                </span>
+              </div>
+            </div>
+            <div
+              class="swing reaction"
+            >
+              <div
+                class="emoji"
+                style="height: 20px; width: 20px;"
+              >
+                <img
+                  alt="😩"
+                  class="emoji"
+                  draggable="false"
+                  src="https://twemoji.maxcdn.com/2/72x72/1f629.png"
+                />
+              </div>
+              <div
+                class="action-container"
+              >
+                <div
+                  class="emoji-action"
+                >
+                  <i
+                    class="fa fa-plus"
+                  />
+                </div>
+                <div
+                  class="emoji-count"
+                >
+                  <span>
+                    0
+                  </span>
+                </div>
+              </div>
+              <div
+                class="reaction-dropdown"
+              >
+                <div
+                  class="tip-border"
+                />
+                <div
+                  class="tip"
+                />
+                <span>
+                  Hard
+                </span>
+              </div>
+            </div>
+            <div
+              class="swing reaction"
+            >
+              <div
+                class="emoji"
+                style="height: 20px; width: 20px;"
+              >
+                <img
+                  alt="💯"
+                  class="emoji"
+                  draggable="false"
+                  src="https://twemoji.maxcdn.com/2/72x72/1f4af.png"
+                />
+              </div>
+              <div
+                class="action-container"
+              >
+                <div
+                  class="emoji-action"
+                >
+                  <i
+                    class="fa fa-plus"
+                  />
+                </div>
+                <div
+                  class="emoji-count"
+                >
+                  <span>
+                    0
+                  </span>
+                </div>
+              </div>
+              <div
+                class="reaction-dropdown"
+              >
+                <div
+                  class="tip-border"
+                />
+                <div
+                  class="tip"
+                />
+                <span>
+                  Easy
+                </span>
+              </div>
+            </div>
+            <div
+              class="swing reaction"
+            >
+              <div
+                class="emoji"
+                style="height: 20px; width: 20px;"
+              >
+                <img
+                  alt="🤓"
+                  class="emoji"
+                  draggable="false"
+                  src="https://twemoji.maxcdn.com/2/72x72/1f913.png"
+                />
+              </div>
+              <div
+                class="action-container"
+              >
+                <div
+                  class="emoji-action"
+                >
+                  <i
+                    class="fa fa-plus"
+                  />
+                </div>
+                <div
+                  class="emoji-count"
+                >
+                  <span>
+                    0
+                  </span>
+                </div>
+              </div>
+              <div
+                class="reaction-dropdown"
+              >
+                <div
+                  class="tip-border"
+                />
+                <div
+                  class="tip"
+                />
+                <span>
+                  Interesting
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3
+            class="modal-module-header"
+          >
+            Course Description
+          </h3>
+          <p>
+            The use of microeconomics to analyze a variety of issues from marketing and finance to organizational structure. Consumer preferences and behavior; demand, cost analysis and estimation; allocation of inputs, pricing and firm behavior under perfect and imperfect competition; game theory and public policy, including competition policy. Business cases are used to connect theory and practice and to highlight differences and similarities between economics and accounting, marketing and finance. This course is restricted to students in the Commerce programs.
+          </p>
         </div>
         <div
-          className="modal-section"
-          onMouseDown={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
+          class="modal-module"
         >
-          <h4>
-            <span>
-              L0201
-            </span>
-            <i
-              className="fa fa-calendar-check-o"
-            />
-          </h4>
-          <h5>
-            S Hussain
-          </h5>
-          <h6>
-            <span
-              className="green"
+          <h3
+            class="modal-module-header"
+          >
+            Course Evaluations
+          </h3>
+          <div
+            class="modal-entry course-evaluations "
+          >
+            <p
+              class="empty-intro"
             >
-              130 open
-            </span>
-            <span>
-               / 
-            </span>
-            <span
-              className="total-seats"
-            >
-              130
-               seats
-            </span>
-          </h6>
-          <i
-            className="fa fa-lock"
-          />
+              No course evaluations for this course yet.
+            </p>
+          </div>
         </div>
-        <div
-          className="modal-section"
-          onMouseDown={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-        >
-          <h4>
-            <span>
-              L0301
-            </span>
+      </div>
+      <div
+        class="col-5-16 cf"
+        id="modal-section-lists"
+      >
+        <div>
+          <h3
+            class="modal-module-header"
+          >
+             
+            Lecture Sections
+             
+            <small>
+              (Hover to see the section on your timetable)
+            </small>
+             
+          </h3>
+          <div
+            class="modal-section"
+          >
+            <h4>
+              <span>
+                L0101
+              </span>
+              <i
+                class="fa fa-calendar-check-o"
+              />
+            </h4>
+            <h5>
+              S Hussain
+            </h5>
+            <h6>
+              <span
+                class="green"
+              >
+                140 open
+              </span>
+              <span>
+                 / 
+              </span>
+              <span
+                class="total-seats"
+              >
+                140
+                 seats
+              </span>
+            </h6>
             <i
-              className="fa fa-calendar-check-o"
+              class="fa fa-lock"
             />
-          </h4>
-          <h5>
-            S Hussain
-          </h5>
-          <h6>
-            <span
-              className="green"
-            >
-              140 open
-            </span>
-            <span>
-               / 
-            </span>
-            <span
-              className="total-seats"
-            >
-              140
-               seats
-            </span>
-          </h6>
-          <i
-            className="fa fa-lock"
-          />
-        </div>
-        <div
-          className="modal-section"
-          onMouseDown={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-        >
-          <h4>
-            <span>
-              L0401
-            </span>
+          </div>
+          <div
+            class="modal-section"
+          >
+            <h4>
+              <span>
+                L0201
+              </span>
+              <i
+                class="fa fa-calendar-check-o"
+              />
+            </h4>
+            <h5>
+              S Hussain
+            </h5>
+            <h6>
+              <span
+                class="green"
+              >
+                130 open
+              </span>
+              <span>
+                 / 
+              </span>
+              <span
+                class="total-seats"
+              >
+                130
+                 seats
+              </span>
+            </h6>
             <i
-              className="fa fa-calendar-check-o"
+              class="fa fa-lock"
             />
-          </h4>
-          <h5>
-            S Hussain
-          </h5>
-          <h6>
-            <span
-              className="green"
-            >
-              130 open
-            </span>
-            <span>
-               / 
-            </span>
-            <span
-              className="total-seats"
-            >
-              130
-               seats
-            </span>
-          </h6>
-          <i
-            className="fa fa-lock"
-          />
-        </div>
-        <div
-          className="modal-section"
-          onMouseDown={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-        >
-          <h4>
-            <span>
-              L0501
-            </span>
+          </div>
+          <div
+            class="modal-section"
+          >
+            <h4>
+              <span>
+                L0301
+              </span>
+              <i
+                class="fa fa-calendar-check-o"
+              />
+            </h4>
+            <h5>
+              S Hussain
+            </h5>
+            <h6>
+              <span
+                class="green"
+              >
+                140 open
+              </span>
+              <span>
+                 / 
+              </span>
+              <span
+                class="total-seats"
+              >
+                140
+                 seats
+              </span>
+            </h6>
             <i
-              className="fa fa-calendar-check-o"
+              class="fa fa-lock"
             />
-          </h4>
-          <h5>
-            P Foltin
-          </h5>
-          <h6>
-            <span
-              className="green"
-            >
-              130 open
-            </span>
-            <span>
-               / 
-            </span>
-            <span
-              className="total-seats"
-            >
-              130
-               seats
-            </span>
-          </h6>
-          <i
-            className="fa fa-lock"
-          />
-        </div>
-        <div
-          className="modal-section"
-          onMouseDown={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-        >
-          <h4>
-            <span>
-              L5101
-            </span>
+          </div>
+          <div
+            class="modal-section"
+          >
+            <h4>
+              <span>
+                L0401
+              </span>
+              <i
+                class="fa fa-calendar-check-o"
+              />
+            </h4>
+            <h5>
+              S Hussain
+            </h5>
+            <h6>
+              <span
+                class="green"
+              >
+                130 open
+              </span>
+              <span>
+                 / 
+              </span>
+              <span
+                class="total-seats"
+              >
+                130
+                 seats
+              </span>
+            </h6>
             <i
-              className="fa fa-calendar-check-o"
+              class="fa fa-lock"
             />
-          </h4>
-          <h5>
-            P Blanchenay
-          </h5>
-          <h6>
-            <span
-              className="green"
-            >
-              140 open
-            </span>
-            <span>
-               / 
-            </span>
-            <span
-              className="total-seats"
-            >
-              140
-               seats
-            </span>
-          </h6>
-          <i
-            className="fa fa-lock"
-          />
+          </div>
+          <div
+            class="modal-section"
+          >
+            <h4>
+              <span>
+                L0501
+              </span>
+              <i
+                class="fa fa-calendar-check-o"
+              />
+            </h4>
+            <h5>
+              P Foltin
+            </h5>
+            <h6>
+              <span
+                class="green"
+              >
+                130 open
+              </span>
+              <span>
+                 / 
+              </span>
+              <span
+                class="total-seats"
+              >
+                130
+                 seats
+              </span>
+            </h6>
+            <i
+              class="fa fa-lock"
+            />
+          </div>
+          <div
+            class="modal-section"
+          >
+            <h4>
+              <span>
+                L5101
+              </span>
+              <i
+                class="fa fa-calendar-check-o"
+              />
+            </h4>
+            <h5>
+              P Blanchenay
+            </h5>
+            <h6>
+              <span
+                class="green"
+              >
+                140 open
+              </span>
+              <span>
+                 / 
+              </span>
+              <span
+                class="total-seats"
+              >
+                140
+                 seats
+              </span>
+            </h6>
+            <i
+              class="fa fa-lock"
+            />
+          </div>
         </div>
       </div>
     </div>
