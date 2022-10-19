@@ -19,7 +19,7 @@ import CourseModal from "./modals/CourseModal";
 import TimetableLoaderContainer from "./containers/timetable_loader_container";
 import SocialProfileContainer from "./containers/social_profile_container";
 import { getCurrentSemester } from "../state";
-import ThemeToggle from "./theme_toggle";
+import ThemeToggle from "./ThemeToggle";
 
 const TopBar = () => {
   const userInfo = useAppSelector((state) => state.userInfo.data);
