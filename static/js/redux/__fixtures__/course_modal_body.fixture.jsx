@@ -54,7 +54,6 @@ const courseModalBodyFixture = {
     areas: "(3)",
     campus: "1",
     evals: [],
-    integrations: [],
     related_courses: [],
     reactions: [],
     regexed_courses: {
@@ -489,7 +488,6 @@ const courseModalBodyFixture = {
         class_year: 2018,
         social_all: true,
         last_name: "Margolius Presler",
-        integrations: [],
         first_name: "Linda",
         social_courses: true,
         img_url:
@@ -506,7 +504,6 @@ const courseModalBodyFixture = {
         class_year: 2018,
         social_all: true,
         last_name: "Margolius Presler",
-        integrations: [],
         first_name: "Linda",
         social_courses: true,
         img_url:
@@ -521,7 +518,6 @@ const courseModalBodyFixture = {
         class_year: 2017,
         social_all: true,
         last_name: "Isalwaysontheprowl",
-        integrations: [],
         first_name: "Mylittlewilliamyao",
         social_courses: true,
         img_url:

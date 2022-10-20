@@ -14,7 +14,6 @@ interface UserData {
   emails_enabled: boolean;
   fbook_uid: string;
   img_url: string;
-  integrations: any[]; // temporarily mark as any
   isLoggedIn: boolean;
   major: any; // temporarily mark as any
   school: any;

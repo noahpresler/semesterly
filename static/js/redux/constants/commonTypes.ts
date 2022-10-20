@@ -105,7 +105,6 @@ export interface Course {
   areas: string[];
   campus: number;
   evals: any;
-  integrations: any;
   related_courses: Course[];
   reactions: Reaction[];
   regexed_courses: any;
@@ -131,7 +130,6 @@ export interface RelatedCourse {
   areas: string[];
   campus: number;
   evals: any;
-  integrations: any;
   prerequisites: string;
   exclusions: string;
   corequisites: string;
@@ -190,7 +188,6 @@ export interface Peer {
   class_year: number;
   email_enabled: boolean;
   img_url: string;
-  integrations: any[];
   jhed: string;
   major: string;
   preferred_name: null | string;

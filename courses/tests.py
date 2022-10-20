@@ -22,8 +22,6 @@ from timetable.models import (
     Section,
     Offering,
     Evaluation,
-    Integration,
-    CourseIntegration,
     Timetable,
 )
 from parsing.models import DataUpdate
@@ -136,24 +134,6 @@ class Serializers(TestCase):
             },
         )
         self.assertTrue(self.valid_evals(serialized.data["evals"]))
-
-    def test_course_serialization_get_integrations(self):
-        testSem = Semester.objects.create(name="Spring", year="2022")
-        integration = Integration.objects.create(name="testIntegration")
-        courseInt = CourseIntegration.objects.create(
-            course=self.course, integration=integration, json="randomJson"
-        )
-        courseInt.semester.add(testSem)
-        courseInt.semester.add(self.sem)
-        serialized = CourseSerializer(
-            self.course,
-            context={
-                "semester": self.sem,
-                "school": self.school,
-            },
-        )
-        integration_data = serialized.data["integrations"]
-        self.assertTrue(integration_data[0] == "testIntegration")
 
     def test_course_serialization_get_related_courses(self):
         testSem = Semester.objects.create(name="Spring", year="2022")

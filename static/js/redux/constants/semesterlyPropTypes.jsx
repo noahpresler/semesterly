@@ -43,7 +43,6 @@ export const evaluation = PropTypes.shape({
   year: PropTypes.string.isRequired,
 });
 
-export const integration = PropTypes.string.isRequired;
 
 // should match timetable.models.Offering fields
 const offering = PropTypes.shape({
@@ -89,7 +88,6 @@ const relatedCourseFields = {
   areas: PropTypes.array.isRequired,
   campus: PropTypes.string.isRequired,
   evals: PropTypes.arrayOf(evaluation).isRequired,
-  integrations: PropTypes.arrayOf(integration),
   // reactions?
   // regexed courses?
   // popularity percent?
@@ -150,7 +148,6 @@ export const userInfo = PropTypes.shape({
   social_all: PropTypes.bool,
   emails_enabled: PropTypes.bool,
   school: PropTypes.string,
-  integrations: PropTypes.arrayOf(PropTypes.shape({})),
   userFirstName: PropTypes.string,
   userLastName: PropTypes.string,
   FacebookSignedUp: PropTypes.bool,

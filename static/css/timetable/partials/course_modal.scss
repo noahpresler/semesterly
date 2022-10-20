@@ -610,44 +610,6 @@
   margin-right: 4px;
 }
 
-.academic-support {
-  li {
-    list-style-type: none;
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-
-  .integration-image {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    float: left;
-    height: 22px;
-    margin-right: 5px;
-    width: 22px;
-  }
-
-  h4 {
-    float: left;
-    font-size: 14px;
-    line-height: 22px;
-    margin: 0;
-  }
-
-  a {
-    float: right;
-    font-size: 12px;
-    line-height: 22px;
-  }
-
-  p {
-    clear: both;
-    font-size: 12px;
-    line-height: 14px;
-    padding: 5px 0 0;
-  }
-}
-
 @media (max-width: 766px) {
   .modal-header {
     h1 {

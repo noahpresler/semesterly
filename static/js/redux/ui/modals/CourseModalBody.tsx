@@ -218,7 +218,6 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
   });
   reactionsDisplay.sort((r1, r2) => r2.props.count - r1.props.count);
 
-  const integrationList = props.course.integrations;
   const evalInfo = props.course.evals;
   const relatedCourses = props.course.related_courses;
   const { prerequisites } = props.course;
