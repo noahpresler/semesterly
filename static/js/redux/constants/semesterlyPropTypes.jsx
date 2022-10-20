@@ -43,7 +43,6 @@ export const evaluation = PropTypes.shape({
   year: PropTypes.string.isRequired,
 });
 
-
 // should match timetable.models.Offering fields
 const offering = PropTypes.shape({
   id: PropTypes.number.isRequired,
