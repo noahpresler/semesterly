@@ -1,30 +1,18 @@
 // Course Modal Styles
 .course-modal {
-  height: 85%;
-  max-height: 900px;
-  max-width: 1200px;
-
   > div {
-    // using important to override boron default style
-    // can't declare in javascript either, cuz need hover
-    background-color: rgba(0,0,0,.8) !important;
     height: 100%;
     outline: none;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
     width: 100%;
   }
 
   + div {
-    // using important to override boron default style
-    // can't declare in javascript either, cuz need hover
-    background-color: rgba(0,0,0,.8) !important;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
   }
 
   &.trans + div,
   &.trans > div {
-    // using important to override boron default style
-    // can't declare in javascript either, cuz need hover
     background-color: transparent !important;
   }
 }
@@ -70,7 +58,7 @@
   display: flex;
   align-items: center;
   margin: 6px;
-  >.areas {
+  > .areas {
     display: flex;
     > div {
       border-radius: 25%;
@@ -148,7 +136,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: background-color .2s, color .2s;
+  transition: background-color 0.2s, color 0.2s;
   width: 100%;
 }
 
@@ -157,7 +145,7 @@
   border-bottom: 1px solid $gddd;
   padding: 20px 10px 10px;
   position: relative;
-  transition: background-color .2s, color .2s;
+  transition: background-color 0.2s, color 0.2s;
   z-index: 11;
 
   h1 {
@@ -165,7 +153,7 @@
     font-size: 36px;
     margin: 0;
     padding-right: 85px;
-    transition: color .2s;
+    transition: color 0.2s;
   }
 
   h2 {
@@ -175,10 +163,9 @@
     font-weight: 400;
     margin: 10px 0;
     padding-right: 15%;
-    transition: color .2s;
+    transition: color 0.2s;
   }
 }
-
 
 // Course Modal Corner Actions
 .modal-close,
@@ -190,7 +177,7 @@
   opacity: 1;
   position: absolute;
   top: 5px;
-  transition: color .2s, transform .3s, opacity .2s, visibility .2s;
+  transition: color 0.2s, transform 0.3s, opacity 0.2s, visibility 0.2s;
   visibility: visible;
   width: 20px;
 
@@ -204,7 +191,7 @@
   right: 5px;
 
   &:hover {
-    color: #C0392B;
+    color: #c0392b;
     transform: scale(1.2);
   }
 }
@@ -213,7 +200,7 @@
   right: 30px;
 
   &:hover {
-    color: #5B99CE;
+    color: #5b99ce;
     transform: scale(1.2);
   }
 }
@@ -235,7 +222,7 @@
   right: 55px;
 
   &:hover {
-    color: #5BCE84;
+    color: #5bce84;
     transform: scale(1.2);
   }
 }
@@ -250,7 +237,7 @@
   opacity: 1;
   position: absolute;
   right: 10%;
-  transition: background-color .2s, opacity .2s, visibility .2s;
+  transition: background-color 0.2s, opacity 0.2s, visibility 0.2s;
   visibility: visible;
   width: 60px;
   z-index: 1;
@@ -264,21 +251,21 @@
   }
 
   &:hover {
-    background-color: #1858BB;
+    background-color: #1858bb;
   }
 
   &.in-roster {
     &:hover {
-      animation: pulsate .8s ease-out infinite;
-      background-color: #C0392B;
+      animation: pulsate 0.8s ease-out infinite;
+      background-color: #c0392b;
     }
   }
 
   &.on-active-timetable {
-    background-color: #2DD6B5;
+    background-color: #2dd6b5;
 
     &:hover {
-      background-color: #56ECCF;
+      background-color: #56eccf;
     }
   }
 }
@@ -300,7 +287,6 @@
   }
 }
 
-
 // Course Modal Body
 .modal-body {
   flex: 1;
@@ -317,7 +303,7 @@
     line-height: 22px;
     margin: 7px 0;
     padding: 0 5px;
-    transition: color .2s;
+    transition: color 0.2s;
     word-wrap: break-word;
   }
 
@@ -343,13 +329,13 @@
       line-height: 30px;
       margin: 0 auto 20px;
       text-align: center;
-      transition: color .3s;
+      transition: color 0.3s;
     }
   }
 
   .rating-module {
     opacity: 1;
-    transition: opacity .2s, visibility .2s;
+    transition: opacity 0.2s, visibility 0.2s;
     visibility: visible;
 
     h4 {
@@ -358,7 +344,7 @@
       font-weight: 400;
       margin: 0 auto 5px;
       text-align: center;
-      transition: color .2s;
+      transition: color 0.2s;
     }
   }
 
@@ -374,7 +360,7 @@
       cursor: pointer;
       position: relative;
       text-decoration: underline;
-      transition: color .3s;
+      transition: color 0.3s;
     }
 
     &:active,
@@ -388,7 +374,7 @@
     }
 
     .course-link-tip {
-      background-color: #FD7473;
+      background-color: #fd7473;
       border-radius: 5px;
       color: $g222;
       height: 60px;
@@ -398,7 +384,7 @@
       overflow: hidden;
       position: absolute;
       top: -10px;
-      transition: opacity .3s, visibility .3s;
+      transition: opacity 0.3s, visibility 0.3s;
       visibility: hidden;
       white-space: nowrap;
       z-index: 1;
@@ -414,7 +400,6 @@
   }
 }
 
-
 .modal-module-header {
   clear: both;
   color: $g777;
@@ -423,7 +408,7 @@
   margin: 0;
   padding: 10px 5px;
   position: relative;
-  transition: color .2s;
+  transition: color 0.2s;
 
   &::after {
     background-color: $gddd;
@@ -433,7 +418,7 @@
     height: 1px;
     left: 0;
     position: absolute;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
     width: 100%;
   }
 
@@ -445,19 +430,19 @@
 
 // Course Modal Sections
 .modal-section {
-  background-color: rgba(255,255,255,.8);
+  background-color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
   float: left;
   padding: 7px;
   position: relative;
-  transition: background-color .2s;
+  transition: background-color 0.2s;
   width: 50%;
 
   &:hover {
     background-color: $geee;
   }
 
-  &:nth-child(2n+0) {
+  &:nth-child(2n + 0) {
     clear: both;
   }
 
@@ -510,7 +495,7 @@
     }
   }
 
-  .fa-lock  {
+  .fa-lock {
     bottom: 7px;
     color: $primary-navy;
     font-size: 14px;
@@ -519,7 +504,7 @@
     position: absolute;
     right: 7px;
     text-align: center;
-    transition: opacity .3s, visibility .3s;
+    transition: opacity 0.3s, visibility 0.3s;
     visibility: hidden;
     width: 20px;
   }
@@ -531,7 +516,7 @@
 
 .modal-section .fa-calendar-check-o {
   opacity: 0;
-  transition: opacity .3s, visibility .3s;
+  transition: opacity 0.3s, visibility 0.3s;
   visibility: hidden;
 }
 
@@ -698,11 +683,11 @@
     h2 {
       font-size: 14px;
     }
-	}
+  }
 
   .modal-body {
     padding-top: 20px;
-	}
+  }
 
   .modal-add,
   .modal-share,
@@ -715,7 +700,7 @@
     position: absolute;
     top: auto;
     transform: translateX(-50%);
-    transition: background-color .3s;
+    transition: background-color 0.3s;
     width: 60px;
     z-index: 1;
 
@@ -730,7 +715,7 @@
     &:hover {
       transform: scale(1) translateX(-50%);
     }
-	}
+  }
 
   .modal-share {
     left: 25%;
@@ -738,7 +723,7 @@
     &:hover {
       background-color: #5b99ce;
     }
-	}
+  }
 
   .modal-save {
     left: 50%;
@@ -746,13 +731,11 @@
     &:hover {
       background-color: #5bce84;
     }
-	}
+  }
 
   .modal-add {
     left: 75%;
-	}
-
-
+  }
 }
 
 .capacity {
@@ -818,20 +801,19 @@
       float: none;
       margin: 5px 0 0;
     }
-	}
-
+  }
 }
 
 @media (max-width: 801px) {
   .capacity__attention {
     font-size: 14px;
-	}
+  }
 }
 
 @media (max-width: 670px) {
   .capacity__attention {
     font-size: 13px;
-	}
+  }
 }
 
 .capacity__tracker-text {

@@ -19,14 +19,20 @@ import ClickOutHandler from "react-onclickout";
 import uniq from "lodash/uniq";
 import Clipboard from "clipboard";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Classmate, DenormalizedCourse, SlotColorData } from "../constants/commonTypes";
+import {
+  Classmate,
+  Course,
+  DenormalizedCourse,
+  RelatedCourse,
+  SlotColorData,
+} from "../constants/commonTypes";
 
 type MasterSlotProps = {
   colourIndex: number;
   inModal?: boolean;
-  fakeFriends: number;
-  course: DenormalizedCourse;
-  sectionId: number;
+  fakeFriends?: number;
+  course: Course | DenormalizedCourse;
+  sectionId?: number;
   professors: string[];
   classmates: {
     current: Classmate[];
@@ -235,9 +241,6 @@ export const ShareLink = ({ link, onClickOut, type }: ShareLinkProps) => {
             {shareBtnText}
           </div>
         </CopyToClipboard>
-        {/* <div className="clipboardBtn" id={`clipboard-btn-${uniqueId}`} data-clipboard-text={link}>
-          Copy to Clipboard
-        </div> */}
       </div>
     </ClickOutHandler>
   );
