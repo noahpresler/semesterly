@@ -103,7 +103,10 @@
   position: absolute;
   width: 390px;
   top: 85px;
-  left: 174px;
+  left: 13px;
+  @media (min-width: 768px) {
+    left: 174px;
+  }
 }
 
 .save-button {
