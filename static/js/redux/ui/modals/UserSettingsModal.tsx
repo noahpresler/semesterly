@@ -286,7 +286,7 @@ const UserSettingsModal = () => {
     userInfo.isLoggedIn && !userInfo.FacebookSignedUp ? (
       <div
         className={classnames(
-          "preference welcome-modal__notifications second cf",
+          "preference user-settings-modal__notifications second cf",
           {
             "preference-attn": highlightNotifs,
           }
