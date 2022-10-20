@@ -29,19 +29,19 @@ interface Option {
 
 const modalStyle = {
   height: "588px",
-  width: "700px",
+  width: "500px",
   overflow: "auto",
 };
 
 const UserSettingsModal = () => {
   const {
     saveSettings,
+    acceptTOS,
+    deleteUser,
     overrideSettingsShow,
     changeUserInfo,
-    acceptTOS,
     setUserSettingsModalVisible,
     setUserSettingsModalHidden,
-    deleteUser,
   } = useActions();
 
   const dispatch = useAppDispatch();
@@ -286,7 +286,7 @@ const UserSettingsModal = () => {
     userInfo.isLoggedIn && !userInfo.FacebookSignedUp ? (
       <div
         className={classnames(
-          "preference user-settings-modal__notifications second cf",
+          "preference welcome-modal__notifications second cf",
           {
             "preference-attn": highlightNotifs,
           }
@@ -304,7 +304,7 @@ const UserSettingsModal = () => {
           <span className="img-icon">
             <i className="fa fa-facebook" />
           </span>
-          <span>Continue with Facebook</span>
+          <span>Connect with Facebook</span>
         </button>
         <p className="disclaimer ctr">
           Connecting your Facebook allows you to see which of your Facebook friends are
@@ -353,7 +353,7 @@ const UserSettingsModal = () => {
         dispatch(setUserSettingsModalHidden());
       }}
       animation="door"
-      className="user-settings-modal"
+      className="user-settings-modal max-modal"
       customStyles={modalStyle}
     >
       <div className="modal-content">

@@ -57,6 +57,10 @@
       text-align: left;
     }
 
+    span {
+      color: white;
+    }
+
     button,
     input,
     select,
@@ -111,17 +115,6 @@
     }
   }
 
-  .switch-slide {
-    float: right;
-    margin-left: 15px;
-  }
-
-  .switch-label {
-    &::after {
-      background: $switch-blue;
-    }
-  }
-
   .preference {
     padding: 0 20px 15px;
   }
@@ -150,16 +143,6 @@
       font-size: 16px;
       line-height: 20px;
       margin: 0;
-    }
-  }
-
-  .abnb-btn {
-    padding-bottom: 14px !important;
-    padding-top: 15px !important;
-
-    i {
-      font-size: 14px;
-      margin-top: 2px;
     }
   }
 
