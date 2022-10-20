@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-// @ts-ignore
-import { DropModal } from "boron-15";
 import { useDispatch } from "react-redux";
-import classNames from "classnames";
 import { useAppSelector } from "../../hooks";
 import {
   getCurrentSemester,
   getDenormAdvancedSearchResults,
   getHoveredSlots,
 } from "../../state";
+import classNames from "classnames";
+import Modal from "./Modal";
 import { getSchoolSpecificInfo } from "../../constants/schools";
 import { getCourseShareLinkFromModal } from "../../constants/endpoints";
 import { explorationModalActions } from "../../state/slices";
@@ -74,7 +73,6 @@ const AdvancedSearchModal = () => {
   const getShareLink = (courseCode: string) =>
     getCourseShareLinkFromModal(courseCode, semester);
 
-  const modal = useRef<DropModal>();
   const scrollContainer = useRef<HTMLDivElement>();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -97,15 +95,6 @@ const AdvancedSearchModal = () => {
   const [curPage, setCurPage] = useState(1);
   const [newSearch, setNewSearch] = useState(false);
 
-  useEffect(() => {
-    if (isVisible) {
-      modal.current.show();
-    }
-    if (!isVisible) {
-      modal.current.hide();
-    }
-  }, [isVisible]);
-
   const toggleFilter = (filterType: string) => () => {
     if (isFetching) {
       return;
@@ -120,7 +109,6 @@ const AdvancedSearchModal = () => {
   const cleanUp = () => {
     dispatch(timetablesActions.unhoverSection());
     dispatch(explorationModalActions.hideExplorationModal());
-    modal.current.hide();
   };
 
   const hideAllFilters = () => {
@@ -405,16 +393,19 @@ const AdvancedSearchModal = () => {
   );
 
   return (
-    <DropModal
-      ref={modal}
+    <Modal
+      visible={isVisible}
+      onClose={() => dispatch(explorationModalActions.hideExplorationModal())}
       className={classNames("exploration-modal max-modal", {
         trans: hasHoveredResult,
       })}
-      modalStyle={{
-        width: "100%",
-        backgroundColor: "transparent",
+      animation={"slideLeft"}
+      customStyles={{
+        maxWidth: "1200px",
+        maxHeight: "900px",
+        width: "90%",
+        height: "85%",
       }}
-      onHide={() => dispatch(explorationModalActions.hideExplorationModal())}
     >
       <div
         className={classNames("exploration-content", {
@@ -435,7 +426,10 @@ const AdvancedSearchModal = () => {
               }}
             />
           </div>
-          <div className="exploration-close" onMouseDown={() => modal.current.hide()}>
+          <div
+            className="exploration-close"
+            onMouseDown={() => dispatch(explorationModalActions.hideExplorationModal())}
+          >
             <i className="fa fa-times" />
           </div>
         </div>
@@ -498,7 +492,7 @@ const AdvancedSearchModal = () => {
           </div>
         </div>
       </div>
-    </DropModal>
+    </Modal>
   );
 };
 
