@@ -53,9 +53,9 @@ const NewsModal = () => {
   );
 
   const modalStyle = {
-    height: "588px",
-    width: "700px",
-    overflow: "auto",
+    width: "85%",
+    height: "80%",
+    maxWidth: "700px",
   };
 
   return (
