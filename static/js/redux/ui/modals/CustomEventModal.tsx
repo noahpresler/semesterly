@@ -13,18 +13,15 @@ GNU General Public License for more details.
 */
 
 // @ts-ignore
-import { DropModal } from "boron-15";
 import { HexColorPicker } from "react-colorful";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { updateCustomSlot } from "../../actions";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { customEventsActions } from "../../state/slices/customEventsSlice";
 import { DAYS } from "../../constants/constants";
+import Modal from "./Modal";
 
 const CustomEventModal = () => {
-  const isVisible = useAppSelector((state) => state.customEvents.isModalVisible);
-
-  const modal = useRef<DropModal>();
   const [eventDay, setEventDay] = useState("");
   const [eventName, setEventName] = useState("");
   const [eventLocation, setEventLocation] = useState("");
@@ -43,6 +40,10 @@ const CustomEventModal = () => {
     return events.find((event) => event.id === selectedEventId);
   };
   const selectedEvent = getSelectedEvent();
+  const isVisible = useAppSelector(
+    (state) => state.customEvents.isModalVisible && !!selectedEvent
+  );
+
   useEffect(() => {
     if (selectedEvent) {
       setEventDay(selectedEvent.day);
@@ -57,21 +58,9 @@ const CustomEventModal = () => {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (modal.current) {
-      if (!isVisible || !selectedEvent) {
-        modal.current.hide();
-      } else {
-        modal.current.show();
-      }
-    }
-  }, [isVisible, selectedEvent]);
-
   const modalHeader = (
-    <div className="modal-content">
-      <div className="modal-header">
-        <h1>Edit Custom Event</h1>
-      </div>
+    <div className="modal-header">
+      <h1>Edit Custom Event</h1>
     </div>
   );
 
@@ -319,17 +308,21 @@ const CustomEventModal = () => {
   );
 
   return (
-    <DropModal
-      ref={modal}
-      onHide={() => {
+    <Modal
+      visible={isVisible}
+      onClose={() => {
         dispatch(customEventsActions.hideCustomEventsModal());
       }}
-      modalStyle={{ width: "100%", maxWidth: "600px" }}
+      customStyles={{
+        width: "100%",
+        height: "min-content",
+        maxWidth: "600px",
+      }}
     >
       {modalHeader}
       {editCustomEventForm}
       {isPickingColor && colorPicker}
-    </DropModal>
+    </Modal>
   );
 };
 
