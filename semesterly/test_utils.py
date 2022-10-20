@@ -749,17 +749,17 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         """Saves user setttings by clicking the button, asserts that the
         modal is then invisible"""
         self.find((By.CLASS_NAME, "signup-button")).click()
-        self.assert_invisibility((By.CLASS_NAME, "welcome-modal"))
+        self.assert_invisibility((By.CLASS_NAME, "user-settings-modal"))
 
     def complete_user_settings_basics(self, major, class_year):
-        """Completes major/class year/TOS agreement via the welcome modal
+        """Completes major/class year/TOS agreement via the user settings modal
 
         Args:
             major (str): Student's major
             class_year (str): Student's class year
         """
-        # Assert welcome modal is open
-        self.find((By.CLASS_NAME, "welcome-modal"))
+        # Assert that user settings modal is open
+        self.find((By.CLASS_NAME, "user-settings-modal"))
         major_select, year_select = self.find(
             (By.XPATH, "//div[contains(@class,'select-field')]//input"),
             get_all=True,
@@ -776,7 +776,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             )
         ).click()
         self.save_user_settings()
-        self.assert_invisibility((By.CLASS_NAME, "welcome-modal"))
+        self.assert_invisibility((By.CLASS_NAME, "user-settings-modal"))
 
     def change_ptt_name(self, name):
         """Changes personal timetable name to the provided title"""
