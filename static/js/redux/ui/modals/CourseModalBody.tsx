@@ -323,35 +323,6 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
         <p>None</p>
       </div>
     );
-  const learningDenLogoImg = {
-    backgroundImage: "url(/static/img/integrations/learningDen_books.png)",
-  };
-  const learningDenDisplay =
-    integrationList.indexOf("LearningDen") > -1 ? (
-      <li className="cf">
-        <span className="integration-image" style={learningDenLogoImg} />
-        <h4>Learning Den</h4>
-        <a
-          href="https://advising.jhu.edu/tutoring-mentoring/learning-den-tutoring-services/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn More
-        </a>
-        <p>
-          The Learning Den is a peer-to-peer, small group tutoring program that helps
-          students to improve their understanding of course materials, and prepare for
-          exams.
-        </p>
-      </li>
-    ) : null;
-  const academicSupportDisplay =
-    integrationList.indexOf("LearningDen") > -1 ? (
-      <div className="modal-module academic-support">
-        <h3 className="modal-module-header">Academic Support</h3>
-        {learningDenDisplay}
-      </div>
-    ) : null;
   let friendCircles = (
     <div className="loading">
       <span className="img-icon">
