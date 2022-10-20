@@ -280,6 +280,19 @@ class Evaluation(models.Model):
     year = models.CharField(max_length=200)
 
 
+# Unused, but must remain for migrations
+class Integration(models.Model):
+    name = models.CharField(max_length=255)
+
+
+# Unused, but must remain for migrations
+class CourseIntegration(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.deletion.CASCADE)
+    integration = models.ForeignKey(Integration, on_delete=models.deletion.CASCADE)
+    json = models.TextField()
+    semester = models.ManyToManyField(Semester)
+
+
 class Timetable(models.Model):
     courses = models.ManyToManyField(Course)
     sections = models.ManyToManyField(Section)
