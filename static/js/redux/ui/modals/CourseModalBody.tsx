@@ -479,7 +479,6 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
           {showCapacityAttention && isMobile && attentioncapacityTracker}
           {prerequisitesDisplay}
           {posTags}
-          {academicSupportDisplay}
           {friendDisplay}
           {hasTakenDisplay}
         </div>
