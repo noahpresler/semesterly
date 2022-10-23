@@ -43,6 +43,7 @@ import userAcquisitionModal from "./slices/userAcquisitionModalSlice";
 import compareTimetable from "./slices/compareTimetableSlice";
 import registrar from "./slices/registrarSlice";
 import entities, * as fromEntities from "./slices/entitiesSlice";
+import theme from "./slices/themeSlice";
 import { Slot, Timetable } from "../constants/commonTypes";
 
 export const reducers = {
@@ -69,6 +70,7 @@ export const reducers = {
   signupModal,
   termsOfServiceBanner,
   termsOfServiceModal,
+  theme,
   timetables,
   ui,
   userAcquisitionModal,
