@@ -29,7 +29,6 @@ export const userInfoFixture = {
     class_year: 2019,
     social_all: false,
     userFirstName: "Noah",
-    integrations: [],
     isLoggedIn: true,
     userLastName: "Presler",
     LoginHash: "oNx",

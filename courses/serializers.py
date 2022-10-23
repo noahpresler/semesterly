@@ -20,8 +20,6 @@ from timetable.models import (
     Course,
     Section,
     Evaluation,
-    CourseIntegration,
-    Integration,
     Semester,
 )
 from . import utils
@@ -45,7 +43,6 @@ class CourseSerializer(serializers.ModelSerializer):
     """
 
     evals = serializers.SerializerMethodField()
-    integrations = serializers.SerializerMethodField()
     related_courses = serializers.SerializerMethodField()
     reactions = serializers.SerializerMethodField()
     regexed_courses = serializers.SerializerMethodField()
@@ -76,14 +73,6 @@ class CourseSerializer(serializers.ModelSerializer):
         for course_eval in evals:
             course_eval["unique_term_year"] = course_eval["year"] not in years
         return evals
-
-    def get_integrations(self, course):
-        ids = CourseIntegration.objects.filter(
-            course__id=course.id, semester__id=self.context["semester"].id
-        ).values_list("integration", flat=True)
-        return list(
-            Integration.objects.filter(id__in=ids).values_list("name", flat=True)
-        )
 
     def get_related_courses(self, course):
         related = course.related_courses.filter(
@@ -164,7 +153,6 @@ class CourseSerializer(serializers.ModelSerializer):
             "areas",
             "campus",
             "evals",
-            "integrations",
             "related_courses",
             "reactions",
             "regexed_courses",

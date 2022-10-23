@@ -257,17 +257,6 @@
     }
   }
 
-  .integration {
-    margin: 1px 5px 0 0;
-
-    a {
-      float: left;
-      font-size: 12px;
-      line-height: 15px;
-      padding-right: 5px;
-    }
-  }
-
   .search-course-add,
   .search-course-save {
     background-color: #d7d7d7;
@@ -344,20 +333,6 @@
   }
 }
 
-// If a course has an den integration turned on
-.has-den {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  float: left;
-  height: 15px;
-  margin-right: 5px;
-  opacity: 1;
-  transition: visibility 0.3s, opacity 0.3s;
-  visibility: visible;
-  width: 100px;
-}
-
 // Section Listings per Course
 .search-sections {
   opacity: 1;
@@ -423,10 +398,6 @@
     background-color: $white-transparent-9;
   }
 
-  .has-den {
-    opacity: 0;
-    visibility: hidden;
-  }
 }
 
 .results-loading-gif {
