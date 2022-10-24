@@ -15,14 +15,18 @@
   font-size: 12px;
   cursor:default;
   .tip {
+    @include theme() {
+      border-color: transparent transparent t('share-link-wrapper');
+    }
     right: 12px;
     top: -8px;
-    border-color: transparent transparent #f9f9f9;
   }
   .tip-border {
     right: 12px;
     top: -9px;
-    border-color: transparent transparent #f9f9f9;
+    @include theme() {
+      border-color: transparent transparent t('share-link-wrapper');
+    }
   }
   .share-course-link {
     @include theme() {
