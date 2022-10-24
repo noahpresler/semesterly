@@ -115,7 +115,7 @@
   padding-top: 7px;
   position: absolute;
   top: 30px;
-  z-index: 100;
+  z-index: 10;
 
   &.down {
     display: block;
@@ -161,7 +161,7 @@
   position: absolute;
   top: 29px;
   width: 150%;
-  z-index: 100;
+  z-index: 10;
 }
 
 .see-more {
@@ -275,17 +275,6 @@
     }
   }
 
-  .integration {
-    margin: 1px 5px 0 0;
-
-    a {
-      float: left;
-      font-size: 12px;
-      line-height: 15px;
-      padding-right: 5px;
-    }
-  }
-
   .search-course-add,
   .search-course-save {
     border-radius: 100%;
@@ -381,6 +370,26 @@
   width: 100px;
 }
 
+.search-course-add {
+  &.in-roster {
+    background-color: #2dd6b5;
+
+    &:hover {
+      background-color: #56eccf;
+    }
+  }
+}
+
+.search-course-save {
+  &.in-roster {
+    background-color: #97b0ea;
+
+    &:hover {
+      background-color: #aec1ef;
+    }
+  }
+}
+
 // Section Listings per Course
 .search-sections {
   opacity: 1;
@@ -448,10 +457,6 @@
     }
   }
 
-  .has-den {
-    opacity: 0;
-    visibility: hidden;
-  }
 }
 
 .results-loading-gif {

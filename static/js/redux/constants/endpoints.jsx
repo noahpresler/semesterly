@@ -50,8 +50,6 @@ export const getRequestShareTimetableLinkEndpoint = () => "/timetables/links/";
 export const getSetRegistrationTokenEndpoint = () => "/registration-token/";
 export const deleteRegistrationTokenEndpoint = (endpoint) =>
   `/registration-token/${endpoint}/`;
-export const getIntegrationEndpoint = (integrationId, courseId) =>
-  `/integrations/${integrationId}/course/${courseId}/`;
 export const acceptTOSEndpoint = () => "/tos/accept/";
 export function getCourseShareLinkFromModal(code, semester) {
   return `/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;

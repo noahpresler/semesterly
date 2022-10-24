@@ -27,17 +27,16 @@ import TopBar from "./TopBar";
 import SignupModalContainer from "./containers/modals/signup_modal_container";
 import TutModalContainer from "./containers/modals/tut_modal_container";
 import PeerModalContainer from "./containers/modals/peer_modal_container";
-import IntegrationModalContainer from "./containers/modals/integration_modal_container";
 import SaveCalendarModalContainer from "./containers/modals/save_calendar_modal_container";
 import UserAcquisitionModal from "./modals/user_acquisition_modal";
 import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_container";
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
 import UserSettingsModal from "./modals/user_settings_modal";
-import CustomEventModal from "./modals/custom_event_modal";
+import CustomEventModal from "./modals/CustomEventModal";
 import AdvancedSearchModal from "./modals/AdvancedSearchModal";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getActiveTimetableCourses } from "../state";
-import NewsModal from "./modals/news_modal";
+import NewsModal from "./modals/NewsModal";
 import { newsModalActions } from "../state/slices/newsModalSlice";
 import SideBar from "./SideBar";
 import CompareTimetableSideBar from "./CompareTimetableSidebar";
@@ -187,12 +186,11 @@ const Semesterly = () => {
 
   return (
     <div className="page-wrapper">
+      <NewsModal />
       <TopBar />
       <UserSettingsModal />
       <AdvancedSearchModal />
-      <NewsModal />
       <SignupModalContainer />
-      <IntegrationModalContainer />
       <TutModalContainer />
       <PeerModalContainer />
       <SaveCalendarModalContainer />

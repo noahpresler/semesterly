@@ -26,6 +26,7 @@ $themes: (
   // Light mode
   light:
     (
+      color-scheme-type: light,
       text-color: $primary-navy,
       text-color-hover: $primary-navy,
       background: $g808080,
@@ -38,6 +39,9 @@ $themes: (
       sidebar-input-border: 1px solid $gfff,
       sidebar-input-border_hover: 1px solid $gddd,
       sidebar-input-border_foucs: 1px solid $blue-alt,
+      dropdown-background: #fff,
+      dropdown-border: 1px solid $ge6e6e6,
+      dropdown-hover: $geee,
       top-bar-background: $light-base-component-bg,
       top-bar-border-bottom: none,
       search-bar-background: #f2f3f5,
@@ -61,14 +65,23 @@ $themes: (
       search-course-add-in-roster-hover: #56eccf,
       search-course-save-in-roster: #97b0ea,
       search-course-save-in-roster-hover: #aec1ef,
+      row-button-hover-background-color: $gddd,
     ),
   // Dark Mode
   dark:
     (
+      color-scheme-type: dark,
       text-color: $dblue0,
       text-color-hover: white,
       background: $g808080,
       sidebar-background: $dark-base-component-bg,
+      sidebar-input-background: $dblue3,
+      sidebar-input-border: 1px solid $g222,
+      sidebar-input-border_hover: 1px solid $dblue3,
+      sidebar-input-border_foucs: 1px solid $blue-alt,
+      dropdown-background: $g333,
+      dropdown-border: 1px solid $g333,
+      dropdown-hover: $dblue3,
       main-bar-background: $dark-base-component-bg,
       main-calendar-border-color: $dblue2,
       navicon-hamburger-background: $dblue0,
@@ -95,6 +108,7 @@ $themes: (
       search-course-add-in-roster-hover: $confirm-green-darker,
       search-course-save-in-roster: $save-course-blue,
       search-course-save-in-roster-hover: $save-course-hover-blue,
+      row-button-hover-background-color: $dblue3,
     )
 );
 

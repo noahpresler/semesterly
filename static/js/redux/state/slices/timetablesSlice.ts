@@ -5,7 +5,13 @@ import {
   receiveTimetables,
   changeActiveTimetable,
 } from "../../actions/initActions";
-import { Course, HoveredSlot, Section, Timetable } from "../../constants/commonTypes";
+import {
+  Course,
+  DenormalizedCourse,
+  HoveredSlot,
+  Section,
+  Timetable,
+} from "../../constants/commonTypes";
 import { saveLocalActiveIndex } from "../../util";
 
 interface TimetablesSliceState {
@@ -50,7 +56,7 @@ const timetablesSlice = createSlice({
     hoverSection: (
       state,
       action: PayloadAction<{
-        course: Course;
+        course: Course | DenormalizedCourse;
         section: Section;
       }>
     ) => {

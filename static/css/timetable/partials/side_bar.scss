@@ -87,21 +87,27 @@
 }
 
 .timetable-names-dropdown {
-  background-color: $gfff;
-  border: 1px solid $ge6e6e6;
+  @include theme() {
+    background-color: t("dropdown-background");
+    border: t("dropdown-border");
+  }
   box-shadow: 0 2px 10px $black-transparent-2;
   display: none;
   left: 0;
   position: absolute;
   top: 35px;
   width: 100%;
-  z-index: 100;
+  z-index: 10;
 
   &.down {
     display: block;
   }
 
   .tip {
+    @include theme() {
+      // tip color
+      border-bottom-color: t("dropdown-background");
+    }
     right: 9px;
     top: -7px;
   }
@@ -120,15 +126,10 @@
 }
 
 .tt-name {
-  background-color: $gfff;
   cursor: pointer;
   font-size: 12px;
   padding: 5px 5px 5px 20px;
   transition: background-color 0.3s;
-
-  :hover {
-    background-color: $geee;
-  }
 }
 
 .sb-header {

@@ -82,7 +82,6 @@ export const googleFixture = {
       class_year: null,
       social_all: null,
       userFirstName: "Noah",
-      integrations: [],
       isLoggedIn: true,
       userLastName: "Presler",
       LoginHash: "xqr",

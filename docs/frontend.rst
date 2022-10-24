@@ -82,8 +82,6 @@ The reducers directory follows this structure::
     ├── exploration_modal_reducer.jsx
     ├── final_exams_modal_reducer.jsx
     ├── friends_reducer.jsx
-    ├── integration_modal_reducer.jsx
-    ├── integrations_reducer.jsx
     ├── notification_token_reducer.jsx
     ├── optional_courses_reducer.jsx
     ├── peer_modal_reducer.jsx

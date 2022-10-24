@@ -82,12 +82,9 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             curr_sem_index = 0
             sem = Semester.objects.get(**all_semesters[curr_sem_index])
 
-        integrations = []
         if self.student and self.student.user.is_authenticated:
             self.student.school = self.school
             self.student.save()
-            for i in self.student.integrations.all():
-                integrations.append(i.name)
 
         final_exams = []
         if SCHOOLS_MAP[self.school].final_exams is None:
@@ -104,7 +101,6 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             "allSemesters": all_semesters,
             # 'oldSemesters': get_old_semesters(self.school),
             "uses12HrTime": SCHOOLS_MAP[self.school].ampm,
-            "studentIntegrations": integrations,
             "latestAgreement": AgreementSerializer(Agreement.objects.latest()).data,
             "registrar": SCHOOLS_MAP[self.school].registrar,
             "examSupportedSemesters": list(map(all_semesters.index, final_exams)),
