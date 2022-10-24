@@ -288,9 +288,6 @@
 
   .search-course-add,
   .search-course-save {
-    @include theme() {
-      background-color: t("search-course-save-background");
-    }
     border-radius: 100%;
     height: 40px;
     line-height: 40px;
@@ -304,6 +301,17 @@
   }
 
   .search-course-save {
+    @include theme() {
+      background-color: t("search-course-save-background");
+      &.in-roster {
+        background-color: t("search-course-save-in-roster");
+    
+        &:hover {
+          background-color: t("search-course-save-in-roster-hover");
+        }
+      }
+    }
+
     right: 55px;
 
     &:hover {
@@ -314,6 +322,17 @@
   }
 
   .search-course-add {
+    @include theme() {
+      background-color: t("search-course-save-background");
+      &.in-roster {
+        background-color: t("search-course-add-in-roster");
+    
+        &:hover {
+          background-color: t("search-course-add-in-roster-hover");
+        }
+      }
+    }
+
     h6 {
       color: #00a1ff;
       font-size: 12px;
@@ -345,26 +364,6 @@
     position: absolute;
     transition: opacity 0.3s, visibility 0.3s;
     visibility: hidden;
-  }
-}
-
-.search-course-add {
-  &.in-roster {
-    background-color: #2dd6b5;
-
-    &:hover {
-      background-color: #56eccf;
-    }
-  }
-}
-
-.search-course-save {
-  &.in-roster {
-    background-color: #97b0ea;
-
-    &:hover {
-      background-color: #aec1ef;
-    }
   }
 }
 

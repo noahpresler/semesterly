@@ -57,6 +57,10 @@ $themes: (
       search-bar-side-text: $g777,
       search-bar-box-shadow: rgba(0, 0, 0, 0.2),
       search-results-box-shadow: $black-transparent-2,
+      search-course-add-in-roster: #2dd6b5,
+      search-course-add-in-roster-hover: #56eccf,
+      search-course-save-in-roster: #97b0ea,
+      search-course-save-in-roster-hover: #aec1ef,
     ),
   // Dark Mode
   dark:
@@ -87,6 +91,10 @@ $themes: (
       search-bar-side-text: $gaaa,
       search-bar-box-shadow: $dblue7,
       search-results-box-shadow: $dblue7,
+      search-course-add-in-roster: $confirm-green-darkest,
+      search-course-add-in-roster-hover: $confirm-green-darker,
+      search-course-save-in-roster: $save-course-blue,
+      search-course-save-in-roster-hover: $save-course-hover-blue,
     )
 );
 
