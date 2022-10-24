@@ -49,7 +49,14 @@ $themes: (
       search-course-save-hover: #7be68d,
       search-course-save-hover-text: $green-light,
       search-course-add-hover: #a6deff,
-      search-course-add-hover-text: $blue-light
+      search-course-add-hover-text: $blue-light,
+      search-results-hover: $gf3f3f3,
+      search-bar-side: $gf3f3f3,
+      search-bar-side-trans50: $white-transparent-9,
+      search-bar-side-hover: #a5d5ff,
+      search-bar-side-text: $g777,
+      search-bar-box-shadow: rgba(0, 0, 0, 0.2),
+      search-results-box-shadow: $black-transparent-2,
     ),
   // Dark Mode
   dark:
@@ -72,7 +79,14 @@ $themes: (
       search-course-save-hover: $g777,
       search-course-save-hover-text: $gbbb,
       search-course-add-hover: $g777,
-      search-course-add-hover-text: $gbbb
+      search-course-add-hover-text: $gbbb,
+      search-results-hover: $dblue6,
+      search-bar-side: $dblue7,
+      search-bar-side-trans50: $dblue7,
+      search-bar-side-hover: $dblue1,
+      search-bar-side-text: $gaaa,
+      search-bar-box-shadow: $dblue7,
+      search-results-box-shadow: $dblue7,
     )
 );
 
