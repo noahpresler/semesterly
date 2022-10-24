@@ -248,11 +248,15 @@
     padding: 0;
 
     &.hoverAdd {
-      color: $blue-light;
+      @include theme() {
+        color: t("search-course-add-hover-text");
+       }
     }
 
     &.hoverSave {
-      color: $green-light;
+      @include theme() {
+        color: t("search-course-save-hover-text");
+       }
     }
 
     &.bubble {
@@ -279,7 +283,9 @@
 
   .search-course-add,
   .search-course-save {
-    background-color: #d7d7d7;
+    @include theme() {
+      background-color: t("search-course-save-background");
+    }
     border-radius: 100%;
     height: 40px;
     line-height: 40px;
@@ -296,7 +302,9 @@
     right: 55px;
 
     &:hover {
-      background-color: #7be68d;
+      @include theme() {
+       background-color: t("search-course-save-hover");
+      }
     }
   }
 
@@ -317,7 +325,9 @@
     }
 
     &:hover {
-      background-color: #a6deff;
+      @include theme() {
+        background-color: t("search-course-add-hover");
+       }
     }
   }
 

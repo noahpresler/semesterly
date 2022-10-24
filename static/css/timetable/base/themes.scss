@@ -44,7 +44,12 @@ $themes: (
       search-bar-option-background-hover: #f1eeee,
       search-bar-semester-picker-border: 1px solid $ge6e6e6,
       search-bar-focused-background: $gfff,
-      search-border: $gfff
+      search-border: $gfff,
+      search-course-save-background: #d7d7d7,
+      search-course-save-hover: #7be68d,
+      search-course-save-hover-text: $green-light,
+      search-course-add-hover: #a6deff,
+      search-course-add-hover-text: $blue-light
     ),
   // Dark Mode
   dark:
@@ -62,7 +67,12 @@ $themes: (
       search-bar-option-background-hover: $dblue2,
       search-bar-semester-picker-border: 1px solid $dblue2,
       search-bar-focused-background: $dblue8,
-      search-border: $dblue8
+      search-border: $dblue8,
+      search-course-save-background: $g444,
+      search-course-save-hover: $g777,
+      search-course-save-hover-text: $gbbb,
+      search-course-add-hover: $g777,
+      search-course-add-hover-text: $gbbb
     )
 );
 
