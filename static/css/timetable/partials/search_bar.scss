@@ -421,22 +421,28 @@
 }
 
 .trans50 {
-  // This makes it semi transparent
-  background-color: $white-transparent-0;
-  border: 1px solid $white-transparent-0;
-  border-top-color: transparent;
-  box-shadow: none;
-
+  @include theme() {
+    // This makes it semi transparent
+    background-color: $white-transparent-0;
+    border: 1px solid $white-transparent-0;
+    border-top-color: transparent;
+    box-shadow: none;
+  }
+  
   li,
   .search-section,
   .search-course h4 {
     // This makes it semi transparent
-    color: $navy-transparent-0;
+    @include theme() {
+      color: $navy-transparent-0;
+    }
   }
 
   .search-section:hover {
-    background-color: #ffdbbe;
-    color: $navy-transparent-100;
+    @include theme() {
+      background-color: #ffdbbe;
+      color: $navy-transparent-100;
+    }
   }
 
   .search-course,
@@ -444,7 +450,9 @@
   .search-course-save,
   .search-bar__side,
   .search-course .label {
-    background-color: transparent;
+    @include theme() {
+      background-color: transparent;
+    }
   }
 
   .see-more__inner {
@@ -458,8 +466,11 @@
     }
   }
 
+  .has-den {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
-
 .results-loading-gif {
   background: url("/static/img/search-results-loader.gif") no-repeat;
   background-position: right 5px center;
