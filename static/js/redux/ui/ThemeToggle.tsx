@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { setTheme } from "../state/slices/themeSlice";
 
 const ThemeSwitch = styled(Switch)(({ theme }) => ({
   width: 53,
@@ -63,43 +65,19 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
  *
  */
 
-// Add more themes here to have it be accepted.
-const availableThemes = ["light", "dark"];
-
 // For typescript purposes
-type Theme = typeof availableThemes[number];
-const themeLocalStorageKey = "main_theme";
-
 const ThemeToggle = () => {
-  const [theme, setTheme] = useState<Theme>("light");
+  const theme = useAppSelector((state) => state.theme.theme);
+  const dispatch = useAppDispatch();
 
-  // On Mount
-  useEffect(() => {
-    const curTheme = localStorage.getItem(themeLocalStorageKey);
-
-    // Check if a theme is valid.
-    if (availableThemes.indexOf(curTheme) !== -1) {
-      setTheme(curTheme);
-    } else {
-      // Set the first element as the default theme
-      setTheme(availableThemes[0]);
-    }
-  }, []);
-
-  // When theme changes
   useEffect(() => {
     // Remove previous theme.
     const root: Element = document.querySelector(".page");
-
     // Reset previous classes
     root.className = "page";
-
     // Now, add the theme
     root.classList.add(`theme--${theme}`);
     root.setAttribute("data-theme", theme);
-
-    // Store in localStorage
-    localStorage.setItem(themeLocalStorageKey, theme);
   }, [theme]);
 
   return (
@@ -107,7 +85,7 @@ const ThemeToggle = () => {
       <ThemeSwitch
         checked={theme === "dark"}
         onChange={(e) => {
-          setTheme(e.target.checked ? "dark" : "light");
+          dispatch(setTheme(e.target.checked ? "dark" : "light"));
         }}
       />
     </div>
