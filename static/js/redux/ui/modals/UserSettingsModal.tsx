@@ -123,8 +123,8 @@ const UserSettingsModal = () => {
     setUserSettings({ ...userSettings, major: majorOption.value });
   };
 
-  const changeClassYear = (calssYearOption: Option) => {
-    setUserSettings({ ...userSettings, class_year: calssYearOption.value });
+  const changeClassYear = (classYearOption: Option) => {
+    setUserSettings({ ...userSettings, class_year: classYearOption.value });
   };
 
   const showUserSettings = () =>
