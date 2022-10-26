@@ -48,6 +48,12 @@ $themes: (
       search-bar-option-background-hover: #f1eeee,
       search-bar-semester-picker-border: 1px solid $ge6e6e6,
       row-button-hover-background-color: $gddd,
+      share-link-wrapper: $gf9f9f9,
+      share-link-text: $g222,
+      share-link-clipboard: #3895db,
+      share-link-clipboard-text: $gfff,
+      share-link-shadow-1: rgba(0, 0, 0, 0.5),
+      share-link-shadow-2: rgba(0, 0, 0, 0.15),
     ),
   // Dark Mode
   dark:
@@ -73,6 +79,12 @@ $themes: (
       search-bar-option-background-hover: $dblue2,
       search-bar-semester-picker-border: 1px solid $dblue2,
       row-button-hover-background-color: $dblue3,
+      share-link-wrapper: $dblue3,
+      share-link-text: $dblue0,
+      share-link-clipboard: #155b91,
+      share-link-clipboard-text: $dblue0,
+      share-link-shadow-1: $g333,
+      share-link-shadow-2: $g444,
     )
 );
 
