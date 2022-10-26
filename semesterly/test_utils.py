@@ -99,7 +99,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.current_sem = sem
         self.driver.get(self.get_test_url("jhu"))
         WebDriverWait(self.driver, self.TIMEOUT).until(
-            lambda driver: driver.find_element_by_tag_name("body")
+            lambda driver: driver.find_element(By.TAG_NAME, "body")
         )
 
     def tearDown(self):
@@ -768,7 +768,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         major_select.send_keys(major)
         self.find((By.XPATH, f"//div[contains(text(), '{major}')]")).click()
         year_select.send_keys(class_year)
-        self.find((By.XPATH, f"//div[contains(text(), '{class_year}')]")).click()
+        ActionChains(self.driver).move_to_element(year_select).move_by_offset(
+            0, year_select.size["height"] + 20
+        ).click().perform()
+
         self.find(
             (
                 By.XPATH,
