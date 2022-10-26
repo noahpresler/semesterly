@@ -20,7 +20,9 @@
 
     &.results {
       border-radius: 0 10px 0 0;
-      background-color: #ffffff;
+      @include theme() {
+        background-color: t("search-bar-focused-background");
+      }
     }
 
     &::-webkit-input-placeholder {
@@ -58,8 +60,10 @@
 
   &.results {
     border-radius: 10px 10px 0 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    border: 1px solid #e6e6e6;
+    @include theme() {
+      box-shadow: 0 2px 10px t("search-bar-box-shadow");
+      border: 1px solid t("search-border");
+    }
   }
 }
 
@@ -89,16 +93,19 @@
   }
 
   &.results {
-    background-color: #ffffff;
+    @include theme() {
+      background-color: t("search-bar-focused-background");
+    }
   }
+
 }
 
 .semester-picker {
   @include theme() {
     background-color: t("search-bar-background");
     border: t("search-bar-semester-picker-border");
+    box-shadow: 0 2px 10px t("search-results-box-shadow");
   }
-  box-shadow: 0 2px 10px $black-transparent-2;
   color: #777777;
   cursor: pointer;
   display: none;
@@ -140,11 +147,15 @@
 }
 
 .search-results {
-  background-color: $gfff;
-  border: 1px solid $ge6e6e6;
+  @include theme() {
+    background-color: t("search-bar-focused-background");
+    border: 1px solid t("search-border");
+    box-shadow: 0 3px 4px t("search-results-box-shadow");
+    color-scheme: t("color-scheme-type");
+  }
   border-radius: 0 10px 10px 10px;
   border-top: 0;
-  box-shadow: 0 3px 4px $black-transparent-2;
+  box-shadow: 0 3px 4px $dblue7;
   margin: 0;
   overflow: hidden;
   padding: 0;
@@ -204,7 +215,9 @@
   transition: background-color 0.2s, color 0.2s;
 
   &.hovered {
-    background-color: $gf3f3f3;
+    @include theme() {
+      background-color: t("search-results-hover");
+     }
   }
 
   h3 {
@@ -218,7 +231,9 @@
   }
 
   h4 {
-    color: $g777;
+    @include theme() {
+      color: t("search-bar-side-text");
+    }
     font-size: 12px;
     font-weight: 400;
     margin: 5px 0;
@@ -239,11 +254,15 @@
     padding: 0;
 
     &.hoverAdd {
-      color: $blue-light;
+      @include theme() {
+        color: t("search-course-add-hover-text");
+       }
     }
 
     &.hoverSave {
-      color: $green-light;
+      @include theme() {
+        color: t("search-course-save-hover-text");
+       }
     }
 
     &.bubble {
@@ -259,7 +278,6 @@
 
   .search-course-add,
   .search-course-save {
-    background-color: #d7d7d7;
     border-radius: 100%;
     height: 40px;
     line-height: 40px;
@@ -273,14 +291,38 @@
   }
 
   .search-course-save {
+    @include theme() {
+      background-color: t("search-course-save-background");
+      &.in-roster {
+        background-color: t("search-course-save-in-roster");
+    
+        &:hover {
+          background-color: t("search-course-save-in-roster-hover");
+        }
+      }
+    }
+
     right: 55px;
 
     &:hover {
-      background-color: #7be68d;
+      @include theme() {
+       background-color: t("search-course-save-hover");
+      }
     }
   }
 
   .search-course-add {
+    @include theme() {
+      background-color: t("search-course-save-background");
+      &.in-roster {
+        background-color: t("search-course-add-in-roster");
+    
+        &:hover {
+          background-color: t("search-course-add-in-roster-hover");
+        }
+      }
+    }
+
     h6 {
       color: #00a1ff;
       font-size: 12px;
@@ -297,7 +339,9 @@
     }
 
     &:hover {
-      background-color: #a6deff;
+      @include theme() {
+        background-color: t("search-course-add-hover");
+       }
     }
   }
 
@@ -311,6 +355,20 @@
     transition: opacity 0.3s, visibility 0.3s;
     visibility: hidden;
   }
+}
+
+// If a course has an den integration turned on
+.has-den {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  float: left;
+  height: 15px;
+  margin-right: 5px;
+  opacity: 1;
+  transition: visibility 0.3s, opacity 0.3s;
+  visibility: visible;
+  width: 100px;
 }
 
 .search-course-add {
@@ -363,22 +421,28 @@
 }
 
 .trans50 {
-  // This makes it semi transparent
-  background-color: $white-transparent-0;
-  border: 1px solid $white-transparent-0;
-  border-top-color: transparent;
-  box-shadow: none;
-
+  @include theme() {
+    // This makes it semi transparent
+    background-color: $white-transparent-0;
+    border: 1px solid $white-transparent-0;
+    border-top-color: transparent;
+    box-shadow: none;
+  }
+  
   li,
   .search-section,
   .search-course h4 {
     // This makes it semi transparent
-    color: $navy-transparent-0;
+    @include theme() {
+      color: $navy-transparent-0;
+    }
   }
 
   .search-section:hover {
-    background-color: #ffdbbe;
-    color: $navy-transparent-100;
+    @include theme() {
+      background-color: #ffdbbe;
+      color: $navy-transparent-100;
+    }
   }
 
   .search-course,
@@ -386,7 +450,9 @@
   .search-course-save,
   .search-bar__side,
   .search-course .label {
-    background-color: transparent;
+    @include theme() {
+      background-color: transparent;
+    }
   }
 
   .see-more__inner {
@@ -395,11 +461,16 @@
   }
 
   .search-bar__side-sections {
-    background-color: $white-transparent-9;
+    @include theme() {
+      background-color: t("search-bar-side-trans50");
+    }
   }
 
+  .has-den {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
-
 .results-loading-gif {
   background: url("/static/img/search-results-loader.gif") no-repeat;
   background-position: right 5px center;
@@ -407,7 +478,9 @@
 
 // Side Bar in Search Results
 .search-bar__side {
-  background-color: $gf3f3f3;
+  @include theme() {
+    background-color: t("search-bar-side");
+  }
   height: 100%;
   min-height: 232px;
   overflow-y: auto;
@@ -432,7 +505,9 @@
   }
 
   p {
-    color: $g777;
+    @include theme() {
+      color: t("search-bar-side-text");
+    }
     font-size: 11px;
     line-height: 11px;
     margin: 0 0 5px;
@@ -454,7 +529,9 @@
   width: auto;
 
   &:hover {
-    background-color: #a5d5ff;
+    @include theme() {
+      background-color: t("search-bar-side-hover");
+    }
   }
 }
 
