@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
-// @ts-ignore
-import { WaveModal } from "boron-15";
 import { getNewsEndpoint } from "../../constants/endpoints";
 import { newsModalActions } from "../../state/slices/newsModalSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
