@@ -58,9 +58,10 @@ const Row = (props: RowProps) => {
   );
 };
 
-export const ShowWeekendsButton = (props: { isMobile: boolean }) => {
+export const ShowWeekendsSwitch = (props: { isMobile: boolean }) => {
   const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
   const dispatch = useDispatch();
+  const theme = useAppSelector((state) => state.theme.theme);
   const button = (
     <Tooltip title={<Typography fontSize={12}>Show Weekends</Typography>}>
       <div className="save-timetable">
@@ -68,7 +69,16 @@ export const ShowWeekendsButton = (props: { isMobile: boolean }) => {
           size="small"
           checked={showWeekend}
           color="default"
-          sx={{ "& .MuiSwitch-thumb": { color: "lightgray" } }}
+          sx={{
+            "& .MuiSwitch-switchBase": {
+              "& + .MuiSwitch-track": {
+                backgroundColor: theme === "light" ? "" : "#777",
+              },
+            },
+            "& .MuiSwitch-thumb": {
+              backgroundColor: theme === "light" ? "lightgray" : "#777",
+            },
+          }}
           onChange={() => dispatch(preferencesActions.toggleShowWeekend())}
         />
       </div>
@@ -296,7 +306,7 @@ const Calendar = (props: CalendarProps) => {
   );
   const toolbar = isComparingTimetables ? (
     <>
-      <ShowWeekendsButton isMobile={false} />
+      <ShowWeekendsSwitch isMobile={false} />
     </>
   ) : (
     <>
@@ -306,7 +316,7 @@ const Calendar = (props: CalendarProps) => {
       {shareLink}
       {addNewTimetableButton}
       {saveToCalendarButton}
-      <ShowWeekendsButton isMobile={false} />
+      <ShowWeekendsSwitch isMobile={false} />
     </>
   );
 
