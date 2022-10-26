@@ -22,7 +22,7 @@ import CellContainer from "./containers/cell_container";
 import { DAYS } from "../constants/constants";
 import { ShareLink } from "./MasterSlot";
 import { useAppSelector } from "../hooks";
-import { ShowWeekendsButton } from "./Calendar";
+import { ShowWeekendsSwitch } from "./Calendar";
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -230,7 +230,7 @@ const DayCalendar = (props: DayCalendarProps) => {
       {addButton}
       {saveButton}
       {saveToCalendarButton}
-      <ShowWeekendsButton isMobile />
+      <ShowWeekendsSwitch isMobile />
     </>
   );
 
