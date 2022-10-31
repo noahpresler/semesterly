@@ -31,6 +31,7 @@ const mapStateToProps = (state) => {
     mostFriendsKey: state.ui.courseToColourIndex[state.alerts.mostFriendsClassId],
     totalFriendsCount: state.alerts.totalFriendsCount,
     userInfo: state.userInfo.data,
+    slotColorDataLen: state.theme.slotColors[state.theme.theme].length,
     alertFacebookFriends:
       state.alerts.alertFacebookFriends &&
       state.userInfo.data.FacebookSignedUp &&

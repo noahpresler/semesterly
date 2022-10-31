@@ -15,7 +15,6 @@ GNU General Public License for more details.
 import PropTypes from "prop-types";
 import React from "react";
 import { WaveModal } from "boron-15";
-import COLOUR_DATA from "../../constants/colours";
 import * as SemesterlyPropTypes from "../../constants/semesterlyPropTypes";
 
 class PeerModal extends React.Component {
@@ -79,12 +78,12 @@ class PeerModal extends React.Component {
       return (
         <div
           className="pm-side-bar-slot"
-          style={{ backgroundColor: COLOUR_DATA[colourIndex].background }}
+          style={{ backgroundColor: this.props.slotColorData[colourIndex].background }}
           key={course.id}
         >
           <div
             className="slot-bar"
-            style={{ backgroundColor: COLOUR_DATA[colourIndex].border }}
+            style={{ backgroundColor: this.props.slotColorData[colourIndex].border }}
           />
           <div className="master-slot-content">
             <h3>{course.code}</h3>
@@ -155,7 +154,9 @@ class PeerModal extends React.Component {
           <div className="shared-course" key={String(sc.course.id) + p.profile_url}>
             <div
               className="course-color-circle"
-              style={{ backgroundColor: COLOUR_DATA[colourIndex].background }}
+              style={{
+                backgroundColor: this.props.slotColorData[colourIndex].background,
+              }}
             >
               {inSection}
             </div>
@@ -301,6 +302,7 @@ PeerModal.propTypes = {
   changeUserInfo: PropTypes.func.isRequired,
   togglePeerModal: PropTypes.func.isRequired,
   openSignUpModal: PropTypes.func.isRequired,
+  slotColorData: PropTypes.arrayOf().isRequired,
 };
 
 export default PeerModal;

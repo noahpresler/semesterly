@@ -44,8 +44,8 @@ import {
 } from "../actions/timetable_actions";
 import { fetchCourseInfo } from "../actions/modal_actions";
 import { uniqBy } from "lodash";
-import COLOUR_DATA from "../constants/colours";
 import { selectGradient } from "../state/slices/compareTimetableSlice";
+import { selectSlotColorData } from "../state/slices/themeSlice";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -144,6 +144,7 @@ function getConflictStyles(slotsByDay: any) {
 const SlotManager = (props: { days: string[] }) => {
   const hoveredSlot: HoveredSlot = useAppSelector((state) => getHoveredSlots(state));
   // don't show slot if an alternative is being hovered
+  const slotColorData = useAppSelector(selectSlotColorData);
   const timetableSlots = useAppSelector((state) =>
     getActiveDenormTimetable(state).slots.filter(
       (slot) =>
@@ -233,7 +234,7 @@ const SlotManager = (props: { days: string[] }) => {
             );
           } else {
             colorIndex = courseToColourIndex[course.id];
-            colorData = COLOUR_DATA;
+            colorData = slotColorData;
           }
           slotsByDay[offering.day].push(
             slotToDisplayOffering(course, section, offering, colorIndex, colorData)
@@ -251,7 +252,7 @@ const SlotManager = (props: { days: string[] }) => {
               ? courseToColourIndex[course.id]
               : getNextAvailableColour(courseToColourIndex);
           slotsByDay[offering.day].push(
-            slotToDisplayOffering(course, section, offering, colourId, COLOUR_DATA)
+            slotToDisplayOffering(course, section, offering, colourId, slotColorData)
           );
         });
     }

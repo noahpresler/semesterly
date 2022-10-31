@@ -25,6 +25,7 @@ const mapStateToProps = (state) => ({
   // because of a 'HOVER_COURSE' action (i.e. fake courses)
   courses: getActiveTimetableDenormCourses(state),
   courseToColourIndex: state.ui.courseToColourIndex,
+  slotColorData: state.theme.slotColors[state.theme.theme],
   peers: state.friends.peers,
   userInfo: state.userInfo.data,
   isVisible: state.peerModal.isVisible,

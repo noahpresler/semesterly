@@ -3,7 +3,6 @@ import isEmpty from "lodash/isEmpty";
 import Reaction from "../reaction";
 import REACTION_MAP from "../../constants/reactions";
 import MasterSlot from "../MasterSlot";
-import COLOUR_DATA from "../../constants/colours";
 import EvaluationList from "../evaluation_list";
 import CourseModalSection from "../CourseModalSection";
 import SlotHoverTip from "../slot_hover_tip";
@@ -31,6 +30,7 @@ import {
 import { timetablesActions } from "../../state/slices/timetablesSlice";
 import { addOrRemoveCourse, fetchCourseInfo, react, saveSettings } from "../../actions";
 import { signupModalActions } from "../../state/slices/signupModalSlice";
+import { selectSlotColorData } from "../../state/slices/themeSlice";
 
 type CourseModalBodyProps = {
   course: DenormalizedCourse | null;
@@ -49,7 +49,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
   const sectionTypeToSections = getSectionTypeToSections(props.course);
   const popularityPercent = props.course?.popularity_percent * 100;
   const userInfo = useAppSelector((state) => state.userInfo.data);
-
+  const slotColorData = useAppSelector(selectSlotColorData);
   const courseSections = useAppSelector((state) => state.courseSections.objects);
   const isSectionLocked = (courseId: number, section: string) => {
     if (courseSections[courseId] === undefined) {
@@ -221,7 +221,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
   const evalInfo = props.course.evals;
   const relatedCourses = props.course.related_courses;
   const { prerequisites } = props.course;
-  const maxColourIndex = COLOUR_DATA.length - 1;
+  const maxColourIndex = slotColorData.length - 1;
 
   const similarCourses =
     relatedCourses.length === 0 ? null : (
@@ -238,7 +238,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
             inModal
             fetchCourseInfo={() => dispatch(fetchCourseInfo(rc.id))}
             getShareLink={getShareLink}
-            colorData={COLOUR_DATA}
+            colorData={slotColorData}
           />
         ))}
       </div>
