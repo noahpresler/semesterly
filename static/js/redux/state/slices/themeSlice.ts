@@ -1,7 +1,11 @@
+import { RootState } from "./../index";
+import { lightSlotColor, darkSlotColor } from "./../../constants/colors";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { SlotColorData } from "../../constants/commonTypes";
 
 interface ThemeSliceState {
   theme: Theme;
+  slotColors: { [k in Theme]?: SlotColorData[] };
 }
 
 type Theme = "light" | "dark";
@@ -21,6 +25,10 @@ const getInitialTheme = () => {
 
 const initialState: ThemeSliceState = {
   theme: getInitialTheme(),
+  slotColors: {
+    light: lightSlotColor,
+    dark: darkSlotColor,
+  },
   // slot color state goes here
 };
 
@@ -34,6 +42,7 @@ const themeSlice = createSlice({
     },
   },
 });
-
+export const selectSlotColorData = (state: RootState) =>
+  state.theme.slotColors[state.theme.theme];
 export const { setTheme } = themeSlice.actions;
 export default themeSlice.reducer;
