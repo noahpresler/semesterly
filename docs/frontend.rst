@@ -196,7 +196,7 @@ General Components
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``terms_of_service_banner.jsx``| .. image:: components/terms_of_service_banner.png|                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``terms_of_service_modal.jsx`` | .. image:: components/terms_of_service_modal.png |                          |
+|``TermsOfServiceModal.tsx``    | .. image:: components/terms_of_service_modal.png |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 | ``timetable_loader.jsx``      | .. image:: components/timetable_loader.png       |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+

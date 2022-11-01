@@ -24,12 +24,12 @@ import NewTimetableAlertContainer from "./alerts/new_timetable_alert_container";
 import EnableNotificationsAlertContainer from "./alerts/enable_notifications_alert_container";
 import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
 import TopBar from "./TopBar";
-import SignupModalContainer from "./containers/modals/signup_modal_container";
+import SignupModal from "./modals/SignupModal";
 import TutorialModal from "./modals/TutorialModal";
 import PeerModalContainer from "./containers/modals/peer_modal_container";
 import SaveCalendarModal from "./modals/SaveCalendarModal";
 import UserAcquisitionModal from "./modals/user_acquisition_modal";
-import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_container";
+import TermsOfServiceModal from "./modals/TermsOfServiceModal";
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
 import UserSettingsModal from "./modals/UserSettingsModal";
 import CustomEventModal from "./modals/CustomEventModal";
@@ -190,13 +190,13 @@ const Semesterly = () => {
       <TopBar />
       <UserSettingsModal />
       <AdvancedSearchModal />
-      <SignupModalContainer />
+      <SignupModal />
       <TutorialModal />
       <PeerModalContainer />
       <SaveCalendarModal />
       <CustomEventModal />
       <UserAcquisitionModal />
-      <TermsOfServiceModalContainer />
+      <TermsOfServiceModal />
       <TermsOfServiceBannerContainer />
       <AlertBox ref={alertBoxRef} />
       <div className="all-cols">
