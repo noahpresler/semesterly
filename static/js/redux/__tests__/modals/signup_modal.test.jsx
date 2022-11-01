@@ -14,7 +14,7 @@ GNU General Public License for more details.
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { renderWithRedux } from "../../test-utils";
-import SignupModal from "../../ui/containers/modals/signup_modal_container";
+import SignupModal from "../../ui/modals/SignupModal";
 
 describe("Signup Modal", () => {
   it("shows when isVisible is true", () => {
