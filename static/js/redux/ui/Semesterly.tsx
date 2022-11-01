@@ -27,7 +27,7 @@ import TopBar from "./TopBar";
 import SignupModalContainer from "./containers/modals/signup_modal_container";
 import TutModalContainer from "./containers/modals/tut_modal_container";
 import PeerModalContainer from "./containers/modals/peer_modal_container";
-import SaveCalendarModalContainer from "./containers/modals/save_calendar_modal_container";
+import SaveCalendarModal from "./modals/SaveCalendarModal";
 import UserAcquisitionModal from "./modals/user_acquisition_modal";
 import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_container";
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
@@ -193,7 +193,7 @@ const Semesterly = () => {
       <SignupModalContainer />
       <TutModalContainer />
       <PeerModalContainer />
-      <SaveCalendarModalContainer />
+      <SaveCalendarModal />
       <CustomEventModal />
       <UserAcquisitionModal />
       <TermsOfServiceModalContainer />
