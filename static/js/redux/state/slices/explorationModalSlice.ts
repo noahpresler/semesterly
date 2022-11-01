@@ -18,7 +18,7 @@ import {
   receiveAdvancedSearchResults,
 } from "../../actions/initActions";
 
-interface ExplorationModalSliceState {
+interface AdvancedSearchModalSliceState {
   isVisible: boolean;
   advancedSearchResults: number[];
   isFetching: boolean;
@@ -26,7 +26,7 @@ interface ExplorationModalSliceState {
   schoolInfoLoaded: boolean;
 }
 
-const initialState: ExplorationModalSliceState = {
+const initialState: AdvancedSearchModalSliceState = {
   isVisible: false,
   advancedSearchResults: [],
   isFetching: false,
@@ -34,14 +34,14 @@ const initialState: ExplorationModalSliceState = {
   schoolInfoLoaded: false,
 };
 
-const explorationModalSlice = createSlice({
-  name: "explorationModal",
+const advancedSearchModalSlice = createSlice({
+  name: "advancedSearchModal",
   initialState,
   reducers: {
-    showExplorationModal: (state) => {
+    showAdvancedSearchModal: (state) => {
       state.isVisible = true;
     },
-    hideExplorationModal: (state) => {
+    hideAdvancedSearchModal: (state) => {
       state.isVisible = false;
     },
     requestAdvancedSearchResults: (state) => {
@@ -71,9 +71,9 @@ const explorationModalSlice = createSlice({
   },
 });
 
-export const getAdvancedSearchResultIds = (state: ExplorationModalSliceState) =>
+export const getAdvancedSearchResultIds = (state: AdvancedSearchModalSliceState) =>
   state.advancedSearchResults;
 
-export const explorationModalActions = explorationModalSlice.actions;
+export const advancedSearchModalActions = advancedSearchModalSlice.actions;
 
-export default explorationModalSlice.reducer;
+export default advancedSearchModalSlice.reducer;

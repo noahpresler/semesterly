@@ -10,7 +10,7 @@ import classNames from "classnames";
 import Modal from "./Modal";
 import { getSchoolSpecificInfo } from "../../constants/schools";
 import { getCourseShareLinkFromModal } from "../../constants/endpoints";
-import { explorationModalActions } from "../../state/slices";
+import { advancedSearchModalActions } from "../../state/slices";
 import {
   addOrRemoveCourse,
   addOrRemoveOptionalCourse,
@@ -29,19 +29,19 @@ import {
 import TimeSelector from "../time_selector";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-type ExplorationSearchResultProps = {
+type AdvancedSearchResultProps = {
   name: string;
   code: string;
   onClick: Function;
   isSelected: boolean;
 };
 
-const ExplorationSearchResult = ({
+const AdvancedSearchResult = ({
   name,
   code,
   onClick,
   isSelected,
-}: ExplorationSearchResultProps) => (
+}: AdvancedSearchResultProps) => (
   <div
     className="exp-s-result"
     onClick={() => onClick()}
@@ -57,7 +57,7 @@ const AdvancedSearchModal = () => {
 
   // selectors
   const { isVisible, isFetching, active } = useAppSelector(
-    (state) => state.explorationModal
+    (state) => state.advancedSearchModal
   );
   const advancedSearchResults = useAppSelector(getDenormAdvancedSearchResults);
   const courseSections = useAppSelector((state) => state.courseSections.objects);
@@ -108,7 +108,7 @@ const AdvancedSearchModal = () => {
 
   const cleanUp = () => {
     dispatch(timetablesActions.unhoverSection());
-    dispatch(explorationModalActions.hideExplorationModal());
+    dispatch(advancedSearchModalActions.hideAdvancedSearchModal());
   };
 
   const hideAllFilters = () => {
@@ -255,7 +255,7 @@ const AdvancedSearchModal = () => {
   };
 
   const searchResults = advancedSearchResults.map((c: any, i) => (
-    <ExplorationSearchResult
+    <AdvancedSearchResult
       key={c.id}
       code={c.code}
       name={c.name}
@@ -308,7 +308,7 @@ const AdvancedSearchModal = () => {
         </div>
         <CourseModalBody
           course={selectedCourse}
-          hideModal={() => explorationModalActions.hideExplorationModal()}
+          hideModal={() => advancedSearchModalActions.hideAdvancedSearchModal()}
           isFetching={isFetching}
         />
       </div>
@@ -395,8 +395,8 @@ const AdvancedSearchModal = () => {
   return (
     <Modal
       visible={isVisible}
-      onClose={() => dispatch(explorationModalActions.hideExplorationModal())}
-      className={classNames("exploration-modal max-modal", {
+      onClose={() => dispatch(advancedSearchModalActions.hideAdvancedSearchModal())}
+      className={classNames("advanced-search-modal max-modal", {
         trans: hasHoveredResult,
       })}
       animation={"slideLeft"}
@@ -408,11 +408,11 @@ const AdvancedSearchModal = () => {
       }}
     >
       <div
-        className={classNames("exploration-content", {
+        className={classNames("advanced-search-content", {
           loading: isFetching,
         })}
       >
-        <div className="exploration-header cf">
+        <div className="advanced-search-header cf">
           <div className="col-4-16 exp-title">
             <i className="fa fa-compass" />
             <h1>Advanced Search</h1>
@@ -427,14 +427,16 @@ const AdvancedSearchModal = () => {
             />
           </div>
           <div
-            className="exploration-close"
-            onMouseDown={() => dispatch(explorationModalActions.hideExplorationModal())}
+            className="advanced-search-close"
+            onMouseDown={() =>
+              dispatch(advancedSearchModalActions.hideAdvancedSearchModal())
+            }
           >
             <i className="fa fa-times" />
           </div>
         </div>
-        <div className="exploration-body">
-          <div className="col-4-16 exp-filters">
+        <div className="advanced-search-body">
+          <div className="col-4-16 advanced-search-filters">
             {selectedFilterSections}
             <SelectedFilterSection
               key={"times"}
@@ -449,7 +451,7 @@ const AdvancedSearchModal = () => {
             </SelectedFilterSection>
           </div>
           <div
-            className="col-5-16 exp-search-results"
+            className="col-5-16 advanced-search-results"
             id="scrollDiv"
             ref={scrollContainer}
           >
@@ -487,7 +489,7 @@ const AdvancedSearchModal = () => {
             onClickOut={hideAllFilters}
             schoolSpecificInfo={schoolSpecificInfo}
           />
-          <div className="col-7-16 exp-modal">
+          <div className="col-7-16 adv-modal">
             {(!newSearch || !isFetching) && courseModal}
           </div>
         </div>
