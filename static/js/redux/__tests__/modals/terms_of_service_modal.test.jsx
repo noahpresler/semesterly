@@ -21,7 +21,7 @@ import {
   userInfoFixture,
 } from "../../__fixtures__/terms_of_service_modal.fixture";
 import { handleAgreement } from "../../actions/user_actions";
-import TermsOfServiceModalContainer from "../../ui/containers/terms_of_service_modal_container";
+import TermsOfServiceModal from "../../ui/modals/TermsOfServiceModal";
 import { triggerTermsOfServiceModal } from "../../state/slices/termsOfServiceModalSlice";
 
 const middlewares = [thunk];
@@ -34,7 +34,7 @@ describe("TOS Modal", () => {
       userInfo: userInfoFixture,
     };
 
-    const { container } = renderWithRedux(<TermsOfServiceModalContainer />, {
+    const { container } = renderWithRedux(<TermsOfServiceModal />, {
       preloadedState: initialState,
     });
     expect(container).toHaveTextContent(
@@ -49,7 +49,7 @@ describe("TOS Modal", () => {
       termsOfServiceModal: tosModalFixture,
       userInfo: userInfoFixture,
     };
-    const { container } = renderWithRedux(<TermsOfServiceModalContainer />, {
+    const { container } = renderWithRedux(<TermsOfServiceModal />, {
       preloadedState: initialState,
     });
     expect(container).toHaveTextContent("Welcome to Semester.ly");
@@ -60,7 +60,7 @@ describe("TOS Modal", () => {
       termsOfServiceModal: { ...tosModalFixture, isVisible: false },
       userInfo: userInfoFixture,
     };
-    const { container } = renderWithRedux(<TermsOfServiceModalContainer />, {
+    const { container } = renderWithRedux(<TermsOfServiceModal />, {
       preloadedState: initialState,
     });
     expect(container).toBeEmptyDOMElement();
