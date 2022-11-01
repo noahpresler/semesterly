@@ -24,7 +24,7 @@ import NewTimetableAlertContainer from "./alerts/new_timetable_alert_container";
 import EnableNotificationsAlertContainer from "./alerts/enable_notifications_alert_container";
 import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
 import TopBar from "./TopBar";
-import SignupModalContainer from "./containers/modals/signup_modal_container";
+import SignupModal from "./modals/SignupModal";
 import TutModalContainer from "./containers/modals/tut_modal_container";
 import PeerModalContainer from "./containers/modals/peer_modal_container";
 import SaveCalendarModalContainer from "./containers/modals/save_calendar_modal_container";
@@ -190,7 +190,7 @@ const Semesterly = () => {
       <TopBar />
       <UserSettingsModal />
       <AdvancedSearchModal />
-      <SignupModalContainer />
+      <SignupModal />
       <TutModalContainer />
       <PeerModalContainer />
       <SaveCalendarModalContainer />

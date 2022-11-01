@@ -12,49 +12,39 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React from "react";
 import twemoji from "twemoji";
-import { WaveModal } from "boron-15";
+// @ts-ignore
 import renderHTML from "react-render-html";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { signupModalActions } from "../../state/slices/signupModalSlice";
+import Modal from "./Modal";
 
-const SignupModal = (props) => {
-  let modal = null;
-
-  useEffect(() => {
-    if (modal && props.isVisible) {
-      modal.show();
-    }
-  }, [props.isVisible]);
+const SignupModal = () => {
+  const isVisible = useAppSelector((state) => state.signupModal.isVisible);
+  const dispatch = useAppDispatch();
 
   const hide = () => {
     history.replaceState({}, "Semester.ly", "/");
-    props.toggleSignupModal();
+    dispatch(signupModalActions.hideSignupModal());
   };
 
   const modalHeader = (
-    <div className="modal-content">
-      <div className="modal-header">
-        <div
-          className="pro-pic"
-          style={{ backgroundImage: "url(/static/img/blank.jpg)" }}
-        />
-        <h1>That feature requires an account...</h1>
-      </div>
+    <div className="modal-header">
+      <div
+        className="pro-pic"
+        style={{ backgroundImage: "url(/static/img/blank.jpg)" }}
+      />
+      <h1>That feature requires an account...</h1>
     </div>
   );
-  const modalStyle = {
-    width: "100%",
-  };
 
   return (
-    <WaveModal
-      ref={(c) => {
-        modal = c;
-      }}
+    <Modal
+      visible={isVisible}
       className="signup-modal max-modal"
-      modalStyle={modalStyle}
-      onHide={hide}
+      customStyles={{ height: "588px", width: "500px" }}
+      onClose={hide}
     >
       {modalHeader}
       <div className="features">
@@ -108,13 +98,8 @@ const SignupModal = (props) => {
           </a>
         </div>
       </div>
-    </WaveModal>
+    </Modal>
   );
-};
-
-SignupModal.propTypes = {
-  isVisible: PropTypes.bool.isRequired,
-  toggleSignupModal: PropTypes.func.isRequired,
 };
 
 export default SignupModal;
