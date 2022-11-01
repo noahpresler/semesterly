@@ -29,7 +29,7 @@ import TutModalContainer from "./containers/modals/tut_modal_container";
 import PeerModalContainer from "./containers/modals/peer_modal_container";
 import SaveCalendarModal from "./modals/SaveCalendarModal";
 import UserAcquisitionModal from "./modals/user_acquisition_modal";
-import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_container";
+import TermsOfServiceModal from "./modals/TermsOfServiceModal";
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
 import UserSettingsModal from "./modals/UserSettingsModal";
 import CustomEventModal from "./modals/CustomEventModal";
@@ -196,7 +196,7 @@ const Semesterly = () => {
       <SaveCalendarModal />
       <CustomEventModal />
       <UserAcquisitionModal />
-      <TermsOfServiceModalContainer />
+      <TermsOfServiceModal />
       <TermsOfServiceBannerContainer />
       <AlertBox ref={alertBoxRef} />
       <div className="all-cols">
