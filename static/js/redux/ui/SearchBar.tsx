@@ -42,7 +42,7 @@ const getAbbreviatedSemesterName = (semester: Semester) =>
 
 const SearchBar = () => {
   const advancedSearchModalIsVisible = useAppSelector(
-    (state) => state.advancedSearchModal.isVisible
+    (state) => state.advancedSearch.isVisible
   );
   const semester = useAppSelector((state) => getCurrentSemester(state));
   const allSemesters = useAppSelector((state) => state.semester.all);

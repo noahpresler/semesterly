@@ -29,7 +29,9 @@ import userInfo, { isUserInfoIncomplete } from "./slices/userInfoSlice";
 import savingTimetable from "./slices/savingTimetableSlice";
 import classmates from "./slices/classmatesSlice";
 import optionalCourses from "./slices/optionalCoursesSlice";
-import advancedSearchModal from "./slices/advancedSearchModalSlice";
+import advancedSearch, {
+  getAdvancedSearchResultIds,
+} from "./slices/advancedSearchSlice";
 import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
 import peerModal from "./slices/peerModalSlice";
@@ -54,7 +56,7 @@ export const reducers = {
   courseSections,
   customEvents,
   entities,
-  advancedSearchModal,
+  advancedSearch,
   friends,
   newsModal,
   notificationToken,
@@ -140,9 +142,9 @@ export const getSearchResults = (state: RootState) =>
   );
 
 export const getDenormAdvancedSearchResults = (state: RootState) =>
-  advancedSearchModal
-    .getAdvancedSearchResultIds(state.advancedSearchModal)
-    .map((id) => getDenormCourseById(state, id));
+  getAdvancedSearchResultIds(state.advancedSearch).map((id: number) =>
+    getDenormCourseById(state, id)
+  );
 
 // modal selectors
 export const getIsUserInfoIncomplete = (state: RootState) =>

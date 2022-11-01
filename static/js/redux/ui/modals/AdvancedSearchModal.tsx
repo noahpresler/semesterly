@@ -57,7 +57,7 @@ const AdvancedSearchModal = () => {
 
   // selectors
   const { isVisible, isFetching, active } = useAppSelector(
-    (state) => state.advancedSearchModal
+    (state) => state.advancedSearch
   );
   const advancedSearchResults = useAppSelector(getDenormAdvancedSearchResults);
   const courseSections = useAppSelector((state) => state.courseSections.objects);
@@ -254,7 +254,7 @@ const AdvancedSearchModal = () => {
     }));
   };
 
-  const searchResults = advancedSearchResults.map((c: any, i) => (
+  const searchResults = advancedSearchResults.map((c: any, i: number) => (
     <AdvancedSearchResult
       key={c.id}
       code={c.code}
