@@ -25,7 +25,7 @@ import EnableNotificationsAlertContainer from "./alerts/enable_notifications_ale
 import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
 import TopBar from "./TopBar";
 import SignupModalContainer from "./containers/modals/signup_modal_container";
-import TutModalContainer from "./containers/modals/tut_modal_container";
+import TutorialModal from "./modals/TutorialModal";
 import PeerModalContainer from "./containers/modals/peer_modal_container";
 import SaveCalendarModal from "./modals/SaveCalendarModal";
 import UserAcquisitionModal from "./modals/user_acquisition_modal";
@@ -191,7 +191,7 @@ const Semesterly = () => {
       <UserSettingsModal />
       <AdvancedSearchModal />
       <SignupModalContainer />
-      <TutModalContainer />
+      <TutorialModal />
       <PeerModalContainer />
       <SaveCalendarModal />
       <CustomEventModal />
