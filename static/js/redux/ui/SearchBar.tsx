@@ -97,7 +97,11 @@ const SearchBar = () => {
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if ($("input:focus").length === 0 && !advancedSearchModalIsVisible && !e.ctrlKey) {
+      if (
+        $("input:focus").length === 0 &&
+        !advancedSearchModalIsVisible &&
+        !e.ctrlKey
+      ) {
         // autofocus if no other inputs are focused
         if (
           (e.keyCode >= 48 && e.keyCode <= 57) ||
