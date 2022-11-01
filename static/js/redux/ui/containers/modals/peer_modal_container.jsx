@@ -15,7 +15,7 @@ GNU General Public License for more details.
 import { connect } from "react-redux";
 import { getActiveTimetableDenormCourses } from "../../../state";
 import { fetchFriends, saveSettings } from "../../../actions/user_actions";
-import PeerModal from "../../modals/peer_modal";
+import PeerModal from "../../modals/PeerModal";
 import { userInfoActions } from "../../../state/slices";
 import { signupModalActions } from "../../../state/slices/signupModalSlice";
 import { togglePeerModal } from "../../../state/slices/peerModalSlice";
