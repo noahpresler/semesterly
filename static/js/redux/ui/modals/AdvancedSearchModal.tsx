@@ -10,7 +10,7 @@ import classNames from "classnames";
 import Modal from "./Modal";
 import { getSchoolSpecificInfo } from "../../constants/schools";
 import { getCourseShareLinkFromModal } from "../../constants/endpoints";
-import { advancedSearchModalActions } from "../../state/slices";
+import { advancedSearchActions } from "../../state/slices";
 import {
   addOrRemoveCourse,
   addOrRemoveOptionalCourse,
@@ -108,7 +108,7 @@ const AdvancedSearchModal = () => {
 
   const cleanUp = () => {
     dispatch(timetablesActions.unhoverSection());
-    dispatch(advancedSearchModalActions.hideAdvancedSearchModal());
+    dispatch(advancedSearchActions.hideAdvancedSearchModal());
   };
 
   const hideAllFilters = () => {
@@ -308,7 +308,7 @@ const AdvancedSearchModal = () => {
         </div>
         <CourseModalBody
           course={selectedCourse}
-          hideModal={() => advancedSearchModalActions.hideAdvancedSearchModal()}
+          hideModal={() => advancedSearchActions.hideAdvancedSearchModal()}
           isFetching={isFetching}
         />
       </div>
@@ -395,7 +395,7 @@ const AdvancedSearchModal = () => {
   return (
     <Modal
       visible={isVisible}
-      onClose={() => dispatch(advancedSearchModalActions.hideAdvancedSearchModal())}
+      onClose={() => dispatch(advancedSearchActions.hideAdvancedSearchModal())}
       className={classNames("advanced-search-modal max-modal", {
         trans: hasHoveredResult,
       })}
@@ -429,7 +429,7 @@ const AdvancedSearchModal = () => {
           <div
             className="advanced-search-close"
             onMouseDown={() =>
-              dispatch(advancedSearchModalActions.hideAdvancedSearchModal())
+              dispatch(advancedSearchActions.hideAdvancedSearchModal())
             }
           >
             <i className="fa fa-times" />

@@ -74,6 +74,6 @@ const advancedSearchSlice = createSlice({
 export const getAdvancedSearchResultIds = (state: advancedSearchSliceState) =>
   state.advancedSearchResults;
 
-export const advancedSearchModalActions = advancedSearchSlice.actions;
+export const advancedSearchActions = advancedSearchSlice.actions;
 
 export default advancedSearchSlice.reducer;

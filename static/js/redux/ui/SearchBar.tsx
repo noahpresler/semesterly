@@ -23,7 +23,7 @@ import SearchResult from "./SearchResult";
 import { DenormalizedCourse, Semester } from "../constants/commonTypes";
 import { addOrRemoveCourse, fetchSearchResults, maybeSetSemester } from "../actions";
 import { hoverSearchResult } from "../state/slices/uiSlice";
-import { advancedSearchModalActions } from "../state/slices";
+import { advancedSearchActions } from "../state/slices";
 import { getCurrentSemester, getHoveredSlots, getSearchResults } from "../state";
 
 const getSemesterName = (semester: Semester) => `${semester.name} ${semester.year}`;
@@ -263,9 +263,7 @@ const SearchBar = () => {
         </div>
         <div
           className="show-advanced-search"
-          onMouseDown={() =>
-            dispatch(advancedSearchModalActions.showAdvancedSearchModal())
-          }
+          onMouseDown={() => dispatch(advancedSearchActions.showAdvancedSearchModal())}
         >
           <i className="fa fa-compass" />
           <span>Advanced Search</span>
