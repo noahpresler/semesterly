@@ -12,27 +12,28 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import { WaveModal } from "boron-15";
-import * as SemesterlyPropTypes from "../../constants/semesterlyPropTypes";
+import React from "react";
+import { acceptTOS } from "../../actions";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { getIsUserInfoIncomplete } from "../../state";
+import Modal from "./Modal";
 
-/* eslint-disable react/no-unused-prop-types, no-shadow */
+const TermsOfServiceModal = () => {
+  const isVisible = useAppSelector(
+    (state) =>
+      state.termsOfServiceModal.isVisible &&
+      !(!state.userInfo.overrideShow && getIsUserInfoIncomplete(state)) &&
+      !state.userInfo.isVisible
+  );
+  const userInfo = useAppSelector((state) => state.userInfo.data);
+  const description = useAppSelector(
+    (state) => state.termsOfServiceModal.latestAgreement.description
+  );
+  const url = useAppSelector((state) => state.termsOfServiceModal.latestAgreement.url);
+  const dispatch = useAppDispatch();
 
-const TermsOfServiceModal = (props) => {
-  let modal = null;
-
-  useEffect(() => {
-    if (modal && props.isVisible) {
-      modal.show();
-    } else if (modal && !props.isVisible) {
-      modal.hide();
-    }
-  }, [props.isVisible]);
-
-  const getBody = (props) => {
-    const { description, url } = props;
-    const isNewUser = !props.userInfo.timeAcceptedTos;
+  const getBody = () => {
+    const isNewUser = !userInfo.timeAcceptedTos;
     const link = (
       <a href={url} target="_blank" rel="noopener noreferrer">
         here
@@ -77,22 +78,17 @@ const TermsOfServiceModal = (props) => {
     }
   };
 
-  const modalStyle = {
-    width: "100%",
-  };
-
   return (
-    <WaveModal
-      ref={(c) => {
-        modal = c;
-      }}
+    <Modal
+      visible={isVisible}
       className="terms-of-service-modal max-modal"
-      modalStyle={modalStyle}
-      closeOnClick={false}
+      customStyles={{ width: "450px", height: "350px" }}
+      showCloseButton={false}
+      onClose={() => {}}
     >
       <div className="tos-modal-container">
         <h1>Terms of Service and Privacy Policy</h1>
-        {getBody(props)}
+        {getBody()}
         <div>
           <a
             href="/termsofservice"
@@ -116,7 +112,7 @@ const TermsOfServiceModal = (props) => {
         <button
           className="accept-tos-btn"
           onClick={() => {
-            props.acceptTOS();
+            dispatch(acceptTOS());
           }}
         >
           <i className="fa fa-check" />
@@ -126,17 +122,8 @@ const TermsOfServiceModal = (props) => {
           You must accept the new Terms of Service to continue using Semester.ly.
         </p>
       </div>
-    </WaveModal>
+    </Modal>
   );
-};
-
-TermsOfServiceModal.propTypes = {
-  userInfo: SemesterlyPropTypes.userInfo.isRequired,
-  isVisible: PropTypes.bool.isRequired,
-  acceptTOS: PropTypes.func.isRequired,
-  description: PropTypes.string.isRequired,
-  // local path to announcement page
-  url: PropTypes.string.isRequired,
 };
 
 export default TermsOfServiceModal;
