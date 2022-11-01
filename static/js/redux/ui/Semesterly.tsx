@@ -28,7 +28,7 @@ import SignupModal from "./modals/SignupModal";
 import TutModalContainer from "./containers/modals/tut_modal_container";
 import PeerModalContainer from "./containers/modals/peer_modal_container";
 import SaveCalendarModal from "./modals/SaveCalendarModal";
-import UserAcquisitionModal from "./modals/user_acquisition_modal";
+import UserAcquisitionModal from "./modals/UserAcquisitionModal";
 import TermsOfServiceModal from "./modals/TermsOfServiceModal";
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
 import UserSettingsModal from "./modals/UserSettingsModal";
