@@ -39,9 +39,9 @@
   }
 
   > .done {
-    color: #42A770;
+    color: #42a770;
     transform: scale(1.1);
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
   }
 
   > .loader {
@@ -134,7 +134,7 @@
   width: 100%;
 }
 
-@media(max-width: 776px) {
+@media (max-width: 776px) {
   .abnb-modal {
     max-width: 1200px;
   }
