@@ -177,7 +177,7 @@ exports[`CourseModalBody correctly renders 1`] = `
                   alt="🔥"
                   class="emoji"
                   draggable="false"
-                  src="https://twemoji.maxcdn.com/2/72x72/1f525.png"
+                  src="https://twemoji.maxcdn.com/v/14.0.2/72x72/1f525.png"
                 />
               </div>
               <div
@@ -223,7 +223,7 @@ exports[`CourseModalBody correctly renders 1`] = `
                   alt="😍"
                   class="emoji"
                   draggable="false"
-                  src="https://twemoji.maxcdn.com/2/72x72/1f60d.png"
+                  src="https://twemoji.maxcdn.com/v/14.0.2/72x72/1f60d.png"
                 />
               </div>
               <div
@@ -269,7 +269,7 @@ exports[`CourseModalBody correctly renders 1`] = `
                   alt="💩"
                   class="emoji"
                   draggable="false"
-                  src="https://twemoji.maxcdn.com/2/72x72/1f4a9.png"
+                  src="https://twemoji.maxcdn.com/v/14.0.2/72x72/1f4a9.png"
                 />
               </div>
               <div
@@ -315,7 +315,7 @@ exports[`CourseModalBody correctly renders 1`] = `
                   alt="😐"
                   class="emoji"
                   draggable="false"
-                  src="https://twemoji.maxcdn.com/2/72x72/1f610.png"
+                  src="https://twemoji.maxcdn.com/v/14.0.2/72x72/1f610.png"
                 />
               </div>
               <div
@@ -361,7 +361,7 @@ exports[`CourseModalBody correctly renders 1`] = `
                   alt="😴"
                   class="emoji"
                   draggable="false"
-                  src="https://twemoji.maxcdn.com/2/72x72/1f634.png"
+                  src="https://twemoji.maxcdn.com/v/14.0.2/72x72/1f634.png"
                 />
               </div>
               <div
@@ -407,7 +407,7 @@ exports[`CourseModalBody correctly renders 1`] = `
                   alt="😩"
                   class="emoji"
                   draggable="false"
-                  src="https://twemoji.maxcdn.com/2/72x72/1f629.png"
+                  src="https://twemoji.maxcdn.com/v/14.0.2/72x72/1f629.png"
                 />
               </div>
               <div
@@ -453,7 +453,7 @@ exports[`CourseModalBody correctly renders 1`] = `
                   alt="💯"
                   class="emoji"
                   draggable="false"
-                  src="https://twemoji.maxcdn.com/2/72x72/1f4af.png"
+                  src="https://twemoji.maxcdn.com/v/14.0.2/72x72/1f4af.png"
                 />
               </div>
               <div
@@ -499,7 +499,7 @@ exports[`CourseModalBody correctly renders 1`] = `
                   alt="🤓"
                   class="emoji"
                   draggable="false"
-                  src="https://twemoji.maxcdn.com/2/72x72/1f913.png"
+                  src="https://twemoji.maxcdn.com/v/14.0.2/72x72/1f913.png"
                 />
               </div>
               <div
