@@ -656,10 +656,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def open_and_query_adv_search(self, query, n_results=None):
         """Open's the advanced search modal and types in the provided query,
         asserting that n_results are then returned"""
-        self.find((By.CLASS_NAME, "show-exploration"), clickable=True).click()
-        self.find((By.CLASS_NAME, "exploration-modal"), clickable=True)
+        self.find((By.CLASS_NAME, "show-advanced-search"), clickable=True).click()
+        self.find((By.CLASS_NAME, "advanced-search-modal"), clickable=True)
         search = self.find(
-            (By.XPATH, '//div[contains(@class,"exploration-header")]//input')
+            (By.XPATH, '//div[contains(@class,"advanced-search-header")]//input')
         )
         search.clear()
         search.send_keys(query)
@@ -742,7 +742,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         code = self.find((By.TAG_NAME, "h5"), root=res[index]).text
         course = Course.objects.get(code=code)
         ActionChains(self.driver).move_to_element(res[index]).click().perform()
-        modal = self.find((By.CLASS_NAME, "exp-modal"))
+        modal = self.find((By.CLASS_NAME, "adv-modal"))
         self.validate_course_modal_body(course, modal, semester)
 
     def save_user_settings(self):
