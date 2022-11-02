@@ -23,7 +23,7 @@ import SearchResult from "./SearchResult";
 import { DenormalizedCourse, Semester } from "../constants/commonTypes";
 import { addOrRemoveCourse, fetchSearchResults, maybeSetSemester } from "../actions";
 import { hoverSearchResult } from "../state/slices/uiSlice";
-import { explorationModalActions } from "../state/slices";
+import { advancedSearchActions } from "../state/slices";
 import { getCurrentSemester, getHoveredSlots, getSearchResults } from "../state";
 
 const getSemesterName = (semester: Semester) => `${semester.name} ${semester.year}`;
@@ -41,8 +41,8 @@ const getAbbreviatedSemesterName = (semester: Semester) =>
   `${abbreviateSemesterName(semester.name)}${abbreviateYear(semester.year)}`;
 
 const SearchBar = () => {
-  const explorationModalIsVisible = useAppSelector(
-    (state) => state.explorationModal.isVisible
+  const advancedSearchModalIsVisible = useAppSelector(
+    (state) => state.advancedSearch.isVisible
   );
   const semester = useAppSelector((state) => getCurrentSemester(state));
   const allSemesters = useAppSelector((state) => state.semester.all);
@@ -97,7 +97,11 @@ const SearchBar = () => {
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if ($("input:focus").length === 0 && !explorationModalIsVisible && !e.ctrlKey) {
+      if (
+        $("input:focus").length === 0 &&
+        !advancedSearchModalIsVisible &&
+        !e.ctrlKey
+      ) {
         // autofocus if no other inputs are focused
         if (
           (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -127,7 +131,7 @@ const SearchBar = () => {
         }
       }
     },
-    [explorationModalIsVisible, searchResults, hoveredPosition]
+    [advancedSearchModalIsVisible, searchResults, hoveredPosition]
   );
 
   useEffect(() => {
@@ -258,8 +262,8 @@ const SearchBar = () => {
           />
         </div>
         <div
-          className="show-exploration"
-          onMouseDown={() => dispatch(explorationModalActions.showExplorationModal())}
+          className="show-advanced-search"
+          onMouseDown={() => dispatch(advancedSearchActions.showAdvancedSearchModal())}
         >
           <i className="fa fa-compass" />
           <span>Advanced Search</span>

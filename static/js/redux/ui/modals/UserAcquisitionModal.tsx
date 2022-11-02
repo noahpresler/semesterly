@@ -12,45 +12,33 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import { WaveModal } from "boron-15";
-import React, { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { useActions } from "../../hooks";
+import React from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { userAcquisitionModalActions } from "../../state/slices";
+import Modal from "./Modal";
 
 const UserAcquisitionModal = () => {
-  const LoginToken = useSelector((state) => state.userInfo.data.LoginToken);
-  const LoginHash = useSelector((state) => state.userInfo.data.LoginHash);
-  const isVisible = useSelector((state) => state.userAcquisitionModal.isVisible);
-
-  const { toggleAcquisitionModal } = useActions();
-
-  const modal = useRef();
-
-  useEffect(() => {
-    if (modal && isVisible) {
-      modal.current.show();
-    }
-  }, [isVisible]);
+  const LoginToken = useAppSelector((state) => state.userInfo.data.LoginToken);
+  const LoginHash = useAppSelector((state) => state.userInfo.data.LoginHash);
+  const isVisible = useAppSelector((state) => state.userAcquisitionModal.isVisible);
+  const dispatch = useAppDispatch();
 
   const modalHeader = (
-    <div className="modal-content">
-      <div className="modal-header">
-        <h1>Login/Signup</h1>
-      </div>
+    <div className="modal-header">
+      <h1>Login/Signup</h1>
     </div>
   );
 
-  const modalStyle = {
-    width: "100%",
-  };
-
   return (
-    <WaveModal
-      ref={modal}
+    <Modal
+      visible={isVisible}
       className="user-acquisition-modal abnb-modal max-modal"
-      modalStyle={modalStyle}
-      onHide={() => {
-        toggleAcquisitionModal();
+      customStyles={{
+        height: "520px",
+        width: "450px",
+      }}
+      onClose={() => {
+        dispatch(userAcquisitionModalActions.toggleAcquisitionModal());
         history.replaceState({}, "Semester.ly", "/");
       }}
     >
@@ -120,19 +108,8 @@ const UserAcquisitionModal = () => {
           </span>
           <span>Continue with Google</span>
         </button>
-
-        {/* <button
-            className="btn abnb-btn secondary eight-px-top" onClick={() => {
-              // props.createiCalfromTimetable();
-            }} disabled
-          >
-            <span className="img-icon">
-              <i className="fa fa-envelope-o" />
-            </span>
-            <span>Email Coming Soon</span>
-          </button> */}
       </div>
-    </WaveModal>
+    </Modal>
   );
 };
 

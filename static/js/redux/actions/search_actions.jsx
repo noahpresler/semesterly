@@ -19,7 +19,7 @@ import { getUserSavedTimetables, saveTimetable } from "./user_actions";
 import { nullifyTimetable } from "./timetable_actions";
 import { fetchCourseClassmates } from "./modal_actions";
 import { getSemester } from "./school_actions";
-import { alertsActions, explorationModalActions } from "../state/slices";
+import { alertsActions, advancedSearchActions } from "../state/slices";
 import { semesterActions } from "../state/slices/semesterSlice";
 import {
   receiveAdvancedSearchResults,
@@ -98,7 +98,7 @@ export const fetchAdvancedSearchResults =
     }
 
     // indicate that we are now requesting courses
-    dispatch(explorationModalActions.requestAdvancedSearchResults());
+    dispatch(advancedSearchActions.requestAdvancedSearchResults());
     // send a request (via fetch) to the appropriate endpoint to get courses
     const state = getState();
     fetch(getCourseSearchEndpoint(query, getSemester(getState()), page), {
@@ -121,6 +121,6 @@ export const fetchAdvancedSearchResults =
   };
 
 export const setAdvancedSearchResultIndex = (idx, courseId) => (dispatch) => {
-  dispatch(explorationModalActions.setActiveAdvancedSearchResult(idx));
+  dispatch(advancedSearchActions.setActiveAdvancedSearchResult(idx));
   dispatch(fetchCourseClassmates(courseId));
 };

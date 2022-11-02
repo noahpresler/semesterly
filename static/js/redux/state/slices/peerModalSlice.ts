@@ -26,7 +26,6 @@ const peerModalSlice = createSlice({
   },
 });
 
-export const { togglePeerModal, peerModalLoading, peerModalLoaded } =
-  peerModalSlice.actions;
+export const peerModalActions = peerModalSlice.actions;
 
 export default peerModalSlice.reducer;

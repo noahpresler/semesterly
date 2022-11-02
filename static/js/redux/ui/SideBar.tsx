@@ -37,11 +37,11 @@ import {
   fetchCourseInfo,
   loadTimetable,
 } from "../actions";
-import { togglePeerModal } from "../state/slices/peerModalSlice";
 import { Timetable } from "../constants/commonTypes";
 import { startComparingTimetables } from "../state/slices/compareTimetableSlice";
 import AvgCourseRating from "./AvgCourseRating";
 import { selectSlotColorData } from "../state/slices/themeSlice";
+import { peerModalActions } from "../state/slices/peerModalSlice";
 
 const SideBar = () => {
   const dispatch = useAppDispatch();
@@ -262,7 +262,7 @@ const SideBar = () => {
       <div className="col-2-3">
         <AvgCourseRating avgRating={avgRating} />
       </div>
-      <a onClick={() => dispatch(togglePeerModal())}>
+      <a onClick={() => dispatch(peerModalActions.togglePeerModal())}>
         <h4 className="sb-header">
           Current Courses
           <div className="sb-header-link">
