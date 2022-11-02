@@ -20,6 +20,10 @@
 
 /* -- dialog -- */
 .rodal-dialog {
+  @include theme() {
+    background: t("modal-background");
+    color-scheme: t("color-scheme-type");
+  }
   position: absolute;
   top: 0;
   left: 0;
@@ -28,7 +32,6 @@
   margin: auto;
   z-index: 101;
   // padding: 15px;
-  background: #fff;
   border-radius: 3px;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
   overflow: auto;
