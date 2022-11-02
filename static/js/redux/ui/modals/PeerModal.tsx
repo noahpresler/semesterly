@@ -15,11 +15,11 @@ GNU General Public License for more details.
 import React, { useEffect } from "react";
 import { getActiveTimetableDenormCourses } from "../../state";
 import Modal from "./Modal";
-import COLOUR_DATA from "../../constants/colours";
 import { useActions, useAppDispatch, useAppSelector } from "../../hooks";
 import { signupModalActions } from "../../state/slices/signupModalSlice";
 import { userInfoActions } from "../../state/slices";
 import { peerModalActions } from "../../state/slices/peerModalSlice";
+import { selectSlotColorData } from "../../state/slices/themeSlice";
 
 const modalStyle = {
   height: "85%",
@@ -95,6 +95,7 @@ const PeerModal = () => {
   const peers = useAppSelector((state) => state.friends.peers);
   const isLoading = useAppSelector((state) => state.peerModal.isLoading);
   const isVisible = useAppSelector((state) => state.peerModal.isVisible);
+  const slotColorData = useAppSelector(selectSlotColorData);
 
   useEffect(() => {
     if (isVisible && userInfo.social_all) {
@@ -130,12 +131,12 @@ const PeerModal = () => {
     return (
       <div
         className="pm-side-bar-slot"
-        style={{ backgroundColor: COLOUR_DATA[colourIndex].background }}
+        style={{ backgroundColor: slotColorData[colourIndex].background }}
         key={course.id}
       >
         <div
           className="slot-bar"
-          style={{ backgroundColor: COLOUR_DATA[colourIndex].border }}
+          style={{ backgroundColor: slotColorData[colourIndex].border }}
         />
         <div className="master-slot-content">
           <h3>{course.code}</h3>
@@ -194,7 +195,7 @@ const PeerModal = () => {
         <div className="shared-course" key={String(sc.course.id) + p.profile_url}>
           <div
             className="course-color-circle"
-            style={{ backgroundColor: COLOUR_DATA[colourIndex].background }}
+            style={{ backgroundColor: slotColorData[colourIndex].background }}
           >
             {inSection}
           </div>
