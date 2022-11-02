@@ -1,5 +1,5 @@
-// Exploration Modal Styles
-.exploration-modal {
+// Advanced Search Modal Styles
+.advanced-search-modal {
   > div {
     height: 100%;
     outline: none;
@@ -27,7 +27,7 @@
   }
 }
 
-.exploration-content {
+.advanced-search-content {
   background: $gfff;
   height: 100%;
   position: relative;
@@ -39,34 +39,34 @@
 }
 
 @media (max-width: 766px) {
-  .exploration-modal,
-  .exploration-modal + div {
+  .advanced-search-modal,
+  .advanced-search-modal + div {
     display: none;
   }
 }
 
-.exploration-modal.trans,
-.trans .exploration-content,
-.trans .exploration-header,
+.advanced-search-modal.trans,
+.trans .advanced-search-content,
+.trans .advanced-search-header,
 .trans .exp-title h1,
-.trans .exploration-header input,
-.trans .exploration-close,
+.trans .advanced-search-header input,
+.trans .advanced-search-close,
 .trans h3.exp-header,
 .trans h3.exp-header:after,
 .trans h3.exp-header i,
-.trans .exploration-body p,
-.trans .exp-modal .modal-header,
-.trans .exp-modal .modal-header h1,
-.trans .exp-modal .modal-header h2,
-.trans .exp-modal .modal-header div,
-.trans .exp-modal .modal-content,
+.trans .advanced-search-body p,
+.trans .adv-modal .modal-header,
+.trans .adv-modal .modal-header h1,
+.trans .adv-modal .modal-header h2,
+.trans .adv-modal .modal-header div,
+.trans .adv-modal .modal-content,
 .trans .modal-body .credits h4,
-.trans .exp-modal .modal-share,
-.trans .exp-modal .modal-share i,
-.trans .exp-modal .modal-add,
-.trans .exp-modal .modal-add i,
-.trans .exp-modal .modal-save,
-.trans .exp-modal .modal-save i,
+.trans .adv-modal .modal-share,
+.trans .adv-modal .modal-share i,
+.trans .adv-modal .modal-add,
+.trans .adv-modal .modal-add i,
+.trans .adv-modal .modal-save,
+.trans .adv-modal .modal-save i,
 .trans .modal-module,
 .trans h3.modal-module-header,
 .trans h3.modal-module-header:after {
@@ -75,7 +75,7 @@
   border-color: transparent;
 }
 
-.trans .exp-search-results,
+.trans .advanced-search-results,
 .trans .modal-module,
 .trans .time-selector,
 .trans .modal-body .rating-module,
@@ -84,8 +84,7 @@
   visibility: hidden;
 }
 
-// Exploration Header
-.exploration-header {
+.advanced-search-header {
   background-color: $geee;
   border-bottom: 1px solid $gddd;
   padding: 15px;
@@ -146,8 +145,8 @@
   }
 }
 
-/* Close Exploration Button */
-.exploration-close {
+/* Close Advanced Search Button */
+.advanced-search-close {
   color: $g777;
   cursor: pointer;
   height: 20px;
@@ -169,7 +168,7 @@
 }
 
 // Share Button
-.exp-modal {
+.adv-modal {
   .share-course-link-wrapper {
     margin-right: 158px;
     margin-top: 118px;
@@ -184,8 +183,7 @@
   }
 }
 
-// Exploration Body
-.exploration-body {
+.advanced-search-body {
   height: 100%;
   left: 0;
   padding: 61px 0 0;
@@ -243,8 +241,8 @@
   }
 }
 
-// Exploration Filters
-.exp-filters {
+// Advanced Search Filters
+.advanced-search-filters {
   height: 100%;
   overflow-y: auto;
   padding: 15px;
@@ -367,8 +365,8 @@
   }
 }
 
-// Exploration Search Results
-.exp-search-results {
+// Advanced Search Results
+.advanced-search-results {
   height: 100%;
   opacity: 1;
   overflow-y: auto;
@@ -404,8 +402,8 @@
   }
 }
 
-// Exploration Course Content
-.exp-modal {
+// Advanced Course Content
+.adv-modal {
   height: 100%;
 
   .modal-content {
