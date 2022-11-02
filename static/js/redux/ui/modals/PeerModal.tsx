@@ -266,6 +266,7 @@ const PeerModal = () => {
       onClose={() => dispatch(peerModalActions.togglePeerModal())}
       animation="door"
       className="peer-modal"
+      showCloseButton={false}
       customStyles={modalStyle}
     >
       <div className="modal-content">
