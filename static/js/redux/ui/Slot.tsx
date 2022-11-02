@@ -240,7 +240,7 @@ const Slot = (props: SlotProps) => {
           </div>
           <div className="fc-time">
             {friends}
-            {props.location}
+            <span>{props.location}</span>
           </div>
         </div>
       </div>
