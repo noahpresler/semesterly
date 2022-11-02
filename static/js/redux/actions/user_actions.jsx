@@ -44,7 +44,7 @@ import {
   closeTermsOfServiceModal,
   triggerTermsOfServiceModal,
 } from "../state/slices/termsOfServiceModalSlice";
-import { peerModalLoaded, peerModalLoading } from "../state/slices/peerModalSlice";
+import { peerModalActions } from "../state/slices/peerModalSlice";
 import { receiveFriends, requestFriends } from "../state/slices/friendsSlice";
 import { registerToken, unregisterToken } from "../state/slices/notificationTokenSlice";
 import { timetablesActions } from "../state/slices/timetablesSlice";
@@ -285,7 +285,7 @@ export const fetchFriends = () => (dispatch, getState) => {
     return;
   }
   dispatch(requestFriends());
-  dispatch(peerModalLoading());
+  dispatch(peerModalActions.peerModalLoading());
   fetch(getFriendsEndpoint(getCurrentSemester(state)), {
     credentials: "include",
     method: "GET",
@@ -293,7 +293,7 @@ export const fetchFriends = () => (dispatch, getState) => {
     .then((response) => response.json())
     .then((json) => {
       dispatch(receiveFriends(json));
-      dispatch(peerModalLoaded());
+      dispatch(peerModalActions.peerModalLoaded());
     });
 };
 

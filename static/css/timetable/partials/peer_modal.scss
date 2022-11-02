@@ -1,8 +1,4 @@
 .peer-modal {
-  height: 85%;
-  max-height: 900px;
-  max-width: 1200px;
-
   > div {
     height: 100%;
     outline: none;
@@ -85,7 +81,7 @@
       line-height: 22px;
       margin: 7px 0 20px;
       padding: 0 5px;
-      transition: color .2s;
+      transition: color 0.2s;
       word-wrap: break-word;
     }
 
@@ -156,7 +152,7 @@
     height: 25px;
     margin-bottom: 5px;
     max-width: 200px;
-    opacity: .1;
+    opacity: 0.1;
   }
 
   .card-hat {
@@ -179,7 +175,7 @@
       overflow: hidden;
       padding: 0 5px;
       text-overflow: ellipsis;
-      transition: color .2s;
+      transition: color 0.2s;
       white-space: nowrap;
       word-wrap: break-word;
     }
@@ -189,7 +185,7 @@
     color: $friend;
     float: left;
     font-size: 18px;
-    line-height: 18px;;
+    line-height: 18px;
     margin-left: 2px;
     margin-top: -1px;
   }
@@ -209,7 +205,8 @@
 .peer-card-wrapper {
   background-color: $gfff;
   border: 1px solid $gd4d4d4;
-  box-shadow: 0 -1px 0 $ge6e6e6, 0 0 2px $black-transparent-1, 0 2px 4px $black-transparent-1;
+  box-shadow: 0 -1px 0 $ge6e6e6, 0 0 2px $black-transparent-1,
+    0 2px 4px $black-transparent-1;
 
   &.upsell {
     padding: 35px 20px;
@@ -261,18 +258,18 @@
   height: 16px;
   line-height: 16px;
   margin: 7px 0 7px 25px;
-  opacity: .07;
+  opacity: 0.07;
   padding: 0 5px;
   width: 220px;
 }
 
 .ghost {
   button {
-    opacity: .4;
+    opacity: 0.4;
   }
 
   .course-color-circle {
-    opacity: .5;
+    opacity: 0.5;
   }
 }
 
@@ -311,7 +308,7 @@
 @media (max-width: 850px) {
   .peer-card {
     width: 100%;
-	}
+  }
 
   .main-modal-wrapper {
     h4 {
@@ -321,13 +318,13 @@
 
   .key {
     margin-bottom: 15px;
-	}
+  }
 }
 
 @media (max-width: 600px) {
   .pm-side-bar {
     display: none;
-	}
+  }
 
   .main-modal-wrapper {
     left: 0;
@@ -348,7 +345,7 @@
       font-size: 25px;
       margin-top: 3px;
     }
-	}
+  }
 
   .peer-card-wrapper {
     &.upsell {
