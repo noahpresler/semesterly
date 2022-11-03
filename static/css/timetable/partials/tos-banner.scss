@@ -34,7 +34,7 @@
 
 .tos-banner__close {
   @include theme() {
-    color: t('tos-banner-close');
+    background-color: t('tos-banner-close');
   }
   bottom: 6px;
   cursor: pointer;
