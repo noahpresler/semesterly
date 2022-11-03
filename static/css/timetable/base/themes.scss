@@ -72,6 +72,9 @@ $themes: (
       share-link-clipboard-text: $gfff,
       share-link-shadow-1: rgba(0, 0, 0, 0.5),
       share-link-shadow-2: rgba(0, 0, 0, 0.15),
+      tos-banner-background: $gfff,
+      tos-banner-border: $gddd,
+      tos-banner-close: $geee
     ),
   // Dark Mode
   dark:
@@ -121,6 +124,9 @@ $themes: (
       share-link-clipboard-text: $dblue0,
       share-link-shadow-1: $g333,
       share-link-shadow-2: $g444,
+      tos-banner-background: $dblue7,
+      tos-banner-border: $dblue6,
+      tos-banner-close: $dblue7
     )
 );
 
