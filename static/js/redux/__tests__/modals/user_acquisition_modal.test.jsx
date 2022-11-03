@@ -15,7 +15,7 @@ import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import { renderWithRedux } from "../../test-utils";
 import { userInfoFixture } from "../../__fixtures__/user_acquisition_modal.fixture";
-import UserAcquisitionModal from "../../ui/modals/user_acquisition_modal";
+import UserAcquisitionModal from "../../ui/modals/UserAcquisitionModal";
 
 describe("User Aquisition Modal", () => {
   it("shows when isVisible is true", () => {

@@ -33,6 +33,7 @@ $themes: (
       // Not sure what this is for, but was referenced in grid_layout.scss
       main-bar-background: $light-base-component-bg,
       main-calendar-border-color: #ddd,
+      modal-background: $gfff,
       navicon-hamburger-background: $primary-navy,
       sidebar-background: $light-base-component-bg,
       sidebar-input-background: #ddd,
@@ -75,6 +76,9 @@ $themes: (
       tos-banner-background: $gfff,
       tos-banner-border: $gddd,
       tos-banner-close: $geee
+      github-follow-button-color: $g333,
+      github-follow-button-background-color: $geee,
+      github-follow-button-hover-color: $gddd,
     ),
   // Dark Mode
   dark:
@@ -93,6 +97,7 @@ $themes: (
       dropdown-hover: $dblue3,
       main-bar-background: $dark-base-component-bg,
       main-calendar-border-color: $dblue2,
+      modal-background: $dblue8,
       navicon-hamburger-background: $dblue0,
       top-bar-background: $dark-base-component-bg,
       top-bar-border-bottom: 1px solid $dblue2,
@@ -127,6 +132,9 @@ $themes: (
       tos-banner-background: $dblue7,
       tos-banner-border: $dblue6,
       tos-banner-close: $dblue7
+      github-follow-button-color: #d1ddeb,
+      github-follow-button-background-color: transparent,
+      github-follow-button-hover-color: $dblue6,
     )
 );
 

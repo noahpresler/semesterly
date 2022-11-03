@@ -1,8 +1,4 @@
 .signup-modal {
-  height: 588px;
-  max-width: 500px;
-  overflow: auto;
-
   > div {
     outline: none;
   }
@@ -14,7 +10,7 @@
     position: relative;
   }
 
-  .features{
+  .features {
     font-size: 17px;
     padding: 40px 20px 20px;
     width: 100%;
@@ -104,7 +100,7 @@
   }
 }
 
-@media(max-width: 776px) {
+@media (max-width: 776px) {
   .signup-modal {
     height: 85%;
     max-height: 900px;

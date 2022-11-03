@@ -14,14 +14,14 @@ GNU General Public License for more details.
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { renderWithRedux } from "../../test-utils";
-import SignupModalContainer from "../../ui/containers/modals/signup_modal_container";
+import SignupModal from "../../ui/modals/SignupModal";
 
 describe("Signup Modal", () => {
   it("shows when isVisible is true", () => {
     const initialState = {
       signupModal: { isVisible: true },
     };
-    const { container } = renderWithRedux(<SignupModalContainer />, {
+    const { container } = renderWithRedux(<SignupModal />, {
       preloadedState: initialState,
     });
     expect(container).not.toBeEmptyDOMElement();
@@ -32,7 +32,7 @@ describe("Signup Modal", () => {
     const initialState = {
       signupModal: { isVisible: false },
     };
-    const { container } = renderWithRedux(<SignupModalContainer />, {
+    const { container } = renderWithRedux(<SignupModal />, {
       preloadedState: initialState,
     });
     expect(container).toBeEmptyDOMElement();

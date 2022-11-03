@@ -99,7 +99,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.current_sem = sem
         self.driver.get(self.get_test_url("jhu"))
         WebDriverWait(self.driver, self.TIMEOUT).until(
-            lambda driver: driver.find_element_by_tag_name("body")
+            lambda driver: driver.find_element(By.TAG_NAME, "body")
         )
 
     def tearDown(self):
@@ -656,10 +656,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def open_and_query_adv_search(self, query, n_results=None):
         """Open's the advanced search modal and types in the provided query,
         asserting that n_results are then returned"""
-        self.find((By.CLASS_NAME, "show-exploration"), clickable=True).click()
-        self.find((By.CLASS_NAME, "exploration-modal"), clickable=True)
+        self.find((By.CLASS_NAME, "show-advanced-search"), clickable=True).click()
+        self.find((By.CLASS_NAME, "advanced-search-modal"), clickable=True)
         search = self.find(
-            (By.XPATH, '//div[contains(@class,"exploration-header")]//input')
+            (By.XPATH, '//div[contains(@class,"advanced-search-header")]//input')
         )
         search.clear()
         search.send_keys(query)
@@ -742,7 +742,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         code = self.find((By.TAG_NAME, "h5"), root=res[index]).text
         course = Course.objects.get(code=code)
         ActionChains(self.driver).move_to_element(res[index]).click().perform()
-        modal = self.find((By.CLASS_NAME, "exp-modal"))
+        modal = self.find((By.CLASS_NAME, "adv-modal"))
         self.validate_course_modal_body(course, modal, semester)
 
     def save_user_settings(self):
@@ -768,7 +768,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         major_select.send_keys(major)
         self.find((By.XPATH, f"//div[contains(text(), '{major}')]")).click()
         year_select.send_keys(class_year)
-        self.find((By.XPATH, f"//div[contains(text(), '{class_year}')]")).click()
+        ActionChains(self.driver).move_to_element(year_select).move_by_offset(
+            0, year_select.size["height"] + 20
+        ).click().perform()
+
         self.find(
             (
                 By.XPATH,

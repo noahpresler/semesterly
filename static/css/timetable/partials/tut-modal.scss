@@ -1,7 +1,4 @@
 .tut-modal__wrapper {
-  height: 100%;
-  width: 100%;
-
   .fa-chevron-right {
     color: $gfff;
     float: right;
@@ -34,12 +31,12 @@
   }
 
   .tut-img {
-    transition: all .1s linear;
+    transition: all 0.1s linear;
     user-select: none;
   }
 
   .action {
-	  transition: all .1s linear;
+    transition: all 0.1s linear;
 
     &:hover {
       color: $gbdc3c7;
@@ -56,16 +53,11 @@
   width: 100%;
 }
 
-.tut-modal {
-  max-height: 550px;
-  max-width: 500px;
-}
-
 .tut-modal > div {
   outline: none;
 }
 
-@media(max-width: 500px) {
+@media (max-width: 500px) {
   .tut-modal {
     width: 100% !important;
   }
