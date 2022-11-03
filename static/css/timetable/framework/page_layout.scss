@@ -341,12 +341,16 @@ li {
 
     .footer-button--github {
       font-size: 13px;
-      color: $g333;
-      background-color: $geee;
+      @include theme() {
+        color: t("github-follow-button-color");
+        background-color: t("github-follow-button-background-color");
+      }
       border-radius: 3px;
       &:hover {
         text-decoration: none;
-        background-color: $gddd;
+        @include theme() {
+          background-color: t("github-follow-button-hover-color");
+        }
       }
       i {
         margin: 0 3px;
