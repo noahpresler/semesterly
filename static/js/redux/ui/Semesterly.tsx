@@ -266,7 +266,7 @@ const Semesterly = () => {
                   Follow
                 </a>
               </li>
-              <li className="footer-button">
+              <li className="footer-button--facebook">
                 <div
                   className="fb-like"
                   data-href="https://www.facebook.com/semesterly/"
