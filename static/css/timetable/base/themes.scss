@@ -73,6 +73,9 @@ $themes: (
       share-link-clipboard-text: $gfff,
       share-link-shadow-1: rgba(0, 0, 0, 0.5),
       share-link-shadow-2: rgba(0, 0, 0, 0.15),
+      github-follow-button-color: $g333,
+      github-follow-button-background-color: $geee,
+      github-follow-button-hover-color: $gddd,
     ),
   // Dark Mode
   dark:
@@ -123,6 +126,9 @@ $themes: (
       share-link-clipboard-text: $dblue0,
       share-link-shadow-1: $g333,
       share-link-shadow-2: $g444,
+      github-follow-button-color: #d1ddeb,
+      github-follow-button-background-color: transparent,
+      github-follow-button-hover-color: $dblue6,
     )
 );
 
