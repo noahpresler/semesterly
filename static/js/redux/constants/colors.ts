@@ -31,7 +31,7 @@ export const lightSlotColor: SlotColorData[] = [
   { background: "#E7F76D", highlight: "#C9E20A", border: "#AFC11F", font: "#222" },
   { background: "#A3F5F2", highlight: "#7CD2CF", border: "#53ABA8", font: "#222" },
   { background: "#7499A2", highlight: "#668B94", border: "#6C7A89", font: "#222" },
-  { background: "#E7F76D", highlight: "#C4D44D", border: "#6C7A89", font: "#222" },
+  { background: "#E7F76D", highlight: "#C4D44D", border: "#A1AC4C", font: "#222" },
   { background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222" },
   // last
   { background: "#4c7fd8", highlight: "#6598f1", border: "#375994", font: "#222" },
@@ -69,7 +69,7 @@ export const darkSlotColor: SlotColorData[] = [
   { background: "#E7F76D", highlight: "#C9E20A", border: "#AFC11F", font: "#222" },
   { background: "#A3F5F2", highlight: "#7CD2CF", border: "#53ABA8", font: "#222" },
   { background: "#7499A2", highlight: "#668B94", border: "#6C7A89", font: "#222" },
-  { background: "#E7F76D", highlight: "#C4D44D", border: "#6C7A89", font: "#222" },
+  { background: "#E7F76D", highlight: "#C4D44D", border: "#A1AC4C", font: "#222" },
   { background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222" },
   // last
   { background: "#4c7fd8", highlight: "#6598f1", border: "#375994", font: "#222" },
