@@ -1,6 +1,8 @@
 .tos-banner {
-  background-color: $gfff;
-  border: 1px solid $gddd;
+  @include theme() {
+    background-color: t('tos-banner-background');
+    border: 1px solid t('tos-banner-border');
+  }
   bottom: 0;
   left: 50%;
   max-width: 470px;
@@ -31,7 +33,9 @@
 }
 
 .tos-banner__close {
-  background-color: $geee;
+  @include theme() {
+    background-color: t('tos-banner-close');
+  }
   bottom: 6px;
   cursor: pointer;
   padding: 0 5px;
