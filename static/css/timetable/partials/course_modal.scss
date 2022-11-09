@@ -24,7 +24,7 @@
 .course-modal.trans .modal-header h2,
 .course-modal.trans .modal-body p,
 .course-modal.trans .modal-body p a,
-.course-modal.trans .modal-body .credits h4,
+.course-modal.trans .modal-body .credits,
 .course-modal.trans .modal-body .rating-module h4,
 .course-modal.trans .modal-body .modal-module {
   background-color: transparent;
@@ -302,7 +302,6 @@
   }
 
   p {
-    color: $g555;
     font-size: 16px;
     line-height: 22px;
     margin: 7px 0;
@@ -324,10 +323,13 @@
       line-height: 66px;
       margin: 0;
       text-align: center;
+      transition: color 0.3s;
     }
 
     h4 {
-      color: $g999;
+      @include theme() {
+        color: t("text-color-thin");
+      }
       font-size: 30px;
       font-weight: 200;
       line-height: 30px;
@@ -427,7 +429,9 @@
   }
 
   small {
-    color: $g777;
+    @include theme() {
+      color: t("text-color-thin");
+    }
     font-size: 11px;
   }
 }

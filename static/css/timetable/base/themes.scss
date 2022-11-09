@@ -28,6 +28,7 @@ $themes: (
     (
       color-scheme-type: light,
       text-color: $primary-navy,
+      text-color-thin: $g999,
       text-color-hover: $primary-navy,
       background: $g808080,
       // Not sure what this is for, but was referenced in grid_layout.scss
@@ -86,6 +87,7 @@ $themes: (
     (
       color-scheme-type: dark,
       text-color: $dblue0,
+      text-color-thin: $dblue1,
       text-color-hover: white,
       background: $g808080,
       sidebar-background: $dark-base-component-bg,
