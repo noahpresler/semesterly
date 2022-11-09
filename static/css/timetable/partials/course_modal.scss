@@ -331,7 +331,7 @@
 
     h4 {
       @include theme() {
-        color: t("text-color-thin");
+        color: t("course-modal-credits");
       }
       font-size: 30px;
       font-weight: 200;
