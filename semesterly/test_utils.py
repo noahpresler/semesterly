@@ -659,7 +659,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.find((By.CLASS_NAME, "show-advanced-search"), clickable=True).click()
         self.find((By.CLASS_NAME, "advanced-search-modal"), clickable=True)
         search = self.find(
-            (By.XPATH, '//div[contains(@class,"advanced-search-header")]//input')
+            (By.XPATH, '//div[contains(@class,"advanced-search-modal-header")]//input')
         )
         search.clear()
         search.send_keys(query)
