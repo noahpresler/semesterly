@@ -24,6 +24,7 @@
 .course-modal.trans .modal-header h2,
 .course-modal.trans .modal-body p,
 .course-modal.trans .modal-body p a,
+.course-modal.trans .modal-body .credits h3,
 .course-modal.trans .modal-body .credits h4,
 .course-modal.trans .modal-body .rating-module h4,
 .course-modal.trans .modal-body .modal-module {
@@ -129,7 +130,9 @@
 
 // Course Modal Content Styles
 .modal-content {
-  background-color: $gfff;
+  @include theme() {
+    background-color: t("modal-background");
+  }
   border: 0;
   border-radius: 0;
   box-shadow: none;
@@ -141,15 +144,19 @@
 }
 
 .modal-header {
-  background-color: $gf3f3f3;
-  border-bottom: 1px solid $gddd;
+  @include theme() {
+    background-color: t("modal-header-background");
+    border-bottom: 1px solid t("modal-border-color");
+  }
   padding: 20px 10px 10px;
   position: relative;
   transition: background-color 0.2s, color 0.2s;
   z-index: 11;
 
   h1 {
-    color: $primary-navy;
+    @include theme() {
+      color: t("text-color");
+    }
     font-size: 36px;
     margin: 0;
     padding-right: 85px;
@@ -298,7 +305,6 @@
   }
 
   p {
-    color: $g555;
     font-size: 16px;
     line-height: 22px;
     margin: 7px 0;
@@ -320,10 +326,13 @@
       line-height: 66px;
       margin: 0;
       text-align: center;
+      transition: color 0.3s;
     }
 
     h4 {
-      color: $g999;
+      @include theme() {
+        color: t("course-modal-credits");
+      }
       font-size: 30px;
       font-weight: 200;
       line-height: 30px;
@@ -411,7 +420,9 @@
   transition: color 0.2s;
 
   &::after {
-    background-color: $gddd;
+    @include theme() {
+      background-color: t("modal-border-color");
+    }
     bottom: 5px;
     content: "";
     display: block;
@@ -423,14 +434,18 @@
   }
 
   small {
-    color: $g777;
+    @include theme() {
+      color: t("text-color-thin");
+    }
     font-size: 11px;
   }
 }
 
 // Course Modal Sections
 .modal-section {
-  background-color: rgba(255, 255, 255, 0.8);
+  @include theme() {
+    background-color: t("lecture-section-background");
+  }
   cursor: pointer;
   float: left;
   padding: 7px;
@@ -439,7 +454,9 @@
   width: 50%;
 
   &:hover {
-    background-color: $geee;
+    @include theme() {
+      background-color: t("lecture-section-background-hover");
+    }
   }
 
   &:nth-child(2n + 0) {
@@ -447,7 +464,9 @@
   }
 
   h4 {
-    color: $primary-navy;
+    @include theme() {
+      color: t("text-color");
+    }
     font-size: 16px;
     font-weight: 400;
     line-height: 20px;
@@ -468,7 +487,9 @@
   }
 
   h5 {
-    color: $g777;
+    @include theme() {
+      color: t("text-color-thin");
+    }
     font-size: 13px;
     font-weight: 400;
     line-height: 16px;
@@ -476,7 +497,9 @@
   }
 
   h6 {
-    color: $g777;
+    @include theme() {
+      color: t("text-color-thin");
+    }
     font-size: 10px;
     font-weight: 400;
     line-height: 14px;
@@ -497,7 +520,6 @@
 
   .fa-lock {
     bottom: 7px;
-    color: $primary-navy;
     font-size: 14px;
     line-height: 20px;
     opacity: 0;

@@ -1,6 +1,8 @@
 .reactions {
-  background-color: $gf3f3f3;
-  border: 1px solid $gd9d9d9;
+  @include theme() {
+    background-color: t("reactions-background");
+    border: 1px solid t("main-calendar-border-color");
+  }
   border-radius: 60px;
   display: inline-block;
   padding: 0 10px;
@@ -12,19 +14,19 @@
     margin: 0 2px;
     position: relative;
     text-align: center;
-    transition: all .5s cubic-bezier(.36, -0.64, .34, 1.76);
-    transition: transform .3s ease-out;
+    transition: all 0.5s cubic-bezier(0.36, -0.64, 0.34, 1.76);
+    transition: transform 0.3s ease-out;
     vertical-align: middle;
     width: 40px;
 
     &:hover.animate {
       transform: scale(1.2);
-      transition: transform .3s ease-out;
+      transition: transform 0.3s ease-out;
     }
 
     &:hover.no-animate {
       transform: scale(1.1);
-      transition: transform .3s ease-out;
+      transition: transform 0.3s ease-out;
     }
 
     .emoji {
@@ -44,15 +46,14 @@
   opacity: 0;
   perspective: 100px;
   transform: scale(1.2);
-  transition: transform .3s ease-out;
+  transition: transform 0.3s ease-out;
 }
 
 .swing.reaction.no-animate {
   opacity: 1;
   transform: none;
-  transition: transform .3s ease-out;
+  transition: transform 0.3s ease-out;
 }
-
 
 .reactions-wrapper {
   text-align: center;
@@ -60,14 +61,16 @@
 }
 
 .emoji-count {
-  background-color: $ga1a1a1;
+  @include theme() {
+    background-color: t("reactions-count-background");
+  }
   border-radius: 30%;
   bottom: 10px;
   color: $gfff;
   font-size: 14px;
   font-weight: 700;
   height: 16px;
-  opacity: .7;
+  opacity: 0.7;
   padding: 0 2px;
   position: absolute;
   right: 0;
@@ -157,20 +160,20 @@
 }
 
 .reaction:hover .reaction-dropdown {
-  opacity: .8;
+  opacity: 0.8;
   transition: visibility 0s linear 0ms, opacity 300ms;
   visibility: visible;
 }
 
 @media (max-width: 810px) {
-	.reactions {
+  .reactions {
     .reaction {
       width: 34px;
     }
   }
 }
 @media (max-width: 355px) {
-	.reactions {
+  .reactions {
     .reaction {
       width: 29px;
     }

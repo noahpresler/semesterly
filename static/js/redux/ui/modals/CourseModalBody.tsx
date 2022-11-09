@@ -493,7 +493,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
           <div className="reactions-wrapper">
             <div className="reactions">{reactionsDisplay}</div>
           </div>
-          <div>
+          <div className="modal-module">
             <h3 className="modal-module-header">Course Description</h3>
             <p>{description}</p>
             {shortCourseSection}

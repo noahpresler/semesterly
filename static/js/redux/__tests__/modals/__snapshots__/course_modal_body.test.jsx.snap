@@ -536,7 +536,9 @@ exports[`CourseModalBody correctly renders 1`] = `
             </div>
           </div>
         </div>
-        <div>
+        <div
+          class="modal-module"
+        >
           <h3
             class="modal-module-header"
           >
