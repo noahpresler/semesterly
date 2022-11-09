@@ -1,6 +1,8 @@
 .reactions {
-  background-color: $gf3f3f3;
-  border: 1px solid $gd9d9d9;
+  @include theme() {
+    background-color: t("reactions-background");
+    border: 1px solid t("main-calendar-border-color");
+  }
   border-radius: 60px;
   display: inline-block;
   padding: 0 10px;

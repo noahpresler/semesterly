@@ -146,8 +146,8 @@
 .modal-header {
   @include theme() {
     background-color: t("modal-header-background");
+    border-bottom: 1px solid t("modal-border-color");
   }
-  border-bottom: 1px solid $gddd;
   padding: 20px 10px 10px;
   position: relative;
   transition: background-color 0.2s, color 0.2s;
@@ -342,12 +342,6 @@
     }
   }
 
-  .reactions {
-    @include theme() {
-      background-color: t("reactions-background");
-    }
-  }
-
   .rating-module {
     opacity: 1;
     transition: opacity 0.2s, visibility 0.2s;
@@ -426,7 +420,9 @@
   transition: color 0.2s;
 
   &::after {
-    background-color: $gddd;
+    @include theme() {
+      background-color: t("modal-border-color");
+    }
     bottom: 5px;
     content: "";
     display: block;
