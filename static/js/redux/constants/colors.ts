@@ -54,17 +54,17 @@ export const lightSlotColor: SlotColorData[] = [
 // 20%
 export const darkSlotColor: SlotColorData[] = [
   // red
-  { background: "#F16E66", highlight: "#d8635b", border: "#f48b85", font: "#222" },
+  { background: "#F16E66", highlight: "#d8635b", border: "#a84d47", font: "#222" },
   // blue
-  { background: "#5598DF", highlight: "#4c88c8", border: "#77ade5", font: "#222" },
+  { background: "#5598DF", highlight: "#4c88c8", border: "#3b6a9c", font: "#222" },
   // turquoise
-  { background: "#57C3B9", highlight: "#4eafa6", border: "#79cfc7", font: "#222" },
+  { background: "#57C3B9", highlight: "#4eafa6", border: "#3c8881", font: "#222" },
   // 'yellow'
-  { background: "#F2B25C", highlight: "#d9a052", border: "#f5c17d", font: "#222" },
+  { background: "#F2B25C", highlight: "#d9a052", border: "#a97c40", font: "#222" },
   // purple
-  { background: "#7C72DC", highlight: "#6f66c6", border: "#968ee3", font: "#222" },
+  { background: "#7C72DC", highlight: "#6f66c6", border: "#564f92", font: "#222" },
   // green
-  { background: "#59BEA0", highlight: "#50ab90", border: "#7acbb3", font: "#222" },
+  { background: "#59BEA0", highlight: "#50ab90", border: "#3e8570", font: "#222" },
   { background: "#D4DBC8", highlight: "#B5BFA3", border: "#97A086", font: "#222" },
   { background: "#E7F76D", highlight: "#C9E20A", border: "#AFC11F", font: "#222" },
   { background: "#A3F5F2", highlight: "#7CD2CF", border: "#53ABA8", font: "#222" },
@@ -75,12 +75,12 @@ export const darkSlotColor: SlotColorData[] = [
   { background: "#4c7fd8", highlight: "#6598f1", border: "#375994", font: "#222" },
 
   // x2
-  { background: "#F16E66", highlight: "#d8635b", border: "#f48b85", font: "#222" },
-  { background: "#5598DF", highlight: "#4c88c8", border: "#77ade5", font: "#222" },
-  { background: "#57C3B9", highlight: "#4eafa6", border: "#79cfc7", font: "#222" },
-  { background: "#F2B25C", highlight: "#d9a052", border: "#f5c17d", font: "#222" },
-  { background: "#7C72DC", highlight: "#6f66c6", border: "#968ee3", font: "#222" },
-  { background: "#59BEA0", highlight: "#50ab90", border: "#7acbb3", font: "#222" },
+  { background: "#F16E66", highlight: "#d8635b", border: "#a84d47", font: "#222" },
+  { background: "#5598DF", highlight: "#4c88c8", border: "#3b6a9c", font: "#222" },
+  { background: "#57C3B9", highlight: "#4eafa6", border: "#3c8881", font: "#222" },
+  { background: "#F2B25C", highlight: "#d9a052", border: "#a97c40", font: "#222" },
+  { background: "#7C72DC", highlight: "#6f66c6", border: "#564f92", font: "#222" },
+  { background: "#59BEA0", highlight: "#50ab90", border: "#3e8570", font: "#222" },
   { background: "#D4DBC8", highlight: "#B5BFA3", border: "#97A086", font: "#222" },
   { background: "#E7F76D", highlight: "#C9E20A", border: "#AFC11F", font: "#222" },
   { background: "#A3F5F2", highlight: "#7CD2CF", border: "#53ABA8", font: "#222" },
