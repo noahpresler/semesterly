@@ -146,6 +146,7 @@ const CourseModal = () => {
     <Modal
       visible={isVisible}
       onClose={hide}
+      showCloseButton={false}
       className={classNames("course-modal max-modal", {
         trans: hasHoveredResult,
       })}
