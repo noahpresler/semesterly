@@ -153,7 +153,9 @@
   z-index: 11;
 
   h1 {
-    color: $primary-navy;
+    @include theme() {
+      color: t("text-color");
+    }
     font-size: 36px;
     margin: 0;
     padding-right: 85px;
