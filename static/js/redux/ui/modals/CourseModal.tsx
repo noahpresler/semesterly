@@ -137,8 +137,9 @@ const CourseModal = () => {
   );
 
   const modalStyle = {
-    height: "900px",
-    width: "1200px",
+    height: "85%",
+    width: "90%",
+    maxWidth: "1200px",
     boxShadow: "0 0",
   };
   return (
