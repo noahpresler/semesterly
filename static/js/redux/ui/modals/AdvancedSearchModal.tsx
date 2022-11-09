@@ -405,6 +405,7 @@ const AdvancedSearchModal = () => {
         maxHeight: "900px",
         width: "90%",
         height: "85%",
+        boxShadow: "0 0",
       }}
     >
       <div

@@ -6,24 +6,19 @@
     width: 100%;
   }
 
-  + div {
-    // using important to override boron default style
-    // can't declare in javascript either, cuz need hover
-    background-color: $black-transparent-8 !important;
-    transition: background-color 0.2s;
-  }
-
-  &.trans + div {
-    // using important to override boron default style
-    // can't declare in javascript either, cuz need hover
-    background-color: transparent !important;
-  }
-
   .ms-friend {
     float: left;
     height: 30px;
     margin: 0;
     width: 30px;
+  }
+  + div {
+    transition: background-color 0.2s;
+  }
+
+  &.trans + div,
+  &.trans > div {
+    background-color: transparent !important;
   }
 }
 
@@ -49,6 +44,8 @@
 
 .advanced-search-modal.trans,
 .trans .advanced-search-content,
+.trans .advanced-search-content .advanced-search-modal-header,
+.trans .advanced-search-content .advanced-search-modal-header input,
 .trans .advanced-search-header,
 .trans .adv-title h1,
 .trans .advanced-search-header input,
@@ -56,12 +53,15 @@
 .trans h3.advanced-search-modal-header,
 .trans h3.advanced-search-modal-header:after,
 .trans h3.advanced-search-modal-header i,
+.trans .advanced-search-body,
 .trans .advanced-search-body p,
-.trans .adv-modal .modal-header,
-.trans .adv-modal .modal-header h1,
-.trans .adv-modal .modal-header h2,
-.trans .adv-modal .modal-header div,
 .trans .adv-modal .modal-content,
+.trans .adv-modal .modal-content .modal-header,
+.trans .adv-modal .modal-content .modal-header h1,
+.trans .adv-modal .modal-content .modal-header h2,
+.trans .adv-modal .modal-content .modal-header div,
+.trans .adv-modal .modal-content .modal-body,
+.trans .modal-body,
 .trans .modal-body .credits h4,
 .trans .adv-modal .modal-share,
 .trans .adv-modal .modal-share i,
@@ -78,9 +78,12 @@
 }
 
 .trans .advanced-search-results,
+.trans .adv-title,
 .trans .modal-module,
 .trans .time-selector,
 .trans .modal-body .rating-module,
+.trans .exp-filter-section,
+.trans .modal-body p,
 .trans .modal-body .modal-module-header {
   opacity: 0;
   visibility: hidden;
