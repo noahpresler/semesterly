@@ -24,7 +24,8 @@
 .course-modal.trans .modal-header h2,
 .course-modal.trans .modal-body p,
 .course-modal.trans .modal-body p a,
-.course-modal.trans .modal-body .credits,
+.course-modal.trans .modal-body .credits h3,
+.course-modal.trans .modal-body .credits h4,
 .course-modal.trans .modal-body .rating-module h4,
 .course-modal.trans .modal-body .modal-module {
   background-color: transparent;
@@ -341,6 +342,12 @@
     }
   }
 
+  .reactions {
+    @include theme() {
+      background-color: t("reactions-background");
+    }
+  }
+
   .rating-module {
     opacity: 1;
     transition: opacity 0.2s, visibility 0.2s;
@@ -440,7 +447,9 @@
 
 // Course Modal Sections
 .modal-section {
-  background-color: rgba(255, 255, 255, 0.8);
+  @include theme() {
+    background-color: t("lecture-section-background");
+  }
   cursor: pointer;
   float: left;
   padding: 7px;
@@ -449,7 +458,9 @@
   width: 50%;
 
   &:hover {
-    background-color: $geee;
+    @include theme() {
+      background-color: t("lecture-section-background-hover");
+    }
   }
 
   &:nth-child(2n + 0) {
@@ -457,7 +468,9 @@
   }
 
   h4 {
-    color: $primary-navy;
+    @include theme() {
+      color: t("text-color");
+    }
     font-size: 16px;
     font-weight: 400;
     line-height: 20px;
@@ -478,7 +491,9 @@
   }
 
   h5 {
-    color: $g777;
+    @include theme() {
+      color: t("text-color-thin");
+    }
     font-size: 13px;
     font-weight: 400;
     line-height: 16px;
@@ -486,7 +501,9 @@
   }
 
   h6 {
-    color: $g777;
+    @include theme() {
+      color: t("text-color-thin");
+    }
     font-size: 10px;
     font-weight: 400;
     line-height: 14px;
@@ -507,7 +524,6 @@
 
   .fa-lock {
     bottom: 7px;
-    color: $primary-navy;
     font-size: 14px;
     line-height: 20px;
     opacity: 0;
