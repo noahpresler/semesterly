@@ -44,5 +44,6 @@ const themeSlice = createSlice({
 });
 export const selectSlotColorData = (state: RootState) =>
   state.theme.slotColors[state.theme.theme];
+export const selectTheme = (state: RootState) => state.theme.theme;
 export const { setTheme } = themeSlice.actions;
 export default themeSlice.reducer;

@@ -27,6 +27,7 @@ import { preferencesActions } from "../state/slices/preferencesSlice";
 import Tooltip from "@mui/material/Tooltip";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
+import { selectTheme } from "../state/slices/themeSlice";
 
 type RowProps = {
   isLoggedIn: boolean;
@@ -61,7 +62,7 @@ const Row = (props: RowProps) => {
 export const ShowWeekendsSwitch = (props: { isMobile: boolean }) => {
   const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
   const dispatch = useDispatch();
-  const theme = useAppSelector((state) => state.theme.theme);
+  const theme = useAppSelector(selectTheme);
   const button = (
     <Tooltip title={<Typography fontSize={12}>Show Weekends</Typography>}>
       <div className="save-timetable">
