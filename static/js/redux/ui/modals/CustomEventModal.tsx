@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { customEventsActions } from "../../state/slices/customEventsSlice";
 import { DAYS } from "../../constants/constants";
 import Modal from "./Modal";
+import { selectSlotColorData } from "../../state/slices/themeSlice";
 
 const CustomEventModal = () => {
   const [eventDay, setEventDay] = useState("");
@@ -32,6 +33,7 @@ const CustomEventModal = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isPickingColor, setIsPickingColor] = useState(false);
 
+  const slotColor = useAppSelector(selectSlotColorData);
   const getSelectedEvent = () => {
     const events = useAppSelector((state) => state.customEvents.events);
     const selectedEventId = useAppSelector(
@@ -201,10 +203,10 @@ const CustomEventModal = () => {
   const eventColorPresets = (
     <div className="event-color-presets">
       <div className="event-color-preset-buttons">
-        {["#FD7473", "#5CCCF2", "#36DEBB", "#FFD467", "#C585DE"].map(createColorButton)}
+        {slotColor.slice(0, 5).map((data) => createColorButton(data.background))}
       </div>
       <div className="event-color-preset-buttons">
-        {["#53E997", "#E7F76D", "#A3F5F2", "#7499A2", "#C8F7C5"].map(createColorButton)}
+        {slotColor.slice(5, 10).map((data) => createColorButton(data.background))}
       </div>
     </div>
   );
