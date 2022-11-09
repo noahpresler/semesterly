@@ -29,7 +29,6 @@ const initialState: ThemeSliceState = {
     light: lightSlotColor,
     dark: darkSlotColor,
   },
-  // slot color state goes here
 };
 
 const themeSlice = createSlice({
