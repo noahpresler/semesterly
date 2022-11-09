@@ -31,8 +31,7 @@ export const lightSlotColor: SlotColorData[] = [
   { background: "#E7F76D", highlight: "#C9E20A", border: "#AFC11F", font: "#222" },
   { background: "#A3F5F2", highlight: "#7CD2CF", border: "#53ABA8", font: "#222" },
   { background: "#7499A2", highlight: "#668B94", border: "#6C7A89", font: "#222" },
-  { background: "#E7F76D", highlight: "#C4D44D", border: "#A1AC4C", font: "#222" },
-  { background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222" },
+  { background: "#C8F7C5", highlight: "#b4deb1", border: "#8cac89", font: "#222" },
   // last
   { background: "#4c7fd8", highlight: "#6598f1", border: "#375994", font: "#222" },
 
@@ -47,7 +46,6 @@ export const lightSlotColor: SlotColorData[] = [
   { background: "#E7F76D", highlight: "#C9E20A", border: "#AFC11F", font: "#222" },
   { background: "#A3F5F2", highlight: "#7CD2CF", border: "#53ABA8", font: "#222" },
   { background: "#7499A2", highlight: "#668B94", border: "#6C7A89", font: "#222" },
-  { background: "#E7F76D", highlight: "#C4D44D", border: "#6C7A89", font: "#222" },
   { background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222" },
   { background: "#4c7fd8", highlight: "#6598f1", border: "#375994", font: "#222" },
 ]; // consider #CF000F, #e8fac3, #C8F7C5
@@ -65,12 +63,11 @@ export const darkSlotColor: SlotColorData[] = [
   { background: "#7C72DC", highlight: "#6f66c6", border: "#564f92", font: "#222" },
   // green
   { background: "#59BEA0", highlight: "#50ab90", border: "#3e8570", font: "#222" },
-  { background: "#D4DBC8", highlight: "#B5BFA3", border: "#97A086", font: "#222" },
-  { background: "#E7F76D", highlight: "#C9E20A", border: "#AFC11F", font: "#222" },
-  { background: "#A3F5F2", highlight: "#7CD2CF", border: "#53ABA8", font: "#222" },
+  { background: "#bec5b4", highlight: "#abb1a2", border: "#85897d", font: "#222" },
+  { background: "#bac758", highlight: "#a7b34f", border: "#828b3d", font: "#222" },
+  { background: "#83c6c3", highlight: "#75b2af", border: "#5b8a88", font: "#222" },
   { background: "#7499A2", highlight: "#668B94", border: "#6C7A89", font: "#222" },
-  { background: "#E7F76D", highlight: "#C4D44D", border: "#A1AC4C", font: "#222" },
-  { background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222" },
+  { background: "#b4deb1", highlight: "#a2c79f", border: "#7d9b7b", font: "#222" },
   // last
   { background: "#4c7fd8", highlight: "#6598f1", border: "#375994", font: "#222" },
 
@@ -81,11 +78,10 @@ export const darkSlotColor: SlotColorData[] = [
   { background: "#F2B25C", highlight: "#d9a052", border: "#a97c40", font: "#222" },
   { background: "#7C72DC", highlight: "#6f66c6", border: "#564f92", font: "#222" },
   { background: "#59BEA0", highlight: "#50ab90", border: "#3e8570", font: "#222" },
-  { background: "#D4DBC8", highlight: "#B5BFA3", border: "#97A086", font: "#222" },
-  { background: "#E7F76D", highlight: "#C9E20A", border: "#AFC11F", font: "#222" },
-  { background: "#A3F5F2", highlight: "#7CD2CF", border: "#53ABA8", font: "#222" },
+  { background: "#bec5b4", highlight: "#abb1a2", border: "#85897d", font: "#222" },
+  { background: "#bac758", highlight: "#a7b34f", border: "#828b3d", font: "#222" },
+  { background: "#83c6c3", highlight: "#75b2af", border: "#5b8a88", font: "#222" },
   { background: "#7499A2", highlight: "#668B94", border: "#6C7A89", font: "#222" },
-  { background: "#E7F76D", highlight: "#C4D44D", border: "#6C7A89", font: "#222" },
-  { background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222" },
+  { background: "#b4deb1", highlight: "#a2c79f", border: "#7d9b7b", font: "#222" },
   { background: "#4c7fd8", highlight: "#6598f1", border: "#375994", font: "#222" },
 ]; // consider #CF000F, #e8fac3, #C8F7C5
