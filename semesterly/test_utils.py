@@ -664,7 +664,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         search.clear()
         search.send_keys(query)
         if n_results:
-            self.assert_n_elements_found((By.CLASS_NAME, "exp-s-result"), n_results)
+            self.assert_n_elements_found(
+                (By.CLASS_NAME, "advanced-s-result"), n_results
+            )
 
     def close_adv_search(self):
         """Closes the advanced search modal"""
@@ -738,7 +740,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def select_nth_adv_search_result(self, index, semester):
         """Selects the nth advanced search result with a click.
         Validates the course modal body displayed in the search reuslts"""
-        res = self.find((By.CLASS_NAME, "exp-s-result"), get_all=True)
+        res = self.find((By.CLASS_NAME, "advanced-s-result"), get_all=True)
         code = self.find((By.TAG_NAME, "h5"), root=res[index]).text
         course = Course.objects.get(code=code)
         ActionChains(self.driver).move_to_element(res[index]).click().perform()

@@ -43,9 +43,8 @@ const AdvancedSearchResult = ({
   isSelected,
 }: AdvancedSearchResultProps) => (
   <div
-    className="exp-s-result"
+    className={`advanced-s-result${isSelected ? " s-result-selected" : ""}`}
     onClick={() => onClick()}
-    style={{ backgroundColor: isSelected ? "#eeeeee" : undefined }}
   >
     <h4>{name}</h4>
     <h5>{code}</h5>
@@ -396,6 +395,7 @@ const AdvancedSearchModal = () => {
     <Modal
       visible={isVisible}
       onClose={() => dispatch(advancedSearchActions.hideAdvancedSearchModal())}
+      showCloseButton={false}
       className={classNames("advanced-search-modal max-modal", {
         trans: hasHoveredResult,
       })}
@@ -412,8 +412,8 @@ const AdvancedSearchModal = () => {
           loading: isFetching,
         })}
       >
-        <div className="advanced-search-header cf">
-          <div className="col-4-16 exp-title">
+        <div className="advanced-search-modal-header cf">
+          <div className="col-4-16 adv-title">
             <i className="fa fa-compass" />
             <h1>Advanced Search</h1>
           </div>

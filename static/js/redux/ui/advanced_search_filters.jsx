@@ -125,7 +125,7 @@ SelectedFilter.propTypes = {
 
 export const SelectedFilterSection = ({ name, toggle, children, type, removeAll }) => (
   <div className="exp-filter-section open">
-    <h3 className="exp-header">
+    <h3 className="advanced-search-header">
       <span>{name.substring(0, name.length - 1)} Filter</span>
       <i className="fa fa-plus" onClick={toggle} />
       <i className="clear-all">

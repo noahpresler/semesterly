@@ -28,7 +28,9 @@
 }
 
 .advanced-search-content {
-  background: $gfff;
+  @include theme() {
+    background-color: t("modal-background");
+  }
   height: 100%;
   position: relative;
   width: 100%;
@@ -48,12 +50,12 @@
 .advanced-search-modal.trans,
 .trans .advanced-search-content,
 .trans .advanced-search-header,
-.trans .exp-title h1,
+.trans .adv-title h1,
 .trans .advanced-search-header input,
 .trans .advanced-search-close,
-.trans h3.exp-header,
-.trans h3.exp-header:after,
-.trans h3.exp-header i,
+.trans h3.advanced-search-modal-header,
+.trans h3.advanced-search-modal-header:after,
+.trans h3.advanced-search-modal-header i,
 .trans .advanced-search-body p,
 .trans .adv-modal .modal-header,
 .trans .adv-modal .modal-header h1,
@@ -84,16 +86,20 @@
   visibility: hidden;
 }
 
-.advanced-search-header {
-  background-color: $geee;
-  border-bottom: 1px solid $gddd;
+.advanced-search-modal-header {
+  @include theme() {
+    background-color: t("modal-background");
+    border-bottom: 1px solid t("modal-border-color");
+  }
   padding: 15px;
   position: absolute;
   width: 100%;
   z-index: 1;
 
   input {
-    border: 1px solid $ge6e6e6;
+    @include theme() {
+      border: 1px solid t("modal-border-color");
+    }
     font-size: 16px;
     height: 30px;
     line-height: 30px;
@@ -126,7 +132,7 @@
   }
 }
 
-.exp-title {
+.adv-title {
   i {
     display: inline-block;
     font-size: 22px;
@@ -136,7 +142,9 @@
   }
 
   h1 {
-    color: $g777;
+    @include theme() {
+      color: t("text-color-thin");
+    }
     display: inline-block;
     font-size: 18px;
     line-height: 30px;
@@ -147,7 +155,6 @@
 
 /* Close Advanced Search Button */
 .advanced-search-close {
-  color: $g777;
   cursor: pointer;
   height: 20px;
   position: absolute;
@@ -194,7 +201,9 @@
   flex-direction: row;
   align-items: center;
   p {
-    color: $g777;
+    @include theme() {
+      color: t("text-color-thin");
+    }
     font-size: 12px;
   }
   .subtitle div {
@@ -202,9 +211,11 @@
   }
 }
 
-.exp-header {
+.advanced-search-header {
+  @include theme() {
+    color: t("text-color-thin");
+  }
   clear: both;
-  color: $g777;
   font-size: 14px;
   font-weight: 200;
   margin: 0;
@@ -212,7 +223,11 @@
   position: relative;
 
   &::after {
-    background-color: $gddd;
+    @include theme() {
+      background-color: t(
+        "modal-border-color"
+      ); // This actually controls the border color
+    }
     bottom: 5px;
     content: "";
     display: block;
@@ -378,15 +393,19 @@
   }
 }
 
-.exp-s-result {
-  background-color: $gfff;
+.advanced-s-result {
+  @include theme() {
+    background-color: t("modal-background");
+  }
   cursor: pointer;
   padding: 10px;
   position: relative;
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: $geee;
+    @include theme() {
+      background-color: t("search-results-hover");
+    }
   }
 
   h4 {
@@ -395,10 +414,18 @@
   }
 
   h5 {
-    color: $g777;
+    @include theme() {
+      color: t("text-color-thin");
+    }
     font-size: 12px;
     font-weight: 400;
     margin: 5px 0;
+  }
+}
+
+.s-result-selected {
+  @include theme() {
+    background-color: t("search-results-hover");
   }
 }
 
@@ -412,7 +439,9 @@
   }
 
   .modal-header {
-    background-color: $gfff;
+    @include theme() {
+      background-color: t("modal-header-background");
+    }
     padding: 20px 10px 30px;
 
     > .subtitle {
