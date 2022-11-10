@@ -48,7 +48,7 @@ const ghostCard = (
           style={{ backgroundImage: "url(/static/img/blank.jpg)" }}
         />
         <div className="user-info">
-          <div className="ghost-name">H</div>
+          <div className="ghost-name" />
           <button className="view-profile-btn" />
         </div>
       </div>

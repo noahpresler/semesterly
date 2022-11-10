@@ -25,13 +25,18 @@
 }
 
 .pm-side-bar {
+  @include theme() {
+    background-color: t("sidebar-background");
+  }
   border-right: 1px solid $gddd;
   height: 100%;
   position: absolute;
   width: 200px;
 
   p {
-    color: $g555;
+    @include theme() {
+      color: t("text-color-thin");
+    }
     font-size: 16px;
     font-weight: 200;
     line-height: 16px;
@@ -48,7 +53,9 @@
 }
 
 .main-modal-wrapper {
-  background-color: $gf3f3f3;
+  @include theme() {
+    background-color: t("modal-header-background");
+  }
   height: 100%;
   left: 200px;
   padding: 20px 10px 20px 20px;
@@ -148,7 +155,9 @@
   }
 
   .ghost-name {
-    background-color: $g222;
+    @include theme() {
+      background-color: t("ghost-card-name");
+    }
     height: 25px;
     margin-bottom: 5px;
     max-width: 200px;
@@ -203,10 +212,11 @@
 }
 
 .peer-card-wrapper {
-  background-color: $gfff;
-  border: 1px solid $gd4d4d4;
-  box-shadow: 0 -1px 0 $ge6e6e6, 0 0 2px $black-transparent-1,
-    0 2px 4px $black-transparent-1;
+  @include theme() {
+    background-color: t("modal-background");
+  }
+  border-radius: 3px;
+  box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 2.5px;
 
   &.upsell {
     padding: 35px 20px;
@@ -254,7 +264,9 @@
 }
 
 .ghost-course-title {
-  background-color: $g555;
+  @include theme() {
+    background-color: t("ghost-card-course-title");
+  }
   height: 16px;
   line-height: 16px;
   margin: 7px 0 7px 25px;
