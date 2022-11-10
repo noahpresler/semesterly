@@ -44,8 +44,8 @@ import {
 } from "../actions/timetable_actions";
 import { fetchCourseInfo } from "../actions/modal_actions";
 import { uniqBy } from "lodash";
-import COLOUR_DATA from "../constants/colours";
 import { selectGradient } from "../state/slices/compareTimetableSlice";
+import { selectSlotColorData, selectTheme } from "../state/slices/themeSlice";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -144,6 +144,7 @@ function getConflictStyles(slotsByDay: any) {
 const SlotManager = (props: { days: string[] }) => {
   const hoveredSlot: HoveredSlot = useAppSelector((state) => getHoveredSlots(state));
   // don't show slot if an alternative is being hovered
+  const slotColorData = useAppSelector(selectSlotColorData);
   const timetableSlots = useAppSelector((state) =>
     getActiveDenormTimetable(state).slots.filter(
       (slot) =>
@@ -176,6 +177,7 @@ const SlotManager = (props: { days: string[] }) => {
     (state) => state.compareTimetable.comparedTimetable
   );
   const sectionsInBoth = getSectionsInTwoTimetables(activeTimetable, comparedTimetable);
+  const theme = useAppSelector(selectTheme);
 
   const getComparedTimetableSlotColor = (offering: Offering, courseId: number) => {
     const isOfferingInActiveTimetable = isOfferingInTimetable(
@@ -233,7 +235,7 @@ const SlotManager = (props: { days: string[] }) => {
             );
           } else {
             colorIndex = courseToColourIndex[course.id];
-            colorData = COLOUR_DATA;
+            colorData = slotColorData;
           }
           slotsByDay[offering.day].push(
             slotToDisplayOffering(course, section, offering, colorIndex, colorData)
@@ -251,7 +253,7 @@ const SlotManager = (props: { days: string[] }) => {
               ? courseToColourIndex[course.id]
               : getNextAvailableColour(courseToColourIndex);
           slotsByDay[offering.day].push(
-            slotToDisplayOffering(course, section, offering, colourId, COLOUR_DATA)
+            slotToDisplayOffering(course, section, offering, colourId, slotColorData)
           );
         });
     }
@@ -307,6 +309,14 @@ const SlotManager = (props: { days: string[] }) => {
     );
   };
 
+  const getThemedCustomSlotColor = (color: string): string => {
+    // maps a custom slot color to a themed color
+    if (theme === "dark" && color === "#F8F6F7") {
+      return "#979797";
+    }
+    return color;
+  };
+
   const uses12HrTime = useAppSelector((state) => state.ui.uses12HrTime);
 
   const dispatch = useAppDispatch();
@@ -319,6 +329,7 @@ const SlotManager = (props: { days: string[] }) => {
       return slot.custom ? (
         <CustomSlot
           {...slot}
+          color={getThemedCustomSlotColor(slot.color)}
           key={`${i.toString() + j.toString()} custom`}
           uses12HrTime={uses12HrTime}
         />

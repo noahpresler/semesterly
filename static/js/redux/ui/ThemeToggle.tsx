@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { setTheme } from "../state/slices/themeSlice";
+import { selectTheme, setTheme } from "../state/slices/themeSlice";
 
 const ThemeSwitch = styled(Switch)(({ theme }) => ({
   width: 53,
@@ -67,7 +67,7 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
 
 // For typescript purposes
 const ThemeToggle = () => {
-  const theme = useAppSelector((state) => state.theme.theme);
+  const theme = useAppSelector(selectTheme);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
