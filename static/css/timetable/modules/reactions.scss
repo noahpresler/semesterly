@@ -132,9 +132,11 @@
 }
 
 .reaction-dropdown {
-  background-color: $ga1a1a1;
+  @include theme() {
+    color: t("text-color-thin");
+    background-color: t("reactions-count-background");
+  }
   border-radius: 8px;
-  color: $gfff;
   font-size: 10px;
   left: -15%;
   opacity: 0;
