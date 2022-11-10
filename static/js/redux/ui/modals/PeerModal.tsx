@@ -168,11 +168,11 @@ const PeerModal = () => {
         <p className="description">
           See who your classmates are this semester! Click below to find Semester.ly
           users in your courses, message them, or add them on Facebook!
-          <i>
-            By accepting this permission, any Semester.ly students in your courses will
-            be able to view your name and public Facebook profile.
-          </i>
         </p>
+        <div className="disclaimer">
+          By accepting this permission, any Semester.ly students in your courses will be
+          able to view your name and public Facebook profile.
+        </div>
         <button className="lure-accept" onClick={optInClick}>
           Yes, I&#39;m In
         </button>

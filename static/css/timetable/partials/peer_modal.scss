@@ -34,11 +34,8 @@
   width: 200px;
 
   p {
-    @include theme() {
-      color: t("text-color-thin");
-    }
     font-size: 16px;
-    font-weight: 200;
+    font-weight: 400;
     line-height: 16px;
     margin-bottom: 30px;
     text-align: center;
@@ -64,7 +61,7 @@
 
   h4 {
     float: left;
-    font-weight: 200;
+    font-weight: 400;
     margin: 0;
     margin-bottom: 16px;
     margin-left: 5px;
@@ -79,11 +76,12 @@
     }
 
     .disclaimer {
-      float: left;
+      font-size: 14px;
+      font-style: italic;
+      float: none;
     }
 
     p {
-      color: $g555;
       font-size: 16px;
       line-height: 22px;
       margin: 7px 0 20px;
@@ -216,7 +214,7 @@
     background-color: t("modal-background");
   }
   border-radius: 3px;
-  box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 2.5px;
+  box-shadow: rgba(0, 0, 0, 0.15) 2px 2px 2.5px;
 
   &.upsell {
     padding: 35px 20px;
