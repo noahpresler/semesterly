@@ -28,7 +28,7 @@
     }
 
     h4 {
-      font-size: 1.30em;
+      font-size: 1.3em;
       margin: 0.5em 0 0.5em 0;
       font-weight: bold;
     }
@@ -37,6 +37,25 @@
       font-size: 1.15em;
       margin: 0.5em 0 0.5em 0;
       font-weight: bold;
+    }
+
+    h6 {
+      font-size: 1em;
+      margin: 0.5em 0 0.5em 0;
+      font-weight: bold;
+    }
+
+    pre {
+      @include theme() {
+        background-color: t("code-snippet-background");
+      }
+      border: none;
+      border-radius: 3px;
+      padding: 1em;
+      margin: 1em 0;
+      overflow: auto;
+      font-size: 0.9em;
+      line-height: 1.5em;
     }
 
     p {

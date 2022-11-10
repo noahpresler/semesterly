@@ -27,6 +27,7 @@ $themes: (
   light:
     (
       background: $g808080,
+      code-snippet-background: $gf3f3f3,
       color-scheme-type: light,
       course-modal-credits: $g999,
       dropdown-background: #fff,
@@ -91,6 +92,7 @@ $themes: (
   dark:
     (
       background: $g808080,
+      code-snippet-background: $dblue7,
       color-scheme-type: dark,
       course-modal-credits: $dblue050,
       dropdown-background: $g333,
