@@ -250,6 +250,7 @@
   height: 16px;
   text-align: center;
   width: 16px;
+  opacity: 0.5;
 
   .fa-check {
     color: $gfff;
@@ -276,10 +277,6 @@
 .ghost {
   button {
     opacity: 0.4;
-  }
-
-  .course-color-circle {
-    opacity: 0.5;
   }
 }
 

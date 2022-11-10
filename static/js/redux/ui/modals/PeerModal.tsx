@@ -234,13 +234,19 @@ const PeerModal = () => {
         <h4>Your Classmates</h4>
         <div className="key">
           <div className="key-entry">
-            <div className="course-color-circle" style={{ backgroundColor: "#ddd" }}>
+            <div
+              className="course-color-circle"
+              style={{ backgroundColor: "rgb(128, 128, 128)" }}
+            >
               <i className="fa fa-check" />
             </div>
             <p>peer is in your class & section</p>
           </div>
           <div className="key-entry">
-            <div className="course-color-circle" style={{ backgroundColor: "#ddd" }} />
+            <div
+              className="course-color-circle"
+              style={{ backgroundColor: "rgb(128, 128, 128)" }}
+            />
             <p>peer is in your class only</p>
           </div>
         </div>
