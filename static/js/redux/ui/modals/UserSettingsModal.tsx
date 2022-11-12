@@ -33,7 +33,6 @@ const modalStyle = {
   height: "90%",
   maxHeight: "688px",
   maxWidth: "600px",
-  overflow: "auto",
 };
 
 const UserSettingsModal = () => {

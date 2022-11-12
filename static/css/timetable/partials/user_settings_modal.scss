@@ -38,6 +38,9 @@
   }
 
   .modal-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     padding: 26px 0 20px;
 
     p {
@@ -103,7 +106,9 @@
     }
 
     .show-delete-dropdown {
-      border-bottom: 1px solid #eee;
+      @include theme() {
+        border-bottom: 1px solid t("modal-border-color");
+      }
     }
 
     .Select {
@@ -143,8 +148,9 @@
   }
 
   .user-settings-modal__notifications {
-    border-bottom: 1px solid $geee;
-    border-top: 1px solid $geee;
+    @include theme() {
+      border-bottom: 1px solid t("modal-border-color");
+    }
     padding-top: 15px;
 
     &.preference-attn-yellow {
