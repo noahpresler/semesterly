@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import React, { useState, useEffect, useRef } from "react";
 import { useActions, useAppDispatch, useAppSelector } from "../../hooks";
-import Select, { Theme } from "react-select";
+import Select from "react-select";
 import Modal from "./Modal";
 import classnames from "classnames";
 import majors from "../../constants/majors";
