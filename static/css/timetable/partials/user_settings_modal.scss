@@ -5,8 +5,10 @@
   }
 
   .modal-header {
-    background-color: $geee;
-    border-bottom: 1px solid $gddd;
+    @include theme() {
+      background-color: t("modal-header-background");
+      border-bottom: 1px solid t("modal-border-color");
+    }
     padding: 25px;
     position: relative;
     text-align: left;
@@ -20,7 +22,9 @@
   }
 
   .pro-pic {
-    border: 2px solid $gddd;
+    @include theme() {
+      border: 2px solid t("modal-border-color");
+    }
     box-shadow: 0 2px 2px $g188-transparent-4;
     z-index: 1;
   }
@@ -117,6 +121,12 @@
 
   .preference {
     padding: 0 20px 15px;
+  }
+
+  .preference-row {
+    display: flex;
+    padding: 0 0 15px;
+    column-gap: 20px;
   }
 
   .preference-attn {
