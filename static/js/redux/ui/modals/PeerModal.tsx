@@ -27,6 +27,10 @@ const modalStyle = {
   width: "1200px",
 };
 
+const keyCircleStyle = {
+  backgroundColor: "rgb(128, 128, 128)",
+};
+
 const emptyState = (
   <div className="peer-card upsell">
     <div className="peer-card-wrapper upsell cf">
@@ -49,7 +53,7 @@ const ghostCard = (
         />
         <div className="user-info">
           <div className="ghost-name" />
-          <button className="view-profile-btn" />
+          <button className="view-profile-btn" disabled />
         </div>
       </div>
       <div className="shared-courses">
@@ -234,19 +238,13 @@ const PeerModal = () => {
         <h4>Your Classmates</h4>
         <div className="key">
           <div className="key-entry">
-            <div
-              className="course-color-circle"
-              style={{ backgroundColor: "rgb(128, 128, 128)" }}
-            >
+            <div className="course-color-circle" style={keyCircleStyle}>
               <i className="fa fa-check" />
             </div>
             <p>peer is in your class & section</p>
           </div>
           <div className="key-entry">
-            <div
-              className="course-color-circle"
-              style={{ backgroundColor: "rgb(128, 128, 128)" }}
-            />
+            <div className="course-color-circle" style={keyCircleStyle} />
             <p>peer is in your class only</p>
           </div>
         </div>
