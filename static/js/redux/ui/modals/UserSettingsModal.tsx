@@ -355,7 +355,7 @@ const UserSettingsModal = () => {
     neutral0: "#2d2e32", // background color: dblue7
     neutral20: "#5a5d64", // border color: dblue2
   };
-  let reactSelectLightColors = {
+  const reactSelectLightColors = {
     primary: "#2684ff",
     primary25: "#deebff",
     neutral0: "#ffffff",
