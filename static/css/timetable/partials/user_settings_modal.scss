@@ -5,8 +5,10 @@
   }
 
   .modal-header {
-    background-color: $geee;
-    border-bottom: 1px solid $gddd;
+    @include theme() {
+      background-color: t("modal-header-background");
+      border-bottom: 1px solid t("modal-border-color");
+    }
     padding: 25px;
     position: relative;
     text-align: left;
@@ -20,7 +22,9 @@
   }
 
   .pro-pic {
-    border: 2px solid $gddd;
+    @include theme() {
+      border: 2px solid t("modal-border-color");
+    }
     box-shadow: 0 2px 2px $g188-transparent-4;
     z-index: 1;
   }
@@ -34,6 +38,9 @@
   }
 
   .modal-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     padding: 26px 0 20px;
 
     p {
@@ -99,7 +106,9 @@
     }
 
     .show-delete-dropdown {
-      border-bottom: 1px solid #eee;
+      @include theme() {
+        border-bottom: 1px solid t("modal-border-color");
+      }
     }
 
     .Select {
@@ -117,6 +126,19 @@
 
   .preference {
     padding: 0 20px 15px;
+
+    .alert-danger {
+      @include theme() {
+        background-color: t("alert-danger-background");
+        border-color: t("modal-border-color");
+      }
+    }
+  }
+
+  .preference-row {
+    display: flex;
+    padding: 0 0 15px;
+    column-gap: 20px;
   }
 
   .preference-attn {
@@ -126,8 +148,9 @@
   }
 
   .user-settings-modal__notifications {
-    border-bottom: 1px solid $geee;
-    border-top: 1px solid $geee;
+    @include theme() {
+      border-bottom: 1px solid t("modal-border-color");
+    }
     padding-top: 15px;
 
     &.preference-attn-yellow {

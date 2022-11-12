@@ -21,6 +21,7 @@ import majors from "../../constants/majors";
 import { isIncomplete as TOSIncomplete } from "../../util";
 import { isUserInfoIncomplete as areUserSettingsIncomplete } from "../../state/slices";
 import { getIsUserInfoIncomplete } from "../../state";
+import { selectTheme } from "../../state/slices/themeSlice";
 
 interface Option {
   value: string;
@@ -28,9 +29,10 @@ interface Option {
 }
 
 const modalStyle = {
-  height: "588px",
-  width: "500px",
-  overflow: "auto",
+  width: "80%",
+  height: "90%",
+  maxHeight: "688px",
+  maxWidth: "600px",
 };
 
 const UserSettingsModal = () => {
@@ -205,7 +207,14 @@ const UserSettingsModal = () => {
 
   const preferences = !userInfo.FacebookSignedUp ? null : (
     <div>
-      <div className="preference cf">
+      <div className="preference-row cf">
+        <div className="preference-wrapper">
+          <h3>Would you like to find classes with friends?</h3>
+          <p className="disclaimer">
+            See which Facebook friends will be your classmates! Only friends in your
+            course will see your name.
+          </p>
+        </div>
         <label className="switch switch-slide" htmlFor="social-courses-input">
           <input
             name="shareClassesWithFriends"
@@ -220,15 +229,15 @@ const UserSettingsModal = () => {
           <span className="switch-label" data-on="Yes" data-off="No" />
           <span className="switch-handle" />
         </label>
+      </div>
+      <div className="preference-row cf">
         <div className="preference-wrapper">
-          <h3>Would you like to find classes with friends?</h3>
+          <h3>Would you like to find sections with friends?</h3>
           <p className="disclaimer">
-            See which Facebook friends will be your classmates! Only friends in your
-            course will see your name.
+            See which Facebook friends will be in your section! Only friends in your
+            section will see your name.
           </p>
         </div>
-      </div>
-      <div className="preference cf">
         <label className="switch switch-slide" htmlFor="share-sections-input">
           <input
             id="share-sections-input"
@@ -243,15 +252,15 @@ const UserSettingsModal = () => {
           <span className="switch-label" data-on="Yes" data-off="No" />
           <span className="switch-handle" />
         </label>
+      </div>
+      <div className="preference-row cf">
         <div className="preference-wrapper">
-          <h3>Would you like to find sections with friends?</h3>
+          <h3>Find new friends in your classes!</h3>
           <p className="disclaimer">
-            See which Facebook friends will be in your section! Only friends in your
-            section will see your name.
+            Find your peers for this semester. All students in your courses will be able
+            to view your name and public Facebook profile.
           </p>
         </div>
-      </div>
-      <div className="preference cf">
         <label className="switch switch-slide" htmlFor="social-all-input">
           <input
             name="findNewFriends"
@@ -266,13 +275,6 @@ const UserSettingsModal = () => {
           <span className="switch-label" data-on="Yes" data-off="No" />
           <span className="switch-handle" />
         </label>
-        <div className="preference-wrapper">
-          <h3>Find new friends in your classes!</h3>
-          <p className="disclaimer">
-            Find your peers for this semester. All students in your courses will be able
-            to view your name and public Facebook profile.
-          </p>
-        </div>
       </div>
     </div>
   );
@@ -346,6 +348,20 @@ const UserSettingsModal = () => {
     <h1>Welcome!</h1>
   );
 
+  const isDarkMode = useAppSelector(selectTheme) === "dark";
+  const reactSelectDarkColors = {
+    primary: "#4d5057", // selected element: dblue3
+    primary25: "#3d3e42", // hover color: dblue6
+    neutral0: "#2d2e32", // background color: dblue7
+    neutral20: "#5a5d64", // border color: dblue2
+  };
+  const reactSelectLightColors = {
+    primary: "#2684ff",
+    primary25: "#deebff",
+    neutral0: "#ffffff",
+    neutral20: "#cccccc",
+  };
+
   return (
     <Modal
       visible={showUserSettings()}
@@ -373,8 +389,14 @@ const UserSettingsModal = () => {
               className="select-field"
               value={{ label: userSettings.major, value: userSettings.major }}
               options={majors}
+              menuShouldScrollIntoView={false}
               isSearchable
               onChange={changeMajor}
+              theme={(theme) =>
+                isDarkMode
+                  ? { ...theme, colors: { ...theme.colors, ...reactSelectDarkColors } }
+                  : { ...theme, colors: { ...theme.colors, ...reactSelectLightColors } }
+              }
             />
           </div>
           <div className="preference cf">
@@ -391,8 +413,14 @@ const UserSettingsModal = () => {
                 { value: 2027, label: 2027 },
                 { value: 2028, label: 2028 },
               ]}
+              menuShouldScrollIntoView={false}
               isSearchable
               onChange={changeClassYear}
+              theme={(theme) =>
+                isDarkMode
+                  ? { ...theme, colors: { ...theme.colors, ...reactSelectDarkColors } }
+                  : { ...theme, colors: { ...theme.colors, ...reactSelectLightColors } }
+              }
             />
           </div>
           {preferences}
