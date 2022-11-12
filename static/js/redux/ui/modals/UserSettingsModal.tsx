@@ -351,7 +351,7 @@ const UserSettingsModal = () => {
 
   const isDarkMode = useAppSelector(selectTheme) === "dark";
   const reactSelectDarkColors = {
-    primary: "#3d3e42", // selected element: dblue6
+    primary: "#4d5057", // selected element: dblue3
     primary25: "#3d3e42", // hover color: dblue6
     neutral0: "#2d2e32", // background color: dblue7
     neutral20: "#5a5d64", // border color: dblue2
