@@ -349,12 +349,18 @@ const UserSettingsModal = () => {
     <h1>Welcome!</h1>
   );
 
-  const isDarkMode = useAppSelector(selectTheme);
+  const isDarkMode = useAppSelector(selectTheme) === "dark";
   const reactSelectDarkColors = {
     primary: "#3d3e42", // selected element: dblue6
     primary25: "#3d3e42", // hover color: dblue6
     neutral0: "#2d2e32", // background color: dblue7
     neutral20: "#5a5d64", // border color: dblue2
+  };
+  let reactSelectLightColors = {
+    primary: "#2684ff",
+    primary25: "#deebff",
+    neutral0: "#ffffff",
+    neutral20: "#cccccc",
   };
 
   return (
@@ -390,7 +396,7 @@ const UserSettingsModal = () => {
               theme={(theme) =>
                 isDarkMode
                   ? { ...theme, colors: { ...theme.colors, ...reactSelectDarkColors } }
-                  : theme
+                  : { ...theme, colors: { ...theme.colors, ...reactSelectLightColors } }
               }
             />
           </div>
@@ -414,7 +420,7 @@ const UserSettingsModal = () => {
               theme={(theme) =>
                 isDarkMode
                   ? { ...theme, colors: { ...theme.colors, ...reactSelectDarkColors } }
-                  : theme
+                  : { ...theme, colors: { ...theme.colors, ...reactSelectLightColors } }
               }
             />
           </div>
