@@ -79,6 +79,8 @@ $themes: (
       sidebar-input-border: 1px solid $gfff,
       sidebar-input-border_focus: 1px solid $blue-alt,
       sidebar-input-border_hover: 1px solid $gddd,
+      switch-slide-before: $gddd,
+      switch-slide-after: $switch-blue,
       text-color-hover: $primary-navy,
       text-color-thin: $g777,
       text-color: $primary-navy,
@@ -91,6 +93,7 @@ $themes: (
   // Dark Mode
   dark:
     (
+      alert-danger-background: $red-dark,
       background: $g808080,
       code-snippet-background: $dblue7,
       color-scheme-type: dark,
@@ -144,6 +147,8 @@ $themes: (
       sidebar-input-border: 1px solid $g222,
       sidebar-input-border_focus: 1px solid $blue-alt,
       sidebar-input-border_hover: 1px solid $dblue3,
+      switch-slide-before: $dblue6,
+      switch-slide-after: $blue-dark,
       text-color-hover: white,
       text-color-thin: $dblue075,
       text-color: $dblue0,

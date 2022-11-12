@@ -121,6 +121,13 @@
 
   .preference {
     padding: 0 20px 15px;
+
+    .alert-danger {
+      @include theme() {
+        background-color: t("alert-danger-background");
+        border-color: t("modal-border-color");
+      }
+    }
   }
 
   .preference-row {
