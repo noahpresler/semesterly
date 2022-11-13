@@ -27,8 +27,8 @@
 .pm-side-bar {
   @include theme() {
     background-color: t("sidebar-background");
+    border-right: 1px solid t("modal-border-color");
   }
-  border-right: 1px solid $gddd;
   height: 100%;
   position: absolute;
   width: 200px;
@@ -91,12 +91,13 @@
     }
 
     .lure-accept {
-      background: $green-bright;
+      background-color: $green-bright;
       border: 1px solid $green-bright;
       border-radius: 3px;
       color: $gfff;
       font-size: 14px;
       font-weight: 900;
+      margin-top: 10px;
       padding: 5px 10px;
       width: 100px;
     }
