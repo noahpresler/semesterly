@@ -40,7 +40,7 @@ import {
 import { Timetable } from "../constants/commonTypes";
 import { startComparingTimetables } from "../state/slices/compareTimetableSlice";
 import AvgCourseRating from "./AvgCourseRating";
-import { selectSlotColorData } from "../state/slices/themeSlice";
+import { selectSlotColorData, selectTheme } from "../state/slices/themeSlice";
 import { peerModalActions } from "../state/slices/peerModalSlice";
 
 const SideBar = () => {
@@ -78,7 +78,7 @@ const SideBar = () => {
 
   const timetableCourses = useAppSelector((state) => getActiveTimetableCourses(state));
   const events = useAppSelector((state) => state.customEvents.events);
-
+  const curTheme = useAppSelector(selectTheme);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const hideDropdown = () => {
@@ -131,6 +131,7 @@ const SideBar = () => {
                   startComparingTimetables({
                     activeTimetable,
                     comparedTimetable: t,
+                    theme: curTheme,
                   })
                 );
                 event.stopPropagation();

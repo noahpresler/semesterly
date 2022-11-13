@@ -3,6 +3,7 @@ import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { selectTheme, setTheme } from "../state/slices/themeSlice";
+import themeObject from "../constants/themes";
 
 const ThemeSwitch = styled(Switch)(({ theme }) => ({
   width: 53,
@@ -76,16 +77,17 @@ const ThemeToggle = () => {
     // Reset previous classes
     root.className = "page";
     // Now, add the theme
-    root.classList.add(`theme--${theme}`);
-    root.setAttribute("data-theme", theme);
+    root.classList.add(`theme--${theme.name}`);
+    root.setAttribute("data-theme", theme.name);
   }, [theme]);
 
   return (
     <div className="theme-toggle-container">
       <ThemeSwitch
-        checked={theme === "dark"}
+        checked={theme.name === "dark"}
         onChange={(e) => {
-          dispatch(setTheme(e.target.checked ? "dark" : "light"));
+          const themeName = e.target.checked ? "dark" : "light";
+          dispatch(setTheme(themeObject[themeName]));
         }}
       />
     </div>

@@ -1,4 +1,5 @@
 // This file stores typescript types used by both react and redux
+export type ThemeName = "light" | "dark";
 
 export type Day = "M" | "T" | "W" | "R" | "F";
 
@@ -7,6 +8,33 @@ export interface Semester {
   name: string;
   year: string;
 }
+/**
+ * Centralizes theme related constants
+ */
+export interface Theme {
+  name: ThemeName;
+  slotColors: SlotColorData[];
+  compareTtColors: {
+    // compare timetable gradient colors
+    activeStart: string;
+    activeEnd: string;
+    comparedStart: string;
+    comparedEnd: string;
+    commonStart: string;
+    commonEnd: string;
+  };
+  customEventDefaultColor: string;
+  reactSelectColors: {
+    primary: string;
+    primary25: string;
+    neutral0: string;
+    neutral20: string;
+  };
+}
+
+export type ThemeObject = {
+  [x in ThemeName]?: Theme;
+};
 
 /**
  * Offering refers to a class period of a section of a course

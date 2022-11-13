@@ -1,4 +1,4 @@
-import { SlotColorData, Timetable } from "./../../constants/commonTypes";
+import { SlotColorData, Timetable, Theme } from "./../../constants/commonTypes";
 import { RootState } from "..";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getSectionsInTwoTimetables } from "../../ui/slotUtils";
@@ -35,28 +35,30 @@ const compareTimetableSlice = createSlice({
       action: PayloadAction<{
         activeTimetable: Timetable;
         comparedTimetable: Timetable;
+        theme: Theme;
       }>
     ) => {
       state.isComparing = true;
       state.activeTimetable = action.payload.activeTimetable;
       state.comparedTimetable = action.payload.comparedTimetable;
+      const colors = action.payload.theme.compareTtColors;
       const numCommon = getSectionsInTwoTimetables(
         state.activeTimetable,
         state.comparedTimetable
       ).length;
       const activeGradient = buildGradient(
-        "#fd7473",
-        "#f4cece",
+        colors.activeStart,
+        colors.activeEnd,
         calcGradientRange(state.activeTimetable.slots.length - numCommon)
       );
       const comparedGradient = buildGradient(
-        "#5cccf2",
-        "#c2e6f2",
+        colors.comparedStart,
+        colors.comparedEnd,
         calcGradientRange(state.comparedTimetable.slots.length - numCommon)
       );
       const commonGradient = buildGradient(
-        "#36debb",
-        "#d9f6f0",
+        colors.commonStart,
+        colors.commonEnd,
         calcGradientRange(numCommon)
       );
 

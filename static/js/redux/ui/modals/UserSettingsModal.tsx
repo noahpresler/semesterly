@@ -348,19 +348,7 @@ const UserSettingsModal = () => {
     <h1>Welcome!</h1>
   );
 
-  const isDarkMode = useAppSelector(selectTheme) === "dark";
-  const reactSelectDarkColors = {
-    primary: "#4d5057", // selected element: dblue3
-    primary25: "#3d3e42", // hover color: dblue6
-    neutral0: "#2d2e32", // background color: dblue7
-    neutral20: "#5a5d64", // border color: dblue2
-  };
-  const reactSelectLightColors = {
-    primary: "#2684ff",
-    primary25: "#deebff",
-    neutral0: "#ffffff",
-    neutral20: "#cccccc",
-  };
+  const curTheme = useAppSelector(selectTheme);
 
   return (
     <Modal
@@ -392,11 +380,10 @@ const UserSettingsModal = () => {
               menuShouldScrollIntoView={false}
               isSearchable
               onChange={changeMajor}
-              theme={(theme) =>
-                isDarkMode
-                  ? { ...theme, colors: { ...theme.colors, ...reactSelectDarkColors } }
-                  : { ...theme, colors: { ...theme.colors, ...reactSelectLightColors } }
-              }
+              theme={(theme) => ({
+                ...theme,
+                colors: { ...theme.colors, ...curTheme.reactSelectColors },
+              })}
             />
           </div>
           <div className="preference cf">
@@ -416,11 +403,10 @@ const UserSettingsModal = () => {
               menuShouldScrollIntoView={false}
               isSearchable
               onChange={changeClassYear}
-              theme={(theme) =>
-                isDarkMode
-                  ? { ...theme, colors: { ...theme.colors, ...reactSelectDarkColors } }
-                  : { ...theme, colors: { ...theme.colors, ...reactSelectLightColors } }
-              }
+              theme={(theme) => ({
+                ...theme,
+                colors: { ...theme.colors, ...curTheme.reactSelectColors },
+              })}
             />
           </div>
           {preferences}
