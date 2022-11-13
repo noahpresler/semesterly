@@ -14,15 +14,7 @@ export interface Semester {
 export interface Theme {
   name: ThemeName;
   slotColors: SlotColorData[];
-  compareTtColors: {
-    // compare timetable gradient colors
-    activeStart: string;
-    activeEnd: string;
-    comparedStart: string;
-    comparedEnd: string;
-    commonStart: string;
-    commonEnd: string;
-  };
+  compareTtColors: CompareTimetableColors;
   customEventDefaultColor: string;
   reactSelectColors: {
     primary: string;
@@ -30,6 +22,15 @@ export interface Theme {
     neutral0: string;
     neutral20: string;
   };
+}
+
+export interface CompareTimetableColors {
+  activeStart: string;
+  activeEnd: string;
+  comparedStart: string;
+  comparedEnd: string;
+  commonStart: string;
+  commonEnd: string;
 }
 
 export type ThemeObject = {

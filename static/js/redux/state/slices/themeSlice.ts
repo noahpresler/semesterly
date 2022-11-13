@@ -1,3 +1,4 @@
+import { setTheme } from "./../../actions/initActions";
 import { RootState } from "./../index";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Theme, ThemeName } from "../../constants/commonTypes";
@@ -29,13 +30,18 @@ const themeSlice = createSlice({
   name: "theme",
   initialState,
   reducers: {
-    setTheme: (state, action: PayloadAction<Theme>) => {
+    // setTheme: (state, action: PayloadAction<Theme>) => {
+    //   state.theme = action.payload;
+    //   localStorage.setItem(themeLocalStorageKey, action.payload.name);
+    // },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(setTheme, (state, action) => {
       state.theme = action.payload;
       localStorage.setItem(themeLocalStorageKey, action.payload.name);
-    },
+    });
   },
 });
 export const selectSlotColorData = (state: RootState) => state.theme.theme.slotColors;
 export const selectTheme = (state: RootState) => state.theme.theme;
-export const { setTheme } = themeSlice.actions;
 export default themeSlice.reducer;
