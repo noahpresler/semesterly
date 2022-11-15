@@ -12,7 +12,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import PropTypes from "prop-types";
 import React from "react";
 import { createICalFromTimetable } from "../../actions";
 import { useAppDispatch, useAppSelector } from "../../hooks";
