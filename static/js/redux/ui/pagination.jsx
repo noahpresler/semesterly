@@ -20,7 +20,7 @@ const Bubble = ({ index, active, setActive }) => (
     onClick={() => setActive(index)}
     className={active ? "sem-page active" : "sem-page"}
   >
-    <span>{index + 1}</span>
+    <span className="section-bubble">{index + 1}</span>
   </li>
 );
 

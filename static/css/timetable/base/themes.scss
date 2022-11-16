@@ -91,6 +91,9 @@ $themes: (
       tos-banner-background: $gfff,
       tos-banner-border: $gddd,
       tos-banner-close: $geee,
+      course-section-bubble-background: $gaaa,
+      course-section-bubble-border: $gfff,
+      bubble-text-color: $gfff,
     ),
   // Dark Mode
   dark:
@@ -161,6 +164,9 @@ $themes: (
       tos-banner-background: $dblue7,
       tos-banner-border: $dblue6,
       tos-banner-close: $dblue7,
+      course-section-bubble-background: $dblue3,
+      course-section-bubble-border: $dblue8,
+      bubble-text-color: $dblue0,
     )
 );
 
