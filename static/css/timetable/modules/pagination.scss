@@ -29,11 +29,9 @@
 }
 
 .sem-page {
-  // background-color: $gaaa;
-  // border: 5px solid $gfff;
   @include theme() {
-    background-color: t('course-section-bubble-background');
-    border: 5px solid t('course-section-bubble-border');
+    background-color: t("course-section-bubble-background");
+    border: 5px solid t("course-section-bubble-border");
   }
   border-radius: 50%;
   color: transparent;
@@ -58,11 +56,17 @@
   &.active {
     background-color: $primary-navy;
     border: 5px solid $primary-navy;
-    @include theme() {
-      color: t('bubble-text-color');
+    span.section-bubble {
+      @include theme() {
+        color: t("bubble-text-color");
+      }
     }
   }
 
+  span.section-bubble {
+    color: transparent
+  }
+  
   span {
     left: 50%;
     position: absolute;
