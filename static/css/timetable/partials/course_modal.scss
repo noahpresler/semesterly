@@ -298,6 +298,7 @@
 .modal-body {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   width: 100%;
 
   [class^="col-"] {
