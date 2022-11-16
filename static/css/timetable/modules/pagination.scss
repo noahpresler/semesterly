@@ -58,7 +58,9 @@
   &.active {
     background-color: $primary-navy;
     border: 5px solid $primary-navy;
-    color: $gfff;
+    @include theme() {
+      color: t('bubble-text-color');
+    }
   }
 
   span {
