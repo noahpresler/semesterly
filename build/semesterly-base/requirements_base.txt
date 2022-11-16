@@ -11,7 +11,7 @@ celery==5.2.2
 coverage==4.4.1
 cryptography==36.0.1
 dateparser==1.1.0
-Django==3.2.15
+Django==3.2.16
 django-cachalot==2.4.3
 django-extensions==3.1.5
 django-picklefield==3.0.1
