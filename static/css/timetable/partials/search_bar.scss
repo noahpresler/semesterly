@@ -373,10 +373,14 @@
 
 .search-course-add {
   &.in-roster {
-    background-color: #2dd6b5;
+    @include theme() {
+      background-color: t("search-course-add-in-roster");
+    }
 
     &:hover {
-      background-color: #56eccf;
+      @include theme() {
+        background-color: t("search-course-add-in-roster-hover");
+      }
     }
   }
 }
