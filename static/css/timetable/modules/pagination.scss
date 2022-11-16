@@ -29,8 +29,12 @@
 }
 
 .sem-page {
-  background-color: $gaaa;
-  border: 5px solid $gfff;
+  // background-color: $gaaa;
+  // border: 5px solid $gfff;
+  @include theme() {
+    background-color: t('course-section-bubble-background');
+    border: 5px solid t('course-section-bubble-border');
+  }
   border-radius: 50%;
   color: transparent;
   cursor: pointer;
