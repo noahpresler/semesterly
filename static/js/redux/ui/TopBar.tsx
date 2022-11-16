@@ -25,6 +25,7 @@ const TopBar = () => {
   const userInfo = useAppSelector((state) => state.userInfo.data);
   const currentSemester = useAppSelector((state) => getCurrentSemester(state));
   const isComparing = useAppSelector((state) => state.compareTimetable.isComparing);
+  const theme = useAppSelector((state) => state.theme.theme.name);
 
   const [sideBarCollapsed, setSideBarCollapsed] = useState("neutral");
 
@@ -85,11 +86,17 @@ const TopBar = () => {
   return (
     <div className="top-bar">
       <a href="https://semester.ly">
-        <img
-          alt="logo"
-          className="semesterly-logo no-print"
-          src="/static/img/logo2.0-32x32.png"
-        />
+        {theme === "dark" ? 
+          <img
+            alt="logo"
+            className="semesterly-logo no-print"
+            src="/static/img/logo2.0-32x32-dark.png"
+          />: 
+          <img
+            alt="logo"
+            className="semesterly-logo no-print"
+            src="/static/img/logo2.0-32x32.png"
+          />}
       </a>
       <div className="semesterly-name no-print">Semester.ly</div>
       <div className="print-content print">
