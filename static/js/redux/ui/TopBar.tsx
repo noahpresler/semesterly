@@ -20,12 +20,13 @@ import TimetableLoaderContainer from "./containers/timetable_loader_container";
 import SocialProfileContainer from "./containers/social_profile_container";
 import { getCurrentSemester } from "../state";
 import ThemeToggle from "./ThemeToggle";
+import { selectTheme } from "../state/slices/themeSlice";
 
 const TopBar = () => {
   const userInfo = useAppSelector((state) => state.userInfo.data);
   const currentSemester = useAppSelector((state) => getCurrentSemester(state));
   const isComparing = useAppSelector((state) => state.compareTimetable.isComparing);
-  const theme = useAppSelector((state) => state.theme.theme.name);
+  const theme = useAppSelector(selectTheme);
 
   const [sideBarCollapsed, setSideBarCollapsed] = useState("neutral");
 
@@ -86,7 +87,7 @@ const TopBar = () => {
   return (
     <div className="top-bar">
       <a href="https://semester.ly">
-        {theme === "dark" ? (
+        {theme.name === "dark" ? (
           <img
             alt="logo"
             className="semesterly-logo no-print"
