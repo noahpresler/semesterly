@@ -7,7 +7,9 @@
   }
 
   h3 {
-    color: $g555;
+    @include theme() {
+      color: t("text-color-thin");
+    }
     font-size: 14px;
     margin: 20px 10px;
   }
@@ -23,23 +25,32 @@
       margin-left: 3px;
     }
   }
-
 }
 
 .tos-modal-container {
   padding: 30px 20px;
 }
 
-
 .accept-tos-btn {
-  background-color: $green;
+  @include theme() {
+    background-color: t("confirm-button-background");
+  }
   border: 0;
   border-radius: 3px;
-  color: $gfff;
   margin: 20px auto;
   padding: 10px 20px;
 
+  span {
+    color: $gfff;
+  }
+
   i {
     margin-right: 10px;
+  }
+
+  &:hover {
+    @include theme() {
+      background-color: t("confirm-button-hover");
+    }
   }
 }
