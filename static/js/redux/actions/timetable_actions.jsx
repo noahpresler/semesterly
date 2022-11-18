@@ -408,7 +408,7 @@ export const addCustomSlot =
         day,
         name: "New Custom Event", // default name for custom slot
         location: "",
-        color: color,
+        color,
         time_start: timeStart, // match backend slot attribute names
         time_end: timeEnd,
         credits: 0.0,

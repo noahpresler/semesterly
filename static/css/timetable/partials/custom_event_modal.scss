@@ -117,12 +117,22 @@
 }
 
 .save-button {
+  @include theme() {
+    background-color: t("confirm-button-background");
+  }
   width: 50%;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 1em;
 
   span {
+    color: white;
     font-size: 1.5em;
+  }
+
+  &:hover {
+    @include theme() {
+      background-color: t("confirm-button-hover");
+    }
   }
 }
