@@ -15,6 +15,21 @@
   &.trans > div {
     background-color: transparent !important;
   }
+
+  // Course Modal Content Styles
+  .modal-content {
+    @include theme() {
+      background-color: t("modal-background");
+    }
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: background-color 0.2s, color 0.2s;
+    width: 100%;
+  }
 }
 
 .course-modal.trans .modal-content,
@@ -126,21 +141,6 @@
   margin-right: 4.5px;
   padding: 0;
   width: 30px;
-}
-
-// Course Modal Content Styles
-.modal-content {
-  @include theme() {
-    background-color: t("modal-background");
-  }
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  transition: background-color 0.2s, color 0.2s;
-  width: 100%;
 }
 
 .modal-header {

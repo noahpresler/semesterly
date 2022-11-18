@@ -23,8 +23,12 @@ import { selectSlotColorData } from "../../state/slices/themeSlice";
 
 const modalStyle = {
   height: "85%",
-  maxHeight: "900px",
-  width: "1200px",
+  width: "90%",
+  maxWidth: "1200px",
+};
+
+const keyCircleStyle = {
+  backgroundColor: "rgb(128, 128, 128)",
 };
 
 const emptyState = (
@@ -48,8 +52,8 @@ const ghostCard = (
           style={{ backgroundImage: "url(/static/img/blank.jpg)" }}
         />
         <div className="user-info">
-          <div className="ghost-name">H</div>
-          <button className="view-profile-btn" />
+          <div className="ghost-name" />
+          <button className="view-profile-btn" disabled />
         </div>
       </div>
       <div className="shared-courses">
@@ -168,11 +172,11 @@ const PeerModal = () => {
         <p className="description">
           See who your classmates are this semester! Click below to find Semester.ly
           users in your courses, message them, or add them on Facebook!
-          <i>
-            By accepting this permission, any Semester.ly students in your courses will
-            be able to view your name and public Facebook profile.
-          </i>
         </p>
+        <div className="disclaimer">
+          By accepting this permission, any Semester.ly students in your courses will be
+          able to view your name and public Facebook profile.
+        </div>
         <button className="lure-accept" onClick={optInClick}>
           Yes, I&#39;m In
         </button>
@@ -229,18 +233,18 @@ const PeerModal = () => {
   });
 
   const display = !isLoading ? (
-    <div className="main-modal-wrapper">
+    <div className="modal-content">
       <div className="pm-header">
         <h4>Your Classmates</h4>
         <div className="key">
           <div className="key-entry">
-            <div className="course-color-circle" style={{ backgroundColor: "#ddd" }}>
+            <div className="course-color-circle" style={keyCircleStyle}>
               <i className="fa fa-check" />
             </div>
             <p>peer is in your class & section</p>
           </div>
           <div className="key-entry">
-            <div className="course-color-circle" style={{ backgroundColor: "#ddd" }} />
+            <div className="course-color-circle" style={keyCircleStyle} />
             <p>peer is in your class only</p>
           </div>
         </div>
@@ -251,7 +255,7 @@ const PeerModal = () => {
       {(!userInfo.social_all || peerCards.length === 0) && ghostCards}
     </div>
   ) : (
-    <div className="main-modal-wrapper">
+    <div className="modal-content">
       <span className="img-icon">
         <div className="loader" />
       </span>
@@ -270,11 +274,9 @@ const PeerModal = () => {
       showCloseButton={false}
       customStyles={modalStyle}
     >
-      <div className="modal-content">
-        <div className="split-modal-wrapper">
-          {sideBar}
-          {display}
-        </div>
+      <div className="content-wrapper">
+        {sideBar}
+        {display}
       </div>
     </Modal>
   );
