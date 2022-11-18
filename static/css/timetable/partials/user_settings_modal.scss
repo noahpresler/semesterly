@@ -132,6 +132,10 @@
     display: flex;
     padding: 0 0 15px;
     column-gap: 20px;
+
+    .preference-wrapper {
+      flex: 1;
+    }
   }
 
   .preference-attn {
