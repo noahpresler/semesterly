@@ -29,19 +29,11 @@
     z-index: 1;
   }
 
-  .modal-content {
-    height: 100%;
-    text-align: center;
-
-    form {
-      text-align: left;
-    }
-  }
-
   .modal-body {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    text-align: center;
     padding: 26px 0 20px;
 
     p {
