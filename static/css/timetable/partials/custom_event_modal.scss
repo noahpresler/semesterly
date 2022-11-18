@@ -33,7 +33,6 @@
 
   .active {
     @include theme() {
-      color: t("text-color");
       background-color: t("custom-event-active-day-background");
     }
   }
