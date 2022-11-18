@@ -66,8 +66,6 @@ const UserSettingsModal = () => {
     findNewFriends: userInfo.social_all || false,
   });
 
-  const tosAgreed = useRef();
-
   const [showDelete, setShowDelete] = useState(false);
   const [fbSwitchAlertText, setFbSwitchAlertText] = useState(null);
   const [userSettings, setUserSettings] = useState({ ...userInfo });
@@ -178,10 +176,16 @@ const UserSettingsModal = () => {
   }, [fbSettings]);
 
   const tos = isSigningUp ? (
-    <div className="preference cf">
+    <div className="preference-row cf">
+      <div className="preference-wrapper">
+        <h3>Accept the terms and conditions</h3>
+        <p className="disclaimer">
+          By agreeing, you accept our <a href="/termsofservice">terms and conditions</a>{" "}
+          & <a href="/privacypolicy">privacy policy</a>.
+        </p>
+      </div>
       <label className="switch switch-slide" htmlFor="tos-agreed-input">
         <input
-          ref={tosAgreed}
           id="tos-agreed-input"
           className="switch-input"
           type="checkbox"
@@ -195,18 +199,11 @@ const UserSettingsModal = () => {
         <span className="switch-label" data-on="ACCEPTED" data-off="CLICK TO ACCEPT" />
         <span className="switch-handle" />
       </label>
-      <div className="preference-wrapper">
-        <h3>Accept the terms and conditions</h3>
-        <p className="disclaimer">
-          By agreeing, you accept our
-          <a>terms and conditions</a>&<a>privacy policy</a>.
-        </p>
-      </div>
     </div>
   ) : null;
 
   const preferences = !userInfo.FacebookSignedUp ? null : (
-    <div>
+    <>
       <div className="preference-row cf">
         <div className="preference-wrapper">
           <h3>Would you like to find classes with friends?</h3>
@@ -276,7 +273,7 @@ const UserSettingsModal = () => {
           <span className="switch-handle" />
         </label>
       </div>
-    </div>
+    </>
   );
   const renderedfbAlert = fbSwitchAlertText ? (
     <div className="alert alert-danger" role="alert">
@@ -360,64 +357,62 @@ const UserSettingsModal = () => {
       className="user-settings-modal max-modal"
       customStyles={modalStyle}
     >
-      <div className="modal-content">
-        <div className="modal-header">
-          <div
-            className="pro-pic"
-            style={{ backgroundImage: `url(${userInfo.img_url})` }}
+      <div className="modal-header">
+        <div
+          className="pro-pic"
+          style={{ backgroundImage: `url(${userInfo.img_url})` }}
+        />
+        {greetings}
+        {!isSigningUp ? cancelButton : null}
+      </div>
+      <div className="modal-body">
+        <div className="preference cf">{renderedfbAlert}</div>
+        <div className="preference cf">
+          <h3>What&#39;s your major?</h3>
+          <Select
+            className="select-field"
+            value={{ label: userSettings.major, value: userSettings.major }}
+            options={majors}
+            menuShouldScrollIntoView={false}
+            isSearchable
+            onChange={changeMajor}
+            theme={(theme) => ({
+              ...theme,
+              colors: { ...theme.colors, ...curTheme.reactSelectColors },
+            })}
           />
-          {greetings}
-          {!isSigningUp ? cancelButton : null}
         </div>
-        <div className="modal-body">
-          <div className="preference cf">{renderedfbAlert}</div>
-          <div className="preference cf">
-            <h3>What&#39;s your major?</h3>
-            <Select
-              className="select-field"
-              value={{ label: userSettings.major, value: userSettings.major }}
-              options={majors}
-              menuShouldScrollIntoView={false}
-              isSearchable
-              onChange={changeMajor}
-              theme={(theme) => ({
-                ...theme,
-                colors: { ...theme.colors, ...curTheme.reactSelectColors },
-              })}
-            />
-          </div>
-          <div className="preference cf">
-            <h3>What&#39;s your graduating class year?</h3>
-            <Select
-              className="select-field"
-              value={{ label: userSettings.class_year, value: userSettings.class_year }}
-              options={[
-                { value: 2022, label: 2022 },
-                { value: 2023, label: 2023 },
-                { value: 2024, label: 2024 },
-                { value: 2025, label: 2025 },
-                { value: 2026, label: 2026 },
-                { value: 2027, label: 2027 },
-                { value: 2028, label: 2028 },
-              ]}
-              menuShouldScrollIntoView={false}
-              isSearchable
-              onChange={changeClassYear}
-              theme={(theme) => ({
-                ...theme,
-                colors: { ...theme.colors, ...curTheme.reactSelectColors },
-              })}
-            />
-          </div>
-          {preferences}
-          {fbUpsell}
-          {tos}
-          {!isSigningUp ? deleteDropdown : null}
-          <div className="button-wrapper">
-            <button className="signup-button" onClick={hide}>
-              Save
-            </button>
-          </div>
+        <div className="preference cf">
+          <h3>What&#39;s your graduating class year?</h3>
+          <Select
+            className="select-field"
+            value={{ label: userSettings.class_year, value: userSettings.class_year }}
+            options={[
+              { value: 2022, label: 2022 },
+              { value: 2023, label: 2023 },
+              { value: 2024, label: 2024 },
+              { value: 2025, label: 2025 },
+              { value: 2026, label: 2026 },
+              { value: 2027, label: 2027 },
+              { value: 2028, label: 2028 },
+            ]}
+            menuShouldScrollIntoView={false}
+            isSearchable
+            onChange={changeClassYear}
+            theme={(theme) => ({
+              ...theme,
+              colors: { ...theme.colors, ...curTheme.reactSelectColors },
+            })}
+          />
+        </div>
+        {preferences}
+        {fbUpsell}
+        {tos}
+        {!isSigningUp ? deleteDropdown : null}
+        <div className="button-wrapper">
+          <button className="signup-button" onClick={hide}>
+            Save
+          </button>
         </div>
       </div>
     </Modal>

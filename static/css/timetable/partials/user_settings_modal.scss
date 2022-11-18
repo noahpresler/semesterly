@@ -29,18 +29,11 @@
     z-index: 1;
   }
 
-  .modal-content {
-    text-align: center;
-
-    form {
-      text-align: left;
-    }
-  }
-
   .modal-body {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    text-align: center;
     padding: 26px 0 20px;
 
     p {
@@ -139,6 +132,10 @@
     display: flex;
     padding: 0 0 15px;
     column-gap: 20px;
+
+    .preference-wrapper {
+      flex: 1;
+    }
   }
 
   .preference-attn {
