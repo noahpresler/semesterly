@@ -17,8 +17,9 @@ import { DragSource, DropTarget } from "react-dnd";
 import tinycolor from "tinycolor2";
 import { removeCustomSlot } from "../actions/timetable_actions";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
-import { useAppDispatch } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { customEventsActions } from "../state/slices/customEventsSlice";
+import { selectTheme } from "../state/slices/themeSlice";
 import {
   canDropCustomSlot,
   onCustomSlotCreateDrag,
@@ -107,6 +108,8 @@ const CustomSlot = (props: CustomSlotProps) => {
     });
   }, []);
 
+  const theme = useAppSelector(selectTheme);
+
   const getSlotStyles = () => {
     const startHour = parseInt(props.time_start.split(":")[0], 10);
     const startMinute = parseInt(props.time_start.split(":")[1], 10);
@@ -126,7 +129,7 @@ const CustomSlot = (props: CustomSlotProps) => {
         bottom: -bottom,
         zIndex: 10,
         right: "0%",
-        backgroundColor: "#F8F6F7",
+        backgroundColor: theme.customEventDefaultColor,
         color: "#222",
         width: "100%",
         left: 0,
