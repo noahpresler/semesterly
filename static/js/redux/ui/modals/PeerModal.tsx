@@ -23,8 +23,8 @@ import { selectSlotColorData } from "../../state/slices/themeSlice";
 
 const modalStyle = {
   height: "85%",
-  maxHeight: "900px",
-  width: "1200px",
+  width: "90%",
+  maxWidth: "1200px",
 };
 
 const keyCircleStyle = {
@@ -233,7 +233,7 @@ const PeerModal = () => {
   });
 
   const display = !isLoading ? (
-    <div className="main-modal-wrapper">
+    <div className="modal-content">
       <div className="pm-header">
         <h4>Your Classmates</h4>
         <div className="key">
@@ -255,7 +255,7 @@ const PeerModal = () => {
       {(!userInfo.social_all || peerCards.length === 0) && ghostCards}
     </div>
   ) : (
-    <div className="main-modal-wrapper">
+    <div className="modal-content">
       <span className="img-icon">
         <div className="loader" />
       </span>
@@ -274,11 +274,9 @@ const PeerModal = () => {
       showCloseButton={false}
       customStyles={modalStyle}
     >
-      <div className="modal-content">
-        <div className="split-modal-wrapper">
-          {sideBar}
-          {display}
-        </div>
+      <div className="content-wrapper">
+        {sideBar}
+        {display}
       </div>
     </Modal>
   );
