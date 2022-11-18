@@ -25,16 +25,23 @@
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    border-width: 1px;
+    border-width: 0px;
+    @include theme() {
+      border-color: t("modal-border-color");
+    }
   }
 
   .active {
-    color: white;
-    background-color: #222;
+    @include theme() {
+      color: t("text-color");
+      background-color: t("custom-event-active-day-background");
+    }
   }
 
   .inactive {
-    background-color: #f3f3f3;
+    @include theme() {
+      background-color: t("custom-event-inactive-day-background");
+    }
   }
 }
 
