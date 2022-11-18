@@ -310,14 +310,6 @@ const SlotManager = (props: { days: string[] }) => {
     );
   };
 
-  const getThemedCustomSlotColor = (color: string): string => {
-    // maps a custom slot color to a themed color
-    if (color === themeObject.light.customEventDefaultColor) {
-      return curTheme.customEventDefaultColor;
-    }
-    return color;
-  };
-
   const uses12HrTime = useAppSelector((state) => state.ui.uses12HrTime);
 
   const dispatch = useAppDispatch();
@@ -330,7 +322,7 @@ const SlotManager = (props: { days: string[] }) => {
       return slot.custom ? (
         <CustomSlot
           {...slot}
-          color={getThemedCustomSlotColor(slot.color)}
+          color={slot.color}
           key={`${i.toString() + j.toString()} custom`}
           uses12HrTime={uses12HrTime}
         />
