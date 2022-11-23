@@ -97,7 +97,6 @@
       background-color: t("search-bar-focused-background");
     }
   }
-
 }
 
 .semester-picker {
@@ -217,7 +216,7 @@
   &.hovered {
     @include theme() {
       background-color: t("search-results-hover");
-     }
+    }
   }
 
   h3 {
@@ -256,13 +255,13 @@
     &.hoverAdd {
       @include theme() {
         color: t("search-course-add-hover-text");
-       }
+      }
     }
 
     &.hoverSave {
       @include theme() {
         color: t("search-course-save-hover-text");
-       }
+      }
     }
 
     &.bubble {
@@ -295,7 +294,7 @@
       background-color: t("search-course-save-background");
       &.in-roster {
         background-color: t("search-course-save-in-roster");
-    
+
         &:hover {
           background-color: t("search-course-save-in-roster-hover");
         }
@@ -306,7 +305,7 @@
 
     &:hover {
       @include theme() {
-       background-color: t("search-course-save-hover");
+        background-color: t("search-course-save-hover");
       }
     }
   }
@@ -316,7 +315,7 @@
       background-color: t("search-course-save-background");
       &.in-roster {
         background-color: t("search-course-add-in-roster");
-    
+
         &:hover {
           background-color: t("search-course-add-in-roster-hover");
         }
@@ -341,7 +340,7 @@
     &:hover {
       @include theme() {
         background-color: t("search-course-add-hover");
-       }
+      }
     }
   }
 
@@ -373,10 +372,14 @@
 
 .search-course-add {
   &.in-roster {
-    background-color: #2dd6b5;
+    @include theme() {
+      background-color: t("search-course-add-in-roster");
+    }
 
     &:hover {
-      background-color: #56eccf;
+      @include theme() {
+        background-color: t("search-course-add-in-roster-hover");
+      }
     }
   }
 }
@@ -428,7 +431,12 @@
     border-top-color: transparent;
     box-shadow: none;
   }
-  
+
+  li {
+    opacity: 0;
+    visibility: hidden;
+  }
+
   li,
   .search-section,
   .search-course h4 {

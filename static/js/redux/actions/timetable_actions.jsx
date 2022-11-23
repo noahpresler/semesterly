@@ -53,6 +53,7 @@ import {
   removeOptionalCourseById,
 } from "../state/slices/optionalCoursesSlice";
 import { savingTimetableActions } from "../state/slices/savingTimetableSlice";
+import { selectTheme } from "../state/slices/themeSlice";
 
 export const setActiveTimetable = (newActive) => (dispatch) => {
   dispatch(changeActiveTimetable(newActive));
@@ -399,22 +400,24 @@ export const addLastAddedCourse = () => (dispatch, getState) => {
   dispatch(addOrRemoveCourse(courseId, section));
 };
 
-export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
-  dispatch(
-    customEventsActions.addNewCustomEvent({
-      day,
-      name: "New Custom Event", // default name for custom slot
-      location: "",
-      color: "#F8F6F7",
-      time_start: timeStart, // match backend slot attribute names
-      time_end: timeEnd,
-      credits: 0.0,
-      id,
-      preview,
-    })
-  );
-  dispatch(savingTimetableActions.setUpToDate(false));
-};
+export const addCustomSlot =
+  (timeStart, timeEnd, day, preview, id) => (dispatch, getState) => {
+    const color = selectTheme(getState()).customEventDefaultColor;
+    dispatch(
+      customEventsActions.addNewCustomEvent({
+        day,
+        name: "New Custom Event", // default name for custom slot
+        location: "",
+        color,
+        time_start: timeStart, // match backend slot attribute names
+        time_end: timeEnd,
+        credits: 0.0,
+        id,
+        preview,
+      })
+    );
+    dispatch(savingTimetableActions.setUpToDate(false));
+  };
 
 export const removeCustomSlot = (id) => (dispatch, getState) => {
   dispatch(savingTimetableActions.setUpToDate(false));

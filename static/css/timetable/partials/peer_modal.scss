@@ -1,10 +1,4 @@
 .peer-modal {
-  > div {
-    height: 100%;
-    outline: none;
-    width: 100%;
-  }
-
   .img-icon {
     left: 50%;
     position: absolute;
@@ -12,358 +6,343 @@
     transform: translate(-50%, -50%);
   }
 
-  .modal-content {
-    background-color: $gf3f3f3;
+  .loader {
+    height: 90px;
+    width: 90px;
+  }
+
+  .content-wrapper {
     height: 100%;
-    position: relative;
-
-    .loader {
-      height: 90px;
-      width: 90px;
-    }
-  }
-}
-
-.pm-side-bar {
-  border-right: 1px solid $gddd;
-  height: 100%;
-  position: absolute;
-  width: 200px;
-
-  p {
-    color: $g555;
-    font-size: 16px;
-    font-weight: 200;
-    line-height: 16px;
-    margin-bottom: 30px;
-    text-align: center;
-    width: 100%;
-  }
-}
-
-.pm-header {
-  clear: both;
-  height: 50px;
-  width: 100%;
-}
-
-.main-modal-wrapper {
-  background-color: $gf3f3f3;
-  height: 100%;
-  left: 200px;
-  padding: 20px 10px 20px 20px;
-  position: absolute;
-  right: 0;
-
-  h4 {
-    float: left;
-    font-weight: 200;
-    margin: 0;
-    margin-bottom: 16px;
-    margin-left: 5px;
-    text-align: left;
+    display: flex;
   }
 
-  .upsell {
-    h4 {
-      float: none;
-      font-weight: 400;
-      text-align: center;
-    }
-
-    .disclaimer {
-      float: left;
-    }
-
-    p {
-      color: $g555;
-      font-size: 16px;
-      line-height: 22px;
-      margin: 7px 0 20px;
-      padding: 0 5px;
-      transition: color 0.2s;
-      word-wrap: break-word;
-    }
-
-    .lure-accept {
-      background: $green-bright;
-      border: 1px solid $green-bright;
-      border-radius: 3px;
-      color: $gfff;
-      font-size: 14px;
-      font-weight: 900;
-      padding: 5px 10px;
-      width: 100px;
-    }
-  }
-}
-
-.split-modal-wrapper {
-  background-color: $gf3f3f3;
-  height: 100%;
-  overflow: auto;
-  position: relative;
-}
-
-.circle-pic {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  border: 1px solid $gddd;
-  border-radius: 100%;
-  height: 80px;
-  margin: 20px 60px;
-  position: relative;
-  width: 80px;
-}
-
-.peer-pic {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  border: 1px solid $gddd;
-  border-radius: 100%;
-  float: left;
-  height: 50px;
-  position: relative;
-  width: 50px;
-}
-
-.peer-card {
-  float: left;
-  padding-bottom: 10px;
-  padding-right: 10px;
-  width: 50%;
-
-  .user-info {
+  .pm-header {
+    clear: both;
     height: 50px;
-    margin-left: 70px;
-  }
-
-  h3 {
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 30px;
-    margin: 0;
-  }
-
-  .ghost-name {
-    background-color: $g222;
-    height: 25px;
-    margin-bottom: 5px;
-    max-width: 200px;
-    opacity: 0.1;
-  }
-
-  .card-hat {
-    height: 85px;
-    padding: 20px;
     width: 100%;
   }
 
-  .shared-courses {
-    padding: 0 20px 20px;
-  }
+  .pm-side-bar {
+    @include theme() {
+      background-color: t("sidebar-background");
+      border-right: 1px solid t("modal-border-color");
+    }
 
-  .shared-course {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 10px;
+    align-items: center;
+    min-width: 200px;
+    min-height: 100%;
+    height: fit-content;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    padding-top: 10px;
+
     p {
-      color: $g555;
       font-size: 16px;
-      font-weight: 300;
+      font-weight: 400;
       line-height: 16px;
-      margin: 7px 0 7px 20px;
-      overflow: hidden;
-      padding: 0 5px;
-      text-overflow: ellipsis;
-      transition: color 0.2s;
-      white-space: nowrap;
-      word-wrap: break-word;
+      margin-bottom: 30px;
+      text-align: center;
+      width: 100%;
     }
   }
 
-  .class-only-indicator {
-    color: $friend;
+  .modal-content {
+    @include theme() {
+      background-color: t("modal-header-background");
+    }
+
+    overflow-y: auto;
+    width: 1000px;
+    padding: 20px 10px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+
+    h4 {
+      float: left;
+      font-weight: 400;
+      margin: 0;
+      margin-bottom: 16px;
+      margin-left: 5px;
+      text-align: left;
+    }
+
+    .upsell {
+      h4 {
+        float: none;
+        font-weight: 400;
+        text-align: center;
+      }
+
+      .disclaimer {
+        font-size: 14px;
+        font-style: italic;
+        float: none;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 22px;
+        margin: 7px 0 20px;
+        padding: 0 5px;
+        transition: color 0.2s;
+        word-wrap: break-word;
+      }
+
+      .lure-accept {
+        background-color: $green-bright;
+        border: 1px solid $green-bright;
+        border-radius: 3px;
+        color: $gfff;
+        font-size: 14px;
+        font-weight: 900;
+        margin-top: 10px;
+        padding: 5px 10px;
+        width: 100px;
+      }
+    }
+  }
+
+  .circle-pic {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 1px solid $gddd;
+    border-radius: 100%;
+    height: 80px;
+    width: 80px;
+  }
+
+  .peer-pic {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 1px solid $gddd;
+    border-radius: 100%;
     float: left;
-    font-size: 18px;
-    line-height: 18px;
-    margin-left: 2px;
-    margin-top: -1px;
+    height: 50px;
+    position: relative;
+    width: 50px;
   }
 
-  &.upsell {
-    text-align: center;
-    width: 100%;
-  }
-
-  .fa-facebook-square {
+  .peer-card {
     float: left;
-    margin-left: 5px;
-    margin-top: 2px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    width: 50%;
+
+    .user-info {
+      height: 50px;
+      margin-left: 70px;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 30px;
+      margin: 0;
+    }
+
+    .ghost-name {
+      @include theme() {
+        background-color: t("ghost-card-name");
+      }
+      height: 25px;
+      margin-bottom: 5px;
+      max-width: 200px;
+      opacity: 0.1;
+    }
+
+    .card-hat {
+      height: 85px;
+      padding: 20px;
+      width: 100%;
+    }
+
+    .shared-courses {
+      padding: 0 20px 20px;
+    }
+
+    .shared-course {
+      p {
+        color: $g555;
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 16px;
+        margin: 7px 0 7px 20px;
+        overflow: hidden;
+        padding: 0 5px;
+        text-overflow: ellipsis;
+        transition: color 0.2s;
+        white-space: nowrap;
+        word-wrap: break-word;
+      }
+    }
+
+    .class-only-indicator {
+      color: $friend;
+      float: left;
+      font-size: 18px;
+      line-height: 18px;
+      margin-left: 2px;
+      margin-top: -1px;
+    }
+
+    &.upsell {
+      text-align: center;
+      width: 100%;
+    }
+
+    .fa-facebook-square {
+      float: left;
+      margin-left: 5px;
+      margin-top: 2px;
+    }
   }
-}
 
-.peer-card-wrapper {
-  background-color: $gfff;
-  border: 1px solid $gd4d4d4;
-  box-shadow: 0 -1px 0 $ge6e6e6, 0 0 2px $black-transparent-1,
-    0 2px 4px $black-transparent-1;
+  .peer-card-wrapper {
+    @include theme() {
+      background-color: t("modal-background");
+    }
+    border-radius: 3px;
+    box-shadow: rgba(0, 0, 0, 0.15) 2px 2px 2.5px;
 
-  &.upsell {
-    padding: 35px 20px;
-    text-align: center;
-    width: 100%;
+    &.upsell {
+      padding: 35px 20px;
+      text-align: center;
+      width: 100%;
+    }
   }
-}
 
-.view-profile-btn {
-  background: $facebook-view;
-  border: 1px solid $facebook-view;
-  border-radius: 3px;
-  color: $gfff;
-  display: block;
-  float: left;
-  font-size: 11px;
-  height: 20px;
-  padding: 0 0 0 2px;
-  width: 100px;
-}
-
-.friend-status {
-  color: $green-light;
-  font-size: 13px;
-  margin: 0 0 0 110px;
-  padding: 0;
-}
-
-.course-color-circle {
-  background-color: $pink;
-  border-radius: 16px;
-  float: left;
-  height: 16px;
-  text-align: center;
-  width: 16px;
-
-  .fa-check {
+  .view-profile-btn {
+    background: $facebook-view;
+    border: 1px solid $facebook-view;
+    border-radius: 3px;
     color: $gfff;
     display: block;
-    font-size: 12px;
-    height: 16px;
-    line-height: 16px;
-    width: 16px;
+    float: left;
+    font-size: 11px;
+    height: 20px;
+    padding: 0 0 0 2px;
+    width: 100px;
   }
-}
 
-.ghost-course-title {
-  background-color: $g555;
-  height: 16px;
-  line-height: 16px;
-  margin: 7px 0 7px 25px;
-  opacity: 0.07;
-  padding: 0 5px;
-  width: 220px;
-}
-
-.ghost {
-  button {
-    opacity: 0.4;
+  .friend-status {
+    color: $green-light;
+    font-size: 13px;
+    margin: 0 0 0 110px;
+    padding: 0;
   }
 
   .course-color-circle {
+    background-color: $pink;
+    border-radius: 16px;
+    float: left;
+    height: 16px;
+    text-align: center;
+    width: 16px;
     opacity: 0.5;
+
+    .fa-check {
+      color: $gfff;
+      display: block;
+      font-size: 12px;
+      height: 16px;
+      line-height: 16px;
+      width: 16px;
+    }
   }
-}
 
-.pm-side-bar-slot {
-  background-color: $pink;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 8px 8px 5px;
-  overflow: hidden;
-  padding: 5px 5px 5px 10px;
-  position: relative;
-
-  .slot-bar {
-    left: 0;
-    top: 0;
-  }
-}
-
-.key {
-  float: right;
-}
-
-.key-entry {
-  margin-bottom: 3px;
-
-  p {
-    font-size: 14px;
-    font-weight: 300;
+  .ghost-course-title {
+    @include theme() {
+      background-color: t("ghost-card-course-title");
+    }
     height: 16px;
     line-height: 16px;
-    margin: 0;
-    margin-left: 20px;
-  }
-}
-
-@media (max-width: 850px) {
-  .peer-card {
-    width: 100%;
+    margin: 7px 0 7px 25px;
+    opacity: 0.07;
+    padding: 0 5px;
+    width: 220px;
   }
 
-  .main-modal-wrapper {
-    h4 {
-      font-size: 22px;
+  .ghost {
+    button {
+      opacity: 0.4;
+    }
+  }
+
+  .pm-side-bar-slot {
+    background-color: $pink;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 8px 8px 5px;
+    overflow: hidden;
+    padding: 5px 5px 5px 10px;
+    position: relative;
+
+    .slot-bar {
+      left: 0;
+      top: 0;
     }
   }
 
   .key {
-    margin-bottom: 15px;
-  }
-}
-
-@media (max-width: 600px) {
-  .pm-side-bar {
-    display: none;
+    float: right;
   }
 
-  .main-modal-wrapper {
-    left: 0;
-    position: absolute;
+  .key-entry {
+    margin-bottom: 3px;
 
-    .upsell {
-      p {
-        font-size: 12px;
-        line-height: 16px;
-      }
+    p {
+      font-size: 14px;
+      font-weight: 300;
+      height: 16px;
+      line-height: 16px;
+      margin: 0;
+      margin-left: 20px;
+    }
+  }
 
+  @media (max-width: 850px) {
+    .peer-card {
+      width: 100%;
+    }
+
+    .modal-content {
       h4 {
         font-size: 22px;
       }
     }
 
-    h4 {
-      font-size: 25px;
-      margin-top: 3px;
+    .key {
+      margin-bottom: 15px;
     }
   }
 
-  .peer-card-wrapper {
-    &.upsell {
-      padding: 18px 10px;
-    }
-  }
-}
-
-@media (max-width: 410px) {
-  .main-modal-wrapper {
-    h4 {
-      font-size: 18px;
+  @media (max-width: 670px) {
+    .pm-side-bar {
+      display: none;
     }
   }
 
-  .key-entry {
-    p {
-      font-size: 10px;
+  @media (max-width: 410px) {
+    .modal-content {
+      h4 {
+        font-size: 18px;
+      }
+    }
+
+    .key-entry {
+      p {
+        font-size: 10px;
+      }
     }
   }
 }

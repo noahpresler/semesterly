@@ -124,11 +124,13 @@ button {
   padding: 5px;
 
   .custom-instructions {
+    @include theme() {
+      color: t("text-color-thin");
+    }
     line-height: 30px;
     margin: 0 10px;
     font-size: 15px;
     font-weight: 300;
-    color: #777;
   }
 
   @media screen and (max-width: 550px) {
