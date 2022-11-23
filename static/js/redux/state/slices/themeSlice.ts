@@ -29,12 +29,7 @@ const initialState: ThemeSliceState = {
 const themeSlice = createSlice({
   name: "theme",
   initialState,
-  reducers: {
-    // setTheme: (state, action: PayloadAction<Theme>) => {
-    //   state.theme = action.payload;
-    //   localStorage.setItem(themeLocalStorageKey, action.payload.name);
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(setTheme, (state, action) => {
       state.theme = action.payload;
@@ -44,5 +39,4 @@ const themeSlice = createSlice({
 });
 export const selectSlotColorData = (state: RootState) => state.theme.theme.slotColors;
 export const selectTheme = (state: RootState): Theme => state.theme.theme;
-export const { setTheme } = themeSlice.actions;
 export default themeSlice.reducer;
