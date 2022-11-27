@@ -276,6 +276,17 @@
   }
 }
 
+.compare-tt {
+  div {
+    h3,
+    span {
+      @include theme() {
+        color: t("compare-timetable-slot");
+      }
+    }
+  }
+}
+
 .master-slot-content {
   h3 {
     color: $g222;
