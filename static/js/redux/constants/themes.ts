@@ -25,9 +25,9 @@ const darkTheme: Theme = {
   name: "dark",
   slotColors: darkSlotColor,
   compareTtColors: {
-    activeStart: "#f16e66",
+    activeStart: "#bd3a32",
     activeEnd: "#60110c",
-    comparedStart: "#5598df",
+    comparedStart: "#2d6fb5",
     comparedEnd: "#052c56",
     commonStart: "#39aea3",
     commonEnd: "#064d47",
