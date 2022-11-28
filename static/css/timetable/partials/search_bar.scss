@@ -480,8 +480,11 @@
   }
 }
 .results-loading-gif {
-  background: url("/static/img/search-results-loader.gif") no-repeat;
-  background-position: right 5px center;
+  @include theme() {
+    background: url(t("search-loader-background")) no-repeat;
+    background-position: right 5px center;
+    background-size: 17px;
+  }
 }
 
 // Side Bar in Search Results
