@@ -25,12 +25,12 @@ const darkTheme: Theme = {
   name: "dark",
   slotColors: darkSlotColor,
   compareTtColors: {
-    activeStart: "#fd7473",
-    activeEnd: "#f4cece",
-    comparedStart: "#5cccf2",
-    comparedEnd: "#c2e6f2",
-    commonStart: "#36debb",
-    commonEnd: "#d9f6f0",
+    activeStart: "#bd3a32",
+    activeEnd: "#60110c",
+    comparedStart: "#2d6fb5",
+    comparedEnd: "#052c56",
+    commonStart: "#39aea3",
+    commonEnd: "#064d47",
   },
   customEventDefaultColor: "#979797",
   reactSelectColors: {

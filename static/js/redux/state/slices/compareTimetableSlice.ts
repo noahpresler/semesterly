@@ -1,6 +1,12 @@
-import { SlotColorData, Timetable, Theme } from "./../../constants/commonTypes";
+import { setTheme } from "./../../actions/initActions";
+import {
+  SlotColorData,
+  Timetable,
+  Theme,
+  CompareTimetableColors,
+} from "./../../constants/commonTypes";
 import { RootState } from "..";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
 import { getSectionsInTwoTimetables } from "../../ui/slotUtils";
 import { buildGradient, calcGradientRange } from "../../ui/gradientUtils";
 
@@ -42,33 +48,48 @@ const compareTimetableSlice = createSlice({
       state.activeTimetable = action.payload.activeTimetable;
       state.comparedTimetable = action.payload.comparedTimetable;
       const colors = action.payload.theme.compareTtColors;
-      const numCommon = getSectionsInTwoTimetables(
-        state.activeTimetable,
-        state.comparedTimetable
-      ).length;
-      const activeGradient = buildGradient(
-        colors.activeStart,
-        colors.activeEnd,
-        calcGradientRange(state.activeTimetable.slots.length - numCommon)
-      );
-      const comparedGradient = buildGradient(
-        colors.comparedStart,
-        colors.comparedEnd,
-        calcGradientRange(state.comparedTimetable.slots.length - numCommon)
-      );
-      const commonGradient = buildGradient(
-        colors.commonStart,
-        colors.commonEnd,
-        calcGradientRange(numCommon)
-      );
-
-      state.gradient.active = activeGradient;
-      state.gradient.compared = comparedGradient;
-      state.gradient.common = commonGradient;
+      updateGradients(state, colors);
     },
     stopComparingTimetables: (state) => initialState,
   },
+  extraReducers: (builder) => {
+    builder.addCase(setTheme, (state, action) => {
+      if (state.isComparing) {
+        // update slot color when theme changes while comparing
+        const colors = action.payload.compareTtColors;
+        updateGradients(state, colors);
+      }
+    });
+  },
 });
+
+function updateGradients(
+  state: Draft<Draft<CompareTimetableSliceState>>,
+  colors: CompareTimetableColors
+) {
+  const numCommon = getSectionsInTwoTimetables(
+    state.activeTimetable,
+    state.comparedTimetable
+  ).length;
+  const activeGradient = buildGradient(
+    colors.activeStart,
+    colors.activeEnd,
+    calcGradientRange(state.activeTimetable.slots.length - numCommon)
+  );
+  const comparedGradient = buildGradient(
+    colors.comparedStart,
+    colors.comparedEnd,
+    calcGradientRange(state.comparedTimetable.slots.length - numCommon)
+  );
+  const commonGradient = buildGradient(
+    colors.commonStart,
+    colors.commonEnd,
+    calcGradientRange(numCommon)
+  );
+  state.gradient.active = activeGradient;
+  state.gradient.compared = comparedGradient;
+  state.gradient.common = commonGradient;
+}
 
 export const selectGradient = (state: RootState) => state.compareTimetable.gradient;
 export const { startComparingTimetables, stopComparingTimetables } =

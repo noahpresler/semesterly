@@ -1,3 +1,4 @@
+import { Theme } from "./../constants/commonTypes";
 import { createAction } from "@reduxjs/toolkit";
 import { normalize } from "normalizr";
 import { courseSchema } from "../schema";
@@ -59,3 +60,7 @@ export const receiveAdvancedSearchResults = createAction(
 );
 
 export const requestCourses = createAction("global/requestCourses");
+
+export const setTheme = createAction("global/setTheme", (theme: Theme) => ({
+  payload: theme,
+}));

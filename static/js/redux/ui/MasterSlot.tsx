@@ -26,6 +26,7 @@ import {
   RelatedCourse,
   SlotColorData,
 } from "../constants/commonTypes";
+import { useAppSelector } from "../hooks";
 
 type MasterSlotProps = {
   colourIndex: number;
@@ -47,6 +48,7 @@ type MasterSlotProps = {
 };
 
 const MasterSlot = (props: MasterSlotProps) => {
+  const isComparingTt = useAppSelector((state) => state.compareTimetable.isComparing);
   const [shareLinkShown, setShareLinkShown] = useState(false);
 
   const updateColours = (colour: string) => {
@@ -115,7 +117,9 @@ const MasterSlot = (props: MasterSlotProps) => {
       </div>,
     ].concat(friendCircles.slice(0, 3));
   }
-  let masterSlotClass = `master-slot slot-${props.sectionId}-${props.colourIndex}`;
+  let masterSlotClass = `master-slot slot-${props.sectionId}-${props.colourIndex} ${
+    isComparingTt ? "compare-tt" : ""
+  }`;
   const validProfs = props.professors ? uniq(props.professors.filter((p) => p)) : false;
   const prof =
     !validProfs || validProfs.length === 0 || validProfs[0] === ""
