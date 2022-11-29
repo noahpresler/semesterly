@@ -64,7 +64,9 @@ const UserAcquisitionModal = () => {
           </span>
           <span>Continue with Facebook</span>
         </button>
-        <p className="method-details">Allows the option to friends in your classes.</p>
+        <p className="method-details">
+          Allows the option to see friends in your classes.
+        </p>
         <br />
 
         <button
