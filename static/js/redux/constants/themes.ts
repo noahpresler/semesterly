@@ -29,7 +29,7 @@ const darkTheme: Theme = {
     activeEnd: "#60110c",
     comparedStart: "#2d6fb5",
     comparedEnd: "#052c56",
-    commonStart: "#39aea3",
+    commonStart: "#278d83",
     commonEnd: "#064d47",
   },
   customEventDefaultColor: "#979797",
