@@ -37,7 +37,8 @@ const parseInstructors = (instr: string) => {
     if (instr[i] !== "." && instr[i] !== " " && instr[i] === instr[i].toUpperCase()) {
       capitals++;
     }
-    if (capitals === 3) { // start of new instructor
+    // start of new instructor
+    if (capitals === 3) {
       parsed += currInstructor;
       parsed += ", ";
       currInstructor = instr[i];
