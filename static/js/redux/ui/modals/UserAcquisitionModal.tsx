@@ -15,6 +15,7 @@ GNU General Public License for more details.
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { userAcquisitionModalActions } from "../../state/slices";
+import { selectTheme } from "../../state/slices/themeSlice";
 import Modal from "./Modal";
 
 const UserAcquisitionModal = () => {
@@ -22,6 +23,7 @@ const UserAcquisitionModal = () => {
   const LoginHash = useAppSelector((state) => state.userInfo.data.LoginHash);
   const isVisible = useAppSelector((state) => state.userAcquisitionModal.isVisible);
   const dispatch = useAppDispatch();
+  const isDarkTheme = useAppSelector(selectTheme).name === "dark";
 
   const modalHeader = (
     <div className="modal-header">
@@ -62,7 +64,9 @@ const UserAcquisitionModal = () => {
           </span>
           <span>Continue with Facebook</span>
         </button>
-        <p className="method-details">Allows the option to friends in your classes.</p>
+        <p className="method-details">
+          Allows the option to see friends in your classes.
+        </p>
         <br />
 
         <button
@@ -78,7 +82,9 @@ const UserAcquisitionModal = () => {
             <img
               alt="JHU"
               className="jhu-square"
-              src="/static/img/school_logos/jhu-square.png"
+              src={`/static/img/school_logos/jhu-square${
+                isDarkTheme ? "-dark" : ""
+              }.png`}
             />
           </span>
           <span>Continue with JHED*</span>
@@ -87,7 +93,6 @@ const UserAcquisitionModal = () => {
 
         <div className="or-separator">
           <span className="h6 or-separator--text">or</span>
-          <hr />
         </div>
 
         <button
