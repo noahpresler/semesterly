@@ -14,6 +14,7 @@ GNU General Public License for more details.
 
 import React, { useState, useEffect } from "react";
 import { useAppSelector } from "../../hooks";
+import { selectTheme } from "../../state/slices/themeSlice";
 import { browserSupportsLocalStorage } from "../../util";
 import Modal from "./Modal";
 
@@ -24,6 +25,8 @@ const TutorialModal = () => {
   const signUpModalVisible = useAppSelector((state) => state.signupModal.isVisible);
   const settingModalVisible = useAppSelector((state) => state.userInfo.overrideShow);
   const courseModalVisible = useAppSelector((state) => state.courseInfo.id !== null);
+  const theme = useAppSelector(selectTheme);
+  const isDarkMode = theme.name === "dark";
 
   useEffect(() => {
     const tutorial = JSON.parse(localStorage.getItem("tutorial"));
@@ -52,7 +55,7 @@ const TutorialModal = () => {
   const contentStyle = {
     width: "500px",
     height: "600px",
-    backgroundColor: "#FC7372",
+    backgroundColor: theme.slotColors[0].background,
   };
 
   const left =
@@ -71,21 +74,22 @@ const TutorialModal = () => {
     ) : (
       right
     );
+
   switch (tutorialPosition) {
     case 1:
-      contentStyle.backgroundColor = "#FC7372";
+      contentStyle.backgroundColor = theme.slotColors[0].background;
       break;
     case 2:
-      contentStyle.backgroundColor = "#35DDBA";
+      contentStyle.backgroundColor = theme.slotColors[2].background;
       break;
     case 3:
-      contentStyle.backgroundColor = "#5BCBF1";
+      contentStyle.backgroundColor = theme.slotColors[1].background;
       break;
     case 4:
-      contentStyle.backgroundColor = "#FED361";
+      contentStyle.backgroundColor = theme.slotColors[3].background;
       break;
     default:
-      contentStyle.backgroundColor = "#FC7372";
+      contentStyle.backgroundColor = theme.slotColors[0].background;
   }
 
   return (
@@ -105,7 +109,7 @@ const TutorialModal = () => {
         <img
           className="tut-img"
           alt="Step 1!"
-          src={"/static/img/tutorial/step1.png"}
+          src={`/static/img/tutorial/step1${isDarkMode ? "-dark" : ""}.png`}
           style={{
             display: tutorialPosition === 1 ? "inline" : "none",
             opacity: tutorialPosition === 1 ? "1" : "0",
@@ -115,7 +119,7 @@ const TutorialModal = () => {
         <img
           className="tut-img"
           alt="Step 2!"
-          src={"/static/img/tutorial/step2.png"}
+          src={`/static/img/tutorial/step2${isDarkMode ? "-dark" : ""}.png`}
           style={{
             display: tutorialPosition === 2 ? "inline" : "none",
             opacity: tutorialPosition === 2 ? "1" : "0",
@@ -125,7 +129,7 @@ const TutorialModal = () => {
         <img
           className="tut-img"
           alt="Step 3!"
-          src={"/static/img/tutorial/step3.png"}
+          src={`/static/img/tutorial/step3${isDarkMode ? "-dark" : ""}.png`}
           style={{
             display: tutorialPosition === 3 ? "inline" : "none",
             opacity: tutorialPosition === 3 ? "1" : "0",
@@ -135,7 +139,7 @@ const TutorialModal = () => {
         <img
           className="tut-img"
           alt="Step 4!"
-          src={"/static/img/tutorial/step4.png"}
+          src={`/static/img/tutorial/step4${isDarkMode ? "-dark" : ""}.png`}
           style={{
             display: tutorialPosition === 4 ? "inline" : "none",
             opacity: tutorialPosition === 4 ? "1" : "0",
