@@ -76,11 +76,14 @@
 }
 
 .slot-shortCourseDates {
+  @include theme() {
+    background-color: t("short-course-background");
+    color: t("text-color");
+  }
   font-size: 10px;
   border-radius: 4px;
   text-align: center;
   width: 80%;
-  background-color: white;
   z-index: 10;
   position: absolute;
   top: 50%;
