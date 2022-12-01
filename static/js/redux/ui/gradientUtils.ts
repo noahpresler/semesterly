@@ -1,3 +1,4 @@
+import { ThemeName } from "./../constants/commonTypes";
 import tinycolor from "tinycolor2";
 
 interface RGBObj {
@@ -67,16 +68,24 @@ export const isRgbValid = (color: any) => {
 export const equalRgb = (a: RGBObj, b: RGBObj) =>
   a.r === b.r && a.g === b.g && a.b === b.b;
 
-export const gradientToSlotColorData = (color: string) => ({
+export const gradientToSlotColorData = (color: string, curTheme: ThemeName) => ({
   background: color,
   highlight: tinycolor(color).darken(5).toString(),
-  border: tinycolor(color).darken(20).toString(),
+  border:
+    curTheme === "dark"
+      ? tinycolor(color).lighten(20).toString()
+      : tinycolor(color).darken(20).toString(),
   font: "#222",
 });
 
-export const buildGradient = (start: string, end: string, rng: number) => {
+export const buildGradient = (
+  start: string,
+  end: string,
+  rng: number,
+  curTheme: ThemeName
+) => {
   if (rng < 2) {
-    return [gradientToSlotColorData(start)];
+    return [gradientToSlotColorData(start, curTheme)];
     // OR: throw new Error("Gradient should have at least two steps");
   }
   const b = hexToRgb(start); // y-intercept
@@ -93,7 +102,7 @@ export const buildGradient = (start: string, end: string, rng: number) => {
   // Only round when converting to Hex
   return gradient
     .map((color) => rgbToHex(roundRgb(color)))
-    .map(gradientToSlotColorData);
+    .map((color) => gradientToSlotColorData(color, curTheme));
 };
 
 export default {};
