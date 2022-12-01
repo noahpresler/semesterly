@@ -3,6 +3,7 @@ import {
   SlotColorData,
   Timetable,
   Theme,
+  ThemeName,
   CompareTimetableColors,
 } from "./../../constants/commonTypes";
 import { RootState } from "..";
@@ -48,7 +49,7 @@ const compareTimetableSlice = createSlice({
       state.activeTimetable = action.payload.activeTimetable;
       state.comparedTimetable = action.payload.comparedTimetable;
       const colors = action.payload.theme.compareTtColors;
-      updateGradients(state, colors);
+      updateGradients(state, colors, action.payload.theme.name);
     },
     stopComparingTimetables: (state) => initialState,
   },
@@ -57,7 +58,7 @@ const compareTimetableSlice = createSlice({
       if (state.isComparing) {
         // update slot color when theme changes while comparing
         const colors = action.payload.compareTtColors;
-        updateGradients(state, colors);
+        updateGradients(state, colors, action.payload.name);
       }
     });
   },
@@ -65,7 +66,8 @@ const compareTimetableSlice = createSlice({
 
 function updateGradients(
   state: Draft<Draft<CompareTimetableSliceState>>,
-  colors: CompareTimetableColors
+  colors: CompareTimetableColors,
+  curTheme: ThemeName
 ) {
   const numCommon = getSectionsInTwoTimetables(
     state.activeTimetable,
@@ -74,17 +76,20 @@ function updateGradients(
   const activeGradient = buildGradient(
     colors.activeStart,
     colors.activeEnd,
-    calcGradientRange(state.activeTimetable.slots.length - numCommon)
+    calcGradientRange(state.activeTimetable.slots.length - numCommon),
+    curTheme
   );
   const comparedGradient = buildGradient(
     colors.comparedStart,
     colors.comparedEnd,
-    calcGradientRange(state.comparedTimetable.slots.length - numCommon)
+    calcGradientRange(state.comparedTimetable.slots.length - numCommon),
+    curTheme
   );
   const commonGradient = buildGradient(
     colors.commonStart,
     colors.commonEnd,
-    calcGradientRange(numCommon)
+    calcGradientRange(numCommon),
+    curTheme
   );
   state.gradient.active = activeGradient;
   state.gradient.compared = comparedGradient;
