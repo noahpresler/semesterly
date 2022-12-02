@@ -40,7 +40,9 @@ button {
 
     &:hover,
     &:active {
-      color: $blue-dark;
+      @include theme() {
+        color: t("toolbar-icon-hover");
+      }
     }
 
     &.add-button {
@@ -151,6 +153,9 @@ button {
 }
 
 .fc-right {
+  display: flex;
+  align-items: center;
+
   .share-course-link-wrapper {
     top: auto;
     right: auto;
