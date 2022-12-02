@@ -167,13 +167,16 @@ button {
 
 .save-timetable {
   img {
-    display: inline-block;
-    font-size: 18px;
-    height: 18px;
-    left: 7px;
-    line-height: 30px;
-    position: absolute;
-    top: 4px;
-    width: 18px;
+    font-size: 24px;
+    height: 24px;
+    width: 24px;
+    filter: invert(48%) sepia(0%) saturate(0%) hue-rotate(5deg) brightness(96%)
+      contrast(92%);
+  }
+
+  img:hover {
+    @include theme() {
+      filter: t("toolbar-img-icon-hover-filter");
+    }
   }
 }

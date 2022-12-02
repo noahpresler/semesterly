@@ -214,7 +214,7 @@ const Calendar = (props: CalendarProps) => {
           data-tip
           onClick={sisButtonClicked}
         >
-          <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: "2px" }} />
+          <img src="/static/img/addtosis.svg" alt="SIS" />
         </button>
       </Tooltip>
     </div>
