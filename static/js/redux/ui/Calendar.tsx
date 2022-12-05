@@ -29,11 +29,42 @@ import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { selectTheme } from "../state/slices/themeSlice";
 
-type RowProps = {
+interface RowProps {
   isLoggedIn: boolean;
   time: string;
   displayTime?: string;
   customEventModeOn: boolean;
+}
+
+interface CalendarProps {
+  triggerSaveCalendarModal: Function;
+  isFetchingShareLink: boolean;
+  endHour: number;
+  handleCreateNewTimetable: Function;
+  shareLinkValid: boolean;
+  fetchSISTimetableData: Function;
+  fetchShareTimetableLink: Function;
+  isLoggedIn: boolean;
+  uses12HrTime: boolean;
+  registrarSupported: boolean;
+  shareLink?: string;
+}
+
+const getTimelineStyle = (endHour: number) => {
+  const now = new Date();
+  if (
+    now.getHours() > endHour || // if the current time is before
+    now.getHours() < 8 || // 8am or after the schedule end
+    now.getDay() === 0 || // time or if the current day is
+    now.getDay() === 6 // Saturday or Sunday, then
+  ) {
+    // display no line
+    return { display: "none" };
+  }
+  const diff = Math.abs(new Date().valueOf() - new Date().setHours(8, 0, 0).valueOf());
+  const mins = Math.ceil(diff / 1000 / 60);
+  const top = (mins / 15.0) * 13;
+  return { top, zIndex: 1 };
 };
 
 const Row = (props: RowProps) => {
@@ -63,72 +94,40 @@ export const ShowWeekendsSwitch = (props: { isMobile: boolean }) => {
   const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
   const dispatch = useDispatch();
   const theme = useAppSelector(selectTheme);
+
   const button = (
     <Tooltip title={<Typography fontSize={12}>Show Weekends</Typography>}>
-      <div className="save-timetable">
-        <Switch
-          size="small"
-          checked={showWeekend}
-          color="default"
-          sx={{
-            "& .MuiSwitch-switchBase": {
-              "& + .MuiSwitch-track": {
-                backgroundColor: theme.name === "light" ? "" : "#777",
-              },
-            },
-            "& .MuiSwitch-thumb": {
-              backgroundColor: theme.name === "light" ? "lightgray" : "#777",
-            },
-          }}
-          onChange={() => dispatch(preferencesActions.toggleShowWeekend())}
-        />
-      </div>
+      <Switch
+        size="small"
+        checked={showWeekend}
+        color="default"
+        sx={{
+          "& .MuiSwitch-track": {
+            backgroundColor: theme.name === "light" ? "" : "#777",
+          },
+          "& .MuiSwitch-thumb": {
+            backgroundColor: theme.name === "light" ? "lightgray" : "#777",
+          },
+        }}
+        onChange={() => dispatch(preferencesActions.toggleShowWeekend())}
+      />
     </Tooltip>
   );
+
   return props.isMobile ? button : <div className="cal-btn-wrapper">{button}</div>;
 };
 
-type CalendarProps = {
-  triggerSaveCalendarModal: Function;
-  isFetchingShareLink: boolean;
-  endHour: number;
-  handleCreateNewTimetable: Function;
-  shareLinkValid: boolean;
-  fetchSISTimetableData: Function;
-  fetchShareTimetableLink: Function;
-  isLoggedIn: boolean;
-  uses12HrTime: boolean;
-  registrarSupported: boolean;
-  shareLink?: string;
-};
-
 const Calendar = (props: CalendarProps) => {
+  const dispatch = useDispatch();
+
+  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
   const [shareLinkShown, setShareLinkShown] = useState(false);
   const [customEventModeOn, setCustomEventModeOn] = useState(false);
-
-  const getTimelineStyle = () => {
-    const now = new Date();
-    if (
-      now.getHours() > props.endHour || // if the current time is before
-      now.getHours() < 8 || // 8am or after the schedule end
-      now.getDay() === 0 || // time or if the current day is
-      now.getDay() === 6 // Saturday or Sunday, then
-    ) {
-      // display no line
-      return { display: "none" };
-    }
-    const diff = Math.abs(
-      new Date().valueOf() - new Date().setHours(8, 0, 0).valueOf()
-    );
-    const mins = Math.ceil(diff / 1000 / 60);
-    const top = (mins / 15.0) * 13;
-    return { top, zIndex: 1 };
-  };
-  const [timelineStyle, setTimelineStyle] = useState(getTimelineStyle());
+  const [timelineStyle, setTimelineStyle] = useState(getTimelineStyle(props.endHour));
 
   useEffect(() => {
     setInterval(() => {
-      setTimelineStyle(getTimelineStyle());
+      setTimelineStyle(getTimelineStyle(props.endHour));
     }, 60 * 1000);
   }, []);
 
@@ -166,6 +165,7 @@ const Calendar = (props: CalendarProps) => {
       props.fetchShareTimetableLink();
     }
   };
+
   const showShareLink = () => {
     const idEventTarget = "#clipboard-btn-timetable";
     const clipboard = new Clipboard(idEventTarget);
@@ -189,7 +189,6 @@ const Calendar = (props: CalendarProps) => {
     form.submit();
   };
 
-  const dispatch = useDispatch();
   const customEventModeButtonClicked = () => {
     if (props.isLoggedIn) {
       setCustomEventModeOn((previous) => !previous);
@@ -215,7 +214,7 @@ const Calendar = (props: CalendarProps) => {
           data-tip
           onClick={sisButtonClicked}
         >
-          <img src="/static/img/addtosis.png" alt="SIS" style={{ marginTop: "2px" }} />
+          <img src="/static/img/addtosis.svg" alt="SIS" />
         </button>
       </Tooltip>
     </div>
@@ -270,7 +269,7 @@ const Calendar = (props: CalendarProps) => {
     <div className="cal-btn-wrapper">
       <Tooltip title={<Typography fontSize={12}>Add Custom Event</Typography>}>
         <button
-          className="save-timetable add-button"
+          className="save-timetable"
           onMouseDown={() => customEventModeButtonClicked()}
           data-tip
           data-for="save-btn-tooltip"
@@ -294,13 +293,11 @@ const Calendar = (props: CalendarProps) => {
           data-tip
           data-for="saveToCal-btn-tooltip"
         >
-          <img src="/static/img/addtocalendar.png" alt="Add to Calendar" />
+          <i className="fa fa-calendar" />
         </button>
       </Tooltip>
     </div>
   );
-
-  const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
 
   const isComparingTimetables = useAppSelector(
     (state) => state.compareTimetable.isComparing

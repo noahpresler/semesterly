@@ -96,6 +96,10 @@ $themes: (
       text-color-hover: $primary-navy,
       text-color-thin: $g777,
       text-color: $primary-navy,
+      toolbar-icon-hover: $primary-navy,
+      // Use a filter to change the color of img elements (e.g., png icons)
+      toolbar-img-icon-hover-filter: invert(23%) sepia(55%) saturate(362%)
+        hue-rotate(169deg) brightness(96%) contrast(88%),
       top-bar-background: $light-base-component-bg,
       top-bar-border-bottom: none,
       tos-banner-background: $gfff,
@@ -176,6 +180,10 @@ $themes: (
       text-color-hover: white,
       text-color-thin: $dblue075,
       text-color: $dblue0,
+      toolbar-icon-hover: $dblue0,
+      // Use a filter to change color of img elements (e.g., png icons)
+      toolbar-img-icon-hover-filter: invert(91%) sepia(10%) saturate(390%)
+        hue-rotate(173deg) brightness(97%) contrast(89%),
       top-bar-background: $dark-base-component-bg,
       top-bar-border-bottom: 1px solid $dblue2,
       tos-banner-background: $dblue7,
