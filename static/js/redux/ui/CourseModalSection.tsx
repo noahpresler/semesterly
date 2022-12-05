@@ -28,8 +28,7 @@ type CourseModalSectionProps = {
   unHoverSection: Function;
 };
 
-
-const isLetter = (ch: string) =>  ch.length === 1 && ch.match(/[a-z]/i);
+const isLetter = (ch: string) => ch.length === 1 && ch.match(/[a-z]/i);
 
 // A. MadooeiP. Simari -> A. Madooei, P. Simari
 // N. Martinez-Velez -> N. Martinez-Velez
@@ -40,7 +39,12 @@ export const parseInstructors = (instr: string) => {
   let capitals = 0;
   let prev = "";
   for (let i = 0; i < instr.length; i++) {
-    if (isLetter(instr[i]) && prev !== "-" && prev !== "'" && instr[i] === instr[i].toUpperCase()) {
+    if (
+      isLetter(instr[i]) &&
+      prev !== "-" &&
+      prev !== "'" &&
+      instr[i] === instr[i].toUpperCase()
+    ) {
       capitals++;
     }
     // start of new instructor
