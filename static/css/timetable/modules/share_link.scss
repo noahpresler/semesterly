@@ -1,7 +1,7 @@
 .share-course-link-wrapper {
   @include theme() {
     background-color: t("share-link-wrapper");
-    box-shadow: 0 0 12px t("share-link-shadow-1"), 0 0 1px t("share-link-shadow-2");
+    box-shadow: 0px 2px 6px t("share-link-shadow-1");
   }
   border-radius: 2px;
   max-width: 250px;
@@ -13,7 +13,7 @@
   display: inline-block;
   margin-top: 8px;
   font-size: 12px;
-  cursor:default;
+  cursor: default;
   .tip {
     @include theme() {
       border-color: transparent transparent t("share-link-wrapper");
@@ -39,7 +39,6 @@
     max-width: 240px;
     width: auto;
     cursor: text;
-    border: 1px solid $g222;
     padding: 0 5px;
   }
   .clipboardBtn {

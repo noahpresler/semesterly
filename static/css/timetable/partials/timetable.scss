@@ -157,11 +157,12 @@ button {
   align-items: center;
 
   .share-course-link-wrapper {
-    top: auto;
+    @include theme() {
+      background-color: t("tooltip-background");
+    }
     right: auto;
-    display: block;
-    margin-left: -154px !important;
-    margin-top: 36px;
+    margin-left: -154px;
+    margin-top: 40px;
   }
 }
 
