@@ -28,17 +28,23 @@ type CourseModalSectionProps = {
   unHoverSection: Function;
 };
 
-// parse A. MadooeiP. Simari into A. Madooei, P. Simari
-const parseInstructors = (instr: string) => {
+
+const isLetter = (ch: string) =>  ch.length === 1 && ch.match(/[a-z]/i);
+
+// A. MadooeiP. Simari -> A. Madooei, P. Simari
+// N. Martinez-Velez -> N. Martinez-Velez
+// M. O'Connor -> M. O'Connor
+export const parseInstructors = (instr: string) => {
   let parsed = "";
   let currInstructor = "";
   let capitals = 0;
+  let prev = "";
   for (let i = 0; i < instr.length; i++) {
-    if (instr[i] !== "." && instr[i] !== " " && instr[i] === instr[i].toUpperCase()) {
+    if (isLetter(instr[i]) && prev !== "-" && prev !== "'" && instr[i] === instr[i].toUpperCase()) {
       capitals++;
     }
     // start of new instructor
-    if (capitals === 3) {
+    if (capitals === 3 && isLetter(prev)) {
       parsed += currInstructor;
       parsed += ", ";
       currInstructor = instr[i];
@@ -46,6 +52,7 @@ const parseInstructors = (instr: string) => {
     } else {
       currInstructor += instr[i];
     }
+    prev = instr[i];
   }
   parsed += currInstructor;
   return parsed;
