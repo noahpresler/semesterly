@@ -41,7 +41,8 @@ export const parseInstructors = (instr: string) => {
       currInstr = "";
     }
   }
-  return parsedInstrs + currInstr;
+  parsedInstrs += currInstr;
+  return parsedInstrs;
 };
 
 const CourseModalSection = (props: CourseModalSectionProps) => {
