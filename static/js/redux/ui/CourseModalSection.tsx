@@ -28,38 +28,20 @@ type CourseModalSectionProps = {
   unHoverSection: Function;
 };
 
-const isLetter = (ch: string) => ch.length === 1 && ch.match(/[a-z]/i);
-
 // A. MadooeiP. Simari -> A. Madooei, P. Simari
-// N. Martinez-Velez -> N. Martinez-Velez
-// M. O'Connor -> M. O'Connor
+// C. RobersonK. Tifft Oshinnaiye -> C. Roberson, K. Tifft Oshinnaiye
 export const parseInstructors = (instr: string) => {
-  let parsed = "";
-  let currInstructor = "";
-  let capitals = 0;
-  let prev = "";
-  for (let i = 0; i < instr.length; i++) {
-    if (
-      isLetter(instr[i]) &&
-      prev !== "-" &&
-      prev !== "'" &&
-      instr[i] === instr[i].toUpperCase()
-    ) {
-      capitals++;
+  let parsedInstrs = "";
+  let currInstr = instr.substring(0, 3);
+  for (let i = 3; i < instr.length; i++) {
+    currInstr += instr[i];
+    // If period is two characters forward, we've reached the end of an instructor
+    if (i + 2 < instr.length && instr[i + 2] === ".") {
+      parsedInstrs += `${currInstr}, `;
+      currInstr = "";
     }
-    // start of new instructor
-    if (capitals === 3 && isLetter(prev)) {
-      parsed += currInstructor;
-      parsed += ", ";
-      currInstructor = instr[i];
-      capitals = 1;
-    } else {
-      currInstructor += instr[i];
-    }
-    prev = instr[i];
   }
-  parsed += currInstructor;
-  return parsed;
+  return parsedInstrs + currInstr;
 };
 
 const CourseModalSection = (props: CourseModalSectionProps) => {
