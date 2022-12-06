@@ -32,8 +32,8 @@ type CourseModalSectionProps = {
 // C. RobersonK. Tifft Oshinnaiye -> C. Roberson, K. Tifft Oshinnaiye
 export const parseInstructors = (instr: string) => {
   let parsedInstrs = "";
-  let currInstr = instr.substring(0, 3);
-  for (let i = 3; i < instr.length; i++) {
+  let currInstr = "";
+  for (let i = 0; i < instr.length; i++) {
     currInstr += instr[i];
     // If period is two characters forward, we've reached the end of an instructor
     if (i + 2 < instr.length && instr[i + 2] === ".") {
