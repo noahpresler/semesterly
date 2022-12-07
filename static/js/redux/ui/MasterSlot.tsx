@@ -27,6 +27,7 @@ import {
   SlotColorData,
 } from "../constants/commonTypes";
 import { useAppSelector } from "../hooks";
+import { parseInstructors } from "./CourseModalSection";
 
 type MasterSlotProps = {
   colourIndex: number;
@@ -120,7 +121,9 @@ const MasterSlot = (props: MasterSlotProps) => {
   let masterSlotClass = `master-slot slot-${props.sectionId}-${props.colourIndex} ${
     isComparingTt ? "compare-tt" : ""
   }`;
-  const validProfs = props.professors ? uniq(props.professors.filter((p) => p)) : false;
+  const validProfs = props.professors
+    ? uniq(props.professors.filter((p) => p)).map((p) => parseInstructors(p))
+    : false;
   const prof =
     !validProfs || validProfs.length === 0 || validProfs[0] === ""
       ? "Professor Unlisted"

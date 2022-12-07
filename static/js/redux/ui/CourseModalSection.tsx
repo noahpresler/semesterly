@@ -28,6 +28,23 @@ type CourseModalSectionProps = {
   unHoverSection: Function;
 };
 
+// A. MadooeiP. Simari -> A. Madooei, P. Simari
+// C. RobersonK. Tifft Oshinnaiye -> C. Roberson, K. Tifft Oshinnaiye
+export const parseInstructors = (instr: string) => {
+  let parsedInstrs = "";
+  let currInstr = "";
+  for (let i = 0; i < instr.length; i++) {
+    currInstr += instr[i];
+    // If period is two characters forward, we've reached the end of an instructor
+    if (i + 2 < instr.length && instr[i + 2] === ".") {
+      parsedInstrs += `${currInstr}, `;
+      currInstr = "";
+    }
+  }
+  parsedInstrs += currInstr;
+  return parsedInstrs;
+};
+
 const CourseModalSection = (props: CourseModalSectionProps) => {
   const seats = props.size - props.enrolment;
   let seatStatus = props.waitlist > 0 ? `${props.waitlist} waitlist` : `${seats} open`;
@@ -59,7 +76,7 @@ const CourseModalSection = (props: CourseModalSectionProps) => {
         <span>{props.secName}</span>
         <i className="fa fa-calendar-check-o" />
       </h4>
-      <h5>{props.instr}</h5>
+      <h5>{parseInstructors(props.instr)}</h5>
       <h6>
         <span className={benchmark}>{seatStatus}</span>
         <span> / </span>
