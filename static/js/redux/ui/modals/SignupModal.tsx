@@ -43,7 +43,7 @@ const SignupModal = () => {
     <Modal
       visible={isVisible}
       className="signup-modal max-modal"
-      customStyles={{ height: "588px", width: "500px" }}
+      customStyles={{ height: "588px", maxWidth: "500px", width: "90%" }}
       onClose={hide}
     >
       {modalHeader}

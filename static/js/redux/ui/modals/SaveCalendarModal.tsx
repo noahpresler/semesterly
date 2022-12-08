@@ -52,7 +52,7 @@ const SaveCalendarModal = () => {
     <Modal
       visible={isVisible}
       className="save-calendar-modal abnb-modal max-modal"
-      customStyles={{ height: "300px", width: "450px" }}
+      customStyles={{ height: "300px", width: "90%", maxWidth: "450px" }}
       onClose={() => {
         dispatch(saveCalendarModalActions.toggleSaveCalendarModal());
         history.replaceState({}, "Semester.ly", "/");

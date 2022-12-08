@@ -82,7 +82,7 @@ const TermsOfServiceModal = () => {
     <Modal
       visible={isVisible}
       className="terms-of-service-modal max-modal"
-      customStyles={{ width: "450px", height: "350px" }}
+      customStyles={{ maxWidth: "450px", height: "350px", width: "90%" }}
       showCloseButton={false}
       onClose={() => {}}
     >

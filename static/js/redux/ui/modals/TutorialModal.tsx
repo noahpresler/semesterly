@@ -53,7 +53,8 @@ const TutorialModal = () => {
     setIsVisible(false);
   };
   const contentStyle = {
-    width: "500px",
+    width: "90%",
+    maxWidth: "500px",
     height: "600px",
     backgroundColor: theme.slotColors[0].background,
   };

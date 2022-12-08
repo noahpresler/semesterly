@@ -36,8 +36,9 @@ const UserAcquisitionModal = () => {
       visible={isVisible}
       className="user-acquisition-modal abnb-modal max-modal"
       customStyles={{
+        width: "90%",
         height: "520px",
-        width: "450px",
+        maxWidth: "450px",
       }}
       onClose={() => {
         dispatch(userAcquisitionModalActions.toggleAcquisitionModal());
