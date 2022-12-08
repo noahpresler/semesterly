@@ -2,8 +2,8 @@
   .eval-item {
     @include theme() {
       background-color: t("evaluation-background");
+      border: 1px solid t("modal-border-color");
     }
-    border: 1px solid $gd4d4d4;
     display: inline-block;
     margin: 3px;
     text-align: center;
@@ -38,7 +38,9 @@
 
 .nav-item-active {
   .eval-item {
-    border: 1px solid $primary-navy;
+    @include theme() {
+      border: 1px solid t("toolbar-icon-hover");
+    }
   }
 }
 
