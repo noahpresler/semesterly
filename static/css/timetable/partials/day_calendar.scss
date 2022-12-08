@@ -38,13 +38,13 @@
     width: 100%;
   }
 
-  #nudgespotInappContainer { // sass-lint:disable-line id-name-format
+  #nudgespotInappContainer {
+    // sass-lint:disable-line id-name-format
     display: none;
   }
 
   .calendar {
     .fc-toolbar {
-      background-color: $gf9f9f9;
       border-bottom: 0;
       border-color: transparent;
       margin-top: 0;
@@ -57,7 +57,7 @@
     border: 0;
   }
 
-  .fc .fc-toolbar>*>:first-child {
+  .fc .fc-toolbar > * > :first-child {
     margin-left: 8px;
   }
 
@@ -80,12 +80,6 @@
       border: 0;
       margin-left: 3px;
       width: 5px;
-    }
-  }
-
-  .sem-pages {
-    .sem-page {
-      border: 5px solid $gf9f9f9;
     }
   }
 }
