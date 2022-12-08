@@ -40,6 +40,7 @@ import NewsModal from "./modals/NewsModal";
 import { newsModalActions } from "../state/slices/newsModalSlice";
 import SideBar from "./SideBar";
 import CompareTimetableSideBar from "./CompareTimetableSidebar";
+import { selectTheme } from "../state/slices/themeSlice";
 
 const Semesterly = () => {
   const dispatch = useAppDispatch();
@@ -184,6 +185,8 @@ const Semesterly = () => {
     isComparingTimetables ? "-compare-timetable" : ""
   }`;
 
+  const theme = useAppSelector(selectTheme);
+
   return (
     <div className="page-wrapper">
       <NewsModal />
@@ -198,7 +201,7 @@ const Semesterly = () => {
       <UserAcquisitionModal />
       <TermsOfServiceModal />
       <TermsOfServiceBannerContainer />
-      <AlertBox ref={alertBoxRef} />
+      <AlertBox ref={alertBoxRef} theme={theme.name} />
       <div className="all-cols">
         <div className={mainbarClassName}>
           {cal}
