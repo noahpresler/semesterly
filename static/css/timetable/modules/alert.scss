@@ -4,14 +4,12 @@
   position: fixed;
   right: 0;
   top: 14px;
-  z-index: 999999;
+  z-index: 99;
 
   .alert {
     align-items: center;
-    background-color: $g333;
     border-radius: 2px;
     box-shadow: 0 3px 12px 0 $black-transparent-3;
-    color: $gfff;
     display: flex;
     font-size: 11px;
     justify-content: space-between;

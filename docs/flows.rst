@@ -11,10 +11,9 @@ Initalization
 When a user loads the home timetable page, ``FeatureFlowView`` inside of
 ``timetable.utils`` is used to handle the request. On initial page load,
 the frontend requires some data to initialize the redux state, like
-information about the current user, the list of possible semesters for the
-school, and the list of student integrations. This initial data is created
-inside of the view, and passed in as a single json string in the response
-context:
+information about the current user and the list of possible semesters for the
+school. This initial data is created inside of the view, and passed in as a single json
+string in the response context:
 
     .. code-block:: python
 
@@ -29,7 +28,6 @@ context:
                     'currentSemester': curr_sem_index,
                     'allSemesters': all_semesters,
                     'uses12HrTime': self.school in AM_PM_SCHOOLS,
-                    'studentIntegrations': integrations,
                     'examSupportedSemesters': map(all_semesters.index,
                                                   final_exams_available.get(self.school, [])),
 

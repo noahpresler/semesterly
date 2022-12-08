@@ -5,28 +5,28 @@ on:
     branches:
       - prod
       - develop
-      - feature/enhance-search
+      - feature/dark-mode-timetable
   pull_request:
     branches:
       - prod
       - develop
-      - feature/enhance-search
+      - feature/dark-mode-timetable
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: 14
-        cache: "npm"
-    - name: Install Dependencies
-      run: |
-        npm install
-        npm install -g eslint
-        npm install -g prettier
-    - name: Run Prettier
-      run: npx prettier "**/*.{js,jsx,ts,tsx}" --check 
-    - name: Run ESLint
-      run: eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: "npm"
+      - name: Install Dependencies
+        run: |
+          npm install
+          npm install -g eslint
+          npm install -g prettier
+      - name: Run Prettier
+        run: npx prettier "**/*.{js,jsx,ts,tsx}" --check
+      - name: Run ESLint
+        run: eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0

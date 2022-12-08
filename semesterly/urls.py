@@ -27,7 +27,6 @@ urlpatterns = [
     re_path("", include("authpipe.urls")),
     re_path("", include("timetable.urls")),
     re_path("", include("courses.urls")),
-    re_path("", include("integrations.urls")),
     re_path("", include("searches.urls")),
     re_path("", include("student.urls")),
     re_path("", include("analytics.urls")),

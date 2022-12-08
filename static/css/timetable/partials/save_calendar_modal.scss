@@ -1,15 +1,13 @@
 .abnb-modal {
-  height: 465px;
-  max-width: 450px;
-  overflow: auto;
-
   > div {
     outline: none;
   }
 
   .modal-header {
-    background-color: $geee;
-    border-bottom: 1px solid $gddd;
+    @include theme() {
+      background-color: t("modal-header-background");
+      border-bottom: 1px solid t("modal-border-color");
+    }
     padding: 25px;
     position: relative;
   }
@@ -43,9 +41,9 @@
   }
 
   > .done {
-    color: #42A770;
+    color: #42a770;
     transform: scale(1.1);
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
   }
 
   > .loader {
@@ -70,11 +68,12 @@
 }
 
 .abnb-btn {
-  background: $gfff;
-  border: 1px solid;
-  border-color: $gc4c4c4;
+  @include theme() {
+    color: t("text-color");
+    background-color: t("modal-header-background");
+    border: 1px solid t("modal-border-color");
+  }
   border-radius: 4px;
-  color: $g484848;
   padding: 20px 27px !important;
   width: 100%;
 
@@ -86,7 +85,6 @@
 
   &.secondary {
     > span {
-      color: $g484848;
       font-weight: 300;
     }
   }
@@ -117,7 +115,6 @@
 .method-details {
   color: $g777;
   font-size: 12px;
-  font-weight: 200;
   margin-bottom: 2px;
   margin-top: 4px;
   text-align: center;
@@ -138,7 +135,7 @@
   width: 100%;
 }
 
-@media(max-width: 776px) {
+@media (max-width: 776px) {
   .abnb-modal {
     max-width: 1200px;
   }

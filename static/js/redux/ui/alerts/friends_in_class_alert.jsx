@@ -18,7 +18,6 @@ import React from "react";
 import classnames from "classnames";
 import { LogFacebookAlertClick } from "../../actions/user_actions";
 import MasterSlot from "../MasterSlot";
-import COLOUR_DATA from "../../constants/colours";
 import { setDeclinedNotifications } from "../../util";
 
 class FriendsInClassAlert extends React.Component {
@@ -69,7 +68,7 @@ class FriendsInClassAlert extends React.Component {
   }
 
   render() {
-    const maxColourIndex = COLOUR_DATA.length - 1;
+    const maxColourIndex = this.props.slotColorDataLen - 1;
     let professors = [];
     if (
       this.props.mostFriendsClass.slots.length === 0 &&
@@ -149,6 +148,7 @@ FriendsInClassAlert.propTypes = {
   mostFriendsKey: PropTypes.number.isRequired,
   mostFriendsCount: PropTypes.number.isRequired,
   totalFriendsCount: PropTypes.number.isRequired,
+  slotColorDataLen: PropTypes.number.isRequired,
   mostFriendsClass: PropTypes.shape({
     id: PropTypes.number,
     slots: PropTypes.any,

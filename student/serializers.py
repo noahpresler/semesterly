@@ -71,7 +71,6 @@ class StudentSerializer(serializers.ModelSerializer):
             "social_all",
             "emails_enabled",
             "school",
-            "integrations",
             "userFirstName",
             "userLastName",
             "FacebookSignedUp",

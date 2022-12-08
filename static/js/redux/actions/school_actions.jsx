@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import { getSchoolInfoEndpoint } from "../constants/endpoints";
 import { getCurrentSemester } from "../state";
-import { explorationModalActions } from "../state/slices";
+import { advancedSearchActions } from "../state/slices";
 import { receiveSchoolInfo } from "./initActions";
 
 export const getSchool = (state) => state.school.school;
@@ -24,7 +24,7 @@ export const getSemester = (state) => {
 };
 
 export const fetchSchoolInfo = () => (dispatch, getState) => {
-  dispatch(explorationModalActions.requestSchoolInfo());
+  dispatch(advancedSearchActions.requestSchoolInfo());
   fetch(getSchoolInfoEndpoint(getSchool(getState())))
     .then((response) => response.json())
     .then((json) => {

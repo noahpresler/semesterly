@@ -12,7 +12,19 @@
 
 .side-bar {
   input {
-    border: 1px solid $gfff;
+    @include theme() {
+      border: t("sidebar-input-border");
+      background-color: t("sidebar-input-background");
+
+      &:focus {
+        border: t("sidebar-input-border_focus");
+      }
+
+      &:hover {
+        border: t("sidebar-input-border_hover");
+      }
+    }
+
     border-radius: 25px;
     font-family: $font-body;
     font-size: 18px;
@@ -22,14 +34,6 @@
     padding: 5px 5px 5px 15px;
     transition: border 0.3s;
     width: 100%;
-
-    &:focus {
-      border: 1px solid $blue-alt;
-    }
-
-    &:hover {
-      border: 1px solid $gddd;
-    }
   }
 
   .unsaved {
@@ -83,21 +87,27 @@
 }
 
 .timetable-names-dropdown {
-  background-color: $gfff;
-  border: 1px solid $ge6e6e6;
+  @include theme() {
+    background-color: t("dropdown-background");
+    border: t("dropdown-border");
+  }
   box-shadow: 0 2px 10px $black-transparent-2;
   display: none;
   left: 0;
   position: absolute;
   top: 35px;
   width: 100%;
-  z-index: 100;
+  z-index: 10;
 
   &.down {
     display: block;
   }
 
   .tip {
+    @include theme() {
+      // tip color
+      border-bottom-color: t("dropdown-background");
+    }
     right: 9px;
     top: -7px;
   }
@@ -116,15 +126,10 @@
 }
 
 .tt-name {
-  background-color: $gfff;
   cursor: pointer;
   font-size: 12px;
   padding: 5px 5px 5px 20px;
   transition: background-color 0.3s;
-
-  :hover {
-    background-color: $geee;
-  }
 }
 
 .sb-header {
@@ -153,7 +158,9 @@
   transition: color 0.3s;
 
   &:hover {
-    color: $primary-navy;
+    @include theme() {
+      color: t("text-color-hover");
+    }
     cursor: pointer;
   }
 }
@@ -177,7 +184,9 @@
 
 .sb-rating {
   h3 {
-    color: $g777;
+    @include theme() {
+      color: t("text-color");
+    }
     font-size: 12px;
     font-weight: 200;
     margin: 0;
@@ -195,7 +204,9 @@
   margin-bottom: 10px;
 
   h3 {
-    color: $primary-navy;
+    @include theme() {
+      color: t("text-color");
+    }
     font-size: 30px;
     font-weight: 300;
     line-height: 36px;
@@ -203,7 +214,9 @@
   }
 
   h4 {
-    color: $g999;
+    @include theme() {
+      color: t("text-color");
+    }
     font-size: 14px;
     font-weight: 300;
     line-height: 14px;
@@ -235,6 +248,12 @@
     left: 0;
     top: 0;
   }
+
+  div {
+    span {
+      color: black;
+    }
+  }
 }
 
 .modal-module {
@@ -253,6 +272,17 @@
     .tip-border {
       right: 0;
       top: -7px;
+    }
+  }
+}
+
+.compare-tt {
+  div {
+    h3,
+    span {
+      @include theme() {
+        color: t("compare-timetable-slot");
+      }
     }
   }
 }

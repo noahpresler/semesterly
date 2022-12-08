@@ -2,19 +2,22 @@ $primary-navy: #34495e;
 $navy-light: #375b80;
 $navy-transparent-0: rgba(52, 73, 94, 0);
 $navy-transparent-100: rgba(52, 73, 94, 1);
-$navy-transparent-14: rgba(90, 200, 251, .14);
-$navy-transparent-20: rgba(63, 81, 181, .2);
+$navy-transparent-14: rgba(90, 200, 251, 0.14);
+$navy-transparent-20: rgba(63, 81, 181, 0.2);
 $confirm-green: #1abc9c;
 $confirm-green-hover: #16ad8f;
 $confirm-green-darker: #12ab8d;
 $confirm-green-darkest: #0e8870;
 $confirm-green-alt: #42a770;
+$save-course-blue: #344d87;
+$save-course-hover-blue: #485b88;
 
 $red-dark: #963838;
 $red: #d21616;
 $pink: #fd7473;
 $yellow: #d29842;
 $green: #0aa98a;
+$green-dark: #59bea0;
 $green-light: #27ae60;
 $green-bright: #4ad187;
 $blue: #3895db;
@@ -30,7 +33,7 @@ $friend: #53e997;
 $facebook: #3b5998;
 $facebook-dark: #2b406e;
 $facebook-view: #4080ff;
-$facebook-5: rgba(59, 89, 152, .5);
+$facebook-5: rgba(59, 89, 152, 0.5);
 
 // amazon
 $amazon: #f90;
@@ -67,20 +70,28 @@ $gdee2ff: #dee2ff;
 $gebf5ff: #ebf5ff;
 $gf5faff: #f5faff;
 
-$black-very-transparent: rgba(0, 0, 0, .06);
-$black-very-transparent-off: rgba(0, 0, 0, .075);
-$black-transparent-1: rgba(0, 0, 0, .1);
-$black-transparent-15: rgba(0, 0, 0, .15);
-$black-transparent-2: rgba(0, 0, 0, .2);
-$black-transparent-25: rgba(0, 0, 0, .25);
-$black-transparent-3: rgba(0, 0, 0, .3);
-$black-transparent-5: rgba(0, 0, 0, .5);
-$black-transparent-8: rgba(0, 0, 0, .8);
+// dark-mode
+$gdark111: #5a5d64;
+$gdark222: #73767e;
+$gdark333: #e5e5e5;
+$gdark444: #c5c3c3;
+$bdark111: #a8c9e8;
+
+$black-very-transparent: rgba(0, 0, 0, 0.06);
+$black-very-transparent-off: rgba(0, 0, 0, 0.075);
+$black-transparent-1: rgba(0, 0, 0, 0.1);
+$black-transparent-15: rgba(0, 0, 0, 0.15);
+$black-transparent-2: rgba(0, 0, 0, 0.2);
+$black-transparent-25: rgba(0, 0, 0, 0.25);
+$black-transparent-3: rgba(0, 0, 0, 0.3);
+$black-transparent-5: rgba(0, 0, 0, 0.5);
+$black-transparent-8: rgba(0, 0, 0, 0.8);
 
 $white-transparent-0: rgba(255, 255, 255, 0);
-$white-transparent-9: rgba(255, 255, 255, .9);
+$white-transparent-8: rgba(255, 255, 255, 0.8);
+$white-transparent-9: rgba(255, 255, 255, 0.9);
 
-$g188-transparent-4: rgba(188, 188, 188, .4);
+$g188-transparent-4: rgba(188, 188, 188, 0.4);
 
 $switch-blue: #5ac8fb;
 
@@ -88,8 +99,8 @@ $switch-blue: #5ac8fb;
 $react-select-red: #d0021b;
 $react-single-blue: #007eff;
 $react-single-blue-hover: #0071e6;
-$react-select-navy-transparent: rgba(0, 126, 255, .1);
-$react-select-navy-semi-transparent: rgba(0, 126, 255, .24);
+$react-select-navy-transparent: rgba(0, 126, 255, 0.1);
+$react-select-navy-semi-transparent: rgba(0, 126, 255, 0.24);
 $react-single-sky-blue: #c2e0ff;
 $react-single-sky-blue-hover: #d8eafd;
 
@@ -97,3 +108,16 @@ $react-single-sky-blue-hover: #d8eafd;
 $spinner-blue: #114357;
 $spinner-purple: #826c75;
 $spinner-pink: #f29492;
+
+// Recolored colors
+$dblue8: #1d1e22;
+$dblue7: #2d2e32;
+$dblue6: #3d3e42;
+$dblue3: #4d5057;
+$dblue2: #5a5d64;
+$dblue1: #73767e;
+$dblue075: #888d9b;
+$dblue050: #9aa3bb;
+$dblue0: #ceddeb;
+
+$dblue7-transparent: rgba(45, 46, 50, 0.8);

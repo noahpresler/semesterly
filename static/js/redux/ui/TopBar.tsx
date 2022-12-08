@@ -15,15 +15,18 @@ GNU General Public License for more details.
 import React, { useState, useEffect } from "react";
 import { useAppSelector } from "../hooks";
 import SearchBar from "./SearchBar";
-import CourseModalContainer from "./containers/modals/course_modal_container";
+import CourseModal from "./modals/CourseModal";
 import TimetableLoaderContainer from "./containers/timetable_loader_container";
 import SocialProfileContainer from "./containers/social_profile_container";
 import { getCurrentSemester } from "../state";
+import ThemeToggle from "./ThemeToggle";
+import { selectTheme } from "../state/slices/themeSlice";
 
 const TopBar = () => {
   const userInfo = useAppSelector((state) => state.userInfo.data);
   const currentSemester = useAppSelector((state) => getCurrentSemester(state));
   const isComparing = useAppSelector((state) => state.compareTimetable.isComparing);
+  const theme = useAppSelector(selectTheme);
 
   const [sideBarCollapsed, setSideBarCollapsed] = useState("neutral");
 
@@ -84,11 +87,19 @@ const TopBar = () => {
   return (
     <div className="top-bar">
       <a href="https://semester.ly">
-        <img
-          alt="logo"
-          className="semesterly-logo no-print"
-          src="/static/img/logo2.0-32x32.png"
-        />
+        {theme.name === "dark" ? (
+          <img
+            alt="logo"
+            className="semesterly-logo no-print"
+            src="/static/img/logo2.0-32x32-dark.png"
+          />
+        ) : (
+          <img
+            alt="logo"
+            className="semesterly-logo no-print"
+            src="/static/img/logo2.0-32x32.png"
+          />
+        )}
       </a>
       <div className="semesterly-name no-print">Semester.ly</div>
       <div className="print-content print">
@@ -103,9 +114,10 @@ const TopBar = () => {
         </div>
       </div>
       {!isComparing && <SearchBar />}
-      <CourseModalContainer />
+      <CourseModal />
       <SocialProfileContainer />
       <TimetableLoaderContainer />
+      <ThemeToggle />
       <div className="navicon" onClick={toggleSideBar}>
         <span />
         <span />

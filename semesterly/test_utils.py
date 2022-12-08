@@ -656,15 +656,17 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def open_and_query_adv_search(self, query, n_results=None):
         """Open's the advanced search modal and types in the provided query,
         asserting that n_results are then returned"""
-        self.find((By.CLASS_NAME, "show-exploration"), clickable=True).click()
-        self.find((By.CLASS_NAME, "exploration-modal"), clickable=True)
+        self.find((By.CLASS_NAME, "show-advanced-search"), clickable=True).click()
+        self.find((By.CLASS_NAME, "advanced-search-modal"), clickable=True)
         search = self.find(
-            (By.XPATH, '//div[contains(@class,"exploration-header")]//input')
+            (By.XPATH, '//div[contains(@class,"advanced-search-modal-header")]//input')
         )
         search.clear()
         search.send_keys(query)
         if n_results:
-            self.assert_n_elements_found((By.CLASS_NAME, "exp-s-result"), n_results)
+            self.assert_n_elements_found(
+                (By.CLASS_NAME, "advanced-s-result"), n_results
+            )
 
     def close_adv_search(self):
         """Closes the advanced search modal"""
@@ -738,33 +740,28 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     def select_nth_adv_search_result(self, index, semester):
         """Selects the nth advanced search result with a click.
         Validates the course modal body displayed in the search reuslts"""
-        res = self.find((By.CLASS_NAME, "exp-s-result"), get_all=True)
+        res = self.find((By.CLASS_NAME, "advanced-s-result"), get_all=True)
         code = self.find((By.TAG_NAME, "h5"), root=res[index]).text
         course = Course.objects.get(code=code)
         ActionChains(self.driver).move_to_element(res[index]).click().perform()
-        WebDriverWait(self.driver, self.TIMEOUT).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[contains(@class, 'modal-header')]/h2"), course.code
-            )
-        )
-        modal = self.find((By.CLASS_NAME, "exp-modal"))
+        modal = self.find((By.CLASS_NAME, "adv-modal"))
         self.validate_course_modal_body(course, modal, semester)
 
     def save_user_settings(self):
         """Saves user setttings by clicking the button, asserts that the
         modal is then invisible"""
         self.find((By.CLASS_NAME, "signup-button")).click()
-        self.assert_invisibility((By.CLASS_NAME, "welcome-modal"))
+        self.assert_invisibility((By.CLASS_NAME, "user-settings-modal"))
 
     def complete_user_settings_basics(self, major, class_year):
-        """Completes major/class year/TOS agreement via the welcome modal
+        """Completes major/class year/TOS agreement via the user settings modal
 
         Args:
             major (str): Student's major
             class_year (str): Student's class year
         """
-        # Assert welcome modal is open
-        self.find((By.CLASS_NAME, "welcome-modal"))
+        # Assert that user settings modal is open
+        self.find((By.CLASS_NAME, "user-settings-modal"))
         major_select, year_select = self.find(
             (By.XPATH, "//div[contains(@class,'select-field')]//input"),
             get_all=True,
@@ -784,7 +781,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             )
         ).click()
         self.save_user_settings()
-        self.assert_invisibility((By.CLASS_NAME, "welcome-modal"))
+        self.assert_invisibility((By.CLASS_NAME, "user-settings-modal"))
 
     def change_ptt_name(self, name):
         """Changes personal timetable name to the provided title"""

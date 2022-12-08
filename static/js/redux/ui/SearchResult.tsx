@@ -161,15 +161,6 @@ const SearchResult = (props: SearchResultProps) => {
       ? "Add this course to your timetable"
       : "Remove this course from your timetable";
   }
-  const learningDenLogoImg = {
-    backgroundImage: "url(/static/img/integrations/learningDen.png)",
-  };
-  const learningDenLogo =
-    course.integrations.indexOf("LearningDen") > -1 ? (
-      <div className="label integration">
-        <span className="has-den" style={learningDenLogoImg} />
-      </div>
-    ) : null;
   const waitlistOnlyFlag = hasOnlyWaitlistedSections() ? (
     <h4 className="label flag">Waitlist Only</h4>
   ) : null;
@@ -196,7 +187,6 @@ const SearchResult = (props: SearchResultProps) => {
           {info}
         </h4>
         <h4 className={classNames("label", "bubble")}>{campuses[course.campus]}</h4>
-        {learningDenLogo}
         {waitlistOnlyFlag}
       </div>
     </li>

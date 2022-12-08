@@ -10,7 +10,9 @@
     margin-left: 0px;
     font-size: 16px;
     border-radius: 0 25px 25px 0;
-    background-color: #f2f3f5;
+    @include theme() {
+      background-color: t("search-bar-background");
+    }
     height: 30px;
     line-height: 30px;
     outline: 0;
@@ -18,7 +20,9 @@
 
     &.results {
       border-radius: 0 10px 0 0;
-      background-color: #ffffff;
+      @include theme() {
+        background-color: t("search-bar-focused-background");
+      }
     }
 
     &::-webkit-input-placeholder {
@@ -31,12 +35,14 @@
       line-height: 30px;
     }
 
-    &:-ms-input-placeholder { // IE 10+
+    &:-ms-input-placeholder {
+      // IE 10+
       font-size: 14px;
       line-height: 30px;
     }
 
-    &:-moz-placeholder { // Firefox 18-
+    &:-moz-placeholder {
+      // Firefox 18-
       font-size: 14px;
       line-height: 30px;
     }
@@ -49,19 +55,22 @@
 }
 
 .search-bar__wrapper {
-  background-color: $gfff;
   width: 100%;
   border-radius: 25px;
 
   &.results {
     border-radius: 10px 10px 0 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
-    border: 1px solid #e6e6e6;
+    @include theme() {
+      box-shadow: 0 2px 10px t("search-bar-box-shadow");
+      border: 1px solid t("search-border");
+    }
   }
 }
 
 .search-bar__semester {
-  background-color: #f2f3f5;
+  @include theme() {
+    background-color: t("search-bar-background");
+  }
   color: #757575;
   cursor: pointer;
   float: left;
@@ -84,14 +93,18 @@
   }
 
   &.results {
-    background-color: #ffffff;
+    @include theme() {
+      background-color: t("search-bar-focused-background");
+    }
   }
 }
 
 .semester-picker {
-  background-color: $gfff;
-  border: 1px solid $ge6e6e6;
-  box-shadow: 0 2px 10px $black-transparent-2;
+  @include theme() {
+    background-color: t("search-bar-background");
+    border: t("search-bar-semester-picker-border");
+    box-shadow: 0 2px 10px t("search-results-box-shadow");
+  }
   color: #777777;
   cursor: pointer;
   display: none;
@@ -101,7 +114,7 @@
   padding-top: 7px;
   position: absolute;
   top: 30px;
-  z-index: 100;
+  z-index: 10;
 
   &.down {
     display: block;
@@ -118,35 +131,41 @@
   }
 }
 
-
 .semester-option {
   padding-left: 7px;
   padding-right: 7px;
+  @include theme() {
+    background-color: t("search-bar-background");
+  }
 
-  &:hover{
-    background-color: #F1EEEE;
+  &:hover {
+    @include theme() {
+      background-color: t("search-bar-option-background-hover");
+    }
   }
 }
 
 .search-results {
-  background-color: $gfff;
-  border: 1px solid $ge6e6e6;
+  @include theme() {
+    background-color: t("search-bar-focused-background");
+    border: 1px solid t("search-border");
+    box-shadow: 0 3px 4px t("search-results-box-shadow");
+    color-scheme: t("color-scheme-type");
+  }
   border-radius: 0 10px 10px 10px;
   border-top: 0;
-  box-shadow: 0 3px 4px $black-transparent-2;
+  box-shadow: 0 3px 4px $dblue7;
   margin: 0;
   overflow: hidden;
   padding: 0;
   position: absolute;
   top: 29px;
   width: 150%;
-  z-index: 100;
+  z-index: 10;
 }
 
-
-
 .see-more {
-  color: #C3B9B1;
+  color: #c3b9b1;
   font-size: 15px;
   height: 180px;
   overflow: hidden;
@@ -192,30 +211,34 @@
   max-width: 600px;
   padding: 10px 110px 10px 5px;
   position: relative;
-  transition: background-color .2s, color .2s;
+  transition: background-color 0.2s, color 0.2s;
 
   &.hovered {
-    background-color: $gf3f3f3;
+    @include theme() {
+      background-color: t("search-results-hover");
+    }
   }
 
   h3 {
     font-size: 14px;
     height: 14px;
     margin: 0;
-    overflow: hidden;
+    overflow: visible;
     padding-left: 5px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   h4 {
-    color: $g777;
+    @include theme() {
+      color: t("search-bar-side-text");
+    }
     font-size: 12px;
     font-weight: 400;
     margin: 5px 0;
     min-height: 12px;
     padding-left: 5px;
-    transition: all .1s linear;
+    transition: all 0.1s linear;
   }
 
   .search-result-labels {
@@ -230,11 +253,15 @@
     padding: 0;
 
     &.hoverAdd {
-      color: $blue-light;
+      @include theme() {
+        color: t("search-course-add-hover-text");
+      }
     }
 
     &.hoverSave {
-      color: $green-light;
+      @include theme() {
+        color: t("search-course-save-hover-text");
+      }
     }
 
     &.bubble {
@@ -248,20 +275,8 @@
     }
   }
 
-  .integration {
-    margin: 1px 5px 0 0;
-
-    a {
-      float: left;
-      font-size: 12px;
-      line-height: 15px;
-      padding-right: 5px;
-    }
-  }
-
   .search-course-add,
   .search-course-save {
-    background-color: #d7d7d7;
     border-radius: 100%;
     height: 40px;
     line-height: 40px;
@@ -270,21 +285,45 @@
     text-align: center;
     top: 50%;
     transform: translateY(-50%);
-    transition: background-color .2s;
+    transition: background-color 0.2s;
     width: 40px;
   }
 
   .search-course-save {
+    @include theme() {
+      background-color: t("search-course-save-background");
+      &.in-roster {
+        background-color: t("search-course-save-in-roster");
+
+        &:hover {
+          background-color: t("search-course-save-in-roster-hover");
+        }
+      }
+    }
+
     right: 55px;
 
     &:hover {
-      background-color: #7BE68D;
+      @include theme() {
+        background-color: t("search-course-save-hover");
+      }
     }
   }
 
   .search-course-add {
+    @include theme() {
+      background-color: t("search-course-save-background");
+      &.in-roster {
+        background-color: t("search-course-add-in-roster");
+
+        &:hover {
+          background-color: t("search-course-add-in-roster-hover");
+        }
+      }
+    }
+
     h6 {
-      color: #00A1FF;
+      color: #00a1ff;
       font-size: 12px;
       left: 50%;
       margin: 0;
@@ -293,13 +332,15 @@
       text-align: center;
       top: 50%;
       transform: translate(-50%, -75%);
-      transition: transform .3s, opacity .3s, visibility .3s;
+      transition: transform 0.3s, opacity 0.3s, visibility 0.3s;
       visibility: hidden;
       width: 56px;
     }
 
     &:hover {
-      background-color: #A6DEFF;
+      @include theme() {
+        background-color: t("search-course-add-hover");
+      }
     }
   }
 
@@ -310,49 +351,39 @@
     opacity: 0;
     padding: 5px;
     position: absolute;
-    transition: opacity .3s, visibility .3s;
+    transition: opacity 0.3s, visibility 0.3s;
     visibility: hidden;
   }
 }
 
 .search-course-add {
   &.in-roster {
-    background-color: #2DD6B5;
+    @include theme() {
+      background-color: t("search-course-add-in-roster");
+    }
 
     &:hover {
-      background-color: #56ECCF;
+      @include theme() {
+        background-color: t("search-course-add-in-roster-hover");
+      }
     }
   }
 }
 
 .search-course-save {
   &.in-roster {
-    background-color: #97B0EA;
+    background-color: #97b0ea;
 
     &:hover {
-      background-color: #AEC1EF;
+      background-color: #aec1ef;
     }
   }
-}
-
-// If a course has an den integration turned on
-.has-den {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  float: left;
-  height: 15px;
-  margin-right: 5px;
-  opacity: 1;
-  transition: visibility .3s, opacity .3s;
-  visibility: visible;
-  width: 100px;
 }
 
 // Section Listings per Course
 .search-sections {
   opacity: 1;
-  transition: opacity .3s, visibility .3s;
+  transition: opacity 0.3s, visibility 0.3s;
   visibility: visible;
 }
 
@@ -364,7 +395,7 @@
   vertical-align: middle;
 
   &:hover {
-    background-color: #FFDBBE;
+    background-color: #ffdbbe;
     color: $navy-transparent-100;
   }
 }
@@ -379,22 +410,34 @@
 }
 
 .trans50 {
-  // This makes it semi transparent
-  background-color: $white-transparent-0;
-  border: 1px solid $white-transparent-0;
-  border-top-color: transparent;
-  box-shadow: none;
+  @include theme() {
+    // This makes it semi transparent
+    background-color: $white-transparent-0;
+    border: 1px solid $white-transparent-0;
+    border-top-color: transparent;
+    box-shadow: none;
+  }
+
+  li,
+  .see-more {
+    opacity: 0;
+    visibility: hidden;
+  }
 
   li,
   .search-section,
   .search-course h4 {
     // This makes it semi transparent
-    color: $navy-transparent-0;
+    @include theme() {
+      color: $navy-transparent-0;
+    }
   }
 
   .search-section:hover {
-    background-color: #FFDBBE;
-    color: $navy-transparent-100;
+    @include theme() {
+      background-color: #ffdbbe;
+      color: $navy-transparent-100;
+    }
   }
 
   .search-course,
@@ -402,7 +445,9 @@
   .search-course-save,
   .search-bar__side,
   .search-course .label {
-    background-color: transparent;
+    @include theme() {
+      background-color: transparent;
+    }
   }
 
   .see-more__inner {
@@ -411,23 +456,24 @@
   }
 
   .search-bar__side-sections {
-    background-color: $white-transparent-9;
-  }
-
-  .has-den {
-    opacity: 0;
-    visibility: hidden;
+    @include theme() {
+      background-color: t("search-bar-side-trans50");
+    }
   }
 }
-
 .results-loading-gif {
-  background: url("/static/img/search-results-loader.gif") no-repeat;
-  background-position: right 5px center;
+  @include theme() {
+    background: url(t("search-loader-background")) no-repeat;
+    background-position: right 5px center;
+    background-size: 17px;
+  }
 }
 
 // Side Bar in Search Results
 .search-bar__side {
-  background-color: $gf3f3f3;
+  @include theme() {
+    background-color: t("search-bar-side");
+  }
   height: 100%;
   min-height: 232px;
   overflow-y: auto;
@@ -452,7 +498,9 @@
   }
 
   p {
-    color: $g777;
+    @include theme() {
+      color: t("search-bar-side-text");
+    }
     font-size: 11px;
     line-height: 11px;
     margin: 0 0 5px;
@@ -470,19 +518,21 @@
   margin: 1px 5px auto auto;
   padding: 5px;
   text-align: center;
-  transition: background-color .1s;
+  transition: background-color 0.1s;
   width: auto;
 
   &:hover {
-    background-color: #A5D5FF;
+    @include theme() {
+      background-color: t("search-bar-side-hover");
+    }
   }
 }
 
 @media (max-width: 1000px) {
-	.search-bar {
+  .search-bar {
     left: 82px;
     width: 55%;
-	}
+  }
 }
 
 @media (max-width: 766px) {
@@ -546,4 +596,14 @@
     left: 50px;
     right: 85px;
   }
+}
+
+.theme-toggle-container {
+  float: right;
+  padding: 10px 2px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 1.25em;
 }

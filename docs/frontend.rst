@@ -82,8 +82,6 @@ The reducers directory follows this structure::
     ├── exploration_modal_reducer.jsx
     ├── final_exams_modal_reducer.jsx
     ├── friends_reducer.jsx
-    ├── integration_modal_reducer.jsx
-    ├── integrations_reducer.jsx
     ├── notification_token_reducer.jsx
     ├── optional_courses_reducer.jsx
     ├── peer_modal_reducer.jsx
@@ -130,7 +128,7 @@ Modals
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``course_modal.jsx``           | .. image:: components/course_modal.png           |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``exploration_modal.jsx``      | .. image:: components/exploration_modal.png      |                          |
+|``AdvancedSearchModal.jsx``    | .. image:: components/exploration_modal.png      |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``final_exams_modal.jsx``      | .. image:: components/final_exams_modal.png      |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
@@ -198,7 +196,7 @@ General Components
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``terms_of_service_banner.jsx``| .. image:: components/terms_of_service_banner.png|                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``terms_of_service_modal.jsx`` | .. image:: components/terms_of_service_modal.png |                          |
+|``TermsOfServiceModal.tsx``    | .. image:: components/terms_of_service_modal.png |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 | ``timetable_loader.jsx``      | .. image:: components/timetable_loader.png       |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+

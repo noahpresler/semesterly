@@ -166,7 +166,6 @@ INSTALLED_APPS = (
     "analytics",
     "authpipe",
     "courses",
-    "integrations",
     "notifications",
     "parsing",
     "scripts",
