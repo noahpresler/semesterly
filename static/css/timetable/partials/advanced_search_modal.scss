@@ -487,6 +487,9 @@
 
   .modal-body {
     padding-top: 20px;
+    @include theme() {
+      background-color: t("modal-background");
+    }
   }
 
   [class^="col-"] {
