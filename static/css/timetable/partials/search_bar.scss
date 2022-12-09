@@ -126,6 +126,9 @@
   }
 
   .tip {
+    @include theme() {
+      border-bottom-color: t("share-link-wrapper");
+    }
     left: 0;
     top: -7px;
   }
