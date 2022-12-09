@@ -73,7 +73,7 @@ export const gradientToSlotColorData = (color: string, curTheme: ThemeName) => (
   highlight: tinycolor(color).darken(5).toString(),
   border:
     curTheme === "dark"
-      ? tinycolor(color).lighten(20).toString()
+      ? tinycolor(color).lighten(10).toString()
       : tinycolor(color).darken(20).toString(),
   font: "#222",
 });
