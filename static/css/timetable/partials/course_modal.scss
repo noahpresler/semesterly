@@ -384,9 +384,7 @@
     }
 
     .course-link-tip {
-      background-color: #fd7473;
       border-radius: 5px;
-      color: $g222;
       height: 60px;
       left: -10px;
       line-height: 20px;
@@ -406,6 +404,9 @@
 
     .course-link-content {
       padding: 10px;
+      span {
+        color: $g222;
+      }
     }
   }
 }
