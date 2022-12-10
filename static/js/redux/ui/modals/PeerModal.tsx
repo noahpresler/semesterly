@@ -234,21 +234,23 @@ const PeerModal = () => {
 
   const display = !isLoading ? (
     <div className="modal-content">
-      <div className="pm-header">
-        <h4>Your Classmates</h4>
-        <div className="key">
-          <div className="key-entry">
-            <div className="course-color-circle" style={keyCircleStyle}>
-              <i className="fa fa-check" />
+      {userInfo.social_all ? (
+        <>
+          <h4 className="pm-header">Your Classmates</h4>
+          <div className="key">
+            <div className="key-entry">
+              <div className="course-color-circle" style={keyCircleStyle}>
+                <i className="fa fa-check" />
+              </div>
+              <p>peer is in your class & section</p>
             </div>
-            <p>peer is in your class & section</p>
+            <div className="key-entry">
+              <div className="course-color-circle" style={keyCircleStyle} />
+              <p>peer is in your class only</p>
+            </div>
           </div>
-          <div className="key-entry">
-            <div className="course-color-circle" style={keyCircleStyle} />
-            <p>peer is in your class only</p>
-          </div>
-        </div>
-      </div>
+        </>
+      ) : null}
       {!userInfo.social_all ? upsell : null}
       {peerCards.length === 0 && userInfo.social_all ? emptyState : null}
       {userInfo.social_all ? peerCards : null}
