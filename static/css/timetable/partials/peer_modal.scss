@@ -283,7 +283,6 @@
 
   .key {
     margin-bottom: 20px;
-    height: fit-content;
     width: 100%;
     padding-right: 10px;
     display: flex;
@@ -296,7 +295,7 @@
     p {
       font-size: 14px;
       font-weight: 300;
-      height: 16px;
+      height: fit-content;
       line-height: 16px;
       margin: 0;
       margin-left: 20px;
