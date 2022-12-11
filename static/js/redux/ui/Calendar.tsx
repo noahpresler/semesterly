@@ -109,7 +109,10 @@ export const ShowWeekendsSwitch = (props: { isMobile: boolean }) => {
             backgroundColor: theme.name === "light" ? "lightgray" : "#777",
           },
         }}
-        onChange={() => dispatch(preferencesActions.toggleShowWeekend())}
+        onChange={() => {
+          dispatch(preferencesActions.toggleShowWeekend());
+          dispatch(preferencesActions.savePreferences());
+        }}
       />
     </Tooltip>
   );
