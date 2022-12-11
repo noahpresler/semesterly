@@ -236,7 +236,7 @@ const PeerModal = () => {
     <div className="modal-content">
       {userInfo.social_all ? (
         <>
-          <h4 className="pm-header">Your Classmates</h4>
+          <h4>Your Classmates</h4>
           <div className="key">
             <div className="key-entry">
               <div className="course-color-circle" style={keyCircleStyle}>

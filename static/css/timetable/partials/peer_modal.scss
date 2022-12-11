@@ -16,13 +16,6 @@
     display: flex;
   }
 
-  .pm-header {
-    text-align: center;
-    clear: both;
-    height: 50px;
-    width: 100%;
-  }
-
   .pm-side-bar {
     @include theme() {
       background-color: t("sidebar-background");
@@ -62,12 +55,9 @@
     box-shadow: none;
 
     h4 {
-      float: left;
-      font-weight: 400;
       margin: 0;
       margin-bottom: 16px;
-      margin-left: 5px;
-      text-align: left;
+      text-align: center;
     }
 
     .upsell {
@@ -292,12 +282,17 @@
   }
 
   .key {
-    float: right;
+    margin-bottom: 20px;
+    height: fit-content;
+    width: 100%;
+    padding-right: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
   }
 
   .key-entry {
-    margin-bottom: 3px;
-
     p {
       font-size: 14px;
       font-weight: 300;
