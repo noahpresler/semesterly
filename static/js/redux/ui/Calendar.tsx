@@ -113,7 +113,6 @@ export const ShowWeekendsSwitch = (props: { isMobile: boolean }) => {
         onChange={() => {
           dispatch(setShowWeekend(!showWeekend));
           dispatch(preferencesActions.savePreferences());
-
         }}
       />
     </Tooltip>

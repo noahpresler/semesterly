@@ -72,9 +72,9 @@ export const setTheme = createAction("global/setTheme", (theme: Theme) => ({
  * to update the timetable state in addition to the preferences state. This is in
  * contrast to has_conflict/tryWithConflict, which is immediately set because the
  * timetable is fetched as it automatically adds a course once it's toggled.
- * 
- * Note this only matters for savingTimetableSlice & userInfoSlice since when the user 
- * is not logged in, they can only have one timetable and preferences are handled by 
+ *
+ * Note this only matters for savingTimetableSlice & userInfoSlice since when the user
+ * is not logged in, they can only have one timetable and preferences are handled by
  * browser storage, so the timetable can never be out of sync with the preferences.
  */
 export const setShowWeekend = createAction(
