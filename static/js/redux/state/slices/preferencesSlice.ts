@@ -5,6 +5,7 @@ import { Timetable } from "../../constants/commonTypes";
 import { getTimetablePreferencesEndpoint } from "../../constants/endpoints";
 import Cookie from "js-cookie";
 import { userInfoActions } from "./userInfoSlice";
+import { saveLocalPreferences } from "../../util";
 
 interface PreferencesSliceState {
   tryWithConflicts: boolean;
@@ -19,29 +20,37 @@ const initialState: PreferencesSliceState = {
 export const savePreferences =
   () => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const activeTimetable = state.savingTimetable.activeTimetable;
-    const preferences = state.preferences;
-    fetch(getTimetablePreferencesEndpoint(activeTimetable.id), {
-      headers: {
-        "X-CSRFToken": Cookie.get("csrftoken"),
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "PUT",
-      body: JSON.stringify({
-        has_conflict: preferences.tryWithConflicts,
-        show_weekend: preferences.showWeekend,
-      }),
-      credentials: "include",
-    });
-    dispatch(
-      userInfoActions.updateSavedTimetable({
-        ...activeTimetable,
-        has_conflict: preferences.tryWithConflicts,
-        show_weekend: preferences.showWeekend,
-      })
-    );
+    if (state.userInfo.data.isLoggedIn) {
+      savePreferencesLoggedIn(dispatch, state);
+    } else {
+      saveLocalPreferences(state.preferences);
+    }
   };
+
+const savePreferencesLoggedIn = (dispatch: AppDispatch, state: RootState) => {
+  const activeTimetable = state.savingTimetable.activeTimetable;
+  const preferences = state.preferences;
+  fetch(getTimetablePreferencesEndpoint(activeTimetable.id), {
+    headers: {
+      "X-CSRFToken": Cookie.get("csrftoken"),
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+    body: JSON.stringify({
+      has_conflict: preferences.tryWithConflicts,
+      show_weekend: preferences.showWeekend,
+    }),
+    credentials: "include",
+  });
+  dispatch(
+    userInfoActions.updateSavedTimetable({
+      ...activeTimetable,
+      has_conflict: preferences.tryWithConflicts,
+      show_weekend: preferences.showWeekend,
+    })
+  );
+};
 
 const preferencesSlice = createSlice({
   name: "preferences",
