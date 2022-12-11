@@ -28,6 +28,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { selectTheme } from "../state/slices/themeSlice";
+import { setShowWeekend } from "../actions/initActions";
 
 interface RowProps {
   isLoggedIn: boolean;
@@ -110,8 +111,9 @@ export const ShowWeekendsSwitch = (props: { isMobile: boolean }) => {
           },
         }}
         onChange={() => {
-          dispatch(preferencesActions.toggleShowWeekend());
+          dispatch(setShowWeekend(!showWeekend));
           dispatch(preferencesActions.savePreferences());
+
         }}
       />
     </Tooltip>

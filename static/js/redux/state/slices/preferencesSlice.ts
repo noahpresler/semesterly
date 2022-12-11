@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "..";
-import { changeActiveSavedTimetable } from "../../actions/initActions";
+import { changeActiveSavedTimetable, setShowWeekend } from "../../actions/initActions";
 import { Timetable } from "../../constants/commonTypes";
 import { getTimetablePreferencesEndpoint } from "../../constants/endpoints";
 import Cookie from "js-cookie";
+import { userInfoActions } from "./userInfoSlice";
 
 interface PreferencesSliceState {
   tryWithConflicts: boolean;
@@ -16,7 +17,7 @@ const initialState: PreferencesSliceState = {
 };
 
 export const savePreferences =
-  () => (_dispatch: AppDispatch, getState: () => RootState) => {
+  () => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const activeTimetable = state.savingTimetable.activeTimetable;
     const preferences = state.preferences;
@@ -33,6 +34,13 @@ export const savePreferences =
       }),
       credentials: "include",
     });
+    dispatch(
+      userInfoActions.updateSavedTimetable({
+        ...activeTimetable,
+        has_conflict: preferences.tryWithConflicts,
+        show_weekend: preferences.showWeekend,
+      })
+    );
   };
 
 const preferencesSlice = createSlice({
@@ -45,28 +53,29 @@ const preferencesSlice = createSlice({
     turnConflictsOn: (state) => {
       state.tryWithConflicts = true;
     },
-    toggleShowWeekend: (state) => {
-      state.showWeekend = !state.showWeekend;
-    },
     setAllPreferences: (state, { payload }: PayloadAction<PreferencesSliceState>) => {
       state.tryWithConflicts = payload.tryWithConflicts;
       state.showWeekend = payload.showWeekend;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      changeActiveSavedTimetable,
-      (
-        state,
-        action: PayloadAction<{
-          timetable: Timetable;
-          upToDate: boolean;
-        }>
-      ) => {
-        state.tryWithConflicts = action.payload.timetable.has_conflict;
-        state.showWeekend = action.payload.timetable.show_weekend;
-      }
-    );
+    builder
+      .addCase(
+        changeActiveSavedTimetable,
+        (
+          state,
+          action: PayloadAction<{
+            timetable: Timetable;
+            upToDate: boolean;
+          }>
+        ) => {
+          state.tryWithConflicts = action.payload.timetable.has_conflict;
+          state.showWeekend = action.payload.timetable.show_weekend;
+        }
+      )
+      .addCase(setShowWeekend, (state, action: PayloadAction<boolean>) => {
+        state.showWeekend = action.payload;
+      });
   },
 });
 export const preferencesActions = { ...preferencesSlice.actions, savePreferences };

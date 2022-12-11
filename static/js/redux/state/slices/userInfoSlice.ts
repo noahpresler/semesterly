@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { initAllState } from "../../actions/initActions";
+import { Timetable } from "../../constants/commonTypes";
 import { isIncomplete } from "../../util";
 
 interface UserData {
@@ -70,6 +71,11 @@ const userInfoSlice = createSlice({
     },
     receiveSavedTimeTables: (state, action: PayloadAction<any>) => {
       state.data.timetables = action.payload;
+    },
+    updateSavedTimetable: (state, action: PayloadAction<Timetable>) => {
+      state.data.timetables = state.data.timetables.map((t: Timetable) =>
+        t.id === action.payload.id ? action.payload : t
+      );
     },
     setUserSettingsModalVisible: (state) => {
       state.isVisible = true;
