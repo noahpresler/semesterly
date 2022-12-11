@@ -32,7 +32,7 @@ const keyCircleStyle = {
 };
 
 const emptyState = (
-  <div className="peer-card upsell">
+  <div className="peer-card">
     <div className="peer-card-wrapper upsell cf">
       <h4>Check back later!</h4>
       <p className="description">
@@ -81,7 +81,7 @@ const ghostCard = (
 );
 
 const ghostCards = (
-  <div>
+  <div className="peer-card-container">
     {ghostCard}
     {ghostCard}
     {ghostCard}
@@ -166,7 +166,7 @@ const PeerModal = () => {
   );
 
   const upsell = (
-    <div className="peer-card upsell">
+    <div className="peer-card">
       <div className="peer-card-wrapper upsell cf">
         <h4>Study Buddies, Delivered</h4>
         <p className="description">
@@ -232,26 +232,30 @@ const PeerModal = () => {
     );
   });
 
+  const peerCardsContainer = <div className="peer-card-container">{peerCards}</div>;
+
   const display = !isLoading ? (
     <div className="modal-content">
-      <div className="pm-header">
-        <h4>Your Classmates</h4>
-        <div className="key">
-          <div className="key-entry">
-            <div className="course-color-circle" style={keyCircleStyle}>
-              <i className="fa fa-check" />
+      {userInfo.social_all ? (
+        <>
+          <h4>Your Classmates</h4>
+          <div className="key">
+            <div className="key-entry">
+              <div className="course-color-circle" style={keyCircleStyle}>
+                <i className="fa fa-check" />
+              </div>
+              <p>peer is in your class & section</p>
             </div>
-            <p>peer is in your class & section</p>
+            <div className="key-entry">
+              <div className="course-color-circle" style={keyCircleStyle} />
+              <p>peer is in your class only</p>
+            </div>
           </div>
-          <div className="key-entry">
-            <div className="course-color-circle" style={keyCircleStyle} />
-            <p>peer is in your class only</p>
-          </div>
-        </div>
-      </div>
+        </>
+      ) : null}
       {!userInfo.social_all ? upsell : null}
       {peerCards.length === 0 && userInfo.social_all ? emptyState : null}
-      {userInfo.social_all ? peerCards : null}
+      {userInfo.social_all ? peerCardsContainer : null}
       {(!userInfo.social_all || peerCards.length === 0) && ghostCards}
     </div>
   ) : (
@@ -269,9 +273,9 @@ const PeerModal = () => {
     <Modal
       visible={isVisible}
       onClose={() => dispatch(peerModalActions.togglePeerModal())}
+      showCloseButton={false}
       animation="door"
       className="peer-modal"
-      showCloseButton={false}
       customStyles={modalStyle}
     >
       <div className="content-wrapper">
