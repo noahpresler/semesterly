@@ -20,6 +20,7 @@ import { signupModalActions } from "../../state/slices/signupModalSlice";
 import { userInfoActions } from "../../state/slices";
 import { peerModalActions } from "../../state/slices/peerModalSlice";
 import { selectSlotColorData } from "../../state/slices/themeSlice";
+import { parseInstructors } from "../CourseModalSection";
 
 const modalStyle = {
   height: "85%",
@@ -145,7 +146,11 @@ const PeerModal = () => {
         <div className="master-slot-content">
           <h3>{course.code}</h3>
           <h3>{course.name}</h3>
-          <h3>{professors.length === 0 ? "No Professor Listed" : professors}</h3>
+          <h3>
+            {professors.length === 0
+              ? "No Professor Listed"
+              : parseInstructors(professors)}
+          </h3>
         </div>
       </div>
     );
