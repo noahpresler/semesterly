@@ -32,7 +32,7 @@ const keyCircleStyle = {
 };
 
 const emptyState = (
-  <div className="peer-card upsell">
+  <div className="peer-card">
     <div className="peer-card-wrapper upsell cf">
       <h4>Check back later!</h4>
       <p className="description">
@@ -81,7 +81,7 @@ const ghostCard = (
 );
 
 const ghostCards = (
-  <div>
+  <div className="peer-card-container">
     {ghostCard}
     {ghostCard}
     {ghostCard}
@@ -166,7 +166,7 @@ const PeerModal = () => {
   );
 
   const upsell = (
-    <div className="peer-card upsell">
+    <div className="peer-card">
       <div className="peer-card-wrapper upsell cf">
         <h4>Study Buddies, Delivered</h4>
         <p className="description">
@@ -232,6 +232,8 @@ const PeerModal = () => {
     );
   });
 
+  const peerCardsContainer = <div className="peer-card-container">{peerCards}</div>;
+
   const display = !isLoading ? (
     <div className="modal-content">
       {userInfo.social_all ? (
@@ -253,7 +255,7 @@ const PeerModal = () => {
       ) : null}
       {!userInfo.social_all ? upsell : null}
       {peerCards.length === 0 && userInfo.social_all ? emptyState : null}
-      {userInfo.social_all ? peerCards : null}
+      {userInfo.social_all ? peerCardsContainer : null}
       {(!userInfo.social_all || peerCards.length === 0) && ghostCards}
     </div>
   ) : (
@@ -273,7 +275,6 @@ const PeerModal = () => {
       onClose={() => dispatch(peerModalActions.togglePeerModal())}
       animation="door"
       className="peer-modal"
-      showCloseButton={false}
       customStyles={modalStyle}
     >
       <div className="content-wrapper">
