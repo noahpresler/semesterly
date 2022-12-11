@@ -149,7 +149,7 @@ const PeerModal = () => {
           <h3>
             {professors.length === 0
               ? "No Professor Listed"
-              : parseInstructors(professors)}
+              : parseInstructors(professors.join(""))}
           </h3>
         </div>
       </div>
