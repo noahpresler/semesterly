@@ -209,7 +209,7 @@ export const createNewTimetable =
           slots: [],
           events: [],
           has_conflict: false,
-          show_weekend: true,
+          show_weekend: false,
         },
         true
       )
@@ -226,7 +226,7 @@ export const nullifyTimetable = () => (dispatch) => {
         slots: [],
         events: [],
         has_conflict: false,
-        show_weekend: true,
+        show_weekend: false,
       },
       upToDate: false,
     })
