@@ -307,7 +307,7 @@ const AdvancedSearchModal = () => {
         </div>
         <CourseModalBody
           course={selectedCourse}
-          hideModal={() => advancedSearchActions.hideAdvancedSearchModal()}
+          hideModal={() => dispatch(advancedSearchActions.hideAdvancedSearchModal())}
           isFetching={isFetching}
         />
       </div>
