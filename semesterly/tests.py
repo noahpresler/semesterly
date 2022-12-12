@@ -91,7 +91,6 @@ class EndToEndTest(SeleniumTestCase):
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
 
-    @unittest.skip("")
     def test_logged_in_via_fb_flow(self):
         with self.description("Setup and clear tutorial"):
             self.clear_tutorial()
