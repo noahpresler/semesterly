@@ -3,6 +3,7 @@ import {
   alertTimeTableExists,
   changeActiveSavedTimetable,
   changeActiveTimetable,
+  setShowWeekend,
 } from "../../actions/initActions";
 import { Timetable } from "../../constants/commonTypes";
 
@@ -62,6 +63,9 @@ const savingTimetableSlice = createSlice({
       })
       .addCase(changeActiveTimetable, (state) => {
         state.upToDate = false;
+      })
+      .addCase(setShowWeekend, (state, action: PayloadAction<boolean>) => {
+        state.activeTimetable.show_weekend = action.payload;
       });
   },
 });
