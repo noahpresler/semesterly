@@ -831,16 +831,19 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         try:
             eles = self.find(locator, get_all=True)
             elements = [s.text for s in eles if s.text]
-            # Remove "Unlock this section" from text if present
+            # Remove "Unlock this section" and "Lock this section" from text if present
             return list(
                 map(
-                    lambda s: "\n".join(s.split("\n")[1:])
-                    if s.startswith("Unlock this section")
-                    else s,
+                    lambda s: "\n".join(
+                        filter(
+                            lambda l: not l.startswith("Unlock this section")
+                            and not l.startswith("Lock this section"),
+                            s.split("\n"),
+                        )
+                    ),
                     elements,
                 )
             )
-
         except RuntimeError:
             return []
 
