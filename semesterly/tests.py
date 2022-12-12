@@ -209,7 +209,7 @@ class EndToEndTest(SeleniumTestCase):
             self.delete_timetable("End To End Testing!")
             self.assert_timetable_not_found("End To End Testing!")
         with self.description("Add and edit custom events"):
-            self.create_custom_event(5, 0, 4)
+            self.create_custom_event(4, 0, 4, False)
             self.assert_custom_event_exists(
                 name="New Custom Event", start_time="8:00", end_time="10:00"
             )
