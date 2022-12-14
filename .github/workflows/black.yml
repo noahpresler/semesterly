@@ -5,12 +5,12 @@ on:
     branches:
       - prod
       - develop
-      - feature/enhance-search
+      - feature/dark-mode-timetable
   pull_request:
     branches:
       - prod
       - develop
-      - feature/enhance-search
+      - feature/dark-mode-timetable
 
 jobs:
   lint:

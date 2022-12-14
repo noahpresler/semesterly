@@ -1,0 +1,222 @@
+/*
+    Variables to change color of components that have the same color.
+    This is created for convenience, as multiple components may have same colors.
+     */
+
+// Light mode shared variables
+$light-base-component-bg: $gfff;
+
+// Dark mode shared variables
+$dark-base-component-bg: $dblue8;
+
+/*
+    Change the variables in the $theme below to change the themes.
+
+    To change the colors by theme, use this function:
+
+    @include theme() {
+        background-color: t('key');
+        // or other css...
+    }
+
+    Try to be as descriptive as possible when naming variables, ex) instead of sidebar, name it as sidebar-background.
+*/
+
+$themes: (
+  // Light mode
+  light:
+    (
+      background: $g808080,
+      bubble-text-color: $gfff,
+      code-snippet-background: $gf3f3f3,
+      color-scheme-type: light,
+      compare-timetable-slot: $g222,
+      confirm-button-background: $confirm-green,
+      confirm-button-hover: $confirm-green-hover,
+      course-modal-credits: $g999,
+      course-section-bubble-background: $gaaa,
+      course-section-bubble-border: $gfff,
+      custom-event-active-day-background: $gc4c4c4,
+      custom-event-inactive-day-background: $gf3f3f3,
+      dropdown-background: #fff,
+      dropdown-border: 1px solid $ge6e6e6,
+      dropdown-hover: $geee,
+      evaluation-background: $gfff,
+      ghost-card-course-title: $g222,
+      ghost-card-name: $g222,
+      github-follow-button-background-color: $geee,
+      github-follow-button-color: $g333,
+      github-follow-button-hover-color: $gddd,
+      lecture-section-background-hover: $geee,
+      lecture-section-background: $white-transparent-8,
+      main-bar-background: $light-base-component-bg,
+      main-calendar-border-color: #ddd,
+      modal-background: $gfff,
+      modal-border-color: $gddd,
+      modal-header-background: $gf3f3f3,
+      navicon-hamburger-background: $primary-navy,
+      reactions-background: $gf3f3f3,
+      reactions-count-background: $ge6e6e6,
+      row-button-hover-background-color: $gddd,
+      search-bar-background: #f2f3f5,
+      search-bar-box-shadow: rgba(0, 0, 0, 0.2),
+      search-bar-focused-background: $gfff,
+      search-bar-option-background-hover: #f1eeee,
+      search-bar-semester-picker-border: 1px solid $ge6e6e6,
+      search-bar-side-hover: #a5d5ff,
+      search-bar-side-text: $g777,
+      search-bar-side-trans50: $white-transparent-9,
+      search-bar-side: $gf3f3f3,
+      search-border: $gfff,
+      search-course-add-hover-text: $blue-light,
+      search-course-add-hover: #a6deff,
+      search-course-add-in-roster-hover: #56eccf,
+      search-course-add-in-roster: #2dd6b5,
+      search-course-save-background: #d7d7d7,
+      search-course-save-hover-text: $green-light,
+      search-course-save-hover: #7be68d,
+      search-course-save-in-roster-hover: #aec1ef,
+      search-course-save-in-roster: #97b0ea,
+      search-loader-background: "/static/img/search-results-loader-light.svg",
+      search-results-box-shadow: $black-transparent-2,
+      search-results-hover: $gf3f3f3,
+      share-link-clipboard-text: $gfff,
+      share-link-clipboard: #3895db,
+      share-link-shadow-1: rgba(0, 0, 0, 0.5),
+      share-link-shadow-2: rgba(0, 0, 0, 0.15),
+      share-link-text: $g222,
+      share-link-wrapper: $gddd,
+      short-course-background: $gfff,
+      sidebar-background: $light-base-component-bg,
+      sidebar-input-background: #f2f3f5,
+      sidebar-input-border: 1px solid $gfff,
+      sidebar-input-border_focus: 1px solid $blue-alt,
+      sidebar-input-border_hover: 1px solid $gddd,
+      switch-slide-after: $switch-blue,
+      switch-slide-before: $gddd,
+      text-color-hover: $primary-navy,
+      text-color-thin: $g777,
+      text-color: $primary-navy,
+      toolbar-icon-hover: $primary-navy,
+      // Use a filter to change the color of img elements (e.g., png icons)
+      toolbar-img-icon-hover-filter: invert(23%) sepia(55%) saturate(362%)
+        hue-rotate(169deg) brightness(96%) contrast(88%),
+      tooltip-background: $gfff,
+      top-bar-background: $light-base-component-bg,
+      top-bar-border-bottom: none,
+      tos-banner-background: $gfff,
+      tos-banner-border: $gddd,
+      tos-banner-close: $geee,
+    ),
+  // Dark Mode
+  dark:
+    (
+      alert-danger-background: $red-dark,
+      background: $g808080,
+      bubble-text-color: $dblue0,
+      code-snippet-background: $dblue7,
+      color-scheme-type: dark,
+      compare-timetable-slot: $dblue0,
+      confirm-button-background: $green-dark,
+      confirm-button-hover: $confirm-green-darkest,
+      course-modal-credits: $dblue050,
+      course-section-bubble-background: $dblue3,
+      course-section-bubble-border: $dblue8,
+      custom-event-active-day-background: $dblue3,
+      custom-event-inactive-day-background: $dblue7,
+      dropdown-background: $g333,
+      dropdown-border: 1px solid $g333,
+      dropdown-hover: $dblue3,
+      evaluation-background: $dblue7,
+      ghost-card-course-title: $dblue0,
+      ghost-card-name: $dblue0,
+      github-follow-button-background-color: transparent,
+      github-follow-button-color: #d1ddeb,
+      github-follow-button-hover-color: $dblue6,
+      lecture-section-background-hover: $dblue7,
+      lecture-section-background: $dblue8,
+      main-bar-background: $dark-base-component-bg,
+      main-calendar-border-color: $dblue2,
+      modal-background: $dblue8,
+      modal-border-color: $dblue2,
+      modal-header-background: $dblue7,
+      navicon-hamburger-background: $dblue0,
+      reactions-background: $dblue7,
+      reactions-count-background: $dblue6,
+      row-button-hover-background-color: $dblue3,
+      search-bar-background: $dblue7,
+      search-bar-box-shadow: $dblue7,
+      search-bar-focused-background: $dblue8,
+      search-bar-option-background-hover: $dblue2,
+      search-bar-semester-picker-border: 1px solid $dblue2,
+      search-bar-side-hover: $dblue1,
+      search-bar-side-text: $gaaa,
+      search-bar-side-trans50: $dblue7-transparent,
+      search-bar-side: $dblue7,
+      search-border: $dblue8,
+      search-course-add-hover-text: $gbbb,
+      search-course-add-hover: $g777,
+      search-course-add-in-roster-hover: $confirm-green-darker,
+      search-course-add-in-roster: $confirm-green-darkest,
+      search-course-save-background: $g444,
+      search-course-save-hover-text: $gbbb,
+      search-course-save-hover: $g777,
+      search-course-save-in-roster-hover: $save-course-hover-blue,
+      search-course-save-in-roster: $save-course-blue,
+      search-loader-background: "/static/img/search-results-loader-dark.svg",
+      search-results-box-shadow: $dblue7,
+      search-results-hover: $dblue6,
+      share-link-clipboard-text: $dblue0,
+      share-link-clipboard: #155b91,
+      share-link-shadow-1: $g333,
+      share-link-shadow-2: $g444,
+      share-link-text: $dblue0,
+      share-link-wrapper: $dblue3,
+      short-course-background: $dblue8,
+      sidebar-background: $dark-base-component-bg,
+      sidebar-input-background: $dblue7,
+      sidebar-input-border: 1px solid $g222,
+      sidebar-input-border_focus: 1px solid $blue-alt,
+      sidebar-input-border_hover: 1px solid $dblue3,
+      switch-slide-after: $blue-dark,
+      switch-slide-before: $dblue6,
+      text-color-hover: white,
+      text-color-thin: $dblue075,
+      text-color: $dblue0,
+      toolbar-icon-hover: $dblue0,
+      // Use a filter to change color of img elements (e.g., png icons)
+      toolbar-img-icon-hover-filter: invert(91%) sepia(10%) saturate(390%)
+        hue-rotate(173deg) brightness(97%) contrast(89%),
+      tooltip-background: $dblue7,
+      top-bar-background: $dark-base-component-bg,
+      top-bar-border-bottom: 1px solid $dblue2,
+      tos-banner-background: $dblue7,
+      tos-banner-border: $dblue6,
+      tos-banner-close: $dblue7,
+    )
+);
+
+// Function for using the themes
+
+@mixin theme() {
+  @each $theme, $map in $themes {
+    .theme--#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), "#{$key}");
+        $theme-map: map-merge(
+          $theme-map,
+          (
+            $key: $value,
+          )
+        ) !global;
+      }
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+
+@function t($key) {
+  @return map-get($theme-map, $key);
+}

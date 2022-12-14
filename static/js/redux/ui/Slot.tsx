@@ -209,7 +209,9 @@ const Slot = (props: SlotProps) => {
   const slot = props.connectCreateTarget(
     props.connectDragTarget(
       <div
-        className={`fc-time-grid-event fc-event slot slot-${props.sectionId}-${props.colourId}`}
+        className={`fc-time-grid-event fc-event slot slot-${props.sectionId}-${
+          props.colourId
+        } ${isComparingTimetables ? "compare-tt" : ""}`}
         style={getSlotStyles()}
         onClick={() => {
           props.fetchCourseInfo();
@@ -240,7 +242,7 @@ const Slot = (props: SlotProps) => {
           </div>
           <div className="fc-time">
             {friends}
-            {props.location}
+            <span>{props.location}</span>
           </div>
         </div>
       </div>

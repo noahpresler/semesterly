@@ -1,11 +1,13 @@
 .modal-entry {
   .eval-item {
-    background-color: $gfff;
-    border: 1px solid $gd4d4d4;
+    @include theme() {
+      background-color: t("evaluation-background");
+      border: 1px solid t("modal-border-color");
+    }
     display: inline-block;
     margin: 3px;
     text-align: center;
-    transition: width .3s;
+    transition: width 0.3s;
   }
 }
 
@@ -36,7 +38,9 @@
 
 .nav-item-active {
   .eval-item {
-    border: 1px solid $primary-navy;
+    @include theme() {
+      border: 1px solid t("toolbar-icon-hover");
+    }
   }
 }
 

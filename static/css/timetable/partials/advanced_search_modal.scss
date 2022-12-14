@@ -1,0 +1,559 @@
+// Advanced Search Modal Styles
+.advanced-search-modal {
+  > div {
+    height: 100%;
+    outline: none;
+    width: 100%;
+  }
+
+  .ms-friend {
+    float: left;
+    height: 30px;
+    margin: 0;
+    width: 30px;
+  }
+  + div {
+    transition: background-color 0.2s;
+  }
+
+  &.trans + div,
+  &.trans > div {
+    background-color: transparent !important;
+  }
+}
+
+.advanced-search-content {
+  @include theme() {
+    background-color: t("modal-background");
+  }
+  height: 100%;
+  position: relative;
+  width: 100%;
+
+  &.loading {
+    cursor: wait;
+  }
+}
+
+@media (max-width: 766px) {
+  .advanced-search-modal,
+  .advanced-search-modal + div {
+    display: none;
+  }
+}
+
+.advanced-search-modal.trans,
+.trans .advanced-search-content,
+.trans .advanced-search-content .advanced-search-modal-header,
+.trans .advanced-search-content .advanced-search-modal-header input,
+.trans .advanced-search-header,
+.trans .adv-title h1,
+.trans .advanced-search-header input,
+.trans .advanced-search-close,
+.trans h3.advanced-search-modal-header,
+.trans h3.advanced-search-modal-header:after,
+.trans h3.advanced-search-modal-header i,
+.trans .advanced-search-body,
+.trans .advanced-search-body p,
+.trans .adv-modal .modal-content,
+.trans .adv-modal .modal-content .modal-header,
+.trans .adv-modal .modal-content .modal-header h1,
+.trans .adv-modal .modal-content .modal-header h2,
+.trans .adv-modal .modal-content .modal-header div,
+.trans .adv-modal .modal-content .modal-body,
+.trans .modal-body,
+.trans .modal-body .credits h4,
+.trans .adv-modal .modal-share,
+.trans .adv-modal .modal-share i,
+.trans .adv-modal .modal-add,
+.trans .adv-modal .modal-add i,
+.trans .adv-modal .modal-save,
+.trans .adv-modal .modal-save i,
+.trans .modal-module,
+.trans h3.modal-module-header,
+.trans h3.modal-module-header:after {
+  color: transparent;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.trans .advanced-search-results,
+.trans .adv-title,
+.trans .modal-module,
+.trans .time-selector,
+.trans .modal-body .rating-module,
+.trans .exp-filter-section,
+.trans .modal-body p,
+.trans .modal-body .modal-module-header {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.advanced-search-modal-header {
+  @include theme() {
+    background-color: t("modal-background");
+    border-bottom: 1px solid t("modal-border-color");
+  }
+  padding: 15px;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+
+  input {
+    @include theme() {
+      border: 1px solid t("modal-border-color");
+    }
+    font-size: 16px;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 7px;
+    outline: 0;
+    padding: 0 10px;
+    width: 90%;
+
+    &::-webkit-input-placeholder {
+      font-size: 14px;
+      line-height: 30px;
+    }
+
+    &::-moz-placeholder {
+      font-size: 14px;
+      line-height: 30px;
+    }
+
+    &:-ms-input-placeholder {
+      // IE 10+
+      font-size: 14px;
+      line-height: 30px;
+    }
+
+    &:-moz-placeholder {
+      // Firefox 18-
+      font-size: 14px;
+      line-height: 30px;
+    }
+  }
+}
+
+.adv-title {
+  i {
+    display: inline-block;
+    font-size: 22px;
+    line-height: 30px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  h1 {
+    @include theme() {
+      color: t("text-color-thin");
+    }
+    display: inline-block;
+    font-size: 18px;
+    line-height: 30px;
+    margin: 0;
+    vertical-align: middle;
+  }
+}
+
+/* Close Advanced Search Button */
+.advanced-search-close {
+  cursor: pointer;
+  height: 20px;
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  transition: color 0.3s, transform 0.3s;
+  width: 20px;
+
+  &:hover {
+    color: #ff4523;
+    transform: scale(1.2);
+  }
+
+  i {
+    font-size: 20px;
+    line-height: 20px;
+  }
+}
+
+// Share Button
+.adv-modal {
+  .share-course-link-wrapper {
+    margin-right: 158px;
+    margin-top: 118px;
+
+    .tip {
+      display: none;
+    }
+
+    .tip-border {
+      right: 180px;
+    }
+  }
+}
+
+.advanced-search-body {
+  height: 100%;
+  left: 0;
+  padding: 61px 0 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  p {
+    @include theme() {
+      color: t("text-color-thin");
+    }
+    font-size: 12px;
+  }
+  .subtitle div {
+    font-size: 12px;
+  }
+}
+
+.advanced-search-header {
+  @include theme() {
+    color: t("text-color-thin");
+  }
+  clear: both;
+  font-size: 14px;
+  font-weight: 200;
+  margin: 0;
+  padding: 10px 5px;
+  position: relative;
+
+  &::after {
+    @include theme() {
+      background-color: t(
+        "modal-border-color"
+      ); // This actually controls the border color
+    }
+    bottom: 5px;
+    content: "";
+    display: block;
+    height: 1px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
+
+  i {
+    color: $g999;
+    cursor: pointer;
+    float: right;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #7e88dc;
+    }
+
+    &.clear-all {
+      margin-right: 6px;
+      font-style: normal;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+// Advanced Search Filters
+.advanced-search-filters {
+  height: 100%;
+  overflow-y: auto;
+  padding: 15px;
+
+  h6 {
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 0 3px;
+    padding: 5px;
+
+    i {
+      cursor: pointer;
+      font-size: 14px;
+      margin-left: -5px;
+      margin-right: 3px;
+      transition: transform 0.3s, color 0.3s;
+    }
+  }
+
+  .time-selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    height: auto;
+    i {
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 10px;
+      transition: transform 0.3s, color 0.3s;
+    }
+  }
+
+  i {
+    &:hover {
+      color: #ff4523;
+      transform: scale(1.1);
+    }
+  }
+
+  .none-selected {
+    font-size: 14px;
+    margin-left: 0;
+  }
+}
+
+.exp-filter-section {
+  padding: 0 0 20px;
+}
+
+.selected-filter {
+  @include theme() {
+    border: solid 1px t("modal-border-color");
+  }
+  border-radius: 5px;
+  padding: 0 5px 0 5px;
+  margin: 0 0 3px 5px;
+  width: auto;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+// Filter Out Pop
+.filter-pop-out {
+  @include theme() {
+    background-color: t("modal-background");
+    border: 1px solid t("modal-border-color");
+  }
+  box-shadow: 0 2px 10px $black-transparent-2;
+  display: none;
+  left: 25%;
+  position: absolute;
+  top: 10px;
+  width: 200px;
+  z-index: 1;
+
+  &.open {
+    display: block;
+  }
+
+  input {
+    border: 0;
+    font-size: 16px;
+    line-height: 42px;
+    outline: 0;
+    padding: 0 5px 0 25px;
+    width: 100%;
+  }
+}
+
+.fpo-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0;
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    @include theme() {
+      background-color: t("modal-background");
+    }
+    cursor: pointer;
+    list-style-type: none;
+    padding: 0 5px 0 45px;
+    position: relative;
+    transition: background-color 0.3s;
+
+    &:hover {
+      @include theme() {
+        background-color: t("search-results-hover");
+      }
+    }
+
+    &.loading {
+      cursor: wait;
+    }
+  }
+
+  i {
+    display: inline-block;
+    left: 10px;
+    line-height: 42px;
+    position: absolute;
+    vertical-align: middle;
+  }
+
+  h6 {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 14px;
+    margin: 0;
+    padding: 14px 0;
+    vertical-align: middle;
+  }
+}
+
+// Advanced Search Results
+.advanced-search-results {
+  height: 100%;
+  opacity: 1;
+  overflow-y: auto;
+  padding: 15px;
+  visibility: visible;
+
+  p {
+    padding-left: 10px;
+  }
+}
+
+.advanced-s-result {
+  @include theme() {
+    background-color: t("modal-background");
+  }
+  cursor: pointer;
+  padding: 10px;
+  position: relative;
+  transition: background-color 0.3s;
+
+  &:hover {
+    @include theme() {
+      background-color: t("search-results-hover");
+    }
+  }
+
+  h4 {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  h5 {
+    @include theme() {
+      color: t("text-color-thin");
+    }
+    font-size: 12px;
+    font-weight: 400;
+    margin: 5px 0;
+  }
+}
+
+.s-result-selected {
+  @include theme() {
+    background-color: t("search-results-hover");
+  }
+}
+
+// Advanced Course Content
+.adv-modal {
+  height: 100%;
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-header {
+    @include theme() {
+      background-color: t("modal-header-background");
+    }
+    padding: 20px 10px 30px;
+
+    > .subtitle {
+      h2 {
+        padding: 0;
+      }
+    }
+  }
+
+  h1 {
+    font-size: 22px;
+    padding: 0;
+  }
+
+  h2 {
+    font-size: 14px;
+    padding: 0 20% 0 0;
+  }
+
+  .modal-body {
+    padding-top: 20px;
+    @include theme() {
+      background-color: t("modal-background");
+    }
+  }
+
+  [class^="col-"] {
+    width: 100%;
+    padding: 20px 15px 0;
+  }
+
+  .modal-share,
+  .modal-add,
+  .modal-save {
+    background-color: $primary-navy;
+    border-radius: 100%;
+    bottom: -34px;
+    cursor: pointer;
+    height: 60px;
+    position: absolute;
+    top: auto;
+    transform: translateX(-50%);
+    transition: background-color 0.3s;
+    width: 60px;
+    z-index: 1;
+
+    i {
+      color: $gfff;
+      font-size: 24px;
+      line-height: 60px;
+      text-align: center;
+      width: 100%;
+    }
+
+    &:hover {
+      transform: scale(1) translateX(-50%);
+    }
+  }
+
+  .modal-share {
+    left: 25%;
+
+    &:hover {
+      background-color: #5b99ce;
+    }
+  }
+
+  .modal-save {
+    left: 50%;
+
+    &:hover {
+      background-color: #5bce84;
+    }
+  }
+
+  .modal-add {
+    left: 75%;
+
+    &:hover {
+      background-color: #1858bb;
+    }
+
+    &.on-active-timetable {
+      background-color: #2dd6b5;
+
+      &:hover {
+        background-color: #56eccf;
+      }
+    }
+  }
+}

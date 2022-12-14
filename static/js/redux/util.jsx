@@ -13,7 +13,7 @@ GNU General Public License for more details.
 */
 
 import range from "lodash/range";
-import COLOUR_DATA from "./constants/colours";
+import { lightSlotColor } from "./constants/colors";
 
 export const browserSupportsLocalStorage = () => {
   try {
@@ -167,7 +167,7 @@ export const isIncomplete = (prop) =>
   prop === undefined || prop === "" || prop === null;
 
 export const getNextAvailableColour = (courseToColourIndex) =>
-  range(COLOUR_DATA.length).find(
+  range(lightSlotColor.length).find(
     (i) => !Object.values(courseToColourIndex).some((x) => x === i)
   );
 

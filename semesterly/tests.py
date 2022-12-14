@@ -32,6 +32,7 @@ class EndToEndTest(SeleniumTestCase):
         with self.description("Search for course and test infinite scroll"):
             self.search_course("introduction", 8)
             self.search_infinite_scroll(10)  # Total of 10 courses should be displayed
+            self.clear_search_query()
         with self.description("Add two short courses and then remove"):
             self.search_course("EN.580.241", 1)
             self.add_course(0, n_slots=3, n_master_slots=1, code="EN.580.241")
@@ -208,7 +209,7 @@ class EndToEndTest(SeleniumTestCase):
             self.delete_timetable("End To End Testing!")
             self.assert_timetable_not_found("End To End Testing!")
         with self.description("Add and edit custom events"):
-            self.create_custom_event(5, 0, 4)
+            self.create_custom_event(4, 0, 4, False)
             self.assert_custom_event_exists(
                 name="New Custom Event", start_time="8:00", end_time="10:00"
             )

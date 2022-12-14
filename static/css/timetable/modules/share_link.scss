@@ -1,5 +1,8 @@
 .share-course-link-wrapper {
-  background-color: $gf9f9f9;
+  @include theme() {
+    background-color: t("share-link-wrapper");
+    box-shadow: 0px 2px 6px t("share-link-shadow-1");
+  }
   border-radius: 2px;
   max-width: 250px;
   padding: 5px;
@@ -7,23 +10,28 @@
   right: 5px;
   top: 20px;
   z-index: 2;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5), 0 0 1px rgba(0, 0, 0, 0.15);
   display: inline-block;
   margin-top: 8px;
   font-size: 12px;
-  cursor:default;
+  cursor: default;
   .tip {
+    @include theme() {
+      border-color: transparent transparent t("share-link-wrapper");
+    }
     right: 12px;
     top: -8px;
-    border-color: transparent transparent #f9f9f9;
   }
   .tip-border {
     right: 12px;
     top: -9px;
-    border-color: transparent transparent #f9f9f9;
+    @include theme() {
+      border-color: transparent transparent t("share-link-wrapper");
+    }
   }
   .share-course-link {
-    color: $g222;
+    @include theme() {
+      color: t("share-link-text");
+    }
     font-size: 14px;
     font-weight: 400;
     height: 25px;
@@ -31,18 +39,19 @@
     max-width: 240px;
     width: auto;
     cursor: text;
-    border: 1px solid $gddd;
     padding: 0 5px;
   }
   .clipboardBtn {
     text-align: center;
-    background-color: #3895db;
+    @include theme() {
+      background-color: t("share-link-clipboard");
+      color: t("share-link-clipboard-text");
+    }
     margin-top: 8px;
     padding: 3px 7px;
     font-size: 12px;
     border-radius: 3px;
     cursor: pointer;
-    color: $gfff;
   }
   .clipboardSuccess {
     background: grey;

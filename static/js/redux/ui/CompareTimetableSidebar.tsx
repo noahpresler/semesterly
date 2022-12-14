@@ -1,7 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { fetchCourseInfo } from "../actions";
-import COLOUR_DATA from "../constants/colours";
 import { DenormalizedCourse, SlotColorData, Timetable } from "../constants/commonTypes";
 import { getCourseShareLink } from "../constants/endpoints";
 import { useAppSelector } from "../hooks";

@@ -3,6 +3,26 @@ html {
 }
 
 h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+div,
+input,
+textarea,
+th,
+tr,
+thead {
+  @include theme() {
+    color: t("text-color");
+  }
+}
+
+h1,
 h2 {
   font-family: $font-primary;
   font-weight: 500;
@@ -34,7 +54,10 @@ textarea {
 }
 
 @mixin side-bar {
-  background-color: $gfff;
+  @include theme() {
+    background-color: t("sidebar-background");
+    color-scheme: t("color-scheme-type");
+  }
   bottom: auto;
   height: 100%;
   left: calc(100% - 300px);
@@ -43,9 +66,9 @@ textarea {
   position: absolute;
   top: 0;
   transform: translateX(0);
-  transition: transform .3s;
+  transition: transform 0.3s;
   width: 300px;
-  z-index: 99;
+  z-index: 9;
 
   &.full-cal {
     transform: translateX(100%);
@@ -72,9 +95,13 @@ textarea {
   opacity: 1;
   overflow-y: auto;
   padding: 0 20px;
-  transition: width .3s, opacity .3s, visibility .3s;
+  transition: width 0.3s, opacity 0.3s, visibility 0.3s;
   visibility: visible;
   width: calc(100% - 300px);
+  @include theme() {
+    background-color: t("main-bar-background");
+    color-scheme: t("color-scheme-type");
+  }
 
   &.full-cal {
     width: 100%;
@@ -107,11 +134,14 @@ textarea {
 }
 
 .top-bar {
-  background-color: $gfff;
+  @include theme() {
+    background-color: t("top-bar-background");
+    border-bottom: t("top-bar-border-bottom");
+  }
   box-shadow: 0 0 12px $black-transparent-1, 0 0 1px $black-transparent-15;
   min-height: 50px;
   position: relative;
-  z-index: 1000;
+  z-index: 10;
 }
 
 .la-ball-clip-rotate-multiple {
@@ -119,13 +149,13 @@ textarea {
   margin-right: 0;
 }
 
-.show-exploration {
+.show-advanced-search {
   cursor: pointer;
   height: 30px;
   position: absolute;
   right: -95px;
   top: 0;
-  transition: transform .3s;
+  transition: transform 0.3s;
   user-select: none;
   width: 85px;
 
@@ -190,7 +220,7 @@ textarea {
     padding: 10px;
   }
 
-  .show-exploration {
+  .show-advanced-search {
     display: none;
   }
 }
@@ -227,7 +257,7 @@ textarea {
   .fc-ltr {
     .fc-time-grid {
       .fc-event-container {
-        margin-left: .5%;
+        margin-left: 0.5%;
       }
     }
   }
@@ -258,13 +288,15 @@ textarea {
   z-index: 3;
 
   span {
-    background-color: $primary-navy;
+    @include theme() {
+      background-color: t("navicon-hamburger-background");
+    }
     display: block;
     height: 3px;
     position: absolute;
     right: 0;
     transform: translateY(-50%);
-    transition: width .3s;
+    transition: width 0.3s;
 
     &:nth-child(1) {
       top: 25%;
@@ -309,12 +341,16 @@ li {
 
     .footer-button--github {
       font-size: 13px;
-      color: $g333;
-      background-color: $geee;
+      @include theme() {
+        color: t("github-follow-button-color");
+        background-color: t("github-follow-button-background-color");
+      }
       border-radius: 3px;
       &:hover {
         text-decoration: none;
-        background-color: $gddd;
+        @include theme() {
+          background-color: t("github-follow-button-hover-color");
+        }
       }
       i {
         margin: 0 3px;

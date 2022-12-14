@@ -14,23 +14,25 @@ GNU General Public License for more details.
 
 import PropTypes from "prop-types";
 import React from "react";
-import COLOUR_DATA from "../constants/colours";
+import { useAppSelector } from "../hooks";
+import { selectSlotColorData } from "../state/slices/themeSlice";
 
 const SlotHoverTip = ({ num, code, name, getShareLinkFromModal }) => {
-  const maxColourIndex = COLOUR_DATA.length - 1;
+  const colorData = useAppSelector(selectSlotColorData);
+  const maxColourIndex = colorData.length - 1;
   return (
     <a href={getShareLinkFromModal(code)} className="course-link" key={num}>
       <span>{code}</span>
       <span
         className="course-link-tip"
         style={{
-          backgroundColor: COLOUR_DATA[Math.min(num - 1, maxColourIndex)].background,
+          backgroundColor: colorData[Math.min(num - 1, maxColourIndex)].background,
         }}
       >
         <span
           className="slot-bar"
           style={{
-            backgroundColor: COLOUR_DATA[Math.min(num - 1, maxColourIndex)].border,
+            backgroundColor: colorData[Math.min(num - 1, maxColourIndex)].border,
           }}
         />
         <span className="course-link-content">

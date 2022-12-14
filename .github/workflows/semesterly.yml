@@ -2,15 +2,15 @@ name: Semesterly CI
 
 on:
   push:
-    branches: 
+    branches:
       - prod
       - develop
-      - feature/enhance-search
+      - feature/dark-mode-timetable
   pull_request:
-    branches: 
+    branches:
       - prod
       - develop
-      - feature/enhance-search
+      - feature/dark-mode-timetable
 
 jobs:
   build:

@@ -29,14 +29,15 @@ import userInfo, { isUserInfoIncomplete } from "./slices/userInfoSlice";
 import savingTimetable from "./slices/savingTimetableSlice";
 import classmates from "./slices/classmatesSlice";
 import optionalCourses from "./slices/optionalCoursesSlice";
-import explorationModal, * as fromExplorationModal from "./slices/explorationModalSlice";
+import advancedSearch, {
+  getAdvancedSearchResultIds,
+} from "./slices/advancedSearchSlice";
 import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
 import peerModal from "./slices/peerModalSlice";
 import friends from "./slices/friendsSlice";
 import notificationToken from "./slices/notificationTokenSlice";
 import newsModal from "./slices/newsModalSlice";
-import integrationModal from "./slices/integrationModalSlice";
 import saveCalendarModal from "./slices/saveCalendarModalSlice";
 import termsOfServiceModal from "./slices/termsOfServiceModalSlice";
 import termsOfServiceBanner from "./slices/termOfServiceBannerSlice";
@@ -44,6 +45,7 @@ import userAcquisitionModal from "./slices/userAcquisitionModalSlice";
 import compareTimetable from "./slices/compareTimetableSlice";
 import registrar from "./slices/registrarSlice";
 import entities, * as fromEntities from "./slices/entitiesSlice";
+import theme from "./slices/themeSlice";
 import { Slot, Timetable } from "../constants/commonTypes";
 
 export const reducers = {
@@ -54,9 +56,8 @@ export const reducers = {
   courseSections,
   customEvents,
   entities,
-  explorationModal,
+  advancedSearch,
   friends,
-  integrationModal,
   newsModal,
   notificationToken,
   optionalCourses,
@@ -71,6 +72,7 @@ export const reducers = {
   signupModal,
   termsOfServiceBanner,
   termsOfServiceModal,
+  theme,
   timetables,
   ui,
   userAcquisitionModal,
@@ -140,9 +142,9 @@ export const getSearchResults = (state: RootState) =>
   );
 
 export const getDenormAdvancedSearchResults = (state: RootState) =>
-  fromExplorationModal
-    .getAdvancedSearchResultIds(state.explorationModal)
-    .map((id) => getDenormCourseById(state, id));
+  getAdvancedSearchResultIds(state.advancedSearch).map((id: number) =>
+    getDenormCourseById(state, id)
+  );
 
 // modal selectors
 export const getIsUserInfoIncomplete = (state: RootState) =>

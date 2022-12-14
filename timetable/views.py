@@ -71,7 +71,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         custom_events = params.get("customSlots", [])
         preferences = params["preferences"]
         with_conflicts = preferences.get("tryWithConflicts", False)
-        show_weekend = preferences.get("showWeekend", True)
+        show_weekend = preferences.get("showWeekend", False)
         timetables = [
             timetable
             for opt_courses in optional_course_subsets

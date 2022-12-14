@@ -141,9 +141,6 @@ The overall, the Semester.ly application is made up of many smaller *apps* which
     * - Courses
       - Course Serializer, Views for returning course info
       - Functionality for accessing course data, the course modal, course pages
-    * - Integrations
-      - Integration views
-      - Functionality for integrating school specific code to appear in search or in the course modal
     * - Parsing
       - Scrapers, parsers, parsing utilities
       - Home of the data pipeline that fills our database

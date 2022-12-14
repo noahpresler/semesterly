@@ -37,15 +37,15 @@ import {
   fetchCourseInfo,
   loadTimetable,
 } from "../actions";
-import { togglePeerModal } from "../state/slices/peerModalSlice";
 import { Timetable } from "../constants/commonTypes";
 import { startComparingTimetables } from "../state/slices/compareTimetableSlice";
 import AvgCourseRating from "./AvgCourseRating";
-import COLOUR_DATA from "../constants/colours";
+import { selectSlotColorData, selectTheme } from "../state/slices/themeSlice";
+import { peerModalActions } from "../state/slices/peerModalSlice";
 
 const SideBar = () => {
   const dispatch = useAppDispatch();
-
+  const colorData = useAppSelector(selectSlotColorData);
   const timetable = useAppSelector(getActiveTimetable);
   const coursesInTimetable = useAppSelector((state) =>
     getCoursesFromSlots(state, timetable.slots)
@@ -78,7 +78,7 @@ const SideBar = () => {
 
   const timetableCourses = useAppSelector((state) => getActiveTimetableCourses(state));
   const events = useAppSelector((state) => state.customEvents.events);
-
+  const curTheme = useAppSelector(selectTheme);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const hideDropdown = () => {
@@ -131,6 +131,7 @@ const SideBar = () => {
                   startComparingTimetables({
                     activeTimetable,
                     comparedTimetable: t,
+                    theme: curTheme,
                   })
                 );
                 event.stopPropagation();
@@ -166,7 +167,7 @@ const SideBar = () => {
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
             getShareLink={getShareLink}
-            colorData={COLOUR_DATA}
+            colorData={colorData}
           />
         );
       })
@@ -189,7 +190,7 @@ const SideBar = () => {
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveOptionalCourse(course))}
             getShareLink={getShareLink}
-            colorData={COLOUR_DATA}
+            colorData={colorData}
           />
         );
       })
@@ -262,7 +263,7 @@ const SideBar = () => {
       <div className="col-2-3">
         <AvgCourseRating avgRating={avgRating} />
       </div>
-      <a onClick={() => dispatch(togglePeerModal())}>
+      <a onClick={() => dispatch(peerModalActions.togglePeerModal())}>
         <h4 className="sb-header">
           Current Courses
           <div className="sb-header-link">

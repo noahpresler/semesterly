@@ -17,8 +17,9 @@ import { DragSource, DropTarget } from "react-dnd";
 import tinycolor from "tinycolor2";
 import { removeCustomSlot } from "../actions/timetable_actions";
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
-import { useAppDispatch } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { customEventsActions } from "../state/slices/customEventsSlice";
+import { selectTheme } from "../state/slices/themeSlice";
 import {
   canDropCustomSlot,
   onCustomSlotCreateDrag,
@@ -107,6 +108,8 @@ const CustomSlot = (props: CustomSlotProps) => {
     });
   }, []);
 
+  const theme = useAppSelector(selectTheme);
+
   const getSlotStyles = () => {
     const startHour = parseInt(props.time_start.split(":")[0], 10);
     const startMinute = parseInt(props.time_start.split(":")[1], 10);
@@ -126,8 +129,7 @@ const CustomSlot = (props: CustomSlotProps) => {
         bottom: -bottom,
         zIndex: 10,
         right: "0%",
-        backgroundColor: "#F8F6F7",
-        color: "#222",
+        backgroundColor: theme.customEventDefaultColor,
         width: "100%",
         left: 0,
         opacity: 0.5,
@@ -142,12 +144,10 @@ const CustomSlot = (props: CustomSlotProps) => {
     if (pushLeft === 50) {
       pushLeft += 0.5;
     }
-    const color = tinycolor(props.color).isLight() ? "#222222" : "#FFFFFF";
     return {
       top,
       bottom: -bottom,
       right: "0%",
-      color,
       backgroundColor: props.color,
       width: `${slotWidthPercentage}%`,
       left: `${pushLeft}%`,
@@ -185,6 +185,9 @@ const CustomSlot = (props: CustomSlotProps) => {
     }
   };
 
+  const color = tinycolor(props.color).isLight() ? "#222222" : "#FFFFFF";
+  const coloredSpan = (text: string) => <span style={{ color }}>{text}</span>;
+
   const customSlot = (
     <div
       className={`fc-time-grid-event fc-event slot ${props.preview ? "preview" : ""}`}
@@ -196,29 +199,28 @@ const CustomSlot = (props: CustomSlotProps) => {
     >
       <div
         className="slot-bar"
-        style={{ backgroundColor: tinycolor(props.color).darken(20).toString() }}
+        style={{
+          backgroundColor: tinycolor(props.color).isLight()
+            ? tinycolor(props.color).darken(20).toString()
+            : tinycolor(props.color).lighten(10).toString(),
+        }}
       />
       {removeButton}
       <div className="fc-content">
+        <div className="fc-time">{coloredSpan(props.name)}</div>
         <div className="fc-time">
-          <span>{props.name}</span>
+          {coloredSpan(`${convertedStart} – ${convertedEnd}`)}
         </div>
+        <div className="fc-time">{coloredSpan(props.location)}</div>
         <div className="fc-time">
-          <span>
-            {convertedStart} – {convertedEnd}
-          </span>
-        </div>
-        <div className="fc-time">
-          <span>{props.location}</span>
-        </div>
-        <div className="fc-time">
-          {parseFloat(props.credits) !== 0 && (
-            <span>{`${
-              props.credits.toString().endsWith(".0")
-                ? parseInt(props.credits, 10)
-                : props.credits
-            } credit${parseFloat(props.credits) !== 1 ? "s" : ""}`}</span>
-          )}
+          {parseFloat(props.credits) !== 0 &&
+            coloredSpan(
+              `${
+                props.credits.toString().endsWith(".0")
+                  ? parseInt(props.credits, 10)
+                  : props.credits
+              } credit${parseFloat(props.credits) !== 1 ? "s" : ""}`
+            )}
         </div>
       </div>
     </div>

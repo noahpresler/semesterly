@@ -24,23 +24,23 @@ import NewTimetableAlertContainer from "./alerts/new_timetable_alert_container";
 import EnableNotificationsAlertContainer from "./alerts/enable_notifications_alert_container";
 import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
 import TopBar from "./TopBar";
-import SignupModalContainer from "./containers/modals/signup_modal_container";
-import TutModalContainer from "./containers/modals/tut_modal_container";
-import PeerModalContainer from "./containers/modals/peer_modal_container";
-import IntegrationModalContainer from "./containers/modals/integration_modal_container";
-import SaveCalendarModalContainer from "./containers/modals/save_calendar_modal_container";
-import UserAcquisitionModal from "./modals/user_acquisition_modal";
-import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_container";
+import SignupModal from "./modals/SignupModal";
+import TutorialModal from "./modals/TutorialModal";
+import PeerModal from "./modals/PeerModal";
+import SaveCalendarModal from "./modals/SaveCalendarModal";
+import UserAcquisitionModal from "./modals/UserAcquisitionModal";
+import TermsOfServiceModal from "./modals/TermsOfServiceModal";
 import TermsOfServiceBannerContainer from "./containers/terms_of_service_banner_container";
-import UserSettingsModal from "./modals/user_settings_modal";
-import CustomEventModal from "./modals/custom_event_modal";
+import UserSettingsModal from "./modals/UserSettingsModal";
+import CustomEventModal from "./modals/CustomEventModal";
 import AdvancedSearchModal from "./modals/AdvancedSearchModal";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getActiveTimetableCourses } from "../state";
-import NewsModal from "./modals/news_modal";
+import NewsModal from "./modals/NewsModal";
 import { newsModalActions } from "../state/slices/newsModalSlice";
 import SideBar from "./SideBar";
 import CompareTimetableSideBar from "./CompareTimetableSidebar";
+import { selectTheme } from "../state/slices/themeSlice";
 
 const Semesterly = () => {
   const dispatch = useAppDispatch();
@@ -185,22 +185,23 @@ const Semesterly = () => {
     isComparingTimetables ? "-compare-timetable" : ""
   }`;
 
+  const theme = useAppSelector(selectTheme);
+
   return (
     <div className="page-wrapper">
+      <NewsModal />
       <TopBar />
       <UserSettingsModal />
       <AdvancedSearchModal />
-      <NewsModal />
-      <SignupModalContainer />
-      <IntegrationModalContainer />
-      <TutModalContainer />
-      <PeerModalContainer />
-      <SaveCalendarModalContainer />
+      <SignupModal />
+      <TutorialModal />
+      <PeerModal />
+      <SaveCalendarModal />
       <CustomEventModal />
       <UserAcquisitionModal />
-      <TermsOfServiceModalContainer />
+      <TermsOfServiceModal />
       <TermsOfServiceBannerContainer />
-      <AlertBox ref={alertBoxRef} />
+      <AlertBox ref={alertBoxRef} theme={theme.name} />
       <div className="all-cols">
         <div className={mainbarClassName}>
           {cal}
@@ -267,16 +268,6 @@ const Semesterly = () => {
                   <i className="fa fa-github" />
                   Follow
                 </a>
-              </li>
-              <li className="footer-button">
-                <div
-                  className="fb-like"
-                  data-href="https://www.facebook.com/semesterly/"
-                  data-layout="button_count"
-                  data-action="like"
-                  data-show-faces="true"
-                  data-share="false"
-                />
               </li>
             </ul>
           </footer>

@@ -20,7 +20,6 @@ import {
   getClassmatesEndpoint,
   getDeleteTimetableEndpoint,
   getFriendsEndpoint,
-  getIntegrationEndpoint,
   getLoadSavedTimetablesEndpoint,
   getLogFacebookAlertClickEndpoint,
   getLogFacebookAlertViewEndpoint,
@@ -45,8 +44,7 @@ import {
   closeTermsOfServiceModal,
   triggerTermsOfServiceModal,
 } from "../state/slices/termsOfServiceModalSlice";
-import { initIntegrationModal } from "../state/slices/integrationModalSlice";
-import { peerModalLoaded, peerModalLoading } from "../state/slices/peerModalSlice";
+import { peerModalActions } from "../state/slices/peerModalSlice";
 import { receiveFriends, requestFriends } from "../state/slices/friendsSlice";
 import { registerToken, unregisterToken } from "../state/slices/notificationTokenSlice";
 import { timetablesActions } from "../state/slices/timetablesSlice";
@@ -287,7 +285,7 @@ export const fetchFriends = () => (dispatch, getState) => {
     return;
   }
   dispatch(requestFriends());
-  dispatch(peerModalLoading());
+  dispatch(peerModalActions.peerModalLoading());
   fetch(getFriendsEndpoint(getCurrentSemester(state)), {
     credentials: "include",
     method: "GET",
@@ -295,7 +293,7 @@ export const fetchFriends = () => (dispatch, getState) => {
     .then((response) => response.json())
     .then((json) => {
       dispatch(receiveFriends(json));
-      dispatch(peerModalLoaded());
+      dispatch(peerModalActions.peerModalLoaded());
     });
 };
 
@@ -398,21 +396,6 @@ export const unRegisterAToken = () => (dispatch) => {
   }
 };
 
-export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
-  fetch(getIntegrationEndpoint(integrationID, courseID), {
-    credentials: "include",
-    method: "GET",
-  }).then((response) => {
-    dispatch(
-      initIntegrationModal({
-        enabled: response.status === 200,
-        id: courseID,
-        integration_id: integrationID,
-      })
-    );
-  });
-};
-
 export const deleteUser = () => (dispatch) => {
   fetch(getSaveSettingsEndpoint(), {
     headers: {
@@ -424,31 +407,6 @@ export const deleteUser = () => (dispatch) => {
     credentials: "include",
   }).then(() => {
     dispatch(userInfoActions.deleteAccount());
-  });
-};
-
-export const delIntegration = (integrationID, courseID) => {
-  fetch(getIntegrationEndpoint(integrationID, courseID), {
-    headers: {
-      "X-CSRFToken": Cookie.get("csrftoken"),
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    method: "DELETE",
-  });
-};
-
-export const addIntegration = (integrationID, courseID, json) => {
-  fetch(getIntegrationEndpoint(integrationID, courseID), {
-    headers: {
-      "X-CSRFToken": Cookie.get("csrftoken"),
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    method: "POST",
-    body: JSON.stringify({ json }),
   });
 };
 

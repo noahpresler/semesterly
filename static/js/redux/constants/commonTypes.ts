@@ -1,4 +1,5 @@
 // This file stores typescript types used by both react and redux
+export type ThemeName = "light" | "dark";
 
 export type Day = "M" | "T" | "W" | "R" | "F";
 
@@ -7,6 +8,34 @@ export interface Semester {
   name: string;
   year: string;
 }
+/**
+ * Centralizes theme related constants
+ */
+export interface Theme {
+  name: ThemeName;
+  slotColors: SlotColorData[];
+  compareTtColors: CompareTimetableColors;
+  customEventDefaultColor: string;
+  reactSelectColors: {
+    primary: string;
+    primary25: string;
+    neutral0: string;
+    neutral20: string;
+  };
+}
+
+export interface CompareTimetableColors {
+  activeStart: string;
+  activeEnd: string;
+  comparedStart: string;
+  comparedEnd: string;
+  commonStart: string;
+  commonEnd: string;
+}
+
+export type ThemeObject = {
+  [x in ThemeName]?: Theme;
+};
 
 /**
  * Offering refers to a class period of a section of a course
@@ -105,7 +134,6 @@ export interface Course {
   areas: string[];
   campus: number;
   evals: any;
-  integrations: any;
   related_courses: Course[];
   reactions: Reaction[];
   regexed_courses: any;
@@ -113,6 +141,7 @@ export interface Course {
   prerequisites: string;
   exclusions: string;
   corequisites: string;
+  popularity_percent: number;
   is_waitlist_only: boolean;
   pos: string[];
   writing_intensive: string;
@@ -130,14 +159,13 @@ export interface RelatedCourse {
   areas: string[];
   campus: number;
   evals: any;
-  integrations: any;
   prerequisites: string;
   exclusions: string;
   corequisites: string;
 }
 
 export interface HoveredSlot {
-  course: Course;
+  course: Course | DenormalizedCourse;
   section: Section;
   offerings: Offering[];
   is_optional: boolean;
@@ -189,7 +217,6 @@ export interface Peer {
   class_year: number;
   email_enabled: boolean;
   img_url: string;
-  integrations: any[];
   jhed: string;
   major: string;
   preferred_name: null | string;
