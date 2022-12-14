@@ -9,6 +9,10 @@
   .news-body {
     padding: 1em 2em;
 
+    a {
+      color: $blue;
+    }
+
     h1 {
       font-size: 2em;
       margin: 0 0 0.5em 0;
