@@ -24,6 +24,7 @@ class RegistrationTokenView(ValidateSubdomainMixin, APIView):
     """
     Handles registration and deletion of tokens for maintaining
     chrome notifications for users who choose to enable the feature.
+    TODO: I think this is unused
     """
 
     def put(self, request):

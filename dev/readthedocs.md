@@ -5,27 +5,21 @@ answer the following questions.
 
 1. What is the command I run to get the courses from Fall 2021?
 
-2. How do I then load those courses into my database?
+1. How do I then load those courses into my database?
 
-3. How do I get a terminal running in my docker container?
+1. How do I get a terminal running in my docker container?
 
-4. Where do I store data such as passwords or secrets that I don’t want to commit?
+1. Where do I store data such as passwords or secrets that I don’t want to commit?
 
-5. What is our stack?
+1. What branch do I create a new branch off of when developing?
 
-6. What branch do I create a new branch off of when developing?
+1. If I want to start on a feature called myfeature, what should the branch name be?
 
-7. If I want to start on a feature called myfeature, what should the branch name be?
+1. What is the preferred format for commit messages?
 
-   What about if I want to refactor myreducer?
+1. What linters do we run against our code?
 
-8. What is the preferred format for commit messages?
-
-9. What linters do we run against our code?
-
-10. What is the max line length set to?
-
-11. What is a FeatureFlowView?
+1. What is a FeatureFlowView?
 
 
 When you are done answering the questions, create a PR for a discussion of your answers.
