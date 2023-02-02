@@ -326,9 +326,7 @@ const SlotManager = (props: { days: string[] }) => {
           lockOrUnlockSection={() =>
             dispatch(addOrRemoveCourse(courseId, slot.meeting_section))
           }
-          removeCourse={() => {
-            return dispatch(addOrRemoveCourse(courseId));
-          }}
+          removeCourse={() => dispatch(addOrRemoveCourse(courseId))}
           primaryDisplayAttribute={primaryDisplayAttribute}
           updateCustomSlot={updateCustomSlot}
           addCustomSlot={addCustomSlot}

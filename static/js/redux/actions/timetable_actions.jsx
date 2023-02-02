@@ -345,7 +345,7 @@ export const addOrRemoveCourse =
 
     const removing =
       state.courseSections.objects[courseId] !== undefined && section === "";
-    let reqBody = getBaseReqBody(state);
+    const reqBody = getBaseReqBody(state);
 
     state = getState();
     if (removing) {

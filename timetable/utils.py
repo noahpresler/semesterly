@@ -77,9 +77,7 @@ def courses_to_timetables(
     with_conflicts,
     show_weekend,
 ):
-    all_offerings = courses_to_slots(
-        courses, locked_sections, semester
-    )
+    all_offerings = courses_to_slots(courses, locked_sections, semester)
     timetable_gen = slots_to_timetables(
         all_offerings, school, custom_events, with_conflicts, show_weekend
     )

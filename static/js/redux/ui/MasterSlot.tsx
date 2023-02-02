@@ -117,7 +117,7 @@ const MasterSlot = (props: MasterSlotProps) => {
       </div>,
     ].concat(friendCircles.slice(0, 3));
   }
-  let masterSlotClass = `master-slot slot-${props.sectionId}-${props.colourIndex} ${
+  const masterSlotClass = `master-slot slot-${props.sectionId}-${props.colourIndex} ${
     isComparingTt ? "compare-tt" : ""
   }`;
   const validProfs = props.professors
