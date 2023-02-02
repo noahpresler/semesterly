@@ -60,35 +60,24 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         self.update_courses_and_locked_sections(
             params, course_ids, courses, locked_sections
         )
-        opt_course_ids = params.get("optionCourses", [])
-        max_optional = params.get("numOptionCourses", len(opt_course_ids))
-        optional_courses = [Course.objects.get(id=cid) for cid in opt_course_ids]
-        optional_course_subsets = [
-            subset
-            for subset_size in range(max_optional, -1, -1)
-            for subset in itertools.combinations(optional_courses, subset_size)
-        ]
         custom_events = params.get("customSlots", [])
         preferences = params["preferences"]
         with_conflicts = preferences.get("tryWithConflicts", False)
         show_weekend = preferences.get("showWeekend", False)
         timetables = [
             timetable
-            for opt_courses in optional_course_subsets
             for timetable in courses_to_timetables(
-                courses + list(opt_courses),
+                courses,
                 locked_sections,
                 params["semester"],
                 params["school"],
                 custom_events,
                 with_conflicts,
-                opt_course_ids,
                 show_weekend,
             )
         ]
 
         context = self.create_context(request, params, student)
-        courses = list(courses + optional_courses)
         response = self.create_response(courses, locked_sections, timetables, context)
         return Response(response, status=status.HTTP_200_OK)
 

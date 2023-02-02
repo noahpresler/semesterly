@@ -233,7 +233,6 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
             course={rc}
             professors={null}
             colourIndex={Math.min(i, maxColourIndex)}
-            onTimetable
             hideCloseButton
             inModal
             fetchCourseInfo={() => dispatch(fetchCourseInfo(rc.id))}

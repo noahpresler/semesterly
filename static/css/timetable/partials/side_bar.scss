@@ -239,10 +239,6 @@
   position: relative;
   transition: color 0.3s, background-color 0.3s;
 
-  &.optional {
-    opacity: 0.5;
-  }
-
   .slot-bar {
     background-color: $red-dark;
     left: 0;

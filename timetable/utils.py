@@ -22,7 +22,7 @@ from parsing.library.utils import short_date
 
 MAX_RETURN = 60  # Max number of timetables we want to consider
 
-Slot = namedtuple("Slot", "course section offerings is_optional is_locked")
+Slot = namedtuple("Slot", "course section offerings is_locked")
 Timetable = namedtuple("Timetable", "courses sections has_conflict")
 
 
@@ -47,7 +47,6 @@ class DisplayTimetable:
                 section.course,
                 section,
                 section.offering_set.all(),
-                is_optional=False,
                 is_locked=True,
             )
             for section in timetable.sections.all()
@@ -76,11 +75,10 @@ def courses_to_timetables(
     school,
     custom_events,
     with_conflicts,
-    optional_course_ids,
     show_weekend,
 ):
     all_offerings = courses_to_slots(
-        courses, locked_sections, semester, optional_course_ids
+        courses, locked_sections, semester
     )
     timetable_gen = slots_to_timetables(
         all_offerings, school, custom_events, with_conflicts, show_weekend
@@ -88,16 +86,14 @@ def courses_to_timetables(
     return itertools.islice(timetable_gen, MAX_RETURN)
 
 
-def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
+def courses_to_slots(courses, locked_sections, semester):
     """
     Return a list of lists of Slots. Each Slot sublist represents the list of
     possibilities for a given course and section type, i.e. a valid timetable consists
     of any one slot from each sublist.
     """
     slots = []
-    optional_course_ids = set(optional_course_ids)
     for course in courses:
-        is_optional = course.id in optional_course_ids
         grouped = get_sections_by_section_type(course, semester)
         for section_type, sections in grouped.items():
             locked_section_code = locked_sections.get(str(course.id), {}).get(
@@ -112,7 +108,6 @@ def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
                     course,
                     locked_section,
                     locked_section.offering_set.all(),
-                    is_optional=is_optional,
                     is_locked=True,
                 )
                 slots.append([locked_slot])
@@ -122,7 +117,6 @@ def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
                         course,
                         section,
                         section.offering_set.all(),
-                        is_optional=is_optional,
                         is_locked=False,
                     )
                     for section in sections
