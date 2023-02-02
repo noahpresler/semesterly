@@ -54,7 +54,6 @@ const UserSettingsModal = () => {
   const isUserInfoIncomplete = useAppSelector((state) =>
     getIsUserInfoIncomplete(state)
   );
-  const highlightNotifs = useAppSelector((state) => state.ui.highlightNotifs);
   const isSigningUp = useAppSelector(
     (state) => !state.userInfo.overrideShow && getIsUserInfoIncomplete(state)
   );
@@ -284,12 +283,7 @@ const UserSettingsModal = () => {
   const fbUpsell =
     userInfo.isLoggedIn && !userInfo.FacebookSignedUp ? (
       <div
-        className={classnames(
-          "preference user-settings-modal__notifications second cf",
-          {
-            "preference-attn": highlightNotifs,
-          }
-        )}
+        className={"preference user-settings-modal__notifications second cf"}
       >
         <button
           className="btn abnb-btn fb-btn"

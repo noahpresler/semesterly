@@ -162,14 +162,3 @@ class PersonalTimetable(timetable_models.Timetable):
     last_updated = models.DateTimeField(auto_now=True)
     has_conflict = models.BooleanField(blank=True, default=False)
     show_weekend = models.BooleanField(blank=True, default=False)
-
-
-class RegistrationToken(models.Model):
-    """A push notification token for Chrome notification via Google Cloud Messaging"""
-
-    auth = models.TextField(default="")
-    p256dh = models.TextField(default="")
-    endpoint = models.TextField(default="")
-    student = models.ForeignKey(
-        Student, null=True, default=None, on_delete=models.deletion.CASCADE
-    )

@@ -34,7 +34,6 @@ from courses.serializers import CourseSerializer
 from student.models import (
     Student,
     Reaction,
-    RegistrationToken,
     PersonalEvent,
     PersonalTimetable,
 )
@@ -93,8 +92,7 @@ class UserView(RedirectToSignupMixin, APIView):
     def get(self, request):
         """
         Renders the user profile/stats page which indicates all of a student's
-        reviews of courses, what social they have connected, whether notificaitons
-        are enabled, etc.
+        reviews of courses, what social they have connected, etc.
         """
         student: Student = Student.objects.get(user=request.user)
         img_url = (
@@ -112,7 +110,6 @@ class UserView(RedirectToSignupMixin, APIView):
             "hasGoogle": student.is_signed_up_through_google(),
             "hasFacebook": student.is_signed_up_through_fb(),
             "hasJHU": student.is_signed_up_through_jhu(),
-            "notifications": RegistrationToken.objects.filter(student=student).exists(),
         }
         if student.preferred_name:
             context["name"] = student.preferred_name

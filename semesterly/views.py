@@ -102,13 +102,6 @@ def default_send_email(subject, message):
     )
 
 
-@never_cache
-def sw_js(request, js):
-    template = get_template("sw.js")
-    html = template.render()
-    return HttpResponse(html, content_type="application/x-javascript")
-
-
 def manifest_json(request, js):
     template = get_template("manifest.json")
     html = template.render()

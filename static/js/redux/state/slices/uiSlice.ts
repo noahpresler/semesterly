@@ -13,14 +13,12 @@ interface UiSliceState {
   searchHover: number;
   courseToColourIndex: any; // { courseId: index }
   uses12HrTime: boolean;
-  highlightNotifs: boolean;
 }
 
 const initialState: UiSliceState = {
   searchHover: 0,
   courseToColourIndex: {},
   uses12HrTime: false,
-  highlightNotifs: false, // add yellow styling to notifications
 };
 
 const uiSlice = createSlice({
@@ -29,9 +27,6 @@ const uiSlice = createSlice({
   reducers: {
     hoverSearchResult: (state, action: PayloadAction<number>) => {
       state.searchHover = action.payload;
-    },
-    setHighlightNotifs: (state, action: PayloadAction<boolean>) => {
-      state.highlightNotifs = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -62,6 +57,6 @@ const uiSlice = createSlice({
   },
 });
 
-export const { hoverSearchResult, setHighlightNotifs } = uiSlice.actions;
+export const { hoverSearchResult } = uiSlice.actions;
 
 export default uiSlice.reducer;

@@ -23,7 +23,6 @@ urlpatterns = [
     re_path(
         r"^export_calendar/*$", FeatureFlowView.as_view(feature_name="EXPORT_CALENDAR")
     ),
-    re_path(r"^notifyme/*$", FeatureFlowView.as_view(feature_name="ENABLE_NOTIFS")),
     re_path(r"^find_friends/$", FeatureFlowView.as_view(feature_name="FIND_FRIENDS")),
     re_path(r"^timetable/.*$", RedirectView.as_view(url="/")),
     # timetables

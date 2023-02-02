@@ -11,19 +11,3 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
-
-// 'use strict';
-
-// if ('serviceWorker' in navigator) {
-//     console.log('Service Worker is supported');
-//     navigator.serviceWorker.register('/sw.js').then(function(reg) {
-//         console.log(':^)', reg);
-//         reg.pushManager.subscribe({
-//             userVisibleOnly: true
-//         }).then(function(sub) {
-//             console.log('endpoint:', sub.endpoint);
-//         });
-//     }).catch(function(error) {
-//         console.log(':^(', error);
-//     });
-// }
