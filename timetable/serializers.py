@@ -37,7 +37,6 @@ class SlotSerializer(serializers.Serializer):
     course = serializers.IntegerField(source="course.id")
     section = serializers.IntegerField(source="section.id")
     offerings = serializers.SerializerMethodField()
-    is_optional = serializers.BooleanField()
     is_locked = serializers.BooleanField()
 
     def get_offerings(self, obj):

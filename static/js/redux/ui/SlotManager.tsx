@@ -34,11 +34,9 @@ import {
   getHoveredSlots,
 } from "../state";
 import { getSchoolSpecificInfo } from "../constants/schools";
-import { getDenormCourseById } from "../state/slices/entitiesSlice";
 import {
   addCustomSlot,
   addOrRemoveCourse,
-  addOrRemoveOptionalCourse,
   updateCustomSlot,
   finalizeCustomSlot,
 } from "../actions/timetable_actions";
@@ -46,7 +44,6 @@ import { fetchCourseInfo } from "../actions/modal_actions";
 import { uniqBy } from "lodash";
 import { selectGradient } from "../state/slices/compareTimetableSlice";
 import { selectSlotColorData, selectTheme } from "../state/slices/themeSlice";
-import themeObject from "../constants/themes";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -290,13 +287,6 @@ const SlotManager = (props: { days: string[] }) => {
     (state) => getSchoolSpecificInfo(state.school.school).primaryDisplay
   );
 
-  const optionalCourses = useAppSelector((state) => state.optionalCourses.courses);
-  const isCourseOptional = (courseId: number) =>
-    optionalCourses.some((c) => c === courseId);
-  const entities = useAppSelector((state) => state.entities);
-  const getOptionalCourseById = (courseId: number) =>
-    getDenormCourseById(entities, courseId);
-
   const courseToClassmates = useAppSelector(
     (state) => state.classmates.courseToClassmates
   );
@@ -317,8 +307,6 @@ const SlotManager = (props: { days: string[] }) => {
     const daySlots = slotsByDay[day].map((slot: any, j: number) => {
       const courseId = slot.courseId;
       const locked = isLocked(courseId, slot.meeting_section);
-      const isOptional = isCourseOptional(courseId);
-      const optionalCourse = isOptional ? getOptionalCourseById(courseId) : null;
       return slot.custom ? (
         <CustomSlot
           {...slot}
@@ -338,12 +326,7 @@ const SlotManager = (props: { days: string[] }) => {
           lockOrUnlockSection={() =>
             dispatch(addOrRemoveCourse(courseId, slot.meeting_section))
           }
-          removeCourse={() => {
-            if (!isOptional) {
-              return dispatch(addOrRemoveCourse(courseId));
-            }
-            return dispatch(addOrRemoveOptionalCourse(optionalCourse));
-          }}
+          removeCourse={() => dispatch(addOrRemoveCourse(courseId))}
           primaryDisplayAttribute={primaryDisplayAttribute}
           updateCustomSlot={updateCustomSlot}
           addCustomSlot={addCustomSlot}

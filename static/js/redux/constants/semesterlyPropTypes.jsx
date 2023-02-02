@@ -123,7 +123,6 @@ export const normalizedSlot = PropTypes.shape({
   course: PropTypes.number.isRequired,
   section: PropTypes.number.isRequired,
   offerings: PropTypes.arrayOf(PropTypes.number).isRequired,
-  is_optional: PropTypes.bool.isRequired,
   is_locked: PropTypes.bool.isRequired,
 });
 
@@ -131,7 +130,6 @@ export const denormalizedSlot = PropTypes.shape({
   course: normalizedCourse.isRequired,
   section: normalizedSection.isRequired,
   offerings: PropTypes.arrayOf(offering).isRequired,
-  is_optional: PropTypes.bool.isRequired,
   is_locked: PropTypes.bool.isRequired,
 });
 

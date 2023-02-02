@@ -41,7 +41,6 @@ type MasterSlotProps = {
     past: Classmate[];
   };
   hideCloseButton?: boolean;
-  onTimetable: boolean;
   fetchCourseInfo: MouseEventHandler<HTMLDivElement>;
   removeCourse?: Function;
   getShareLink: Function;
@@ -118,7 +117,7 @@ const MasterSlot = (props: MasterSlotProps) => {
       </div>,
     ].concat(friendCircles.slice(0, 3));
   }
-  let masterSlotClass = `master-slot slot-${props.sectionId}-${props.colourIndex} ${
+  const masterSlotClass = `master-slot slot-${props.sectionId}-${props.colourIndex} ${
     isComparingTt ? "compare-tt" : ""
   }`;
   const validProfs = props.professors
@@ -128,7 +127,6 @@ const MasterSlot = (props: MasterSlotProps) => {
     !validProfs || validProfs.length === 0 || validProfs[0] === ""
       ? "Professor Unlisted"
       : validProfs.join(", ");
-  masterSlotClass = props.onTimetable ? masterSlotClass : `${masterSlotClass} optional`;
   const numCredits = props.course.num_credits;
   let creditsDisplay = numCredits === 1 ? " credit" : " credits";
   creditsDisplay = numCredits + creditsDisplay;

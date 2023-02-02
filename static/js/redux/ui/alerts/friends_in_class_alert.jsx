@@ -110,7 +110,6 @@ class FriendsInClassAlert extends React.Component {
             course={this.props.mostFriendsClass}
             professors={professors}
             colourIndex={Math.min(this.props.mostFriendsKey, maxColourIndex)}
-            onTimetable
             hideCloseButton
             inModal
             fakeFriends={this.props.mostFriendsCount}
