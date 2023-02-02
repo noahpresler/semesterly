@@ -33,14 +33,9 @@ import {
 } from "./actions/timetable_actions";
 import { fetchSchoolInfo } from "./actions/school_actions";
 import { fetchCourseClassmates } from "./actions/modal_actions";
-import {
-  userAcquisitionModalActions,
-  userInfoActions,
-} from "./state/slices";
+import { userAcquisitionModalActions, userInfoActions } from "./state/slices";
 import { receiveCourses } from "./actions/initActions";
-import {
-  browserSupportsLocalStorage,
-} from "./util";
+import { browserSupportsLocalStorage } from "./util";
 // import { addTTtoGCal } from './actions/calendar_actions';
 import { initAllState, setCourseInfo } from "./actions";
 import { timetablesActions } from "./state/slices/timetablesSlice";

@@ -282,9 +282,7 @@ const UserSettingsModal = () => {
 
   const fbUpsell =
     userInfo.isLoggedIn && !userInfo.FacebookSignedUp ? (
-      <div
-        className={"preference user-settings-modal__notifications second cf"}
-      >
+      <div className={"preference user-settings-modal__notifications second cf"}>
         <button
           className="btn abnb-btn fb-btn"
           onClick={() => {
