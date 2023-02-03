@@ -35,7 +35,6 @@ import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
 import peerModal from "./slices/peerModalSlice";
 import friends from "./slices/friendsSlice";
-import notificationToken from "./slices/notificationTokenSlice";
 import newsModal from "./slices/newsModalSlice";
 import saveCalendarModal from "./slices/saveCalendarModalSlice";
 import termsOfServiceModal from "./slices/termsOfServiceModalSlice";
@@ -58,7 +57,6 @@ export const reducers = {
   advancedSearch,
   friends,
   newsModal,
-  notificationToken,
   peerModal,
   preferences,
   registrar,

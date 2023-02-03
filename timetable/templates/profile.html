@@ -241,26 +241,6 @@
 				{% endif %}
 			</div>
 
-			<!-- NOtifications -->
-			<div id="notifications">
-				<h3>Notifications</h3>
-				{% if notifications %}
-				<div class="list-item">
-					<i class="fa fa-check" aria-hidden="true" style="color:green;"></i>
-					<p>Chrome Notifications enabled</p>
-				</div>
-				{% else %}
-				<div class="list-item">
-					<i class="fa fa-times" aria-hidden="true" style="color:#c70f0f;"></i>
-					<p>Notifications are not enabled</p>
-				</div>
-				<div class="list-item link">
-					<img src="http://jhu.sem.ly:8000/static/img/chrome.png">
-					<a href="notifyme">Enable Chrome Notifications</a>
-				</div>
-				{% endif %}
-			</div>
-
 			<!-- Date Joined -->
 			<div id="join-date">
 				<p>Joined {{ student.time_created }}</p>

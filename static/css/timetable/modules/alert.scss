@@ -227,44 +227,6 @@
   }
 }
 
-.enable-notification-alert {
-  h2 {
-    font-size: 16px;
-    margin: 0;
-  }
-
-  .alert-extra {
-    font-size: 12px;
-    line-height: 12px;
-  }
-
-  .decline-notifications {
-    &,
-    &:link,
-    &:active,
-    &:visited {
-      color: $g999;
-      cursor: pointer;
-      display: block;
-      margin-top: 25px;
-      opacity: 0.77;
-      transition: opacity 0.3s;
-    }
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-}
-
-.enable-notifications-alert-icon {
-  background: url("/static/img/alert/bell.png") center no-repeat;
-  background-size: contain;
-  height: 20px;
-  vertical-align: middle;
-  width: 20px;
-}
-
 .friends-in-class-alert {
   margin: 0 10px;
   width: 230px;

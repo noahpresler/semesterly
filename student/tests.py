@@ -22,7 +22,6 @@ from student.models import (
     PersonalTimetable,
     Reaction,
     PersonalEvent,
-    RegistrationToken,
 )
 from timetable.models import Semester, Course, Section, Offering
 from helpers.test.utils import (
@@ -238,7 +237,6 @@ class UserViewTest(APITestCase):
         self.assertFalse(Student.objects.exists())
         self.assertFalse(PersonalTimetable.objects.exists())
         self.assertFalse(PersonalEvent.objects.exists())
-        self.assertFalse(RegistrationToken.objects.exists())
 
         # course data should be untouched
         self.assertTrue(Course.objects.exists())

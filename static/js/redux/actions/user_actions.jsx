@@ -16,17 +16,13 @@ import fetch from "isomorphic-fetch";
 import Cookie from "js-cookie";
 import uniq from "lodash/uniq";
 import {
-  deleteRegistrationTokenEndpoint,
   getClassmatesEndpoint,
   getDeleteTimetableEndpoint,
   getFriendsEndpoint,
   getLoadSavedTimetablesEndpoint,
-  getLogFacebookAlertClickEndpoint,
-  getLogFacebookAlertViewEndpoint,
   getMostClassmatesCountEndpoint,
   getSaveSettingsEndpoint,
   getSaveTimetableEndpoint,
-  getSetRegistrationTokenEndpoint,
   acceptTOSEndpoint,
 } from "../constants/endpoints";
 import { getActiveTimetable, getCurrentSemester } from "../state";
@@ -46,7 +42,6 @@ import {
 } from "../state/slices/termsOfServiceModalSlice";
 import { peerModalActions } from "../state/slices/peerModalSlice";
 import { receiveFriends, requestFriends } from "../state/slices/friendsSlice";
-import { registerToken, unregisterToken } from "../state/slices/notificationTokenSlice";
 import { timetablesActions } from "../state/slices/timetablesSlice";
 
 // temporary fix to allow custom event debounce
@@ -309,92 +304,6 @@ export const autoSave = () => (dispatch, getState) => {
   }, 500);
 };
 
-export const sendRegistrationToken = (token) => (dispatch) => {
-  fetch(getSetRegistrationTokenEndpoint(), {
-    headers: {
-      "X-CSRFToken": Cookie.get("csrftoken"),
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify({
-      token,
-    }),
-    credentials: "include",
-  }).then((response) => {
-    if (response.status === 201) {
-      dispatch(registerToken());
-    }
-  });
-};
-
-export const setARegistrationToken = () => (dispatch) => {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("/sw.js")
-      .then((reg) => {
-        reg.pushManager
-          .subscribe({
-            userVisibleOnly: true,
-          })
-          .then((sub) => {
-            dispatch(sendRegistrationToken(sub.toJSON()));
-          });
-      })
-      .catch(() => {});
-  }
-};
-
-export const isRegistered = () => (dispatch) => {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("/sw.js")
-      .then((reg) =>
-        reg.pushManager.getSubscription().then((sub) => {
-          if (sub) {
-            dispatch(registerToken());
-            return true;
-          }
-          return null;
-        })
-      )
-      .catch(() => null);
-  }
-};
-
-export const sendRegistrationTokenForDeletion = (token) => (dispatch) => {
-  fetch(deleteRegistrationTokenEndpoint(token.endpoint), {
-    headers: {
-      "X-CSRFToken": Cookie.get("csrftoken"),
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    method: "DELETE",
-    credentials: "include",
-  }).then((response) => {
-    if (response.status === 204) {
-      dispatch(unregisterToken());
-    }
-  });
-};
-
-export const unRegisterAToken = () => (dispatch) => {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("/sw.js")
-      .then((reg) => {
-        reg.pushManager
-          .subscribe({
-            userVisibleOnly: true,
-          })
-          .then((sub) => {
-            dispatch(sendRegistrationTokenForDeletion(sub.toJSON()));
-          });
-      })
-      .catch(() => {});
-  }
-};
-
 export const deleteUser = () => (dispatch) => {
   fetch(getSaveSettingsEndpoint(), {
     headers: {
@@ -406,20 +315,6 @@ export const deleteUser = () => (dispatch) => {
     credentials: "include",
   }).then(() => {
     dispatch(userInfoActions.deleteAccount());
-  });
-};
-
-export const logFacebookAlertView = () => {
-  fetch(getLogFacebookAlertViewEndpoint(), {
-    method: "POST",
-    credentials: "include",
-  });
-};
-
-export const LogFacebookAlertClick = () => {
-  fetch(getLogFacebookAlertClickEndpoint(), {
-    method: "POST",
-    credentials: "include",
   });
 };
 
