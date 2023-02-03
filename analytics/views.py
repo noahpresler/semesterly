@@ -71,15 +71,6 @@ def view_analytics_dashboard(request):
         total_shared_timetable_views = number_timetables(Timetable=SharedTimetableView)
         total_shared_course_views = number_timetables(Timetable=SharedCourseView)
 
-        fb_alert_views = number_timetables(Timetable=FacebookAlertView)
-        unique_users_fb_alert_views = number_timetables(
-            Timetable=FacebookAlertView, distinct="student"
-        )
-        fb_alert_clicks = number_timetables(Timetable=FacebookAlertClick)
-        unique_users_fb_alert_clicks = number_timetables(
-            Timetable=FacebookAlertClick, distinct="student"
-        )
-
         return render(
             request,
             "analytics_dashboard.html",
@@ -97,7 +88,6 @@ def view_analytics_dashboard(request):
                     Timetable=PersonalTimetable
                 ),
                 "total_signups": total_signups,
-                "num_users_chrome_notifs": number_user_chrome_notifs(),
                 "num_users_by_permission": num_users_by_permission,
                 "num_users_by_class_year": json.dumps(number_students_by_year()),
                 "num_users_by_school": json.dumps(number_students_by_school()),
@@ -269,29 +259,3 @@ def number_students_by_school():
         )
         result[school] = students.count()
     return result
-
-
-def number_user_chrome_notifs():
-    return (
-        RegistrationToken.objects.values_list("student", flat=True).distinct().count()
-    )
-
-
-@csrf_exempt
-def log_facebook_alert_view(request):
-    try:
-        student = Student.objects.get(user=request.user)
-    except:
-        student = None
-    FacebookAlertView.objects.create(student=student, school=request.subdomain).save()
-    return HttpResponse(json.dumps({}), content_type="application/json")
-
-
-@csrf_exempt
-def log_facebook_alert_click(request):
-    try:
-        student = Student.objects.get(user=request.user)
-    except:
-        student = None
-    FacebookAlertClick.objects.create(student=student, school=request.subdomain).save()
-    return HttpResponse(json.dumps({}), content_type="application/json")

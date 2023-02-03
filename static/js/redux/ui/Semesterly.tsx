@@ -21,8 +21,6 @@ import DeleteTimetableAlert from "./alerts/delete_timetable_alert";
 import TimetableExistsAlertContainer from "./alerts/timetable_exists_alert_container";
 import ChangeSemesterAlertContainer from "./alerts/change_semester_alert_container";
 import NewTimetableAlertContainer from "./alerts/new_timetable_alert_container";
-import EnableNotificationsAlertContainer from "./alerts/enable_notifications_alert_container";
-import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container";
 import TopBar from "./TopBar";
 import SignupModal from "./modals/SignupModal";
 import TutorialModal from "./modals/TutorialModal";
@@ -50,26 +48,12 @@ const Semesterly = () => {
     (state) => state.alerts.alertChangeSemester
   );
   const alertConflict = useAppSelector((state) => state.alerts.alertConflict);
-  const alertEnableNotifications = useAppSelector(
-    (state) => state.alerts.alertEnableNotifications
-  );
-
   const alertDeleteTimetable = useAppSelector(
     (state) => state.alerts.alertDeleteTimetable
   );
 
   const activeTTLength = useAppSelector(
     (state) => getActiveTimetableCourses(state).length
-  );
-  const alertFacebookFriends = useAppSelector((state) =>
-    Boolean(
-      state.alerts.alertFacebookFriends &&
-        state.userInfo.data.FacebookSignedUp &&
-        (!state.userInfo.data.social_courses || state.alerts.facebookAlertIsOn) &&
-        !state.userInfo.overrideShow &&
-        state.alerts.mostFriendsCount >= 2 &&
-        activeTTLength >= 1
-    )
   );
   const alertNewTimetable = useAppSelector((state) => state.alerts.alertNewTimetable);
   const alertTimetableExists = useAppSelector(
@@ -107,17 +91,6 @@ const Semesterly = () => {
     }
   });
 
-  useEffect(() => {
-    if (alertEnableNotifications) {
-      alertBoxRef.current?.show(<EnableNotificationsAlertContainer />, {
-        type: "info",
-        time: 12000,
-        additionalClass: "notification-alert",
-        icon: <div className="enable-notifications-alert-icon" />,
-      });
-    }
-  }, []);
-
   const showAlert = (alert: ReactElement, type: string, delay = 5000) => {
     alertBoxRef.current?.show(alert, {
       type,
@@ -136,15 +109,6 @@ const Semesterly = () => {
       showAlert(<ChangeSemesterAlertContainer />, "info", 15000);
     } else if (alertNewTimetable) {
       showAlert(<NewTimetableAlertContainer />, "info", 12000);
-    } else if (alertEnableNotifications) {
-      showAlert(<EnableNotificationsAlertContainer />, "info", 12000);
-    } else if (alertFacebookFriends) {
-      alertBoxRef.current?.show(<FriendsInClassAlertContainer />, {
-        type: "info",
-        time: 25000,
-        additionalClass: "friends-in-class-alert-container",
-        icon: <div className="friends-in-class-alert-icon" />,
-      });
     } else {
       alertBoxRef.current?.removeAll();
     }
@@ -154,8 +118,6 @@ const Semesterly = () => {
     alertTimetableExists,
     alertChangeSemester,
     alertNewTimetable,
-    alertEnableNotifications,
-    alertFacebookFriends,
   ]);
 
   const toLocalDate = () => {

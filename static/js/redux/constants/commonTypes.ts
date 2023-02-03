@@ -80,7 +80,6 @@ export interface Slot {
   course: number;
   section: number;
   offerings: number[];
-  is_optional: boolean;
   is_locked: boolean;
   is_section_filled?: boolean;
 }
@@ -168,7 +167,6 @@ export interface HoveredSlot {
   course: Course | DenormalizedCourse;
   section: Section;
   offerings: Offering[];
-  is_optional: boolean;
   is_locked: boolean;
 }
 
@@ -193,7 +191,6 @@ export interface DenormalizedSlot {
   course: NormalizedCourse;
   section: NormalizedSection;
   offerings: Offering[];
-  is_optional: boolean;
   is_locked: boolean;
 }
 

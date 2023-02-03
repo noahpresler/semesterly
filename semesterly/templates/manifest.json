@@ -7,8 +7,7 @@
     "display": "standalone",  
     "permissions": [
         "gcm",
-        "storage",
-        "notifications"
+        "storage"
     ],
     "gcm_sender_id": "801736825762"
 }

@@ -13,7 +13,6 @@ import { getCourseShareLinkFromModal } from "../../constants/endpoints";
 import { advancedSearchActions } from "../../state/slices";
 import {
   addOrRemoveCourse,
-  addOrRemoveOptionalCourse,
   fetchAdvancedSearchResults,
   setAdvancedSearchResultIndex,
 } from "../../actions";
@@ -193,11 +192,6 @@ const AdvancedSearchModal = () => {
     cleanUp();
   };
 
-  const cAddOrRemoveOptionalCourse = (course: any) => {
-    dispatch(addOrRemoveOptionalCourse(course));
-    cleanUp();
-  };
-
   const handleTimesChange = (values: any, component: string) => {
     if (isFetching) {
       return;
@@ -285,14 +279,6 @@ const AdvancedSearchModal = () => {
             <i className="fa fa-share-alt" />
           </div>
           {shareLink}
-          {inRoster ? null : (
-            <div
-              className="modal-save"
-              onClick={() => cAddOrRemoveOptionalCourse(selectedCourse)}
-            >
-              <i className="fa fa-bookmark" />
-            </div>
-          )}
           <div
             className="modal-add"
             onClick={() => cAddOrRemoveCourse(selectedCourse.id)}

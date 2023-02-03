@@ -18,7 +18,6 @@ import { getSectionTypeToSections } from "../state/slices/entitiesSlice";
 import { DenormalizedCourse } from "../constants/commonTypes";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addOrRemoveCourse, fetchCourseInfo } from "../actions";
-import { addRemoveOptionalCourse } from "../state/slices/optionalCoursesSlice";
 import { hoverSearchResult } from "../state/slices/uiSlice";
 import { getSchoolSpecificInfo } from "../constants/schools";
 
@@ -34,15 +33,12 @@ const SearchResult = (props: SearchResultProps) => {
   const dispatch = useAppDispatch();
 
   const [hoverAdd, setHoverAdd] = useState(false);
-  const [hoverSave, setHoverSave] = useState(false);
 
   const searchHover = useAppSelector((state) => state.ui.searchHover);
   const isHovered = (position: number) => searchHover === position;
 
   const courseSections = useAppSelector((state) => state.courseSections.objects);
   const inRoster = courseSections[props.course.id] !== undefined;
-  const optionalCourses = useAppSelector((state) => state.optionalCourses.courses);
-  const inOptionRoster = optionalCourses.some((c: number) => c === props.course.id);
 
   const addCourseWrapper = (
     course: DenormalizedCourse,
@@ -52,38 +48,6 @@ const SearchResult = (props: SearchResultProps) => {
     event.stopPropagation(); // stops modal from popping up
     event.preventDefault(); // stops search bar from blurring (losing focus)
     dispatch(addOrRemoveCourse(course.id, sec));
-  };
-
-  const addOptionalCourseWrapper = (course: DenormalizedCourse, event: MouseEvent) => {
-    event.stopPropagation(); // stops modal from popping up
-    event.preventDefault(); // stops search bar from blurring (losing focus)
-    dispatch(addRemoveOptionalCourse(course.id));
-  };
-
-  const actionOver = (action: string) => {
-    switch (action) {
-      case "ADD":
-        setHoverAdd(true);
-        break;
-      case "SAVE":
-        setHoverSave(true);
-        break;
-      default:
-        break;
-    }
-  };
-
-  const actionOut = (action: string) => {
-    switch (action) {
-      case "ADD":
-        setHoverAdd(false);
-        break;
-      case "SAVE":
-        setHoverSave(false);
-        break;
-      default:
-        break;
-    }
   };
 
   /**
@@ -129,34 +93,15 @@ const SearchResult = (props: SearchResultProps) => {
       title="Add this course"
       className={classNames("search-course-add", { "in-roster": inRoster })}
       onMouseDown={(event) => addCourseWrapper(course, "", event)}
-      onMouseOver={() => actionOver("ADD")}
-      onMouseOut={() => actionOut("ADD")}
+      onMouseOver={() => setHoverAdd(true)}
+      onMouseOut={() => setHoverAdd(false)}
     >
       <i className={classNames("fa", { "fa-plus": !inRoster, "fa-check": inRoster })} />
     </span>
   );
-  const addOptionalCourseButton = inRoster ? null : (
-    <span
-      title="Add this course as optional"
-      className={classNames("search-course-save", { "in-roster": inOptionRoster })}
-      onMouseDown={(event) => addOptionalCourseWrapper(course, event)}
-      onMouseOver={() => actionOver("SAVE")}
-      onMouseOut={() => actionOut("SAVE")}
-    >
-      <i
-        className={classNames("fa", {
-          "fa-bookmark": !inOptionRoster,
-          "fa-check": inOptionRoster,
-        })}
-      />
-    </span>
-  );
+
   let info = course.name ? course.code : "";
-  if (hoverSave) {
-    info = !inOptionRoster
-      ? "Add this as an optional course"
-      : "Remove this optional course";
-  } else if (hoverAdd) {
+  if (hoverAdd) {
     info = !inRoster
       ? "Add this course to your timetable"
       : "Remove this course from your timetable";
@@ -175,13 +120,11 @@ const SearchResult = (props: SearchResultProps) => {
       onMouseOver={() => dispatch(hoverSearchResult(props.position))}
     >
       <h3>{course.name || course.code} </h3>
-      {addOptionalCourseButton}
       {addRemoveButton}
       <div className="search-result-labels">
         <h4
           className={classNames("label", {
             hoverAdd,
-            hoverSave,
           })}
         >
           {info}

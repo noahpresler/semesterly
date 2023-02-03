@@ -28,7 +28,6 @@ import ui from "./slices/uiSlice";
 import userInfo, { isUserInfoIncomplete } from "./slices/userInfoSlice";
 import savingTimetable from "./slices/savingTimetableSlice";
 import classmates from "./slices/classmatesSlice";
-import optionalCourses from "./slices/optionalCoursesSlice";
 import advancedSearch, {
   getAdvancedSearchResultIds,
 } from "./slices/advancedSearchSlice";
@@ -36,7 +35,6 @@ import customEvents from "./slices/customEventsSlice";
 import signupModal from "./slices/signupModalSlice";
 import peerModal from "./slices/peerModalSlice";
 import friends from "./slices/friendsSlice";
-import notificationToken from "./slices/notificationTokenSlice";
 import newsModal from "./slices/newsModalSlice";
 import saveCalendarModal from "./slices/saveCalendarModalSlice";
 import termsOfServiceModal from "./slices/termsOfServiceModalSlice";
@@ -59,8 +57,6 @@ export const reducers = {
   advancedSearch,
   friends,
   newsModal,
-  notificationToken,
-  optionalCourses,
   peerModal,
   preferences,
   registrar,

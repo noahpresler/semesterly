@@ -32,7 +32,6 @@ import {
 import { getCourseShareLink } from "../constants/endpoints";
 import {
   addOrRemoveCourse,
-  addOrRemoveOptionalCourse,
   duplicateTimetable,
   fetchCourseInfo,
   loadTimetable,
@@ -47,17 +46,8 @@ const SideBar = () => {
   const dispatch = useAppDispatch();
   const colorData = useAppSelector(selectSlotColorData);
   const timetable = useAppSelector(getActiveTimetable);
-  const coursesInTimetable = useAppSelector((state) =>
-    getCoursesFromSlots(state, timetable.slots)
-  );
   const mandatoryCourses = useAppSelector((state) =>
-    getCoursesFromSlots(
-      state,
-      timetable.slots.filter((slot) => !slot.is_optional)
-    )
-  );
-  const optionalCourses = useAppSelector((state) =>
-    state.optionalCourses.courses.map((cid) => getDenormCourseById(state, cid))
+    getCoursesFromSlots(state, timetable.slots)
   );
   const semester = useAppSelector(getCurrentSemester);
   const savedTimetablesState = useAppSelector(
@@ -72,8 +62,6 @@ const SideBar = () => {
     (state) => state.savingTimetable.activeTimetable
   );
 
-  const isCourseInRoster = (courseId: number) =>
-    timetable.slots.some((s) => s.course === courseId);
   const getShareLink = (courseCode: string) => getCourseShareLink(courseCode, semester);
 
   const timetableCourses = useAppSelector((state) => getActiveTimetableCourses(state));
@@ -144,7 +132,6 @@ const SideBar = () => {
         </div>
       ))
     : null;
-  // TOOD: code duplication between masterslots/optionalslots
   let masterSlots = mandatoryCourses
     ? mandatoryCourses.map((course) => {
         const colourIndex =
@@ -162,33 +149,9 @@ const SideBar = () => {
             professors={professors}
             colourIndex={colourIndex}
             classmates={courseToClassmates[course.id]}
-            onTimetable={isCourseInRoster(course.id)}
             course={course}
             fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
             removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
-            getShareLink={getShareLink}
-            colorData={colorData}
-          />
-        );
-      })
-    : null;
-  let optionalSlots = coursesInTimetable
-    ? optionalCourses.map((course) => {
-        const colourIndex =
-          course.id in courseToColourIndex
-            ? courseToColourIndex[course.id]
-            : getNextAvailableColour(courseToColourIndex);
-        const sectionId = course.id;
-        return (
-          <MasterSlot
-            key={course.id}
-            sectionId={sectionId}
-            onTimetable={isCourseInRoster(course.id)}
-            colourIndex={colourIndex}
-            classmates={courseToClassmates[course.id]}
-            course={course}
-            fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
-            removeCourse={() => dispatch(addOrRemoveOptionalCourse(course))}
             getShareLink={getShareLink}
             colorData={colorData}
           />
@@ -210,31 +173,6 @@ const SideBar = () => {
         <h3>
           Your selections will appear here along with credits, professors and friends in
           the class
-        </h3>
-      </div>
-    );
-  }
-  const optionalSlotsHeader =
-    optionalSlots.length === 0 && masterSlots.length > 3 ? null : (
-      <h4 className="sb-header">Optional Courses</h4>
-    );
-  if (optionalSlots.length === 0 && masterSlots.length > 3) {
-    optionalSlots = null;
-  } else if (optionalSlots.length === 0) {
-    const img = (
-      <img
-        src="/static/img/emptystates/optionalslots.png"
-        alt="No optional courses added."
-      />
-    );
-    // @ts-ignore
-    optionalSlots = (
-      <div className="empty-state">
-        {img}
-        <h4>Give Optional Courses a Spin!</h4>
-        <h3>
-          Load this list with courses you aren&#39;t 100% sure you want to take -
-          we&#39;ll fit as many as possible, automatically
         </h3>
       </div>
     );
@@ -277,9 +215,6 @@ const SideBar = () => {
         to lock a section in place.
       </h4>
       <div className="sb-master-slots">{masterSlots}</div>
-      {optionalSlotsHeader}
-      {optionalSlots}
-      <div id="sb-optional-slots" />
     </div>
   );
 };
