@@ -65,7 +65,6 @@ const timetablesSlice = createSlice({
         section: action.payload.section,
         offerings: action.payload.section.offering_set,
         is_locked: true,
-        is_optional: false,
       };
     },
     unhoverSection: (state) => {

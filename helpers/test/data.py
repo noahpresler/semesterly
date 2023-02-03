@@ -15,8 +15,6 @@ def get_default_tt_request():
     return {
         "courseSections": {},
         "customSlots": [],
-        "numOptionCourses": 0,
-        "optionCourses": [],
         "preferences": {
             "tryWithConflicts": False,
         },

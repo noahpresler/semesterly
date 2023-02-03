@@ -28,7 +28,6 @@ import ui from "./slices/uiSlice";
 import userInfo, { isUserInfoIncomplete } from "./slices/userInfoSlice";
 import savingTimetable from "./slices/savingTimetableSlice";
 import classmates from "./slices/classmatesSlice";
-import optionalCourses from "./slices/optionalCoursesSlice";
 import advancedSearch, {
   getAdvancedSearchResultIds,
 } from "./slices/advancedSearchSlice";
@@ -58,7 +57,6 @@ export const reducers = {
   advancedSearch,
   friends,
   newsModal,
-  optionalCourses,
   peerModal,
   preferences,
   registrar,

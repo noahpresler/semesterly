@@ -52,7 +52,6 @@ export const receiveClassmates = (json) => (dispatch) =>
 
 const getSaveTimetablesRequestBody = (state) => {
   const tt = getActiveTimetable(state);
-  // TODO: optional courses?
   return {
     slots: tt.slots,
     events: state.customEvents.events,

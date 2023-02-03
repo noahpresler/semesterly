@@ -54,7 +54,6 @@ const CompareTimetableSideBar = () => {
         fetchCourseInfo={() => dispatch(fetchCourseInfo(course.id))}
         getShareLink={(courseCode: string) => getCourseShareLink(courseCode, semester)}
         colorData={colorData}
-        onTimetable
         hideCloseButton
       />
     );
