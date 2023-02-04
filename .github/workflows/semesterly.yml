@@ -1,3 +1,4 @@
+# Builds Semester.ly and runs tests
 name: Semesterly CI
 
 on:

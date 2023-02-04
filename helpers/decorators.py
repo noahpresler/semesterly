@@ -19,8 +19,8 @@ from parsing.schools.active import ACTIVE_SCHOOLS
 
 def validate_subdomain(view_func):
     """
-    Validates subdomain, redirecting user to
-    index iof the school is invalid.
+    Validates subdomain (jhu, uoft), redirecting user to
+    index if the school is invalid.
     """
 
     @wraps(view_func)
