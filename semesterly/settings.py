@@ -356,5 +356,5 @@ if not DEBUG:
     rollbar.init(**ROLLBAR)
 
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG # show django debug toolbar if debug mode
+    "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG  # show django debug toolbar if debug mode
 }
