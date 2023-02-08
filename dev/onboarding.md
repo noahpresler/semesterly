@@ -48,6 +48,14 @@ Once you have answered all of the questions, create a pull request (PR) and I wi
 you a review to ensure you've got the important parts. You can then delete your
 `onboarding` branch.
 
+## Adding Yourself
+
+After completing the questions on docs, your first task is to add yourself to
+[Semester.ly's about page](https://semester.ly/about)! You will want to add an image of
+yourself in `static/img/` and create a portrait of yourself in the `about.html` file.
+Using what you've learned about our practices from the documentation quiz, see if you
+can complete this task in our preferred workflow!
+
 ## Moving Forwards
 
 Before you get started on team projects, I would like to assign you a small task and
