@@ -86,5 +86,8 @@ if getattr(settings, "DEBUG", True):
             schema_view.with_ui("swagger", cache_timeout=0),
             name="schema-swagger-ui",
         ),
+    ]
+if settings.SHOW_DEBUG_TOOLBAR:
+    urlpatterns += [
         re_path(r"^__debug__/", include("debug_toolbar.urls")),
     ]
