@@ -9,7 +9,7 @@ bs4==0.0.1
 django-ckeditor==6.2.0 
 celery==5.2.2
 coverage==4.4.1
-cryptography==36.0.1
+cryptography==39.0.1
 dateparser==1.1.0
 Django==3.2.17
 django-cachalot==2.4.3
