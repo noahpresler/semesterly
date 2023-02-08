@@ -87,3 +87,7 @@ if getattr(settings, "DEBUG", True):
             name="schema-swagger-ui",
         ),
     ]
+if settings.SHOW_DEBUG_TOOLBAR:
+    urlpatterns += [
+        re_path(r"^__debug__/", include("debug_toolbar.urls")),
+    ]

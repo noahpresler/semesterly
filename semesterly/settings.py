@@ -62,6 +62,8 @@ SECRET_KEY = get_secret("SECRET_KEY")
 
 DEBUG = True
 
+SHOW_DEBUG_TOOLBAR = False
+
 ALLOWED_HOSTS = ["*"]
 
 USE_X_FORWARDED_HOST = True
@@ -352,3 +354,8 @@ if not DEBUG:
     import rollbar
 
     rollbar.init(**ROLLBAR)
+
+if SHOW_DEBUG_TOOLBAR:
+    DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: True}
+    INSTALLED_APPS += ("debug_toolbar",)
+    MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware",)
