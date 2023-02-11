@@ -20,7 +20,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from analytics.views import save_analytics_course_search
-from courses.serializers import CourseSerializer
+from courses.serializers import CourseSerializer, CourseSearchSerializer
 from searches.utils import search
 from student.utils import get_student
 from timetable.models import Semester
@@ -48,11 +48,11 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
             course_match_data = []
         else:
             paginated_data = paginator.page(cur_page)
-            course_match_data = CourseSerializer(
+            course_match_data = CourseSearchSerializer(
                 paginated_data, context={"semester": sem, "school": school}, many=True
             ).data
 
-        self.save_analytic(request, query, course_matches, sem)
+        # self.save_analytic(request, query, course_matches, sem)
         return Response(
             {"data": course_match_data, "page": cur_page}, status=status.HTTP_200_OK
         )

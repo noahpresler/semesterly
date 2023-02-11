@@ -31,6 +31,25 @@ class EvaluationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CourseSearchSerializer(serializers.ModelSerializer):
+    sections = serializers.SerializerMethodField()
+
+    def get_sections(self, course):
+        return [
+            SectionSerializer(section).data
+            for section in course.section_set.filter(semester=self.context["semester"])
+        ]
+
+    class Meta:
+        model = Course
+        fields = fields = (
+            "code",
+            "name",
+            "id",
+            "sections",
+        )
+
+
 class CourseSerializer(serializers.ModelSerializer):
     """
     Serialize a Course into a dictionary with detailed information about the course, and
