@@ -42,10 +42,11 @@ class CourseSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
+        ordering = ['-id']
         fields = fields = (
+            "id",
             "code",
             "name",
-            "id",
             "sections",
         )
 
