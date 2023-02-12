@@ -51,7 +51,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                 paginated_data, context={"semester": sem, "school": school}, many=True
             ).data
 
-        # self.save_analytic(request, query, course_matches, sem)
+        self.save_analytic(request, query, course_matches, sem)
         return Response(
             {"data": course_match_data, "page": cur_page}, status=status.HTTP_200_OK
         )
