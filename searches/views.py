@@ -36,7 +36,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
 
-        course_matches = search(request.subdomain, query, sem).distinct()
+        course_matches = search(request.subdomain, query, sem).distinct().order_by("id")
 
         courses_per_page = int(request.GET.get("limit", 10))
         paginator = Paginator(course_matches, courses_per_page)
