@@ -20,7 +20,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from analytics.views import save_analytics_course_search
-from courses.serializers import CourseSerializer
+from courses.serializers import CourseSerializer, CourseSearchSerializer
 from searches.utils import search
 from student.utils import get_student
 from timetable.models import Semester
@@ -36,8 +36,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
 
-        # grab first 10 results
-        course_matches = search(request.subdomain, query, sem).distinct()[:10]
+        course_matches = search(request.subdomain, query, sem)
 
         courses_per_page = int(request.GET.get("limit", 10))
         paginator = Paginator(course_matches, courses_per_page)
@@ -48,7 +47,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
             course_match_data = []
         else:
             paginated_data = paginator.page(cur_page)
-            course_match_data = CourseSerializer(
+            course_match_data = CourseSearchSerializer(
                 paginated_data, context={"semester": sem, "school": school}, many=True
             ).data
 
@@ -74,7 +73,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         filters = request.data.get("filters", {})
         course_matches = search(school, query, sem)
         course_matches = self.filter_course_matches(course_matches, filters, sem)
-        course_matches = course_matches.distinct()[:100]  # prevent timeout
+        course_matches = course_matches[:100]  # prevent timeout
         self.save_analytic(request, query, course_matches, sem, True)
         student = get_student(request)
         serializer_context = {

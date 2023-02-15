@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 
 import operator
-from django.db.models import Q
+from django.db.models import Q, Count
 from timetable.models import Course
 from functools import reduce
 
@@ -24,8 +24,14 @@ def search(school, query, semester):
     course_name_contains_query = reduce(
         operator.and_, list(map(course_name_contains_token, query_tokens))
     )
-    return Course.objects.filter(
-        Q(school=school) & course_name_contains_query & Q(section__semester=semester)
+    return (
+        Course.objects.filter(
+            Q(school=school)
+            & course_name_contains_query
+            & Q(section__semester=semester)
+        )
+        .annotate(id_count=Count("id"))
+        .order_by("id")
     )
 
 
