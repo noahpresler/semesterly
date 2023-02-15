@@ -24,9 +24,15 @@ def search(school, query, semester):
     course_name_contains_query = reduce(
         operator.and_, list(map(course_name_contains_token, query_tokens))
     )
-    return Course.objects.filter(
-        Q(school=school) & course_name_contains_query & Q(section__semester=semester)
-    ).annotate(id_count=Count('id')).order_by("id")
+    return (
+        Course.objects.filter(
+            Q(school=school)
+            & course_name_contains_query
+            & Q(section__semester=semester)
+        )
+        .annotate(id_count=Count("id"))
+        .order_by("id")
+    )
 
 
 def course_name_contains_token(token):
