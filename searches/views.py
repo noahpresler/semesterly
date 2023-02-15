@@ -36,7 +36,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
 
-        course_matches = search(request.subdomain, query, sem).distinct().order_by("id")
+        course_matches = search(request.subdomain, query, sem)
 
         courses_per_page = int(request.GET.get("limit", 10))
         paginator = Paginator(course_matches, courses_per_page)
@@ -51,7 +51,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                 paginated_data, context={"semester": sem, "school": school}, many=True
             ).data
 
-        self.save_analytic(request, query, course_matches, sem)
+        #self.save_analytic(request, query, course_matches, sem)
         return Response(
             {"data": course_match_data, "page": cur_page}, status=status.HTTP_200_OK
         )
@@ -73,7 +73,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         filters = request.data.get("filters", {})
         course_matches = search(school, query, sem)
         course_matches = self.filter_course_matches(course_matches, filters, sem)
-        course_matches = course_matches.distinct()[:100]  # prevent timeout
+        course_matches = course_matches[:100]  # prevent timeout
         self.save_analytic(request, query, course_matches, sem, True)
         student = get_student(request)
         serializer_context = {
