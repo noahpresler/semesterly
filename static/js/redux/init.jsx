@@ -65,13 +65,6 @@ const handleFlows = (featureFlow) => (dispatch) => {
     case "USER_ACQ":
       dispatch(userAcquisitionModalActions.triggerAcquisitionModal());
       break;
-    // case 'GCAL_CALLBACK':
-    // hide settings info modal until user is finished adding to gcal
-    // dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: true });
-    // dispatch(saveCalendarModalActions.triggerSaveCalendarModal());
-    // dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: false });
-    // dispatch(addTTtoGCal());
-    // break;
     case "EXPORT_CALENDAR":
       dispatch(saveCalendarModalActions.triggerSaveCalendarModal());
       break;

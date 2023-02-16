@@ -100,31 +100,6 @@ export const fetchSISTimetableData = () => (dispatch, getState) => {
   return sisData;
 };
 
-// export const addTTtoGCal = () => (dispatch, getState) => {
-//   const state = getState();
-//
-//   if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
-//     dispatch({ type: ActionTypes.UPLOAD_CALENDAR });
-//     fetch(getAddTTtoGCalEndpoint(), {
-//       headers: {
-//         'X-CSRFToken': Cookie.get('csrftoken'),
-//         Accept: 'application/json',
-//         'Content-Type': 'application/json',
-//       },
-//       method: 'POST',
-//       body: JSON.stringify({
-//         timetable: getActiveDenormTimetable(state),
-//         semester: getCurrentSemester(state),
-//       }),
-//       credentials: 'include',
-//     })
-//       .then(response => response.json())
-//       .then(() => {
-//         dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
-//       });
-//   }
-// };
-
 export const createICalFromTimetable = () => (dispatch, getState) => {
   const state = getState();
   if (

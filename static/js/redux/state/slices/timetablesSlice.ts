@@ -43,6 +43,9 @@ const initialState: TimetablesSliceState = {
   lastCourseAdded: null, // either int (course id), object (custom slots state), or null
 };
 
+/**
+ * Stores information about all timetables that the user has created. 
+ */
 const timetablesSlice = createSlice({
   name: "timetables",
   initialState,

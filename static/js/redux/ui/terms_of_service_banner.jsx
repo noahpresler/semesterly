@@ -16,6 +16,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 
+
+/**
+ * The terms of service banner appears when the user is using Semester.ly while not
+ * logged in, and says that by continuing to use Semester.ly, they agree to the terms of
+ * service.
+ */
 class TermsOfServiceBanner extends React.Component {
   constructor(props) {
     super(props);

@@ -55,6 +55,11 @@ export const setActiveTimetable = (newActive) => (dispatch) => {
   dispatch(autoSave());
 };
 
+/**
+ * Completely re-generates a timetable based on the current state of the app. Try to
+ * avoid using this unless necessary because it is an expensive operation (needs
+ * refactoring). 
+ */
 export const fetchTimetables =
   (requestBody, removing, newActive = 0) =>
   (dispatch, getState) => {

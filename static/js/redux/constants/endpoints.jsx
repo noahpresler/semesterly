@@ -13,7 +13,6 @@ GNU General Public License for more details.
 */
 
 /* server endpoints */
-// export const getAddTTtoGCalEndpoint = () => '/user/gcal/';
 export const getLogiCalEndpoint = () => "/user/log_ical/";
 export const getCourseInfoEndpoint = (courseId, semester) =>
   `/courses/${semester}/id/${courseId}/`;
