@@ -23,7 +23,7 @@ Ingest
 
     python manage.py ingest [SCHOOLCODE] --years [YEARS] --terms [TERMS]
 
-For example, use ``python manage.py ingest jhu --years 2022 --terms Spring`` to parse
+For example, use ``python manage.py ingest jhu --years 2023 --terms Spring`` to parse
 Spring 2022 courses. You may also leave out the school code to parse all schools. This
 will run for a substantial amount of time and is not recommended.
 
