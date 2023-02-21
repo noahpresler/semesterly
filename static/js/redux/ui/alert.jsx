@@ -16,6 +16,10 @@ import PropTypes from "prop-types";
 import React from "react";
 import classnames from "classnames";
 
+/**
+ * This component wraps actual alerts and tracks when to close the alert (timer or
+ * button clicked).
+ */
 class Alert extends React.Component {
   constructor(props) {
     super(props);

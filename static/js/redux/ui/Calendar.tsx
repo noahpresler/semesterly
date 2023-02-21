@@ -68,6 +68,9 @@ const getTimelineStyle = (endHour: number) => {
   return { top, zIndex: 1 };
 };
 
+/**
+ * This component is a single row of the calendar representing a single time.
+ */
 const Row = (props: RowProps) => {
   const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
   const days = showWeekend ? DAYS : DAYS.slice(0, 5);
@@ -91,6 +94,9 @@ const Row = (props: RowProps) => {
   );
 };
 
+/**
+ * This component displays the switch to toggle weekends on/off.
+ */
 export const ShowWeekendsSwitch = (props: { isMobile: boolean }) => {
   const showWeekend = useAppSelector((state) => state.preferences.showWeekend);
   const dispatch = useDispatch();
@@ -121,6 +127,10 @@ export const ShowWeekendsSwitch = (props: { isMobile: boolean }) => {
   return props.isMobile ? button : <div className="cal-btn-wrapper">{button}</div>;
 };
 
+/**
+ * This component is the calendar which renders the timetable. It seems that the author
+ * tried to create a calendar structure using HTML tables.
+ */
 const Calendar = (props: CalendarProps) => {
   const dispatch = useDispatch();
 
