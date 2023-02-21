@@ -41,7 +41,8 @@ The preferred format is "Topic: Message", where message should be in the imperat
 8. What linters do we run against our code?
 ```
 ESLint
-Prettier (technically not a linter I guess?)
+Prettier
+Black
 ```
 
 9. What is a FeatureFlowView?
