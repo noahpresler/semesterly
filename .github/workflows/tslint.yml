@@ -27,4 +27,4 @@ jobs:
       - name: Run Prettier
         run: npx prettier "**/*.{js,jsx,ts,tsx}" --check
       - name: Run ESLint
-        run: eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0
