@@ -24,7 +24,7 @@ Ingest
     python manage.py ingest [SCHOOLCODE] --years [YEARS] --terms [TERMS]
 
 For example, use ``python manage.py ingest jhu --years 2023 --terms Spring`` to parse
-Spring 2022 courses. You may also leave out the school code to parse all schools. This
+Spring 2023 courses. You may also leave out the school code to parse all schools. This
 will run for a substantial amount of time and is not recommended.
 
 .. note:: If you have ingested before and still have the JSON file on your device, you may skip ingesting and simply digest the old data. This is useful if you are resetting your database during development and wish to quickly reload course data.
