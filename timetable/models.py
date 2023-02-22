@@ -35,10 +35,10 @@ class Semester(models.Model):
     year = models.CharField(max_length=4)
 
     def __unicode__(self):
-        return "{} {}".format(self.name, self.year)
+        return f"{self.name} {self.year}"
 
     def __str__(self):
-        return "{} {}".format(self.name, self.year)
+        return f"{self.name} {self.year}"
 
 
 class Course(models.Model):
@@ -293,6 +293,7 @@ class CourseIntegration(models.Model):
     semester = models.ManyToManyField(Semester)
 
 
+# Abstract model, see PersonalTimetable, DisplayTimetable, and SharedTimetable
 class Timetable(models.Model):
     courses = models.ManyToManyField(Course)
     sections = models.ManyToManyField(Section)

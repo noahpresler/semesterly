@@ -252,7 +252,7 @@ def can_potentially_conflict(
 def find_slots_to_fill(start, end, school):
     """
     Take a @start and @end time in the format found in the coursefinder (e.g. 9:00, 16:30),
-    and return the indices of the slots in thet array which represents times from 8:00am
+    and return the indices of the slots in the array which represents times from 8:00am
     to 10pm that would be filled by the given @start and @end. For example, for uoft
     input: '10:30', '13:00'
     output: [5, 6, 7, 8, 9]
