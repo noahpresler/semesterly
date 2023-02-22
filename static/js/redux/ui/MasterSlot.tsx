@@ -47,6 +47,11 @@ type MasterSlotProps = {
   colorData: SlotColorData[];
 };
 
+/**
+ * This component renders course slots in the SideBar, CourseModalBody, and
+ * CompareTimetableSidebar, displaying the course code, name, professor, and credits.
+ * It can also show the number of friends taking the course, and a share link.
+ */
 const MasterSlot = (props: MasterSlotProps) => {
   const isComparingTt = useAppSelector((state) => state.compareTimetable.isComparing);
   const [shareLinkShown, setShareLinkShown] = useState(false);

@@ -56,7 +56,7 @@ const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatc
   }
 };
 
-// handle feature flows
+// handle feature flows (see FeatureFlowView in mixins.py)
 const handleFlows = (featureFlow) => (dispatch) => {
   switch (featureFlow.name) {
     case "SIGNUP":
@@ -93,6 +93,7 @@ const handleFlows = (featureFlow) => (dispatch) => {
   }
 };
 
+// Setup initial redux state with timetables, semesters, school info, etc.
 const setup = () => (dispatch) => {
   initData = JSON.parse(initData);
 
@@ -121,6 +122,7 @@ const setup = () => (dispatch) => {
 
 store.dispatch(setup());
 
+// Finally, render the Semesterly component
 render(
   <Provider store={store}>
     <DndProvider backend={HTML5Backend}>

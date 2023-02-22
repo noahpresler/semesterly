@@ -40,6 +40,11 @@ import SideBar from "./SideBar";
 import CompareTimetableSideBar from "./CompareTimetableSidebar";
 import { selectTheme } from "../state/slices/themeSlice";
 
+/**
+ * This component is the high level container for the entire app. It contains all of the
+ * modals, renders the top bar, side bar, timetable, displays links at the bottom of
+ * the timetable, and handles the state of alerts. 
+ */
 const Semesterly = () => {
   const dispatch = useAppDispatch();
 
@@ -52,9 +57,6 @@ const Semesterly = () => {
     (state) => state.alerts.alertDeleteTimetable
   );
 
-  const activeTTLength = useAppSelector(
-    (state) => getActiveTimetableCourses(state).length
-  );
   const alertNewTimetable = useAppSelector((state) => state.alerts.alertNewTimetable);
   const alertTimetableExists = useAppSelector(
     (state) => state.alerts.alertTimetableExists

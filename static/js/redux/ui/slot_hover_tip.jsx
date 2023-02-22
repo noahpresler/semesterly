@@ -17,6 +17,11 @@ import React from "react";
 import { useAppSelector } from "../hooks";
 import { selectSlotColorData } from "../state/slices/themeSlice";
 
+/**
+ * This component appears in the CourseModalBody and is used to link to other courses
+ * for pre-requisites and co-requisites. When hovered over, the underlined course code
+ * also displays the course name, and clicking on it will link to that course.
+ */
 const SlotHoverTip = ({ num, code, name, getShareLinkFromModal }) => {
   const colorData = useAppSelector(selectSlotColorData);
   const maxColourIndex = colorData.length - 1;

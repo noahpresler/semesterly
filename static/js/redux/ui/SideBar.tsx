@@ -27,7 +27,6 @@ import {
   getActiveTimetableCourses,
   getCoursesFromSlots,
   getCurrentSemester,
-  getDenormCourseById,
 } from "../state";
 import { getCourseShareLink } from "../constants/endpoints";
 import {
@@ -42,6 +41,12 @@ import AvgCourseRating from "./AvgCourseRating";
 import { selectSlotColorData, selectTheme } from "../state/slices/themeSlice";
 import { peerModalActions } from "../state/slices/peerModalSlice";
 
+/**
+ * This component displays the timetable name, allows you to switch between timetables,
+ * shows credits and average course rating, contains the "Find New Friends" link to open
+ * the PeerModal, and mainly displays all of the courses on the student's current
+ * timetable using MasterSlots.
+ */
 const SideBar = () => {
   const dispatch = useAppDispatch();
   const colorData = useAppSelector(selectSlotColorData);
