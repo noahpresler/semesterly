@@ -20,7 +20,7 @@ import Modal from "./Modal";
 
 /**
  * This modal appears when a student tries to log in or sign up (it should really be
- * called the LoginModal). It allows the student to log in with Google, Facebook or 
+ * called the LoginModal). It allows the student to log in with Google, Facebook or
  * JHED.
  */
 const UserAcquisitionModal = () => {

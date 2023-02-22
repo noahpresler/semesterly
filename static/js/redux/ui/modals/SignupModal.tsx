@@ -21,7 +21,7 @@ import { signupModalActions } from "../../state/slices/signupModalSlice";
 import Modal from "./Modal";
 
 /**
- * This modal pops up when a non-logged in student tries to access a feature that 
+ * This modal pops up when a non-logged in student tries to access a feature that
  * requires an account. It will prompt them to sign up via Facebook.
  */
 const SignupModal = () => {

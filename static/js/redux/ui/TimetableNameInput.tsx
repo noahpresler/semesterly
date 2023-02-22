@@ -22,7 +22,7 @@ import { RootState } from "../state/index";
 /**
  * This is the input field for the timetable name found in the Sidebar. Students can set
  * their timetable name to a non-empty string that doesn't conflict with another
- * timetable name. 
+ * timetable name.
  */
 const TimetableNameInput = () => {
   // select redux state, same as mapStateToProps

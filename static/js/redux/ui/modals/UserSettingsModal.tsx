@@ -38,7 +38,7 @@ const modalStyle = {
 /**
  * This modal appears after a user signs up. It allows them to set their major and class
  * year, and also to opt-in to social features. It doubles as a settings modal, allowing
- * the student to change their major and class year at any time or delete their account. 
+ * the student to change their major and class year at any time or delete their account.
  */
 const UserSettingsModal = () => {
   const {

@@ -19,7 +19,7 @@ import renderHTML from "react-render-html";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
 /**
- * This component renders a single evaluation, displaying the year, professor, stars, 
+ * This component renders a single evaluation, displaying the year, professor, stars,
  * and summary of the evaluation.
  */
 class Evaluation extends React.Component {

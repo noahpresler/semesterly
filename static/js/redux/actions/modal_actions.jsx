@@ -47,7 +47,7 @@ export const fetchCourseInfo = (courseId) => (dispatch, getState) => {
 };
 
 /**
- * 
+ *
  * @param cid The course's id
  * @param title The title of the emoji (e.g. "LOVE")
  */

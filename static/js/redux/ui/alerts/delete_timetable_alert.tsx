@@ -19,7 +19,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 
 /**
  * This alert pops up when a user tries to delete a timetable to ensure that they don't
- * accidentally delete their timetable. 
+ * accidentally delete their timetable.
  */
 const DeleteTimetableAlert = () => {
   const dispatch = useAppDispatch();

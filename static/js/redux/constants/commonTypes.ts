@@ -39,8 +39,8 @@ export type ThemeObject = {
 
 /**
  * Offering refers to a class period of a section of a course.
- * Example: 
- *  Data Structures (Course) has 2 sections (Section) and in one of the sections, 
+ * Example:
+ *  Data Structures (Course) has 2 sections (Section) and in one of the sections,
  *    there's three days they meet (Offering).
  *  Offering 1: Monday 1:30pm - 2:45pm in Shaffer 273
  *  Offering 2: Wednesday 1:30pm - 2:45pm in Shaffer 273
@@ -156,8 +156,8 @@ export interface Course {
 }
 
 /**
- * RelatedCourse is a course that is related to the current course based on some 
- * criteria. This is a feature that isn't currently maintained, but is still used in the 
+ * RelatedCourse is a course that is related to the current course based on some
+ * criteria. This is a feature that isn't currently maintained, but is still used in the
  * codebase.
  */
 export interface RelatedCourse {

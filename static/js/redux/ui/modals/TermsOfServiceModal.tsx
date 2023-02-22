@@ -18,7 +18,6 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getIsUserInfoIncomplete } from "../../state";
 import Modal from "./Modal";
 
-
 /**
  * The terms of service modal appears after the user logs in, and forces them to agree
  * that by continuing to use Semester.ly, they agree to the terms of service.

@@ -53,7 +53,6 @@ export const maybeSetSemester = (semester) => (dispatch, getState) => {
   return null;
 };
 
-
 export const setSemester = (semester) => (dispatch, getState) => {
   const state = getState();
 

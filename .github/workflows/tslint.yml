@@ -23,10 +23,7 @@ jobs:
           node-version: 14
           cache: "npm"
       - name: Install Dependencies
-        run: |
-          npm install
-          npm install -g eslint
-          npm install -g prettier
+        run: npm install
       - name: Run Prettier
         run: npx prettier "**/*.{js,jsx,ts,tsx}" --check
       - name: Run ESLint

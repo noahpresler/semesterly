@@ -44,7 +44,7 @@ const initialState: TimetablesSliceState = {
 };
 
 /**
- * Stores information about all timetables that the user has created. 
+ * Stores information about all timetables that the user has created.
  */
 const timetablesSlice = createSlice({
   name: "timetables",
