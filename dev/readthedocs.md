@@ -33,7 +33,7 @@ It is preferred that you follow the commit message convention of “Topic: Messa
 
 1. What linters do we run against our code?
 
-ESLint, Prettier
+ESLint, Prettier, Black
 
 1. What is a FeatureFlowView?
 When a user loads the home timetable page, FeatureFlowView inside of timetable.utils is used to handle the request. On initial page load, the frontend requires some data to initialize the redux state, like information about the current user, the list of possible semesters for the school, and the list of student integrations. This initial data is created inside of the view, and passed in as a single json string in the response context.
