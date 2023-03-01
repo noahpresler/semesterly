@@ -60,7 +60,7 @@ def get_secret(key):
 
 SECRET_KEY = get_secret("SECRET_KEY")
 
-DEBUG = True
+DEBUG = False
 
 SHOW_DEBUG_TOOLBAR = False
 
