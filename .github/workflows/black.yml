@@ -1,3 +1,4 @@
+# Runs the backend linter: black
 name: Backend Linter
 
 on:

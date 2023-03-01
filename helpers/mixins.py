@@ -32,7 +32,7 @@ from timetable.utils import get_current_semesters
 
 class ValidateSubdomainMixin:
     """
-    Mixin which validates subdomain, redirecting user to index if the school
+    Mixin which validates subdomain (jhu, uoft), redirecting user to index if the school
     is not in :obj:`ACTIVE_SCHOOLS`.
     """
 
@@ -46,8 +46,8 @@ class ValidateSubdomainMixin:
 
 class FeatureFlowView(ValidateSubdomainMixin, APIView):
     """
-    Template that handles GET requests by rendering the homepage. Feature_name or get_feature_flow()
-    can be overridden to launch a feature or action on homepage load.
+    Template that handles GET requests by rendering the homepage. Feature_name or
+    get_feature_flow() can be overridden to launch a feature or action on homepage load.
     """
 
     feature_name = None

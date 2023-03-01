@@ -12,9 +12,14 @@ import {
   getCourseShareLink,
   getCourseShareLinkFromModal,
 } from "../../constants/endpoints";
-import { addOrRemoveCourse, addOrRemoveOptionalCourse } from "../../actions";
+import { addOrRemoveCourse } from "../../actions";
 import Modal from "./Modal";
 
+/**
+ * This modal pops up when a student clicks on a course in the search results or when
+ * they click on a course slot in their timetable. It displays information about the
+ * course, such as the name, description, and sections.
+ */
 const CourseModal = () => {
   const [shareLinkShown, setShareLinkShown] = useState(false);
   const [addBtnIsHover, setAddBtnIsHover] = useState(false);
@@ -75,17 +80,6 @@ const CourseModal = () => {
       onClickOut={() => setShareLinkShown(false)}
     />
   ) : null;
-  const addOptional = inRoster ? null : (
-    <div
-      className="modal-save"
-      onClick={() => {
-        dispatch(addOrRemoveOptionalCourse(course));
-        hide();
-      }}
-    >
-      <i className="fa fa-bookmark" />
-    </div>
-  );
   const add =
     course?.sections !== undefined && Object.keys(course?.sections).length > 0 ? (
       <div
@@ -129,7 +123,6 @@ const CourseModal = () => {
           <i className="fa fa-share-alt" onClick={showShareLink} />
         </div>
         {shareLink}
-        {!isComparingTimetables && addOptional}
         {!isComparingTimetables && add}
       </div>
       <CourseModalBody course={course} hideModal={hide} isFetching={isFetching} />

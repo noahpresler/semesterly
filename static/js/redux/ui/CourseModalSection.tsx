@@ -45,6 +45,9 @@ export const parseInstructors = (instr: string) => {
   return parsedInstrs;
 };
 
+/**
+ * This component displays the section information in the CourseModalBody.
+ */
 const CourseModalSection = (props: CourseModalSectionProps) => {
   const seats = props.size - props.enrolment;
   let seatStatus = props.waitlist > 0 ? `${props.waitlist} waitlist` : `${seats} open`;

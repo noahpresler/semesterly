@@ -15,6 +15,10 @@ GNU General Public License for more details.
 import PropTypes from "prop-types";
 import React from "react";
 
+/**
+ * This alert pops up when the user is trying to rename a timetable to a name that
+ * already exists.
+ */
 class TimetableExistsAlert extends React.Component {
   componentWillUnmount() {
     this.props.dismissSelf();

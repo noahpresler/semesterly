@@ -38,7 +38,13 @@ export type ThemeObject = {
 };
 
 /**
- * Offering refers to a class period of a section of a course
+ * Offering refers to a class period of a section of a course.
+ * Example:
+ *  Data Structures (Course) has 2 sections (Section) and in one of the sections,
+ *    there's three days they meet (Offering).
+ *  Offering 1: Monday 1:30pm - 2:45pm in Shaffer 273
+ *  Offering 2: Wednesday 1:30pm - 2:45pm in Shaffer 273
+ *  Offering 3: Friday 1:30pm - 2:45pm in Shaffer 273
  */
 export interface Offering {
   id: number;
@@ -52,9 +58,6 @@ export interface Offering {
   section: number;
 }
 
-/**
- * Secion contains multiple offerings
- */
 export interface Section {
   course_section_id: number;
   meeting_section: string;
@@ -69,24 +72,27 @@ export interface Section {
   waitlist_size: number;
 }
 
+/**
+ * Used in the entitiesSlice; offerings are ids instead of objects.
+ */
 export interface EntitySection extends Omit<Section, "offering_set"> {
   offering_set: number[];
 }
 
 /**
- * Slot stores section and offering information regarding a course
+ * Slot stores section and offering information regarding a course (all ids)
  */
 export interface Slot {
   course: number;
   section: number;
   offerings: number[];
-  is_optional: boolean;
   is_locked: boolean;
   is_section_filled?: boolean;
 }
 
 /**
- * Event refers to a custom event created by user
+ * Event refers to a custom event created by user. There are some extra fields to
+ * indicate whether the event is being created (preview).
  */
 export interface Event {
   day: Day;
@@ -103,7 +109,7 @@ export interface Event {
 }
 
 /**
- * Timetable stores info of course slots and custom events
+ * Timetable stores info of course slots and custom events.
  */
 export interface Timetable {
   id: number;
@@ -116,7 +122,7 @@ export interface Timetable {
 }
 
 /**
- * Course reactions
+ * Course reactions (emojis)
  */
 export interface Reaction {
   title: string;
@@ -149,6 +155,11 @@ export interface Course {
   slots?: Slot[];
 }
 
+/**
+ * RelatedCourse is a course that is related to the current course based on some
+ * criteria. This is a feature that isn't currently maintained, but is still used in the
+ * codebase.
+ */
 export interface RelatedCourse {
   code: string;
   name: string;
@@ -168,35 +179,14 @@ export interface HoveredSlot {
   course: Course | DenormalizedCourse;
   section: Section;
   offerings: Offering[];
-  is_optional: boolean;
   is_locked: boolean;
 }
 
-export interface NormalizedCourse extends RelatedCourse {
-  related_courses: RelatedCourse[];
-}
-
-export interface NormalizedSection {
-  id: number;
-  meeting_section: string;
-  size: number;
-  enrolment: number;
-  waitlist: number;
-  waitlist_size: number;
-  section_type: string;
-  instructors: string;
-  semseter: Semester;
-  custom?: boolean;
-}
-
-export interface DenormalizedSlot {
-  course: NormalizedCourse;
-  section: NormalizedSection;
-  offerings: Offering[];
-  is_optional: boolean;
-  is_locked: boolean;
-}
-
+/**
+ * Denormalized means that the course object has the sections as objects instead of ids.
+ * It's used in cases where we want to access information on the sections of the course
+ * in addition to the course itself.
+ */
 export interface DenormalizedCourse extends Omit<Course, "sections"> {
   sections: Section[];
 }
@@ -206,12 +196,6 @@ export interface TermOfServiceAgreement {
   description: string;
   url: string;
 }
-
-export type SearchMetrics =
-  | "days with class"
-  | "number of conflicts"
-  | "time on campus"
-  | "course rating stars";
 
 export interface Peer {
   class_year: number;

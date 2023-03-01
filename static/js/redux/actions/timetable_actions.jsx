@@ -47,11 +47,6 @@ import { courseSectionsActions } from "../state/slices/courseSectionsSlice";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { convertToMinutes } from "../ui/slotUtils";
 import { preferencesActions } from "../state/slices/preferencesSlice";
-import {
-  addRemoveOptionalCourse,
-  clearOptionalCourses,
-  removeOptionalCourseById,
-} from "../state/slices/optionalCoursesSlice";
 import { savingTimetableActions } from "../state/slices/savingTimetableSlice";
 import { selectTheme } from "../state/slices/themeSlice";
 
@@ -60,6 +55,11 @@ export const setActiveTimetable = (newActive) => (dispatch) => {
   dispatch(autoSave());
 };
 
+/**
+ * Completely re-generates a timetable based on the current state of the app. Try to
+ * avoid using this unless necessary because it is an expensive operation (needs
+ * refactoring).
+ */
 export const fetchTimetables =
   (requestBody, removing, newActive = 0) =>
   (dispatch, getState) => {
@@ -231,7 +231,6 @@ export const nullifyTimetable = () => (dispatch) => {
       upToDate: false,
     })
   );
-  dispatch(clearOptionalCourses());
   dispatch(customEventsActions.clearCustomEvents());
 };
 
@@ -351,11 +350,7 @@ export const addOrRemoveCourse =
 
     const removing =
       state.courseSections.objects[courseId] !== undefined && section === "";
-    let reqBody = getBaseReqBody(state);
-    if (state.optionalCourses.courses.some((c) => c === courseId)) {
-      dispatch(removeOptionalCourseById(courseId));
-      reqBody = getBaseReqBody(state);
-    }
+    const reqBody = getBaseReqBody(state);
 
     state = getState();
     if (removing) {
@@ -363,8 +358,6 @@ export const addOrRemoveCourse =
       delete updatedCourseSections[courseId]; // remove it from courseSections.objects
       reqBody.courseSections = updatedCourseSections;
       Object.assign(reqBody, {
-        optionCourses: state.optionalCourses.courses,
-        numOptionCourses: state.optionalCourses.numRequired,
         customEvents: state.customEvents,
       });
     } else {
@@ -378,8 +371,6 @@ export const addOrRemoveCourse =
             section_codes: [section],
           },
         ],
-        optionCourses: state.optionalCourses.courses,
-        numOptionCourses: state.optionalCourses.numRequired,
         customEvents: state.customEvents,
       });
     }
@@ -527,24 +518,4 @@ export const finalizeCustomSlot = (id) => (dispatch, getState) => {
       );
       dispatch(savingTimetableActions.setUpToDate(true));
     });
-};
-
-export const addOrRemoveOptionalCourse = (course) => (dispatch, getState) => {
-  const removing = getState().optionalCourses.courses.some((c) => c === course.id);
-  if (getState().timetables.isFetching) {
-    return;
-  }
-
-  dispatch(addRemoveOptionalCourse(course.id));
-  const state = getState(); // the above dispatched action changes the state
-  const reqBody = getBaseReqBody(state);
-  const { optionalCourses } = state;
-
-  const optionCourses = optionalCourses.courses;
-
-  Object.assign(reqBody, {
-    optionCourses,
-    numOptionCourses: state.optionalCourses.numRequired,
-  });
-  dispatch(fetchTimetables(reqBody, removing));
 };

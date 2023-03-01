@@ -38,6 +38,11 @@ type CourseModalBodyProps = {
   isFetching: boolean;
 };
 
+/**
+ * This is a helper component that displays information about a course, such as the
+ * name, description, and sections. It's used in both the CourseModal and
+ * AdvancedSearchModal.
+ */
 const CourseModalBody = (props: CourseModalBodyProps) => {
   const mobileWidth = 767;
   const [isMobile, setIsMobile] = useState(window.innerWidth < mobileWidth);
@@ -233,7 +238,6 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
             course={rc}
             professors={null}
             colourIndex={Math.min(i, maxColourIndex)}
-            onTimetable
             hideCloseButton
             inModal
             fetchCourseInfo={() => dispatch(fetchCourseInfo(rc.id))}

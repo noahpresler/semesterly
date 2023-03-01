@@ -40,6 +40,10 @@ const abbreviateYear = (year: string) => year.replace("20", "'");
 const getAbbreviatedSemesterName = (semester: Semester) =>
   `${abbreviateSemesterName(semester.name)}${abbreviateYear(semester.year)}`;
 
+/**
+ * This component renders the search bar at the top of the screen, handles search and
+ * search results, and also contains the semester select dropdown.
+ */
 const SearchBar = () => {
   const advancedSearchModalIsVisible = useAppSelector(
     (state) => state.advancedSearch.isVisible

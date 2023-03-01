@@ -24,6 +24,10 @@ type RodalProps = {
   onAnimationEnd?: () => never;
 };
 
+/**
+ * This is the generic modal component that is used for all modals. It is a wrapper of
+ * the Rodal library.
+ */
 const Modal = (props: RodalProps) => {
   if ("visible" in props) {
     const shouldRenderPopup = useDelayUnmount(props.visible, 500);

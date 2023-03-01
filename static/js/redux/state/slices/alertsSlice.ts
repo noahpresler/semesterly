@@ -9,9 +9,6 @@ interface AlertsSliceState {
   alertTimetableExists: boolean;
   alertChangeSemester: boolean;
   alertNewTimetable: boolean;
-  alertEnableNotifications: boolean;
-  alertFacebookFriends: boolean;
-  facebookAlertIsOn: boolean;
   mostFriendsClassId: null | number;
   mostFriendsCount: number;
   totalFriendsCount: number;
@@ -25,9 +22,6 @@ const initialState: AlertsSliceState = {
   alertTimetableExists: false,
   alertChangeSemester: false,
   alertNewTimetable: false,
-  alertEnableNotifications: false,
-  alertFacebookFriends: false,
-  facebookAlertIsOn: false,
   mostFriendsClassId: null,
   mostFriendsCount: 0,
   totalFriendsCount: 0,
@@ -72,13 +66,6 @@ const alertsSlice = createSlice({
     dismissAlertNewTimeTable: (state) => {
       state.alertNewTimetable = false;
     },
-    // bring up pop up to ask to enable notifications
-    alertEnableNotifications: (state) => {
-      state.alertEnableNotifications = true;
-    },
-    dismissEnableNotifications: (state) => {
-      state.alertEnableNotifications = false;
-    },
     // dispatched when the most friended class is returned
     changeMostFriendsClass: (
       state,
@@ -91,16 +78,6 @@ const alertsSlice = createSlice({
       state.mostFriendsCount = action.payload.mostFriendsCount;
       state.mostFriendsClassId = action.payload.mostFriendsClassId;
       state.totalFriendsCount = action.payload.totalFriendsCount;
-    },
-    alertFacebookFriends: (state) => {
-      state.alertFacebookFriends = true;
-    },
-    showFacebookAlert: (state) => {
-      state.facebookAlertIsOn = true;
-    },
-    dismissFacebookFriends: (state) => {
-      state.alertFacebookFriends = false;
-      state.facebookAlertIsOn = false;
     },
   },
   extraReducers: (builder) => {

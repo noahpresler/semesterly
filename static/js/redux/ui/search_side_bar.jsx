@@ -18,6 +18,10 @@ import classnames from "classnames";
 import { getSectionTypeDisplayName, strPropertyCmp } from "../util";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
+/**
+ * This component renders the side bar of the search results, which is where you can add
+ * a section of a course or hover over a section to preview it on your timetable.
+ */
 class SearchSideBar extends React.Component {
   constructor(props) {
     super(props);

@@ -67,7 +67,9 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
  *
  */
 
-// For typescript purposes
+/**
+ * This component is responsible for changing the theme between light and dark mode.
+ */
 const ThemeToggle = () => {
   const theme = useAppSelector(selectTheme);
   const dispatch = useAppDispatch();

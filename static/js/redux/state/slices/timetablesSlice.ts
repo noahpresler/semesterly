@@ -43,6 +43,9 @@ const initialState: TimetablesSliceState = {
   lastCourseAdded: null, // either int (course id), object (custom slots state), or null
 };
 
+/**
+ * Stores information about all timetables that the user has created.
+ */
 const timetablesSlice = createSlice({
   name: "timetables",
   initialState,
@@ -65,7 +68,6 @@ const timetablesSlice = createSlice({
         section: action.payload.section,
         offerings: action.payload.section.offering_set,
         is_locked: true,
-        is_optional: false,
       };
     },
     unhoverSection: (state) => {

@@ -19,6 +19,10 @@ import renderHTML from "react-render-html";
 import classNames from "classnames";
 import REACTION_MAP from "../constants/reactions";
 
+/**
+ * This component renders reactions in the CourseModalBody, which includes the emoji and
+ * the number of reactions.
+ */
 class Reaction extends React.Component {
   constructor(props) {
     super(props);

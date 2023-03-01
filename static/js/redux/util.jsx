@@ -11,6 +11,10 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
+/**
+ * This file contains various utility functions, but mostly those for saving data to
+ * local storage.
+ */
 
 import range from "lodash/range";
 import { lightSlotColor } from "./constants/colors";
@@ -62,12 +66,6 @@ export const clearLocalTimetable = function deleteTimetableDataFromLocalStorage(
   localStorage.removeItem("active");
   localStorage.removeItem("preferences");
 };
-export const setFirstVisit = (time) => {
-  if (!browserSupportsLocalStorage()) {
-    return;
-  }
-  localStorage.setItem("firstVisit", time);
-};
 export const setFriendsCookie = (time) => {
   if (!browserSupportsLocalStorage()) {
     return;
@@ -79,13 +77,6 @@ export const setTimeShownBanner = (time) => {
     return;
   }
   localStorage.setItem("timeShownBanner", time);
-};
-export const setDeclinedNotifications = (declined) => {
-  if (!browserSupportsLocalStorage()) {
-    return;
-  }
-  // console.log("settings decline", declined);
-  localStorage.setItem("declinedNotifications", declined);
 };
 export const timeLapsedGreaterThan = (time, days) => {
   if (!browserSupportsLocalStorage()) {

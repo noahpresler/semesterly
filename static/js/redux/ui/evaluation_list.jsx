@@ -19,6 +19,9 @@ import SideScroller from "./side_scroller";
 import { SEMESTER_RANKS } from "../constants/constants";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
+/**
+ * This component renders all evaluations of a Course.
+ */
 class EvaluationList extends React.Component {
   static evalCompare(e1, e2) {
     // Note that Evaluation.year is a string composing of both a semester

@@ -41,13 +41,17 @@ type MasterSlotProps = {
     past: Classmate[];
   };
   hideCloseButton?: boolean;
-  onTimetable: boolean;
   fetchCourseInfo: MouseEventHandler<HTMLDivElement>;
   removeCourse?: Function;
   getShareLink: Function;
   colorData: SlotColorData[];
 };
 
+/**
+ * This component renders course slots in the SideBar, CourseModalBody, and
+ * CompareTimetableSidebar, displaying the course code, name, professor, and credits.
+ * It can also show the number of friends taking the course, and a share link.
+ */
 const MasterSlot = (props: MasterSlotProps) => {
   const isComparingTt = useAppSelector((state) => state.compareTimetable.isComparing);
   const [shareLinkShown, setShareLinkShown] = useState(false);
@@ -118,7 +122,7 @@ const MasterSlot = (props: MasterSlotProps) => {
       </div>,
     ].concat(friendCircles.slice(0, 3));
   }
-  let masterSlotClass = `master-slot slot-${props.sectionId}-${props.colourIndex} ${
+  const masterSlotClass = `master-slot slot-${props.sectionId}-${props.colourIndex} ${
     isComparingTt ? "compare-tt" : ""
   }`;
   const validProfs = props.professors
@@ -128,7 +132,6 @@ const MasterSlot = (props: MasterSlotProps) => {
     !validProfs || validProfs.length === 0 || validProfs[0] === ""
       ? "Professor Unlisted"
       : validProfs.join(", ");
-  masterSlotClass = props.onTimetable ? masterSlotClass : `${masterSlotClass} optional`;
   const numCredits = props.course.num_credits;
   let creditsDisplay = numCredits === 1 ? " credit" : " credits";
   creditsDisplay = numCredits + creditsDisplay;

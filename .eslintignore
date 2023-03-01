@@ -1,4 +1,7 @@
+docs
+venv
 node_modules/
+htmlcov/
 static/js/modules/
 static/js/redux/__tests__/*/__snapshots__/
 static/bundles/

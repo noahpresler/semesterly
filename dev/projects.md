@@ -1,5 +1,9 @@
 # Starting New Projects
 
+This is only relevant if you are working on a project that will take multiple weeks. It
+tells you how to create a Github Project and create a feature branch that everyone has
+access to.
+
 ## Creating The Project
 
 1. Begin by going to our [GitHub

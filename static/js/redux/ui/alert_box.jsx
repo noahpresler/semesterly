@@ -18,6 +18,9 @@ import EventEmitter from "events";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import Alert from "./alert";
 
+/**
+ * This is the component that manages all the alerts that show up on the site.
+ */
 class AlertBox extends React.Component {
   /**
    * Generate a key

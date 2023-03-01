@@ -108,6 +108,10 @@ function collectCreateDrop(connect) {
   };
 }
 
+/**
+ * This is the cell component for the calendar and is wrapped with helpers of React DND
+ * (Drag & Drop) so that custom events can be dragged and dropped.
+ */
 class Cell extends React.Component {
   render() {
     return this.props.connectDragTarget(

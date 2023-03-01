@@ -19,10 +19,4 @@ urlpatterns = [
     # auth
     re_path("", include("social_django.urls", namespace="social")),
     re_path("", include(("django.contrib.auth.urls", "auth"), namespace="auth")),
-    # device token registration
-    re_path(r"^registration-token/$", authpipe.views.RegistrationTokenView.as_view()),
-    re_path(
-        r"^registration-token/(?P<endpoint>.+?)/",
-        authpipe.views.RegistrationTokenView.as_view(),
-    ),
 ]

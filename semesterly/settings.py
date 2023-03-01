@@ -62,6 +62,8 @@ SECRET_KEY = get_secret("SECRET_KEY")
 
 DEBUG = False
 
+SHOW_DEBUG_TOOLBAR = False
+
 ALLOWED_HOSTS = ["*"]
 
 USE_X_FORWARDED_HOST = True
@@ -284,7 +286,7 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "EST"
+TIME_ZONE = "America/New_York"
 
 USE_I18N = True
 
@@ -330,10 +332,10 @@ CKEDITOR_CONFIGS = {
 }
 
 # Caching
+# this is the default cache
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
-        "LOCATION": "127.0.0.1:11211",
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     }
 }
 CACHALOT_ENABLED = True
@@ -352,3 +354,24 @@ if not DEBUG:
     import rollbar
 
     rollbar.init(**ROLLBAR)
+
+if SHOW_DEBUG_TOOLBAR:
+    DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: True}
+    INSTALLED_APPS += ("debug_toolbar",)
+    MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware",)
+    DEBUG_TOOLBAR_PANELS = [
+        "debug_toolbar.panels.history.HistoryPanel",
+        "debug_toolbar.panels.versions.VersionsPanel",
+        "debug_toolbar.panels.timer.TimerPanel",
+        "debug_toolbar.panels.settings.SettingsPanel",
+        "debug_toolbar.panels.headers.HeadersPanel",
+        "debug_toolbar.panels.request.RequestPanel",
+        "debug_toolbar.panels.sql.SQLPanel",
+        "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+        "debug_toolbar.panels.templates.TemplatesPanel",
+        "debug_toolbar.panels.cache.CachePanel",
+        "debug_toolbar.panels.signals.SignalsPanel",
+        "debug_toolbar.panels.redirects.RedirectsPanel",
+        "debug_toolbar.panels.profiling.ProfilingPanel",
+        "cachalot.panels.CachalotPanel",
+    ]

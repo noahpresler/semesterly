@@ -41,7 +41,7 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
     """
     Part of our custom Python Social Auth authentication pipeline. If a user
     already has an account associated with an email, associates that user with
-    the new backend.
+    the new provider (e.g. Facebook, JHED, or Google).
     """
     try_associate_email(**kwargs)
     try_associate_jhed(response, **kwargs)
@@ -81,7 +81,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
     """
     Part of the Python Social Auth pipeline which creates a student upon
     signup. If student already exists, updates information from Facebook
-    or Google (depending on the backend).
+    or Google (depending on the provider).
     Saves friends and other information to fill database.
     """
     backend_name = kwargs["backend"].name

@@ -15,6 +15,10 @@ GNU General Public License for more details.
 import PropTypes from "prop-types";
 import React from "react";
 
+/**
+ * This component is the loading animation that appears in the top right when the
+ * timetable is saving its changes to the database.
+ */
 const TimetableLoader = ({ loading }) => {
   if (loading) {
     return (

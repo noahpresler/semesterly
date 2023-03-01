@@ -13,10 +13,7 @@ GNU General Public License for more details.
 */
 
 /* server endpoints */
-// export const getAddTTtoGCalEndpoint = () => '/user/gcal/';
 export const getLogiCalEndpoint = () => "/user/log_ical/";
-export const getLogFacebookAlertViewEndpoint = () => "/user/log_fb_alert_view/";
-export const getLogFacebookAlertClickEndpoint = () => "/user/log_fb_alert_click/";
 export const getCourseInfoEndpoint = (courseId, semester) =>
   `/courses/${semester}/id/${courseId}/`;
 export const getCourseSearchEndpoint = (query, semester, page = 1) =>
@@ -47,9 +44,6 @@ export const getFriendsEndpoint = (semester) =>
 export const getSchoolInfoEndpoint = (school) => `/school/${school}/`;
 export const getReactToCourseEndpoint = () => "/user/reactions/";
 export const getRequestShareTimetableLinkEndpoint = () => "/timetables/links/";
-export const getSetRegistrationTokenEndpoint = () => "/registration-token/";
-export const deleteRegistrationTokenEndpoint = (endpoint) =>
-  `/registration-token/${endpoint}/`;
 export const acceptTOSEndpoint = () => "/tos/accept/";
 export function getCourseShareLinkFromModal(code, semester) {
   return `/course/${encodeURIComponent(code)}/${semester.name}/${semester.year}`;

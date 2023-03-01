@@ -26,12 +26,6 @@ describe("User Setting Modal Renders As Expected", () => {
   it("VISIBLE if settings unfilled", () => {
     const initialState = {
       userInfo: unfilledFixture.userInfo,
-      notificationToken: {
-        hasToken: false,
-      },
-      ui: {
-        highlightNotifs: false,
-      },
     };
     const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,
@@ -43,12 +37,6 @@ describe("User Setting Modal Renders As Expected", () => {
   it("HIDDEN if settings filled", () => {
     const initialState = {
       userInfo: filledFixture.userInfo,
-      notificationToken: {
-        hasToken: false,
-      },
-      ui: {
-        highlightNotifs: false,
-      },
     };
     const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,
@@ -61,12 +49,6 @@ describe("User Setting Modal Renders As Expected", () => {
     userInfo.overrideShow = true;
     const initialState = {
       userInfo,
-      notificationToken: {
-        hasToken: false,
-      },
-      ui: {
-        highlightNotifs: false,
-      },
     };
     const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,
@@ -81,12 +63,6 @@ describe("User Setting Modal Renders As Expected", () => {
   it("VISIBLE but reduced if signing up with Google only", () => {
     const initialState = {
       userInfo: googleFixture.userInfo,
-      notificationToken: {
-        hasToken: false,
-      },
-      ui: {
-        highlightNotifs: false,
-      },
     };
     const { container } = renderWithRedux(<UserSettingsModal />, {
       preloadedState: initialState,

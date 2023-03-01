@@ -118,7 +118,6 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView(
             "/export_calendar/", "helpers.mixins.FeatureFlowView"
         )
-        self.assertUrlResolvesToView("/notifyme/", "helpers.mixins.FeatureFlowView")
         self.assertUrlResolvesToView("/find_friends/", "helpers.mixins.FeatureFlowView")
 
         # redirects

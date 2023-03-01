@@ -22,6 +22,10 @@ import { getCurrentSemester } from "../state";
 import ThemeToggle from "./ThemeToggle";
 import { selectTheme } from "../state/slices/themeSlice";
 
+/**
+ * This component is the top row of the app which contains the logo, search bar,
+ * advanced search button, theme toggle, user profile, and a toggle to hide the SideBar.
+ */
 const TopBar = () => {
   const userInfo = useAppSelector((state) => state.userInfo.data);
   const currentSemester = useAppSelector((state) => getCurrentSemester(state));
