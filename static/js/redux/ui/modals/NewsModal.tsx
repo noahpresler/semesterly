@@ -7,6 +7,10 @@ import parse from "html-react-parser";
 import { getIsUserInfoIncomplete } from "../../state";
 import Modal from "./Modal";
 
+/**
+ * This is the modal that pops up when a new news post has been published. It displays
+ * the text of the news post, which is created and edited in the Django admin panel.
+ */
 const NewsModal = () => {
   const dispatch = useAppDispatch();
 

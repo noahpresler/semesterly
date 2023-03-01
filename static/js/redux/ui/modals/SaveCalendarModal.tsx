@@ -18,6 +18,10 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { saveCalendarModalActions } from "../../state/slices/saveCalendarModalSlice";
 import Modal from "./Modal";
 
+/**
+ * This modal pops up when a user clicks the "Save to Calendar" button in the timetable
+ * toolbar (top-right). It allows them to download their timetable as an .ics file.
+ */
 const SaveCalendarModal = () => {
   const isVisible = useAppSelector((state) => state.saveCalendarModal.isVisible);
   const isDownloading = useAppSelector(

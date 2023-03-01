@@ -15,6 +15,11 @@ GNU General Public License for more details.
 import PropTypes from "prop-types";
 import React from "react";
 
+/**
+ * This alert pops up when the user is not logged in, has a timetable, and wants to
+ * change the semester. It asks them to confirm that they want to change the semester
+ * because a non-logged in user can only have one timetable at a time.
+ */
 class ChangeSemesterAlert extends React.Component {
   componentWillUnmount() {
     this.props.dismissSelf();

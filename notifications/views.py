@@ -9,6 +9,7 @@ from helpers.mixins import ValidateSubdomainMixin
 
 class NewsUpateView(ValidateSubdomainMixin, APIView):
     def get(self, request: HttpRequest):
+        """Returns the most recent news update."""
         query = NewsUpdate.objects.order_by("-date").first()
         data = NewsUpdateSerializer(query).data
         return Response(data)

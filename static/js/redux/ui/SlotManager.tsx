@@ -139,6 +139,11 @@ function getConflictStyles(slotsByDay: any) {
   return styledSlotsByDay;
 }
 
+/**
+ * This component is responsible for displaying all of the offerings on the timetable
+ * and custom events (which are represented by Slot/CustomSlot respectively).
+ * It fetches all of the info required to display slots and passes them as props.
+ */
 const SlotManager = (props: { days: string[] }) => {
   const hoveredSlot: HoveredSlot = useAppSelector((state) => getHoveredSlots(state));
   // don't show slot if an alternative is being hovered
@@ -175,7 +180,6 @@ const SlotManager = (props: { days: string[] }) => {
     (state) => state.compareTimetable.comparedTimetable
   );
   const sectionsInBoth = getSectionsInTwoTimetables(activeTimetable, comparedTimetable);
-  const curTheme = useAppSelector(selectTheme);
 
   const getComparedTimetableSlotColor = (offering: Offering, courseId: number) => {
     const isOfferingInActiveTimetable = isOfferingInTimetable(

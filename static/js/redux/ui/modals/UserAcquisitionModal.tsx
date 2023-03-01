@@ -18,6 +18,11 @@ import { userAcquisitionModalActions } from "../../state/slices";
 import { selectTheme } from "../../state/slices/themeSlice";
 import Modal from "./Modal";
 
+/**
+ * This modal appears when a student tries to log in or sign up (it should really be
+ * called the LoginModal). It allows the student to log in with Google, Facebook or
+ * JHED.
+ */
 const UserAcquisitionModal = () => {
   const LoginToken = useAppSelector((state) => state.userInfo.data.LoginToken);
   const LoginHash = useAppSelector((state) => state.userInfo.data.LoginHash);

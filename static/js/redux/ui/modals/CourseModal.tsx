@@ -15,6 +15,11 @@ import {
 import { addOrRemoveCourse } from "../../actions";
 import Modal from "./Modal";
 
+/**
+ * This modal pops up when a student clicks on a course in the search results or when
+ * they click on a course slot in their timetable. It displays information about the
+ * course, such as the name, description, and sections.
+ */
 const CourseModal = () => {
   const [shareLinkShown, setShareLinkShown] = useState(false);
   const [addBtnIsHover, setAddBtnIsHover] = useState(false);

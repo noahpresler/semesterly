@@ -65,6 +65,11 @@ type DayCalendarProps = {
   uses12HrTime: boolean;
 };
 
+/**
+ * This is the calendar component rendered on mobile devices, and for the most part
+ * mirrors Calendar.tsx. The main difference is that this component renders a single day
+ * at a time and allows the user to swipe left/right between days.
+ */
 const DayCalendar = (props: DayCalendarProps) => {
   const [shareLinkShown, setShareLinkShown] = useState(false);
   const [currentDay, setCurrentDay] = useState(new Date().getDay());

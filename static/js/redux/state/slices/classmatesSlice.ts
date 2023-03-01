@@ -22,6 +22,9 @@ const initialState: ClassmateSliceState = {
   isFetching: false,
 };
 
+/**
+ * Stores information about friends who have already taken courses on your timetable.
+ */
 const classmatesSlice = createSlice({
   name: "classmates",
   initialState,

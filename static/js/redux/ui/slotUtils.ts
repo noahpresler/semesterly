@@ -1,3 +1,7 @@
+/**
+ * This file contains functions relating to Slots, including time manipulation, drag and
+ * drop, and general helpers with the timetable.
+ */
 import { Timetable } from "../constants/commonTypes";
 import { HALF_HOUR_HEIGHT } from "../constants/constants";
 

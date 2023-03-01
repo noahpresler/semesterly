@@ -17,6 +17,10 @@ import {
   Timetable,
 } from "../../constants/commonTypes";
 
+/**
+ * Stores complete information about courses, sections, and offerings, mapping their ids
+ * to the actual (denormalized) data.
+ */
 interface EntitiesSliceState {
   offering_set: {
     [offeringId: number]: Offering;

@@ -90,6 +90,11 @@ const ghostCards = (
   </div>
 );
 
+/**
+ * This is the modal that pops up when a user clicks on the "Find New Friends" text in
+ * the sidebar. It displays a list of peers that share the same courses as the student's
+ * current timetable, and whether they are in the same section.
+ */
 const PeerModal = () => {
   const dispatch = useAppDispatch();
   const { fetchFriends, saveSettings } = useActions();

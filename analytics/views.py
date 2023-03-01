@@ -96,10 +96,6 @@ def view_analytics_dashboard(request):
                 "google_calendar_exports": google_calendar_exports,
                 "ics_calendar_exports": ics_calendar_exports,
                 "unique_users_calendar_exports": unique_users_calendar_exports,
-                "fb_alert_views": fb_alert_views,
-                "unique_users_fb_alert_views": unique_users_fb_alert_views,
-                "fb_alert_clicks": fb_alert_clicks,
-                "unique_users_fb_alert_clicks": unique_users_fb_alert_clicks,
                 "total_shared_timetable_views": total_shared_timetable_views,
                 "total_shared_course_views": total_shared_course_views,
                 "calendar_exports_by_type": json.dumps(

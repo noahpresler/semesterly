@@ -18,6 +18,10 @@ import classNames from "classnames";
 import ClickOutHandler from "react-onclickout";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
+/**
+ * This component displays the student's profile picture in the top right when they are
+ * signed in and handles the dropdown when clicked.
+ */
 class SocialProfile extends React.Component {
   constructor(props) {
     super(props);

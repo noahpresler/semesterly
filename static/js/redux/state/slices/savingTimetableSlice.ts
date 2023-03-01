@@ -27,6 +27,10 @@ const initialState: SavingTimetableSliceState = {
   upToDate: false,
 };
 
+/**
+ * Stores information about the currently active timetable, and information on whether
+ * it's being saved/up-to-date. It's relevant only for when the user is logged in.
+ */
 const savingTimetableSlice = createSlice({
   name: "savingTimetable",
   initialState,

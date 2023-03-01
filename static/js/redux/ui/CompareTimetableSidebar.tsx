@@ -14,6 +14,10 @@ import CreditTicker from "./CreditTicker";
 import MasterSlot from "./MasterSlot";
 import { getSectionsInTwoTimetables } from "./slotUtils";
 
+/**
+ * This component displays the side bar for the compare timetables feature, which
+ * includes the T-chart of courses and the average course rating.
+ */
 const CompareTimetableSideBar = () => {
   const dispatch = useDispatch();
   const activeCourses = useAppSelector((state) =>
