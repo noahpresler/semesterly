@@ -87,8 +87,8 @@ class Course(models.Model):
     """
 
     school = models.CharField(db_index=True, max_length=100)
-    code = models.CharField(max_length=20)
-    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=20, db_index=True)
+    name = models.CharField(max_length=255, db_index=True)
     description = models.TextField(default="")
     notes = models.TextField(default="", null=True)
     info = models.TextField(default="", null=True)
