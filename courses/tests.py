@@ -580,7 +580,7 @@ class CourseDetail(APITestCase):
     def test_course_exists(self):
         response = self.client.get(
             "/courses/{}/{}/id/{}".format(self.sem_name, self.year, self.cid),
-            **self.request_headers
+            **self.request_headers,
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -591,7 +591,7 @@ class CourseDetail(APITestCase):
     def test_no_course_exists(self):
         response = self.client.get(
             "/courses/{}/{}/id/{}".format(self.sem_name, self.year, self.cid + 1),
-            **self.request_headers
+            **self.request_headers,
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
