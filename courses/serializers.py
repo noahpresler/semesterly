@@ -179,8 +179,15 @@ class OfferingSerializer(serializers.ModelSerializer):
         model = Offering
 
 
+class SemesterSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = Semester
+
+
 class SectionSerializer(serializers.ModelSerializer):
     offering_set = OfferingSerializer(many=True)
+    semester = SemesterSerializer()
 
     class Meta:
         model = Section
@@ -197,12 +204,6 @@ class SectionSerializer(serializers.ModelSerializer):
             "offering_set",
             "course_section_id",
         )
-
-
-class SemesterSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = "__all__"
-        model = Semester
 
 
 class CourseSearchSerializer(serializers.ModelSerializer):

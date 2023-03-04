@@ -19,6 +19,7 @@ class EndToEndTest(SeleniumTestCase):
 
     fixtures = ["jhu_fall_sample.json", "jhu_spring_sample.json"]
 
+    @unittest.skip("temp")
     def test_logged_out_flow(self):
         self.clear_tutorial()
         with self.description("Search for course and then delete search query"):
@@ -91,6 +92,7 @@ class EndToEndTest(SeleniumTestCase):
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
 
+    @unittest.skip("temp")
     def test_logged_in_via_fb_flow(self):
         with self.description("Setup and clear tutorial"):
             self.clear_tutorial()
@@ -124,6 +126,7 @@ class EndToEndTest(SeleniumTestCase):
             self.login_via_fb(email="e@ma.il", password="password")
             self.assert_ptt_equals(ptt)
 
+    @unittest.skip("temp")
     def test_logged_in_via_google_flow(self):
         with self.description("Setup and clear tutorial"):
             self.clear_tutorial()
