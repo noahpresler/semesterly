@@ -125,9 +125,7 @@ class Course(models.Model):
         **reacted:** True if the student provided has given a reaction with this title
         """
         result = list(
-            self.reaction_set.values("title")
-            .annotate(count=models.Count("title"))
-            .all()
+            self.reaction_set.values("title").annotate(count=models.Count("title"))
         )
         if not student:
             return result
