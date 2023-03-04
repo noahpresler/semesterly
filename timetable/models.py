@@ -86,7 +86,7 @@ class Course(models.Model):
             provide Foreign key
     """
 
-    school = models.CharField(db_index=True, max_length=100)
+    school = models.CharField(max_length=100)
     code = models.CharField(max_length=20, db_index=True)
     name = models.CharField(max_length=255, db_index=True)
     description = models.TextField(default="")
