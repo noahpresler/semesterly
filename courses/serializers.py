@@ -94,13 +94,20 @@ class CourseSerializer(serializers.ModelSerializer):
         return evals
 
     def get_related_courses(self, course):
-        related = course.related_courses.filter(
-            section__semester=self.context["semester"]
-        ).distinct()[:5]
-        return [
-            model_to_dict(course, exclude=["related_courses", "unstopped_description"])
-            for course in related
-        ]
+        # Related courses are currently out-dated, and appears to be inefficiently
+        # mapped, as it requires a .distinct() call to work properly. This takes a
+        # substantial amount of query time, yet the information is tangentially useful,
+        # so it is disabled until someone decides to maintain it.
+
+        return []
+
+        # related = course.related_courses.filter(
+        #     section__semester=self.context["semester"]
+        # ).distinct()[:5]
+        # return [
+        #     model_to_dict(course, exclude=["related_courses", "unstopped_description"])
+        #     for course in related
+        # ]
 
     def get_reactions(self, course):
         return course.get_reactions(self.context.get("student"))
