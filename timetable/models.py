@@ -127,15 +127,21 @@ class Course(models.Model):
         result = list(
             self.reaction_set.values("title")
             .annotate(count=models.Count("title"))
-            .distinct()
             .all()
         )
         if not student:
             return result
+
+        from student.models import Reaction
+
+        student_reacts = list(
+            map(
+                lambda r: r.title,
+                Reaction.objects.filter(course=self.id, student=student),
+            )
+        )
         for i, reaction in enumerate(result):
-            result[i]["reacted"] = self.reaction_set.filter(
-                student=student, title=reaction["title"]
-            ).exists()
+            result[i]["reacted"] = reaction["title"] in student_reacts
         return result
 
     def get_avg_rating(self):
