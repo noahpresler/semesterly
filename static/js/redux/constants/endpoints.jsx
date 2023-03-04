@@ -17,7 +17,7 @@ export const getLogiCalEndpoint = () => "/user/log_ical/";
 export const getCourseInfoEndpoint = (courseId, semester) =>
   `/courses/${semester}/id/${courseId}/`;
 export const getCourseSearchEndpoint = (query, semester, page = 1) =>
-  `/search/${semester}/${query}/?page=${page}&limit=8`;
+  `/search/${semester}/${query}/?page=${page}&limit=6`;
 export const getTimetablesEndpoint = () => "/timetables/";
 export const getLoadSavedTimetablesEndpoint = (semester) =>
   `/user/timetables/${semester.name}/${semester.year}/`;
