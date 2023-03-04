@@ -100,11 +100,9 @@ def get_classmates_from_tts(student, course_id, tts):
         classmate["last_name"] = friend.user.last_name
         if student.social_offerings and friend.social_offerings:
             friend_sections = tt.sections.filter(course__id=course_id)
-            print(list(friend_sections.values_list("meeting_section", flat=True)))
             sections = list(
                 friend_sections.values_list("meeting_section", flat=True).distinct()
             )
-            print(sections)
             classmate["sections"] = sections
         else:
             classmate["sections"] = []
