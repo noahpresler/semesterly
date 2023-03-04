@@ -202,7 +202,7 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: start;
   p {
     @include theme() {
       color: t("text-color-thin");
@@ -414,6 +414,10 @@
 
   p {
     padding-left: 10px;
+  }
+
+  .extra-space {
+    height: 500px;
   }
 }
 
