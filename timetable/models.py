@@ -86,7 +86,7 @@ class Course(models.Model):
             provide Foreign key
     """
 
-    school = models.CharField(db_index=True, max_length=100)
+    school = models.CharField(max_length=100)
     code = models.CharField(max_length=20, db_index=True)
     name = models.CharField(max_length=255, db_index=True)
     description = models.TextField(default="")
@@ -125,17 +125,21 @@ class Course(models.Model):
         **reacted:** True if the student provided has given a reaction with this title
         """
         result = list(
-            self.reaction_set.values("title")
-            .annotate(count=models.Count("title"))
-            .distinct()
-            .all()
+            self.reaction_set.values("title").annotate(count=models.Count("title"))
         )
         if not student:
             return result
+
+        from student.models import Reaction
+
+        student_reacts = list(
+            map(
+                lambda r: r.title,
+                Reaction.objects.filter(course=self.id, student=student),
+            )
+        )
         for i, reaction in enumerate(result):
-            result[i]["reacted"] = self.reaction_set.filter(
-                student=student, title=reaction["title"]
-            ).exists()
+            result[i]["reacted"] = reaction["title"] in student_reacts
         return result
 
     def get_avg_rating(self):

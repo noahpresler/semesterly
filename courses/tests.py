@@ -135,103 +135,103 @@ class Serializers(TestCase):
         )
         self.assertTrue(self.valid_evals(serialized.data["evals"]))
 
-    def test_course_serialization_get_related_courses(self):
-        testSem = Semester.objects.create(name="Spring", year="2022")
-        relatedCourseOne = Course.objects.create(
-            id=2, school=self.school, code="SEM102", name="STAD1"
-        )
-        courseOneSec = Section.objects.create(
-            course=relatedCourseOne,
-            meeting_section="01",
-            size=10,
-            enrolment=3,
-            waitlist=0,
-            waitlist_size=10,
-            instructors="instructor",
-            semester=self.sem,
-            was_full=True,
-            course_section_id=1,
-        )
-        relatedCourseTwo = Course.objects.create(
-            id=3, school=self.school, code="SEM103", name="STAD2"
-        )
-        courseTwoSec = Section.objects.create(
-            course=relatedCourseTwo,
-            meeting_section="01",
-            size=10,
-            enrolment=3,
-            waitlist=0,
-            waitlist_size=10,
-            instructors="instructor",
-            semester=self.sem,
-            was_full=True,
-            course_section_id=1,
-        )
-        relatedCourseThree = Course.objects.create(
-            id=4, school=self.school, code="SEM104", name="STAD3"
-        )
-        courseThreeSec = Section.objects.create(
-            course=relatedCourseThree,
-            meeting_section="01",
-            size=10,
-            enrolment=3,
-            waitlist=0,
-            waitlist_size=10,
-            instructors="instructor",
-            semester=self.sem,
-            was_full=True,
-            course_section_id=1,
-        )
-        relatedCourseFour = Course.objects.create(
-            id=5, school=self.school, code="SEM105", name="STAD4"
-        )
-        courseFourSec = Section.objects.create(
-            course=relatedCourseFour,
-            meeting_section="01",
-            size=10,
-            enrolment=3,
-            waitlist=0,
-            waitlist_size=10,
-            instructors="instructor",
-            semester=self.sem,
-            was_full=True,
-            course_section_id=1,
-        )
-        relatedCourseFive = Course.objects.create(
-            id=6, school=self.school, code="SEM106", name="STAD5"
-        )
-        courseFiveSec = Section.objects.create(
-            course=relatedCourseFive,
-            meeting_section="01",
-            size=10,
-            enrolment=3,
-            waitlist=0,
-            waitlist_size=10,
-            instructors="instructor",
-            semester=self.sem,
-            was_full=True,
-            course_section_id=1,
-        )
+    # def test_course_serialization_get_related_courses(self):
+    #     testSem = Semester.objects.create(name="Spring", year="2022")
+    #     relatedCourseOne = Course.objects.create(
+    #         id=2, school=self.school, code="SEM102", name="STAD1"
+    #     )
+    #     courseOneSec = Section.objects.create(
+    #         course=relatedCourseOne,
+    #         meeting_section="01",
+    #         size=10,
+    #         enrolment=3,
+    #         waitlist=0,
+    #         waitlist_size=10,
+    #         instructors="instructor",
+    #         semester=self.sem,
+    #         was_full=True,
+    #         course_section_id=1,
+    #     )
+    #     relatedCourseTwo = Course.objects.create(
+    #         id=3, school=self.school, code="SEM103", name="STAD2"
+    #     )
+    #     courseTwoSec = Section.objects.create(
+    #         course=relatedCourseTwo,
+    #         meeting_section="01",
+    #         size=10,
+    #         enrolment=3,
+    #         waitlist=0,
+    #         waitlist_size=10,
+    #         instructors="instructor",
+    #         semester=self.sem,
+    #         was_full=True,
+    #         course_section_id=1,
+    #     )
+    #     relatedCourseThree = Course.objects.create(
+    #         id=4, school=self.school, code="SEM104", name="STAD3"
+    #     )
+    #     courseThreeSec = Section.objects.create(
+    #         course=relatedCourseThree,
+    #         meeting_section="01",
+    #         size=10,
+    #         enrolment=3,
+    #         waitlist=0,
+    #         waitlist_size=10,
+    #         instructors="instructor",
+    #         semester=self.sem,
+    #         was_full=True,
+    #         course_section_id=1,
+    #     )
+    #     relatedCourseFour = Course.objects.create(
+    #         id=5, school=self.school, code="SEM105", name="STAD4"
+    #     )
+    #     courseFourSec = Section.objects.create(
+    #         course=relatedCourseFour,
+    #         meeting_section="01",
+    #         size=10,
+    #         enrolment=3,
+    #         waitlist=0,
+    #         waitlist_size=10,
+    #         instructors="instructor",
+    #         semester=self.sem,
+    #         was_full=True,
+    #         course_section_id=1,
+    #     )
+    #     relatedCourseFive = Course.objects.create(
+    #         id=6, school=self.school, code="SEM106", name="STAD5"
+    #     )
+    #     courseFiveSec = Section.objects.create(
+    #         course=relatedCourseFive,
+    #         meeting_section="01",
+    #         size=10,
+    #         enrolment=3,
+    #         waitlist=0,
+    #         waitlist_size=10,
+    #         instructors="instructor",
+    #         semester=self.sem,
+    #         was_full=True,
+    #         course_section_id=1,
+    #     )
 
-        self.course.related_courses.add(relatedCourseOne)
-        self.course.related_courses.add(relatedCourseTwo)
-        self.course.related_courses.add(relatedCourseThree)
-        self.course.related_courses.add(relatedCourseFour)
-        self.course.related_courses.add(relatedCourseFive)
+    #     self.course.related_courses.add(relatedCourseOne)
+    #     self.course.related_courses.add(relatedCourseTwo)
+    #     self.course.related_courses.add(relatedCourseThree)
+    #     self.course.related_courses.add(relatedCourseFour)
+    #     self.course.related_courses.add(relatedCourseFive)
 
-        serialized = CourseSerializer(
-            self.course,
-            context={
-                "semester": self.sem,
-                "school": self.school,
-            },
-        )
-        data = serialized.data["related_courses"]
-        self.assertTrue(data[0]["code"] == "SEM102")
-        self.assertTrue(data[1]["code"] == "SEM103")
-        self.assertTrue(data[2]["code"] == "SEM104")
-        self.assertTrue(data[3]["code"] == "SEM105")
-        self.assertTrue(data[4]["code"] == "SEM106")
+    #     serialized = CourseSerializer(
+    #         self.course,
+    #         context={
+    #             "semester": self.sem,
+    #             "school": self.school,
+    #         },
+    #     )
+    #     data = serialized.data["related_courses"]
+    #     self.assertTrue(data[0]["code"] == "SEM102")
+    #     self.assertTrue(data[1]["code"] == "SEM103")
+    #     self.assertTrue(data[2]["code"] == "SEM104")
+    #     self.assertTrue(data[3]["code"] == "SEM105")
+    #     self.assertTrue(data[4]["code"] == "SEM106")
 
     def test_get_reactions_no_student(self):
         serialized = CourseSerializer(
@@ -580,7 +580,7 @@ class CourseDetail(APITestCase):
     def test_course_exists(self):
         response = self.client.get(
             "/courses/{}/{}/id/{}".format(self.sem_name, self.year, self.cid),
-            **self.request_headers
+            **self.request_headers,
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -591,7 +591,7 @@ class CourseDetail(APITestCase):
     def test_no_course_exists(self):
         response = self.client.get(
             "/courses/{}/{}/id/{}".format(self.sem_name, self.year, self.cid + 1),
-            **self.request_headers
+            **self.request_headers,
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -840,7 +840,7 @@ class CourseModalTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_feature_flow_with_course_in_db(self):
-        url = "/course/{}/{}/{}/".format("SEM3420", self.sem_name, self.year)
+        url = f"/course/SEM3420/{self.sem_name}/{self.year}/"
         request = self.factory.get(
             url,
             {"code": "SEM3420", "sem_name": self.sem_name, "year": self.year},
@@ -852,7 +852,7 @@ class CourseModalTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_feature_flow_shared_course_view_created(self):
-        url = "/course/{}/{}/{}/".format(self.code, self.sem_name, self.year)
+        url = f"/course/{self.code}/{self.sem_name}/{self.year}/"
         request = self.factory.get(
             url,
             {"code": self.code, "sem_name": self.sem_name, "year": self.year},

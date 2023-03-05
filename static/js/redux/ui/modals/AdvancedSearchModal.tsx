@@ -460,6 +460,7 @@ const AdvancedSearchModal = () => {
             >
               {(!newSearch || !isFetching) && searchResults}
             </InfiniteScroll>
+            <div className="extra-space" />
           </div>
           {filters}
           <Filter

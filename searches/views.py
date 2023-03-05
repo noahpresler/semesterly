@@ -12,7 +12,7 @@
 
 import operator
 
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.db.models import Q
 
 from rest_framework import status
@@ -43,14 +43,14 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
 
         cur_page = int(request.GET.get("page", 1))
 
-        if cur_page > paginator.num_pages:
-            course_match_data = []
-        else:
+        try:
             paginated_data = paginator.page(cur_page)
-            course_match_data = CourseSearchSerializer(
-                paginated_data, context={"semester": sem, "school": school}, many=True
-            ).data
+        except EmptyPage:
+            return Response({"data": [], "page": cur_page}, status=status.HTTP_200_OK)
 
+        course_match_data = CourseSearchSerializer(
+            paginated_data, context={"semester": sem, "school": school}, many=True
+        ).data
         self.save_analytic(request, query, course_matches, sem)
         return Response(
             {"data": course_match_data, "page": cur_page}, status=status.HTTP_200_OK
