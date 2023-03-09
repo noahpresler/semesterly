@@ -21,6 +21,7 @@ import SocialProfileContainer from "./containers/social_profile_container";
 import { getCurrentSemester } from "../state";
 import ThemeToggle from "./ThemeToggle";
 import { selectTheme } from "../state/slices/themeSlice";
+import useWindowSize from "../hooks/useWindowSize";
 
 /**
  * This component is the top row of the app which contains the logo, search bar,
@@ -33,6 +34,7 @@ const TopBar = () => {
   const theme = useAppSelector(selectTheme);
 
   const [sideBarCollapsed, setSideBarCollapsed] = useState("neutral");
+  const [width] = useWindowSize();
 
   const mainBarSelector = isComparing ? ".main-bar-compare-timetable" : ".main-bar";
   const sideBarSelector = isComparing ? ".side-bar-compare-timetable" : ".side-bar";
@@ -51,15 +53,12 @@ const TopBar = () => {
 
   const toggleSideBar = () => {
     if (sideBarCollapsed === "neutral") {
-      const bodyWidth = $(window).width();
-      if (bodyWidth > 999) {
+      if (width > 1024) {
         setSideBarCollapsed("closed");
       } else {
         setSideBarCollapsed("open");
       }
-      return;
-    }
-    if (sideBarCollapsed === "open") {
+    } else if (sideBarCollapsed === "open") {
       setSideBarCollapsed("closed");
     } else {
       setSideBarCollapsed("open");
@@ -67,12 +66,20 @@ const TopBar = () => {
   };
 
   useEffect(() => {
-    if (sideBarCollapsed === "closed") {
+    console.log(sideBarCollapsed);
+    if (sideBarCollapsed === "neutral") {
+      console.log(width);
+      if (width > 1024) {
+        expandSideBar();
+      } else {
+        collapseSideBar();
+      }
+    } else if (sideBarCollapsed === "closed") {
       collapseSideBar();
     } else {
       expandSideBar();
     }
-  }, [sideBarCollapsed]);
+  }, [sideBarCollapsed, width]);
 
   const renderUserForPrint = () => (
     <div className="print">
