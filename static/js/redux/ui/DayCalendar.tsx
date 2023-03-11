@@ -129,7 +129,7 @@ const DayCalendar = (props: DayCalendarProps) => {
 
   const getCalendarRows = () => {
     const rows = [];
-    for (let i = 8; i <= props.endHour; i++) {
+    for (let i = 0; i <= props.endHour; i++) {
       // one row for each hour, starting from 8am
       const hour = props.uses12HrTime && i > 12 ? i - 12 : i;
       rows.push(

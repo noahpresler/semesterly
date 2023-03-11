@@ -616,6 +616,8 @@ a.fc-more:hover {
 .fc-view > table {
   position: relative;
   z-index: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .fc-basicDay-view .fc-content-skeleton,
