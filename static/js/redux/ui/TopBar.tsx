@@ -66,9 +66,7 @@ const TopBar = () => {
   };
 
   useEffect(() => {
-    console.log(sideBarCollapsed);
     if (sideBarCollapsed === "neutral") {
-      console.log(width);
       if (width > 1024) {
         expandSideBar();
       } else {
