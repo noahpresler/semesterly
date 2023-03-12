@@ -15,6 +15,13 @@ from django.db.models import Q, Count
 from timetable.models import Course
 from functools import reduce
 
+abbreviations = {
+    "ip" : ["Intermediate Programming", "Data Structures"],
+    "ifp" : ["Introduction to Fiction and Poetry"],
+    "oose" : ["Object Oriented Software Engineering"],
+    "ds" : ["Data Structures"]
+
+}
 
 def search(school, query, semester):
     """Returns courses that are contained in the name from a query."""
@@ -22,17 +29,25 @@ def search(school, query, semester):
         return Course.objects.filter(school=school)
     query_tokens = query.strip().lower().split()
     course_name_contains_query = reduce(
-        operator.and_, list(map(course_name_contains_token, query_tokens))
+        operator.and_, map(course_name_contains_token, query_tokens)
     )
+    """add the abbreviation here"""
     return (
         Course.objects.filter(
             Q(school=school)
-            & course_name_contains_query
+            & (course_name_contains_query )
             & Q(section__semester=semester)
         )
         .annotate(id_count=Count("id"))
         .order_by("id")
     )
+
+
+def query_is_abbreviation(query):
+    query = query.lower()
+    if query not in abbreviations:
+        return None
+    return reduce(operator.or_, map(lambda n: Q(name=n), abbreviations[query]))
 
 
 def course_name_contains_token(token):
