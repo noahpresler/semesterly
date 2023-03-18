@@ -6,7 +6,13 @@ from django.db.models import Q
 
 def delete_old_semesters(apps, schema_editor):
     Semester = apps.get_model("timetable", "Semester")
-    Semester.objects.filter(Q(year="2021") | Q(year="2020") | Q(year="2019") | Q(year="2018") | Q(year="2017")).delete()
+    Semester.objects.filter(
+        Q(year="2021")
+        | Q(year="2020")
+        | Q(year="2019")
+        | Q(year="2018")
+        | Q(year="2017")
+    ).delete()
 
 
 class Migration(migrations.Migration):
