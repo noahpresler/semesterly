@@ -10,18 +10,8 @@
   "full_academic_year_registration": false,
   "single_access": false,
   "active_semesters": {
-    "2017": ["Fall", "Summer", "Spring", "Intersession"],
-    "2018": ["Fall", "Spring"],
-    "2019": ["Fall", "Spring"],
-    "2020": ["Fall", "Spring"],
-    "2021": ["Fall", "Spring"],
     "2022": ["Fall", "Spring"],
     "2023": ["Spring"]
-  },
-  "final_exams": {
-    "2017": ["Spring", "Fall"],
-    "2018": ["Spring", "Fall"],
-    "2019": ["Spring"]
   },
   "registrar": true,
   "short_course_weeks_limit": 8
