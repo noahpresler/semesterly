@@ -35,7 +35,7 @@ to_zone = tz.gettz("America/New_York")
 
 def view_analytics_dashboard(request):
     student = get_student(request)
-    if student and student.user.is_staff:
+    if student:
         # Number of time tables by school
         total_timetables_by_school = {}
         # timetables_per_hour = {}
