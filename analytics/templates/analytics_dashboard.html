@@ -31,37 +31,36 @@
     <li>
       <h4>Total number of Personal timetables: {{total_personal_timetables}}</h4>
     </li>
-
     <li>
       <h4>Total signups: {{total_signups}}</h4>
     </li>
-    <li>
+    <!-- <li>
       <h4>Sign ups by permission</h4>
     </li>
     <ul>
       {% for permission, value in num_users_by_permission.items %}
       <li>{{permission}}: {{value.0}} ({{value.1}}%) </li>
       {% endfor %}
-    </ul>
+    </ul> -->
     <li>
       <h4>Total number of calendar exports: {{total_calendar_exports}}</h4>
     </li>
-    <li>
+    <!-- <li>
       <h4>Number of Google calendar exports: {{google_calendar_exports}}</h4>
     </li>
     <li>
       <h4>Number of ics calendar exports: {{ics_calendar_exports}}</h4>
-    </li>
+    </li> -->
     <li>
       <h4>Number of calendar exports by unique users: {{unique_users_calendar_exports}}</h4>
     </li>
-    <li>
+    <!-- <li>
       <h4>Number of shared timetable views: {{total_shared_timetable_views}}</h4>
-    </li>
-    <li>
+    </li> -->
+    <!-- <li>
       <h4>Number of shared course views: {{total_shared_course_views}}</h4>
-    </li>
-    <li>
+    </li> -->
+    <!-- <li>
       <h4>Number of Facebook alert views: {{fb_alert_views}}</h4>
     </li>
     <li>
@@ -72,19 +71,17 @@
     </li>
     <li>
       <h4>Number of Facebook alert clicks by unique users: {{unique_users_fb_alert_clicks}}</h4>
-    </li>
+    </li> -->
   </ul>
 
 
 
   <!-- <h4>Most popular courses in JHU:</h4>
-
     {% for course in jhu_most_popular_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %}
-
 
     <h4>Most searched courses in JHU:</h4>
     {% for course in jhu_most_searched_courses %}
@@ -122,48 +119,53 @@
     {% endfor %} -->
 
 
+
+  <!-- NOTE: Analytics displayed with graphs -->
+
   <script type="text/javascript">
+    // var num_users_by_school = JSON.parse("{{num_users_by_school|escapejs}}");
     var num_users_by_class_year = JSON.parse("{{num_users_by_class_year|escapejs}}");
-    var num_users_by_school = JSON.parse("{{num_users_by_school|escapejs}}");
-    var total_timetables_by_school = JSON.parse("{{total_timetables_by_school|escapejs}}");
-    var total_timetables_by_semester = JSON.parse("{{total_timetables_by_semester|escapejs}}");
-    var number_of_reactions = JSON.parse("{{number_of_reactions|escapejs}}");
-    var calendar_exports_by_type = JSON.parse("{{calendar_exports_by_type|escapejs}}");
+    // var total_timetables_by_school = JSON.parse("{{total_timetables_by_school|escapejs}}");
+    // var total_timetables_by_semester = JSON.parse("{{total_timetables_by_semester|escapejs}}");
+    // var calendar_exports_by_type = JSON.parse("{{calendar_exports_by_type|escapejs}}");
     // var timetables_per_hour = JSON.parse("{{timetables_per_hour|escapejs}}");
     // var shared_timetables_per_hour = JSON.parse("{{shared_timetables_per_hour|escapejs}}");
     var signups_per_hour = JSON.parse("{{signups_per_hour|escapejs}}");
+    // var number_of_reactions = JSON.parse("{{number_of_reactions|escapejs}}");
   </script>
 
-  <h4>Number of users by school:</h4>
-  <canvas id="num_users_by_school"></canvas>
+  <!-- <h4>Number of users by school:</h4>
+  <canvas id="num_users_by_school"></canvas> -->
 
   <h4>Number of users by class year:</h4>
   <canvas id="num_users_by_class_year"></canvas>
 
-  <h4>Number of timetables by school:</h4>
-  <canvas id="timetables_by_schools"></canvas>
+  <!-- <h4>Number of timetables by school:</h4>
+  <canvas id="timetables_by_schools"></canvas> -->
 
-  <h4>Number of timetables by semester:</h4>
-  <canvas id="timetables_by_semester"></canvas>
+  <!-- <h4>Number of timetables by semester:</h4>
+  <canvas id="timetables_by_semester"></canvas> -->
 
-  <h4>Number of calendar exports by type:</h4>
-  <canvas id="calendar_exports_by_type"></canvas>
+  <!-- <h4>Number of calendar exports by type:</h4>
+  <canvas id="calendar_exports_by_type"></canvas> -->
 
-  <!--     <h4>Number of timetables created per hour per school for the past 24 hours:</h4>
-    <canvas id="timetables_per_hours_chart"></canvas>
+  <!-- <h4>Number of timetables created per hour per school for the past 24 hours:</h4>
+  <canvas id="timetables_per_hours_chart"></canvas> -->
 
-    <h4>Number of shared timetables per hour per school for the past 24 hours:</h4>
-    <canvas id="shared_timetables_per_hours_chart"></canvas> -->
+  <!-- <h4>Number of shared timetables per hour per school for the past 24 hours:</h4>
+  <canvas id="shared_timetables_per_hours_chart"></canvas> -->
 
   <h4>Number of signups per day for the past week:</h4>
   <canvas id="signups_chart"></canvas>
 
-  <h4>Number of each reaction used:</h4>
-  <canvas id="reactions_chart"></canvas>
+  <!-- <h4>Number of each reaction used:</h4>
+  <canvas id="reactions_chart"></canvas> -->
 
 
 
   <script>
+    // NOTE: Process and get all the data for graphs
+
     // Colors for each school.
     // TODO: user COLOURS_DATA in constants.jsx.
     var primary_colors = ["#FD7473", "#5CCCF2", "#36DEBB", "#FFD462", "#C585DE", "#53e997", "#D4DBC8", "#E7F76D", "#A3F5F2", "#7499A2",
@@ -171,6 +173,59 @@
     var secondary_colors = ["#e36867", "#52b7d9", "#30c7a8", "#e5be58", "#b177c7", "#4ad187", "#B5BFA3", "#C9E20A", "#7CD2CF", "#668B94",
       "#C4D44D", "#6598f1"];
     Chart.defaults.global.responsive = true;
+
+    // var past_24_labels = ["-23", "-22", "-21", "-20", "-19", "-18", "-17", "-16", "-15", "-14", "-13", "-12", "-11", "-10", "-9", "-8", "-7", "-6", "-5", "-4", "-3", "-2", "-1", "Now"];
+
+    // var num_users_by_school_data = {
+    //   labels: Object.keys(num_users_by_school),
+    //   datasets: [
+    //     {
+    //       data: Object.keys(num_users_by_school).map(function (key) { return num_users_by_school[key] }),
+    //       backgroundColor: primary_colors,
+    //       hoverBackgroundColor: secondary_colors
+    //     }]
+    // };
+
+    var num_users_by_class_year_data = {
+      labels: Object.keys(num_users_by_class_year),
+      datasets: [
+        {
+          data: Object.keys(num_users_by_class_year).map(function (key) { return num_users_by_class_year[key] }),
+          backgroundColor: primary_colors,
+          hoverBackgroundColor: secondary_colors
+        }]
+    };
+
+    // var timetables_by_schools_data = {
+    //   labels: Object.keys(total_timetables_by_school),
+    //   datasets: [
+    //     {
+    //       data: Object.keys(total_timetables_by_school).map(function (key) { return total_timetables_by_school[key] }),
+    //       backgroundColor: primary_colors,
+    //       hoverBackgroundColor: secondary_colors
+    //     }]
+    // };
+
+    // var timetables_by_semester_data = {
+    //   labels: Object.keys(total_timetables_by_semester),
+    //   datasets: [
+    //     {
+    //       data: Object.keys(total_timetables_by_semester).map(function (key) { return total_timetables_by_semester[key] }),
+    //       backgroundColor: primary_colors,
+    //       hoverBackgroundColor: secondary_colors
+    //     }]
+    // };
+
+    // var calendar_exports_by_type_data = {
+    //   labels: Object.keys(calendar_exports_by_type),
+    //   datasets: [
+    //     {
+    //       data: Object.keys(calendar_exports_by_type).map(function (key) { return calendar_exports_by_type[key] }),
+    //       backgroundColor: primary_colors,
+    //       hoverBackgroundColor: secondary_colors
+    //     }]
+    // };
+
     // var timetables_per_hour_datasets = new Array(Object.keys(timetables_per_hour).length);
     // var shared_timetables_per_hour_datasets = new Array(Object.keys(shared_timetables_per_hour).length);
     // var index = 0;
@@ -218,16 +273,16 @@
     //   index++;
     // }
 
-    var past_24_labels = ["-23", "-22", "-21", "-20", "-19", "-18", "-17", "-16", "-15", "-14", "-13", "-12", "-11", "-10", "-9", "-8", "-7", "-6", "-5", "-4", "-3", "-2", "-1", "Now"];
-
     // var timetables_per_hour_data = {
     //   labels: past_24_labels,
     //   datasets: timetables_per_hour_datasets
     // };
+
     // var shared_timetables_per_hour_data = {
     //   labels: past_24_labels,
     //   datasets: shared_timetables_per_hour_datasets
     // };
+
     var signups_per_hour_data = {
       labels: ["-6", "-5", "-4", "-3", "-2", "-1", "Now"],
       datasets: [
@@ -252,65 +307,55 @@
         }
       ]
     }
-    var reactions_data = {
-      labels: Object.keys(number_of_reactions),
-      datasets: [
-        {
-          label: "# Uses",
-          backgroundColor: "rgba(255,23,68,0.2)",
-          borderColor: "rgba(255,23,68,1)",
-          borderWidth: 1,
-          hoverBackgroundColor: "rgba(255,23,68,0.4)",
-          hoverBorderColor: "rgba(255,23,68,1)",
-          data: Object.keys(number_of_reactions).map(function (key) { return number_of_reactions[key] }),
-        }
-      ]
-    };
-    var num_users_by_school_data = {
-      labels: Object.keys(num_users_by_school),
-      datasets: [
-        {
-          data: Object.keys(num_users_by_school).map(function (key) { return num_users_by_school[key] }),
-          backgroundColor: primary_colors,
-          hoverBackgroundColor: secondary_colors
-        }]
-    };
-    var num_users_by_class_year_data = {
-      labels: Object.keys(num_users_by_class_year),
-      datasets: [
-        {
-          data: Object.keys(num_users_by_class_year).map(function (key) { return num_users_by_class_year[key] }),
-          backgroundColor: primary_colors,
-          hoverBackgroundColor: secondary_colors
-        }]
-    };
-    var timetables_by_schools_data = {
-      labels: Object.keys(total_timetables_by_school),
-      datasets: [
-        {
-          data: Object.keys(total_timetables_by_school).map(function (key) { return total_timetables_by_school[key] }),
-          backgroundColor: primary_colors,
-          hoverBackgroundColor: secondary_colors
-        }]
-    };
-    var timetables_by_semester_data = {
-      labels: Object.keys(total_timetables_by_semester),
-      datasets: [
-        {
-          data: Object.keys(total_timetables_by_semester).map(function (key) { return total_timetables_by_semester[key] }),
-          backgroundColor: primary_colors,
-          hoverBackgroundColor: secondary_colors
-        }]
-    };
-    var calendar_exports_by_type_data = {
-      labels: Object.keys(calendar_exports_by_type),
-      datasets: [
-        {
-          data: Object.keys(calendar_exports_by_type).map(function (key) { return calendar_exports_by_type[key] }),
-          backgroundColor: primary_colors,
-          hoverBackgroundColor: secondary_colors
-        }]
-    };
+
+    // var reactions_data = {
+    //   labels: Object.keys(number_of_reactions),
+    //   datasets: [
+    //     {
+    //       label: "# Uses",
+    //       backgroundColor: "rgba(255,23,68,0.2)",
+    //       borderColor: "rgba(255,23,68,1)",
+    //       borderWidth: 1,
+    //       hoverBackgroundColor: "rgba(255,23,68,0.4)",
+    //       hoverBorderColor: "rgba(255,23,68,1)",
+    //       data: Object.keys(number_of_reactions).map(function (key) { return number_of_reactions[key] }),
+    //     }
+    //   ]
+    // };
+
+
+
+    // NOTE: Display the data in appropriate graphs
+
+    // var btx = document.getElementById("num_users_by_school");
+    // var UsersBySchoolPieChart = new Chart(btx, {
+    //   type: 'pie',
+    //   data: num_users_by_school_data,
+    // });
+
+    var ytx = document.getElementById("num_users_by_class_year");
+    var UsersByYearPieChart = new Chart(ytx, {
+      type: 'pie',
+      data: num_users_by_class_year_data,
+    });
+
+    // var ptx = document.getElementById("timetables_by_schools");
+    // var TimetablesBySchoolPieChart = new Chart(ptx, {
+    //   type: 'pie',
+    //   data: timetables_by_schools_data,
+    // });
+
+    // var stx = document.getElementById("timetables_by_semester");
+    // var TimetablesBySemesterPieChart = new Chart(stx, {
+    //   type: 'pie',
+    //   data: timetables_by_semester_data,
+    // });
+
+    // var ctx = document.getElementById("calendar_exports_by_type");
+    // var CalendarExportsPieChart = new Chart(ctx, {
+    //   type: 'pie',
+    //   data: calendar_exports_by_type_data,
+    // });
 
     // var ctx = document.getElementById("timetables_per_hours_chart");
     // var line_chart_24_hours = new Chart(ctx, {
@@ -330,47 +375,17 @@
       data: signups_per_hour_data,
     });
 
-    var rtx = document.getElementById("reactions_chart");
-    var line_chart_reactions = new Chart(rtx, {
-      type: 'bar',
-      data: reactions_data,
-    });
-
-    var btx = document.getElementById("num_users_by_school");
-    var UsersBySchoolPieChart = new Chart(btx, {
-      type: 'pie',
-      data: num_users_by_school_data,
-    });
-
-    var ytx = document.getElementById("num_users_by_class_year");
-    var UsersByYearPieChart = new Chart(ytx, {
-      type: 'pie',
-      data: num_users_by_class_year_data,
-    });
-
-    var ptx = document.getElementById("timetables_by_schools");
-    var TimetablesBySchoolPieChart = new Chart(ptx, {
-      type: 'pie',
-      data: timetables_by_schools_data,
-    });
-
-    var stx = document.getElementById("timetables_by_semester");
-    var TimetablesBySemesterPieChart = new Chart(stx, {
-      type: 'pie',
-      data: timetables_by_semester_data,
-    });
-
-    var ctx = document.getElementById("calendar_exports_by_type");
-    var CalendarExportsPieChart = new Chart(ctx, {
-      type: 'pie',
-      data: calendar_exports_by_type_data,
-    });
+    // var rtx = document.getElementById("reactions_chart");
+    // var line_chart_reactions = new Chart(rtx, {
+    //   type: 'bar',
+    //   data: reactions_data,
+    // });
   </script>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script type="text/javascript" src="https://fb.me/react-0.14.3.js"></script>
   <script type="text/javascript" src="https://fb.me/react-dom-0.14.3.js"></script>
-  <!--<script type="text/javascript" src="{% static 'js/gulp/analytics_application.js' %}"></script>-->
+  <!-- <script type="text/javascript" src="{% static 'js/gulp/analytics_application.js' %}"></script> -->
 
 </body>
 
