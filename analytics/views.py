@@ -94,7 +94,6 @@ def view_analytics_dashboard(request):
                 # "jhu_most_popular_courses": [],  # cause timeout on server
                 # "uoft_most_popular_courses": [],  # cause timeout on server
                 # "umd_most_popular_courses": [],  # cause timeout on server
-
                 #  "num_users_by_school": json.dumps(number_students_by_school()),
                 "num_users_by_class_year": json.dumps(number_students_by_year()),
                 # "total_timetables_by_school": json.dumps(total_timetables_by_school),
