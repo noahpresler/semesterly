@@ -1,3 +1,10 @@
+"""
+Deletes Sections, Offerings, and Timetables for a given year. 
+
+Example usage: python manage.py remove_old_courses 2022
+Removes all of the above for the year 2022
+"""
+
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from timetable.models import Semester
