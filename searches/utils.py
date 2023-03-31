@@ -16,10 +16,13 @@ from timetable.models import Course
 from functools import reduce
 
 abbreviations = {
-    "ip" : ["Intermediate Programming", "Data Structures"],
-    "ifp" : ["Introduction to Fiction & Poetry I", "Introduction to Fiction & Poetry II"],
-    "oose" : ["Object Oriented Software Engineering"],
-    "ds" : ["Data Structures"],
+    "ip": ["Intermediate Programming", "Data Structures"],
+    "ifp": [
+        "Introduction to Fiction & Poetry I",
+        "Introduction to Fiction & Poetry II",
+    ],
+    "oose": ["Object Oriented Software Engineering"],
+    "ds": ["Data Structures"],
     "ie": ["International Monetary Economics"],
     "macro": ["Elements of Macroeconomics"],
     "micro": ["Elements of Microeconomics"],
@@ -45,10 +48,9 @@ abbreviations = {
     "dads": ["Design and Analysis of Dynamical Systems"],
     "lade": ["Linear Algebra and Differential Equations"],
     "me": ["Mastering Electronics"],
-    "hci": ["Introduction to Human-Computer Interaction"]
-
-
+    "hci": ["Introduction to Human-Computer Interaction"],
 }
+
 
 def search(school, query, semester):
     """Returns courses that are contained in the name from a query."""
@@ -60,8 +62,10 @@ def search(school, query, semester):
     course_name_contains_query = reduce(
         operator.and_, map(course_name_contains_token, query_tokens)
     )
-   
-    course_abbreviation = reduce(operator.or_, map(lambda n: Q(name=n), abbreviations[query]))
+
+    course_abbreviation = reduce(
+        operator.or_, map(lambda n: Q(name=n), abbreviations[query])
+    )
     """add the abbreviation here"""
     return (
         Course.objects.filter(
