@@ -17,9 +17,36 @@ from functools import reduce
 
 abbreviations = {
     "ip" : ["Intermediate Programming", "Data Structures"],
-    "ifp" : ["Introduction to Fiction and Poetry"],
+    "ifp" : ["Introduction to Fiction & Poetry I", "Introduction to Fiction & Poetry II"],
     "oose" : ["Object Oriented Software Engineering"],
-    "ds" : ["Data Structures"]
+    "ds" : ["Data Structures"],
+    "ie": ["International Monetary Economics"],
+    "macro": ["Elements of Macroeconomics"],
+    "micro": ["Elements of Microeconomics"],
+    "aap": ["Asian American Politics"],
+    "iid": ["Issues in International Development"],
+    "ime": ["International Monetary Economics"],
+    "linalg": ["Linear Algebra"],
+    "csf": ["Computer System Fundamentals"],
+    "stad": ["Software Testing & Debugging"],
+    "probstat": ["Probability and Statistics"],
+    "fbbc": ["Foundations of Brain, Behavior and Cognition"],
+    "pebl": ["Protein Engineering and Biochemistry Lab"],
+    "icp": ["Introduction to Cognitive Psychology"],
+    "fpse": ["Functional Programming in Software Engineering"],
+    "uima": ["User Interfaces and Mobile Applications"],
+    "ai": ["Artificial Intelligence"],
+    "mfcs": ["Mathematical Foundations for Computer Science"],
+    "cte": ["Cell and Tissue Engineering Lab"],
+    "dsf": ["Digital Systems Fundamentals"],
+    "sboc": ["Systems Biology of the Cell"],
+    "e&i": ["Electronics & Instrumentation"],
+    "cmm": ["Computational Molecular Medicine"],
+    "dads": ["Design and Analysis of Dynamical Systems"],
+    "lade": ["Linear Algebra and Differential Equations"],
+    "me": ["Mastering Electronics"],
+    "hci": ["Introduction to Human-Computer Interaction"]
+
 
 }
 
@@ -27,15 +54,19 @@ def search(school, query, semester):
     """Returns courses that are contained in the name from a query."""
     if query == "":
         return Course.objects.filter(school=school)
+    elif query not in abbreviations:
+        return Course.objects.filter(school=school)
     query_tokens = query.strip().lower().split()
     course_name_contains_query = reduce(
         operator.and_, map(course_name_contains_token, query_tokens)
     )
+   
+    course_abbreviation = reduce(operator.or_, map(lambda n: Q(name=n), abbreviations[query]))
     """add the abbreviation here"""
     return (
         Course.objects.filter(
             Q(school=school)
-            & (course_name_contains_query )
+            & (course_abbreviation | course_name_contains_query)
             & Q(section__semester=semester)
         )
         .annotate(id_count=Count("id"))
