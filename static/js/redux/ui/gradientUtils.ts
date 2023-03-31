@@ -1,3 +1,8 @@
+/**
+ * This file contains functions to generate a gradient from a start and end color used
+ * in the compare timetable sidebar. It also contains various other color manipulation
+ * functions.
+ */
 import { ThemeName } from "./../constants/commonTypes";
 import tinycolor from "tinycolor2";
 

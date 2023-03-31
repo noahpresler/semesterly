@@ -5,3 +5,8 @@ h1 {
 	padding:25px;
 	margin-bottom:20px;
 }
+
+#chart-wrapper {
+	width: 80%;
+	margin: 0 auto;
+}

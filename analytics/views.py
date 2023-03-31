@@ -11,7 +11,9 @@
 # GNU General Public License for more details.
 
 import json
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.error
+import urllib.parse
 import heapq
 from dateutil import tz
 from datetime import timedelta, datetime
@@ -35,79 +37,28 @@ to_zone = tz.gettz("America/New_York")
 
 def view_analytics_dashboard(request):
     student = get_student(request)
-    if student and student.user.is_staff:
-        # Number of time tables by school
-        total_timetables_by_school = {}
-        # timetables_per_hour = {}
-        # shared_timetables_per_hour = {}
-        for school in ACTIVE_SCHOOLS:
-            total_timetables_by_school[school] = number_timetables(school=school)
-            # timetables_per_hour[school] = number_timetables_per_hour(school=school)
-            # shared_timetables_per_hour[school] = number_timetables_per_hour(Timetable=SharedTimetable, school=school)
-
-        # Number of users by permission
-        # TODO: Moves this array to somewhere else (like ACTIVE_SCHOOLS)
+    if student:
         total_signups = number_timetables(Timetable=Student)
-
-        permissions = ["social_courses", "social_offerings", "social_all"]
-        num_users_by_permission = {}
-        for permission in permissions:
-            # TODO: hacky way of passing in permission as an identifier for parameter.
-            # Also have to use tuple for template to easily access %.
-            args = {"Timetable": Student, permission: True}
-            num_users = number_timetables(**args)
-            percent_users = format(float(num_users) / total_signups * 100, ".2f")
-            num_users_by_permission[permission] = (num_users, percent_users)
-
         total_calendar_exports = number_timetables(Timetable=CalendarExport)
-        google_calendar_exports = number_timetables(
-            Timetable=CalendarExport, is_google_calendar=True
-        )
-        ics_calendar_exports = total_calendar_exports - google_calendar_exports
         unique_users_calendar_exports = number_timetables(
             Timetable=CalendarExport, distinct="student"
         )
-
-        total_shared_timetable_views = number_timetables(Timetable=SharedTimetableView)
-        total_shared_course_views = number_timetables(Timetable=SharedCourseView)
-
         return render(
             request,
             "analytics_dashboard.html",
             {
-                "signups_per_hour": number_timetables_per_hour(
-                    Timetable=Student, start_delta_days=7, interval_delta_hours=24
-                ),
-                "total_timetables_by_school": json.dumps(total_timetables_by_school),
-                "total_timetables_by_semester": json.dumps(
-                    number_timetables_per_semester()
-                ),
                 "total_timetables": number_timetables(),
                 "total_shared_timetables": number_timetables(Timetable=SharedTimetable),
                 "total_personal_timetables": number_timetables(
                     Timetable=PersonalTimetable
                 ),
                 "total_signups": total_signups,
-                "num_users_by_permission": num_users_by_permission,
-                "num_users_by_class_year": json.dumps(number_students_by_year()),
-                "num_users_by_school": json.dumps(number_students_by_school()),
-                "number_of_reactions": json.dumps(number_of_reactions()),
                 "total_calendar_exports": total_calendar_exports,
-                "google_calendar_exports": google_calendar_exports,
-                "ics_calendar_exports": ics_calendar_exports,
                 "unique_users_calendar_exports": unique_users_calendar_exports,
-                "fb_alert_views": fb_alert_views,
-                "unique_users_fb_alert_views": unique_users_fb_alert_views,
-                "fb_alert_clicks": fb_alert_clicks,
-                "unique_users_fb_alert_clicks": unique_users_fb_alert_clicks,
-                "total_shared_timetable_views": total_shared_timetable_views,
-                "total_shared_course_views": total_shared_course_views,
-                "calendar_exports_by_type": json.dumps(
-                    {"ics": ics_calendar_exports, "google": google_calendar_exports}
+                "num_users_by_class_year": json.dumps(number_students_by_year()),
+                "signups_per_hour": number_timetables_per_hour(
+                    Timetable=Student, start_delta_days=7, interval_delta_hours=24
                 ),
-                "jhu_most_popular_courses": [],  # needs to be refactored; was causing timeout on server because too slow
-                "uoft_most_popular_courses": [],  # needs to be refactored; was causing timeout on server because too slow
-                "umd_most_popular_courses": [],  # needs to be refactored; was causing timeout on server because too slow
             },
         )
     else:

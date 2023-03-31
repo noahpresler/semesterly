@@ -22,6 +22,10 @@ import { DAYS } from "../../constants/constants";
 import Modal from "./Modal";
 import { selectSlotColorData } from "../../state/slices/themeSlice";
 
+/**
+ * This modal pops up when a student clicks on a custom event in their timetable. It
+ * allows them to modify the event's day, name, time, location, etc.
+ */
 const CustomEventModal = () => {
   const [eventDay, setEventDay] = useState("");
   const [eventName, setEventName] = useState("");

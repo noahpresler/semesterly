@@ -15,6 +15,10 @@ GNU General Public License for more details.
 import PropTypes from "prop-types";
 import React from "react";
 
+/**
+ * This alert pops up when the user is trying to create a new timetable, but the current
+ * timetable is not up-to-date yet (auto-save is still in progress).
+ */
 class NewTimetableAlert extends React.Component {
   componentWillUnmount() {
     this.props.dismissSelf();

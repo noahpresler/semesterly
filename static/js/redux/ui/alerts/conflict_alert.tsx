@@ -18,6 +18,11 @@ import { alertsActions } from "../../state/slices";
 import { preferencesActions } from "../../state/slices/preferencesSlice";
 import { addLastAddedCourse } from "../../actions/timetable_actions";
 
+/**
+ * This alert pops up when a user tries to add a course that conflicts with another
+ * course in their schedule. It allows them to add the course anyway, which will save
+ * the "allow conflicts" preference permanently to their timetable.
+ */
 const ConflictAlert = () => {
   const dispatch = useAppDispatch();
 

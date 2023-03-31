@@ -18,6 +18,10 @@ import { selectTheme } from "../../state/slices/themeSlice";
 import { browserSupportsLocalStorage } from "../../util";
 import Modal from "./Modal";
 
+/**
+ * This modal appears when a student first visits the site. It explains the basic steps
+ * to using Semester.ly.
+ */
 const TutorialModal = () => {
   const [tutorialPosition, setTutorialPosition] = useState(1);
   const [isVisible, setIsVisible] = useState(false);

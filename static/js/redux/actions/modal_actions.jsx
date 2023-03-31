@@ -46,6 +46,11 @@ export const fetchCourseInfo = (courseId) => (dispatch, getState) => {
   dispatch(fetchCourseClassmates(courseId));
 };
 
+/**
+ *
+ * @param cid The course's id
+ * @param title The title of the emoji (e.g. "LOVE")
+ */
 export const react = (cid, title) => (dispatch) => {
   fetch(getReactToCourseEndpoint(), {
     headers: {

@@ -4,6 +4,9 @@ type AvgCourseRatingProps = {
   avgRating: number;
 };
 
+/**
+ * This component displays the average rating of a course (out of 5 stars).
+ */
 const AvgCourseRating = ({ avgRating }: AvgCourseRatingProps) => (
   <div className="sb-rating">
     <h3>Average Course Rating</h3>

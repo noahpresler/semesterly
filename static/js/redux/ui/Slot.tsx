@@ -79,6 +79,12 @@ type SlotProps = {
   colorData: SlotColorData[];
 };
 
+/**
+ * This component displays a single offering on the timetable, showing the course's
+ * name, section, time, and location. The height of the slot is determined by the
+ * duration of the lecture. Clicking on the slot will display the CourseModal for the
+ * course this slot represents.
+ */
 const Slot = (props: SlotProps) => {
   const isComparingTimetables = useAppSelector(
     (state) => state.compareTimetable.isComparing

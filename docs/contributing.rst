@@ -119,6 +119,12 @@ the :ref:`styleguide` to learn more about our code guidelines.
 
     .. code-block:: bash
 
+        sh format.sh
+
+    This runs the following code:
+
+    .. code-block:: bash
+
         npx prettier "**/*.{js,jsx,ts,tsx}" --write 
         eslint . --ext .js,.jsx,.ts,.tsx --fix
         black .

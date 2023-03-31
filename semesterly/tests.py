@@ -30,7 +30,7 @@ class EndToEndTest(SeleniumTestCase):
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.remove_course(0, n_slots_expected=0)
         with self.description("Search for course and test infinite scroll"):
-            self.search_course("introduction", 8)
+            self.search_course("introduction", 6)
             self.search_infinite_scroll(10)  # Total of 10 courses should be displayed
             self.clear_search_query()
         with self.description("Add two short courses and then remove"):

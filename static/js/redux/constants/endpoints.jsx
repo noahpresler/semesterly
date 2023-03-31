@@ -13,12 +13,11 @@ GNU General Public License for more details.
 */
 
 /* server endpoints */
-// export const getAddTTtoGCalEndpoint = () => '/user/gcal/';
 export const getLogiCalEndpoint = () => "/user/log_ical/";
 export const getCourseInfoEndpoint = (courseId, semester) =>
   `/courses/${semester}/id/${courseId}/`;
-export const getCourseSearchEndpoint = (query, semester, page = 1) =>
-  `/search/${semester}/${query}/?page=${page}&limit=8`;
+export const getCourseSearchEndpoint = (query, semester, page = 1, limit = 6) =>
+  `/search/${semester}/${query}/?page=${page}&limit=${limit}`;
 export const getTimetablesEndpoint = () => "/timetables/";
 export const getLoadSavedTimetablesEndpoint = (semester) =>
   `/user/timetables/${semester.name}/${semester.year}/`;

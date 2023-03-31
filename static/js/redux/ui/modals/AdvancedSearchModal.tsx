@@ -50,6 +50,10 @@ const AdvancedSearchResult = ({
   </div>
 );
 
+/**
+ * This is the modal that pops up when you click on the "Advanced Search" button. It
+ * allows students to search for courses by name, department, area, level, etc.
+ */
 const AdvancedSearchModal = () => {
   const dispatch = useDispatch();
 
@@ -456,6 +460,7 @@ const AdvancedSearchModal = () => {
             >
               {(!newSearch || !isFetching) && searchResults}
             </InfiniteScroll>
+            <div className="extra-space" />
           </div>
           {filters}
           <Filter

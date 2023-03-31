@@ -95,6 +95,11 @@ function collectCreateDrop(connect: any) {
   };
 }
 
+/**
+ * This component renders custom events in the timetable, and also handles the
+ * semi-created state when a student is dragging a custom event to create it. It uses
+ * React-DND containers to handle drag and drop events.
+ */
 const CustomSlot = (props: CustomSlotProps) => {
   const [hovered, setHovered] = useState(false);
 

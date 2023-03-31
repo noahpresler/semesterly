@@ -26,6 +26,10 @@ type SearchResultProps = {
   position: number;
 };
 
+/**
+ * This component displays a single search result, allowing the student to add the
+ * course to their timetable; clicking on it will open the CourseModal.
+ */
 const SearchResult = (props: SearchResultProps) => {
   const campuses: any = useAppSelector(
     (state) => getSchoolSpecificInfo(state.school.school).campuses

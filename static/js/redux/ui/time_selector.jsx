@@ -16,6 +16,10 @@ import PropTypes from "prop-types";
 import React from "react";
 import InputRange from "react-input-range";
 
+/**
+ * This component is used in the AdvancedSearchModal to select the time range a class
+ * must take place in.
+ */
 class TimeSelector extends React.Component {
   componentDidMount() {
     $(".input-range__label-container")

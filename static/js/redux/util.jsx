@@ -11,6 +11,10 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
+/**
+ * This file contains various utility functions, but mostly those for saving data to
+ * local storage.
+ */
 
 import range from "lodash/range";
 import { lightSlotColor } from "./constants/colors";

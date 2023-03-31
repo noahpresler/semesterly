@@ -20,6 +20,10 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { signupModalActions } from "../../state/slices/signupModalSlice";
 import Modal from "./Modal";
 
+/**
+ * This modal pops up when a non-logged in student tries to access a feature that
+ * requires an account. It will prompt them to sign up via Facebook.
+ */
 const SignupModal = () => {
   const isVisible = useAppSelector((state) => state.signupModal.isVisible);
   const dispatch = useAppDispatch();

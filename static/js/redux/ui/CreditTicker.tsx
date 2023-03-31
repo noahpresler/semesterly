@@ -22,6 +22,10 @@ interface CreditTickerProps {
   events: Event[];
 }
 
+/**
+ * This component displays the total number of credits the student is taking with their
+ * current timetable. It animates the number of credits in increments of 0.25.
+ */
 const CreditTicker = ({ timetableCourses, events }: CreditTickerProps) => {
   const [displayedCredits, setDisplayedCredits] = useState(0);
 

@@ -27,19 +27,6 @@ import {
   receiveSearchResults,
 } from "./initActions";
 
-export const setSemester = (semester) => (dispatch, getState) => {
-  const state = getState();
-
-  if (state.userInfo.data.isLoggedIn) {
-    dispatch(getUserSavedTimetables(state.semester.all[semester]));
-  } else {
-    dispatch(nullifyTimetable(dispatch));
-  }
-
-  dispatch(semesterActions.updateSemester(semester));
-  dispatch(receiveSearchResults({ data: [], page: 1 }));
-};
-
 /*
  * Check whether the user is logged in and whether their timetable is up to date
  * and set semester if appropriate. Otherwise show an alert modal and save the
@@ -64,6 +51,19 @@ export const maybeSetSemester = (semester) => (dispatch, getState) => {
     dispatch(setSemester(semester));
   }
   return null;
+};
+
+export const setSemester = (semester) => (dispatch, getState) => {
+  const state = getState();
+
+  if (state.userInfo.data.isLoggedIn) {
+    dispatch(getUserSavedTimetables(state.semester.all[semester]));
+  } else {
+    dispatch(nullifyTimetable(dispatch));
+  }
+
+  dispatch(semesterActions.updateSemester(semester));
+  dispatch(receiveSearchResults({ data: [], page: 1 }));
 };
 
 export const fetchSearchResults = (query, pageToFetch) => (dispatch, getState) => {
@@ -101,7 +101,7 @@ export const fetchAdvancedSearchResults =
     dispatch(advancedSearchActions.requestAdvancedSearchResults());
     // send a request (via fetch) to the appropriate endpoint to get courses
     const state = getState();
-    fetch(getCourseSearchEndpoint(query, getSemester(getState()), page), {
+    fetch(getCourseSearchEndpoint(query, getSemester(getState()), page, 8), {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

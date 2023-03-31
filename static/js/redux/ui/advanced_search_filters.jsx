@@ -19,6 +19,10 @@ import ClickOutHandler from "react-onclickout";
 import classNames from "classnames";
 import * as SemesterlyPropTypes from "../constants/semesterlyPropTypes";
 
+/**
+ * This is a helper component used in the AdvancedSearchModal to render filtering by
+ * departments, areas, levels, or days of the week.
+ */
 export class Filter extends React.Component {
   constructor(props) {
     super(props);
