@@ -16,7 +16,7 @@ from timetable.models import Course
 from functools import reduce
 
 abbreviations = {
-    "ip": ["Intermediate Programming", "Data Structures"],
+    "ip": ["Intermediate Programming"],
     "ifp": [
         "Introduction to Fiction & Poetry I",
         "Introduction to Fiction & Poetry II",
@@ -56,33 +56,29 @@ def search(school, query, semester):
     """Returns courses that are contained in the name from a query."""
     if query == "":
         return Course.objects.filter(school=school)
-    elif query not in abbreviations:
-        return Course.objects.filter(school=school)
     query_tokens = query.strip().lower().split()
     course_name_contains_query = reduce(
-        operator.and_, map(course_name_contains_token, query_tokens)
+        operator.and_, list(map(course_name_contains_token, query_tokens))
     )
-
-    course_abbreviation = reduce(
-        operator.or_, map(lambda n: Q(name=n), abbreviations[query])
-    )
-    """add the abbreviation here"""
+    # course_abbreviation = reduce(
+    #     operator.or_, list(map(lambda n: Q(name=n), abbreviations[query_tokens]))
+    # )
+    query = query.lower()
+    course_abbreviation = query
+    try:
+        course_abbreviation = reduce(operator.or_, map(lambda n: Q(name=n), abbreviations[query]))
+    except KeyError:
+        course_abbreviation = course_name_contains_query
+    
     return (
         Course.objects.filter(
             Q(school=school)
-            & (course_abbreviation | course_name_contains_query)
+            &  course_abbreviation
             & Q(section__semester=semester)
         )
         .annotate(id_count=Count("id"))
         .order_by("id")
     )
-
-
-def query_is_abbreviation(query):
-    query = query.lower()
-    if query not in abbreviations:
-        return None
-    return reduce(operator.or_, map(lambda n: Q(name=n), abbreviations[query]))
 
 
 def course_name_contains_token(token):
@@ -92,3 +88,55 @@ def course_name_contains_token(token):
         | Q(name__icontains=token.replace("&", "and"))
         | Q(name__icontains=token.replace("and", "&"))
     )
+def query_is_abbreviation(query):
+    query = query.lower()
+    if query  in abbreviations:
+        return reduce(operator.or_, map(lambda n: Q(name=n), abbreviations[query]))
+    return None
+
+# def query_is_abbreviation(query):
+#     query = query.lower()
+#     if query  in abbreviations:
+#         return reduce(operator.or_, map(lambda n: Q(name=n), abbreviations[query]))
+#     return None
+#     if query == "":
+#         return Course.objects.filter(school=school)
+#     elif query not in abbreviations:
+#         return Course.objects.filter(school=school)
+#     query_tokens = query.strip().lower().split()
+#     course_name_contains_query = reduce(
+#         operator.and_, list(map(course_name_contains_token, query_tokens))
+#     )
+
+#     # course_abbreviation = reduce(
+#     #     operator.or_, map(lambda n: Q(name=n), abbreviations[query])
+#     # )
+#     # if query in abbreviation:
+#     #     return (Course.objects.filter(course_abbreviation))
+#     """add the abbreviation here"""
+#     return (
+        
+#         Course.objects.filter(
+#             Q(school=school)
+#             & course_name_contains_query
+#             & Q(section__semester=semester)
+#         )
+#         .annotate(id_count=Count("id"))
+#         .order_by("id")
+#     )
+
+
+# def query_is_abbreviation(query):
+#     query = query.lower()
+#     if query not in abbreviations:
+#         return None
+#     return reduce(operator.or_, map(lambda n: Q(name=n), abbreviations[query]))
+
+
+# def course_name_contains_token(token):
+#     """Returns a query set of courses where tokens are contained in code or name."""
+#     return (
+#         Q(code__icontains=token)
+#         | Q(name__icontains=token.replace("&", "and"))
+#         | Q(name__icontains=token.replace("and", "&"))
+#     )
