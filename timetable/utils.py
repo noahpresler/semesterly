@@ -270,10 +270,10 @@ def find_slots_to_fill(start, end, school):
 
 def get_time_index(hours, minutes, school):
     """Take number of hours and minutes, and return the corresponding time slot index"""
-    # earliest possible hour is 8, so we get the number of hours past 8am
-    return (hours) * (60 / SCHOOLS_MAP[school].granularity) + minutes / SCHOOLS_MAP[
-        school
-    ].granularity
+    return (
+        hours * (60 / SCHOOLS_MAP[school].granularity)
+        + minutes / SCHOOLS_MAP[school].granularity
+    )
 
 
 def get_hours_minutes(time_string):
@@ -305,8 +305,6 @@ def get_minute_from_string_time(time_string):
 def get_day_to_usage(custom_events, school):
     """Initialize day_to_usage dictionary, which has custom events blocked out."""
     day_to_usage = {
-        # This really should be 24 * 60, but for some reason the timetable is
-        # capped at starting at 8am, so 8am-12am is 16 hours.
         day: [set() for _ in range(int(24 * 60 / SCHOOLS_MAP[school].granularity))]
         for day in ["M", "T", "W", "R", "F", "S", "U"]
     }
