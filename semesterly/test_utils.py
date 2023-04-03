@@ -948,8 +948,8 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
         Args:
             day: 0-6, 0 is Monday
-            start_time: 0 is 8:00A.M, every 1 is 30 mins
-            end_time: 0 is 8:00A.M, every 1 is 30 mins
+            start_time: 0 is 0:00A.M, every 1 is 30 mins
+            end_time: 0 is 0:00A.M, every 1 is 30 mins
             show_weekend: if weekends are shown
         """
         calendar_cells = self.find((By.CLASS_NAME, "cal-cell"), get_all=True)
