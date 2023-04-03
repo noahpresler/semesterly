@@ -117,7 +117,8 @@ export const getFirstTTStartHour = createSelector(
 export const getHoveredSlots = (state: RootState) =>
   fromTimetables.getHoveredSlots(state.timetables);
 
-export const getMaxEndHour = (state: RootState) => 24;
+// It's actually 23 because 24 will show up to 00:59
+export const getMaxEndHour = (state: RootState) => 23;
 
 // search selectors
 const getSearchResultId = (state: RootState, index: number) =>

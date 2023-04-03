@@ -106,7 +106,7 @@ export const getLocalTimetable = () => {
 export const getMaxTimetableHeightBasedOnWindowHeight = (height) => {
   // Hard-coded hour height because not sure how to get it post-render
   const hourHeight = 25 * 2;
-  const otherElementsHeight = 150; // Ex: Topbar, toolbar, footer
+  const otherElementsHeight = 140; // Ex: Topbar, toolbar, footer
   const maxHour = parseInt((height - otherElementsHeight) / hourHeight, 10);
   const maxHeight = maxHour * hourHeight;
   const height24Hours = 24 * hourHeight;
