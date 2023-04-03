@@ -55,17 +55,7 @@ interface CalendarProps {
 }
 
 const getTimelineStyle = (endHour: number) => {
-  const now = new Date();
-  if (
-    now.getHours() > endHour || // if the current time is before
-    now.getHours() < 8 || // 8am or after the schedule end
-    now.getDay() === 0 || // time or if the current day is
-    now.getDay() === 6 // Saturday or Sunday, then
-  ) {
-    // display no line
-    return { display: "none" };
-  }
-  const diff = Math.abs(new Date().valueOf() - new Date().setHours(8, 0, 0).valueOf());
+  const diff = Math.abs(new Date().valueOf() - new Date().setHours(0, 0, 0).valueOf());
   const mins = Math.ceil(diff / 1000 / 60);
   const top = (mins / 15.0) * 13;
   return { top, zIndex: 1 };
