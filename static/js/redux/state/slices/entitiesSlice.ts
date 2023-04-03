@@ -152,9 +152,7 @@ export const getTimetableDenormCourses = (
   return courseIds.map((courseId) => getDenormCourseById(state, courseId));
 };
 
-export const getFirstTTStartHour = function getLatestSlotEndHourFromTimetable(
-  timetable: Timetable
-) {
+export const getFirstTTStartHour = (timetable: Timetable) => {
   let firstStartHour = 24;
   timetable.slots.forEach((slot) => {
     slot.offerings.forEach((offering: any) => {

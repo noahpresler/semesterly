@@ -40,7 +40,7 @@ import {
   receiveCourses,
   changeActiveSavedTimetable,
 } from "./initActions";
-import { timetablesActions } from "../state/slices/timetablesSlice";
+import { timetablesActions, emptyTimetable } from "../state/slices/timetablesSlice";
 import { semesterActions } from "../state/slices/semesterSlice";
 import { customEventsActions } from "../state/slices/customEventsSlice";
 import { courseSectionsActions } from "../state/slices/courseSectionsSlice";
@@ -217,17 +217,11 @@ export const createNewTimetable =
   };
 
 export const nullifyTimetable = () => (dispatch) => {
-  dispatch(receiveTimetables([{ slots: [] }]));
+  dispatch(receiveTimetables([emptyTimetable]));
   dispatch(courseSectionsActions.receiveCourseSections({}));
   dispatch(
     changeActiveSavedTimetable({
-      timetable: {
-        name: "Untitled Schedule",
-        slots: [],
-        events: [],
-        has_conflict: false,
-        show_weekend: false,
-      },
+      timetable: emptyTimetable,
       upToDate: false,
     })
   );

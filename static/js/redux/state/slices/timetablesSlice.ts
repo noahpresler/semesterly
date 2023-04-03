@@ -24,14 +24,14 @@ interface TimetablesSliceState {
   // either int (course id), object (custom slots state), or null
 }
 
-const emptyTimetable: Timetable = {
+export const emptyTimetable: Timetable = {
   slots: [],
   has_conflict: false,
   show_weekend: false,
   id: null,
-  avg_rating: 0,
+  avg_rating: null,
   events: [],
-  name: "",
+  name: "Untitled Schedule",
 };
 
 const initialState: TimetablesSliceState = {
@@ -89,6 +89,7 @@ const timetablesSlice = createSlice({
         state.isFetching = false;
       })
       .addCase(receiveTimetables, (state, action: PayloadAction<Timetable[]>) => {
+        console.log("Payload", action.payload);
         // if the array of timetables is empty, set state.items to an array with one empty timetable
         const actionTimetables =
           action.payload.length > 0 ? action.payload : [emptyTimetable];
@@ -108,8 +109,10 @@ const timetablesSlice = createSlice({
 });
 export const getTimetables = (state: TimetablesSliceState) => state.items;
 
-export const getActiveTimetable = (state: TimetablesSliceState) =>
-  state.items[state.active];
+export const getActiveTimetable = (state: TimetablesSliceState) => {
+  console.log("State", state);
+  return state.items[state.active];
+};
 
 export const getHoveredSlots = (state: TimetablesSliceState) => state.hovered;
 

@@ -1,5 +1,6 @@
 import { getFirstTTStartHour } from "../state";
 import { getSectionTypeToSections } from "../state/slices/entitiesSlice";
+import { emptyTimetable } from "../state/slices/timetablesSlice";
 
 describe("course selectors", () => {
   describe("section type to sections selector", () => {
@@ -46,7 +47,7 @@ describe("timetable selectors", () => {
 
   describe("getMinTTStartHour", () => {
     it("returns 24 for empty timetable", () => {
-      expect(getFirstTTStartHour({ courses: [], slots: [] })).toEqual(17);
+      expect(getFirstTTStartHour(emptyTimetable)).toEqual(24);
     });
     it("returns correct start hour", () => {
       expect(getFirstTTStartHour(timetable)).toEqual(18);
