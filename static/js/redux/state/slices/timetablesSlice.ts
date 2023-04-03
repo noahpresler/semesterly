@@ -89,7 +89,6 @@ const timetablesSlice = createSlice({
         state.isFetching = false;
       })
       .addCase(receiveTimetables, (state, action: PayloadAction<Timetable[]>) => {
-        console.log("Payload", action.payload);
         // if the array of timetables is empty, set state.items to an array with one empty timetable
         const actionTimetables =
           action.payload.length > 0 ? action.payload : [emptyTimetable];
@@ -110,7 +109,6 @@ const timetablesSlice = createSlice({
 export const getTimetables = (state: TimetablesSliceState) => state.items;
 
 export const getActiveTimetable = (state: TimetablesSliceState) => {
-  console.log("State", state);
   return state.items[state.active];
 };
 
