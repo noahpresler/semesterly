@@ -1,5 +1,7 @@
-import { getFirstTTStartHour } from "../state";
-import { getSectionTypeToSections } from "../state/slices/entitiesSlice";
+import {
+  getSectionTypeToSections,
+  getFirstTTStartHour,
+} from "../state/slices/entitiesSlice";
 import { emptyTimetable } from "../state/slices/timetablesSlice";
 
 describe("course selectors", () => {
@@ -38,11 +40,13 @@ describe("timetable selectors", () => {
           {
             id: "O1",
             thing: "thing",
-            time_end: "18:30",
+            time_start: "18:00",
+            time_end: "18:50",
           },
         ],
       },
     ],
+    events: [],
   };
 
   describe("getMinTTStartHour", () => {
