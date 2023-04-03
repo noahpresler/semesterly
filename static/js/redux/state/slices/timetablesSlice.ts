@@ -108,9 +108,8 @@ const timetablesSlice = createSlice({
 });
 export const getTimetables = (state: TimetablesSliceState) => state.items;
 
-export const getActiveTimetable = (state: TimetablesSliceState) => {
-  return state.items[state.active];
-};
+export const getActiveTimetable = (state: TimetablesSliceState) =>
+  state.items[state.active];
 
 export const getHoveredSlots = (state: TimetablesSliceState) => state.hovered;
 
