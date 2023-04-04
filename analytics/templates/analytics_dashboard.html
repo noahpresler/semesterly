@@ -44,12 +44,18 @@
   <!-- Analytics displayed with graphs -->
   <script type="text/javascript">
     var num_users_by_class_year = JSON.parse("{{num_users_by_class_year|escapejs}}");
-    var signups_per_hour = JSON.parse("{{signups_per_hour|escapejs}}");
+    var num_users_by_major = JSON.parse("{{num_users_by_major|escapejs}}");
+    var signups_per_day = JSON.parse("{{signups_per_day|escapejs}}");
   </script>
 
   <h4>Number of users by class year:</h4>
   <div id="chart-wrapper">
     <canvas id="num_users_by_class_year"></canvas>
+  </div>
+
+  <h4>Number of users by major:</h4>
+  <div id="chart-wrapper">
+    <canvas id="num_users_by_major"></canvas>
   </div>
   
   <h4>Number of signups per day for the past week:</h4>
@@ -80,7 +86,17 @@
         }]
     };
 
-    var signups_per_hour_data = {
+    var num_users_by_major_data = {
+      labels: Object.keys(num_users_by_major),
+      datasets: [
+        {
+          data: Object.keys(num_users_by_major).map(function (key) { return num_users_by_major[key] }),
+          backgroundColor: primary_colors,
+          hoverBackgroundColor: secondary_colors
+        }]
+    };
+
+    var signups_per_day_data = {
       labels: ["-6", "-5", "-4", "-3", "-2", "-1", "Now"],
       datasets: [
         {
@@ -100,7 +116,7 @@
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: signups_per_hour,
+          data: signups_per_day,
         }
       ]
     }
@@ -112,10 +128,16 @@
       data: num_users_by_class_year_data,
     });
 
+    var ytx = document.getElementById("num_users_by_major");
+    var UsersByYearPieChart = new Chart(ytx, {
+      type: 'pie',
+      data: num_users_by_major_data,
+    });
+
     var utx = document.getElementById("signups_chart");
     var SignupsPieChart = new Chart(utx, {
       type: 'line',
-      data: signups_per_hour_data,
+      data: signups_per_day_data,
     });
   </script>
 

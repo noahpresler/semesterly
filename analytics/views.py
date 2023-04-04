@@ -56,8 +56,9 @@ def view_analytics_dashboard(request):
                 "total_calendar_exports": total_calendar_exports,
                 "unique_users_calendar_exports": unique_users_calendar_exports,
                 "num_users_by_class_year": json.dumps(number_students_by_year()),
-                "signups_per_hour": number_timetables_per_hour(
-                    Timetable=Student, start_delta_days=7, interval_delta_hours=24
+                "num_users_by_major": json.dumps(number_students_by_major()),
+                "signups_per_day": number_timetables_per_hour(
+                    Timetable=Student, start_delta_days=31, interval_delta_hours=24
                 ),
             },
         )
@@ -195,6 +196,17 @@ def number_students_by_year():
             class_year=class_year["class_year"]
         ).count()
     return count_class_years
+
+
+def number_students_by_major():
+    """Get the number of students by class year."""
+    valid_majors = Student.objects.values("major").distinct()
+    count_majors = {}
+    for major in valid_majors:
+        count_majors[major["major"]] = Student.objects.filter(
+            major=major["major"]
+        ).count()
+    return count_majors
 
 
 def number_students_by_school():
