@@ -58,7 +58,7 @@
     <canvas id="num_users_by_major"></canvas>
   </div>
   
-  <h4>Number of signups per day for the past week:</h4>
+  <h4>Number of signups per day for the past 31 days:</h4>
   <div id="chart-wrapper">
     <canvas id="signups_chart"></canvas>
   </div>
@@ -96,8 +96,16 @@
         }]
     };
 
+    var today = new Date();
+    var labels = [];
+    for (var i = 30; i > 0; i--) {
+      var date = new Date();
+      date.setDate(today.getDate() - i);
+      labels.push(date.toLocaleDateString());
+    }
+    labels.push("Now - " + today.toLocaleDateString());
     var signups_per_day_data = {
-      labels: ["-6", "-5", "-4", "-3", "-2", "-1", "Now"],
+      labels: labels,
       datasets: [
         {
           label: "# Signups",
