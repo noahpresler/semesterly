@@ -198,15 +198,21 @@ def number_students_by_year():
     return count_class_years
 
 
-def number_students_by_major():
-    """Get the number of students by class year."""
+def number_students_by_major(top_majors=30):
+    """Get the number of students by major, condensing small majors
+    into an 'Other' category and displaying only the top majors."""
     valid_majors = Student.objects.values("major").distinct()
     count_majors = {}
+    other_count = 0
     for major in valid_majors:
-        count_majors[major["major"]] = Student.objects.filter(
-            major=major["major"]
-        ).count()
-    return count_majors
+        major_count = Student.objects.filter(major=major["major"]).count()
+        count_majors[major["major"]] = major_count
+    sorted_majors = sorted(count_majors.items(), key=lambda x: x[1], reverse=True)
+    print(sorted_majors[top_majors:])
+    top_majors_count = dict(sorted_majors[:top_majors])
+    other_count += sum(major[1] for major in sorted_majors[top_majors:])
+    top_majors_count["Other"] = other_count
+    return top_majors_count
 
 
 def number_students_by_school():
