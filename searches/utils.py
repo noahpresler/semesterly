@@ -18,6 +18,7 @@ from functools import reduce
 abbreviations = {
     "aap": ["Asian American Politics"],
     "ai": ["Artificial Intelligence"],
+    "ar": ["Augmented Reality"],
     "algo": ["Intro Algorithms"],
     "algos": ["Intro Algorithms"],
     "bmed": ["Biomedical Engineering and Design"],
@@ -39,6 +40,7 @@ abbreviations = {
     "e&i": ["Electronics & Instrumentation"],
     "fbbc": ["Foundations of Brain, Behavior and Cognition"],
     "fpse": ["Functional Programming in Software Engineering"],
+    "fsjs": ["Full-Stack Javascript"],
     "hci": ["Introduction to Human-Computer Interaction"],
     "hri": ["Human-Robot Interaction"],
     "icp": ["Introduction to Cognitive Psychology"],
@@ -54,6 +56,7 @@ abbreviations = {
     "ime": ["International Monetary Economics"],
     "ip": ["Intermediate Programming"],
     "ir": ["Information Retrieval and Web Agents"],
+    "js": ["Full-Stack Javascript"],
     "lade": ["Linear Algebra and Differential Equations"],
     "linalg": ["Linear Algebra", "Honors Linear Algebra"],
     "linsig": ["Linear Signals and Systems"],
@@ -61,9 +64,14 @@ abbreviations = {
     "me": ["Mastering Electronics"],
     "meb": ["Introduction to Chemical and Biological Process Analysis"],
     "mfcs": ["Mathematical Foundations for Computer Science"],
-    "ml": ["Machine Learning"],
+    "ml": ["Machine Learning", "Machine Learning: Deep Learning"],
+    "mldl": ["Machine Learning: Deep Learning"],
     "modsim": ["Biological Models and Simulations"],
     "modsims": ["Biological Models and Simulations"],
+    "nlp": [
+        "Natural Language Processing",
+        "Natural Language Processing: Self-Supervised Models",
+    ],
     "ochem": [
         "Introductory Organic Chemistry I",
         "Introductory Organic Chemistry Laboratory",
@@ -81,6 +89,8 @@ abbreviations = {
         "Chemical Chirality: An Introduction in Organic Chem. Lab, Techniques",
         "Intermediate Organic Chemistry Laboratory",
     ],
+    "os": ["Operating Systems"],
+    "osse": ["Open Source Software Engineering (Semesters of Code I)"],
     "pchem": [
         "Physical Chemistry I",
         "Physical Chemistry II",
@@ -89,6 +99,7 @@ abbreviations = {
     ],
     "pebl": ["Protein Engineering and Biochemistry Lab"],
     "pebble": ["Protein Engineering and Biochemistry Lab"],
+    "pl": ["Principles of Programming Languages"],
     "prob": ["Introduction to Probability"],
     "probstat": [
         "Probability & Statistics for the Physical and Information Sciences & Engineering"
@@ -109,6 +120,7 @@ abbreviations = {
     "qal": ["Quantitative Analytical Laboratory"],
     "sboc": ["Systems Biology of the Cell"],
     "setp": ["Social Entrepreneurship Theory and Practice. Community Based Learning"],
+    "ski": ["Sketching and Indexing for Sequences"],
     "sla": ["Second Language Acquisition"],
     "stad": ["Software Testing & Debugging"],
     "stat": ["Introduction to Statistics"],
