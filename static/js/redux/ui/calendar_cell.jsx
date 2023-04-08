@@ -49,16 +49,25 @@ function collectDragDrop(connect) {
 // ----------------- create source:
 const createSource = {
   beginDrag(props) {
-    const newSlotId = generateCustomEventId();
-    props.addCustomSlot(props.time, props.time, props.day, true, newSlotId);
-    return {
-      timeStart: props.time,
-      day: props.day,
-      id: newSlotId,
-    };
+    if (props.customEventModeOn) {
+      const newSlotId = generateCustomEventId();
+      props.addCustomSlot(props.time, props.time, props.day, true, newSlotId);
+      return {
+        timeStart: props.time,
+        day: props.day,
+        id: newSlotId,
+      };
+    } else {
+      // create search slot
+
+      return null;
+    }
   },
   canDrag(props) {
-    return props.loggedIn && props.customEventModeOn;
+    if (props.customEventModeOn) {
+      return props.loggedIn;
+    }
+    return true;
   },
   endDrag(props, monitor) {
     const { id } = monitor.getItem();
