@@ -16,12 +16,7 @@ from django.forms import model_to_dict
 from django.db import models
 from rest_framework import serializers
 
-from timetable.models import (
-    Course,
-    Section,
-    Evaluation,
-    Semester,
-)
+from timetable.models import Course, Section, Evaluation, Semester, Offering
 from . import utils
 
 
@@ -29,25 +24,6 @@ class EvaluationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evaluation
         fields = "__all__"
-
-
-class CourseSearchSerializer(serializers.ModelSerializer):
-    sections = serializers.SerializerMethodField()
-
-    def get_sections(self, course):
-        return [
-            SectionSerializer(section).data
-            for section in course.section_set.filter(semester=self.context["semester"])
-        ]
-
-    class Meta:
-        model = Course
-        fields = fields = (
-            "id",
-            "code",
-            "name",
-            "sections",
-        )
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -94,13 +70,20 @@ class CourseSerializer(serializers.ModelSerializer):
         return evals
 
     def get_related_courses(self, course):
-        related = course.related_courses.filter(
-            section__semester=self.context["semester"]
-        ).distinct()[:5]
-        return [
-            model_to_dict(course, exclude=["related_courses", "unstopped_description"])
-            for course in related
-        ]
+        # Related courses are currently out-dated, and appears to be inefficiently
+        # mapped, as it requires a .distinct() call to work properly. This takes a
+        # substantial amount of query time, yet the information is tangentially useful,
+        # so it is disabled until someone decides to maintain it.
+
+        return []
+
+        # related = course.related_courses.filter(
+        #     section__semester=self.context["semester"]
+        # ).distinct()[:5]
+        # return [
+        #     model_to_dict(course, exclude=["related_courses", "unstopped_description"])
+        #     for course in related
+        # ]
 
     def get_reactions(self, course):
         return course.get_reactions(self.context.get("student"))
@@ -157,7 +140,9 @@ class CourseSerializer(serializers.ModelSerializer):
     def get_sections(self, course):
         return [
             SectionSerializer(section).data
-            for section in course.section_set.filter(semester=self.context["semester"])
+            for section in course.section_set.prefetch_related("offering_set").filter(
+                semester=self.context["semester"]
+            )
         ]
 
     class Meta:
@@ -188,7 +173,22 @@ class CourseSerializer(serializers.ModelSerializer):
         )
 
 
+class OfferingSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = Offering
+
+
+class SemesterSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = Semester
+
+
 class SectionSerializer(serializers.ModelSerializer):
+    offering_set = OfferingSerializer(many=True)
+    semester = SemesterSerializer()
+
     class Meta:
         model = Section
         fields = (
@@ -204,13 +204,27 @@ class SectionSerializer(serializers.ModelSerializer):
             "offering_set",
             "course_section_id",
         )
-        depth = 1  # also serializer offerings
 
 
-class SemesterSerializer(serializers.ModelSerializer):
+class CourseSearchSerializer(serializers.ModelSerializer):
+    sections = serializers.SerializerMethodField()
+
+    def get_sections(self, course):
+        return [
+            SectionSerializer(section).data
+            for section in course.section_set.prefetch_related("offering_set").filter(
+                semester=self.context["semester"]
+            )
+        ]
+
     class Meta:
-        fields = "__all__"
-        model = Semester
+        model = Course
+        fields = fields = (
+            "id",
+            "code",
+            "name",
+            "sections",
+        )
 
 
 def get_section_dict(section):

@@ -101,7 +101,7 @@ export const fetchAdvancedSearchResults =
     dispatch(advancedSearchActions.requestAdvancedSearchResults());
     // send a request (via fetch) to the appropriate endpoint to get courses
     const state = getState();
-    fetch(getCourseSearchEndpoint(query, getSemester(getState()), page), {
+    fetch(getCourseSearchEndpoint(query, getSemester(getState()), page, 8), {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
