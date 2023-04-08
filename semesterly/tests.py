@@ -26,7 +26,7 @@ class EndToEndTest(SeleniumTestCase):
             self.search_course("notacoursename", 0)
             self.clear_search_query()
         with self.description("Search, add, then remove course"):
-            self.search_course("calc", 3)   
+            self.search_course("calc", 3)
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.remove_course(0, n_slots_expected=0)
         with self.description("Search for course and test infinite scroll"):
