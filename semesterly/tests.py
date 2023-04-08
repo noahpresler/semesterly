@@ -26,7 +26,7 @@ class EndToEndTest(SeleniumTestCase):
             self.search_course("notacoursename", 0)
             self.clear_search_query()
         with self.description("Search, add, then remove course"):
-            self.search_course("calc", 3)
+            self.search_course("calc", 3)   
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.remove_course(0, n_slots_expected=0)
         with self.description("Search for course and test infinite scroll"):
@@ -78,7 +78,7 @@ class EndToEndTest(SeleniumTestCase):
             )
             self.allow_conflicts_add(n_slots=8)
         with self.description("Switch semesters, clear alert and check search/adding"):
-            self.change_term("Spring 2022", clear_alert=True)
+            self.change_term("Spring 2023", clear_alert=True)
             self.search_course("calc", 2)
             self.open_course_modal_from_search(1)
             self.share_timetable(
@@ -86,7 +86,7 @@ class EndToEndTest(SeleniumTestCase):
             )
         with self.description("Advanced search basic query executes"):
             self.change_to_current_term(clear_alert=True)
-            sem = Semester.objects.get(year=2023, name="Fall")
+            sem = Semester.objects.get(year=2022, name="Fall")
             self.open_and_query_adv_search("ca", n_results=7)
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
@@ -198,7 +198,7 @@ class EndToEndTest(SeleniumTestCase):
         with self.description(
             "switch semester, create personal timetable, switch back"
         ):
-            self.change_term("Spring 2017")
+            self.change_term("Spring 2022")
             self.create_ptt("Hope ders no bugs!", finish_saving=False)
             self.click_off()
             self.search_course("AS.110.106", 1)
@@ -228,7 +228,7 @@ class EndToEndTest(SeleniumTestCase):
             self.assert_ptt_const_across_refresh()
         with self.description("Advanced search basic query executes"):
             self.change_to_current_term()
-            sem = Semester.objects.get(year=2017, name="Fall")
+            sem = Semester.objects.get(year=2022, name="Fall")
             self.open_and_query_adv_search("ca", n_results=7)
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
