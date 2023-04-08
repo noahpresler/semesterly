@@ -122,11 +122,9 @@ const CustomSlot = (props: CustomSlotProps) => {
     const endMinute = parseInt(props.time_end.split(":")[1], 10);
 
     const top =
-      (startHour - 8) * (HALF_HOUR_HEIGHT * 2 + 2) +
-      startMinute * (HALF_HOUR_HEIGHT / 30);
+      startHour * (HALF_HOUR_HEIGHT * 2 + 2) + startMinute * (HALF_HOUR_HEIGHT / 30);
     const bottom =
-      (endHour - 8) * (HALF_HOUR_HEIGHT * 2 + 2) +
-      (endMinute * (HALF_HOUR_HEIGHT / 30) - 1);
+      endHour * (HALF_HOUR_HEIGHT * 2 + 2) + (endMinute * (HALF_HOUR_HEIGHT / 30) - 1);
     if (props.preview) {
       // don't take into account conflicts, reduce opacity, increase z-index
       return {

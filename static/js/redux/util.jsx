@@ -103,22 +103,14 @@ export const getLocalTimetable = () => {
   }
 };
 
-export const getMaxHourBasedOnWindowHeight = () => {
-  const calRow = $(".cal-row");
-  const lastRowY = calRow.last().position();
-  if (!lastRowY) {
-    return 0;
-  }
-  const lastHour = 7 + calRow.length / 2;
-  const hourHeight = calRow.height() * 2;
-  const maxHour = parseInt(
-    lastHour + ($(document).height() - 250 - lastRowY.top) / hourHeight,
-    10
-  );
-  if (maxHour < lastHour) {
-    return lastHour;
-  }
-  return Math.min(24, parseInt(maxHour, 10));
+export const getMaxTimetableHeightBasedOnWindowHeight = (height) => {
+  // Hard-coded hour height because not sure how to get it post-render
+  const hourHeight = 25 * 2;
+  const otherElementsHeight = 140; // Ex: Topbar, toolbar, footer
+  const maxHour = parseInt((height - otherElementsHeight) / hourHeight, 10);
+  const maxHeight = maxHour * hourHeight;
+  const height24Hours = 24 * hourHeight;
+  return Math.min(maxHeight, height24Hours);
 };
 
 /*

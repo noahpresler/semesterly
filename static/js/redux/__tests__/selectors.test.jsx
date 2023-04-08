@@ -1,4 +1,8 @@
-import { getSectionTypeToSections, getMaxEndHour } from "../state/slices/entitiesSlice";
+import {
+  getSectionTypeToSections,
+  getFirstTTStartHour,
+} from "../state/slices/entitiesSlice";
+import { emptyTimetable } from "../state/slices/timetablesSlice";
 
 describe("course selectors", () => {
   describe("section type to sections selector", () => {
@@ -36,18 +40,21 @@ describe("timetable selectors", () => {
           {
             id: "O1",
             thing: "thing",
-            time_end: "18:30",
+            time_start: "18:00",
+            time_end: "18:50",
           },
         ],
       },
     ],
+    events: [],
   };
-  describe("getMaxEndHour", () => {
-    it("returns 17 for empty timetable", () => {
-      expect(getMaxEndHour({ courses: [], slots: [] })).toEqual(17);
+
+  describe("getMinTTStartHour", () => {
+    it("returns 24 for empty timetable", () => {
+      expect(getFirstTTStartHour(emptyTimetable)).toEqual(24);
     });
-    it("returns correct end hour", () => {
-      expect(getMaxEndHour(timetable)).toEqual(19);
+    it("returns correct start hour", () => {
+      expect(getFirstTTStartHour(timetable)).toEqual(18);
     });
   });
 });

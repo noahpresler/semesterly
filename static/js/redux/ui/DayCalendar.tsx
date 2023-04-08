@@ -114,13 +114,8 @@ const DayCalendar = (props: DayCalendarProps) => {
   };
 
   const getTimelineStyle = () => {
-    const now = new Date();
-    // don't show line if the current time is before 8am or after the schedule end
-    if (now.getHours() > props.endHour || now.getHours() < 8) {
-      return { display: "none" };
-    }
     const diff = Math.abs(
-      new Date().valueOf() - new Date().setHours(8, 0, 0).valueOf()
+      new Date().valueOf() - new Date().setHours(0, 0, 0).valueOf()
     );
     const mins = Math.ceil(diff / 1000 / 60);
     const top = (mins / 15.0) * 13;
@@ -129,7 +124,7 @@ const DayCalendar = (props: DayCalendarProps) => {
 
   const getCalendarRows = () => {
     const rows = [];
-    for (let i = 8; i <= props.endHour; i++) {
+    for (let i = 0; i <= props.endHour; i++) {
       // one row for each hour, starting from 8am
       const hour = props.uses12HrTime && i > 12 ? i - 12 : i;
       rows.push(

@@ -6,6 +6,7 @@ import {
   setShowWeekend,
 } from "../../actions/initActions";
 import { Timetable } from "../../constants/commonTypes";
+import { emptyTimetable } from "./timetablesSlice";
 
 interface SavingTimetableSliceState {
   activeTimetable: Timetable;
@@ -14,15 +15,7 @@ interface SavingTimetableSliceState {
 }
 
 const initialState: SavingTimetableSliceState = {
-  activeTimetable: {
-    name: "Untitled Schedule",
-    id: null,
-    slots: [],
-    has_conflict: null,
-    show_weekend: null,
-    avg_rating: null,
-    events: [],
-  },
+  activeTimetable: emptyTimetable,
   saving: false, // true if we are currently waiting for a response from the backend
   upToDate: false,
 };

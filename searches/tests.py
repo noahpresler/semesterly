@@ -81,6 +81,30 @@ class BasicSearchTest(APITestCase):
     def test_search_empty(self):
         searchAssertEmptyResponse(self, {}, "/search/Winter/1995/asdf")
 
+    def test_search_abbreviation(self):
+        sem = Semester.objects.create(name="Winter", year="1996")
+        course = Course.objects.create(
+            school=self.school,
+            code="SEA102",
+            name="Data Structures",
+            level=100,
+            areas=["E", "Q"],
+            department="Computer Science",
+        )
+        section = Section.objects.create(
+            course=course, semester=sem, meeting_section="L1", section_type="L"
+        )
+        Offering.objects.create(
+            section=section,
+            day="M",
+            date_start="08-29-1996",
+            date_end="12-10-1996",
+            time_start="8:00",
+            time_end="10:00",
+            is_short_course=False,
+        )
+        searchAssertNonemptyResponse(self, {}, "/search/Winter/1996/ds")
+
 
 class AdvancedSearchTest(APITestCase):
     school = "uoft"
