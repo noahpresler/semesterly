@@ -61,7 +61,9 @@ def view_analytics_dashboard(request):
                 "signups_per_day": number_timetables_per_hour(
                     Timetable=Student, start_delta_days=31, interval_delta_hours=24
                 ),
-                # "jhu_most_popular_courses": most_popular_courses(5, "jhu"),
+                "jhu_most_popular_courses": json.dumps(
+                    most_popular_courses(n=5, school="jhu", Table=PersonalTimetable)
+                ),
             },
         )
     else:
@@ -192,7 +194,8 @@ def most_popular_courses(n, school, Table=AnalyticsTimetable, semester=None):
             .order_by("-count", "courses")
         )
     course_ids = [cc["courses"] for cc in course_counts[:n]]
-    return Course.objects.filter(pk__in=course_ids)
+    course_list = [course.name for course in Course.objects.filter(pk__in=course_ids)]
+    return course_list
 
 
 def number_students_by_year():

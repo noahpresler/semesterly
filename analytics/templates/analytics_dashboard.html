@@ -37,12 +37,26 @@
     <li>
       <h4>Number of calendar exports by unique users: {{unique_users_calendar_exports}}</h4>
     </li>
-    <!-- <li>
-      <h4>JHU: {{jhu_most_popular_courses}}</h4>
-    </li> -->
+    <li>
+      <h4>Most popular courses in JHU:</h4>
+      <ol id="courses-list"></ol>
+    </li>
   </ul>
 
 
+
+  <script type="text/javascript">
+    var jhu_most_popular_courses = JSON.parse("{{jhu_most_popular_courses|escapejs}}");
+
+    var coursesList = document.getElementById("courses-list");
+
+    for (var i = 0; i < jhu_most_popular_courses.length; i++) {
+        var li = document.createElement("li");
+        var text = document.createTextNode(jhu_most_popular_courses[i]);
+        li.appendChild(text);
+        coursesList.appendChild(li);
+    }
+  </script>
 
   <!-- Analytics displayed with graphs -->
   <script type="text/javascript">
@@ -52,6 +66,7 @@
     var signups_per_day_length = signups_per_day.length;
     var signups_heading = "Number of signups per day for the past " + signups_per_day_length + " days:";
   </script>
+
 
   <h4>Number of users by class year:</h4>
   <div id="chart-wrapper">
