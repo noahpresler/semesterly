@@ -38,7 +38,7 @@ to_zone = tz.gettz("America/New_York")
 
 def view_analytics_dashboard(request):
     student = get_student(request)
-    if student:
+    if student and student.user.is_staff:
         total_signups = number_timetables(Timetable=Student)
         total_calendar_exports = number_timetables(Timetable=CalendarExport)
         unique_users_calendar_exports = number_timetables(
