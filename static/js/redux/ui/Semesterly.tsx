@@ -169,7 +169,7 @@ const Semesterly = () => {
       <div className="all-cols">
         <div className={mainbarClassName}>
           {cal}
-          <footer className="footer navbar no-print">
+          <footer className="timetable-footer navbar no-print">
             <p className="data-last-updated no-print">
               Data last updated:{" "}
               {dataLastUpdated && dataLastUpdated.length && dataLastUpdated !== "null"

@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import classnames from "classnames";
 import Clipboard from "clipboard";
@@ -29,6 +29,9 @@ import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { selectTheme } from "../state/slices/themeSlice";
 import { setShowWeekend } from "../actions/initActions";
+import { getMaxTimetableHeightBasedOnWindowHeight } from "../util";
+import useWindowSize from "../hooks/useWindowSize";
+import { getFirstTTStartHour } from "../state";
 
 interface RowProps {
   isLoggedIn: boolean;
@@ -52,17 +55,7 @@ interface CalendarProps {
 }
 
 const getTimelineStyle = (endHour: number) => {
-  const now = new Date();
-  if (
-    now.getHours() > endHour || // if the current time is before
-    now.getHours() < 8 || // 8am or after the schedule end
-    now.getDay() === 0 || // time or if the current day is
-    now.getDay() === 6 // Saturday or Sunday, then
-  ) {
-    // display no line
-    return { display: "none" };
-  }
-  const diff = Math.abs(new Date().valueOf() - new Date().setHours(8, 0, 0).valueOf());
+  const diff = Math.abs(new Date().valueOf() - new Date().setHours(0, 0, 0).valueOf());
   const mins = Math.ceil(diff / 1000 / 60);
   const top = (mins / 15.0) * 13;
   return { top, zIndex: 1 };
@@ -138,6 +131,8 @@ const Calendar = (props: CalendarProps) => {
   const [shareLinkShown, setShareLinkShown] = useState(false);
   const [customEventModeOn, setCustomEventModeOn] = useState(false);
   const [timelineStyle, setTimelineStyle] = useState(getTimelineStyle(props.endHour));
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const [height] = useWindowSize();
 
   useEffect(() => {
     setInterval(() => {
@@ -147,7 +142,7 @@ const Calendar = (props: CalendarProps) => {
 
   const getCalendarRows = () => {
     const rows = [];
-    for (let i = 8; i <= props.endHour; i++) {
+    for (let i = 0; i <= props.endHour; i++) {
       // one row for each hour, starting from 8am
       const hour = props.uses12HrTime && i > 12 ? i - 12 : i;
       rows.push(
@@ -332,6 +327,19 @@ const Calendar = (props: CalendarProps) => {
     </>
   );
 
+  const timetableParentDivRef = useRef<HTMLDivElement>(null);
+  const firstTTStartHour = useAppSelector(getFirstTTStartHour);
+  // This is needed because React doesn't detect when the window innerHeight changes
+  useEffect(() => {
+    setWindowHeight(window.innerHeight);
+    // Hard-coded hour height because not sure how to get it post-render
+    const hourHeight = 25 * 2;
+    timetableParentDivRef.current?.scroll({
+      top: hourHeight * firstTTStartHour,
+      behavior: "smooth",
+    });
+  }, [height]);
+
   return (
     <div
       className={classnames("calendar fc fc-ltr fc-unthemed week-calendar", {
@@ -348,7 +356,11 @@ const Calendar = (props: CalendarProps) => {
         <div className="fc-clear" />
       </div>
       <div className="fc-view-container" style={{ position: "relative" }}>
-        <div className="fc-view fc-settimana-view fc-agenda-view">
+        <div
+          className="fc-view fc-settimana-view fc-agenda-view"
+          style={{ height: getMaxTimetableHeightBasedOnWindowHeight(windowHeight) }}
+          ref={timetableParentDivRef}
+        >
           <table>
             <thead className="fc-head">
               <tr>

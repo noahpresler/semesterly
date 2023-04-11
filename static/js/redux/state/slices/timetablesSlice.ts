@@ -24,14 +24,14 @@ interface TimetablesSliceState {
   // either int (course id), object (custom slots state), or null
 }
 
-const emptyTimetable: Timetable = {
+export const emptyTimetable: Timetable = {
   slots: [],
   has_conflict: false,
   show_weekend: false,
   id: null,
-  avg_rating: 0,
+  avg_rating: null,
   events: [],
-  name: "",
+  name: "Untitled Schedule",
 };
 
 const initialState: TimetablesSliceState = {

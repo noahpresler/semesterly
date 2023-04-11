@@ -152,17 +152,19 @@ export const getTimetableDenormCourses = (
   return courseIds.map((courseId) => getDenormCourseById(state, courseId));
 };
 
-export const getMaxEndHour = function getLatestSlotEndHourFromTimetable(
-  timetable: Timetable
-) {
-  let maxEndHour = 17;
+export const getFirstTTStartHour = (timetable: Timetable) => {
+  let firstStartHour = 24;
   timetable.slots.forEach((slot) => {
     slot.offerings.forEach((offering: any) => {
-      const endHour = parseInt(offering.time_end.split(":")[0], 10) + 1;
-      maxEndHour = Math.max(maxEndHour, endHour);
+      const startHour = parseInt(offering.time_start.split(":")[0], 10);
+      firstStartHour = Math.min(firstStartHour, startHour);
     });
   });
-  return maxEndHour;
+  timetable.events.forEach((event) => {
+    const startHour = parseInt(event.time_start.split(":")[0], 10);
+    firstStartHour = Math.min(firstStartHour, startHour);
+  });
+  return firstStartHour;
 };
 
 export default entitiesSlice.reducer;

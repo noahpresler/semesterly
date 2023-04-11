@@ -14,7 +14,6 @@ GNU General Public License for more details.
 
 import { configureStore } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
-import { getMaxHourBasedOnWindowHeight } from "../util";
 import school from "./slices/schoolSlice";
 import semester, * as fromSemester from "../state/slices/semesterSlice";
 import calendar from "./slices/calendarSlice";
@@ -109,18 +108,17 @@ export const getActiveTimetableDenormCourses = (state: RootState) =>
 export const getCoursesFromSlots = (state: RootState, slots: Slot[]) =>
   fromEntities.getCoursesFromSlots(state.entities, slots);
 
-export const getMaxTTEndHour = createSelector(
+export const getFirstTTStartHour = createSelector(
   // @ts-ignore
   [getActiveDenormTimetable],
-  fromEntities.getMaxEndHour
+  fromEntities.getFirstTTStartHour
 );
 
 export const getHoveredSlots = (state: RootState) =>
   fromTimetables.getHoveredSlots(state.timetables);
 
-// Don't use createSelector to memoize getMaxEndHour
-export const getMaxEndHour = (state: RootState) =>
-  Math.max(getMaxTTEndHour(state), getMaxHourBasedOnWindowHeight());
+// It's actually 23 because 24 will show up to 00:59
+export const getMaxEndHour = (state: RootState) => 23;
 
 // search selectors
 const getSearchResultId = (state: RootState, index: number) =>
