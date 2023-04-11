@@ -37,6 +37,9 @@
     <li>
       <h4>Number of calendar exports by unique users: {{unique_users_calendar_exports}}</h4>
     </li>
+    <!-- <li>
+      <h4>JHU: {{jhu_most_popular_courses}}</h4>
+    </li> -->
   </ul>
 
 
@@ -46,6 +49,8 @@
     var num_users_by_class_year = JSON.parse("{{num_users_by_class_year|escapejs}}");
     var num_users_by_major = JSON.parse("{{num_users_by_major|escapejs}}");
     var signups_per_day = JSON.parse("{{signups_per_day|escapejs}}");
+    var signups_per_day_length = signups_per_day.length;
+    var signups_heading = "Number of signups per day for the past " + signups_per_day_length + " days:";
   </script>
 
   <h4>Number of users by class year:</h4>
@@ -58,7 +63,7 @@
     <canvas id="num_users_by_major"></canvas>
   </div>
   
-  <h4>Number of signups per day for the past 31 days:</h4>
+  <h4 id="signups_heading"></h4>
   <div id="chart-wrapper">
     <canvas id="signups_chart"></canvas>
   </div>
@@ -102,9 +107,12 @@
         }]
     };
 
+    // set the text content of the h4 element to the signups heading
+    document.getElementById("signups_heading").textContent = signups_heading;
+
     var today = new Date();
     var labels = [];
-    for (var i = 30; i > 0; i--) {
+    for (var i = signups_per_day_length - 1; i > 0; i--) {
       var date = new Date();
       date.setDate(today.getDate() - i);
       labels.push(date.toLocaleDateString());
