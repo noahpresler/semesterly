@@ -12,88 +12,21 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import React, { useEffect, useState } from "react";
-import { DragSource, DropTarget } from "react-dnd";
+import React, { useEffect } from "react";
 import tinycolor from "tinycolor2";
-import { removeCustomSlot } from "../actions/timetable_actions";
-import { DRAG_TYPES, HALF_HOUR_HEIGHT } from "../constants/constants";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { customEventsActions } from "../state/slices/customEventsSlice";
-import { selectTheme } from "../state/slices/themeSlice";
-import {
-  canDropCustomSlot,
-  onCustomSlotCreateDrag,
-  onCustomSlotCreateDrop,
-  onCustomSlotUpdateDrop,
-} from "./slotUtils";
+import { HALF_HOUR_HEIGHT } from "../constants/constants";
 
 type SearchSlotProps = {
   depth_level: number;
   num_conflicts: number;
   shift_index: number;
   name: string;
-  location: string;
   color: string;
   time_start: string;
   time_end: string;
-  credits: string;
   id: number;
   uses12HrTime: boolean;
-  preview: boolean;
-  connectDragSource: Function;
-  connectDragTarget: Function;
-  connectCreateTarget: Function;
 };
-
-const dragSlotSource = {
-  beginDrag(props: any) {
-    return {
-      timeStart: props.time_start,
-      timeEnd: props.time_end,
-      id: props.id,
-    };
-  },
-  endDrag() {},
-};
-
-function collectDragSource(connect: any) {
-  return {
-    connectDragSource: connect.dragSource(),
-    connectDragPreview: connect.dragPreview(),
-  };
-}
-
-const dragSlotTarget = {
-  drop(props: any, monitor: any) {
-    onCustomSlotUpdateDrop(props, monitor);
-  },
-};
-
-function collectDragDrop(connect: any) {
-  // inject props as drop target
-  return {
-    connectDragTarget: connect.dropTarget(),
-  };
-}
-
-const createSlotTarget = {
-  drop(props: any, monitor: any) {
-    onCustomSlotCreateDrop(props, monitor);
-  },
-  canDrop(props: any, monitor: any) {
-    return canDropCustomSlot(props, monitor);
-  },
-  hover(props: any, monitor: any) {
-    onCustomSlotCreateDrag(props, monitor);
-  },
-};
-
-function collectCreateDrop(connect: any) {
-  // inject props as drop target
-  return {
-    connectCreateTarget: connect.dropTarget(),
-  };
-}
 
 /**
  * This component renders custom events in the timetable, and also handles the
@@ -101,8 +34,6 @@ function collectCreateDrop(connect: any) {
  * React-DND containers to handle drag and drop events.
  */
 const SearchSlot = (props: SearchSlotProps) => {
-  const [hovered, setHovered] = useState(false);
-
   useEffect(() => {
     // @ts-ignore
     $(`#${props.id} .fc-time input`).on("keydown", (e: KeyboardEvent) => {
@@ -112,8 +43,6 @@ const SearchSlot = (props: SearchSlotProps) => {
       }
     });
   }, []);
-
-  const theme = useAppSelector(selectTheme);
 
   const getSlotStyles = () => {
     const startHour = parseInt(props.time_start.split(":")[0], 10);
@@ -125,19 +54,6 @@ const SearchSlot = (props: SearchSlotProps) => {
       startHour * (HALF_HOUR_HEIGHT * 2 + 2) + startMinute * (HALF_HOUR_HEIGHT / 30);
     const bottom =
       endHour * (HALF_HOUR_HEIGHT * 2 + 2) + (endMinute * (HALF_HOUR_HEIGHT / 30) - 1);
-    if (props.preview) {
-      // don't take into account conflicts, reduce opacity, increase z-index
-      return {
-        top,
-        bottom: -bottom,
-        zIndex: 10,
-        right: "0%",
-        backgroundColor: theme.customEventDefaultColor,
-        width: "100%",
-        left: 0,
-        opacity: 0.5,
-      };
-    }
     // the cumulative width of this slot and all of the slots it is conflicting with
     const totalSlotsWidth = 100 - 7 * props.depth_level;
     // the width of this particular slot
@@ -158,16 +74,6 @@ const SearchSlot = (props: SearchSlotProps) => {
     };
   };
 
-  const dispatch = useAppDispatch();
-  const removeCustomButtonClicked = (event: any) => {
-    event.stopPropagation();
-    dispatch(removeCustomSlot(props.id));
-  };
-
-  const removeButton = hovered ? (
-    <i className="fa fa-times" onClick={(event) => removeCustomButtonClicked(event)} />
-  ) : null;
-
   const convertedStart =
     props.uses12HrTime && parseInt(props.time_start.split(":")[0], 10) > 12
       ? `${parseInt(props.time_start.split(":")[0], 10) - 12}:${
@@ -182,22 +88,13 @@ const SearchSlot = (props: SearchSlotProps) => {
         }`
       : props.time_end;
 
-  const showModalIfNotPreview = () => {
-    if (!props.preview) {
-      dispatch(customEventsActions.showCustomEventsModal(props.id));
-    }
-  };
-
   const color = tinycolor(props.color).isLight() ? "#222222" : "#FFFFFF";
   const coloredSpan = (text: string) => <span style={{ color }}>{text}</span>;
 
   const customSlot = (
     <div
-      className={`fc-time-grid-event fc-event slot ${props.preview ? "preview" : ""}`}
+      className={`fc-time-grid-event fc-event slot`}
       style={getSlotStyles()}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={showModalIfNotPreview}
       id={`${props.id}`}
     >
       <div
@@ -208,44 +105,16 @@ const SearchSlot = (props: SearchSlotProps) => {
             : tinycolor(props.color).lighten(10).toString(),
         }}
       />
-      {removeButton}
       <div className="fc-content">
         <div className="fc-time">{coloredSpan(props.name)}</div>
         <div className="fc-time">
           {coloredSpan(`${convertedStart} – ${convertedEnd}`)}
         </div>
-        <div className="fc-time">{coloredSpan(props.location)}</div>
-        <div className="fc-time">
-          {parseFloat(props.credits) !== 0 &&
-            coloredSpan(
-              `${
-                props.credits.toString().endsWith(".0")
-                  ? parseInt(props.credits, 10)
-                  : props.credits
-              } credit${parseFloat(props.credits) !== 1 ? "s" : ""}`
-            )}
-        </div>
       </div>
     </div>
   );
 
-  return (
-    <div className="fc-event-container">
-      {props.connectCreateTarget(
-        props.connectDragTarget(props.connectDragSource(customSlot))
-      )}
-    </div>
-  );
+  return <div className="fc-event-container">{customSlot}</div>;
 };
 
-export default DropTarget(
-  DRAG_TYPES.DRAG,
-  dragSlotTarget,
-  collectDragDrop
-)(
-  DropTarget(
-    DRAG_TYPES.CREATE,
-    createSlotTarget,
-    collectCreateDrop
-  )(DragSource(DRAG_TYPES.DRAG, dragSlotSource, collectDragSource)(SearchSlot))
-);
+export default SearchSlot;

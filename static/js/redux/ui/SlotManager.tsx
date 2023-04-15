@@ -44,6 +44,7 @@ import { fetchCourseInfo } from "../actions/modal_actions";
 import { uniqBy } from "lodash";
 import { selectGradient } from "../state/slices/compareTimetableSlice";
 import { selectSlotColorData, selectTheme } from "../state/slices/themeSlice";
+import SearchSlot from "./SearchSlot";
 
 function getConflictStyles(slotsByDay: any) {
   const styledSlotsByDay = slotsByDay;
@@ -102,6 +103,7 @@ function getConflictStyles(slotsByDay: any) {
         );
         for (let j = 0; j < directConflicts.length; j++) {
           const slotId = directConflicts[j].id;
+          console.log(daySlots[slotId]);
           daySlots[slotId].num_conflicts = directConflicts.length;
           daySlots[slotId].shift_index = j;
         }
@@ -173,6 +175,7 @@ const SlotManager = (props: { days: string[] }) => {
   const gradient = useAppSelector(selectGradient);
   const courseToColourIndex = useAppSelector((state) => state.ui.courseToColourIndex);
   const customEvents = useAppSelector((state) => state.customEvents.events);
+  const searchSlot = useAppSelector((state) => state.dragSearch.slot);
   const activeTimetable = useAppSelector(
     (state) => state.compareTimetable.activeTimetable
   );
@@ -266,6 +269,11 @@ const SlotManager = (props: { days: string[] }) => {
       customSlot.key = customSlot.id;
       slotsByDay[customSlot.day].push(customSlot);
     }
+    if (searchSlot !== null) {
+      const searchSlotCopy = Object.assign({}, searchSlot);
+      searchSlotCopy.search = true;
+      slotsByDay[searchSlot.day].push(searchSlotCopy);
+    }
     return getConflictStyles(slotsByDay);
   };
 
@@ -311,14 +319,25 @@ const SlotManager = (props: { days: string[] }) => {
     const daySlots = slotsByDay[day].map((slot: any, j: number) => {
       const courseId = slot.courseId;
       const locked = isLocked(courseId, slot.meeting_section);
-      return slot.custom ? (
-        <CustomSlot
-          {...slot}
-          color={slot.color}
-          key={`${i.toString() + j.toString()} custom`}
-          uses12HrTime={uses12HrTime}
-        />
-      ) : (
+      if (slot.search) {
+        return (
+          <SearchSlot
+            {...slot}
+            key={`${i.toString() + j.toString()} search`}
+            uses12HrTime={uses12HrTime}
+          />
+        );
+      } else if (slot.custom) {
+        return (
+          <CustomSlot
+            {...slot}
+            color={slot.color}
+            key={`${i.toString() + j.toString()} custom`}
+            uses12HrTime={uses12HrTime}
+          />
+        );
+      }
+      return (
         <Slot
           {...slot}
           fetchCourseInfo={() => dispatch(fetchCourseInfo(courseId))}
