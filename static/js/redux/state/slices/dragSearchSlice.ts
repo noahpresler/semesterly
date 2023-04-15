@@ -16,9 +16,25 @@ export const dragSearchSlice = createSlice({
     setDragSearchSlot: (state, action: PayloadAction<SearchSlot>) => {
       state.slot = action.payload;
     },
+    updateDragSearchSlot: (
+      state,
+      action: PayloadAction<{
+        time_start: string;
+        time_end: string;
+      }>
+    ) => {
+      if (state.slot) {
+        state.slot.time_start = action.payload.time_start;
+        state.slot.time_end = action.payload.time_end;
+      }
+    },
+    clearDragSearchSlot: (state) => {
+      state.slot = null;
+    },
   },
 });
 
-export const { setDragSearchSlot } = dragSearchSlice.actions;
+export const { setDragSearchSlot, updateDragSearchSlot, clearDragSearchSlot } =
+  dragSearchSlice.actions;
 
 export default dragSearchSlice.reducer;

@@ -94,9 +94,11 @@ export interface Slot {
  * SearchSlot is a slot that is created when dragging in empty space.
  */
 export interface SearchSlot {
+  id: number;
   day: Day;
   time_start: string;
   time_end: string;
+  search?: boolean;
 }
 
 /**
