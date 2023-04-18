@@ -22,6 +22,7 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404
+from django.db.models import Count
 
 from student.models import Student
 
@@ -37,7 +38,7 @@ to_zone = tz.gettz("America/New_York")
 
 def view_analytics_dashboard(request):
     student = get_student(request)
-    if student:
+    if student and student.user.is_staff:
         total_signups = number_timetables(Timetable=Student)
         total_calendar_exports = number_timetables(Timetable=CalendarExport)
         unique_users_calendar_exports = number_timetables(
@@ -56,8 +57,12 @@ def view_analytics_dashboard(request):
                 "total_calendar_exports": total_calendar_exports,
                 "unique_users_calendar_exports": unique_users_calendar_exports,
                 "num_users_by_class_year": json.dumps(number_students_by_year()),
-                "signups_per_hour": number_timetables_per_hour(
-                    Timetable=Student, start_delta_days=7, interval_delta_hours=24
+                "num_users_by_major": json.dumps(number_students_by_major()),
+                "signups_per_day": number_timetables_per_hour(
+                    Timetable=Student, start_delta_days=31, interval_delta_hours=24
+                ),
+                "jhu_most_popular_courses": json.dumps(
+                    most_popular_courses(n=5, school="jhu", Table=PersonalTimetable)
                 ),
             },
         )
@@ -169,32 +174,57 @@ def number_of_reactions(max_only=False):
         return num_reactions
 
 
-def most_popular_courses(n, school, semester, Table=AnalyticsTimetable):
+def most_popular_courses(n, school, Table=AnalyticsTimetable, semester=None):
     """
     Get the top n most popular courses searched (AnalyticsCourseSearch) or in
     timetable (AnalyticsTimetable).
     """
-    num_courses = {}
-    link_to_courses = Table.objects.filter(school=school, semester=semester)
-    for link_to_course in link_to_courses:
-        for course in link_to_course.courses.all():
-            if course.id in num_courses:
-                num_courses[course.id] += 1
-            else:
-                num_courses[course.id] = 1
-    course_ids = heapq.nlargest(n, num_courses, num_courses.get)
-    return Course.objects.filter(pk__in=course_ids)
+    if semester is None:
+        course_counts = (
+            Table.objects.filter(school=school)
+            .values("courses")
+            .annotate(count=Count("courses"))
+            .order_by("-count", "courses")
+        )
+    else:
+        course_counts = (
+            Table.objects.filter(school=school, semester=semester)
+            .values("courses")
+            .annotate(count=Count("courses"))
+            .order_by("-count", "courses")
+        )
+    course_ids = [cc["courses"] for cc in course_counts[:n]]
+    course_list = [course.name for course in Course.objects.filter(pk__in=course_ids)]
+    return course_list
 
 
 def number_students_by_year():
     """Get the number of students by class year."""
-    valid_class_years = Student.objects.values("class_year").distinct()
-    count_class_years = {}
-    for class_year in valid_class_years:
-        count_class_years[class_year["class_year"]] = Student.objects.filter(
-            class_year=class_year["class_year"]
-        ).count()
-    return count_class_years
+    count_class_years = (
+        Student.objects.values("class_year")
+        .annotate(count=Count("id"))
+        .order_by("class_year")
+    )
+    return {
+        class_year["class_year"]: class_year["count"]
+        for class_year in count_class_years
+    }
+
+
+def number_students_by_major(top_majors=25):
+    """Get the number of students by major, condensing small majors
+    into an 'Other' category and displaying only the top majors."""
+    count_majors = (
+        Student.objects.values("major").annotate(count=Count("id")).order_by("-count")
+    )
+    other_count = 0
+    for major in count_majors[top_majors:]:
+        other_count += major["count"]
+    top_majors_count = {
+        major["major"]: major["count"] for major in count_majors[:top_majors]
+    }
+    top_majors_count["Other"] = other_count
+    return top_majors_count
 
 
 def number_students_by_school():
