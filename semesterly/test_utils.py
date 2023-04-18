@@ -92,7 +92,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         sem = get_current_semesters("jhu")[0]
         sem, _ = Semester.objects.update_or_create(name=sem["name"], year=sem["year"])
         for section in Section.objects.filter(
-            semester__name="Fall", semester__year=2017
+            semester__name="Fall", semester__year=2022
         ):
             section.semester = sem
             section.save()
