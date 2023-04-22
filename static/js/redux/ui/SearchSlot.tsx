@@ -13,8 +13,10 @@ GNU General Public License for more details.
 */
 
 import React, { useEffect } from "react";
-import tinycolor from "tinycolor2";
 import { HALF_HOUR_HEIGHT } from "../constants/constants";
+import { useAppSelector } from "../hooks";
+import { selectTheme } from "../state/slices/themeSlice";
+import tinycolor from "tinycolor2";
 
 type SearchSlotProps = {
   depth_level: number;
@@ -67,7 +69,7 @@ const SearchSlot = (props: SearchSlotProps) => {
       top,
       bottom: -bottom,
       right: "0%",
-      backgroundColor: props.color,
+      backgroundColor: theme == "light" ? "#ADB3AE" : "#343835",
       width: `${slotWidthPercentage}%`,
       left: `${pushLeft}%`,
       zIndex: 10 * props.depth_level,
@@ -88,9 +90,12 @@ const SearchSlot = (props: SearchSlotProps) => {
         }`
       : props.time_end;
 
-  const color = tinycolor(props.color).isLight() ? "#222222" : "#FFFFFF";
-  const coloredSpan = (text: string) => <span style={{ color }}>{text}</span>;
+  const theme = useAppSelector(selectTheme).name;
+  const color = (theme == "light") ? "#000000" : "#adb3ae";
+  const coloredSpan = (text: string, color: string) => <span style={{ color }}>{text}</span>;
 
+  //#343835 when dark
+  //#adb3ae when light, change text color to black
   const customSlot = (
     <div
       className={`fc-time-grid-event fc-event slot`}
@@ -100,15 +105,16 @@ const SearchSlot = (props: SearchSlotProps) => {
       <div
         className="slot-bar"
         style={{
-          backgroundColor: tinycolor(props.color).isLight()
-            ? tinycolor(props.color).darken(20).toString()
-            : tinycolor(props.color).lighten(10).toString(),
+          backgroundColor: (theme == "light") 
+          ? tinycolor(color).darken(20).toString()
+          : tinycolor(color).lighten(10).toString(),
         }}
       />
       <div className="fc-content">
-        <div className="fc-time">{coloredSpan(props.name)}</div>
+        <div className="fc-saerching">{coloredSpan("Searching between...", color)}</div>
+        <div className="fc-time">{coloredSpan(props.name, color)}</div>
         <div className="fc-time">
-          {coloredSpan(`${convertedStart} – ${convertedEnd}`)}
+          {coloredSpan(`${convertedStart} – ${convertedEnd}`, color)}
         </div>
       </div>
     </div>
