@@ -69,7 +69,7 @@ const SearchSlot = (props: SearchSlotProps) => {
       top,
       bottom: -bottom,
       right: "0%",
-      backgroundColor: theme == "light" ? "#ADB3AE" : "#343835",
+      backgroundColor: theme === "light" ? "#ADB3AE" : "#343835",
       width: `${slotWidthPercentage}%`,
       left: `${pushLeft}%`,
       zIndex: 10 * props.depth_level,
@@ -91,11 +91,13 @@ const SearchSlot = (props: SearchSlotProps) => {
       : props.time_end;
 
   const theme = useAppSelector(selectTheme).name;
-  const color = (theme == "light") ? "#000000" : "#adb3ae";
-  const coloredSpan = (text: string, color: string) => <span style={{ color }}>{text}</span>;
+  const color = theme === "light" ? "#000000" : "#adb3ae";
+  const coloredSpan = (text: string, color: string) => (
+    <span style={{ color }}>{text}</span>
+  );
 
-  //#343835 when dark
-  //#adb3ae when light, change text color to black
+  // #343835 when dark
+  // #adb3ae when light, change text color to black
   const customSlot = (
     <div
       className={`fc-time-grid-event fc-event slot`}
@@ -105,9 +107,10 @@ const SearchSlot = (props: SearchSlotProps) => {
       <div
         className="slot-bar"
         style={{
-          backgroundColor: (theme == "light") 
-          ? tinycolor(color).darken(20).toString()
-          : tinycolor(color).lighten(10).toString(),
+          backgroundColor:
+            theme === "light"
+              ? tinycolor(color).darken(20).toString()
+              : tinycolor(color).lighten(10).toString(),
         }}
       />
       <div className="fc-content">
