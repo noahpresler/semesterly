@@ -23,7 +23,6 @@ type SearchSlotProps = {
   num_conflicts: number;
   shift_index: number;
   name: string;
-  color: string;
   time_start: string;
   time_end: string;
   id: number;
@@ -92,9 +91,7 @@ const SearchSlot = (props: SearchSlotProps) => {
 
   const theme = useAppSelector(selectTheme).name;
   const color = theme === "light" ? "#000000" : "#adb3ae";
-  const coloredSpan = (text: string, color: string) => (
-    <span style={{ color }}>{text}</span>
-  );
+  const coloredSpan = (text: string) => <span style={{ color }}>{text}</span>;
 
   // #343835 when dark
   // #adb3ae when light, change text color to black
@@ -114,10 +111,10 @@ const SearchSlot = (props: SearchSlotProps) => {
         }}
       />
       <div className="fc-content">
-        <div className="fc-saerching">{coloredSpan("Searching between...", color)}</div>
-        <div className="fc-time">{coloredSpan(props.name, color)}</div>
+        <div className="fc-saerching">{coloredSpan("Searching between...")}</div>
+        <div className="fc-time">{coloredSpan(props.name)}</div>
         <div className="fc-time">
-          {coloredSpan(`${convertedStart} – ${convertedEnd}`, color)}
+          {coloredSpan(`${convertedStart} – ${convertedEnd}`)}
         </div>
       </div>
     </div>

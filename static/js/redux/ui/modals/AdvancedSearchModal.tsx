@@ -173,8 +173,8 @@ const AdvancedSearchModal = () => {
         times: [
           {
             day: VERBOSE_DAYS[DAYS.indexOf(dragSearchSlot.day)],
-            min: parseInt(dragSearchSlot.time_start.split(":")[0]),
-            max: parseInt(dragSearchSlot.time_end.split(":")[0]),
+            min: parseInt(dragSearchSlot.time_start.split(":")[0], 10),
+            max: parseInt(dragSearchSlot.time_end.split(":")[0], 10),
           },
         ],
       }));
