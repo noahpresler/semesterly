@@ -11,9 +11,6 @@ export function convertToHalfHours(time: string) {
 }
 
 export function convertToMinutes(time: string) {
-  console.log(time);
-  // log type of time
-  console.log(typeof time);
   const start = parseInt(time.split(":")[0], 10);
   const end = parseInt(time.split(":")[1], 10);
   return start * 60 + end;

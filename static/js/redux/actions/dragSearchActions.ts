@@ -4,8 +4,10 @@ import {
   setDragSearchSlot,
   updateDragSearchSlot,
   clearDragSearchSlot,
+  finalizeDragSearchSlot,
 } from "./../state/slices/dragSearchSlice";
 import { generateCustomEventId } from "../util";
+import { advancedSearchActions } from "../state/slices";
 
 export const addSearchSlot =
   (timeStart: string, timeEnd: string, day: Day) => (dispatch: Dispatch) => {
@@ -31,7 +33,8 @@ export const updateSearchSlot =
 
 export const finalizeSearchSlot = () => (dispatch: Dispatch) => {
   // trigger advanced search modal with the correct filter data
-
+  dispatch(finalizeDragSearchSlot());
+  dispatch(advancedSearchActions.showAdvancedSearchModal());
   dispatch(clearDragSearchSlot());
 };
 

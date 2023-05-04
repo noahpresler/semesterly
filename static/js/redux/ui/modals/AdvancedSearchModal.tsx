@@ -17,7 +17,7 @@ import {
   setAdvancedSearchResultIndex,
 } from "../../actions";
 import { timetablesActions } from "../../state/slices/timetablesSlice";
-import { VERBOSE_DAYS } from "../../constants/constants";
+import { DAYS, VERBOSE_DAYS } from "../../constants/constants";
 import { ShareLink } from "../MasterSlot";
 import CourseModalBody from "./CourseModalBody";
 import {
@@ -33,6 +33,14 @@ type AdvancedSearchResultProps = {
   code: string;
   onClick: Function;
   isSelected: boolean;
+};
+
+type FilterData = {
+  areas: string[];
+  departments: string[];
+  levels: string[];
+  times: { day: string; min: number; max: number }[];
+  addedDays: string[];
 };
 
 const AdvancedSearchResult = ({
@@ -77,8 +85,14 @@ const AdvancedSearchModal = () => {
 
   const scrollContainer = useRef<HTMLDivElement>();
 
+  const dragSearchSlotExists = useAppSelector((state) => state.dragSearch.slot != null);
+  const dragSearchSlot = useAppSelector((state) => state.dragSearch.slot);
+  const dragSearchSlotFinalized = useAppSelector(
+    (state) => state.dragSearch.slotFinalized
+  );
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterData, setFilterData] = useState({
+  const [filterData, setFilterData] = useState<FilterData>({
     areas: [],
     departments: [],
     levels: [],
@@ -150,6 +164,22 @@ const AdvancedSearchModal = () => {
   useEffect(() => {
     fetchResults();
   }, [filterData]);
+
+  useEffect(() => {
+    if (dragSearchSlotExists && dragSearchSlotFinalized) {
+      setFilterData((prevState) => ({
+        ...prevState,
+        addedDays: [VERBOSE_DAYS[DAYS.indexOf(dragSearchSlot.day)]],
+        times: [
+          {
+            day: VERBOSE_DAYS[DAYS.indexOf(dragSearchSlot.day)],
+            min: parseInt(dragSearchSlot.time_start.split(":")[0]),
+            max: parseInt(dragSearchSlot.time_end.split(":")[0]),
+          },
+        ],
+      }));
+    }
+  }, [dragSearchSlotExists, dragSearchSlot, dragSearchSlotFinalized]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -264,7 +294,7 @@ const AdvancedSearchModal = () => {
     />
   ));
 
-  let courseModal = null;
+  let courseModal: null | JSX.Element = null;
   if (active >= 0 && active < advancedSearchResults.length) {
     const selectedCourse = advancedSearchResults[active];
     const shareLink = shareLinkShown ? (

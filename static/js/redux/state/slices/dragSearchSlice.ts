@@ -3,10 +3,12 @@ import { SearchSlot } from "./../../constants/commonTypes";
 
 export interface DragSearchSliceState {
   slot: SearchSlot | null;
+  slotFinalized: boolean;
 }
 
 const initialState: DragSearchSliceState = {
   slot: null,
+  slotFinalized: false,
 };
 
 export const dragSearchSlice = createSlice({
@@ -30,11 +32,19 @@ export const dragSearchSlice = createSlice({
     },
     clearDragSearchSlot: (state) => {
       state.slot = null;
+      state.slotFinalized = false;
+    },
+    finalizeDragSearchSlot: (state) => {
+      state.slotFinalized = true;
     },
   },
 });
 
-export const { setDragSearchSlot, updateDragSearchSlot, clearDragSearchSlot } =
-  dragSearchSlice.actions;
+export const {
+  setDragSearchSlot,
+  updateDragSearchSlot,
+  clearDragSearchSlot,
+  finalizeDragSearchSlot,
+} = dragSearchSlice.actions;
 
 export default dragSearchSlice.reducer;

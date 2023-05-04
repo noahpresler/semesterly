@@ -103,7 +103,6 @@ function getConflictStyles(slotsByDay: any) {
         );
         for (let j = 0; j < directConflicts.length; j++) {
           const slotId = directConflicts[j].id;
-          console.log(daySlots[slotId]);
           daySlots[slotId].num_conflicts = directConflicts.length;
           daySlots[slotId].shift_index = j;
         }
