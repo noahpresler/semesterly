@@ -25,7 +25,7 @@ import {
   SelectedFilter,
   SelectedFilterSection,
 } from "../advanced_search_filters";
-import TimeSelector from "../time_selector";
+import TimeSelector from "../TimeSelector";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 type AdvancedSearchResultProps = {
@@ -35,12 +35,37 @@ type AdvancedSearchResultProps = {
   isSelected: boolean;
 };
 
+type TimeFilter = { day: string; min: number; max: number };
+
 type FilterData = {
   areas: string[];
   departments: string[];
   levels: string[];
-  times: { day: string; min: number; max: number }[];
+  times: TimeFilter[];
   addedDays: string[];
+};
+
+const convertTimeToValue = (time: string) => {
+  const [hour, minute] = time.split(":");
+  return parseInt(hour, 10) + parseInt(minute, 10) / 60;
+};
+
+const convertTimeValue = (value: number) => {
+  const hour = Math.floor(value);
+  const minute = Math.floor((value - hour) * 60);
+  return `${hour < 10 ? "0" : ""}${hour}:${minute < 10 ? "0" : ""}${minute}`;
+};
+
+const convertFilterTimeValues = (times: TimeFilter[]) => {
+  const newTimes: { day: string; min: string; max: string }[] = [];
+  times.forEach((t) => {
+    newTimes.push({
+      day: t.day,
+      min: convertTimeValue(t.min),
+      max: convertTimeValue(t.max),
+    });
+  });
+  return newTimes;
 };
 
 const AdvancedSearchResult = ({
@@ -152,7 +177,7 @@ const AdvancedSearchModal = () => {
         {
           areas: filterData.areas,
           departments: filterData.departments,
-          times: filterData.times,
+          times: convertFilterTimeValues(filterData.times),
           levels: filterData.levels,
         },
         pageToFetch
@@ -173,8 +198,8 @@ const AdvancedSearchModal = () => {
         times: [
           {
             day: VERBOSE_DAYS[DAYS.indexOf(dragSearchSlot.day)],
-            min: parseInt(dragSearchSlot.time_start.split(":")[0], 10),
-            max: parseInt(dragSearchSlot.time_end.split(":")[0], 10),
+            min: convertTimeToValue(dragSearchSlot.time_start),
+            max: convertTimeToValue(dragSearchSlot.time_end),
           },
         ],
       }));
@@ -394,7 +419,7 @@ const AdvancedSearchModal = () => {
         key={timeState.day}
         day={timeState.day}
         value={value}
-        onChange={(x: number, y = timeState.day) => handleTimesChange(x, y)}
+        onChange={(x: TimeFilter, y = timeState.day) => handleTimesChange(x, y)}
         // onChangeComplete={fetchResults()}
         remove={removeTimeFilter}
       />
