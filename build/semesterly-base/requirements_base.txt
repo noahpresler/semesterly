@@ -1,5 +1,5 @@
 setuptools==65.5.1
-Pygments==2.7.4
+Pygments==2.15.0
 Sphinx==4.0.2
 alabaster==0.7.10
 argparse==1.4.0
