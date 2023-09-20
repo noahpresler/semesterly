@@ -66,13 +66,11 @@ jobs:
       - run: npm run test
 
       - name: Run Backend Tests
-        uses: GabrielBB/xvfb-action@v1
         env:
           NODE_ENV: production
           host: jhu.sem.ly
           DB_PORT: ${{ job.services.postgres.ports[5432] }}
-        with:
-          run: python manage.py test
+        run: python manage.py test
 
       - name: Run docs
         run: make html -C docs
