@@ -78,7 +78,7 @@ class EndToEndTest(SeleniumTestCase):
             )
             self.allow_conflicts_add(n_slots=8)
         with self.description("Switch semesters, clear alert and check search/adding"):
-            self.change_term("Spring 2021", clear_alert=True)
+            self.change_term("Spring 2023", clear_alert=True)
             self.search_course("calc", 2)
             self.open_course_modal_from_search(1)
             self.share_timetable(
@@ -86,7 +86,7 @@ class EndToEndTest(SeleniumTestCase):
             )
         with self.description("Advanced search basic query executes"):
             self.change_to_current_term(clear_alert=True)
-            sem = Semester.objects.get(year=2021, name="Fall")
+            sem = Semester.objects.get(year=2022, name="Fall")
             self.open_and_query_adv_search("ca", n_results=7)
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
@@ -155,15 +155,18 @@ class EndToEndTest(SeleniumTestCase):
             self.search_course("AS.110.795", 1)
             self.add_course(0, n_slots=12, n_master_slots=4)
             self.assert_ptt_const_across_refresh()
+
         with self.description("Change personal timetable name"):
             self.change_ptt_name("Testing Timetable")
             self.assert_ptt_const_across_refresh()
+
         with self.description("Remove courses"):
             self.remove_course(3)
             self.remove_course(2)
             self.remove_course(1)
             self.remove_course(0, from_slot=True)
             self.assert_ptt_const_across_refresh()
+
         with self.description("Add and remove from course modal"):
             self.search_course("AS.110.105", 1)
             self.open_course_modal_from_search(0)
@@ -176,10 +179,12 @@ class EndToEndTest(SeleniumTestCase):
             self.add_course_from_course_modal(n_slots=11, n_master_slots=3)
             self.open_course_modal_from_slot(2)
             self.remove_course_from_course_modal(n_slots_expected=8)
+
         with self.description("Share timetable"):
             self.share_timetable([course1, course2])
             self.assert_ptt_const_across_refresh()
         testing_ptt = self.ptt_to_tuple()
+
         with self.description("Create new personal timetable, validate on reload"):
             self.create_ptt("End To End Testing!")
             self.search_course("AS.110.105", 1)
@@ -188,26 +193,29 @@ class EndToEndTest(SeleniumTestCase):
             self.add_course(0, n_slots=7, n_master_slots=2)
             e2e_ptt = self.ptt_to_tuple()
             self.assert_ptt_const_across_refresh()
+
         with self.description("Switch to original ptt and validate"):
             self.switch_to_ptt("Testing Timetable")
             self.assert_ptt_equals(testing_ptt)
+
         with self.description("Compare timetables"):
             self.compare_timetable("End To End Testing!")
             self.assert_slot_presence(11, 3)
             self.exit_compare_timetable()
-        with self.description(
-            "switch semester, create personal timetable, switch back"
-        ):
-            self.change_term("Spring 2021")
+
+        with self.description("switch semester, create personal timetable, switch back"):
+            self.change_term("Spring 2023")
             self.create_ptt("Hope ders no bugs!", finish_saving=False)
             self.click_off()
             self.search_course("AS.110.106", 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.change_to_current_term()
             self.assert_ptt_equals(e2e_ptt)
+
         with self.description("Delete a timetable"):
             self.delete_timetable("End To End Testing!")
             self.assert_timetable_not_found("End To End Testing!")
+
         with self.description("Add and edit custom events"):
             self.create_custom_event(4, 16, 20, False)
             self.assert_custom_event_exists(
@@ -228,7 +236,7 @@ class EndToEndTest(SeleniumTestCase):
             self.assert_ptt_const_across_refresh()
         with self.description("Advanced search basic query executes"):
             self.change_to_current_term()
-            sem = Semester.objects.get(year=2021, name="Fall")
+            sem = Semester.objects.get(year=2022, name="Fall")
             self.open_and_query_adv_search("ca", n_results=7)
             self.select_nth_adv_search_result(1, sem)
             self.select_nth_adv_search_result(2, sem)
