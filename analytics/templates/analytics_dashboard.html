@@ -37,22 +37,48 @@
     <li>
       <h4>Number of calendar exports by unique users: {{unique_users_calendar_exports}}</h4>
     </li>
+    <li>
+      <h4>Most popular courses in JHU:</h4>
+      <ol id="courses-list"></ol>
+    </li>
   </ul>
 
 
 
+  <script type="text/javascript">
+    var jhu_most_popular_courses = JSON.parse("{{jhu_most_popular_courses|escapejs}}");
+
+    var coursesList = document.getElementById("courses-list");
+
+    for (var i = 0; i < jhu_most_popular_courses.length; i++) {
+        var li = document.createElement("li");
+        var text = document.createTextNode(jhu_most_popular_courses[i]);
+        li.appendChild(text);
+        coursesList.appendChild(li);
+    }
+  </script>
+
   <!-- Analytics displayed with graphs -->
   <script type="text/javascript">
     var num_users_by_class_year = JSON.parse("{{num_users_by_class_year|escapejs}}");
-    var signups_per_hour = JSON.parse("{{signups_per_hour|escapejs}}");
+    var num_users_by_major = JSON.parse("{{num_users_by_major|escapejs}}");
+    var signups_per_day = JSON.parse("{{signups_per_day|escapejs}}");
+    var signups_per_day_length = signups_per_day.length;
+    var signups_heading = "Number of signups per day for the past " + signups_per_day_length + " days:";
   </script>
+
 
   <h4>Number of users by class year:</h4>
   <div id="chart-wrapper">
     <canvas id="num_users_by_class_year"></canvas>
   </div>
+
+  <h4>Number of users by major:</h4>
+  <div id="chart-wrapper">
+    <canvas id="num_users_by_major"></canvas>
+  </div>
   
-  <h4>Number of signups per day for the past week:</h4>
+  <h4 id="signups_heading"></h4>
   <div id="chart-wrapper">
     <canvas id="signups_chart"></canvas>
   </div>
@@ -64,10 +90,16 @@
 
     // Colors for each school.
     // TODO: user COLOURS_DATA in constants.jsx.
-    var primary_colors = ["#FD7473", "#5CCCF2", "#36DEBB", "#FFD462", "#C585DE", "#53e997", "#D4DBC8", "#E7F76D", "#A3F5F2", "#7499A2",
-      "#C8F7C5", "#4c7fd8"];
-    var secondary_colors = ["#e36867", "#52b7d9", "#30c7a8", "#e5be58", "#b177c7", "#4ad187", "#B5BFA3", "#C9E20A", "#7CD2CF", "#668B94",
-      "#C4D44D", "#6598f1"];
+    var primary_colors = ["#FD7473", "#5CCCF2", "#36DEBB", "#FFD462", "#C585DE", "#53e997", "#D4DBC8", "#E7F76D", 
+    "#A3F5F2", "#7499A2", "#C8F7C5", "#4c7fd8", "#FF9E9D", "#52D1F4", "#4EDFBC", "#FFE76E", "#DAA2E2", "#67EAAD", 
+    "#E0E4D1", "#F4FD88", "#B0FFF7", "#8CBBB9", "#FFF9B9", "#7CADD3", "#F1B0B0", "#98E3C5", "#C0C5B1", "#E9FDA7", 
+    "#88FFF5", "#6B8F91"];
+
+    var secondary_colors = ["#e36867", "#52b7d9", "#30c7a8", "#e5be58", "#b177c7", "#4ad187", "#B5BFA3", "#C9E20A", 
+    "#7CD2CF", "#668B94", "#C4D44D", "#6598f1", "#F1908D", "#76C7EB", "#6DD8C6", "#F6E38B", "#D9A9E5", "#78F4B4", 
+    "#D4D8C4", "#EAFD99", "#A7FFFB", "#629EAD", "#FFFCB9", "#5191C8", "#F3C2C2", "#88D7A7", "#AEB29F", "#DCF16E", 
+    "#4CADA4", "#3B5E61"];
+
     Chart.defaults.global.responsive = true;
 
     var num_users_by_class_year_data = {
@@ -80,8 +112,29 @@
         }]
     };
 
-    var signups_per_hour_data = {
-      labels: ["-6", "-5", "-4", "-3", "-2", "-1", "Now"],
+    var num_users_by_major_data = {
+      labels: Object.keys(num_users_by_major),
+      datasets: [
+        {
+          data: Object.keys(num_users_by_major).map(function (key) { return num_users_by_major[key] }),
+          backgroundColor: primary_colors,
+          hoverBackgroundColor: secondary_colors
+        }]
+    };
+
+    // set the text content of the h4 element to the signups heading
+    document.getElementById("signups_heading").textContent = signups_heading;
+
+    var today = new Date();
+    var labels = [];
+    for (var i = signups_per_day_length - 1; i > 0; i--) {
+      var date = new Date();
+      date.setDate(today.getDate() - i);
+      labels.push(date.toLocaleDateString());
+    }
+    labels.push("Now - " + today.toLocaleDateString());
+    var signups_per_day_data = {
+      labels: labels,
       datasets: [
         {
           label: "# Signups",
@@ -100,7 +153,7 @@
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: signups_per_hour,
+          data: signups_per_day,
         }
       ]
     }
@@ -112,10 +165,16 @@
       data: num_users_by_class_year_data,
     });
 
+    var ytx = document.getElementById("num_users_by_major");
+    var UsersByYearPieChart = new Chart(ytx, {
+      type: 'pie',
+      data: num_users_by_major_data,
+    });
+
     var utx = document.getElementById("signups_chart");
     var SignupsPieChart = new Chart(utx, {
       type: 'line',
-      data: signups_per_hour_data,
+      data: signups_per_day_data,
     });
   </script>
 
