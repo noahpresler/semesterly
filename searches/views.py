@@ -139,12 +139,8 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                     operator.or_,
                     (
                         Q(
-                            section__offering__time_start__gte="{0:0=2d}:00".format(
-                                min_max["min"]
-                            ),
-                            section__offering__time_end__lte="{0:0=2d}:00".format(
-                                min_max["max"]
-                            ),
+                            section__offering__time_start__gte=min_max["min"],
+                            section__offering__time_end__lte=min_max["max"],
                             section__offering__day=day_map[min_max["day"]],
                             section__semester=sem,
                             section__section_type="L",

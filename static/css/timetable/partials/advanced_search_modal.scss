@@ -561,3 +561,9 @@
     }
   }
 }
+
+.input-range__label-container {
+  &::after {
+    content: none;
+  }
+}

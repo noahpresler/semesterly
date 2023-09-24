@@ -49,20 +49,36 @@ function collectDragDrop(connect) {
 // ----------------- create source:
 const createSource = {
   beginDrag(props) {
-    const newSlotId = generateCustomEventId();
-    props.addCustomSlot(props.time, props.time, props.day, true, newSlotId);
-    return {
-      timeStart: props.time,
-      day: props.day,
-      id: newSlotId,
-    };
+    if (props.customEventModeOn) {
+      const newSlotId = generateCustomEventId();
+      props.addCustomSlot(props.time, props.time, props.day, true, newSlotId);
+      return {
+        timeStart: props.time,
+        day: props.day,
+        id: newSlotId,
+      };
+    } else {
+      // create search slot
+      props.addSearchSlot(props.time, props.time, props.day);
+      return {
+        timeStart: props.time,
+        day: props.day,
+      };
+    }
   },
   canDrag(props) {
-    return props.loggedIn && props.customEventModeOn;
+    if (props.customEventModeOn) {
+      return props.loggedIn;
+    }
+    return true;
   },
   endDrag(props, monitor) {
-    const { id } = monitor.getItem();
-    props.finalizeCustomSlot(id);
+    if (props.customEventModeOn) {
+      const { id } = monitor.getItem();
+      props.finalizeCustomSlot(id);
+    } else {
+      props.finalizeSearchSlot();
+    }
   },
 };
 
@@ -98,7 +114,11 @@ const createTarget = {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
     lastPreview = props.time;
-    props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
+    if (props.customEventModeOn) {
+      props.updateCustomSlot({ time_start: timeStart, time_end: timeEnd }, id);
+    } else {
+      props.updateSearchSlot(timeStart, timeEnd);
+    }
   },
 };
 
