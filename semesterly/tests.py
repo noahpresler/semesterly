@@ -195,7 +195,9 @@ class EndToEndTest(SeleniumTestCase):
             self.compare_timetable("End To End Testing!")
             self.assert_slot_presence(11, 3)
             self.exit_compare_timetable()
-        with self.description("switch semester, create personal timetable, switch back"):
+        with self.description(
+            "switch semester, create personal timetable, switch back"
+        ):
             self.change_term("Spring 2023")
             self.create_ptt("Hope ders no bugs!", finish_saving=False)
             self.click_off()
