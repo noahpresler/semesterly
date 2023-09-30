@@ -42,6 +42,7 @@ import userAcquisitionModal from "./slices/userAcquisitionModalSlice";
 import compareTimetable from "./slices/compareTimetableSlice";
 import registrar from "./slices/registrarSlice";
 import entities, * as fromEntities from "./slices/entitiesSlice";
+import dragSearch from "./slices/dragSearchSlice";
 import theme from "./slices/themeSlice";
 import { Slot, Timetable } from "../constants/commonTypes";
 
@@ -73,6 +74,7 @@ export const reducers = {
   userAcquisitionModal,
   userInfo,
   compareTimetable,
+  dragSearch,
 };
 
 const store = configureStore({ reducer: reducers });

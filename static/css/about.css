@@ -1,279 +1,316 @@
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-html, body{
-	margin: 0;
-	height: 100%;
-	background-color: #F3F3F3;
-	font-family: "Roboto",Arial,sans-serif;
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background-color: #f3f3f3;
+  font-family: "Roboto", Arial, sans-serif;
 }
 
-h1, h2, h5 {
-	font-family: "Palanquin",Arial,sans-serif;
-	font-weight: 500;
+h1,
+h2,
+h5 {
+  font-family: "Palanquin", Arial, sans-serif;
+  font-weight: 500;
 }
 
 /* Header */
 header {
-	position: fixed;
-	z-index: 10;
-	width: 100%;
-	height: 50px;
-	padding: 10px;
-	color: #253340;
-	background-color: rgba(252, 252, 252, .95);
-	border-bottom: 1px solid #DDD;
-	transition: background-color .3s, border .3s;
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  color: #253340;
+  background-color: rgba(252, 252, 252, 0.95);
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s, border 0.3s;
 }
 header.down {
-	background-color: transparent;
-	border-bottom: 1px solid transparent;
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
 }
 header h1 {
-	color: #34495E;
-	float: left;
-	font-size: 26px;
-	line-height: 30px;
-	margin: 0 10px 0;
+  color: #34495e;
+  float: left;
+  font-size: 26px;
+  line-height: 30px;
+  margin: 0 10px 0;
 }
 #semesterly-logo {
-	height: 32px;
-	float: left;
+  height: 32px;
+  float: left;
 }
 header nav {
-	float: right;
-	font-weight: 600;
-	font-size: 16px;
-	line-height: 30px;
-	height: 30px;
+  float: right;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 30px;
+  height: 30px;
 }
 
 header nav a,
 header nav a:link,
 header nav a:active,
 header nav a:visited {
-	margin-right: 10px;
-	color: rgb(37, 51, 64);
-	text-decoration: none;
-	transition: color .2s;
+  margin-right: 10px;
+  color: rgb(37, 51, 64);
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
 header nav a:hover {
-	color: #3498DB;
+  color: #3498db;
 }
 
 /* Page Content */
 #page {
-	width: 100%;
-	padding-top: 50px;
-	background-color: #F3F3F3;
+  width: 100%;
+  padding-top: 50px;
+  background-color: #f3f3f3;
 }
 
 /* Before Hero */
 #pre {
-	width: 100%;
-	padding: 25px;
-	background-color: #F3F3F3;
-	position: relative;
-	text-align: center;
+  width: 100%;
+  padding: 25px;
+  background-color: #f3f3f3;
+  position: relative;
+  text-align: center;
 }
 #pre h1 {
-	font-size: 48px;
+  font-size: 48px;
 }
-@media(max-width: 700px) {#pre h1 {font-size: 30px;} }
-@media(max-width: 470px) {#pre h1 {font-size: 20px; margin-top: 30px;} }
+@media (max-width: 700px) {
+  #pre h1 {
+    font-size: 30px;
+  }
+}
+@media (max-width: 470px) {
+  #pre h1 {
+    font-size: 20px;
+    margin-top: 30px;
+  }
+}
 
 /* After Hero */
 #post {
-	width: 100%;
-	padding: 25px;
-	background-color: #F3F3F3;
-	position: relative;
-	text-align: center;
+  width: 100%;
+  padding: 25px;
+  background-color: #f3f3f3;
+  position: relative;
+  text-align: center;
 }
 #post h2 {
-	font-size: 30px;
+  font-size: 30px;
 }
-@media(max-width: 700px) {#pre h1 {font-size: 25px;} }
-@media(max-width: 470px) {#pre h1 {font-size: 20px; margin-top: 30px;} }
-
+@media (max-width: 700px) {
+  #pre h1 {
+    font-size: 25px;
+  }
+}
+@media (max-width: 470px) {
+  #pre h1 {
+    font-size: 20px;
+    margin-top: 30px;
+  }
+}
 
 /* Hero */
 #hero {
-	width: 100%;
-	padding: 250px;
-	background-color: #F3F3F3;
-	background-image: url(/static/img/splash/about_bg.jpg);
-	background-size: cover;
-	background-position: center;
-	position: relative;
+  width: 100%;
+  padding: 250px;
+  background-color: #f3f3f3;
+  background-image: url(/static/img/splash/about_bg.jpg);
+  background-size: cover;
+  background-position: center;
+  position: relative;
 }
 #hero h2 {
-	color: white;
-	font-size: 30px;
-	line-height: 40px;
-	padding-left: 50px;
-	padding-right: 50px;
+  color: white;
+  font-size: 30px;
+  line-height: 40px;
+  padding-left: 50px;
+  padding-right: 50px;
 }
-	@media(max-width: 1170px) {#hero h2 {font-size: 22px; line-height: 30px;}}
-	@media(max-width: 980px) {#hero h2 {font-size: 25px; line-height: 23px;}}
-	@media(max-width: 776px) {#hero h2 {font-size: 15px; line-height: 20px; 
-		padding-left: 30px; padding-right: 30px;}}
+@media (max-width: 1170px) {
+  #hero h2 {
+    font-size: 22px;
+    line-height: 30px;
+  }
+}
+@media (max-width: 980px) {
+  #hero h2 {
+    font-size: 25px;
+    line-height: 23px;
+  }
+}
+@media (max-width: 776px) {
+  #hero h2 {
+    font-size: 15px;
+    line-height: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
 
 /* Hero */
 #hero {
-	width: 100%;
-	padding: 250px;
-	background-color: #F3F3F3;
-	background-image: url(/static/img/splash/about_bg.jpg);
-	background-size: cover;
-	position: relative;
+  width: 100%;
+  padding: 250px;
+  background-color: #f3f3f3;
+  background-image: url(/static/img/splash/about_bg.jpg);
+  background-size: cover;
+  position: relative;
 }
 .about {
-	padding-top: 10px;
+  padding-top: 10px;
 }
 .about h2 {
-	font-size: 42px;
-	line-height: 50px;
-	font-weight: 300;
-	margin: 20px 0 0;
-	color: #666;
+  font-size: 42px;
+  line-height: 50px;
+  font-weight: 300;
+  margin: 20px 0 0;
+  color: #666;
 }
 .about h3 {
-	font-size: 18px;
-	font-weight: 400;
-	color: #222;
-	margin: 10px auto 0;
-	max-width: 700px;
-	line-height: 24px;
+  font-size: 18px;
+  font-weight: 400;
+  color: #222;
+  margin: 10px auto 0;
+  max-width: 700px;
+  line-height: 24px;
 }
 .about h5 {
-	font-size: 16px;
-	font-weight: 100;
-	margin: 0;
-	text-transform: uppercase;
-	letter-spacing: 0.2em;
-	color: #555;
-	padding: 20px;
+  font-size: 16px;
+  font-weight: 100;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #555;
+  padding: 20px;
 }
 #learn {
-	position: relative;
-	text-align: center;
+  position: relative;
+  text-align: center;
 }
 .mission {
-	padding: 120px 0;
-	font-size: 0;
-	border-bottom: 1px solid #ddd;
-	position: relative;
+  padding: 120px 0;
+  font-size: 0;
+  border-bottom: 1px solid #ddd;
+  position: relative;
 }
 
 #hero .member {
-	width: 100%;
-	height: 180px; 
+  width: 100%;
+  height: 180px;
 }
 .member {
-	padding: 4%;
+  padding: 4%;
 }
 .circular {
-	width: 100%;
-	height: auto;
-	padding-bottom: 100%;
-	border-radius: 50%;
-	background-size: cover;
+  width: 100%;
+  height: auto;
+  padding-bottom: 100%;
+  border-radius: 50%;
+  background-size: cover;
 }
 .name {
-	font-weight: normal;
-	margin-top: 5%;
+  font-weight: normal;
+  white-space: nowrap;
+  margin-top: 5%;
 }
-@media(max-width: 1134px) {
-	.long-name {
-		white-space: nowrap;
-		margin-left: 0%;
-	}
+@media (max-width: 1134px) {
+  .long-name {
+    white-space: nowrap;
+    margin-left: 0%;
+  }
 }
-@media(max-width: 980px) {
-	.long-name {
-		white-space: nowrap;
-		margin-left: -10%;
-	}
+@media (max-width: 980px) {
+  .long-name {
+    white-space: nowrap;
+    margin-left: -10%;
+  }
 }
-@media(max-width: 800px) {
-	.long-name {
-		white-space: nowrap;
-		margin-left: -20%;
-	}
+@media (max-width: 800px) {
+  .long-name {
+    white-space: nowrap;
+    margin-left: -20%;
+  }
 }
-@media(max-width: 766px) {
-	.long-name {
-		white-space: nowrap;
-		margin-left: 0%;
-	}
+@media (max-width: 766px) {
+  .long-name {
+    white-space: nowrap;
+    margin-left: 0%;
+  }
 }
 
 footer {
-	background-color: #253340;
-	padding: 40px 0 10px;
+  background-color: #253340;
+  padding: 40px 0 10px;
 }
 footer ul {
-	list-style-type: none;
-	padding: 0 0 40px 0;
-	margin: 0;
+  list-style-type: none;
+  padding: 0 0 40px 0;
+  margin: 0;
 }
 footer ul li {
-	margin: 10px 0;
+  margin: 10px 0;
 }
-footer ul li a, 
-footer ul li a:link, 
-footer ul li a:active, 
+footer ul li a,
+footer ul li a:link,
+footer ul li a:active,
 footer ul li a:visited {
-	color: #ddd;
-	font-size: 14px;
-	text-decoration: none;
+  color: #ddd;
+  font-size: 14px;
+  text-decoration: none;
 }
 footer ul li a:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 footer ul li a i {
-	width: 24px;
-	height: 24px;
-	text-align: center;
-	border-radius: 100%;
-	margin-right: 5px;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  border-radius: 100%;
+  margin-right: 5px;
 }
 footer ul li a i.fa-facebook {
-	line-height: 24px;
-	background-color: #3b5998;
+  line-height: 24px;
+  background-color: #3b5998;
 }
 footer ul li a i.fa-at {
-	line-height: 24px;
-	background-color: #409036;
+  line-height: 24px;
+  background-color: #409036;
 }
 footer ul li a i.fa-bookmark {
-	line-height: 24px;
-	background-color: #808080;
+  line-height: 24px;
+  background-color: #808080;
 }
 footer ul li a i.fa-lock {
-	line-height: 24px;
-	background-color: #808080;
+  line-height: 24px;
+  background-color: #808080;
 }
 footer h6 {
-	text-align: center;
-	font-size: 10px;
-	color: #777;
-	margin: 0;
+  text-align: center;
+  font-size: 10px;
+  color: #777;
+  margin: 0;
 }
 
-@media(max-width: 445px) {
-	header h1 {
-		display: none;
-	}
+@media (max-width: 445px) {
+  header h1 {
+    display: none;
+  }
 }
-@media(max-width: 776px) {
-	#hero h2 {
-		font-size: 40px;
-	}
-	footer li {
-		text-align: center;
-	}
+@media (max-width: 776px) {
+  #hero h2 {
+    font-size: 40px;
+  }
+  footer li {
+    text-align: center;
+  }
 }

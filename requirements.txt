@@ -1,5 +1,5 @@
 setuptools==65.5.1
-Pygments==2.7.4
+Pygments==2.15.0
 Sphinx==4.0.2
 alabaster==0.7.10
 argparse==1.4.0
@@ -8,9 +8,9 @@ black==22.3.0
 bs4==0.0.1
 celery==5.2.2
 coverage==6.3.2
-cryptography==39.0.1
+cryptography==41.0.4
 dateparser==1.1.0
-Django==3.2.18
+Django==3.2.20
 django-cachalot==2.4.3
 django-ckeditor==6.2.0 
 django-debug-toolbar==3.8.1
@@ -47,7 +47,7 @@ pywebpush==1.4.0
 PyJWT[crypto]==2.3.0
 PyYAML==6.0
 regex==2022.3.2
-requests==2.25.1
+requests==2.31.0
 rollbar==0.16.1
 scipy==1.7.0
 selenium==4.1.3
@@ -57,4 +57,4 @@ sphinx-rtd-theme==0.5.2
 sphinxcontrib-inlinesyntaxhighlight==0.2
 sphinxcontrib-websupport==1.2.4
 supervisor==4.2.2
-webdriver-manager==3.5.2
+semly-webdriver-manager-fork==4.0.1

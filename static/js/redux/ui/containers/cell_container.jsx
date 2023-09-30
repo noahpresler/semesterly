@@ -19,6 +19,11 @@ import {
   updateCustomSlot,
   finalizeCustomSlot,
 } from "../../actions/timetable_actions";
+import {
+  addSearchSlot,
+  updateSearchSlot,
+  finalizeSearchSlot,
+} from "../../actions/dragSearchActions";
 import { getMaxEndHour } from "../../state";
 
 const mapStateToProps = (state) => ({
@@ -29,6 +34,9 @@ const CellContainer = connect(mapStateToProps, {
   addCustomSlot,
   updateCustomSlot,
   finalizeCustomSlot,
+  addSearchSlot,
+  updateSearchSlot,
+  finalizeSearchSlot,
 })(Cell);
 
 export default CellContainer;

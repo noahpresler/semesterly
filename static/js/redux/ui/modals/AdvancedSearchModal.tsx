@@ -17,7 +17,7 @@ import {
   setAdvancedSearchResultIndex,
 } from "../../actions";
 import { timetablesActions } from "../../state/slices/timetablesSlice";
-import { VERBOSE_DAYS } from "../../constants/constants";
+import { DAYS, VERBOSE_DAYS } from "../../constants/constants";
 import { ShareLink } from "../MasterSlot";
 import CourseModalBody from "./CourseModalBody";
 import {
@@ -25,7 +25,7 @@ import {
   SelectedFilter,
   SelectedFilterSection,
 } from "../advanced_search_filters";
-import TimeSelector from "../time_selector";
+import TimeSelector from "../TimeSelector";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 type AdvancedSearchResultProps = {
@@ -33,6 +33,39 @@ type AdvancedSearchResultProps = {
   code: string;
   onClick: Function;
   isSelected: boolean;
+};
+
+type TimeFilter = { day: string; min: number; max: number };
+
+type FilterData = {
+  areas: string[];
+  departments: string[];
+  levels: string[];
+  times: TimeFilter[];
+  addedDays: string[];
+};
+
+const convertTimeToValue = (time: string) => {
+  const [hour, minute] = time.split(":");
+  return parseInt(hour, 10) + parseInt(minute, 10) / 60;
+};
+
+const convertTimeValue = (value: number) => {
+  const hour = Math.floor(value);
+  const minute = Math.floor((value - hour) * 60);
+  return `${hour < 10 ? "0" : ""}${hour}:${minute < 10 ? "0" : ""}${minute}`;
+};
+
+const convertFilterTimeValues = (times: TimeFilter[]) => {
+  const newTimes: { day: string; min: string; max: string }[] = [];
+  times.forEach((t) => {
+    newTimes.push({
+      day: t.day,
+      min: convertTimeValue(t.min),
+      max: convertTimeValue(t.max),
+    });
+  });
+  return newTimes;
 };
 
 const AdvancedSearchResult = ({
@@ -77,8 +110,14 @@ const AdvancedSearchModal = () => {
 
   const scrollContainer = useRef<HTMLDivElement>();
 
+  const dragSearchSlotExists = useAppSelector((state) => state.dragSearch.slot != null);
+  const dragSearchSlot = useAppSelector((state) => state.dragSearch.slot);
+  const dragSearchSlotFinalized = useAppSelector(
+    (state) => state.dragSearch.slotFinalized
+  );
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterData, setFilterData] = useState({
+  const [filterData, setFilterData] = useState<FilterData>({
     areas: [],
     departments: [],
     levels: [],
@@ -138,7 +177,7 @@ const AdvancedSearchModal = () => {
         {
           areas: filterData.areas,
           departments: filterData.departments,
-          times: filterData.times,
+          times: convertFilterTimeValues(filterData.times),
           levels: filterData.levels,
         },
         pageToFetch
@@ -150,6 +189,22 @@ const AdvancedSearchModal = () => {
   useEffect(() => {
     fetchResults();
   }, [filterData]);
+
+  useEffect(() => {
+    if (dragSearchSlotExists && dragSearchSlotFinalized) {
+      setFilterData((prevState) => ({
+        ...prevState,
+        addedDays: [VERBOSE_DAYS[DAYS.indexOf(dragSearchSlot.day)]],
+        times: [
+          {
+            day: VERBOSE_DAYS[DAYS.indexOf(dragSearchSlot.day)],
+            min: convertTimeToValue(dragSearchSlot.time_start),
+            max: convertTimeToValue(dragSearchSlot.time_end),
+          },
+        ],
+      }));
+    }
+  }, [dragSearchSlotExists, dragSearchSlot, dragSearchSlotFinalized]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -264,7 +319,7 @@ const AdvancedSearchModal = () => {
     />
   ));
 
-  let courseModal = null;
+  let courseModal: null | JSX.Element = null;
   if (active >= 0 && active < advancedSearchResults.length) {
     const selectedCourse = advancedSearchResults[active];
     const shareLink = shareLinkShown ? (
@@ -364,7 +419,7 @@ const AdvancedSearchModal = () => {
         key={timeState.day}
         day={timeState.day}
         value={value}
-        onChange={(x: number, y = timeState.day) => handleTimesChange(x, y)}
+        onChange={(x: TimeFilter, y = timeState.day) => handleTimesChange(x, y)}
         // onChangeComplete={fetchResults()}
         remove={removeTimeFilter}
       />

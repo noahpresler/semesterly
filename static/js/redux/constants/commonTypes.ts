@@ -91,6 +91,17 @@ export interface Slot {
 }
 
 /**
+ * SearchSlot is a slot that is created when dragging in empty space.
+ */
+export interface SearchSlot {
+  id: number;
+  day: Day;
+  time_start: string;
+  time_end: string;
+  search?: boolean;
+}
+
+/**
  * Event refers to a custom event created by user. There are some extra fields to
  * indicate whether the event is being created (preview).
  */
