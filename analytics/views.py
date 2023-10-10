@@ -23,12 +23,14 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404
 from django.db.models import Count
-
+from rest_framework import generics
+from rest_framework.response import Response
 from student.models import Student
 
 from student.utils import get_student
 from student.models import *
 from analytics.models import *
+from analytics.serializers import UIErrorLogSerializer
 from timetable.models import Semester
 from parsing.schools.active import ACTIVE_SCHOOLS
 
@@ -240,3 +242,8 @@ def number_students_by_school():
         )
         result[school] = students.count()
     return result
+
+
+class UIErrorLogCreateView(generics.CreateAPIView):
+    serializer_class = UIErrorLogSerializer
+    queryset = UIErrorLog.objects.all()

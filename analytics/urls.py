@@ -20,4 +20,5 @@ urlpatterns = [
     re_path(r"^analytics/*$", analytics.views.view_analytics_dashboard),
     re_path(r"^robots.txt*$", analytics.views.view_analytics_dashboard),
     re_path(r"^user/log_ical/*$", student.views.log_ical_export),
+    re_path(r"^ui-error-logs/*$", analytics.views.UIErrorLogCreateView.as_view()),
 ]
