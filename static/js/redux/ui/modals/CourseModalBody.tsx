@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import isEmpty from "lodash/isEmpty";
 import Reaction from "../reaction";
 import REACTION_MAP from "../../constants/reactions";
@@ -459,6 +459,21 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
       </div>
     </div>
   );
+
+  const handleKeyPress = useCallback((e) => {
+    console.log(`Key pressed: ${e.key}`)
+  }, [])
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    }
+  }, [handleKeyPress])
+
+
+
 
   return (
     <div className="modal-body">
