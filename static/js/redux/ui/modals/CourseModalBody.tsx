@@ -31,6 +31,7 @@ import { timetablesActions } from "../../state/slices/timetablesSlice";
 import { addOrRemoveCourse, fetchCourseInfo, react, saveSettings } from "../../actions";
 import { signupModalActions } from "../../state/slices/signupModalSlice";
 import { selectSlotColorData } from "../../state/slices/themeSlice";
+import { current } from "@reduxjs/toolkit";
 
 type CourseModalBodyProps = {
   course: DenormalizedCourse | null;
@@ -460,9 +461,30 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
     </div>
   );
 
+
+  // Code to detect if arrow keys were hit. When detected, will hover over section times
+  // Current goal: just use left/right keys to index forwards or backwards
+
+
+  // State to store information about which section is being hovered by arrow keys
+  const [currentHoveredSection, setCurrentHoveredSection] = useState(-1);
+
   const handleKeyPress = useCallback((e) => {
     console.log(`Key pressed: ${e.key}`)
+    if (e.key === "ArrowRight") {
+      console.log("Right arrow key was pressed");
+      setCurrentHoveredSection((prevSection) => prevSection + 1);
+    } else if (e.key === "ArrowLeft") {
+      console.log("Left arrow key was pressed");
+      setCurrentHoveredSection((prevSection) => prevSection >= 0 ? prevSection - 1 : prevSection);
+    }
+    
   }, [])
+
+  // detects change in currentHoveredSection and (for now) just logs the hovered index
+  useEffect(() => {
+    console.log(`Current section index: ${currentHoveredSection}`);
+  }, [currentHoveredSection])
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
