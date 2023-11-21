@@ -67,11 +67,10 @@ const CourseModalSection = (props: CourseModalSectionProps) => {
     benchmark = "yellow";
   }
 
-
   const style = props.isHovered ? "modal-section-hover" : "modal-section";
 
   return (
-      <div
+    <div
       className={classnames(style, {
         locked: props.locked,
         "on-active-timetable": props.isOnActiveTimetable,
@@ -93,7 +92,6 @@ const CourseModalSection = (props: CourseModalSectionProps) => {
       </h6>
       <i className="fa fa-lock" />
     </div>
-    
   );
 };
 export default CourseModalSection;

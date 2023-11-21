@@ -89,62 +89,76 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
     });
   }, []);
 
-    // Code to detect if arrow keys were hit. When detected, will hover over section times
+  // Code to detect if arrow keys were hit. When detected, will hover over section times
   // Current goal: just use left/right keys to index forwards or backwards
-
 
   // State to store information about which section is being hovered by arrow keys
   const [currentHoveredSection, setCurrentHoveredSection] = useState(-1);
-  const [currentHoveredSectionObj, setCurrentHoveredSectionObj] = useState<Section | null>(null);
+  const [currentHoveredSectionObj, setCurrentHoveredSectionObj] =
+    useState<Section | null>(null);
 
   // Stores all available sections into one list
   const sectionList: Section[] = [];
   Object.keys(sectionTypeToSections)
-      .sort()
-      .forEach((sType) => {
-        const sections = sectionTypeToSections[sType];
-        sections.forEach((currentSection: Section) => {
-          sectionList.push(currentSection);
-        });
+    .sort()
+    .forEach((sType) => {
+      const sections = sectionTypeToSections[sType];
+      sections.forEach((currentSection: Section) => {
+        sectionList.push(currentSection);
       });
+    });
 
-
-  const handleKeyPress = useCallback((e) => {
-    if (e.key === "ArrowRight") {
-      setCurrentHoveredSection((prevSection) => (prevSection < sectionList.length - 1 ? prevSection + 1 : prevSection));
-    } else if (e.key === "ArrowLeft") {
-      setCurrentHoveredSection((prevSection) => (prevSection >= 0 ? prevSection - 1 : prevSection));
-    } else if (e.key === "Enter") {
-      if (currentHoveredSection >= 0 && currentHoveredSection < sectionList.length) {
-        dispatch(addOrRemoveCourse(props.course?.id, sectionList[currentHoveredSection].meeting_section));
+  const handleKeyPress = useCallback(
+    (e) => {
+      if (e.key === "ArrowRight") {
+        setCurrentHoveredSection((prevSection) =>
+          prevSection < sectionList.length - 1 ? prevSection + 1 : prevSection
+        );
+      } else if (e.key === "ArrowLeft") {
+        setCurrentHoveredSection((prevSection) =>
+          prevSection >= 0 ? prevSection - 1 : prevSection
+        );
+      } else if (e.key === "Enter") {
+        if (currentHoveredSection >= 0 && currentHoveredSection < sectionList.length) {
+          dispatch(
+            addOrRemoveCourse(
+              props.course?.id,
+              sectionList[currentHoveredSection].meeting_section
+            )
+          );
+          props.hideModal();
+        }
+      } else if (e.key === "Escape") {
+        setCurrentHoveredSection(-1);
         props.hideModal();
       }
-    } else if (e.key === "Escape") {
-      setCurrentHoveredSection(-1);
-      props.hideModal();
-    }
-    
-  }, [currentHoveredSection])
+    },
+    [currentHoveredSection]
+  );
 
   // detects change in currentHoveredSection and (for now) just logs the hovered index
   useEffect(() => {
     if (currentHoveredSection !== -1) {
-      dispatch(timetablesActions.hoverSection({course: props.course, section: sectionList[currentHoveredSection]}))
-      setCurrentHoveredSectionObj(sectionList[currentHoveredSection])
-
+      dispatch(
+        timetablesActions.hoverSection({
+          course: props.course,
+          section: sectionList[currentHoveredSection],
+        })
+      );
+      setCurrentHoveredSectionObj(sectionList[currentHoveredSection]);
     } else {
-      dispatch(timetablesActions.unhoverSection())
-      setCurrentHoveredSectionObj(null)
+      dispatch(timetablesActions.unhoverSection());
+      setCurrentHoveredSectionObj(null);
     }
-  }, [currentHoveredSection])
+  }, [currentHoveredSection]);
 
   // attaches/unattaches event listener to document
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress);
+    document.addEventListener("keydown", handleKeyPress);
     return () => {
-      document.removeEventListener('keydown', handleKeyPress);
-    }
-  }, [handleKeyPress])
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   const dispatch = useAppDispatch();
 
@@ -175,25 +189,27 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
   const mapSectionsToSlots = (sections: Section[]) =>
     sections.sort(strPropertyCmp("meeting_section")).map((section: Section) => (
       <CourseModalSection
-      key={props.course.id + section.meeting_section}
-      secName={section.meeting_section}
-      instr={section.instructors}
-      enrolment={section.enrolment === -1 ? 0 : section.enrolment}
-      waitlist={section.waitlist === -1 ? 0 : section.waitlist}
-      size={section.size === -1 ? 0 : section.size}
-      locked={isSectionLocked(props.course.id, section.meeting_section)}
-      isOnActiveTimetable={isSectionOnActiveTimetable(props.course.id, section.id)}
-      lockOrUnlock={() => {
-        dispatch(addOrRemoveCourse(props.course?.id, section.meeting_section));
-        props.hideModal();
-      }}
-      hoverSection={() =>
-        dispatch(timetablesActions.hoverSection({ course: props.course, section }))
-      }
-      unHoverSection={() => dispatch(timetablesActions.unhoverSection())}
-      isHovered={currentHoveredSectionObj && currentHoveredSectionObj.course_section_id === section.course_section_id}
-    />
-      
+        key={props.course.id + section.meeting_section}
+        secName={section.meeting_section}
+        instr={section.instructors}
+        enrolment={section.enrolment === -1 ? 0 : section.enrolment}
+        waitlist={section.waitlist === -1 ? 0 : section.waitlist}
+        size={section.size === -1 ? 0 : section.size}
+        locked={isSectionLocked(props.course.id, section.meeting_section)}
+        isOnActiveTimetable={isSectionOnActiveTimetable(props.course.id, section.id)}
+        lockOrUnlock={() => {
+          dispatch(addOrRemoveCourse(props.course?.id, section.meeting_section));
+          props.hideModal();
+        }}
+        hoverSection={() =>
+          dispatch(timetablesActions.hoverSection({ course: props.course, section }))
+        }
+        unHoverSection={() => dispatch(timetablesActions.unhoverSection())}
+        isHovered={
+          currentHoveredSectionObj &&
+          currentHoveredSectionObj.course_section_id === section.course_section_id
+        }
+      />
     ));
 
   if (props.isFetching || isEmpty(props.course)) {
@@ -250,8 +266,6 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
         </div>
       );
     });
-
-    
 
   const { reactions, num_credits: numCredits } = props.course;
 
@@ -522,7 +536,6 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
       </div>
     </div>
   );
-
 
   return (
     <div className="modal-body">
