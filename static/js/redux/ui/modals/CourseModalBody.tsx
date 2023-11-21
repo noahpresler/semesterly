@@ -32,6 +32,7 @@ import { addOrRemoveCourse, fetchCourseInfo, react, saveSettings } from "../../a
 import { signupModalActions } from "../../state/slices/signupModalSlice";
 import { selectSlotColorData } from "../../state/slices/themeSlice";
 import { current } from "@reduxjs/toolkit";
+import { isNullishCoalesce } from "typescript";
 
 type CourseModalBodyProps = {
   course: DenormalizedCourse | null;
@@ -94,6 +95,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
 
   // State to store information about which section is being hovered by arrow keys
   const [currentHoveredSection, setCurrentHoveredSection] = useState(-1);
+  const [currentHoveredSectionObj, setCurrentHoveredSectionObj] = useState<Section | null>(null);
 
   console.log("creating section list...")
   // Stores all available sections into one list
@@ -136,8 +138,11 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
     // console.log(`${currentHoveredSection}`)
     if (currentHoveredSection !== -1) {
       dispatch(timetablesActions.hoverSection({course: props.course, section: sectionList[currentHoveredSection]}))
+      setCurrentHoveredSectionObj(sectionList[currentHoveredSection])
+
     } else {
       dispatch(timetablesActions.unhoverSection())
+      setCurrentHoveredSectionObj(null)
     }
   }, [currentHoveredSection])
 
@@ -178,23 +183,25 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
   const mapSectionsToSlots = (sections: Section[]) =>
     sections.sort(strPropertyCmp("meeting_section")).map((section: Section) => (
       <CourseModalSection
-        key={props.course.id + section.meeting_section}
-        secName={section.meeting_section}
-        instr={section.instructors}
-        enrolment={section.enrolment === -1 ? 0 : section.enrolment}
-        waitlist={section.waitlist === -1 ? 0 : section.waitlist}
-        size={section.size === -1 ? 0 : section.size}
-        locked={isSectionLocked(props.course.id, section.meeting_section)}
-        isOnActiveTimetable={isSectionOnActiveTimetable(props.course.id, section.id)}
-        lockOrUnlock={() => {
-          dispatch(addOrRemoveCourse(props.course?.id, section.meeting_section));
-          props.hideModal();
-        }}
-        hoverSection={() =>
-          dispatch(timetablesActions.hoverSection({ course: props.course, section }))
-        }
-        unHoverSection={() => dispatch(timetablesActions.unhoverSection())}
-      />
+      key={props.course.id + section.meeting_section}
+      secName={section.meeting_section}
+      instr={section.instructors}
+      enrolment={section.enrolment === -1 ? 0 : section.enrolment}
+      waitlist={section.waitlist === -1 ? 0 : section.waitlist}
+      size={section.size === -1 ? 0 : section.size}
+      locked={isSectionLocked(props.course.id, section.meeting_section)}
+      isOnActiveTimetable={isSectionOnActiveTimetable(props.course.id, section.id)}
+      lockOrUnlock={() => {
+        dispatch(addOrRemoveCourse(props.course?.id, section.meeting_section));
+        props.hideModal();
+      }}
+      hoverSection={() =>
+        dispatch(timetablesActions.hoverSection({ course: props.course, section }))
+      }
+      unHoverSection={() => dispatch(timetablesActions.unhoverSection())}
+      isHovered={currentHoveredSectionObj && currentHoveredSectionObj.course_section_id === section.course_section_id}
+    />
+      
     ));
 
   if (props.isFetching || isEmpty(props.course)) {
@@ -252,11 +259,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
       );
     });
 
-  
-
-
-  
-
+    
 
   const { reactions, num_credits: numCredits } = props.course;
 

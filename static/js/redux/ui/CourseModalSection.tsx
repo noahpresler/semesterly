@@ -26,6 +26,7 @@ type CourseModalSectionProps = {
   lockOrUnlock: Function;
   hoverSection: Function;
   unHoverSection: Function;
+  isHovered: boolean;
 };
 
 // A. MadooeiP. Simari -> A. Madooei, P. Simari
@@ -65,11 +66,16 @@ const CourseModalSection = (props: CourseModalSectionProps) => {
   } else if (seats < sizeDisplay / 10) {
     benchmark = "yellow";
   }
+
+
+  const style = props.isHovered ? "modal-section-hover" : "modal-section";
+
   return (
-    <div
-      className={classnames("modal-section", {
+      <div
+      className={classnames(style, {
         locked: props.locked,
         "on-active-timetable": props.isOnActiveTimetable,
+        "bg-lecture-section-background-hover": props.isHovered,
       })}
       onMouseDown={() => props.lockOrUnlock()}
       onMouseEnter={() => props.hoverSection()}
@@ -87,6 +93,7 @@ const CourseModalSection = (props: CourseModalSectionProps) => {
       </h6>
       <i className="fa fa-lock" />
     </div>
+    
   );
 };
 export default CourseModalSection;
