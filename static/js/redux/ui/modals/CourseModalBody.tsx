@@ -124,6 +124,9 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
         dispatch(addOrRemoveCourse(props.course?.id, sectionList[currentHoveredSection].meeting_section));
         props.hideModal();
       }
+    } else if (e.key === "Escape") {
+      setCurrentHoveredSection(-1);
+      props.hideModal();
     }
     
   }, [currentHoveredSection])
