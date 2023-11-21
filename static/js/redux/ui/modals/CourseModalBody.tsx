@@ -95,6 +95,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
   // State to store information about which section is being hovered by arrow keys
   const [currentHoveredSection, setCurrentHoveredSection] = useState(-1);
 
+  console.log("creating section list...")
   // Stores all available sections into one list
   const sectionList: Section[] = [];
   Object.keys(sectionTypeToSections)
@@ -103,24 +104,33 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
         const sections = sectionTypeToSections[sType];
         sections.forEach((currentSection: Section) => {
           sectionList.push(currentSection);
+          console.log(`"${currentSection.course_section_id}`)
         });
       });
 
+  console.log("...done!")
 
+
+  // bug: currentHoveredSection is somehow always read as -1
   const handleKeyPress = useCallback((e) => {
+    // console.log(`Key pressed: ${e.key}`);
     if (e.key === "ArrowRight") {
-      setCurrentHoveredSection((prevSection) => prevSection < sectionList.length - 1 ? prevSection + 1 : prevSection);
+      setCurrentHoveredSection((prevSection) => (prevSection < sectionList.length - 1 ? prevSection + 1 : prevSection));
     } else if (e.key === "ArrowLeft") {
-      setCurrentHoveredSection((prevSection) => prevSection >= 0 ? prevSection - 1 : prevSection);
+      setCurrentHoveredSection((prevSection) => (prevSection >= 0 ? prevSection - 1 : prevSection));
     } else if (e.key === "Enter") {
-      dispatch(addOrRemoveCourse(props.course?.id, sectionList[currentHoveredSection].meeting_section));
-      props.hideModal();
+      console.log(`${currentHoveredSection}`)
+      if (currentHoveredSection >= 0 && currentHoveredSection < sectionList.length) {
+        dispatch(addOrRemoveCourse(props.course?.id, sectionList[currentHoveredSection].meeting_section));
+        props.hideModal();
+      }
     }
     
-  }, [])
+  }, [currentHoveredSection])
 
   // detects change in currentHoveredSection and (for now) just logs the hovered index
   useEffect(() => {
+    // console.log(`${currentHoveredSection}`)
     if (currentHoveredSection !== -1) {
       dispatch(timetablesActions.hoverSection({course: props.course, section: sectionList[currentHoveredSection]}))
     } else {
@@ -514,13 +524,6 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
       </div>
     </div>
   );
-
-
-
-
- 
-
-
 
 
   return (
