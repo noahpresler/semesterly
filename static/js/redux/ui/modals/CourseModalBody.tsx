@@ -88,6 +88,54 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
     });
   }, []);
 
+    // Code to detect if arrow keys were hit. When detected, will hover over section times
+  // Current goal: just use left/right keys to index forwards or backwards
+
+
+  // State to store information about which section is being hovered by arrow keys
+  const [currentHoveredSection, setCurrentHoveredSection] = useState(-1);
+
+  // Stores all available sections into one list
+  const sectionList: Section[] = [];
+  Object.keys(sectionTypeToSections)
+      .sort()
+      .forEach((sType) => {
+        const sections = sectionTypeToSections[sType];
+        sections.forEach((currentSection: Section) => {
+          sectionList.push(currentSection);
+        });
+      });
+
+
+  const handleKeyPress = useCallback((e) => {
+    if (e.key === "ArrowRight") {
+      setCurrentHoveredSection((prevSection) => prevSection < sectionList.length - 1 ? prevSection + 1 : prevSection);
+    } else if (e.key === "ArrowLeft") {
+      setCurrentHoveredSection((prevSection) => prevSection >= 0 ? prevSection - 1 : prevSection);
+    } else if (e.key === "Enter") {
+      dispatch(addOrRemoveCourse(props.course?.id, sectionList[currentHoveredSection].meeting_section));
+      props.hideModal();
+    }
+    
+  }, [])
+
+  // detects change in currentHoveredSection and (for now) just logs the hovered index
+  useEffect(() => {
+    if (currentHoveredSection !== -1) {
+      dispatch(timetablesActions.hoverSection({course: props.course, section: sectionList[currentHoveredSection]}))
+    } else {
+      dispatch(timetablesActions.unhoverSection())
+    }
+  }, [currentHoveredSection])
+
+  // attaches/unattaches event listener to document
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    }
+  }, [handleKeyPress])
+
   const dispatch = useAppDispatch();
 
   const sendReact = (cid: number, title: string) => {
@@ -468,61 +516,9 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
   );
 
 
-  // Code to detect if arrow keys were hit. When detected, will hover over section times
-  // Current goal: just use left/right keys to index forwards or backwards
 
 
-  // State to store information about which section is being hovered by arrow keys
-  const [currentHoveredSection, setCurrentHoveredSection] = useState(-1);
-
-  // const numberOfSections = sectionTypeToSections[0].length;
-
-  const sectionList: Section[] = [];
-
-
-  Object.keys(sectionTypeToSections)
-      .sort()
-      .forEach((sType) => {
-        const sections = sectionTypeToSections[sType];
-        sections.forEach((currentSection: Section) => {
-          sectionList.push(currentSection);
-        });
-      });
-    
-  console.log(`sectionList length: ${sectionList.length}`)
-
-
-
-  const handleKeyPress = useCallback((e) => {
-    console.log(`Key pressed: ${e.key}`)
-    if (e.key === "ArrowRight") {
-      console.log("Right arrow key was pressed");
-      setCurrentHoveredSection((prevSection) => prevSection < sectionList.length - 1 ? prevSection + 1 : prevSection);
-    } else if (e.key === "ArrowLeft") {
-      console.log("Left arrow key was pressed");
-      setCurrentHoveredSection((prevSection) => prevSection >= 0 ? prevSection - 1 : prevSection);
-    }
-    
-  }, [])
-
-  // detects change in currentHoveredSection and (for now) just logs the hovered index
-  useEffect(() => {
-    console.log(`Current section index: ${currentHoveredSection}`);
-    if (currentHoveredSection !== -1) {
-      dispatch(timetablesActions.hoverSection({course: props.course, section: sectionList[currentHoveredSection]}))
-    } else {
-      dispatch(timetablesActions.unhoverSection())
-    }
-    
-  }, [currentHoveredSection])
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress);
-    }
-  }, [handleKeyPress])
+ 
 
 
 
