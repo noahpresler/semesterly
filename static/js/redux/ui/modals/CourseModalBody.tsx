@@ -31,8 +31,6 @@ import { timetablesActions } from "../../state/slices/timetablesSlice";
 import { addOrRemoveCourse, fetchCourseInfo, react, saveSettings } from "../../actions";
 import { signupModalActions } from "../../state/slices/signupModalSlice";
 import { selectSlotColorData } from "../../state/slices/themeSlice";
-import { current } from "@reduxjs/toolkit";
-import { isNullishCoalesce } from "typescript";
 
 type CourseModalBodyProps = {
   course: DenormalizedCourse | null;
