@@ -534,6 +534,91 @@
   }
 }
 
+.modal-section-hover {
+  @include theme() {
+    background-color: t("lecture-section-background-hover");
+  }
+  cursor: pointer;
+  float: left;
+  padding: 7px;
+  position: relative;
+  transition: background-color 0.2s;
+  width: 50%;
+
+
+  &:nth-child(2n + 0) {
+    clear: both;
+  }
+
+  h4 {
+    @include theme() {
+      color: t("text-color");
+    }
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    margin: 0;
+
+    span {
+      display: inline-block;
+      margin-right: 3px;
+      vertical-align: middle;
+    }
+
+    i {
+      display: inline-block;
+      font-size: 14px;
+      line-height: 20px;
+      vertical-align: middle;
+    }
+  }
+
+  h5 {
+    @include theme() {
+      color: t("text-color-thin");
+    }
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    margin: 0;
+  }
+
+  h6 {
+    @include theme() {
+      color: t("text-color-thin");
+    }
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 14px;
+    margin: 0;
+
+    .green {
+      color: $green;
+    }
+
+    .yellow {
+      color: $yellow;
+    }
+
+    .red {
+      color: $red;
+    }
+  }
+
+  .fa-lock {
+    bottom: 7px;
+    font-size: 14px;
+    line-height: 20px;
+    opacity: 0;
+    position: absolute;
+    right: 7px;
+    text-align: center;
+    transition: opacity 0.3s, visibility 0.3s;
+    visibility: hidden;
+    width: 20px;
+  }
+}
+
 .hidden-modal {
   color: rgba(52, 73, 94, 0);
 }
