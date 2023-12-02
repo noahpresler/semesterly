@@ -122,27 +122,27 @@ Modals
 +-------------------------------+--------------------------------------------------+--------------------------+
 | Component File                | Screenshot                                       | Description              |
 +===============================+==================================================+==========================+
-|``course_modal_body.jsx``      | .. image:: components/course_modal_body.png      |                          |
+|``CourseModalBody.tsx``        | .. image:: components/course_modal_body.png      |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``course_modal.jsx``           | .. image:: components/course_modal.png           |                          |
+|``CousreModal.tsx``            | .. image:: components/course_modal.png           |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``AdvancedSearchModal.jsx``    | .. image:: components/exploration_modal.png      |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``final_exams_modal.jsx``      | .. image:: components/final_exams_modal.png      |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``peer_modal.jsx``             | .. image:: components/peer_modal.png             |                          |
+|``PeerModal.tsx``              | .. image:: components/peer_modal.png             |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``preference_modal.jsx``       | .. image:: components/preference_modal.png       |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``save_calendar_modal.jsx``    | .. image:: components/save_calendar_modal.png    |                          |
+|``SaveCalendarModal.tsx``      | .. image:: components/save_calendar_modal.png    |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``signup_modal.jsx``           | .. image:: components/signup_modal.png           |                          |
+|``SignupModal.tsx``            | .. image:: components/signup_modal.png           |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``tut_modal.jsx``              | .. image:: components/tut_modal.png              |                          |
+|``TutorialModal.tsx``          | .. image:: components/tut_modal.png              |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``user_acquisition_modal.jsx`` | .. image:: components/user_acquisition_modal.png |                          |
+|``UserAquisitionModal.tsx``    | .. image:: components/user_acquisition_modal.png |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``user_settings_modal.jsx``    | .. image:: components/user_settings_modal.png    |                          |
+|``UserSettingsModal.tsx``      | .. image:: components/user_settings_modal.png    |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 
 General Components
@@ -154,7 +154,7 @@ General Components
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``Calendar.tsx``               | .. image:: components/calendar.png               |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``course_modal_section.jsx``   | .. image:: components/course_modal_section.png   |                          |
+|``CourseModalSelection.tsx``   | .. image:: components/course_modal_section.png   |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``CreditTicker.tsx``           | .. image:: components/credit_ticker.png          |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
@@ -188,7 +188,7 @@ General Components
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``SlotManager.tsx``            | .. image:: components/slot_manager.png           |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-|``slot.jsx``                   | .. image:: components/slot.png                   |                          |
+|``Slot.tsx``                   | .. image:: components/slot.png                   |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 |``social_profile.jsx``         | .. image:: components/social_profile.png         |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
@@ -198,7 +198,7 @@ General Components
 +-------------------------------+--------------------------------------------------+--------------------------+
 | ``timetable_loader.jsx``      | .. image:: components/timetable_loader.png       |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
-| ``timetable_name_input.jsx``  | .. image:: components/timetable_name_input.png   |                          |
+| ``TimetableNameInput.tsx``    | .. image:: components/timetable_name_input.png   |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
 | ``TopBar.tsx``                | .. image:: components/top_bar.png                |                          |
 +-------------------------------+--------------------------------------------------+--------------------------+
