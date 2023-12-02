@@ -73,7 +73,7 @@ class Evaluation extends React.Component {
           <div className="year truncate">
             <b>
               {year}
-              {!evalData.unique_term_year && shortProfName(evalData.professor)}
+              {shortProfName(evalData.professor)}
             </b>
           </div>
           {prof}
