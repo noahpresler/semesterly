@@ -59,13 +59,13 @@ class EvaluationList extends React.Component {
 
     const evals = evalInfo
       .sort((e1, e2) => EvaluationList.evalCompare(e1, e2))
-      .map(e => {
-        if (e.summary && e.summary.trim() !== '') {
+      .map((e) => {
+        if (e.summary && e.summary.trim() !== "") {
           // Render the Evaluation component if the summary is not an empty string
           return <Evaluation evalData={e} key={e.id} />;
         } else {
           // Render an empty div if the summary is an empty string
-          return <div key={e.id} style={{ display: 'none' }}></div>;
+          return <div key={e.id} style={{ display: "none" }} />;
         }
       });
 
