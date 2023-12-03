@@ -538,7 +538,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
   return (
     <div className="modal-body">
       <div className="cf">
-        <div className="col-3-16">
+        <div className="col-4-16">
           <div className="credits">
             <h3>{numCredits}</h3>
             <h4>{creditsSuffix}</h4>
@@ -582,7 +582,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
             <EvaluationList evalInfo={evalInfo} />
           </div>
         </div>
-        <div id="modal-section-lists" className="col-5-16 cf">
+        <div id="modal-section-lists" className="col-4-16 cf">
           {!isComparingTimetables && sectionGrid}
           {similarCourses}
         </div>
