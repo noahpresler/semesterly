@@ -9,7 +9,7 @@ exports[`CourseModalBody correctly renders 1`] = `
       class="cf"
     >
       <div
-        class="col-3-16"
+        class="col-4-16"
       >
         <div
           class="credits"
@@ -568,7 +568,7 @@ exports[`CourseModalBody correctly renders 1`] = `
         </div>
       </div>
       <div
-        class="col-5-16 cf"
+        class="col-4-16 cf"
         id="modal-section-lists"
       >
         <div>
