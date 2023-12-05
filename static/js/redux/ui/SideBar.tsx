@@ -74,6 +74,8 @@ const SideBar = () => {
   const curTheme = useAppSelector(selectTheme);
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const [hoveredCourse, setHoveredCourse] = useState(-1);
+
   const hideDropdown = () => {
     setShowDropdown(false);
   };
@@ -159,6 +161,7 @@ const SideBar = () => {
             removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
             getShareLink={getShareLink}
             colorData={colorData}
+            isHovered={false} // * Eventually we want this to change in accordance with the hoveredCourse state
           />
         );
       })
