@@ -243,6 +243,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
             fetchCourseInfo={() => dispatch(fetchCourseInfo(rc.id))}
             getShareLink={getShareLink}
             colorData={slotColorData}
+            isHovered={false}
           />
         ))}
       </div>
