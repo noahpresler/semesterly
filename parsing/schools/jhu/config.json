@@ -13,10 +13,10 @@
     "2020": ["Fall", "Spring"],
     "2021": ["Fall", "Spring"],
     "2022": ["Fall", "Spring"],
-    "2023": ["Fall", "Spring"]
+    "2023": ["Fall", "Spring"],
+    "2024": ["Spring"]
   },
-  "final_exams": {
-  },
+  "final_exams": {},
   "registrar": true,
   "short_course_weeks_limit": 8
 }

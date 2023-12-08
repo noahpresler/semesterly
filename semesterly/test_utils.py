@@ -17,6 +17,7 @@ import os
 import re
 import shutil
 import socket
+import time
 from contextlib import contextmanager
 from importlib import import_module
 
@@ -522,6 +523,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             (By.CLASS_NAME, "fa-check"), root=modal_header, clickable=True
         )
         remove.click()
+        time.sleep(1)
         self.assert_loader_completes()
         self.assert_invisibility((By.CLASS_NAME, "course-modal"))
         self.assert_n_elements_found(

@@ -13,6 +13,7 @@ GNU General Public License for more details.
 */
 
 import React, { useState, useEffect, ReactElement, useRef } from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import DayCalendarContainer from "./containers/day_calendar_container";
 import CalendarContainer from "./containers/calendar_container";
 import AlertBox from "./alert_box";
@@ -33,12 +34,13 @@ import UserSettingsModal from "./modals/UserSettingsModal";
 import CustomEventModal from "./modals/CustomEventModal";
 import AdvancedSearchModal from "./modals/AdvancedSearchModal";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { getActiveTimetableCourses } from "../state";
 import NewsModal from "./modals/NewsModal";
 import { newsModalActions } from "../state/slices/newsModalSlice";
 import SideBar from "./SideBar";
 import CompareTimetableSideBar from "./CompareTimetableSidebar";
 import { selectTheme } from "../state/slices/themeSlice";
+import FallBack from "./FallBack";
+import { reportUIError } from "../util";
 
 /**
  * This component is the high level container for the entire app. It contains all of the
@@ -242,4 +244,19 @@ const Semesterly = () => {
   );
 };
 
-export default Semesterly;
+const SemesterlyWithErrorBoundary = withErrorBoundary(Semesterly, {
+  FallbackComponent: FallBack,
+  onError(error, info) {
+    const { componentStack } = info;
+    const { name, message, stack } = error;
+    const errorInfo = {
+      name,
+      message,
+      stack,
+      componentStack,
+    };
+    reportUIError(errorInfo);
+  },
+});
+
+export default SemesterlyWithErrorBoundary;
