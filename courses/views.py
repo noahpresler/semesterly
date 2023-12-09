@@ -14,7 +14,7 @@ import collections
 import json
 from datetime import datetime
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from pytz import timezone
@@ -59,6 +59,26 @@ def all_courses(request):
         "school_name": school_name,
     }
     return render(request, "all_courses.html", context)
+
+
+def all_courses_json(request):
+    """
+    Returns all course names and codes in JSON.
+    """
+    school = request.subdomain
+    courses = Course.objects.filter(school=school).all()
+
+    # Create a list of dictionaries with course name and code
+    courses_data = [
+        {
+            "name": course.name,
+            "code": course.code,
+        }
+        for course in courses
+    ]
+
+    # Return as JSON
+    return JsonResponse(courses_data, safe=False)
 
 
 def get_classmates_in_course(request, school, sem_name, year, course_id):
