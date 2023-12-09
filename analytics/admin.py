@@ -11,5 +11,13 @@
 # GNU General Public License for more details.
 
 from django.contrib import admin
+from .models import UIErrorLog
 
 # Register your models here.
+
+
+@admin.register(UIErrorLog)
+class UIErrorLogAdmin(admin.ModelAdmin):
+    """Enables admins to create, view, and edit news updates at /admin"""
+
+    list_display = ("name", "message", "user", "time_occurred")

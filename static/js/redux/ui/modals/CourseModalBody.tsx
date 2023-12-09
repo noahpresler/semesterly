@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import isEmpty from "lodash/isEmpty";
 import Reaction from "../reaction";
 import REACTION_MAP from "../../constants/reactions";
@@ -87,6 +87,77 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
     });
   }, []);
 
+  // Code to detect if arrow keys were hit. When detected, will hover over section times
+  // Current goal: just use left/right keys to index forwards or backwards
+
+  // State to store information about which section is being hovered by arrow keys
+  const [currentHoveredSection, setCurrentHoveredSection] = useState(-1);
+  const [currentHoveredSectionObj, setCurrentHoveredSectionObj] =
+    useState<Section | null>(null);
+
+  // Stores all available sections into one list
+  const sectionList: Section[] = [];
+  Object.keys(sectionTypeToSections)
+    .sort()
+    .forEach((sType) => {
+      const sections = sectionTypeToSections[sType];
+      sections.forEach((currentSection: Section) => {
+        sectionList.push(currentSection);
+      });
+    });
+
+  const handleKeyPress = useCallback(
+    (e) => {
+      if (e.key === "ArrowRight") {
+        setCurrentHoveredSection((prevSection) =>
+          prevSection < sectionList.length - 1 ? prevSection + 1 : prevSection
+        );
+      } else if (e.key === "ArrowLeft") {
+        setCurrentHoveredSection((prevSection) =>
+          prevSection >= 0 ? prevSection - 1 : prevSection
+        );
+      } else if (e.key === "Enter") {
+        if (currentHoveredSection >= 0 && currentHoveredSection < sectionList.length) {
+          dispatch(
+            addOrRemoveCourse(
+              props.course?.id,
+              sectionList[currentHoveredSection].meeting_section
+            )
+          );
+          props.hideModal();
+        }
+      } else if (e.key === "Escape") {
+        setCurrentHoveredSection(-1);
+        props.hideModal();
+      }
+    },
+    [currentHoveredSection]
+  );
+
+  // detects change in currentHoveredSection and (for now) just logs the hovered index
+  useEffect(() => {
+    if (currentHoveredSection !== -1) {
+      dispatch(
+        timetablesActions.hoverSection({
+          course: props.course,
+          section: sectionList[currentHoveredSection],
+        })
+      );
+      setCurrentHoveredSectionObj(sectionList[currentHoveredSection]);
+    } else {
+      dispatch(timetablesActions.unhoverSection());
+      setCurrentHoveredSectionObj(null);
+    }
+  }, [currentHoveredSection]);
+
+  // attaches/unattaches event listener to document
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress]);
+
   const dispatch = useAppDispatch();
 
   const sendReact = (cid: number, title: string) => {
@@ -132,6 +203,10 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
           dispatch(timetablesActions.hoverSection({ course: props.course, section }))
         }
         unHoverSection={() => dispatch(timetablesActions.unhoverSection())}
+        isHovered={
+          currentHoveredSectionObj &&
+          currentHoveredSectionObj.course_section_id === section.course_section_id
+        }
       />
     ));
 
@@ -463,7 +538,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
   return (
     <div className="modal-body">
       <div className="cf">
-        <div className="col-3-16">
+        <div className="col-4-16">
           <div className="credits">
             <h3>{numCredits}</h3>
             <h4>{creditsSuffix}</h4>
@@ -507,7 +582,7 @@ const CourseModalBody = (props: CourseModalBodyProps) => {
             <EvaluationList evalInfo={evalInfo} />
           </div>
         </div>
-        <div id="modal-section-lists" className="col-5-16 cf">
+        <div id="modal-section-lists" className="col-4-16 cf">
           {!isComparingTimetables && sectionGrid}
           {similarCourses}
         </div>

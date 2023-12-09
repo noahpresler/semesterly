@@ -12,6 +12,7 @@
 
 from timetable.models import *
 from student.models import Student
+from django.contrib.auth.models import User
 
 
 class SharedTimetable(Timetable):
@@ -112,3 +113,32 @@ class CalendarExport(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=50)
     is_google_calendar = models.BooleanField(blank=True, default=False)
+
+
+class ErrorLog(models.Model):
+    """
+    Logs errors that occur on the site.
+    """
+
+    time_occurred = models.DateTimeField(auto_now_add=True)
+    message = models.CharField(max_length=1000)
+    name = models.CharField(max_length=100)
+    stack = models.TextField()
+    user = models.ForeignKey(
+        User, blank=True, null=True, on_delete=models.deletion.CASCADE
+    )
+
+    class Meta:
+        abstract = True
+        ordering = ["-time_occurred"]
+
+    def __str__(self) -> str:
+        return f"{self.name}: {self.message}"
+
+
+class UIErrorLog(ErrorLog):
+    """
+    UI errors that occur in the React components
+    """
+
+    componentStack = models.TextField()

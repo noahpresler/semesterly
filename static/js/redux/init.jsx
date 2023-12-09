@@ -19,7 +19,7 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
-import Semesterly from "./ui/Semesterly";
+import SemesterlyWithErrorBoundary from "./ui/Semesterly";
 import {
   fetchMostClassmatesCount,
   handleAgreement,
@@ -126,7 +126,7 @@ store.dispatch(setup());
 render(
   <Provider store={store}>
     <DndProvider backend={HTML5Backend}>
-      <Semesterly />
+      <SemesterlyWithErrorBoundary />
     </DndProvider>
   </Provider>,
   document.getElementsByClassName("page")[0]

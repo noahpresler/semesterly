@@ -15,9 +15,10 @@ GNU General Public License for more details.
  * This file contains various utility functions, but mostly those for saving data to
  * local storage.
  */
-
+import Cookie from "js-cookie";
 import range from "lodash/range";
 import { lightSlotColor } from "./constants/colors";
+import { getUIErrorLogEndpoint } from "./constants/endpoints";
 
 export const browserSupportsLocalStorage = () => {
   try {
@@ -174,3 +175,15 @@ export const slotToDisplayOffering = (
   sectionId: section.id,
   colorData,
 });
+
+export const reportUIError = (error) => {
+  fetch(getUIErrorLogEndpoint(), {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "X-CSRFToken": Cookie.get("csrftoken"),
+    },
+    method: "POST",
+    body: JSON.stringify(error),
+  });
+};

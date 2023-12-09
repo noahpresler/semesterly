@@ -55,3 +55,4 @@ export function getCourseShareLink(code, semester) {
 }
 
 export const getNewsEndpoint = () => "/notifications/news";
+export const getUIErrorLogEndpoint = () => "/ui-error-logs/";

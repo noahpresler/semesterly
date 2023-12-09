@@ -27,7 +27,7 @@ const SlotHoverTip = ({ num, code, name, getShareLinkFromModal }) => {
   const maxColourIndex = colorData.length - 1;
   return (
     <a href={getShareLinkFromModal(code)} className="course-link" key={num}>
-      <span>{code}</span>
+      <span>{name}</span>
       <span
         className="course-link-tip"
         style={{
