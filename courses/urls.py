@@ -16,6 +16,7 @@ import courses.views
 
 urlpatterns = [
     re_path(r"^courses/?$", courses.views.all_courses),
+    re_path(r"^courses/json/?$", courses.views.all_courses_json),
     re_path(r"c/(?P<code>.+?)/?$", courses.views.course_page),
     re_path(
         r"course/(?P<code>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/?$",
