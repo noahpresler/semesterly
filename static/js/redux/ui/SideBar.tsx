@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import classNames from "classnames";
 // @ts-ignore no available type
 import ClickOutHandler from "react-onclickout";
@@ -139,6 +139,11 @@ const SideBar = () => {
         </div>
       ))
     : null;
+
+
+  // Contains all keys for masterSlots
+  const masterSlotList: number[] = [];
+
   let masterSlots = mandatoryCourses
     ? mandatoryCourses.map((course) => {
         const colourIndex =
@@ -149,6 +154,11 @@ const SideBar = () => {
         const sectionId = timetable.slots.find(
           (slot) => slot.course === course.id
         ).section;
+
+        masterSlotList.push(course.id);
+        console.log(masterSlotList);
+        console.log(`${course.name}: ${course.id}`)
+
         return (
           <MasterSlot
             key={course.id}
@@ -161,11 +171,45 @@ const SideBar = () => {
             removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
             getShareLink={getShareLink}
             colorData={colorData}
-            isHovered={false} // * Eventually we want this to change in accordance with the hoveredCourse state
+            isHovered={hoveredCourse === course.id} // * Eventually we want this to change in accordance with the hoveredCourse state
           />
         );
       })
     : null;
+
+    console.log(`masterslotlist size: ${masterSlotList.length} `)
+
+
+    const handleKeyPress = useCallback(
+      (e) => {
+        if (e.key === "ArrowUp" && hoveredCourse !== -1) {
+          console.log("up arrow");
+          setHoveredCourse((prevHoveredCourse) => prevHoveredCourse - 1);
+          console.log(`hoveredCourse: ${hoveredCourse}`)
+
+        } else if (e.key === "ArrowDown") {
+          if (hoveredCourse !== masterSlotList.length - 1) {
+            setHoveredCourse((prevHoveredCourse) => prevHoveredCourse + 1);
+          } 
+
+          console.log("down arrow");
+          console.log(`masterslotlist size: ${masterSlotList.length} `)
+          console.log(`hoveredCourse: ${hoveredCourse}`)
+        } 
+      },
+      [hoveredCourse]
+    );
+
+
+    // attaches/unattaches event listener to document
+    useEffect(() => {
+      document.addEventListener("keydown", handleKeyPress);
+      return () => {
+        document.removeEventListener("keydown", handleKeyPress);
+      };
+    }, [handleKeyPress]);
+
+  
   const dropItDown =
     savedTimetables && savedTimetables.length !== 0 ? (
       <div className="timetable-drop-it-down" onClick={toggleDropdown}>

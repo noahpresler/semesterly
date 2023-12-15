@@ -246,7 +246,7 @@ const Semesterly = () => {
 
 const SemesterlyWithErrorBoundary = withErrorBoundary(Semesterly, {
   FallbackComponent: FallBack,
-  onError(error, info) {
+  onError(error: any, info: any) {
     const { componentStack } = info;
     const { name, message, stack } = error;
     const errorInfo = {
