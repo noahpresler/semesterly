@@ -75,6 +75,7 @@ const SideBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const [hoveredCourse, setHoveredCourse] = useState(-1);
+  const [masterSlotListLength, setMasterSlotListLength] = useState(0);
 
   const hideDropdown = () => {
     setShowDropdown(false);
@@ -156,8 +157,8 @@ const SideBar = () => {
         ).section;
 
         masterSlotList.push(course.id);
-        console.log(masterSlotList);
-        console.log(`${course.name}: ${course.id}`)
+        // console.log(masterSlotList);
+        // console.log(`${course.name}: ${course.id}`)
 
         return (
           <MasterSlot
@@ -177,27 +178,34 @@ const SideBar = () => {
       })
     : null;
 
-    console.log(`masterslotlist size: ${masterSlotList.length} `)
+    useEffect(() => {
+      setMasterSlotListLength(masterSlotList.length);
+    }, [masterSlotList])
 
 
     const handleKeyPress = useCallback(
       (e) => {
         if (e.key === "ArrowUp" && hoveredCourse !== -1) {
-          console.log("up arrow");
-          setHoveredCourse((prevHoveredCourse) => prevHoveredCourse - 1);
-          console.log(`hoveredCourse: ${hoveredCourse}`)
+          if (hoveredCourse !== -1) {
+            setHoveredCourse((prevHoveredCourse) => {
+              console.log(`hoveredCourse: ${prevHoveredCourse - 1}`)
+              return prevHoveredCourse - 1;
+            });
+          }
+          
 
         } else if (e.key === "ArrowDown") {
-          if (hoveredCourse !== masterSlotList.length - 1) {
-            setHoveredCourse((prevHoveredCourse) => prevHoveredCourse + 1);
+          if (hoveredCourse !== masterSlotListLength - 1) {
+            setHoveredCourse((prevHoveredCourse) => {
+              console.log(`hoveredCourse: ${prevHoveredCourse + 1}`)
+              return prevHoveredCourse + 1;
+            });
+            
           } 
 
-          console.log("down arrow");
-          console.log(`masterslotlist size: ${masterSlotList.length} `)
-          console.log(`hoveredCourse: ${hoveredCourse}`)
         } 
       },
-      [hoveredCourse]
+      [hoveredCourse, masterSlotListLength]
     );
 
 
