@@ -143,20 +143,15 @@ const Calendar = (props: CalendarProps) => {
   // Prevent arrow keys from moving calendar up/down (still scrollable using mouse)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Prevent scrolling with arrow keys
       if (event.key === "ArrowUp" || event.key === "ArrowDown") {
         event.preventDefault();
       }
     };
-
-    // Attach the event listener
     window.addEventListener("keydown", handleKeyDown);
-
-    // Clean up the event listener when the component is unmounted
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []); // Empty dependency array to ensure the effect runs only once during component mount
+  }, []);
 
   const getCalendarRows = () => {
     const rows = [];
