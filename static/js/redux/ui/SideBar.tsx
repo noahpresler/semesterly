@@ -179,14 +179,17 @@ const SideBar = () => {
     : null;
 
     useEffect(() => {
+      if (masterSlotList.length < masterSlotListLength && hoveredCourse === masterSlotListLength - 1) { // i.e. a course was removed and last course was hovered
+        setHoveredCourse((prevIndex) => prevIndex - 1)
+      }
       setMasterSlotListLength(masterSlotList.length);
     }, [masterSlotList])
 
 
     const handleKeyPress = useCallback(
       (e) => {
-        if (e.key === "ArrowUp" && hoveredCourse !== -1) {
-          if (hoveredCourse !== -1) {
+        if (e.key === "ArrowUp") {
+          if (hoveredCourse > -1) {
             setHoveredCourse((prevHoveredCourse) => {
               console.log(`hoveredCourse: ${prevHoveredCourse - 1}`)
               return prevHoveredCourse - 1;
@@ -195,7 +198,7 @@ const SideBar = () => {
           
 
         } else if (e.key === "ArrowDown") {
-          if (hoveredCourse !== masterSlotListLength - 1) {
+          if (hoveredCourse < masterSlotListLength - 1) {
             setHoveredCourse((prevHoveredCourse) => {
               console.log(`hoveredCourse: ${prevHoveredCourse + 1}`)
               return prevHoveredCourse + 1;
@@ -207,6 +210,7 @@ const SideBar = () => {
       },
       [hoveredCourse, masterSlotListLength]
     );
+
 
 
     // attaches/unattaches event listener to document
