@@ -142,7 +142,7 @@ const SideBar = () => {
     : null;
 
 
-  // Contains all keys for masterSlots
+  // Contains all keys for masterSlots (Iterated over for hoveredCourse, i.e. state for index of up/down keyboard shortcuts)
   const masterSlotList: number[] = [];
 
   let masterSlots = mandatoryCourses
@@ -157,8 +157,6 @@ const SideBar = () => {
         ).section;
 
         masterSlotList.push(course.id);
-        // console.log(masterSlotList);
-        // console.log(`${course.name}: ${course.id}`)
 
         return (
           <MasterSlot
@@ -172,12 +170,15 @@ const SideBar = () => {
             removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
             getShareLink={getShareLink}
             colorData={colorData}
-            isHovered={hoveredCourse === course.id} // * Eventually we want this to change in accordance with the hoveredCourse state
+            isHovered={hoveredCourse === course.id}
           />
         );
       })
     : null;
 
+
+    // This detects changes to the size of masterSlotList (i.e. how many courses are on the current timetable) and updates the masterSlotList length accordingly
+    // Also handles edge case in which hoveredCourse points to the last index in masterSlotList, but a course is deleted by the user. When this happens, hoveredCourse is decremented.
     useEffect(() => {
       if (masterSlotList.length < masterSlotListLength && hoveredCourse === masterSlotListLength - 1) { // i.e. a course was removed and last course was hovered
         setHoveredCourse((prevIndex) => prevIndex - 1)
@@ -186,26 +187,16 @@ const SideBar = () => {
     }, [masterSlotList])
 
 
-    const handleKeyPress = useCallback(
-      (e) => {
+    // Handles keypresses: "Up" decrements hoveredCourse, "Down" increments hoveredCourse (both with bounds). 
+    const handleKeyPress = useCallback((e) => {
         if (e.key === "ArrowUp") {
           if (hoveredCourse > -1) {
-            setHoveredCourse((prevHoveredCourse) => {
-              console.log(`hoveredCourse: ${prevHoveredCourse - 1}`)
-              return prevHoveredCourse - 1;
-            });
+            setHoveredCourse((prevHoveredCourse) => prevHoveredCourse - 1);
           }
-          
-
         } else if (e.key === "ArrowDown") {
           if (hoveredCourse < masterSlotListLength - 1) {
-            setHoveredCourse((prevHoveredCourse) => {
-              console.log(`hoveredCourse: ${prevHoveredCourse + 1}`)
-              return prevHoveredCourse + 1;
-            });
-            
-          } 
-
+            setHoveredCourse((prevHoveredCourse) => prevHoveredCourse + 1);
+          };  
         } 
       },
       [hoveredCourse, masterSlotListLength]
@@ -213,7 +204,7 @@ const SideBar = () => {
 
 
 
-    // attaches/unattaches event listener to document
+    // Attaches/unattaches event listener to document
     useEffect(() => {
       document.addEventListener("keydown", handleKeyPress);
       return () => {
