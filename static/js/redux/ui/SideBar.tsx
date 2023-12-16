@@ -170,7 +170,7 @@ const SideBar = () => {
             removeCourse={() => dispatch(addOrRemoveCourse(course.id))}
             getShareLink={getShareLink}
             colorData={colorData}
-            isHovered={hoveredCourse === course.id}
+            isHovered={masterSlotList[hoveredCourse] === course.id}
           />
         );
       })
@@ -197,7 +197,12 @@ const SideBar = () => {
           if (hoveredCourse < masterSlotListLength - 1) {
             setHoveredCourse((prevHoveredCourse) => prevHoveredCourse + 1);
           };  
-        } 
+        } else if (e.key === "Enter" && hoveredCourse > -1) {
+          dispatch(fetchCourseInfo(masterSlotList[hoveredCourse]));
+        } else if (e.key === "Backspace" && hoveredCourse > -1) {
+          dispatch(addOrRemoveCourse(masterSlotList[hoveredCourse]));
+          
+        }
       },
       [hoveredCourse, masterSlotListLength]
     );
