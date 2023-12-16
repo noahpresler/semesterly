@@ -141,7 +141,6 @@ const SideBar = () => {
       ))
     : null;
 
-
   // Contains all keys for masterSlots (Iterated over for hoveredCourse, i.e. state for index of up/down keyboard shortcuts)
   const masterSlotList: number[] = [];
 
@@ -176,48 +175,47 @@ const SideBar = () => {
       })
     : null;
 
+  // This detects changes to the size of masterSlotList (i.e. how many courses are on the current timetable) and updates the masterSlotList length accordingly
+  // Also handles edge case in which hoveredCourse points to the last index in masterSlotList, but a course is deleted by the user. When this happens, hoveredCourse is decremented.
+  useEffect(() => {
+    if (
+      masterSlotList.length < masterSlotListLength &&
+      hoveredCourse === masterSlotListLength - 1
+    ) {
+      // i.e. a course was removed and last course was hovered
+      setHoveredCourse((prevIndex) => prevIndex - 1);
+    }
+    setMasterSlotListLength(masterSlotList.length);
+  }, [masterSlotList]);
 
-    // This detects changes to the size of masterSlotList (i.e. how many courses are on the current timetable) and updates the masterSlotList length accordingly
-    // Also handles edge case in which hoveredCourse points to the last index in masterSlotList, but a course is deleted by the user. When this happens, hoveredCourse is decremented.
-    useEffect(() => {
-      if (masterSlotList.length < masterSlotListLength && hoveredCourse === masterSlotListLength - 1) { // i.e. a course was removed and last course was hovered
-        setHoveredCourse((prevIndex) => prevIndex - 1)
-      }
-      setMasterSlotListLength(masterSlotList.length);
-    }, [masterSlotList])
-
-
-    // Handles keypresses: "Up" decrements hoveredCourse, "Down" increments hoveredCourse (both with bounds). 
-    const handleKeyPress = useCallback((e) => {
-        if (e.key === "ArrowUp") {
-          if (hoveredCourse > -1) {
-            setHoveredCourse((prevHoveredCourse) => prevHoveredCourse - 1);
-          }
-        } else if (e.key === "ArrowDown") {
-          if (hoveredCourse < masterSlotListLength - 1) {
-            setHoveredCourse((prevHoveredCourse) => prevHoveredCourse + 1);
-          };  
-        } else if (e.key === "Enter" && hoveredCourse > -1) {
-          dispatch(fetchCourseInfo(masterSlotList[hoveredCourse]));
-        } else if (e.key === "Backspace" && hoveredCourse > -1) {
-          dispatch(addOrRemoveCourse(masterSlotList[hoveredCourse]));
-          
+  // Handles keypresses: "Up" decrements hoveredCourse, "Down" increments hoveredCourse (both with bounds).
+  const handleKeyPress = useCallback(
+    (e) => {
+      if (e.key === "ArrowUp") {
+        if (hoveredCourse > -1) {
+          setHoveredCourse((prevHoveredCourse) => prevHoveredCourse - 1);
         }
-      },
-      [hoveredCourse, masterSlotListLength]
-    );
+      } else if (e.key === "ArrowDown") {
+        if (hoveredCourse < masterSlotListLength - 1) {
+          setHoveredCourse((prevHoveredCourse) => prevHoveredCourse + 1);
+        }
+      } else if (e.key === "Enter" && hoveredCourse > -1) {
+        dispatch(fetchCourseInfo(masterSlotList[hoveredCourse]));
+      } else if (e.key === "Backspace" && hoveredCourse > -1) {
+        dispatch(addOrRemoveCourse(masterSlotList[hoveredCourse]));
+      }
+    },
+    [hoveredCourse, masterSlotListLength]
+  );
 
+  // Attaches/unattaches event listener to document
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
-
-    // Attaches/unattaches event listener to document
-    useEffect(() => {
-      document.addEventListener("keydown", handleKeyPress);
-      return () => {
-        document.removeEventListener("keydown", handleKeyPress);
-      };
-    }, [handleKeyPress]);
-
-  
   const dropItDown =
     savedTimetables && savedTimetables.length !== 0 ? (
       <div className="timetable-drop-it-down" onClick={toggleDropdown}>

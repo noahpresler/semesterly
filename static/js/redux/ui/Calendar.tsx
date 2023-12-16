@@ -144,17 +144,17 @@ const Calendar = (props: CalendarProps) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Prevent scrolling with arrow keys
-      if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      if (event.key === "ArrowUp" || event.key === "ArrowDown") {
         event.preventDefault();
       }
     };
 
     // Attach the event listener
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     // Clean up the event listener when the component is unmounted
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []); // Empty dependency array to ensure the effect runs only once during component mount
 

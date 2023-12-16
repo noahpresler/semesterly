@@ -167,14 +167,13 @@ const MasterSlot = (props: MasterSlotProps) => {
     }
   }
 
-
   useEffect(() => {
     if (props.isHovered) {
       updateColours(props.colorData[props.colourIndex].highlight);
     } else {
       updateColours(props.colorData[props.colourIndex].background);
     }
-  }, [props.isHovered])
+  }, [props.isHovered]);
 
   return (
     <div
