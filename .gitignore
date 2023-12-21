@@ -20,7 +20,7 @@ node_modules
 npm-debug.log.*
 openssl.cnf
 parse_errors.log
-parsing/**/data/*.json
+parsing/**/data/courses.json
 parsing/**/logs/*.json
 parsing/**/logs/*.log
 *.pid
