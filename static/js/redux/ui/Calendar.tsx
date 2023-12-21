@@ -140,6 +140,19 @@ const Calendar = (props: CalendarProps) => {
     }, 60 * 1000);
   }, []);
 
+  // Prevent arrow keys from moving calendar up/down (still scrollable using mouse)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   const getCalendarRows = () => {
     const rows = [];
     for (let i = 0; i <= props.endHour; i++) {

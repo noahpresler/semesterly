@@ -45,6 +45,7 @@ type MasterSlotProps = {
   removeCourse?: Function;
   getShareLink: Function;
   colorData: SlotColorData[];
+  isHovered: boolean;
 };
 
 /**
@@ -165,6 +166,15 @@ const MasterSlot = (props: MasterSlotProps) => {
       }
     }
   }
+
+  useEffect(() => {
+    if (props.isHovered) {
+      updateColours(props.colorData[props.colourIndex].highlight);
+    } else {
+      updateColours(props.colorData[props.colourIndex].background);
+    }
+  }, [props.isHovered]);
+
   return (
     <div
       className={masterSlotClass}

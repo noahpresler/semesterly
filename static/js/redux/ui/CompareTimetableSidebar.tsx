@@ -59,6 +59,7 @@ const CompareTimetableSideBar = () => {
         getShareLink={(courseCode: string) => getCourseShareLink(courseCode, semester)}
         colorData={colorData}
         hideCloseButton
+        isHovered={false}
       />
     );
   };
