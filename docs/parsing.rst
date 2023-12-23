@@ -39,8 +39,70 @@ Digest
 You may leave out the school code to digest all schools.
 
 
+Loading Course Evaluations for JHU
+**********************************
+
+Loading JHU evaluations into Semester.ly requires two steps. First, run the selenium parser locally to crawl the evaluation HTML file and save it to a JSON file. 
+Then, run the digest command to load the JSON file into the database. JHU publishes evaluations for the past 5 years, so the parser will crawl the evaluations for the past 5 years and save them to a JSON file.
+However, to get the evaluations for the current semester, you will need to run the parser again in the current year after the evaluations are published at the end of the semester.
+
+Instructions for Parsing Evaluations
+####################################
+
+**Prerequisites**
+
+Ensure your computer is using an **x86-64 architecture** since the chrome driver is only compatible with this architecture.
+
+
+1. **Install Chrome in Docker Environment**
+From your web container shell, execute the following script:
+
+.. code-block:: bash
+
+    code/build/install_chrome.sh
+    
+2. **Set the Year Variable**
+Modify the `year` variable in `parsing/library/evals_parser.py` to select the desired year for the evaluations.
+Run the following command in the web container shell:
+
+.. code-block:: bash
+  
+    python parsing/library/evals_parser.py
+  
+.. note::Enter your **JHU email and password** when prompted.
+
+3. **Ingestion and Digestion to Local Database**
+After the ingestion process completes, the file `parsing/schools/jhu/data/evals.json` will be generated.
+To digest the evaluations into the local database, run:
+
+.. code-block:: bash
+  
+    python manage.py digest jhu --types evals
+  
+
+Final Step for Production Database
+####################################
+
+After merging `evals.json` to production, the script `run_parser.sh` will handle the digestion of the evaluations into the production database.
+
+Troubleshooting
+###############
+
+**Selenium or Chrome Driver Issues:** 
+If you encounter any issues related to Selenium or the Chrome Driver, try running the following command in the web container shell:
+
+.. code-block:: bash
+  
+    pip install -r requirements.txt
+    
+This command will install necessary dependencies that may resolve the issues
+
+**JSON Output Generation Issues:** 
+If you're facing difficulties with generating JSON output, consider executing the script locally rather than in a Docker environment.
+
+
 Learn More & Advanced Usage
-###########################
+***************************
 
 There are advanced methods for using these tools. Detailed options can be viewed by running
 
