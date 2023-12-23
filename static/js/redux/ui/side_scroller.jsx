@@ -24,11 +24,6 @@ class SideScroller extends React.Component {
   }
 
   render() {
-    if (this.props.content.length <= 2) {
-      return (
-        <div style={{ marginBottom: "-30px !important" }}>{this.props.content}</div>
-      );
-    }
     let navItems = null;
     if (this.props.navItems) {
       const navs = [];
