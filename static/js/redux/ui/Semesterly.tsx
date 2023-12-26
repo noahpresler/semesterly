@@ -128,7 +128,7 @@ const Semesterly = () => {
     // DataLastUpdated Input example-  2021-05-02 14:42 UTC
     // Params: How the backend sends a timestamp
     // dateString: of the form yyyy-mm-dd hh:mm
-    const dateString = dataLastUpdated.toString().slice(0, -4); // exclude UTC
+    const dateString = dataLastUpdated.toString();
 
     if (!dateString || dateString.length === 0) return "";
 
