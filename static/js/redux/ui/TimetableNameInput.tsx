@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import classnames from "classnames";
-import { AnyIfEmpty, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useActions } from "../hooks";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { RootState } from "../state/index";
