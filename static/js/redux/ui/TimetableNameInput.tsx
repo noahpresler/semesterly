@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import classnames from "classnames";
-import { useSelector } from "react-redux";
+import { AnyIfEmpty, useSelector } from "react-redux";
 import { useActions } from "../hooks";
 import { signupModalActions } from "../state/slices/signupModalSlice";
 import { RootState } from "../state/index";
@@ -46,7 +46,7 @@ const TimetableNameInput = () => {
   };
 
   const handleEnterKeyPressed = useCallback(
-    (e) => {
+    (e: any) => {
       // save course when user pressed enter
       if (inputRef && e.key === "Enter") {
         setTimetableName();

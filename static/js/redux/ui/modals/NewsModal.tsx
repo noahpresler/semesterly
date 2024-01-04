@@ -27,6 +27,7 @@ const NewsModal = () => {
   useEffect(() => {
     const tutorialData = JSON.parse(localStorage.getItem("tutorial"));
     if (!tutorialData || !tutorialData.modalTutShown || isSigningUp) {
+      console.log("NOT FETCHING");
       return;
     }
 
@@ -41,11 +42,13 @@ const NewsModal = () => {
         localStorage.setItem("lastViewedNewsDate", new Date(Date.now()).toISOString());
       }
 
-      setNewsTitle(data.title);
-      setNewsBody(data.body);
+      setNewsTitle(data.title === "" ? "No news at the moment!" : data.title);
+      setNewsBody(data.body === "" ? "Please check back again later." : data.body);
     };
 
     fetchData();
+
+    console.log("FETCHED NEWS");
   }, []);
 
   const modalHeader = (
