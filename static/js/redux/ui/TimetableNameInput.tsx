@@ -46,7 +46,7 @@ const TimetableNameInput = () => {
   };
 
   const handleEnterKeyPressed = useCallback(
-    (e: any) => {
+    (e) => {
       // save course when user pressed enter
       if (inputRef && e.key === "Enter") {
         setTimetableName();
