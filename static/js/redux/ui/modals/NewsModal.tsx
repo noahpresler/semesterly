@@ -26,17 +26,14 @@ const NewsModal = () => {
 
   useEffect(() => {
     const tutorialData = JSON.parse(localStorage.getItem("tutorial"));
-    if (!tutorialData || !tutorialData.modalTutShown || isSigningUp) {
-      console.log("NOT FETCHING");
-      return;
-    }
+    const displayCriteria = tutorialData && tutorialData.modalTutShown && !isSigningUp;
 
     const fetchData = async () => {
       const response = await fetch(getNewsEndpoint());
       const data = await response.json();
 
       // Only display modal if the news was posted after the last viewed time
-      if (data.date && new Date(data.date) > lastViewedTime) {
+      if (data.date && new Date(data.date) > lastViewedTime && displayCriteria) {
         dispatch(newsModalActions.showNewsModal());
         // Set to current date and time
         localStorage.setItem("lastViewedNewsDate", new Date(Date.now()).toISOString());
@@ -47,8 +44,6 @@ const NewsModal = () => {
     };
 
     fetchData();
-
-    console.log("FETCHED NEWS");
   }, []);
 
   const modalHeader = (
