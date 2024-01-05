@@ -133,8 +133,39 @@ const Semesterly = () => {
     if (!dateString || dateString.length === 0) return "";
 
     // Convert given datetime to local datetime of user
-    // in form yyyy-mm-dd hh:mm TZ (Timezone full name)
-    return new Date(dateString).toString();
+    // in form (month) dd, yyyy
+
+    const curDate: Date = new Date(dateString);
+
+    const months = [
+      'January', 'February', 'March', 'April',
+      'May', 'June', 'July', 'August',
+      'September', 'October', 'November', 'December'
+    ];
+
+    let dayEnding: String;
+    const curDay = curDate.getDay();
+    if (curDay >= 11 && curDay <= 13) {
+      dayEnding = 'th';
+    }
+  
+    switch (curDay % 10) {
+      case 1:
+        dayEnding = 'st';
+        break;
+      case 2:
+        dayEnding = 'nd';
+        break;
+      case 3:
+        dayEnding = 'rd';
+        break;
+      default:
+        dayEnding = 'th';
+    }
+
+    const monthIndex: number= curDate.getMonth();
+
+    return `${months[monthIndex]} ${curDate.getUTCDate()}${dayEnding}, ${curDate.getFullYear()}`;
   };
 
   const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
