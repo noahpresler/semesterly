@@ -138,34 +138,45 @@ const Semesterly = () => {
     const curDate: Date = new Date(dateString);
 
     const months = [
-      'January', 'February', 'March', 'April',
-      'May', 'June', 'July', 'August',
-      'September', 'October', 'November', 'December'
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
 
     let dayEnding: String;
     const curDay = curDate.getDay();
     if (curDay >= 11 && curDay <= 13) {
-      dayEnding = 'th';
+      dayEnding = "th";
     }
-  
+
     switch (curDay % 10) {
       case 1:
-        dayEnding = 'st';
+        dayEnding = "st";
         break;
       case 2:
-        dayEnding = 'nd';
+        dayEnding = "nd";
         break;
       case 3:
-        dayEnding = 'rd';
+        dayEnding = "rd";
         break;
       default:
-        dayEnding = 'th';
+        dayEnding = "th";
     }
 
-    const monthIndex: number= curDate.getMonth();
+    const monthIndex: number = curDate.getMonth();
 
-    return `${months[monthIndex]} ${curDate.getUTCDate()}${dayEnding}, ${curDate.getFullYear()}`;
+    return `${
+      months[monthIndex]
+    } ${curDate.getUTCDate()}${dayEnding}, ${curDate.getFullYear()}`;
   };
 
   const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
