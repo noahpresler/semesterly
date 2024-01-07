@@ -79,6 +79,10 @@ const SideBar = () => {
 
   const hideDropdown = () => {
     setShowDropdown(false);
+
+    // * Set hoveredCourse to -1 if user clicks out
+    setHoveredCourse(-1);
+    console.log(`hovered course index: ${hoveredCourse}`);
   };
 
   const toggleDropdown = () => {
@@ -90,6 +94,8 @@ const SideBar = () => {
     hideDropdown();
     callback();
   };
+
+  console.log(`hovered course index: ${hoveredCourse}`);
 
   const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
@@ -184,6 +190,7 @@ const SideBar = () => {
     ) {
       // i.e. a course was removed and last course was hovered
       setHoveredCourse((prevIndex) => prevIndex - 1);
+      console.log(`hovered course index: ${hoveredCourse}`);
     }
     setMasterSlotListLength(masterSlotList.length);
   }, [masterSlotList]);
@@ -194,15 +201,18 @@ const SideBar = () => {
       if (e.key === "ArrowUp") {
         if (hoveredCourse > -1) {
           setHoveredCourse((prevHoveredCourse) => prevHoveredCourse - 1);
+          console.log(`hovered course index: ${hoveredCourse}`);
         }
       } else if (e.key === "ArrowDown") {
         if (hoveredCourse < masterSlotListLength - 1) {
           setHoveredCourse((prevHoveredCourse) => prevHoveredCourse + 1);
+          console.log(`hovered course index: ${hoveredCourse}`);
         }
       } else if (e.key === "Enter" && hoveredCourse > -1) {
         dispatch(fetchCourseInfo(masterSlotList[hoveredCourse]));
       } else if (e.key === "Backspace" && hoveredCourse > -1) {
         dispatch(addOrRemoveCourse(masterSlotList[hoveredCourse]));
+        console.log(`hovered course index: ${hoveredCourse}`);
       }
     },
     [hoveredCourse, masterSlotListLength]
