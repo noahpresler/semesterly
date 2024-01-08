@@ -79,6 +79,9 @@ const SideBar = () => {
 
   const hideDropdown = () => {
     setShowDropdown(false);
+
+    // * Set hoveredCourse to -1 if user clicks out
+    setHoveredCourse(-1);
   };
 
   const toggleDropdown = () => {
