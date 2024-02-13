@@ -16,6 +16,7 @@ const newsModalSlice = createSlice({
       state.isVisible = false;
     },
     showNewsModal: (state) => {
+      localStorage.setItem("lastViewedNewsDate", new Date(Date.now()).toISOString()); // !
       state.isVisible = true;
     },
   },

@@ -14,7 +14,7 @@ spec:
           containers:
             - image: semesterly.azurecr.io/semesterly:Version
               name: gunicorn-cron
-              command: ["/bin/bash","/code/run_parser.sh"]
+              command: ["/bin/bash", "/code/run_parser.sh"]
               workingDir: /code
               envFrom:
                 - secretRef:
